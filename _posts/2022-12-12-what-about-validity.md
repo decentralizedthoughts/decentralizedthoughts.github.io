@@ -4,7 +4,7 @@ date: 2022-12-12 04:00:00 -05:00
 tags:
 - dist101
 - lowerbound
-author: Ittai Abraham and Cristian Cachin
+author: Ittai Abraham and Christian Cachin
 ---
 
 Perhaps the architipical [trilemma](https://twitter.com/el33th4xor/status/1191820205456023552?s=20&t=RcutJw0wQUsTmrO0OXzpXw) is **consensus** - it requires three properties: **agreement**, **liveness**, and **validity**. Getting any two is easy, but all three together is what makes consensus such a facinating problem that continues to create new challenges even after 40 years of research.
