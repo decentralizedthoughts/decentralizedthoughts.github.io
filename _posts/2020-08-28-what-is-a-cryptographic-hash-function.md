@@ -1,6 +1,6 @@
 ---
 title: What is a Cryptographic Hash Function?
-date: 2020-08-28 10:05:00 -07:00
+date: 2020-08-28 13:05:00 -04:00
 tags:
 - cryptography
 - hashing
