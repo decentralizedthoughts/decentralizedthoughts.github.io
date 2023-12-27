@@ -111,7 +111,7 @@ We know that, for certain cryptosystems proven secure with a random oracle, repl
 
 ## Hash functions as mathematical functions
 
-We've established that a hash function can be thought of as a random oracle that, given some input $x\in \\{0,1\\}^*$ (i.e., an arbitrarily-sized sequence of bits) returns a "random," fixed-size input $y\in \\{0,1\\}^{256}$ (i.e., 256 bits) and will always return that same $y$ given that same $x$ as input.
+We've established that a hash function can be thought of as a random oracle that, given some input $x\in \\{0,1\\}^*$ (i.e., an arbitrarily-sized sequence of bits) returns a "random," fixed-size output $y\in \\{0,1\\}^{256}$ (i.e., 256 bits) and will always return that same $y$ given that same $x$ as input.
 (We assume the output size is 256 bits. We'll explain later why.)
 
 Formally, we can define a hash function as a [mathematical function](https://en.wikipedia.org/wiki/Function_(mathematics)) $H : \\{0,1\\}^\* \mapsto \\{0,1\\}^{256}$.
@@ -141,7 +141,7 @@ Even better, as cryptographers, we know how to construct **collision-resistant**
 
 ## What can I do with a hash function?
 
-By now, you know that a hash function "compresses" an arbitrarily-large output to a fixed-size input, which is uniquely determined by flipping some coins.
+By now, you know that a hash function "compresses" an arbitrarily-large input to a fixed-size output, which is uniquely determined by flipping some coins.
 Next, let's see what a hash function is useful for.
 
 ### Downloading files correctly over the Internet
