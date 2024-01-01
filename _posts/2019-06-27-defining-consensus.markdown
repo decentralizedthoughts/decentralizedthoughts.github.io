@@ -15,7 +15,7 @@ Let us begin with the simplest consensus problem: *agreement*.
 
 
 ## The Agreement Problem
-In this problem, we assume a set of $n$ parties where each party $i$ has some input $v_i$ from some known set of input values $v_i \in V$. A protocol that solves Agreement must have the following properties.
+In this problem, we assume a set of $n$ parties where each party $i$ has some input $v_i$ from some known set of input values $v_i \in V$. A protocol that solves Agreement must have the following properties:
 
 **Agreement:** no two honest parties *decide* on different values.
 
@@ -23,16 +23,15 @@ In this problem, we assume a set of $n$ parties where each party $i$ has some in
 
 **Termination:** all honest parties must eventually *decide* on a value in $V$ and terminate.
 
-
-
 Obviously, Agreement is easily solvable if all parties are honest and the system is synchronous. To make the problem non-trivial we need to fix the communication model [synchrony, asynchrony, or partial synchrony](https://ittaiab.github.io/2019-06-01-2019-5-31-models/) and then fix the [threshold of the adversary](https://ittaiab.github.io/2019-06-17-the-threshold-adversary/) and other details about the [power](https://ittaiab.github.io/2019-06-07-modeling-the-adversary/) of the adversary.
 
 In the *binary agreement* problem, we assume the set of possible inputs $V$ contains just two values: 0 and 1.
 
-For lower bounds it's often beneficial to define an even easier problem of _agreement  with weak validity_ where we replace validity with:
+For lower bounds it's often beneficial to define an even easier problem of *agreement  with weak validity* where we replace validity with:
 
 **Weak Validity:** if all parties are honest and all have the same input value $v$, then $v$ must be the decision value.
 
+More validity options and the notion of **external validity** is discussed in [this post](https://decentralizedthoughts.github.io/2022-12-12-what-about-validity/).
 
 ### Uniform vs. non-uniform agreement
 When the adversary is omission or crash, then the *agreement* property above is called *non-uniform agreement*. 
@@ -50,5 +49,6 @@ Here we assume a designated party, often called the leader (or dealer) that has 
 
 **Termination:** all honest parties must eventually *decide* on a value in $V$ and terminate.
 
+Broadcast and Agreement are deeply connected. A nice exercise is to solve Broadcast given Agreement. Another good exercise is to solve Agreement given Broadcast. You can find this solution in [this post](https://decentralizedthoughts.github.io/2020-09-14-broadcast-from-agreement-and-agreement-from-broadcast/).
 
-Observe that the two problems are [deeply connected](https://decentralizedthoughts.github.io/2020-09-14-broadcast-from-agreement-and-agreement-from-broadcast/). A nice exercise is to try to solve Broadcast given Agreement. Another good exercise is to try to solve Agreement given Broadcast.
+Please leave comments on [Twitter](https://twitter.com/ittaia/status/1421066572207169544?s=20).
