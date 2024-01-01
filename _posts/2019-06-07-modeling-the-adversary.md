@@ -75,7 +75,7 @@ In the [sleepy model](https://eprint.iacr.org/2016/918.pdf) of Pass and Shi, in 
 
 ### Mobile sluggish
 
-One of the challenges in the mobile model is the fact that the adversary can accumulate the private keys of parties. In the [weak synchrony model](https://eprint.iacr.org/2019/179.pdf) (also called  [mobile sluggish](https://eprint.iacr.org/2019/270.pdf)), the adversary is allowed to corrupt either via a Byzanitne corruption (that is not mobile) or a mobile sluggish corruption. Critically, the sluggish corruption allows the adversary to delay messages to and from the corrupted party but not to learn its private keys. Hence allowing to the sluggish corruptions to be mobile does not allow the adversary to accumulate private keys.
+One of the challenges in the mobile model is the fact that the adversary can accumulate the private keys of parties. In the [weak synchrony model](https://eprint.iacr.org/2019/179.pdf) (also called  [mobile sluggish](https://eprint.iacr.org/2019/270.pdf)), the adversary is allowed to corrupt either via a Byzanitne corruption (that is not mobile) or a mobile sluggish corruption. Critically, the sluggish corruption allows the adversary to delay messages to and from the corrupted party but not to learn its private keys. Hence, allowing sluggish corruptions to be mobile does not allow the adversary to accumulate private keys.
 
 ### Flexible model
 

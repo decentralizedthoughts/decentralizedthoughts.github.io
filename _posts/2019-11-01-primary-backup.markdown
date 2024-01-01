@@ -25,12 +25,12 @@ while true:
       send output to the client
 ```
 
-Importantly, to avoid duplication of input, we assume the command ```cmd``` includes a unique identifier. Moreover, to avoid duplication of output, the assume the ```output``` includes a unique identifier and also the unique identifier of the ```cmd```.
+1. To avoid duplication of input, each command ```cmd``` includes a unique identifier. 
+2. To avoid duplication of output, each ```output``` includes a unique identifier and also the unique identifier of the ```cmd```.
 
+The above state machine can made fault tolerant to a single crash failure with a simple primary-backup paradigm. 
 
-The above state machine can be implemented in practice with a simple primary-backup paradigm. 
-
-**Primary.** The ```primary``` behaves exactly like an ideal state machine until it crashes. However, if it does crash, it needs the backup to takeover the execution and continue serving the client. 
+**Primary.** The ```primary``` behaves exactly like an ideal state machine until it crashes. However, if it does crash, it needs the backup to take over the execution and continue serving the client. 
 
 ```
 // Primary
@@ -92,6 +92,7 @@ Note that in some cases, the same ```output``` may arrive twice (from both the p
 Due to the invariant maintained by the primary, a client knows that the response it got from a primary must have been sent to the backup. If the backup crashes then the primary will continue to serve the clients. If the primary is faulty and crashes then the backup is guaranteed to have seen any command whose output was returned to the client.
 
 **A couple of remarks on the setting.**
+
 1. We assumed that the adversary can crash any client and that all non-fualty client messages arrive at the primary/backup and vice-versa. This Primary-Backup protocol works even if we assume that the adversary can fail any client by [omission failures](https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/). To handle this model, even with an ideal state machine we need to maintain a unique identifier for every command sent to the state machine and use a retry mechanism.
 
 2. In practice, there is often an out-of-band procedure to reset the system to allow the primary to be the primary again after it recovers from its failure. For example, one can first stop the backup and then restart the whole system. 
