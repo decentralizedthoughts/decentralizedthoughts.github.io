@@ -61,9 +61,29 @@ For models that are round-based, another visibility distinction is the adversary
 
 In the traditional model the adversary is allowed to corrupt honest parties will a budget of $f$, but is not allowed to *un-corrupt* (or heal) corrupt parties back to being honest. In the **mobile model** the adversary is allowed to dynamically decide to corrupt and un-corrupt parties.  The total number of corrupted parties at any given time is at most $f$, but over time the set of corrupted parties may change. It is often required that there is a *gap* between the time the adversary un-corrupts one party and the time it is allowed to corrupt another. This model was introduced by [Ostrovsky and Yung](https://web.cs.ucla.edu/~rafail/PUBLIC/05.pdf) and exemplified by [proactive secret sharing](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.40.8922&rep=rep1&type=pdf). Another modeling decision is whether the party is aware that it is un-corrupted.
 
+## More models
+
+Over the years there have been many variations - here is an incomplete list (lets us know in comments about more).
+
+### Mixed corruptions
+
+In some cases we are interested in a mix of say $f$ Byzantine and $k$ crash corruptions (for example [here](https://eprint.iacr.org/2022/805)) or any other mix.
+
+### Sleepy model
+
+In the [sleepy model](https://eprint.iacr.org/2016/918.pdf) of Pass and Shi, in addition to being either honest or corrupt, parties can be either *active* or *inactive* each round. The assumption is that the threshold bound on the adversary holds at each round on the actual number of active parties in that round. This is sometimes called the [dynamic participation](https://eprint.iacr.org/2023/280.pdf) model. 
+
+### Mobile sluggish
+
+One of the challenges in the mobile model is the fact that the adversary can accumulate the private keys of parties. In the [weak synchrony model](https://eprint.iacr.org/2019/179.pdf) (also called  [mobile sluggish](https://eprint.iacr.org/2019/270.pdf)), the adversary is allowed to corrupt either via a Byzanitne corruption (that is not mobile) or a mobile sluggish corruption. Critically, the sluggish corruption allows the adversary to delay messages to and from the corrupted party but not to learn its private keys. Hence allowing to the sluggish corruptions to be mobile does not allow the adversary to accumulate private keys.
+
+### Flexible model
+
+The [Flexible BFT model](https://eprint.iacr.org/2019/270.pdf) introduces two variations. First, a model where different properties are held under different threshold assumptions. Second, a model where the same protocol may serve different clients, where each client may have a different adversary threshold in mind. 
+
 ## Acknowledgments
 
-Special thanks to [Alin Tomescu](http://twitter.com/alinush407) for reviewing this post.
+Special thanks to [Alin Tomescu](http://twitter.com/alinush407) and Kartik Nayak for insightful comments. 
 
 Please leave comments on [Twitter](https://twitter.com/ittaia/status/1141481767121170434?s=20)
 

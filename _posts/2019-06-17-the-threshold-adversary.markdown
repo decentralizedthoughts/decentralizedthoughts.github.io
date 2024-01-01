@@ -35,10 +35,7 @@ In this model instead of having a static total *n* that represents the total num
 2. The adversary can corrupt at most $1/2 - \epsilon$ fraction of the bounded resource (say at most 49 percent).
 3. The adversary can corrupt at most $1/3 - \epsilon$ fraction of the total bounded resource (say 32 percent). 
 
-There can be a gap between the total amount of resources, and the *active* amount of the resource that is used online to run the system. This model is called the [sleepy model](https://eprint.iacr.org/2016/918.pdf) by Pass and Shi, to explicitly allow some fraction of the resource holders to sleep (not be active). This can also model cases where the total amount of the bounded resource changes over time or its allocation moves over time and not all holders of the resource are active participants. 
-%
-Typically, the assumption is that the above threshold restrictions hold at any given time as a function of the *active* participants. If this is not the case at all times then special care is needed.
-
+In this model the total amount of resources and its allocation can dynamically change over time. Typically, the assumption is that the above threshold restrictions hold at any given time (and sometimes as a function of the *active* participants). If this is not the case at all times then special care is needed.
 
 The two main examples of potential bound resources are **PoW** and **PoS**:
 
@@ -72,6 +69,11 @@ In contrast, many of the generalized bounded resource models are often considere
 The fact that the protocol is permissionless in the sense that anyone holding the bounded resource is allowed to participate does not mean that obtaining the bounded resource is without restrictions (both economic and permission based). In essence, it is moving the task of granting the bounded resource to an external process. For example, it may be that obtaining specific hardware or buying staking tokens is a permission process.
 
 The work of Lewis-Pye and Roughgarden on [Permissionless Consensus](https://arxiv.org/pdf/2304.14701.pdf) provides a comprehensive categorization and deep analysis of this model.
+
+
+## Acknowledgments
+
+Many thanks to Kartik Nayak for insightful comments
 
 Please comment on [Twitter](https://twitter.com/ittaia/status/1141475000278556674?s=20)
 
