@@ -99,14 +99,15 @@ How [DAGs improve the performance of SMR](https://decentralizedthoughts.github.i
 To learn about upper bounds, start with a [simple SMR for crash failures](/2019-11-01-primary-backup/). Then extend SMR to omission failures: [First via single shot](/2020-09-13-synchronous-consensus-omission-faults/) and then via the [lock-commit](https://decentralizedthoughts.github.io/2020-11-30-the-lock-commit-paradigm-multi-shot-and-mixed-faults/) paradigm to [multi-shot consensus](https://decentralizedthoughts.github.io/2020-11-30-the-lock-commit-paradigm-multi-shot-and-mixed-faults/).
 
 
-## Nakamoto consensus
+## Nakamoto Consensus
 
-The bitcoin revolution brought many breakthroughs in distributed computing, economics and cryptography. One of the striking breakthroughs in distributed computing was a new form of Byzantine Agreement now called **Nakamoto Consensus**
+The bitcoin revolution brought many breakthroughs in distributed computing, economics and cryptography. One of the striking breakthroughs in distributed computing was a new form of Byzantine Agreement now called **Nakamoto Consensus**.
 
-- what is [Nakamoto consensus](https://decentralizedthoughts.github.io/2021-10-15-Nakamoto-Consensus/
-- Bitcoins [settup assumption](https://decentralizedthoughts.github.io/2019-07-18-do-bitcoin-and-ethereum-have-any-trusted-setup-assumptions/).
+- What is [Nakamoto consensus](https://decentralizedthoughts.github.io/2021-10-15-Nakamoto-Consensus/)?
+- Bitcoin's [setup assumption](https://decentralizedthoughts.github.io/2019-07-18-do-bitcoin-and-ethereum-have-any-trusted-setup-assumptions/).
 - Security proof of [Nakamoto consensus](https://decentralizedthoughts.github.io/2023-10-30-Analysis-Nakamoto/) and an [older post](https://decentralizedthoughts.github.io/2019-11-29-Analysis-Nakamoto/).
-  
+- What is the problem of [selfish mining](/2020-02-26-selfish-mining/)?
+
 
 ## Lower Bounds
 
@@ -158,13 +159,9 @@ What are [blockchains useful for, really](https://decentralizedthoughts.github.i
 
 What was the [first blockchain (or how to timestamp a digital document)](/2020-07-05-the-first-blockchain-or-how-to-time-stamp-a-digital-document/)? 
 
-What is [Nakamoto Consensus](/2021-10-15-Nakamoto-Consensus/)? How do you [prove Nakamoto Consensus is secure](/2023-10-30-Analysis-Nakamoto/)?
-
 Do proof-of-work blockchains need any [setup assumptions?](/2019-07-18-do-bitcoin-and-ethereum-have-any-trusted-setup-assumptions/)?
 
 What does [checkpointing a blockchain](/2019-09-13-dont-trust-checkpoint/) mean?
-
-What is the problem of [selfish mining](/2020-02-26-selfish-mining/)?
 
 The simplest L2 solution is a [payment channel](/2019-10-25-payment-channels-are-just-a-two-person-bfs-smr-systems/).
 
