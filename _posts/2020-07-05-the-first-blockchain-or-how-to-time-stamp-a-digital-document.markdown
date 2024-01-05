@@ -13,7 +13,7 @@ This post is about the work of Stuart Haber and W. Scott Stornetta from 1991 on 
 > -- <cite> [Juvenal](https://en.wikipedia.org/wiki/Juvenal) </cite>
 
 
-From 1995, the ideas of this paper have been in use by a company called [Surety](http://www.surety.com/solutions/intellectual-property-protection/sign-seal). This makes it the longest-running chain of hashes! Here are two photos from 2018 of Stuart Haber with the current hash circled in red on the New York Times:
+From 1995, the ideas of this paper have been in use by a company called [Surety](http://www.surety.com/solutions/intellectual-property-protection/sign-seal). This makes it the longest-running chain of hashes! Here are two photos from 2018 of Stuart Haber (photos credit: [Dahlia Malkhi](https://malkhi.com/)) with the current hash circled in red on the New York Times:
 
 <p align="center">
     <img src="/uploads/Haber1.jpeg" width="600" title="The first blockchain">
