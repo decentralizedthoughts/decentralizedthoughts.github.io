@@ -99,7 +99,14 @@ How [DAGs improve the performance of SMR](https://decentralizedthoughts.github.i
 To learn about upper bounds, start with a [simple SMR for crash failures](/2019-11-01-primary-backup/). Then extend SMR to omission failures: [First via single shot](/2020-09-13-synchronous-consensus-omission-faults/) and then via the [lock-commit](https://decentralizedthoughts.github.io/2020-11-30-the-lock-commit-paradigm-multi-shot-and-mixed-faults/) paradigm to [multi-shot consensus](https://decentralizedthoughts.github.io/2020-11-30-the-lock-commit-paradigm-multi-shot-and-mixed-faults/).
 
 
+## Nakamoto consensus
 
+The bitcoin revolution brought many breakthroughs in distributed computing, economics and cryptography. One of the striking breakthroughs in distributed computing was a new form of Byzantine Agreement now called **Nakamoto Consensus**
+
+- what is [Nakamoto consensus](https://decentralizedthoughts.github.io/2021-10-15-Nakamoto-Consensus/
+- Bitcoins [settup assumption](https://decentralizedthoughts.github.io/2019-07-18-do-bitcoin-and-ethereum-have-any-trusted-setup-assumptions/).
+- Security proof of [Nakamoto consensus](https://decentralizedthoughts.github.io/2023-10-30-Analysis-Nakamoto/) and an [older post](https://decentralizedthoughts.github.io/2019-11-29-Analysis-Nakamoto/).
+  
 
 ## Lower Bounds
 

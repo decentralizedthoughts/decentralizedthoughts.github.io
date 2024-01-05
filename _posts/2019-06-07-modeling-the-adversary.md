@@ -20,16 +20,17 @@ After we fix the communication model, [synchrony, asynchrony, or partial synchro
 ### 1. Type of corruption
 The first fundamental aspect is what type of behavior the adversary can inflict on the $f$ parties is can corrupt. There are four classic types of corruption: Passive, Crash, Omission, and Byzantine.
 
-**Passive**: a passively corrupted party must follow the protocol just like an honest party, but it allows the adversary to learn information. A passive adversary (sometimes called [Honest-But-Curious](https://eprint.iacr.org/2011/136.pdf) or [Semi-Honest](http://www.wisdom.weizmann.ac.il/~oded/foc-vol2.html)) does not deviate from the protocol but can learn all possible information from its _view_: i.e., the messages sent and received by parties it controls.
+**Passive**: a passively corrupted party must follow the protocol just like an honest party, but it allows the adversary to learn information. A passive adversary (sometimes called [Honest-But-Curious](https://eprint.iacr.org/2011/136.pdf) or [Semi-Honest](http://www.wisdom.weizmann.ac.il/~oded/foc-vol2.html)) does not deviate from the protocol but can learn all possible information from its _view_: i.e., the messages sent and received by parties it controls. A failure in this case is if the passive adversary learns information that the protocol designer wanted the adversary not to learn.
 
 **Crash**: in addition to passive, once the party is corrupted, the adversary can decide when to cause it to stop sending and receiving all messages.
 
-**Omission**: in addition to passive, once corrupted, the adversary can decide, for each message sent or received, to either drop or allow it to continue. Note that the party is not informed that it is corrupted.
+**Omission**: in addition to passive, once corrupted, the adversary can decide, for each message sent or each message received, to either drop or allow it to continue. Note that the party is not informed that it is corrupted. Sometimes there is a separation to *send omission corruption* and *receive omission corruption*.
 
 **Byzantine**: this gives the adversary full power to control the party and take any (arbitrary) action on the corrupted party. Sometimes this model is called active corruption or arbitrary corruption.
 
 Note that each corruption type subsumes the previous one.
-There are other types of corruption (most notable are variants of *Covert* [adversaries](https://eprint.iacr.org/2007/060.pdf)) that we will cover later. *Covert* adversaries can be used to model rational behavior where there is fear (utility loss) from punishment through some form of detection. 
+
+There are other types of corruption. Most notable are variants of [Covert adversaries](https://eprint.iacr.org/2007/060.pdf).  *Covert adversaries* can be used to model rational behavior where there is fear (utility loss) from punishment through some form of detection. 
 
 ### 2. Computational power 
 The computational power of the adversary is the next choice. There are two traditional variants and one newer one:
@@ -46,7 +47,7 @@ Adaptivity is the ability of the adversary to corrupt dynamically based on infor
 2. **Adaptive**: the adversary can decide dynamically as the protocol progresses who to corrupt based on what the adversary learns over time. There are three main sub-variants:
    1. *Strong Adaptive*: once the adversary asks to corrupt, the party is immediately corrupted. Moreover, messages sent from the party before corruption that have not yet arrived can be erased by the adversary. Some [lower bounds](https://users.cs.duke.edu/~kartik/papers/podc2019.pdf) only work in this model.
    2. *Adaptive*: once the adversary asks to corrupt, the party is immediately corrupted. Messages sent from the party before corruption cannot be erased (so will eventually arrive in asynchrony or in arrive in at most $\Delta$ time in synchrony).
-   3. *Delayed Adaptive*: once the adversary asks to corrupt, the party is corrupted at the end of the round ($\Delta$ time in synchrony, or once the party decides to listen to a port in asynchrony).   
+   3. *Delayed Adaptive*: once the adversary asks to corrupt, the party is corrupted at the end of the round ($\Delta$ time in synchrony, or once the party decides to listen to a port in asynchrony). Often in this model is also critical that honest parties can [erase](https://eprint.iacr.org/2008/291.pdf) some information in order to get forward security.
 
 ### 4. Visibility 
 The visibility is the power of the adversary to see the messages and the states of the non-corrupted parties. Again, there are two basic variants:
@@ -83,7 +84,7 @@ The [Flexible BFT model](https://eprint.iacr.org/2019/270.pdf) introduces two va
 
 ## Acknowledgments
 
-Special thanks to [Alin Tomescu](http://twitter.com/alinush407) and Kartik Nayak for insightful comments. 
+Special thanks to [Alin Tomescu](http://twitter.com/alinush407), Kartik Nayak and Gilad Stern for insightful comments. 
 
 Please leave comments on [Twitter](https://twitter.com/ittaia/status/1141481767121170434?s=20)
 
