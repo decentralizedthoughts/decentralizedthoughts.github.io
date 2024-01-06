@@ -9,24 +9,28 @@ author: Ittai Abraham
 
 In addition to limiting the adversary via a communication model [synchrony, asynchrony, or partial synchrony](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/), we need some way to limit the power of the adversary to corrupt parties. 
 
-
 > Power tends to corrupt, and absolute power corrupts absolutely.
 > -- <cite> [John Dalberg-Acton 1887](https://en.wikipedia.org/wiki/John_Dalberg-Acton,_1st_Baron_Acton) </cite>
 
 As John observed almost 150 years ago, if the adversary has no limits to his power, then there is very little we can do. Let's begin with the traditional notion of a *threshold adversary* as used in Distributed Computing and Cryptography to limit the power of the adversary. 
 
 ## The threshold adversary 
+
 The traditional and simple model is that of a *threshold adversary* given a static group of ***n*** nodes. 
 
 A threshold adversary is an adversary that can corrupt up to ***f*** nodes. There are three typical thresholds:
+
 1. $f<n$ where the adversary can corrupt all parties but one. Sometimes called the *dishonest majority* model or the [anytrust](https://www.ohmygodel.com/publications/d3-eurosec12.pdf) model.
 2. $f<n/2$ where the adversary can corrupt a minority of the nodes. Often called the *dishonest minority* model.  
 3. $f<n/3$ where the adversary can corrupt less than a third of the nodes. 
 
 There are many examples of protocols that work in the above threshold models. Here are some classics:
+
 1. The Dolev, Strong [Broadcast protocol](https://www.cs.huji.ac.il/~dolev/pubs/authenticated.pdf)  solves Byzantine broadcast assuming an adversary that can corrupt up to $n-1$ parties out of $n$ in the Synchronous model. See [this post](https://decentralizedthoughts.github.io/2019-12-22-dolev-strong/) for details.
 2. Lamport's [Paxos](https://lamport.azurewebsites.net/pubs/lamport-paxos.pdf) protocol solves state machine replication assuming an adversary that can corrupt less than $n/2$ parties out of $n$ in the Partially synchronous model. See [this post](https://decentralizedthoughts.github.io/2022-11-04-paxos-via-recoverable-broadcast/) for details.
 3. Ben Or's [randomized protocol](http://www.cs.utexas.edu/users/lorenzo/corsi/cs380d/papers/p27-ben-or.pdf) solves Byzantine agreement in the Asynchronous model assuming a $f<n/5$ threshold. This was later [improved by Bracha](https://core.ac.uk/download/pdf/82523202.pdf) to the optimal $f<n/3$ bound. See [this series of posts](https://decentralizedthoughts.github.io/2022-03-30-asynchronous-agreement-part-one-defining-the-problem/) for details.
+
+There are other less common thresholds. For example, [perfect asynchronous verifiable secret sharing](https://decentralizedthoughts.github.io/2020-07-15-asynchronous-fault-tolerant-computation-with-optimal-resilience/) requires $f<n/4$. And there are even bounds that are not integer divisions of $n$. For example, [2 round unauthenticated reliable broadcast](https://decentralizedthoughts.github.io/2021-09-29-the-round-complexity-of-reliable-broadcast/) requires $f < (n+1)/4$.
 
 ## Proof of work and proof of stake
 
@@ -53,12 +57,14 @@ In this model the total amount of resources and its allocation can dynamically c
 # Notes
 
 ## On *stake* based bounded resources
+
 Basing the security assumption on the adversary controlling a threshold of some set of coins issued by the system (stake) has both advantages and disadvantages.
+
 1. On the one hand, using a resource that is issued by the platform allows one to control the resource allocation in ways that are not possible when the resource is external. In particular, the platform can create *punishment mechanisms* to better incentivize honest behavior. For example, [Buterin suggests](https://medium.com/@VitalikButerin/minimal-slashing-conditions-20f0b500fc6c) conditions to detect malicious behavior and then punish the adversary by reducing (slashing) the offender's stake.
 2. On the other hand, if the value of the stake depends on the platform, this may cause some circular reasoning about security and in particular a bootstrapping problem of how to set the external cost of buying stake. If the cost of buying stake is too high, then it may happen that not enough honest entities will sign up, and the system will lose liveness. If the cost of buying stake is initially too low, then an attacker can gain early monopoly power. One option is to bootstrap proof-of-stake using an existing decentralized high-value proof-of-work coin or high-value traditional fiat (see [here](https://bitcoinist.com/visa-paypal-10-million-run-facebook-coin-node/)). This type of solution assumes that the adversary does not already have monopoly power on the bootstrapping resource. Another option is to bootstrap a proof-of-stake system from an existing high-value proof-of-work system (for example, see [eth2.0](https://github.com/ethereum/eth2.0-specs)).
 
-
 ## On distributed computing vs game theory
+
 The threshold adversary model captures the ability of the adversary to corrupt some fraction of the parties and allow them to deviate from the prescribed behavior. It divides parties into honest and corrupt. This is rather different from traditional *Game Theory* models where all parties are considered *rational*. 
 
 As mentioned above, in the *proof of stake* setting there is a notion of *slashing* which captures the fact that deviating coalitions may suffer economic loss and that may deter them from deviation.
@@ -76,7 +82,6 @@ In contrast, many of the generalized bounded resource models are often considere
 The fact that the protocol is permissionless in the sense that anyone holding the bounded resource is allowed to participate does not mean that obtaining the bounded resource is without restrictions (both economic and permission based). In essence, it is moving the task of granting the bounded resource to an external process. For example, it may be that obtaining specific hardware or buying staking tokens is a permission process.
 
 The work of Lewis-Pye and Roughgarden on [Permissionless Consensus](https://arxiv.org/pdf/2304.14701.pdf) provides a comprehensive categorization and deep analysis of this model.
-
 
 ## Acknowledgments
 

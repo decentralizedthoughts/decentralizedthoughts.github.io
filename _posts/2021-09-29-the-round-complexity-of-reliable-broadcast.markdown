@@ -130,7 +130,7 @@ Do we have to assume a PKI to get to 2 rounds? This protocol decides in 2 rounds
 
 The previous 2-round reliable broadcast protocol that assumes no authentication requires $n\geq 4f$. This is worse than the $n\geq 3f+1$ of 2-round reliable broadcast with PKI. Can we do better?
 
-It turns out that $n\geq 4f$ is the best we can do without signatures. We prove this *lower bound* in our [new paper](https://arxiv.org/pdf/2109.12454.pdf): *any unauthenticated reliable broadcast under $n\leq 4n-1$ cannot achieve good-case 2 rounds*.
+It turns out that $n\geq 4f$ is the best we can do without signatures. We prove this *lower bound* in our [new paper](https://arxiv.org/pdf/2109.12454.pdf): *any unauthenticated reliable broadcast under $n\leq 4f-1$ cannot achieve good-case 2 rounds*.
 
 ## How many rounds does Reliable Broadcast need when the broadcaster is bad?
 
