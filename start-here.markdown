@@ -26,7 +26,7 @@ This post covers several [relaxations of Broadcast](/2019-10-22-flavours-of-broa
 
 The Synchronous model is a good place to start because protocols are simpler. 
 
-- Classic Byzantine agreement protocol for $f\leq n/2$: the [Phase-King](https://decentralizedthoughts.github.io/2022-06-09-phase-king-via-gradecast/).
+- Classic Byzantine agreement protocol: the [Phase-King](https://decentralizedthoughts.github.io/2022-06-09-phase-king-via-gradecast/).
 
 - Classic Byzantine Broadcast protocol (with a PKI) for $f < n$: the [Dolev-Strong Authenticated Broadcast protocol](/2019-12-22-dolev-strong/). 
 
@@ -70,6 +70,7 @@ The Byzantine setting:
 Fundamental lower bound in asynchrony: The  [FLP lower bound](/2019-12-15-consensus-model-for-FLP/) showing the impossibility of consensus under even one crash fault. 
 
 Important building blocks in asynchrony:
+
 1. The [Reliable Broadcast](https://decentralizedthoughts.github.io/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/) protocol. 
 2. The [Reliable Gather](https://decentralizedthoughts.github.io/2021-03-26-living-with-asynchrony-the-gather-protocol/) is a multi-leader generalization of reliable broadcast.
 3. We discusses how to measure [round complexity in asynchrony](https://decentralizedthoughts.github.io/2021-09-29-the-round-complexity-of-reliable-broadcast/) and also improved round complexity for reliable broadcast. 

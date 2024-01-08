@@ -17,11 +17,11 @@ In the *ideal model*, there is a single *server* and a set of *clients*. Clients
 
 ### A Sequential Client
 
-The client is modeled as a simple state machine that sends commands to the server and listens to the server responses. Importantly, the client is *sequential*: it waits to receive the response of its previous command before sending a new command. This simplifies the client and in some settings also provides a basic flow control mechanism that bounds the total number of in-flight commands as a function of the number of permissioned clients. We model the client as having an external ```command-queue``` and ```response-queue```. Finally, we assume each command has a unique identifier, and the output includes this identifier. Hence the client can match the response to the request and avoid duplication.
+The client is modeled as a simple state machine that sends commands to the server and listens to the server responses. Importantly, the client is *sequential*: it waits to receive the response of its previous command before sending a new command. This simplifies the client and in some settings also provides a basic flow control mechanism that bounds the total number of in-flight commands as a function of the number of permissioned clients. We model the client as having an external ```command-queue``` and ```response-queue```. Finally, we assume each command has a unique identifier, and the output includes this identifier. Hence, the client can match the response to the request and avoid duplication.
 
 
 ```
-// Cleint state machine
+// Client state machine
 pending = empty
 while true
     if pending = empty and command-queue is not empty
@@ -103,6 +103,7 @@ There are two *servers* we call ```Primary``` and ```Backup``` and a set of *cli
 Note that the adversary in this model can both control the network delays, cause client omission faults, and crash one of the servers while the adversary in the Ideal Model can only control network delays and cause client omission faults.
 
 Our goal is to obtain a protocol with the following two properties:
+
 1. **Liveness**: Each non-faulty client request gets a response after at most $8 \Delta$ time. Note that we changed the required response time from $3 \Delta$ to $8 \Delta$ and that we only require this for non-faulty clients.
 2. **Safety**: for every client history that is created when running this protocol is a client history that can be generated in the ideal model. In more detail, for any adversary behavior in this model when running the protocol, there exists some adversary behavior in the ideal model that generates the client history. 
 Note that the adversary behavior captures all the power the adversary has in each model. 
@@ -203,16 +204,18 @@ while true
 First, as long as the Primary does not crash, the Backup will not initiate a view change. In that case, commands sent by a client will arrive in $<\Delta$ time, be processed in a batch in $<\Delta$ time, and sent a response in $<\Delta$ time, for a total of $<3\Delta$ time.
 
 Now consider a client command and the Primary crashing. There are two cases:
+
 1. The Primary crashes after sending the client command to the Backup (but before sending a response). In this case, the Backup will receive the command at time $<3\Delta$. Will detect the Primary crashed by time $<5\Delta$, and will send the response. The client will receive the response in at most $<6\Delta$ time.
 
 
-2. The Primary crashes just before sending the client command to the Backup, so just at $<2Delta$ from when the client sends a command. This means that the last command from the Primary to the Backup is sent at $<\Delta$ and arrives at $<2\Delta$ from the client command. So the Backup will start a view change at time $<4\Delta$. The client will receive the view change in time $<5\Delta$. The client will resend the command to the Backup and get a response after $<3 \Delta$. So the client will receive a response in at most $<8 \Delta$ time.
+2. The Primary crashes just before sending the client command to the Backup, so just at $<2 \Delta$ from when the client sends a command. This means that the last command from the Primary to the Backup is sent at $<\Delta$ and arrives at $<2\Delta$ from the client command. So the Backup will start a view change at time $<4\Delta$. The client will receive the view change in time $<5\Delta$. The client will resend the command to the Backup and get a response after $<3 \Delta$. So the client will receive a response in at most $<8 \Delta$ time.
 
 Finally, after the view change, each command sent to the Backup will get a response in $<3 \Delta$ time.
 
 ### Safety analysis  
 
 For a client command, let's define its linearization point as:
+
 1. **Type 1**: If the Primary sends the command to the Backup then the time it sends is the linearization point.
 2. **Type 2**: Otherwise, the Primary crashed before sending the command to the Backup so define the linearization point as the time the Backup executes the command.
 
@@ -222,11 +225,11 @@ Given this, let's show that the response is equal to a response of the sequentia
 
 **The core observation**: due to the Backup's $2 \Delta$ view change timer, all the type 1 linearization points will arrive at the backup and be executed by the Backup before all the type 2 linearization points. 
 
-Since the Primary is sequential, all the type 1 linearization points respect the sequential execution at the Primary. If Primary crashes, then all the type 1 linearization points are also respected at the backup since it is sequential and it receives all of them.
+Since the Primary is sequential, all the type 1 linearization points respect the sequential execution at the Primary. If Primary crashes, then all the type 1 linearization points are also respected at the backup since it is sequential, and it receives all of them.
 
 Since the Backup is sequential, then all the type 2 linearization points respect the sequential execution at the Backup and they all appear after all the type 1 linearization points as needed.
 
-### Acknowledgment
+### Acknowledgments
 Many thanks to Matan, Avihu, and Noa for fixing several bugs in the Backup state machine pseudo code.
 
 
