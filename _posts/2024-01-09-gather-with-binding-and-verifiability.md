@@ -1,6 +1,6 @@
 ---
 title: 'Living with Asynchrony: the Gather Protocol with Binding and Verifiability'
-date: 2024-01-10 01:00:00 +02:00
+date: 2024-01-09 18:00:00 -05:00
 tags:
 - asynchrony
 author: Gilad Stern and Ittai Abraham
