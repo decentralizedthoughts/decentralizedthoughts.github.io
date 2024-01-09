@@ -19,21 +19,20 @@ As in our previous [lower bounds](https://decentralizedthoughts.github.io/2019-0
 
 In this world, client $1$ wants to send command $C1$, and the adversary blocks all communication to and from server $2$ (server $2$ is omission faulty). Since the protocol is safe and live, any correct solution must notify client $1$ that command $C1$ is the only committed command.
 
-![WorldA](https://hackmd.io/_uploads/Bka1-zsdp.jpg)
+![World A](https://decentralizedthoughts.github.io/_uploads/WordA.jpg)
 
 
 ### World B:
 
 In this world, client $2$ wants to send command $C2$, and the adversary blocks all communication to and from server $1$ (server $1$ is omission faulty). Since the protocol is safe and live, any correct solution must notify client $2$ that command $C2$ is the only committed command.
 
-![WorldB](https://hackmd.io/_uploads/Sk8lbzod6.jpg)
-
+![World B](https://decentralizedthoughts.github.io/_uploads/WordB.jpg)
 
 ### World C:
 
 In this world, client $1$ wants to send command $C1$, and client $2$ wants to send command $C2$. The adversary causes both clients to fail by omission as follows: it blocks all communication between client $1$ and server $2$ and all communication between client $2$ and server $1$. Finally, without loss of generality, the adversary also causes server 2 to have omission failures by blocking all communication between server $1$ and server $2$.
 
-![WorldC](https://hackmd.io/_uploads/BJeb-GiOa.jpg)
+![World C](https://decentralizedthoughts.github.io/_uploads/WordC.jpg)
 
 Observe that the view of server 1 in world A and world C is indistinguishable. Since in worlds A and C, client $1$ only communicates with server $1$, it also has indistinguishable views.
 
