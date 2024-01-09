@@ -13,7 +13,7 @@ In a [previous post](https://decentralizedthoughts.github.io/2019-11-01-primary-
 
 **Theorem:** *It is impossible to implement State Machine Replication with two replicas for two clients and an adversary that can cause omission failures to one replica (and any number of clients) even in a lock-step model.* 
 
-As in our previous [lower bounds](https://decentralizedthoughts.github.io/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/), we assume a solution that is [safe and live](https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/) and reach a contradiction. For the contradiction, we define three worlds and use an indistinguishability argument. In each world, there are two clients called client $1$ and client $2$ and two servers called server $1$ and server $2$.
+As in our previous [lower bounds](https://decentralizedthoughts.github.io/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/), we assume an implementation of a Write Once Register State Machine that is [safe and live](https://decentralizedthoughts.github.io/2022-11-19-from-single-shot-to-smr/) and reach a contradiction. For the contradiction, we define three worlds and use an indistinguishability argument. In each world, there are two clients called client $1$ and client $2$ and two servers called server $1$ and server $2$.
 
 ### World A:
 
@@ -47,17 +47,17 @@ Observe that the view of server 1 in world A and world C is indistinguishable. S
 
 Similarly, the view of server 2 in world B and world C is indistinguishable. Since in worlds B and C, client $2$ only communicates with server $2$, it also has indistinguishable views.
 
-So in world C, the two clients will see conflicting states and this is a violation of safety.
+So in world C, the two clients will see conflicting states and this is a violation of safety. In particular a violation of the [agreement property](https://decentralizedthoughts.github.io/2022-11-19-from-single-shot-to-smr/) that clients should have.
 
 
 Notes:
 
 1. The proof heavily uses the fact that the clients are prone to omission failures. If clients can just crash (or are non-faulty) then the clients can implement SMR using the replicas as relays.
 2. This lower bound can be generalized to $n$ replicas and $f$ omission failures for any $n\leq 2f$.
-3. Since it just requires omission faults, this lower bound holds even if there is a setup and a PKI.
+3. Since it just requires omission faults, this lower bound holds even if there is a setup and a PKI (or any other cryptographic assumptions and setups).
 4. This post was updated in November 2021 to stress that the lower bound requires at least two clients. In fact, the state machine we need is a simple two-client write-once register.
-5. While this post focuses on synchrony and omission faults for both one server and all clients, it can also be cast in asynchrony (or partial synchrony) with just one sever. It's a good exercise!
-6. Nancy Lynch's book has a variant of this lower bound for atomic objects in asynchrony. See Theorem 17.6 in her [book](https://dl.acm.org/doi/book/10.5555/2821576). This was later [extended](https://users.ece.cmu.edu/~adrian/731-sp04/readings/GL-cap.pdf) by Gilbert and Lynch to partial synchrony and connected to Browers conjecture.
+5. Nancy Lynch's book has a variant of this lower bound for atomic objects in asynchrony. See Theorem 17.6 in her [book](https://dl.acm.org/doi/book/10.5555/2821576). 
+6. This was later [extended](https://users.ece.cmu.edu/~adrian/731-sp04/readings/GL-cap.pdf) by Gilbert and Lynch to partial synchrony and connected to Browers conjecture. We cover this in our post on the [CAP theorem](https://decentralizedthoughts.github.io/2023-07-09-CAP-two-servers-in-psynch/).
 
 Please leave comments on [Twitter](https://twitter.com/ittaia/status/1191305159638503426?s=20)
 

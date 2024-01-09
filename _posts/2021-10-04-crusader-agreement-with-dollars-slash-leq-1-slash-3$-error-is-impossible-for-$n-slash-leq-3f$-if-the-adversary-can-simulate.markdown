@@ -14,6 +14,7 @@ The classic [FLM lower bound](https://groups.csail.mit.edu/tds/papers/Lynch/Fisc
 
 
 ### Crusader Agreement
+
 Consider $n$ parties in the synchronous model, where at most $f$ of them are Byzantine: each party $i$ has an input $b_i \in \{0,1\}$ and must output a value in $\{0,1,\bot\}$.
 
 1. **(Validity)**: If all honest parties have the same input then this must be the output of all honest parties.
@@ -22,14 +23,16 @@ Consider $n$ parties in the synchronous model, where at most $f$ of them are Byz
 ***Exercise***: show a constant round protocol that solves Crusader agreement for any $n>3f$ (first correct answer on [twitter](https://twitter.com/kartik1507/status/1445048662430683138?s=20) gets $(n-f)$ DT coins).  
 
 ### Crusader Agreement with $\epsilon$-error
+
 This is an even easier problem where you are allowed some probability $\epsilon$ of error:
+
 1. **(Validity with $\epsilon$-error)**: If all honest parties have the same input then, for any adversary strategy, with probability at least $1-\epsilon$, this input value must be the output of all honest parties.
 2. **(Weak Agreement with $\epsilon$-error)**: For any adversary strategy, with probability at least $1-\epsilon$, it is not the case that one honest outputs 1 and another honest outputs 0.
 
 For example, a protocol that solves Crusader Agreement with $1/10$-error only needs to maintain Validity and Agreement, in expectation, in 9 out of 10 executions. Note that the probability distribution is on the coins of the honest parties.
 
-
 ### Strengthened Lower Bound:
+
 ***Theorem (FLM, KY, D)***: It is impossible to solve *Crusader Agreement with $\epsilon$-error* for any $\epsilon <1/3$ for $n \leq 3f$ if the adversary can simulate.
 
 Before going into the proof, let us unpack this statement. It says that even if you allow considerable error (at most $1/3$) for both Validity and Agreement and **also** weaken the Agreement property to Weak Agreement it is still impossible when $n \leq 3f$.
@@ -37,6 +40,7 @@ Before going into the proof, let us unpack this statement. It says that even if 
 Side note: one may wonder if *Crusader Ageement* is substantially weaker than Agreement? Indeed there is a significant round complexity separation:  We can solve Crusader agreement using a worst case constant number of rounds (for any $f<n/3$). But for Agreement there is $f+1$ round [lower bound](https://decentralizedthoughts.github.io/2019-12-15-synchrony-uncommitted-lower-bound/) on the worst case number of rounds (for any $f<n/3$).
 
 ### The Proof
+
 As an indication of the strength of the FLM covering technique, the proof is quite similar. Here we show the $n=3$ case.
 
 Six parties are connected in a cycle $A,B,C,A',B',C'$. Parties $A,B,C$ have input of 1 (shown in the blue color) and parties $A',B',C'$ have an input of 0 (shown in the red color). This is a great time to stop and ask: why is this setup well-formed? Why is it okay to take a protocol for three parties and wire it with six parties?
@@ -65,8 +69,6 @@ We have shown that the FLM lower bound holds for Agreement, and even for Crusade
 
 Lower bounds in distributed computing are protocols for the adversary. The FLM lower bound is a striking example of a non-trivial adversary strategy: The adversary uses the protocol against itself.   
 
-
 What if we weaken the Validity property instead of the Agreement property: **(Weak Validity)**: if all parties are non-faulty and have the same input then this is the output value. Can you solve this problem for $n=3$? What about solving this problem with probability $0.99$?
-
 
 Your decentralized thoughts on [twitter](https://twitter.com/kartik1507/status/1445048662430683138?s=20)
