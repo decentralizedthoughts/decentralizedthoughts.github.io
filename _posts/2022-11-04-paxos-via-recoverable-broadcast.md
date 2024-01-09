@@ -19,6 +19,7 @@ We introduce Paxos with two simplifications:
 2. Focus on a *single-shot* consensus. A [later post](https://decentralizedthoughts.github.io/2022-11-19-from-single-shot-to-smr/) shows how to extend to *multi-shot* consensus and *state machine replication*.
 
 In essence, our goal is to focus first on *safety* and move as much of the *liveness* and *multi-shot* complications to a later post. 
+
 ## View-based protocol with simple revolving primary
 
 The protocol progresses in **views**, each view has a designated **primary** party. The role of the primary is rotated. For simplicity, the primary of view $v$ is party $v \bmod n$. 
@@ -69,7 +70,8 @@ else
 ```
 
 We'll next define ```recoverable-broadcast``` and ```recover-max```.
-## Recoverable-broadcast and recover-max  for $f<n/2$ Omission Corruptions
+
+## Recoverable-broadcast and recover-max for $f<n/2$ Omission Corruptions
 
 ### Recoverable-broadcast protocol
 
@@ -166,9 +168,9 @@ Upon primary receiving n-f <"recover", u, *>,
 
 2. *Progression of Echoes*: At view $u$, parties in $ W $ send echoes from views that are at least $ v $ (and possibly from higher views if they've encountered them).
 
-3. *Quorum intersection*: The primary of view \( u \) waits for \( n-f \) `recover` messages. Let's denote the set of these sending parties as $ R \) (for the "read set"). Given $ f < n/2 $ and the fact that both $ W $ and $ R $ have at least $ n-f $ parties, the intersection of $ W $ and $ R $ is non-empty. This is because $ W \cap R$ contains at least $ 2(n-f) - n > 0 $ parties.
+3. *Quorum intersection*: The primary of view $u$ waits for $n-f$ `recover` messages. Let's denote the set of these sending parties as $R$ (for the "read set"). Given $ f < n/2 $ and the fact that both $ W $ and $ R $ have at least $ n-f $ parties, the intersection of $ W $ and $ R $ is non-empty. This is because $W \cap R$ contains at least $ 2(n-f) - n = n - 2f \geq 1 $ parties.
 
-4. *Primary chooses the highest*: Because of the non-empty intersection between $ W $ and $ R $ the primary receives recover messages that indicate echoes from a view of at least $ v $ (or higher because it chooses the highest and there may be others. The primary then chooses the value associated with the highest view number.
+4. *Primary chooses the highest*: Because of the non-empty intersection between $ W $ and $ R $ the primary receives recover messages that indicate echoes from a view of at least $ v $ (or higher because it chooses the highest and there may be others). The primary then chooses the value associated with the highest view number.
 
 
 
@@ -195,14 +197,13 @@ else
     recoverable-broadcast(v, Y)
 ```
 
-
 ### Agreement (Safety)
 
 The agreement property follows from the safety lemma:
 
 **Safety lemma**: Let $v^{\star}$ be the first view with $n-f$ echoes of $(v^\star, W)$, then for any view $v \ge v^\star$ the proposal value of ```recoverable-broadcast(v, W)``` must be $W$.
 
-Before we prove the lemma, lets see why it implies uniform agreement.
+Before we prove the lemma, let's see why it implies uniform agreement.
 
 *Proof of uniform agreement property given the safety lemma*: consider any party that outputs a value $X'$ in view $v'$.  It cannot be that $v' < v^\star$ because outputting a value requires seeing at least $n-f$ echo messages $(v',X')$, but by definition $v^{\star}$ is the first such view. So it must be that $v' \geq v^\star$ and hence $X'=W$ because the only values that are sent in recoverable-broadcast for these views is with the value $W$.
 
@@ -210,7 +211,7 @@ We now prove the lemma, which is the essence of Paxos safety.
 
 *Proof of the safety lemma*:
 
-For $u=v^\star$ lemma is true by definition.
+For the base case when $v=v^\star$ lemma is true by the validity of ```recoverable-broadcast(v, W)```.
 
 By induction, assume the lemma is true for all views $v$ such that $v^\star \le v<u$. To prove the lemma for view $u$, use the **recover-max after recoverable-broadcast** property: the output in view $u$ is a value from view $y$ with $v^\star \le y$. 
 
@@ -222,10 +223,9 @@ Hence the value of recover-max in view $u$ must be $W \neq \bot$, so the value o
 
 We proved (uniform) agreement, now let's prove that eventually, after GST, all *non-faulty* parties output a value.
 
-Consider the view $v^+$ with the *first* non-faulty primary that starts after GST. Denote this start time as $T$. Since we are after GST, then on or before time $T+ \Delta$ the primary will receive ```<"recover", v+, *)>``` from all non-faulty parties (at least $n-f$). Hence the primry will start a ```recoverable-broadcast(v+,Z)>``` that will arrive at all non-faulty parties on or before time $T+2\Delta$. Hence all non-faulty parties will send ```<"echo", v+, Z>``` (because they are still in view $v^+$). So all non-faulty parties will hear $n-f$ ```<"echo", v+, Z>``` on or before time $T+3\Delta$. So all non-faulty will decide $Z$ because they are still in view $v^+$.
+Consider the view $v^+$ with the *first* non-faulty primary that starts after GST. Denote this start time as $T$. Since we are after GST, then on or before time $T+ \Delta$ the primary will receive ```<"recover", v+, *)>``` from all non-faulty parties (at least $n-f$). Hence, the primary will start a ```recoverable-broadcast(v+,Z)>``` that will arrive at all non-faulty parties on or before time $T+2\Delta$. Hence, all non-faulty parties will send ```<"echo", v+, Z>``` (because they are still in view $v^+$). So all non-faulty parties will hear $n-f$ ```<"echo", v+, Z>``` on or before time $T+3\Delta$. So all non-faulty will decide $Z$ because they are still in view $v^+$.
 
 This concludes the liveness proof.
-
 
 ### Termination
 
@@ -244,7 +244,8 @@ Upon receiving n-f <decide, Z>
  Terminate
 
 ``` 
-*Proof*: 
+
+*Proof*:
 
 The tricky party of the proof is to only use the liveness property when we are sure all non-faulty parties are still running the protocol. 
 
@@ -255,6 +256,7 @@ The remaining part of the proof is natural:
 So consider the first non-faulty party that receives a  `<decide, Z>` message or outputs a value. In both cases it will send a `<decide, Z>` message to all parties. So eventually all non-faulty parties will receive a `<decide, Z>` message. So all non-faulty will eventually send a `<decide, Z>` message to all parties. So at non-faulty will see at least $n-f$ `<decide, Z>` messages and terminate.
 
 Note that this argument just used the liveness property, so this gadget is generic and can be used with any consensus protocol.
+
 ### Validity
 
 Observe that validity is rather trivial in these protocols. By induction, the only values used are the inputs of the parties.
@@ -272,7 +274,7 @@ Note that the time and number of messages before GST can be both unbounded. So f
 *Exercise: Modify the protocol above to use just $O(n)$ messages per view (so total of $O(n^2)$ after GST). Explain why the proof still works, in particular, detail the Liveness proof and the Time complexity.*
 
 ## Acknowledgments
-Many thanks to Kartik Nayak for insightful comments.
 
+Many thanks to Kartik Nayak for insightful comments.
 
 Your comments on [Twitter](https://twitter.com/ittaia/status/1599150005432250368?s=20&t=JiegXa5IVUUcfNM6ZietBA).
