@@ -25,13 +25,14 @@ In essence, our goal is to focus first on *safety* and move as much of the *live
 The protocol progresses in **views**, each view has a designated **primary** party. The role of the primary is rotated. For simplicity, the primary of view $v$ is party $v \bmod n$. 
 
 Clocks are perfectly synchronized, and $\Delta$ (the maximum message delay after GST) is known. View $v$ is set to be the time interval $[v(10 \Delta),(v+1)(10 \Delta))$. In other words, each $10\Delta$ clock ticks each party triggers a **view change** and increments the view by one. Clocks are assumed to be perfectly synchronized, so all parties move in and out of each view in complete synchrony (lock step).
+
 ## Single-shot consensus
 
 In this setting, each party has some *input value* and the goal is to *output a single value* with the following three properties:
 
 **Uniform Agreement**: if any two parties output $X$ and $X'$ then $X=X'$. Note that this is a strictly stronger property than **Agreement** which just requires that all *non-faulty* parties that output a value, output the same value.
 
-**Termination**: all non-faulty parties eventually output a value and terminate. Note that this is a strictly stronger property than **Liveness** which just requires that all non-faulty parties eventually output a value.
+**Termination**: all non-faulty parties eventually output a value and terminate. Note that this is a strictly stronger property than **Liveness** which just requires that all non-faulty parties eventually output a value. Note that we are in partial synchrony, and obtaining this property will require reasoning about events after GST.
 
 **Validity**: the output is an input of one of the parties. Note that this is a strictly stronger property than **Weak Validity** which just requires that if *all* parties have the same input value then this is the output value.
 
@@ -147,7 +148,7 @@ Upon primary receiving n-f <"recover", u, *>,
 **Recover-max after recoverable-broadcast**: If $n-f$ parties send echo in view $v$ for recoverable-broadcast then for recover-max of view $u>v$, the output is a value from view $y$ with $v\le y$.
 
 
-### proof of recover-max properties:
+### Proof of recover-max properties:
 
   
 **Validity**: 
@@ -197,6 +198,9 @@ else
     recoverable-broadcast(v, Y)
 ```
 
+Finally, define that a party *decides* and outputs a value the first time a recoverable-broadcast subroutine outputs a value. 
+
+
 ### Agreement (Safety)
 
 The agreement property follows from the safety lemma:
@@ -217,7 +221,7 @@ By induction, assume the lemma is true for all views $v$ such that $v^\star \le 
 
 1. From the induction hypothesis, in all views $v^\star \le v<u$ the proposal value of ```recoverable-broadcast(v, W)``` is $W$;
 2. During recover-max for view $u$ there are no recoverable-broadcast for view $u$ or higher views, so there are no echoes for view $u$ or higher. 
-Hence the value of recover-max in view $u$ must be $W \neq \bot$, so the value of recoverable-broadcast in view $u$ must be $W$ as well. This concludes the induction argument with concludes the proof of the safety Lemma.
+Hence, the value of recover-max in view $u$ must be $W \neq \bot$, so the value of recoverable-broadcast in view $u$ must be $W$ as well. This concludes the induction argument with concludes the proof of the safety Lemma.
 
 ### Liveness
 
@@ -228,7 +232,6 @@ Consider the view $v^+$ with the *first* non-faulty primary that starts after GS
 This concludes the liveness proof.
 
 ### Termination
-
 
 We proved that all non-faulty parties output a value, but our protocol never terminates! For that, we add the following *termination gadget*:
 
@@ -253,9 +256,11 @@ Claim: It cannot be the case that there is an execution where no honest party re
 
 The remaining part of the proof is natural:
 
-So consider the first non-faulty party that receives a  `<decide, Z>` message or outputs a value. In both cases it will send a `<decide, Z>` message to all parties. So eventually all non-faulty parties will receive a `<decide, Z>` message. So all non-faulty will eventually send a `<decide, Z>` message to all parties. So at non-faulty will see at least $n-f$ `<decide, Z>` messages and terminate.
+So consider the first non-faulty party that receives a  `<decide, Z>` message or outputs a value. In both cases it will send a `<decide, Z>` message to all parties. So eventually all non-faulty parties will receive a `<decide, Z>` message. So all non-faulty will eventually send a `<decide, Z>` message to all parties. So all non-faulty will see at least $n-f$ `<decide, Z>` messages and terminate.
 
-Note that this argument just used the liveness property, so this gadget is generic and can be used with any consensus protocol.
+Note that here we used the safety property: all parties that decide will indeed decide the same value.
+
+Note that this argument just used the liveness and safety properties, so this gadget is generic and can be used with any consensus protocol.
 
 ### Validity
 
@@ -275,6 +280,6 @@ Note that the time and number of messages before GST can be both unbounded. So f
 
 ## Acknowledgments
 
-Many thanks to Kartik Nayak for insightful comments.
+Many thanks to Kartik Nayak and Gilad Stern for insightful comments.
 
 Your comments on [Twitter](https://twitter.com/ittaia/status/1599150005432250368?s=20&t=JiegXa5IVUUcfNM6ZietBA).
