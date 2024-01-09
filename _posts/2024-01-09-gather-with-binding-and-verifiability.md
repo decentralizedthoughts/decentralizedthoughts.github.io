@@ -1,5 +1,5 @@
 ---
-title: 'Gather with Binding and Verifiability'
+title: Gather with Binding and Verifiability
 date: 2024-01-09 18:00:00 -05:00
 tags:
 - asynchrony
