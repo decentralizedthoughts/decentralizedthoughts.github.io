@@ -12,7 +12,7 @@ Recall that we are in an asynchronous model, assuming $f<n/3$, with at most $f$ 
 
 ## Basic Gather Refresher
 
-As a quick reminder, each party $i$ has an input $x_i$ to the protocol and outputs a set $S_i$ of at least $n-f$ tuples of the form $(j,x)$. The basic *validity* property: for every $(j,x)\in S_i$ such that $i$ and $j$ are nonfaulty, $x=x_j$. The more subtle property is *common core existence*: there exists some set $S^*$ of at least $n-f$ tuples that every nonfaulty party includes in its output (formally, for every nonfaulty $i$, $S^*\subseteq S_i$).
+As a quick reminder, each party $i$ has an input $x_i$ to the protocol and outputs a set $S_i$ of at least $n-f$ tuples of the form $(j,x)$. The basic *validity* property: for every $(j,x)\in S_i$ such that $i$ and $j$ are nonfaulty, $x=x_j$. The more subtle property is *common core existence*: there exists some set $S^\star$ of at least $n-f$ tuples that every nonfaulty party includes in its output (formally, for every nonfaulty $i$, $S^\star \subseteq S_i$).
 
 The protocol [in our previous post](https://decentralizedthoughts.github.io/2021-03-26-living-with-asynchrony-the-gather-protocol/) works as follows:
 
@@ -33,7 +33,7 @@ But for other [applications](https://arxiv.org/abs/2102.09041), the gather value
 
 <summary>More Formal definition of <b>fixed</b>.</summary>
 
-**Binding Core**: There exists an (efficient) extractor algorithm $X$ that takes the views of all nonfaulty parties and outputs a set $X(V)=S$ such that if $V^*$ is the views of the nonfaulty at the time of the execution in which the first nonfaulty party completes the gather protocol then $X(V^*)=S^*$ and the output of any nonfaulty party contains $S^*$.
+Binding Core: There exists an (efficient) extractor algorithm $X$ that takes the views of all nonfaulty parties and outputs a set $X(V)=S$ such that if $V^\star$ is the views of the nonfaulty at the time of the execution in which the first nonfaulty party completes the gather protocol then $X(V^\star)=S^\star$ and the output of any nonfaulty party contains $S^\star$.
 
 </details>
 
@@ -44,7 +44,7 @@ Observe that [our proof of basic Gather core existence](https://decentralizedtho
 ### Gather with Binding
 
 {: .box-note}
-To achieve binding, we employ the most important trick in distributed computing: **adding another round**:
+To achieve **binding**, we employ the most important trick in distributed computing: **adding another round**:
 
 1. Broadcast $x_i$ ([reliable broadcast](https://decentralizedthoughts.github.io/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/)).
 2. Define the set $S_i$ of pairs $(j,x_j)$, where $x_j$ was received from $j$. Once $S_i$ contains $n-f$ pairs send $S_i$ to every party.
@@ -57,26 +57,27 @@ The proofs of the validity and termination properties of this protocol remain st
 Consider the *first nonfaulty party* that completed the protocol. Denote its output as $V$. The set $V$ contains $n{-}f~$ $U$ sets, so least $n{-}2f$ of these $U$ sets must be from nonfaulty parties.
 
 Let $U^1,\dots,U^{f+1}$ be some $f+1$ sets from nonfaulty that form the set $V$ (for concreteness, choose the $f+1$ lexicographically first). Define:
+
 $$
-S^*= \bigcap_1^{f+1} U^i
+S^\star= \bigcap_1^{f+1} U^i
 $$
 
-By its definition, $S^*$ is fixed once the first nonfaulty completes the gather protocol.
+By its definition, $S^\star$ is fixed once the first nonfaulty completes the gather protocol.
 
 The proof concludes with the following two claims:
 
-**Claim 1:** $|S^*| \geq n-f$.
+**Claim 1:** $\|S^\star \| \geq n-f$.
 
-**Claim 2:** Any nonfaulty output contains $S^*$.
+**Claim 2:** Any nonfaulty output contains $S^\star$.
 
 
-*Proof of claim 1:* This follows from the regular common core property on the first 4 rounds (see proof in [previous post](https://decentralizedthoughts.github.io/2021-03-26-living-with-asynchrony-the-gather-protocol/)). So there must exist a set $S$ of at least $n-f$ tuples such that $S\subseteq U_i$ for all nonfaulty parties $i$ (because that would have been $i$'s output in the basic Gather protocol). Note that all we know is that eventually there exists some $S$ such that $S \subseteq S^*$ and in fact, $S$ may not be fixed yet.
+*Proof of claim 1:* This follows from the regular common core property on the first 4 rounds (see proof in [previous post](https://decentralizedthoughts.github.io/2021-03-26-living-with-asynchrony-the-gather-protocol/)). So there must exist a set $S$ of at least $n-f$ tuples such that $S\subseteq U_i$ for all nonfaulty parties $i$ (because that would have been $i$'s output in the basic Gather protocol). Note that all we know is that eventually there exists some $S$ such that $S \subseteq S^\star$ and in fact, $S$ may not be fixed yet.
 
 Note the little trick we did here. We do not know which set will eventually be the core as we defined it for the "regular" gather protocol. However, we do know that when nonfaulty parties eventually send their $U_i$ sets, all of these sets must have a large intersection. This immediately means that any number of $U_i$ sets sent by nonfaulty parties will have a large intersection as well.
 
-*Proof of claim 2:* any nonfaulty party that completes the protocol waits to first receive $n-f$ sets $U_i$ and outputs the union of these sets. From quorum intersection, at least one of the $U_i$ sets was received from one of the nonfaulty parties defined above. These parties sent the sets $U^1,\dots, U^{f+1}$ that all include the core $S^*$, and thus every party will include the core in its output.
+*Proof of claim 2:* any nonfaulty party that completes the protocol waits to first receive $n-f$ sets $U_i$ and outputs the union of these sets. From quorum intersection, at least one of the $U_i$ sets was received from one of the nonfaulty parties defined above. These parties sent the sets $U^1,\dots, U^{f+1}$ that all include the core $S^\star$, and thus every party will include the core in its output.
 
-Note that $S^*$ is defined at the time the first nonfaulty party completes the protocol, and thus the core is binding.
+Note that $S^\star$ is defined at the time the first nonfaulty party completes the protocol, and thus the core is binding.
 
 
 ## Extending Gather with Verifiability: verifying that a faulty party's output also includes the common core
@@ -99,13 +100,13 @@ Note that we do ***not*** require $Verify$ to have **transferability**. If $Veri
 ### Gather with Verifiability
 
 {: .box-note}
-To obtain verifiability, we again employ the most important trick in distributed computing: **adding another round**.
+To obtain **verifiability**, we again employ the most important trick in distributed computing: **adding another round**.
 
 So we run the same protocol as above, but instead of outputting the sets $V_i$, we send these to all parties. We then add the following unsurprising code:
 
 6. Upon receiving a message $V_j$ from party $j$, accept the message after receiving the broadcast $x_k$ from $k$ for every $(k,x_k)\in V_j$. After accepting $n-f$ sets $V_j$, output $W_i=\cup V_j$.
 
-How does this help us in verification? We know that every nonfaulty party $j$ has the set $S^*$ in its $V_j$ set. This means that we can indirectly check if $S^*$ is contained in $S$ by checking if at least one nonfaulty party's $V$ set is contained in $S$. We can easily do that by simply checking if $S$ contains at least $f+1$ sets $V_j$, since at least one of those sets will be a set sent by a nonfaulty party. 
+How does this help us in verification? We know that every nonfaulty party $j$ has the set $S^\star$ in its $V_j$ set. This means that we can indirectly check if $S^\star$ is contained in $S$ by checking if at least one nonfaulty party's $V$ set is contained in $S$. We can easily do that by simply checking if $S$ contains at least $f+1$ sets $V_j$, since at least one of those sets will be a set sent by a nonfaulty party. 
 
 Using this trick, we also know that nonfaulty parties will accept each other's sets. That is because a nonfaulty $i$ outputs a set $W_i$ that is the union of $n-f$ sets $V_j$. At least $f+1$ of those sets were sent by nonfaulty parties that send these sets to everybody. Every nonfaulty party will eventually receive these sets and accept $W_i$.  
 
