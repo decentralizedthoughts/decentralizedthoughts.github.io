@@ -1,5 +1,5 @@
 ---
-title: 'Living with Asynchrony: the Gather Protocol with Binding and Verifiability'
+title: 'Gather with Binding and Verifiability'
 date: 2024-01-09 18:00:00 -05:00
 tags:
 - asynchrony
@@ -27,7 +27,7 @@ When the values sent in the gather protocol are all public, for example as in [a
 
 But for other [applications](https://arxiv.org/abs/2102.09041), the gather values are [secret shares](https://decentralizedthoughts.github.io/2020-07-17-polynomial-secret-sharing-and-the-lagrange-basis/), and **we want to reveal the secrets only after a common core is fixed**. In some settings, secret values may be revealed once $n-2f$ nonfaulty parties complete the gather. So we want the property that the *core is fixed once the first nonfaulty completes the gather protocol*. We call this property ***binding***. Generally, a protocol is binding if it defines the output (or parts of it) at the time the first nonfaulty party completes the protocol. 
 
-**Binding Core**: The common core $S^*$ is **fixed** at the time of the execution in which the first nonfaulty party completes the gather protocol. 
+**Binding Core**: The common core $S^\star$ is **fixed** at the time of the execution in which the first nonfaulty party completes the gather protocol. 
 
 <details>
 
@@ -86,7 +86,6 @@ In Gather, all nonfaulty parties output sets that include a common core. However
 
 We cannot force faulty parties to include the common core but we can do the next best thing: make them prove that their output contains the common core. For this, we need to be able to *verify* the output of parties.
 
-
 We formalize with a function $Verify$ that takes as input a set $S$ and the local state of the party and outputs either 0 or 1. We denote $Verify_i$ the function with the state of party $i$.
 
 $Verify$ has three properties:
@@ -112,14 +111,14 @@ Using this trick, we also know that nonfaulty parties will accept each other's s
 
 This leads us to the following manner of verifying a set $S$:
 
-* Upon receiving $V_j$ sets from $f+1$ parties such that $V_j\subseteq S$, output 1 (and wait until this happens if this is not the case).
+* $Verify(S)$: Upon receiving $V_j$ sets from $f+1$ parties such that $V_j\subseteq S$, output 1 (and wait until this happens if this is not the case).
 
 ## Notes and an exercise 
 
 * Instead of sending sets that include pairs, we can include just  the index of the sender. This allows us to optimize the protocols, especially when the $x_i$ are large.
-
 * In this post and the previous we present a version of gather where the sets are not broadcast. See [here](https://arxiv.org/abs/2102.09041) for a variation of gather that broadcasts the sets. 
 * The common core in this post is of size $n-f$. While the conference version of [Canetti and Rabin 93](https://dl.acm.org/doi/10.1145/167088.167105) is underspecified, the version in [Canetti's thesis](https://www.wisdom.weizmann.ac.il/~oded/ran-phd.html) seems to offer a binding core of size $n-2f$. For some use cases a core of size $f+1$ is sufficient.
+  
 * **Exercise 1:** Suppose that parties need to broadcast their output - how can you guarantee the **transferability** property defined above?
 * **Exercise 2:** For $n=4$ provide a concrete Binding violation example for the basic gather protocol.
 
