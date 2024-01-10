@@ -33,7 +33,7 @@ But for other [applications](https://arxiv.org/abs/2102.09041), the gather value
 
 <summary>More Formal definition of <b>fixed</b>.</summary>
 
-Binding Core: There exists an (efficient) extractor algorithm $X$ that takes the views of all nonfaulty parties and outputs a set $X(V)=S$ such that if $V^\star$ is the views of the nonfaulty at the time of the execution in which the first nonfaulty party completes the gather protocol then $X(V^\star)=S^\star$ and the output of any nonfaulty party contains $S^\star$.
+<b>Binding Core</b>: There exists an (efficient) extractor algorithm $X$ that takes the views of all nonfaulty parties and outputs a set $X(V)=S$ such that if $V^\star$ is the views of the nonfaulty at the time of the execution in which the first nonfaulty party completes the gather protocol then $X(V^\star)=S^\star$ and the output of any nonfaulty party contains $S^\star$.
 
 </details>
 
@@ -123,4 +123,4 @@ This leads us to the following manner of verifying a set $S$:
 * **Exercise 2:** For $n=4$ provide a concrete Binding violation example for the basic gather protocol.
 
 
-Please send your feedback/comments and solutions on [Twitter]().
+Please send your [feedback/comments and solutions](https://x.com/ittaia/status/1745031198114513231?s=20).
