@@ -80,16 +80,20 @@ We'll next define ```recoverable-broadcast``` and ```recover-max```.
 The ```recoverable-broadcast``` protocol has a designated *primary* party with *input value* ```Z``` and a view number ```v```:
 
 ```
-Primary sends <v, Z> to all
-
-Upon receiving <v, Z> from primary, 
- send <"echo", v, Z> to all
+Upon start of view v,
+ Primary sends <v, Z> to all
 
 Upon receiving n-f <"echo", v, Z>, 
  output Z
 ```
 
-For simplicity, the primary also acts as a regular party. So it also sends ```<v, Z>``` to itself and upon seeing its own message, it sends an ```<"echo", v, Z>``` message to all parties (again including sending it to itself). 
+All parties run the following while in view  ```v```:
+```
+Upon receiving <v, Z> from primary, 
+ send <"echo", v, Z> to all
+```
+
+Observe that for simplicity, the primary also acts as a regular party. So it also sends ```<v, Z>``` to itself and upon seeing its own message, it sends an ```<"echo", v, Z>``` message to all parties (again including sending it to itself). 
 
 ### Recoverable-broadcast properties
 
@@ -277,6 +281,17 @@ Note that the time and number of messages before GST can be both unbounded. So f
 **Message Complexity**: since each round has an all-to-all message exchange, the total number of messages sent after GST is $O((f+1) \times n^2) = O(n^3)$. We show [here](https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/) that $O(n^2)$ is the best you can hope for (for deterministic protocols or against strongly adaptive adversaries).
 
 *Exercise: Modify the protocol above to use just $O(n)$ messages per view (so total of $O(n^2)$ after GST). Explain why the proof still works, in particular, detail the Liveness proof and the Time complexity.*
+
+## Canonical examples
+
+The following 3 examples are helpful to understand paxos.
+
+All these examples will have $n=3$ and $f=1$. Assume party 1 has input ```A``` and party 2 has ```B```.
+
+1. In view 1: parties 1 and 2 echo and only the Primary of view 1 (party 1) outputs ```A```. In view 2: the primary (party 2) hears a recover from parties 3 and 1, hence will see the echo from view 1, hence will use that echo as its value  ```recoverable-broadcast(2, A)```.
+2. In view 1: parties 1 and 2 echo, but the Primary of view 1 does not output. Note that view 2 can be exactly like in the above example. Party 2 could have used its own input in this case, but the protocol guides it use ```B``` because it cannot distinguish between the two cases.
+3. In view 1: party 1 echoes its own input ```A```. In view 2, party 2 hears a recover from 2 and 3, hence sends its own input ```B```, then receives echoes from 2 and 3, and outputs. Now in view 3, the primary party 3 hears a recover from itself a value of ```B``` and from 1 a value of ```A```. So how does it choose between them? This example shows the importance of choosing the value with the highest view. In this case ```A``` is associated with view 1 and ```B``` is associated with view 2, so ```B``` must be chosen.
+
 
 ## Acknowledgments
 
