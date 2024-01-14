@@ -223,7 +223,7 @@ Observe that these points are indeed between the client request and the response
 
 Given this, let's show that the response is equal to a response of the sequential execution that respects the linearization points.
 
-**The core observation**: due to the Backup's $2 \Delta$ view change timer, all the type 1 linearization points will arrive at the backup and be executed by the Backup before all the type 2 linearization points. 
+**The core observation**: due to the Backup's $2 \Delta$ view change timer, all the type 1 linearization points reflect messages that will arrive at the backup and be executed by the Backup before all the executions that are related to type 2 linearization points. 
 
 Since the Primary is sequential, all the type 1 linearization points respect the sequential execution at the Primary. If Primary crashes, then all the type 1 linearization points are also respected at the backup since it is sequential, and it receives all of them.
 
