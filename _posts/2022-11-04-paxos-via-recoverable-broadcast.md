@@ -288,10 +288,9 @@ The following 3 examples are helpful to understand paxos.
 
 All these examples will have $n=3$ and $f=1$. Assume party 1 has input ```A``` and party 2 has ```B```.
 
-1. In view 1: parties 1 and 2 echo and only the Primary of view 1 (party 1) outputs ```A```. In view 2: the primary (party 2) hears a recover from parties 3 and 1, hence will see the echo from view 1, hence will use that echo as its value  ```recoverable-broadcast(2, A)```.
-2. In view 1: parties 1 and 2 echo, but the Primary of view 1 does not output. Note that view 2 can be exactly like in the above example. Party 2 could have used its own input in this case, but the protocol guides it use ```B``` because it cannot distinguish between the two cases.
-3. In view 1: party 1 echoes its own input ```A```. In view 2, party 2 hears a recover from 2 and 3, hence sends its own input ```B```, then receives echoes from 2 and 3, and outputs. Now in view 3, the primary party 3 hears a recover from itself a value of ```B``` and from 1 a value of ```A```. So how does it choose between them? This example shows the importance of choosing the value with the highest view. In this case ```A``` is associated with view 1 and ```B``` is associated with view 2, so ```B``` must be chosen.
-
+1. **Only party 1 outputs in view 1**. In view 1: party 1 sends ```A```, parties 1 and 2 echo and party 1 outputs ```A```. In view 2: party 2 receives recover from parties 1 and 2, hence will see the echo from view 1, hence will use that echo as its value  ```recoverable-broadcast(2, A)```.
+2. **No one outputs in view 1** In view 1: party 1 sends ```A```, party 1 sends echo. View 2 is *exactly* like in the above example. Party 2 receives recover from parties 1 and 2, hence uses ```B```, but in fact its just because it cannot distinguish between this and the previous example.
+3. **View 1 like example 2 and View 2 only party 2 outputs**. In view 1: party 1 sends ```A```, party 1 sends echo. In view 2:  party 2 receives recover from parties 2 and 3, hence will see $\bot$ so it will use it input for ```recoverable-broadcast(2, B)```. Parties 2 and 3 echo, party 2 outputs ```B```. Now at view 3: party 3 receives  ecover from parties 1 and 3: it hears ```A``` from 1 and ```B``` from 3, so what will it choose? Since ```A``` is associated with view 1 and ```B``` is associated with view 2, so ```B``` must be chosen.
 
 ## Acknowledgments
 
