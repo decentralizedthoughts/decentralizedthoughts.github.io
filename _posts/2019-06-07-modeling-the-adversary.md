@@ -18,6 +18,12 @@ After we fix the communication model, [synchrony, asynchrony, or partial synchro
 
 
 ### 1. Type of corruption
+
+<p align="center">
+  <img src="/uploads/types.jpeg" width="256" title="Types">
+</p>
+
+
 The first fundamental aspect is what type of behavior the adversary can inflict on the $f$ parties is can corrupt. There are four classic types of corruption: Passive, Crash, Omission, and Byzantine.
 
 **Passive**: a passively corrupted party must follow the protocol just like an honest party, but it allows the adversary to learn information. A passive adversary (sometimes called [Honest-But-Curious](https://eprint.iacr.org/2011/136.pdf) or [Semi-Honest](http://www.wisdom.weizmann.ac.il/~oded/foc-vol2.html)) does not deviate from the protocol but can learn all possible information from its _view_: i.e., the messages sent and received by parties it controls. A failure in this case is if the passive adversary learns information that the protocol designer wanted the adversary not to learn.
