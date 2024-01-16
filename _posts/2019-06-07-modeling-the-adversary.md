@@ -20,7 +20,7 @@ After we fix the communication model, [synchrony, asynchrony, or partial synchro
 ### 1. Type of corruption
 
 <p align="center">
-  <img src="/uploads/types.jpeg" width="256" title="Types">
+  <img src="/uploads/types.jpeg" width="512" title="Types">
 </p>
 
 
