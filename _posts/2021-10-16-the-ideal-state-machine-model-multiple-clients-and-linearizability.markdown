@@ -12,6 +12,7 @@ First, these definitions highlight the challenges of serving multiple clients. S
 
 
 ### The Ideal State Machine Model
+
 In the *ideal model*, there is a single *server* and a set of *clients*. Clients only communicate with the server. The adversary can corrupt clients and cause them to have omission failures. A client that is not corrupted is called *non-faulty*. We assume a synchronous model of communication where the adversary can delay messages by at most some known bound $\Delta$.  In order to focus on the communication delay effects, we assume that local computation takes zero time.
 
 
@@ -36,6 +37,7 @@ while true
 Note that if a ```<response>``` arrives without a matching pending command it is ignored.
 
 ### A batched server implementing a sequential state machine: 
+
 The state machine is defined by the *transition function*  ```apply()``` that takes the existing state and a new command and outputs the new state and the response: ```(state, response) = apply(state, cmd)```. The server uses a *timer* that ticks every $\Delta$ time to batch client commands into *blocks*. It then executes each block and sends the responses to the relevant clients. 
 
 To maintain the history, the blocks of commands are recorded in a log of blocks.
@@ -65,20 +67,18 @@ When a non-faulty client sends a command, it may take up to $3 \Delta$ of networ
 The above requirement is for non-faulty clients. If the client is faulty (can suffer omission faults) then it may happen that the client never receives a response (because the adversary omits the responses at the client).
 
 ### The Client Experience: Safety
+
 Now that we defined the liveness property we need to ask: given a request, what should we consider as a correct response from the server? More generally, we will look at a full *client history* (all the requests and responses of all the clients) and ask: is this history correct?
 
 We will give two answers to this question. The first is by saying that a history is correct if it can be generated in an execution in our ideal model:
 
-
 **Safety (relative to the ideal model)**: a client history is safe if it can be generated in the ideal model.
 
-Our second answer is to use the definition of **[linearizability](http://www.cs.tau.ac.il/~shanir/multiprocessor-synch-2003/linear/notes/linear.pdf)**. We can view each request-response pair as a function call to the state machine object and require that each function call has a **linearization point** at some time between the request and the response. The behavior of the system is as if the function occurs instantaneously at its linearization point and the object behaves like its sequential definition.
+Our second answer is to use the definition of **[linearizability](https://www.researchgate.net/publication/213876653_The_Art_of_Multiprocessor_Programming) (Chapter 3.5)**. We can view each request-response pair as a function call to the state machine object and require that each function call has a **linearization point** at some time between the request and the response. The behavior of the system is as if the function occurs instantaneously at its linearization point and the object behaves like its sequential definition.
 
 Note that since clients may fail, the last client request may not have a response in the client history. Formally, we require that a request with no response either has a linearization point that is after the request or there is no linearization point for this request.
 
 **Safety (linearizability)**: a client history is safe if it is linearizable. 
-
-
 
 So these are two ways to say the same thing! Let's say a few words about why that is the case. The single server executes requests as a sequential state machine. The linearization point of a request is precisely the point in time when the server sequentially executes the request (and a request that has no response and no linearization point is exactly the case that this request message was omitted by the adversary).
 
@@ -98,6 +98,7 @@ Let's now show how to implement a system that behaves like an ideal system even 
 In this part, we will extend the protocol in our [previous post](https://decentralizedthoughts.github.io/2019-11-01-primary-backup/) to the multi-client setting.
 
 ### The Two-Server One-Crash Model
+
 There are two *servers* we call ```Primary``` and ```Backup``` and a set of *clients*. Clients only communicate with the two servers. The adversary can cause a crash failure to one of the two servers and also cause omission failures to any number of clients. Clients that have no omission failures are called non-faulty. Communication is synchronous: the adversary can delay messages by at most some known bound $\Delta$.  
 
 Note that the adversary in this model can both control the network delays, cause client omission faults, and crash one of the servers while the adversary in the Ideal Model can only control network delays and cause client omission faults.
@@ -197,8 +198,6 @@ while true
         counter++
 ```
 
-
-
 ### Liveness analysis
 
 First, as long as the Primary does not crash, the Backup will not initiate a view change. In that case, commands sent by a client will arrive in $<\Delta$ time, be processed in a batch in $<\Delta$ time, and sent a response in $<\Delta$ time, for a total of $<3\Delta$ time.
@@ -227,11 +226,10 @@ Given this, let's show that the response is equal to a response of the sequentia
 
 Since the Primary is sequential, all the type 1 linearization points respect the sequential execution at the Primary. If Primary crashes, then all the type 1 linearization points are also respected at the backup since it is sequential, and it receives all of them.
 
-Since the Backup is sequential, then all the type 2 linearization points respect the sequential execution at the Backup and they all appear after all the type 1 linearization points as needed.
+Since the Backup is sequential, then all the type 2 linearization points respect the sequential execution at the Backup, and they all appear after all the type 1 linearization points as needed.
 
 ### Acknowledgments
+
 Many thanks to Matan, Avihu, and Noa for fixing several bugs in the Backup state machine pseudo code.
-
-
 
 Your decentralized thoughts and comments on [Twitter](https://twitter.com/ittaia/status/1451515584139730949?s=20)
