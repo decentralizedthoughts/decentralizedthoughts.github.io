@@ -39,6 +39,11 @@ Note that each corruption type subsumes the previous one.
 There are other types of corruption. Most notable are variants of [Covert adversaries](https://eprint.iacr.org/2007/060.pdf).  *Covert adversaries* can be used to model rational behavior where there is fear (utility loss) from punishment through some form of detection. 
 
 ### 2. Computational power 
+
+<p align="center">
+  <img src="/uploads/compute power.jpeg" width="512" title="Types">
+</p>
+
 The computational power of the adversary is the next choice. There are two traditional variants and one newer one:
 
 1. **Unbounded**: the adversary has unbounded computational power. This model often leads to notions of *perfect security* or *statistical security*.
@@ -46,6 +51,11 @@ The computational power of the adversary is the next choice. There are two tradi
 3. **Fine-grained computationally bounded**: there is some concrete measure of computational power and the adversary is limited concretely. This model is used in proof-of-work based protocols. For example, see [Andrychowicz and Dziembowski](https://www.iacr.org/archive/crypto2015/92160235/92160235.pdf) for a way to model the hash rate. It is also needed for Verifiable Delay Functions.
 
 ### 3. Adaptivity 
+
+<p align="center">
+  <img src="/uploads/adaptiv.jpeg" width="512" title="Types">
+</p>
+
 Adaptivity is the ability of the adversary to corrupt dynamically based on information the adversary learns during the execution. There are two basic variants: static and adaptive. The adaptive model has several sub-variants.
 
 1. **Static**: the adversary has to decide which $f$ parties to corrupt in advance before the execution of the protocol. Note that this is always sufficient when the protocol is deterministic.
