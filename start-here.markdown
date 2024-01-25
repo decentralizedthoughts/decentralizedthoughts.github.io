@@ -206,7 +206,7 @@ Polynomial secret sharing is a base for deep connections between cryptography an
 
 # Research Oriented Posts
 
-- [What is the difference between PBFT, Tendermint, SBFT, and HotStuff ?](/2019-06-23-what-is-the-difference-between/) [How does HotStuff-2 relate to these protocols?](/2023-04-01-hotstuff-2/)
+- [What is the difference between PBFT, Tendermint, SBFT, and HotStuff ?](/2019-06-23-what-is-the-difference-between/) and [How does HotStuff-2 relate to these protocols?](/2023-04-01-hotstuff-2/)
 
 - [Survey of modern Authenticated Synchronous BFT protocols](/2019-11-11-authenticated-synchronous-bft/) (updated in March 2021).
 
