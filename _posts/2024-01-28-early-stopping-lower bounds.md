@@ -88,7 +88,7 @@ In order to fix this, in world $A$, $j_1$ terminates after receiving $i$'s messa
 ## The general case
 
 
-***Theorem***: *Any protocol in the *synchronous* model for $n$ parties that is resilient to $n-2 \geq t \geq 1$ failures, then in executions with $f$ failures:*
+***Theorem***: *Any protocol in the synchronous model for $n$ parties that is resilient to $n-2 \geq t \geq 1$ failures, then in executions with $f$ failures:*
 
 1. *For $\mathcal{O}$, for $f\le t-1$ any protocol must have an execution with at least $f+2$ rounds.*
 2. *For $\mathcal{U}$, for $f \le t-2$, must have an execution where a decision is done after at least  $f+2$ rounds.*
