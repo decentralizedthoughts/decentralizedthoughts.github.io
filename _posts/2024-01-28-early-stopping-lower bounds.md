@@ -1,7 +1,7 @@
 ---
 title: 'Early Stopping is same but different: two rounds are needed even in failure
   free executions'
-date: 2028-01-23 12:05:00 -05:00
+date: 2024-01-28 12:05:00 -05:00
 tags:
 - lowerbound
 author: Ittai Abraham and Gilad Stern
