@@ -124,7 +124,7 @@ This completes the proof of Lemma 3.
 
 * To apply Lemma 3 in the crash model, we looked at the failure free decision if $i$ crashes. In the **mobile adversary model**, we look at the failure free decision if $i$ crashes for one round (and then heals) in both $C$ and $C'$. If its not the same value, then Lemma 3 holds by applying this crash to both $C$ and $C'$. Otherwise, the failure free decision if $i$ crashes for one round is fixed (wlog to the value opposite of $C$) so Lemma 3 holds by looking at the hybrid worlds where $i$ crashes for just one round after sending to $j$ parties (and then heals). This argument implies that [infinite executions must exist](https://link.springer.com/chapter/10.1007/BFb0028994) with even just **one** mobile crash. Hence, deterministic solutions are impossible and randomization is needed in the mobile adversary model. 
 
-* Note that the bound $\min \{f+2,t+1\}$ does not hold for $\mathcal{C}$ or $\mathcal{U}$, in those models the bound is:
+* Note that the bound $\min \\{ f+2,t+1 \\}$ does not hold for $\mathcal{C}$ or $\mathcal{U}$, in those models the bound is:
 $$
 \begin{align}
  & 
