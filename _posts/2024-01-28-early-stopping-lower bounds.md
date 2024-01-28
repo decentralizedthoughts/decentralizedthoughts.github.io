@@ -38,7 +38,7 @@ Let's prove lower bounds for 3 models:
 Note that lower bounds for $\mathcal{O}$ and $\mathcal{U}$ imply lower bounds with omission faults for consensus and uniform consensus respectively.
 
 
-***Theorem for $f=0$***: *Let there be a protocol in the *synchronous* model for $n$ parties that is resilient to $n-2 \geq t \geq 1$ failures. Then in error free executions:*
+***Theorem for $f=0$***: *Let there be a protocol in the synchronous model for $n$ parties that is resilient to $n-2 \geq t \geq 1$ failures. Then in error free executions:*
 
 1. *For $\mathcal{O}$, the protocol must have an execution with at least 2 rounds.*
 2. *For $\mathcal{U}$, for $t>1$, the protocol must have an execution where a decision is made after at least 2 rounds.*
@@ -59,7 +59,7 @@ Hence, $C_{i-1},C_{i}$ are two AS but FFD configurations.
 This might not sound like much, but the next lemma shows that if there are two AS but FFD configurations, it is not possible to terminate (or decide) in one round starting in either one of them. Intuitively, seeking a contradiction, any party hearing all parties must decide and stop in one round in both configurations. But the configurations are so similar with just one party that has a different state. This causes problems because this party may crash after sending its message to just one party, who then decides and stops, but others don't know what value to choose.
 
 
-***Lemma 2***: *If $C,C'$ are two AS but FFD configurations at the beginning of a round, and in both configurations the adversary has at least $c \in\{1,2\}$ more crash failures (so has previously crashed ay most $t-c$ parties) then:*
+***Lemma 2***: *If $C,C'$ are two AS but FFD configurations at the beginning of a round, and in both configurations the adversary has at least $c \in\{1,2\}$ more crash failures (so has previously crashed at most $t-c$ parties) then:*
 
 1. *For $\mathcal{O}$ any protocol must have an execution with at least 2 more rounds.*
 2. *For $\mathcal{U}$, for $c=2$, must have an execution where a decision is done after at least  2 more rounds.*
@@ -125,6 +125,7 @@ This completes the proof of Lemma 3.
 * To apply Lemma 3 in the crash model, we looked at the failure free decision if $i$ crashes. In the **mobile adversary model**, we look at the failure free decision if $i$ crashes for one round (and then heals) in both $C$ and $C'$. If its not the same value, then Lemma 3 holds by applying this crash to both $C$ and $C'$. Otherwise, the failure free decision if $i$ crashes for one round is fixed (wlog to the value opposite of $C$) so Lemma 3 holds by looking at the hybrid worlds where $i$ crashes for just one round after sending to $j$ parties (and then heals). This argument implies that [infinite executions must exist](https://link.springer.com/chapter/10.1007/BFb0028994) with even just **one** mobile crash. Hence, deterministic solutions are impossible and randomization is needed in the mobile adversary model. 
 
 * Note that the bound $\min \\{ f+2,t+1 \\}$ does not hold for $\mathcal{C}$ or $\mathcal{U}$, in those models the bound is:
+
 $$
 \begin{align}
  & 
@@ -140,4 +141,4 @@ $$
 
 
 
-Please leave comments on [Twitter](...)
+Please leave comments on [Twitter](https://x.com/ittaia/status/1751743296219529283?s=20).
