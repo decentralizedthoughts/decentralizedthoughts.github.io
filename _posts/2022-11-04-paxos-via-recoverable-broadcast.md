@@ -24,7 +24,7 @@ In essence, our goal is to focus first on *safety* and move as much of the *live
 
 The protocol progresses in **views**, each view has a designated **primary** party. The role of the primary is rotated. For simplicity, the primary of view $v$ is party $v \bmod n$. 
 
-Clocks are perfectly synchronized, and $\Delta$ (the maximum message delay after GST) is known. View $v$ is set to be the time interval $[v(10 \Delta),(v+1)(10 \Delta))$. In other words, each $10\Delta$ clock ticks each party triggers a **view change** and increments the view by one. Clocks are assumed to be perfectly synchronized, so all parties move in and out of each view in complete synchrony (lock step).
+Clocks are perfectly synchronized, and $\Delta$ (the maximum message delay after GST) is known. View $v$ is set to be the time interval $[v(10 \Delta),(v+1)(10 \Delta))$ (see liveness proof for how this can be optimized). In other words, each $10\Delta$ clock ticks each party triggers a **view change** and increments the view by one. Clocks are assumed to be perfectly synchronized, so all parties move in and out of each view in complete synchrony (lock step).
 
 ## Single-shot consensus
 
@@ -233,7 +233,10 @@ We proved (uniform) agreement, now let's prove that eventually, after GST, all *
 
 Consider the view $v^+$ with the *first* non-faulty primary that starts after GST. Denote this start time as $T$. Since we are after GST, then on or before time $T+ \Delta$ the primary will receive ```<"recover", v+, *)>``` from all non-faulty parties (at least $n-f$). Hence, the primary will start a ```recoverable-broadcast(v+,Z)>``` that will arrive at all non-faulty parties on or before time $T+2\Delta$. Hence, all non-faulty parties will send ```<"echo", v+, Z>``` (because they are still in view $v^+$). So all non-faulty parties will hear $n-f$ ```<"echo", v+, Z>``` on or before time $T+3\Delta$. So all non-faulty will decide $Z$ because they are still in view $v^+$.
 
-This concludes the liveness proof.
+This concludes the liveness proof. 
+
+Note that all we needed here is that all non-faulty parties are in the same view for $3\Delta$ time. So we could have defined view $v$ to just be the time interval $[v(3 \Delta),(v+1)(3 \Delta))$.
+
 
 ### Termination
 
@@ -284,7 +287,7 @@ Note that the time and number of messages before GST can be both unbounded. So f
 
 ## Canonical examples
 
-The following 3 examples are helpful to understand paxos.
+The following 3 examples are helpful to understand Paxos.
 
 All these examples will have $n=3$ and $f=1$. Assume party 1 has input ```A``` and party 2 has ```B```.
 
