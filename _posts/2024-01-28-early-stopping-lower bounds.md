@@ -35,11 +35,11 @@ In other words, two configurations are AS but FFD if the state of all parties ex
 There are slightly different lower bounds for 3 different models:
 
 
-***Early Stopping for Consensus under Crashes with Fixed First (ES{-}C{-}Cfix)***: Here we study early stopping for consensus where the first message sent in the round a party is crashed is fixed. Note this models includes omission failures and also deterministic protocols that always follow the same sending order.
+***Early Stopping for Consensus under Crashes with Fixed First ($ES{-}C{-}Cfix$)*** : Here we study early stopping for consensus where the first message sent in the round a party is crashed is fixed. Note this models includes omission failures and also deterministic protocols that always follow the same sending order.
 
-***Early Deciding for Uniform Consensus under Crashes with Fixed First (ED{-}UC{-}Cfix)***: Here we study early deciding for [uniform consensus](https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/) in the same fault model above where the first message sent in the round a party is crashed is fixed. 
+***Early Deciding for Uniform Consensus under Crashes with Fixed First ($ED{-}UC{-}Cfix$)*** : Here we study early deciding for [uniform consensus](https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/) in the same fault model above where the first message sent in the round a party is crashed is fixed. 
 
-***Early Stopping for Consensus under Crashes (ES{-}C{-}C)***: Here we study the standard crash model where parties can decide the order of messages sent in each round (potentially as a function of its state).
+***Early Stopping for Consensus under Crashes ($ES{-}C{-}C$)*** : Here we study the standard crash model where parties can decide the order of messages sent in each round (potentially as a function of its state).
 
 ## The $f=0$ case
 
