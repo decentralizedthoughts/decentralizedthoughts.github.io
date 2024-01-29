@@ -35,27 +35,19 @@ In other words, two configurations are AS but FFD if the state of all parties ex
 There are slightly different lower bounds for 3 different models:
 
 
-***Early Stopping for Consensus under Crashes with Fixed First (ES-C-Cfix)***: Here we study early stopping for consensus where the first message sent in the round a party is crashed is fixed. Note this models includes omission failures and also deterministic protocols that always follow the same sending order.
+***Early Stopping for Consensus under Crashes with Fixed First (ES{-}C{-}Cfix)***: Here we study early stopping for consensus where the first message sent in the round a party is crashed is fixed. Note this models includes omission failures and also deterministic protocols that always follow the same sending order.
 
-***Early Deciding for Uniform Consensus under Crashes with Fixed First (ED-UC-Cfix)***: Here we study early deciding for [uniform consensus](https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/) in the same fault model above where the first message sent in the round a party is crashed is fixed. 
+***Early Deciding for Uniform Consensus under Crashes with Fixed First (ED{-}UC{-}Cfix)***: Here we study early deciding for [uniform consensus](https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/) in the same fault model above where the first message sent in the round a party is crashed is fixed. 
 
-***Early Stopping for Consensus under Crashes (ES-C-C)***: Here we study the standard crash model where parties can decide the order of messages sent in each round (potentially as a function of its state).
-
-
-
-1. $\mathcal{O}$: Early stopping for consensus with crash failures when the adversary can decide the order of sending messages in the round the party crashes.
-2. $\mathcal{U}$: Early deciding for [uniform consensus](https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/) with crash failures when the adversary can decide the order of sending messages in the round the party crashes.
-3. $\mathcal{C}$: Early stopping for consensus with crash failures when the party can decide the order of sending messages in each round.
-
-Note that lower bounds for $\mathcal{O}$ and $\mathcal{U}$ imply lower bounds with omission faults for consensus and uniform consensus respectively.
+***Early Stopping for Consensus under Crashes (ES{-}C{-}C)***: Here we study the standard crash model where parties can decide the order of messages sent in each round (potentially as a function of its state).
 
 ## The $f=0$ case
 
 ***Theorem for $f=0$***: *Let there be a protocol in the synchronous model for $n$ parties that is resilient to $n-2 \geq t \geq 1$ failures. Then in error free executions:*
 
-1. * $ES-C-Cfix$: the protocol must have an execution with at least 2 rounds.*
-2. * $ED-UC-Cfix$: for $t>1$, the protocol must have an execution where a decision is made after at least 2 rounds.*
-3. * $ES-C-C$: for $t>1$, the protocol must have an execution with at least 2 rounds.*
+1. $ES{-}C{-}Cfix$ : *the protocol must have an execution with at least 2 rounds.*
+2. $ED{-}UC{-}Cfix$ : *for $t>1$, the protocol must have an execution where a decision is made after at least 2 rounds.*
+3. $ES{-}C{-}C$ : *for $t>1$, the protocol must have an execution with at least 2 rounds.*
 
 
 The theorem follows from Lemma 1 and Lemma 2.
@@ -74,14 +66,14 @@ This might not sound like much, but the next lemma shows that if there are two A
 
 ***Lemma 2***: *If $C,C'$ are two AS but FFD configurations at the beginning of a round, and in both configurations the adversary has at least $c \in\{1,2\}$ more crash failures (so has previously crashed at most $t-c$ parties) then:*
 
-1. * $ES-C-Cfix$: any protocol must have an execution with at least 2 more rounds.*
-2. * $ED-UC-Cfix$: for $c=2$, must have an execution where a decision is done after at least  2 more rounds.*
-3. * $ES-C-C$: for $c=2$, must have an execution with at least 2 more rounds.*
+1. $ES{-}C{-}Cfix$ : *any protocol must have an execution with at least 2 more rounds.*
+2. $ED{-}UC{-}Cfix$ : *for $c=2$, must have an execution where a decision is done after at least  2 more rounds.*
+3. $ES{-}C{-}C$ : *for $c=2$, must have an execution with at least 2 more rounds.*
 
 
 *Proof*: Seeking a contradiction, assume a binary consensus protocol in which all parties stop in one more round in any failure free execution (or for case 2 above, all parties decide in one more round in failure free executions).
 
-Let party $i$ be the difference between $C$ and $C'$. We will start by proving this lemma with the simplifying assumption that $i$ sends its messages in the same order starting in either configuration $C$ or $C'$ (model $ES-C-Cfix$).
+Let party $i$ be the difference between $C$ and $C'$. We will start by proving this lemma with the simplifying assumption that $i$ sends its messages in the same order starting in either configuration $C$ or $C'$ (model $ES{-}C{-}Cfix$).
 
 World $A$: from configuration $C$, party $i$ sends to one party $j$ and then crashes. For party $j$, this looks exactly like the configuration where party $i$, and all other parties are non-faulty in this round, hence by our assumptions party $j$ must decide and stop at the end of the round.
 
@@ -89,11 +81,11 @@ World $A'$: from configuration $C'$, party $i$ sends to the same party $j$ as ab
 
 The executions in worlds $A$ and $A'$ look like continuations of configuration $C$ and $C'$ without failures, so $j$ must terminate by the end of the round. Since we chose $C$ and $C'$ to be FFDs, this means that $j$ must output different values in these executions. However, for all other parties, what they see is that $i$ (that crashed) and $j$ (that stopped) stop responding but cannot distinguish between worlds $A$ and $A'$, and thus must disagree with $j$ in at least one of these worlds.
 
-This completes the proof when parties have a fixed sending order because in both worlds $A$ and $A'$ it is party $j$ that stops. In model $ES-C-Cfix$ we can force this to be the case by simply choosing some specific party $j$ to be the first to receive messages from $i$.
+This completes the proof when parties have a fixed sending order because in both worlds $A$ and $A'$ it is party $j$ that stops. In model $ES{-}C{-}Cfix$ we can force this to be the case by simply choosing some specific party $j$ to be the first to receive messages from $i$.
 
-For model $ED-UC-Cfix$, uniform consensus - the adversary also crashes party $j$ and this proves that party $j$ cannot decide early. This requires $c = 2$ because the adversary crashes both $i$ and $j$.
+For model $ED{-}UC{-}Cfix$, uniform consensus - the adversary also crashes party $j$ and this proves that party $j$ cannot decide early. This requires $c = 2$ because the adversary crashes both $i$ and $j$.
 
-For model $ES-C-C$, for crash failures where parties can control the order of messages, party $i$ may send its first message to party $j_1$ in world $A$ and send its first message to another party $j_2$ in world $A'$. This will prevent our previous attack from working because $j$ stops responding in both worlds, so other parties cannot tell the difference.
+For model $ES{-}C{-}C$, for crash failures where parties can control the order of messages, party $i$ may send its first message to party $j_1$ in world $A$ and send its first message to another party $j_2$ in world $A'$. This will prevent our previous attack from working because $j$ stops responding in both worlds, so other parties cannot tell the difference.
 
 In order to fix this, in world $A$, $j_1$ terminates after receiving $i$'s message and the adversary crashes $j_2$. This means that neither $j_1$ nor $j_2$ continue participating in the next round. Similarly, in world $A'$, the adversary crashes $j_1$ and $j_2$ terminates so both $j_1,j_2$ stop responding. Hence, the remaining parties cannot distinguish between worlds $A$ and $A'$. Note that $c = 2$ because the adversary crashes both $i$ and one of the $j$'s in each world.
 
@@ -103,9 +95,9 @@ In order to fix this, in world $A$, $j_1$ terminates after receiving $i$'s messa
 
 ***Theorem***: *Any protocol in the synchronous model for $n$ parties that is resilient to $n-2 \geq t \geq 1$ failures, then in executions with $f$ failures:*
 
-1. *$ES-C-Cfix$: for $f\le t-1$ any protocol must have an execution with at least $f+2$ rounds.*
-2. *$ED-UC-Cfix$: for $f \le t-2$, must have an execution where a decision is done after at least  $f+2$ rounds.*
-3. *$ES-C-C$: for $f \le t-2$, must have an execution with at least $f+2$ rounds.*
+1. $ES{-}C{-}Cfix$ : *for $f\le t-1$ any protocol must have an execution with at least $f+2$ rounds.*
+2. $ED{-}UC{-}Cfix$ : *for $f \le t-2$, must have an execution where a decision is done after at least  $f+2$ rounds.*
+3. $ES{-}C{-}C$ : *for $f \le t-2$, must have an execution with at least $f+2$ rounds.*
 
 
 Looking at the  proof for $f=0$, it has two steps:
@@ -137,7 +129,7 @@ This completes the proof of Lemma 3.
 
 * To apply Lemma 3 in the crash model, we looked at the failure free decision if $i$ crashes. In the **mobile adversary model**, we look at the failure free decision if $i$ crashes for one round (and then heals) in both $C$ and $C'$. If its not the same value, then Lemma 3 holds by applying this crash to both $C$ and $C'$. Otherwise, the failure free decision if $i$ crashes for one round is fixed (wlog to the value opposite of $C$) so Lemma 3 holds by looking at the hybrid worlds where $i$ crashes for just one round after sending to $j$ parties (and then heals). This argument implies that [infinite executions must exist](https://link.springer.com/chapter/10.1007/BFb0028994) with even just **one** mobile crash. Hence, deterministic solutions are impossible and randomization is needed in the mobile adversary model. 
 
-* Note that the bound $\min \\{ f+2,t+1 \\}$ does not hold for $ES-C-C$ or $ED-UC-Cfix$, in those models the bound is:
+* Note that the bound $\min \\{ f+2,t+1 \\}$ does not hold for $ES{-}C{-}C$ or $ED{-}UC{-}Cfix$, in those models the bound is:
 
 $$
 \begin{align}
@@ -149,7 +141,7 @@ $$
  \end{align}
 $$
 
-* *Exercise*: devise a protocol that stops early in one round for $t=1$ and the crash model $ES-C-C$ where parties can choose the order they send messages in each round. That is, show that if there are no faults and parties can choose to send messages in different orders depending on their state, they can complete the protocol after one round in all error free executions. Note that your protocol has to deal with the case that some party terminated early because it did not see faults, but others might continue running because they did.
+* *Exercise*: devise a protocol that stops early in one round for $t=1$ and the crash model $ES{-}C{-}C$ where parties can choose the order they send messages in each round. That is, show that if there are no faults and parties can choose to send messages in different orders depending on their state, they can complete the protocol after one round in all error free executions. Note that your protocol has to deal with the case that some party terminated early because it did not see faults, but others might continue running because they did.
 
 
 
