@@ -44,7 +44,7 @@ The main idea of the lower bound is that when communication from Server 2 to Ser
 
 Server 1 cannot receive any message. Nevertheless, Client 2 and Server 2 must complete the request. Note that Server 1 learns nothing of this request.
 
-!<p align="center">
+<p align="center">
   <img src="/uploads/SRO1.jpg" width="256" title="World A">
 </p>
 
@@ -53,7 +53,7 @@ Server 1 cannot receive any message. Nevertheless, Client 2 and Server 2 must co
 
 Server 2 cannot send any message. Nevertheless, Client 1 and Server 1 must complete the request. Note that Server 2 may learn of this request but cannot convey any outgoing information.
 
-!<p align="center">
+<p align="center">
   <img src="/uploads/SRO2.jpg" width="256" title="World B">
 </p>
 
@@ -63,7 +63,7 @@ Here we start with Client 2 and Server 2 running an indistinguishable run to Wor
 
 Note that Server 2 may detect a problem with the second request, but it cannot convey any outgoing information to Client 1 or Server 1.
 
-!<p align="center">
+<p align="center">
   <img src="/uploads/SRO3.jpg" width="256" title="Hybrid World">
 </p>
 
@@ -76,6 +76,8 @@ This creates a safety violation (assuming there is no validity or liveness viola
 ## Notes
 
 This lower bound is strictly stronger than the one on [omission failures in synchrony](https://decentralizedthoughts.github.io/2019-11-02-primary-backup-for-2-servers-and-omission-failures-is-impossible/).
+
+The upper bounds can be extended to $f<n$ and the lower bound to any $f \geq n/2$.
 
 ## Acknowledgments
 
