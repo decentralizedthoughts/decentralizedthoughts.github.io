@@ -13,11 +13,11 @@ In this post we explore adversary failure models that are in between crash and o
 2. **Receive Omissions (RO)**: the adversary can corrupt a party and decide to block any message that the party receives. The corrupted party is not aware that it is corrupted or that the message it was supposed to receive was blocked.
 3. **Send or Receive Omissions (SRO)**: the adversary can corrupt a party with either send omissions or receive omissions but not both.
 
-Can you guess in which models state machine replication is possible for any $f<n$ and for which ones we can't do better than $f<n/2$? In models where you can **detect failures** you can get $f<n$.
+Can you guess in which models state machine replication is possible for any $f<n$ and for which ones we can't do better than $f<n/2$? The answer is that in models where you can **detect failures** you can get $f<n$.
 
 ## Primary Backup for Send Omissions for $n=2$ and $f=1$
 
-The solution is similar to the case of crash failures with the following two changes:
+The solution is similar to the primary backup solution for [crash failures](https://decentralizedthoughts.github.io/2019-11-01-primary-backup/) with the following two changes:
 
 To deal with send omissions from the primary to the client: the backup also sends the response back to the client.
 
@@ -25,7 +25,7 @@ To deal with send omissions from the primary to the backup: The primary sends a 
 
 ## Primary Backup for Receive Omissions for $n=2$ and $f=1$
 
-The solution is again similar to the case of crash failures with the following two changes:
+The solution is again similar to the primary backup solution for [crash failures](https://decentralizedthoughts.github.io/2019-11-01-primary-backup/) with the following two changes:
 
 To deal with receive omissions of the primary from the client: the client sends to both the primary and the backup and the backup forwards the request to the primary. The primary executes commands only once via unique identifiers.
 
