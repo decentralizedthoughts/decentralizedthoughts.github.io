@@ -7,6 +7,7 @@ author: Ittai Abraham
 ---
 
 ## TLDR: a Blockchain is a trusted coordination mechanism;
+
 Of course, the answer depends on who you ask :-)
 
 My 7-word answer: **a blockchain is a trusted coordination mechanism**. 
@@ -30,6 +31,7 @@ The idea that money is simply a trusted ledger (aka a blockchain) of all transac
 
  
 ## Origin of the word "Blockchain" 
+
 Emails from [Satoshi](https://plan99.net/~mike/satoshi-emails/thread1.html) in 2009 mention "the block chain". However, Satoshi's emails and the [Bitcoin whitepaper](https://bitcoin.org/bitcoin.pdf) do not use the word "Blockchain".  There was some initial debate between using "block chain" vs "blockchain", but by 2014, the official [Bitcoin forums](https://groups.google.com/g/bitcoin-documentation/c/D9aqm8uDQG0) seem to have converged on using "blockchain". 
 
 So what does this "chain of blocks" do? The answer seems clear in [Satoshi Nakamoto's 2008](https://www.metzdowd.com/pipermail/cryptography/2008-November/014849.html) groundbreaking insight:
@@ -47,6 +49,7 @@ So how should we call this part of Bitcoins innovation? Vitalik Buterin's 2013 [
 
 
 ## What is a Blockchain, in more than seven words?
+
 How can a Blockchain be a **trusted coordination mechanism**?
 
 Viewed through the lens of computer science and distributed computing my answer is: a Blockchain is a trusted coordination mechanism via: 
@@ -54,7 +57,6 @@ Viewed through the lens of computer science and distributed computing my answer 
 1. Byzantine Fault Tolerant State Machine Replication ("trusted"); with
 2. Openness and Auditability ("coordination"), and;
 3. Incentives to provide guarantees ("mechanism").
-
 
 ### 1. Byzantine Fault Tolerant State Machine Replication ("trusted")
 
@@ -88,6 +90,7 @@ Another important historical example of the limits of openness is that to update
 
 
 ### 3. Incentives to provide guarantees ("mechanism")
+
 Finally, traditional cryptographic models in computer science assume a binary: *good guys / bad guys* view of the world. These models assume some fraction of parties are inherently honest and the remaining parties are controlled by a malicious adversary whose sole goal is to break the protocol guarntees. 
 
 Arguably, the breakthrough in blockchain systems is going beyond this model and focus on a 
@@ -112,7 +115,9 @@ Cryptoeconomics and incentive considerations appear in many surprising places ac
 
 #### What is a Blockchain? Notable responses
 
-**@artofkot**: collusion resistant coordination tool. Also checkout the excellent [full blog post](https://artofkot.xyz/blog/why-blockchains).
+**Virgil Griffith**: is an unprecedented arena for playing cooperative games. See [full blog post](https://medium.com/@virgilgr/ethereum-is-game-changing-technology-literally-d67e01a01cf8).
+
+**@artofkot**: collusion resistant coordination tool. Checkout the excellent [full blog post](https://artofkot.xyz/blog/why-blockchains).
 
 **@JoshaTobkin**: a shared immutable ledger 
 
