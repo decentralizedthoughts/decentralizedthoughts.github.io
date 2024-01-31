@@ -33,7 +33,7 @@ To deal with receive omissions of the primary from the backup: The backup sends 
 
 ## Primary Backup for Send or Receive Omissions is impossible $n=2$ and $f=1$
 
-Recall that here the adversary can corrupt at most one server with either send of receive omission (bit not both) and can also corrupt any number of clients (again with either send or receive omissions).
+Recall that here the adversary can corrupt at most one server with either send of receive omission (but not both) and can also corrupt any number of clients (again with either send or receive omissions).
 
 In the figures below, arrow-less lines represent bidirectional communication, while lines with an arrow represent communication **only** in the direction of the arrow (other direction is blocked).
 
@@ -75,7 +75,7 @@ This creates a safety violation (assuming there is no validity or liveness viola
 
 ## Notes
 
-This lower bound is strictly stronger than the one on [omission failures in synchrony](https://decentralizedthoughts.github.io/2019-11-02-primary-backup-for-2-servers-and-omission-failures-is-impossible/).
+This lower bound is strictly stronger than the one for [omission failures in synchrony](https://decentralizedthoughts.github.io/2019-11-02-primary-backup-for-2-servers-and-omission-failures-is-impossible/).
 
 The upper bounds can be extended to $f<n$ and the lower bound to any $f \geq n/2$.
 
@@ -83,4 +83,4 @@ The upper bounds can be extended to $f<n$ and the lower bound to any $f \geq n/2
 
 Many thanks to Alon Hovav for noting the lower bound and to Gilad Stern and Kartik Nayak for helpful comments.
 
-Please leave comments on [Twitter](...)
+Please leave comments on [Twitter](https://x.com/ittaia/status/1752630191006814254?s=20)
