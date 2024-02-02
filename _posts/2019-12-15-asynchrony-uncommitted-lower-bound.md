@@ -15,8 +15,6 @@ In this third post, we conclude with the celebrated Fischer, Lynch, and Paterson
 * **Bad news**: Deterministic asynchronous consensus is *impossible*.
 * **Good news**: With randomization, asynchronous consensus is possible in constant expected time. See [this paper](https://research.vmware.com/files/attachments/0/0/0/0/0/7/8/practical_aba_2_.pdf) for a recent result. Note that randomization does not circumvent the existence of a non-terminating execution, it just reduces the probability measure of this event to have [measure zero](https://en.wikipedia.org/wiki/Almost_surely).
 
-
-
 This post assumes you are familiar with the [definitions of the first post](https://decentralizedthoughts.github.io/2019-12-15-consensus-model-for-FLP/) and with Lemma 1 that we proved in the first post:
 
 
@@ -38,7 +36,6 @@ To prove the theorem, we use the following key technical Lemma:
 
 Start with Lemma 1, to begin with, an uncommitted configuration. Repeat Lemma 2 infinitely often; each time apply it to the pending messages in a FIFO order. Clearly, from Lemma 2, the sequence is uncommitted. For fairness, due to FIFO, a message $e$ that has $\|M\|$ pending messages before it will be derived after at most $\|M\|+1$ applications of Lemma 2.
 
-
 #### Proof of Lemma 2:
 
 Recall the **proof pattern** for showing the existence of an *uncommitted configuration*:
@@ -58,6 +55,7 @@ The *contradiction* of the statement of Lemma 2 is that: there exists a configur
 Define two configurations $X,X'$ as *adjacent* if $X \xrightarrow{T', e'=(p',m')} X'$ and $e'$ is a pending message in $X$.
 
 **Claim**: there must exist two adjacent configurations $Y \xrightarrow{T', e'} Y'$ and a pending message $e'=(p',m')$ in $Y$ such that:
+
 1. $C \rightsquigarrow Y \xrightarrow{e} Z$ and Z is 1-committed.
 2. $C \rightsquigarrow Y \xrightarrow{T', e'} Y' \xrightarrow{e} Z'$ and $Z'$ is 0-committed.
 
@@ -76,31 +74,19 @@ Now examine the sub-sequence $G=Y_1,\dots,Y_k=C_0$ of $\pi_0$ from $G$ to $C_0$.
 
 ![](https://i.imgur.com/TLWm47j.jpg)
 
-**Proof of Lemma 2 given the claim**
+#### Proof of Lemma 2 given the claim
 
-Let $Y,Y'$ be these two adjacent configurations. There are two cases to consider about $e=(p,m)$ and $e'=(p',m')$:
+Let $Y,Y'$ be these two adjacent configurations. There are three cases to consider when looking at $e=(p,m)$, $e'=(p',m')$ and $T’$. In each case we drive a contradiction: 
 
-1. Case 1 (trivial case): $p \neq p'$. This implies that processing $e$ and then $T',e'$ will lead to a different outcome than processing $T',e'$ and only then $e$. But since $e$ and $e'$ reach different parties, there is no way to distinguish these two worlds.
+* *Case 1*: $Y \xrightarrow{T'} Y''$ is such that $Y'' \xrightarrow{e} Z''$ is 0-committed. This means that the time of receiving $e$ is the only difference between these two worlds. But in this case $p$ may crash in both worlds after receiving $e$. Then $Y \xrightarrow{T'} Y'' \xrightarrow{e} Z'' \xrightarrow{p ~~crashes} W'' $ is indistinguishable from $Y \xrightarrow{e} Z \xrightarrow{p ~~crashes, T'} W$ but $W''$ is 0-committed (due to $Y''$) and $W$ is 1-committed (due to $Z$).
 
- Formally, $Y \xrightarrow{e=(p,m)} Z$ is 1-committed and so $Y \xrightarrow{e=(p,m)} Z \xrightarrow{T', e'=(p',m')} Z''$ is 1-committed. But $Y \xrightarrow{T', e'=(p',m')} Y' \xrightarrow{e=(p,m)} Z'$ is 0-committed. This is a contradiction because $Z''$ and $Z'$ have exactly the same configuration and pending messages.
+* *Case 2A*: (trivial case): $p \neq p'$. This implies that processing $e$ and then $e'$ will lead to a different outcome than processing $e'$ and only then $e$. But since $e$ and $e'$ reach different parties there is no way to distinguish these two worlds, but again one is 0-committed and the other is 1-committed.
 
 
-2. Case 2: $p=p'$. This implies that the committed value must change between the world where $p$ receives $m$ first and $m'$ later, relative to the world where $p$ receives $m'$ first and receives $m$ later! But what if $p$ crashes right after receiving both messages? These two worlds will be indistinguishable to the rest of the parties! Moreover, $p$ does not need to crash; it can just be slow!
+* *Case 2B*:  $p=p'$. This implies that the committed value must change between the world where $p$ receives $m$ first and $m'$ later relative to the world where $p$ receives $m'$ first and $m$ later. But what if in both worlds, $p$ crashes right after receiving both messages? These two worlds will be indistinguishable to the rest of the parties, but again one is 0-committed and the other is 1-committed.
 
- Formally, consider some execution where party $p$ crashes at $Y$. Now add a delay $T'$, so $Y \xrightarrow{T'} U$. There must be some $U \stackrel{\sigma}{\rightsquigarrow} D$ where $D$ is a deciding configuration and $\sigma$ does not contain party $p$. 
- 
- 
- If party $p$ was just slow then $Y \xrightarrow{T'} U \stackrel{\sigma}{\rightsquigarrow} D$ is indistinguishable from $Y \xrightarrow{e} Z \xrightarrow{T'} Z'' \stackrel{\sigma}{\rightsquigarrow} D'$ expect for party $p$. Note that by the claim assumption, $D'$ must be 0-committed. Also, $D'$ must be decided at least for all parties but $p$. Note that we added a delay of $T'$ before $\sigma$ to obtain this indistinguishability. 
- 
- 
- On the other hand, consider $Y \xrightarrow{T',e'} Y' \xrightarrow{e} Z' \stackrel{\sigma}{\rightsquigarrow} D''$, this is indistinguishable from $D$ except for party $p$. By the claim assumptions, $Z'$ is 0-committed, and the parties in $D''$ must be decided due to indistinguishability with $D$. 
- 
- 
- This is a contradiction because the parties that are not $p$ have decided and see the same view in $D,D',D''$, however, $D'$ is 1-committed and $D''$ is 0-committed. 
 
 This completes the proof of Lemma 2, and that completes the proof of the FLP Theorem.
-
-
 
 ### Discussion
 
