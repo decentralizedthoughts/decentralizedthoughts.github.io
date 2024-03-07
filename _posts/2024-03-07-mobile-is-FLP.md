@@ -1,5 +1,6 @@
 ---
-title: 'Mobile delay is same but different: infinite executions for mobile crash and FLP'
+title: 'Mobile delay is same but different: infinite executions for mobile crash and
+  FLP'
 date: 2024-03-07 12:05:00 -05:00
 tags:
 - lowerbound
