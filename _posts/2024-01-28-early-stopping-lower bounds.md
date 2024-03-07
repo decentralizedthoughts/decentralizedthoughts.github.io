@@ -24,9 +24,9 @@ We start with two definitions, mention 3 models, then the $f=0$ case, followed b
 ## Definitions 
 
 
-***Definition 1:*** *Two configurations are **Almost Similar (AS)** if the state of all parties except for a single party $i$ are the same.*
+***Definition 1:*** *Two configurations are **Almost Same (AS)** if the state of all parties except for a single party $i$ are the same.*
 
-***Definition 2:*** *Two Almost Similar (AS) configurations are **Failure Free Different (FFD)** if the failure free continuation of one configuration leads to a different decision value than the failure free continuation of the other configuration.*
+***Definition 2:*** *Two Almost Same (AS) configurations are **Failure Free Different (FFD)** if the failure free continuation of one configuration leads to a different decision value than the failure free continuation of the other configuration.*
 
 In other words, two configurations are AS but FFD if the state of all parties except for one are the same, and continuing one without faults leads to a different decision value than doing so with the other.
 
@@ -52,9 +52,9 @@ There are slightly different lower bounds for 3 different models:
 
 The theorem follows from Lemma 1 and Lemma 2.
 
-***Lemma 1***: *Any consensus protocol that is resilient to at least 1 crash failure must have two initial configurations that are Almost Similar but Failure Free Different (AS but FFD).*
+***Lemma 1***: *Any consensus protocol that is resilient to at least 1 crash failure must have two initial configurations that are Almost Same but Failure Free Different (AS but FFD).*
 
-*Proof*: For any $0 \leq i \le n$ consider the initial configuration $C_i$ where when parties 1 to $i$ have input 1 (empty set for $i=0$) and the rest have input 0. Let $val(i)$ be the decision in the failure free execution that starts with configuration $C_i$. From validity, $val(0)=0$ and $val(n)=1$, so the (trivial) [one dimension Sperner's Lemma](https://en.wikipedia.org/wiki/Sperner%27s_lemma#One-dimensional_case) implies that there exists $1 \le i \le n$ and two configurations $C_{i-1},C_{i}$ such that:
+*Proof*: For any $0 \leq i \le n$ consider the initial configuration $C_i$ where parties 1 to $i$ have input 1 (empty set for $i=0$) and the rest have input 0. Let $val(i)$ be the decision in the failure free execution that starts with configuration $C_i$. From validity, $val(0)=0$ and $val(n)=1$, so the (trivial) [one dimension Sperner's Lemma](https://en.wikipedia.org/wiki/Sperner%27s_lemma#One-dimensional_case) implies that there exists $1 \le i \le n$ and two configurations $C_{i-1},C_{i}$ such that:
 
 * $val(i-1) = 0$ while $val(i) = 1$
 * The only difference between configurations $C_{i-1}$ and $C_i$ is the state of party $i$.
@@ -89,14 +89,12 @@ For model $ES{-}C{-}C$, for crash failures where parties can control the order o
 
 In order to fix this, in world $A$, $j_1$ terminates after receiving $i$'s message and the adversary crashes $j_2$. This means that neither $j_1$ nor $j_2$ continue participating in the next round. Similarly, in world $A'$, the adversary crashes $j_1$ and $j_2$ terminates so both $j_1,j_2$ stop responding. Hence, the remaining parties cannot distinguish between worlds $A$ and $A'$. Note that $c = 2$ because the adversary crashes both $i$ and one of the $j$'s in each world.
 
-
 ## The general case
-
 
 ***Theorem***: *Any protocol in the synchronous model for $n$ parties that is resilient to $n-2 \geq t \geq 1$ failures, then in executions with $f$ failures:*
 
 1. $ES{-}C{-}Cfix$ : *for $f\le t-1$ any protocol must have an execution with at least $f+2$ rounds.*
-2. $ED{-}UC{-}Cfix$ : *for $f \le t-2$, must have an execution where a decision is done after at least  $f+2$ rounds.*
+2. $ED{-}UC{-}Cfix$ : *for $f \le t-2$, must have an execution where a decision is done after at least $f+2$ rounds.*
 3. $ES{-}C{-}C$ : *for $f \le t-2$, must have an execution with at least $f+2$ rounds.*
 
 
