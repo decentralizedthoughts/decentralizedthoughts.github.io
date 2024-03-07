@@ -7,12 +7,11 @@ tags:
 author: Ittai Abraham and Gilad Stern
 ---
 
-We prove that both the *mobile single crash adversary* and the classic *asynchronous single crash adversary* (aka [FLP](https://decentralizedthoughts.github.io/2019-12-15-asynchrony-uncommitted-lower-bound/)) must have infinite executions.
+Both the *synchronous mobile single crash adversary* and the *asynchronous single crash adversary* (aka [FLP](https://decentralizedthoughts.github.io/2019-12-15-asynchrony-uncommitted-lower-bound/)) must have infinite executions (if they always reach agreement).
 
-We do this by *reducing* the problem to a common weaker adversary we call the ***mobile delay adversary*** in synchrony with a single failure and then prove that any consensus protocol resilient to it must have infinite executions. 
+We prove both results by *reducing* the problem to a common weaker adversary we call the ***mobile delay adversary*** in synchrony with a single failure and then prove that any consensus protocol resilient to it must have infinite executions. 
 
-This approach provides a rather simple and unified proof, for both mobile crash and asynchrony.
-
+This gives a rather simple and unified proof, for both mobile crash and asynchrony.
 
 ## Definitions 
 
