@@ -1,5 +1,6 @@
 ---
-title: 'Consensus tolerating one mobile crash in synchrony or one crash is asynchrony must have infinite executions for the same simple reason'
+title: Consensus tolerating one mobile crash in synchrony or one crash is asynchrony
+  must have infinite executions for the same simple reason
 date: 2024-03-07 12:05:00 -05:00
 tags:
 - lowerbound
