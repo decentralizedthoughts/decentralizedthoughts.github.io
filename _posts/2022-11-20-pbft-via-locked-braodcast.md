@@ -211,7 +211,7 @@ The time and number of messages before GST can be both unbounded, so we measure 
 
 However, the number of bits in each message is large and not optimal. The size of a lock-certificate or a delivery-certificate is $O(n)$ signatures. More worrisome, the size of a ```R``` that is sent in the locked broadcast can be $O(n^2)$ signatures because it may contain $O(n)$ lock-certificates (for different views).
 
-Lock-certificates can be reduced to a single signatures by using threshold signatures. Reducing the size of the ```R``` below $O(n)$ signatures requires either more powerful succinct proofs (for example, a SNARK) or a slightly different protocol. We will explore both in future posts.
+Lock-certificates can be reduced to a single signature by using threshold signatures. Reducing the size of the ```R``` below $O(n)$ signatures requires either more powerful succinct proofs (for example, a SNARK) or a slightly different protocol. We will explore both in future posts.
 
 ## Notes
 

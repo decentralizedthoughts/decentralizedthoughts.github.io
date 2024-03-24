@@ -345,7 +345,7 @@ This concludes the proof of accountable safety.
 
 1. Assuming perfect clock synchronization to obtain view synchronization.
 2. In the worst case the first honest primary will wait for $\Delta$ time so it hears the valid chain with the lock-certificate of highest view among all non-faulty parties.
-3. Need 3 consecutive honest parties. The first creates valid proposal; the second creates the first block-cert on it;  the third creates the second block-cert on the block with one view above it, so a commit cert is formed and sent to all parties.
+3. Need 3 consecutive honest parties. The first creates valid proposal; the second creates the first block-cert on it; the third creates the second block-cert on the block with one view above it, so a commit cert is formed and sent to all parties.
 
 We will show in later posts how to use other mechanisms for view synchronization.
 
