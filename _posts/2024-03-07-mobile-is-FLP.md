@@ -1,6 +1,5 @@
 ---
-title: 'Mobile delay is same but different: infinite executions for mobile crash and
-  FLP'
+title: 'Consensus tolerating one mobile crash in synchrony or one crash is asynchrony must have infinite executions for the same simple reason'
 date: 2024-03-07 12:05:00 -05:00
 tags:
 - lowerbound
@@ -8,6 +7,7 @@ author: Ittai Abraham and Gilad Stern
 ---
 
 In a consensus protocol parties have an input (at least two possible values, say 0 or 1) and may output a decision value such that:
+
 * **Uniform Agreement**: all decision values are the same.
 * **Validity**: if all inputs are the same, then this is the output value.
 
@@ -18,7 +18,6 @@ The third property is **Termination**, and the following lower bounds are known:
 **Theorem [[SW89](https://dl.acm.org/doi/10.5555/73228.73254)]**: any protocol solving consensus in a synchronous model that is resilient to one mobile crash failure must have an infinite execution.
 
 We prove both results by a *reduction* to a common weaker adversary we call the ***mobile delay adversary*** in synchrony with a single failure and then prove that any consensus protocol resilient to it must have infinite executions. This gives a rather simple and unified proof, for both mobile crash and asynchrony.
-
 
 Our proof initially followed the [Layered Analysis of Consensus, 2002](http://courses.csail.mit.edu/6.897/fall04/papers/Moses/layering.pdf) by [Moses and Rajsbaum](https://epubs.siam.org/doi/10.1137/S0097539799364006), with simplifications for maintaining just two configurations. Following feedback from Eli and Giuliano, we adopt the insights of [Time is not a Healer, but it Sure Makes Hindsight 20:20, 2023](https://arxiv.org/abs/2305.02295) by [Gafni and Losa](https://dl.acm.org/doi/abs/10.1007/978-3-031-44274-2_6). This approach is based on the work of [Volzer, 2004](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=043ac773bfcc3adb84dcdad6e726f2096a742f5b) and requires to maintain just one configuration. An interesting takeaway from these approaches is the understanding that the FLP notion of [bi-valency](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=043ac773bfcc3adb84dcdad6e726f2096a742f5b) may not be the most natural definition for proving these results.
 
