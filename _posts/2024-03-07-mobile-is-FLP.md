@@ -7,7 +7,6 @@ tags:
 author: Ittai Abraham and Gilad Stern
 ---
 
-
 In a consensus protocol parties have an input (at least two possible values, say 0 or 1) and may output a decision value such that:
 * **Uniform Agreement**: all decision values are the same.
 * **Validity**: if all inputs are the same, then this is the output value.
