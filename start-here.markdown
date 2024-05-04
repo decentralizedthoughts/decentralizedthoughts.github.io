@@ -116,11 +116,13 @@ Lower bounds give us powerful tools to understand the fundamental limitations an
 
 ### Lower bounds on the size of the adversary:
 
-- Folklore (aka CAP theorem for synchrony): [Consensus with Omission failures](/2019-11-02-primary-backup-for-2-servers-and-omission-failures-is-impossible/) requires $f<n/2$.
-
-- The [CAP theorem for partial synchrony](https://decentralizedthoughts.github.io/2023-07-09-CAP-two-servers-in-psynch/): Any system, in the face of a perceived 50-50 split, can either maintain safety or liveness, but not both.
-
-- Split brain attacks:
+- State Machine replication can work only for minority failures:
+  - The [CAP theorem for partial synchrony](https://decentralizedthoughts.github.io/2023-07-09-CAP-two-servers-in-psynch/): Any system, in the face of a perceived 50-50 split, can either maintain safety or liveness, but not both.
+  - The CAP theorem for synchrony and omission: [Consensus with Omission failures even in lock step](/2019-11-02-primary-backup-for-2-servers-and-omission-failures-is-impossible/) requires $f<n/2$.
+  - Strengthening the lower bound: $f<n/2$ is required in lock step [even if the adversary can choose either send omission or receive omission](https://decentralizedthoughts.github.io/2024-01-30-between-crash-and-omission/) (but not both).
+  - [CAP type theorems in the permissionless setting](https://decentralizedthoughts.github.io/2022-03-03-blockchain-resource-pools-and-a-cap-esque-impossibility-result/)
+  
+- Split brain lower bounds:
   - Dwork, Lynch, Stockmeyer 1988 ([DLS](https://groups.csail.mit.edu/tds/papers/Lynch/jacm88.pdf)) lower bound: [Byzantine Consensus in Partial Synchrony](/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/) requires $f<n/3$.
   - CJKR lower bound: Neither Non-equivocation nor Transferability alone is enough for [tolerating minority corruptions in asynchrony](https://decentralizedthoughts.github.io/2021-06-14-neither-non-equivocation-nor-transferability-alone-is-enough-for-tolerating-minority-corruptions-in-asynchrony/).
   - TEEs without state need $3f+1$ in Partial Synchrony because of the [rollback adversary](https://decentralizedthoughts.github.io/2023-06-26-dls-meets-rollback/).
@@ -129,28 +131,40 @@ Lower bounds give us powerful tools to understand the fundamental limitations an
 
 - Strengthening the FLM lower bound with randomization and a weaker problem: [Crusader Agreement with $\leq 1/3$ error is impossible for $n\leq 3f$ if the adversary can simulate](https://decentralizedthoughts.github.io/2021-10-04-crusader-agreement-with-dollars-slash-leq-1-slash-3$-error-is-impossible-for-$n-slash-leq-3f$-if-the-adversary-can-simulate/).
 
-
 ### Lower bounds on the number of messages
 
 - Dolev and Reischuk 1982 ([DR](https://www.cs.huji.ac.il/~dolev/pubs/p132-dolev.pdf)) lower bound: [Consensus (even with omission failures) needs a quadratic number of messages](/2019-08-16-byzantine-agreement-needs-quadratic-messages/).
 - Extending Dolev and Reischuk to [Byzantine crusader broadcast](https://decentralizedthoughts.github.io/2022-08-14-new-DR-LB/).
 
-### Lower bounds on the round complexity
+### Lower bounds on the round complexity and existence of infinite executions
 
-- Fischer, Lynch, Paterson 1985 ([FLP](https://groups.csail.mit.edu/tds/papers/Lynch/jacm85.pdf)) lower bound, three part series: 
+- The simplest proof that [any consensus protocol in asynchrony must have an infinite execution](https://decentralizedthoughts.github.io/2024-03-07-mobile-is-FLP/) even against a single crash failure.
+
+- The same proof also shows that [any consensus protocol in synchrony must have an infinite execution](https://decentralizedthoughts.github.io/2024-03-07-mobile-is-FLP/) against a single **mobile** crash failure.
+
+- [Early stopping lower bounds](https://decentralizedthoughts.github.io/2024-01-28-early-stopping-lower-bounds/) provide a bound on the number of rounds in execution where there are $0\leq f\eq t$ faults. In particular, in the best case executions where there are no faults at all ($f=0$).
+  - $\min\{f+2,t+1\}$ round lower bound for Early Stopping for consensus with crashes and Early Deciding for uniform consensus with omission (crashes with fixed first)
+
+- Fischer, Lynch, Paterson 1985 ([FLP](https://groups.csail.mit.edu/tds/papers/Lynch/jacm85.pdf)) lower bound, three part series using bi-valency (uncommitted configuration) arguments: 
   - Consensus must have some initial state that is [uncommitted](/2019-12-15-consensus-model-for-FLP/):
   - This implies [executions with at least $f+1$ rounds in Synchrony](/2019-12-15-synchrony-uncommitted-lower-bound/).
   - The FLP result: [non-terminating executions in Asynchrony](/2019-12-15-asynchrony-uncommitted-lower-bound/).
 
+- Lower bounds on the *good case latency* - the number of rounds when the broadcaster is non-faulty and the network is synchronous: [a complete categorization](https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/)
+- The [good case latency of optimistically responsive rotating leader protocols](https://decentralizedthoughts.github.io/2021-12-07-good-case-latency-of-rotating-leader-synchronous-bft/) requires $2\Delta$.
 
 ### Lower bounds due to privacy requirements
 
--  Ben-Or, Kelmer, Rabin 1994 ([BKR](https://dl.acm.org/doi/10.1145/197917.198088)) lower bound: Asynchronous Verifiable Secret Sharing must have a [non-zero probability of not terminating](https://decentralizedthoughts.github.io/2020-07-15-asynchronous-fault-tolerant-computation-with-optimal-resilience/).
+- Ben-Or, Kelmer, Rabin 1994 ([BKR](https://dl.acm.org/doi/10.1145/197917.198088)) lower bound: Asynchronous Verifiable Secret Sharing must have a [non-zero probability of not terminating](https://decentralizedthoughts.github.io/2020-07-15-asynchronous-fault-tolerant-computation-with-optimal-resilience/).
+- [Asynchronous Verifiable Secret sharing (and MPC) with perfect security](https://decentralizedthoughts.github.io/2020-07-15-asynchronous-fault-tolerant-computation-with-optimal-resilience/) needs $f<n/4$. 
 
 ### Liveness attacks
 
 - Raft does not guarantee liveness under [omission faults](https://decentralizedthoughts.github.io/2020-12-12-raft-liveness-full-omission/).
 
+### Lower bounds on stronger notions of validity
+
+- [Lower bounds for strong validity](https://decentralizedthoughts.github.io/2022-12-12-what-about-validity/)
 
 ## Blockchains
 

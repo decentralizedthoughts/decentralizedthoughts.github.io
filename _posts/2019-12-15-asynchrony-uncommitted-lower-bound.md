@@ -15,6 +15,9 @@ In this third post, we conclude with the celebrated Fischer, Lynch, and Paterson
 * **Bad news**: Deterministic asynchronous consensus is *impossible*.
 * **Good news**: With randomization, asynchronous consensus is possible in constant expected time. See [this paper](https://research.vmware.com/files/attachments/0/0/0/0/0/7/8/practical_aba_2_.pdf) for a recent result. Note that randomization does not circumvent the existence of a non-terminating execution, it just reduces the probability measure of this event to have [measure zero](https://en.wikipedia.org/wiki/Almost_surely).
 
+{: .box-note}
+A much simpler proof for this theorem [in this post](https://decentralizedthoughts.github.io/2024-03-07-mobile-is-FLP/).
+
 This post assumes you are familiar with the [definitions of the first post](https://decentralizedthoughts.github.io/2019-12-15-consensus-model-for-FLP/) and with Lemma 1 that we proved in the first post:
 
 
