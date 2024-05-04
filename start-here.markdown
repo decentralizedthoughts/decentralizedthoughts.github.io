@@ -142,8 +142,8 @@ Lower bounds give us powerful tools to understand the fundamental limitations an
 
 - The same proof also shows that [any consensus protocol in synchrony must have an infinite execution](https://decentralizedthoughts.github.io/2024-03-07-mobile-is-FLP/) against a single **mobile** crash failure.
 
-- [Early stopping lower bounds](https://decentralizedthoughts.github.io/2024-01-28-early-stopping-lower-bounds/) provide a bound on the number of rounds in execution where there are $0\leq f\eq t$ faults. In particular, in the best case executions where there are no faults at all ($f=0$).
-  - $\min\{f+2,t+1\}$ round lower bound for Early Stopping for consensus with crashes and Early Deciding for uniform consensus with omission (crashes with fixed first)
+- [Early stopping lower bounds](https://decentralizedthoughts.github.io/2024-01-28-early-stopping-lower-bounds/) provide a bound on the number of rounds in execution where there are $0\leq f\leq t$ faults. In particular, in the best case executions where there are no faults at all ($f=0$).
+  - $\min\\{f+2,t+1\\}$ round lower bound for Early Stopping for consensus with crashes and Early Deciding for uniform consensus with omission (crashes with fixed first)
 
 - Fischer, Lynch, Paterson 1985 ([FLP](https://groups.csail.mit.edu/tds/papers/Lynch/jacm85.pdf)) lower bound, three part series using bi-valency (uncommitted configuration) arguments: 
   - Consensus must have some initial state that is [uncommitted](/2019-12-15-consensus-model-for-FLP/):
@@ -155,8 +155,7 @@ Lower bounds give us powerful tools to understand the fundamental limitations an
 
 ### Lower bounds due to privacy requirements
 
-- Ben-Or, Kelmer, Rabin 1994 ([BKR](https://dl.acm.org/doi/10.1145/197917.198088)) lower bound: Asynchronous Verifiable Secret Sharing must have a [non-zero probability of not terminating](https://decentralizedthoughts.github.io/2020-07-15-asynchronous-fault-tolerant-computation-with-optimal-resilience/).
-- [Asynchronous Verifiable Secret sharing (and MPC) with perfect security](https://decentralizedthoughts.github.io/2020-07-15-asynchronous-fault-tolerant-computation-with-optimal-resilience/) needs $f<n/4$. 
+- Ben-Or, Kelmer, Rabin 1994 ([BKR](https://dl.acm.org/doi/10.1145/197917.198088)) lower bound: Asynchronous Verifiable Secret Sharing must have a [non-zero probability of not terminating](https://decentralizedthoughts.github.io/2020-07-15-asynchronous-fault-tolerant-computation-with-optimal-resilience/) when $n/4 \leq f < n/3$. So Asynchronous Verifiable Secret sharing (and Asynchronous MPC) with perfect security needs $f<n/4$. 
 
 ### Liveness attacks
 
