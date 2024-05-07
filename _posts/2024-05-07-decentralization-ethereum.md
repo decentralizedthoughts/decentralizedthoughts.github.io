@@ -37,7 +37,7 @@ The builder market is technically open to everyone, but the barrier to accessing
 |:--:|
 | **Fraction of builder income from private order flows.** |
 
-### Finding 2: We identified five pivotal providers (MEV-Share, MEV Blocker, jaredfromsubway.eth, Banana Gun, Maestro) who had a sustained influence on the outcome of more than half of MEV-Boost auctions.
+***Finding 2: We identified five pivotal providers (MEV-Share, MEV Blocker, jaredfromsubway.eth, Banana Gun, Maestro) who had a sustained influence on the outcome of more than half of MEV-Boost auctions.***
 
 
 We define a provider $P$ as pivotal for an instance of MEV-Boost auction if removing $P$'s transactions from the winning block causes the winner to lose the auction. For each pivotal provider, we compute the fraction of auctions in which it is pivotal. We refer to this metric as *pivotal level*, a number ranging from 0 to 1, which can be used to quantify the importance of individual providers.
@@ -49,7 +49,7 @@ We plot the weekly pivotal level for the top-5 pivotal providers. A positive tre
 |:--:|
 | **The pivotal level of top-5 pivotal providers over time. A line may not start from the beginning because the provider did not exist at that point. Maestro became an independent provider around December 2023.** |
 
-### Finding 3: To access private order flows, new builders need to pay up to 1.4 ETH to enter the market.
+***Finding 3: To access private order flows, new builders need to pay up to 1.4 ETH to enter the market.***
 
 
 The private order flow providers impose reputation requirements on the builders, which are usually evaluated based on market share. These reputation requirements act as a proxy for trust, e.g., ensuring builders do not unbundle transactions. Thus, new builders face a chicken-and-egg problem as they need access to private order flows to win auctions and gain market share, but the private order flow providers only serve builders with a decent market share.
@@ -67,7 +67,7 @@ Builders thus resort to subsidizing their bids, i.e., bidding higher than the tr
 
 
 
-### Finding 4: The inequality in block building is highest among tail builders, followed by middle and least among top builders, and it worsens when MEV increases.
+***Finding 4: The inequality in block building is highest among tail builders, followed by middle and least among top builders, and it worsens when MEV increases.***
 
 
 We first compare the true values across different builders for the same auction to understand the variations in builders' abilities to extract values.  We used the quartile coefficient of dispersion (QCD) to quantify the inequality of true values across builders. 
@@ -81,7 +81,7 @@ The distribution of the QCD for MEV-Boost auction reveals two trends. First, wit
 | **Violin graphs for the distribution of the QCD across three MEV tiers, for top, middle, and tail builders** |
 
 
-### Finding 5: 88.84% of the MEV-Boost auctions are competitive, with proposers' losses from uncompetitive auctions amounting to 0.98% of total gains.
+***Finding 5: 88.84% of the MEV-Boost auctions are competitive, with proposers' losses from uncompetitive auctions amounting to 0.98% of total gains.***
 
 We further quantify whether an auction is competitive or efficient by using true values. We define an MEV-Boost auction as competitive if the winning bid is not less than the second-highest true value.
 
@@ -92,7 +92,7 @@ Our results reveal that 88.84% of the MEV-Boost auctions we analyzed were compet
 | **The distribution of CI and EI, where each dot represents an auction. The color represents density when multiple dots overlap.** |
 
 
-### Finding 6: 79.74% of the MEV-Boost auctions are efficient, and 51.4% of the inefficient auctions are caused by block subsidization.
+***Finding 6: 79.74% of the MEV-Boost auctions are efficient, and 51.4% of the inefficient auctions are caused by block subsidization.***
 
 We define an MEV-Boost auction as efficient if the winner has the highest true value. An interesting finding is that more than 20% of MEV-Boost auctions are inefficient and the auctions tend to be inefficient when the MEV in an MEV-Boost auction is low. Further analysis reveals that over half of the inefficient auctions are caused by block subsidization. Moreover, block subsidization is more common when the extractable value is small, because the cost will be relatively low.
 
