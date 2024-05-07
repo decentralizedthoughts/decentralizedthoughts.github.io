@@ -29,7 +29,7 @@ This post provides a summary of our findings from the empirical study, and we en
 ## Why does the builder market centralize, given that it is permissionless and anyone can join?
 
 
-### Finding 1: Private order flows contribute to 60% of the MEV in over 50% of the blocks in MEV-Boost.
+***Finding 1: Private order flows contribute to 60% of the MEV in over 50% of the blocks in MEV-Boost.***
 
 The builder market is technically open to everyone, but the barrier to accessing profitable private order flows forms an implicit access barrier. We illustrate the importance of private order flow to the success of builders by plotting the fraction of builder income from private order flows. Currently, approximately 60% of the block value comes from private order flows.
 
