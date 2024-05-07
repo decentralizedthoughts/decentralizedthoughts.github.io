@@ -1,6 +1,6 @@
 ---
 title: Decentralization of Ethereum Builder Market
-date: 2024-05-07 12:05:00 -05:00
+date: 2024-05-07 13:05:00 -04:00
 tags:
 - MEV
 author: Sen Yang, Kartik Nayak, and Fan Zhang
