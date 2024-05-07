@@ -8,7 +8,7 @@ author: Sen Yang, Kartik Nayak, and Fan Zhang
 
 Decentralization is a core underpinning of blockchains. Is today's blockchain really decentralized?
 
-In a [recent work](https://arxiv.org/pdf/2405.01329), we explore this question in the context of the *builder market* in Ethereum. The market was introduced to avoid centralization caused by Maximal Extractable Value (MEV). After two years in operation, however, the builder market has evolved to a highly centralized one with three builders producing most of the blocks. As can be seen in the following figure, Beaver, Rsync and Blocknative produce more than 90\% of the blocks
+In a [recent work](https://arxiv.org/pdf/2405.01329), we explore this question in the context of the *builder market* in Ethereum. The market was introduced to avoid centralization caused by Maximal Extractable Value (MEV). After two years in operation, however, the builder market has evolved to a highly centralized one with three builders producing most of the blocks. As can be seen in the following figure, Beaver, Rsync and Blocknative produce more than 90% of the blocks
 
 
 |![Market share of builders. The builder market is arguably one of the least decentralized parts of Ethereum!](https://hackmd.io/_uploads/HJgkDOMMC.png)|
@@ -59,7 +59,7 @@ Builders thus resort to subsidizing their bids, i.e., bidding higher than the tr
 
 |![market-share-cost](https://hackmd.io/_uploads/rkTt3dGzR.png)|
 |:--:|
-|**Subsidy required to establish a 1\% market share, as required by MEV Blocker. This quantifies the cost of accessing private order flows.**
+|**Subsidy required to establish a 1% market share, as required by MEV Blocker. This quantifies the cost of accessing private order flows.**
 
 
 ## What are the security implications of a centralized builder market to MEV-Boost auctions?
