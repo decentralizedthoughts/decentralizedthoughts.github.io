@@ -9,7 +9,7 @@ layout: page
 
 - The [network model](/2019-06-01-2019-5-31-models/), the [threshold adversary](/2019-06-17-the-threshold-adversary/) model, and the [power of the adversary](/2019-06-07-modeling-the-adversary/). 
 - Definition of [Consensus and Agreement](/2019-06-27-defining-consensus/).
-- State machine replication (https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/).
+- State machine replication [and consensus](https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/).
 - State Machine Replication for [crash failures](/2019-11-01-primary-backup/).
 - From single agreement to [state machine replication](https://decentralizedthoughts.github.io/2022-11-19-from-single-shot-to-smr/).
 - The [ideal state machine model and Linearizability](https://decentralizedthoughts.github.io/2021-10-16-the-ideal-state-machine-model-multiple-clients-and-linearizability/). 
