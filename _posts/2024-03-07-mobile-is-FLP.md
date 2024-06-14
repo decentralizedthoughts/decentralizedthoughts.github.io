@@ -63,7 +63,7 @@ Note that in the failure free extension of $D$ these messages will be delivered 
 
 Case 1 (trivial): If $val(D) \neq val(D-p)$ then $D$ is an extension of $C$, is at the beginning of round $k+1$, and its a $p$-pivot configuration. So the Lemma holds.
 
-Case 2: Otherwise $val(D) = val(D-p)$. From the definition of $D$, $val(C-p)=val(D-p)$ because both executions are identical: we crash $p$ at the beginning of round $k$. From the assumption that $C$ is a $p$-pivot, $val(C-p) \neq val(C)$. Therefore $val(D) \neq val (C)$. Without loss of generality assume that $val(D)=0$, hence $val(C)=1$.
+Case 2: Otherwise $val(D) = val(D-p)$. From the definition of $D$, $val(C-p)=val(D-p)$ because both executions are identical: we delay all messages from $p$ at the beginning of round $k$. From the assumption that $C$ is a $p$-pivot, $val(C-p) \neq val(C)$. Therefore $val(D) \neq val (C)$. Without loss of generality assume that $val(D)=0$, hence $val(C)=1$.
 
 Consider the $n+1$ configurations $D=C_0,C_1,\dots,C_n=C$ where $C_j$ is the configuration in which the adversary delays party $i$ after it sends its messages to $j$ parties. 
 
