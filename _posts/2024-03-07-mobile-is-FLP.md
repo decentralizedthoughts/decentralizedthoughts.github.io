@@ -65,11 +65,13 @@ Case 1 (trivial): If $val(D) \neq val(D-p)$ then $D$ is an extension of $C$, is 
 
 Case 2: Otherwise $val(D) = val(D-p)$. From the definition of $D$, $val(C-p)=val(D-p)$ because both executions are identical: we delay all messages from $p$ at the beginning of round $k$. From the assumption that $C$ is a $p$-pivot, $val(C-p) \neq val(C)$. Therefore $val(D) \neq val (C)$. Without loss of generality assume that $val(D)=0$, hence $val(C)=1$.
 
-Consider the $n+1$ configurations $D=C_0,C_1,\dots,C_n=C$ where $C_j$ is the configuration in which the adversary delays party $i$ after it sends its messages to $j$ parties. 
+Observe that the only difference between $C$ and $D$ is that in $D$ we delay $p$'s messages in round $k$ for one round.
+
+Consider the $n+1$ configurations $D=C_0,C_1,\dots,C_n=C$ where $C_j$ is the configuration in which the adversary delays party $p$ after it sends its messages to $j$ parties. 
 
 The (trivial) [one dimension Sperner's Lemma](https://en.wikipedia.org/wiki/Sperner%27s_lemma#One-dimensional_case) implies that there exists $1 \le i \le n$ and two adjacent configurations such that $val(C_{i-1}) =0$ and $val(C_{i})=1$.
 
-As in lemma 1, the only difference between $C_{i-1}$ and $C_i$ is the state of party $i$. Let $C'$ be the execution where party $i$ crashes (is delayed forever) at the beginning of round $k$. Like before, $C'$ could be reached from either $C_{i-1}$ or $C_i$ with all parties' views being indistinguishable. So again we have 
+The only difference between $C_{i-1}$ and $C_i$ is the state of party $i$ and an undelivered message from $p$ to $i$. Let $C'$ be the execution where messages sent from party $i$ are delayed forever at the beginning of round $k$. As in Lemma 1, $C'$ could be reached from either $C_{i-1}$ or $C_i$ with all parties' views being indistinguishable. So again we have 
 
 $$val(C')=val(C_{i-1}-i)=val(C_i-i)$$ 
 
