@@ -18,17 +18,16 @@ The third property is **Termination**, and the following lower bounds are known:
 
 **Theorem [[SW89](https://dl.acm.org/doi/10.5555/73228.73254)]**: any protocol solving consensus in a synchronous model that is resilient to one mobile crash failure must have an infinite execution.
 
-We prove both results by a *reduction* to a common weaker adversary we call the ***mobile delay adversary*** in synchrony with a single failure and then prove that any consensus protocol resilient to it must have infinite executions. This gives a rather simple and unified proof, for both mobile crash and asynchrony.
+We prove both results by a *reduction* to a common weaker adversary we call the ***mobile delay adversary*** in synchrony with a single failure and then prove that any consensus protocol resilient to it must have infinite executions. This gives a rather simple and unified proof, for both a **single mobile crash in synchrony** and a **single crash in asynchrony**.
 
-Our proof initially followed the [Layered Analysis of Consensus, 2002](http://courses.csail.mit.edu/6.897/fall04/papers/Moses/layering.pdf) by [Moses and Rajsbaum](https://epubs.siam.org/doi/10.1137/S0097539799364006), with simplifications for maintaining just two configurations. Following feedback from [Gafni and Losa](https://dl.acm.org/doi/abs/10.1007/978-3-031-44274-2_6), we adopt the insights of [Time is not a Healer, but it Sure Makes Hindsight 20:20, 2023](https://arxiv.org/abs/2305.02295) which is based on the work of [Volzer, 2004](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=043ac773bfcc3adb84dcdad6e726f2096a742f5b) and maintains just one configuration. 
 
 ## Definitions 
 
-A *configuration* is a set of all the states of all the parties and the set of undelivered messages.
+A *configuration* is a set of all the states of all the parties and the set of currently undelivered messages.
 
-***Definition***: For a configuration $C$ let $val(C)$ be the decision in the *failure free extension* that starts with configuration $C$.
+***Definition***: For a configuration $C$ let $val(C)$ be the decision in the *failure free extension* that starts with configuration $C$ and runs in synchrony with no failures. 
 
-***Definition***: For a configuration $C$ and party $p$ let $val(C-p)$ be the decision in the extension that starts with configuration $C$ in which party $p$ is infinitely delayed (essentially crashed) and all other parties are failure free.
+***Definition***: For a configuration $C$ and party $p$ let $val(C-p)$ be the decision in the extension that starts with configuration $C$ and runs in synchrony with party $p$ is infinitely delayed (essentially crashed) and all other parties are failure free.
 
 ***Definition of a $p$-pivot configuration:*** For a party $p$ we say that a configuration $C$ is a $p$-pivot if $val(C) \neq val (C-p)$.
 
@@ -58,12 +57,11 @@ We now show can can always extend a $p$-pivot configuration by one round to a $p
 
 ***Lemma 2***: *If $C$ is a $p$-pivot configuration at the beginning of round $k$, then there is an extension of $C$ to $C'$ by one round in the mobile delay model where $C'$ is a $p'$-pivot configuration at the beginning of round $k+1$.*
 
-
 *Proof*: Given a $p$-pivot configuration $C$ at the beginning of round $k$, define $D$ as the extension of $C$ by one round (to the beginning of round $k+1$), where all of party $p$'s messages are delayed in round $k$.
 
 Case 1 (trivial): If $val(D) \neq val(D-p)$ then $D$ is an extension of $C$, is at the beginning of round $k+1$, and its a $p$-pivot configuration. So the Lemma holds.
 
-Case 2: Otherwise $val(D) = val(D-p)$. From the definition of $D$, $val(C-p)=val(D-p)$ because in both cases we essentially crash $p$ at the beginning of round $k$. From the assumption that $C$ is a $p$-pivot, $val(C-p) \neq val(C)$. Therefore $val(D) \neq val (C)$. Without loss of generality assume that $val(D)=0$, hence $val(C)=1$.
+Case 2: Otherwise $val(D) = val(D-p)$. From the definition of $D$, $val(C-p)=val(D-p)$ because both executions are identical: we crash $p$ at the beginning of round $k$. From the assumption that $C$ is a $p$-pivot, $val(C-p) \neq val(C)$. Therefore $val(D) \neq val (C)$. Without loss of generality assume that $val(D)=0$, hence $val(C)=1$.
 
 Consider the $n+1$ configurations $D=C_0,C_1,\dots,C_n=C$ where $C_j$ is the configuration in which the adversary delays party $i$ after it sends its messages to $j$ parties. 
 
@@ -73,7 +71,7 @@ As in lemma 1, the only difference between $C_{i-1}$ and $C_i$ is the state of p
 
 $$val(C')=val(C_{i-1}-i)=val(C_i-i)$$ 
 
-By definition, if $val(C')=1$ then $C_{i-1}$ is an $i$-pivot configuration and similarly if $val(C')=0$ then $C_i$ is an $i$-pivot configuration. This completes the proof.
+By definition, if $val(C')=1$ then $C_{i-1}$ is an $i$-pivot configuration at the beginning of round $k+1$ and similarly if $val(C')=0$ then $C_i$ is an $i$-pivot configuration at the beginning of round $k+1$. This completes the proof.
 
 ## Extending the proof to non-uniform agreement
 
@@ -99,6 +97,10 @@ The following claims are almost immediate, we provide them for completeness:
 
 The theorems at the top of this post follow from Claims 1 and 2 and the existence of infinite execution in the mobile delay lock step model.
 
+## Related work and acknowledgments
+
+Our proof initially followed the [Layered Analysis of Consensus, 2002](http://courses.csail.mit.edu/6.897/fall04/papers/Moses/layering.pdf) by [Moses and Rajsbaum](https://epubs.siam.org/doi/10.1137/S0097539799364006), with simplifications for maintaining just two configurations. Following feedback from [Gafni and Losa](https://dl.acm.org/doi/abs/10.1007/978-3-031-44274-2_6), we adopt the insights of [Time is not a Healer, but it Sure Makes Hindsight 20:20, 2023](https://arxiv.org/abs/2305.02295) which is based on the work of [Volzer, 2004](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=043ac773bfcc3adb84dcdad6e726f2096a742f5b) and maintains just one configuration. 
+
 Gafni and Losa prove an even stronger result, showing that synchronous single mobile crash and asynchronous single crash are equivalent in the sense that they can simulate each other (and showing two additional equivalent models).
 
 
@@ -106,7 +108,7 @@ Gafni and Losa prove an even stronger result, showing that synchronous single mo
 
 * The mobile delay adversary is used as a base for reductions to both the mobile crash and the asynchronous case. This highlights how little asynchrony is needed and the deep connection between asynchrony and mobile faults. 
 * Compared to the FLP proof via [bi-valency](https://decentralizedthoughts.github.io/2019-12-15-asynchrony-uncommitted-lower-bound/), this proof is more constructive in showing a fair execution. The FLP notion of [bi-valency](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=043ac773bfcc3adb84dcdad6e726f2096a742f5b) may not be the most natural definition for proving these results.
-* Compared to the Almost Same but Failure Free different notion of our post on [early stopping](https://decentralizedthoughts.github.io/2024-01-28-early-stopping-lower-bounds/), here we maintain just one configuration instead of two. However, the proofs are very similar. It currently seems that early stopping needs to maintain two configurations because it needs to reason about a configuration that is one round in the future.
+* Compared to the *Almost Same but Failure Free different* notion of our post on [early stopping](https://decentralizedthoughts.github.io/2024-01-28-early-stopping-lower-bounds/), here we maintain just one configuration instead of two. However, the proofs are very similar. It currently seems that early stopping needs to maintain two configurations because it needs to reason about a configuration that is one round in the future.
 * The constructive round by round nature of this proof approach shows that all the adversary needs to do is guess the pivot and its action (which can be done with probability $1/2n$ each round). This immediately shows that any protocol (even a randomized one and even one that uses fancy cryptography) that runs for at most $c$ rounds must have an error probability of at least $(2n)^{-c} (1/2)$.
 
 Please leave comments on [Twitter](https://x.com/ittaia/status/1772026991111217657).
