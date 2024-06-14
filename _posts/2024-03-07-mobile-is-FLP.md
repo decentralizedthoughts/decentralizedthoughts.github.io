@@ -27,7 +27,7 @@ A *configuration* is a set of all the states of all the parties and the set of c
 
 ***Definition***: For a configuration $C$ let $val(C)$ be the decision in the *failure free extension* that starts with configuration $C$ and runs in synchrony with no failures. 
 
-***Definition***: For a configuration $C$ and party $p$ let $val(C-p)$ be the decision in the extension that starts with configuration $C$ and runs in synchrony with party $p$ is infinitely delayed (essentially crashed) and all other parties are failure free.
+***Definition***: For a configuration $C$ and party $p$ let $val(C-p)$ be the decision in the extension that starts with configuration $C$ and runs in synchrony except that all of party $p$'s outgoing messages are infinitely delayed ($p$ is crashed) and all other parties are failure free.
 
 ***Definition of a $p$-pivot configuration:*** For a party $p$ we say that a configuration $C$ is a $p$-pivot if $val(C) \neq val (C-p)$.
 
@@ -58,6 +58,8 @@ We now show can can always extend a $p$-pivot configuration by one round to a $p
 ***Lemma 2***: *If $C$ is a $p$-pivot configuration at the beginning of round $k$, then there is an extension of $C$ to $C'$ by one round in the mobile delay model where $C'$ is a $p'$-pivot configuration at the beginning of round $k+1$.*
 
 *Proof*: Given a $p$-pivot configuration $C$ at the beginning of round $k$, define $D$ as the extension of $C$ by one round (to the beginning of round $k+1$), where all of party $p$'s messages are delayed in round $k$.
+
+Note that in the failure free extension of $D$ these messages will be delivered in round $k+$.
 
 Case 1 (trivial): If $val(D) \neq val(D-p)$ then $D$ is an extension of $C$, is at the beginning of round $k+1$, and its a $p$-pivot configuration. So the Lemma holds.
 
