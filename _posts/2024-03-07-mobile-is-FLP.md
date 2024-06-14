@@ -12,7 +12,7 @@ In a consensus protocol parties have an input (at least two possible values, say
 * **Uniform Agreement**: all decision values are the same.
 * **Validity**: if all inputs are the same, then this is the output value.
 
-The third property is **Termination**, and the following lower bounds are known:
+The third property is **Termination**, and the following two influential lower bounds correspond to two [Dijkstra prizes](https://www.podc.org/dijkstra/) (awarded in [2001](https://www.podc.org/influential/2001-influential-paper/) and [2024](https://www.podc.org/2024-edsger-w-dijkstra-prize-in-distributed-computing/)):
 
 **Theorem [[FLP83](https://decentralizedthoughts.github.io/2019-12-15-asynchrony-uncommitted-lower-bound/)]**: any protocol solving consensus in an asynchronous model that is resilient to one crash failure must have an infinite execution.
 
