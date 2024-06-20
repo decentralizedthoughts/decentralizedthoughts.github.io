@@ -28,18 +28,18 @@ We start with two definitions, mention 3 models, then the $f=0$ case, followed b
 
 ***Definition 2:*** *Two Almost Same (AS) configurations are **Failure Free Different (FFD)** if the failure free continuation of one configuration leads to a different decision value than the failure free continuation of the other configuration.*
 
-In other words, two configurations are AS but FFD if the state of all parties except for one are the same, and continuing one without faults leads to a different decision value than doing so with the other.
+In other words, two configurations are *AS but FFD* if the state of all parties except for one are the same, and continuing one without faults leads to a different decision value than doing so with the other.
 
 ## Models
 
-There are slightly different lower bounds for 3 different models:
+There are slightly different lower bounds for 3 different adversary models and problems:
 
 
-***Early Stopping for Consensus under Crashes with Fixed First ($ES{-}C{-}Cfix$)*** : Here we study early stopping for consensus where the first message sent in the round a party is crashed is fixed. Note this models includes omission failures and also deterministic protocols that always follow the same sending order.
+***Early Stopping for Consensus under Crashes with Fixed First ($ES{-}C{-}Cfix$)*** : Early stopping for consensus in protocols where the first message sent in the round a party is crashed is fixed. Note this models includes omission failures and also deterministic protocols that always follow the same sending order.
 
-***Early Deciding for Uniform Consensus under Crashes with Fixed First ($ED{-}UC{-}Cfix$)*** : Here we study early deciding for [uniform consensus](https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/) in the same fault model above where the first message sent in the round a party is crashed is fixed. 
+***Early Deciding for Uniform Consensus under Crashes with Fixed First ($ED{-}UC{-}Cfix$)*** : Early deciding for [uniform consensus](https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/) in the same fault model above where the first message sent in the round a party is crashed is fixed.
 
-***Early Stopping for Consensus under Crashes ($ES{-}C{-}C$)*** : Here we study the standard crash model where parties can decide the order of messages sent in each round (potentially as a function of its state).
+***Early Stopping for Consensus under Crashes ($ES{-}C{-}C$)*** : The standard crash model where parties can decide the order of messages sent in each round (potentially as a function of its state).
 
 ## The $f=0$ case
 
@@ -97,8 +97,7 @@ In order to fix this, in world $A$, $j_1$ terminates after receiving $i$'s messa
 2. $ED{-}UC{-}Cfix$ : *for $f \le t-2$, must have an execution where a decision is done after at least $f+2$ rounds.*
 3. $ES{-}C{-}C$ : *for $f \le t-2$, must have an execution with at least $f+2$ rounds.*
 
-
-Looking at the  proof for $f=0$, it has two steps:
+Looking at the proof for $f=0$, it has two steps:
 
 1. Show that there are configurations in the beginning of round $1$ that are AS but FFD.
 2. Show that we need at least two more rounds when starting from such a pair of configurations (if we have enough of a corruption budget).
