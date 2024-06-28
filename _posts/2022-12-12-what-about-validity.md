@@ -7,7 +7,7 @@ tags:
 author: Ittai Abraham and Christian Cachin
 ---
 
-Perhaps the architipical [trilemma](https://twitter.com/el33th4xor/status/1191820205456023552?s=20&t=RcutJw0wQUsTmrO0OXzpXw) is **consensus** - it requires three properties: **agreement**, **liveness**, and **validity**. Getting any two is easy, but all three together is what makes consensus such a facinating problem that continues to create new challenges even after 40 years of research.
+Perhaps the archetypical [trilemma](https://twitter.com/el33th4xor/status/1191820205456023552?s=20&t=RcutJw0wQUsTmrO0OXzpXw) is **consensus** - it requires three properties: **agreement**, **liveness**, and **validity**. Getting any two is easy, but all three together is what makes consensus such a facinating problem that continues to create new challenges even after 40 years of research.
 
 A lot of research focuses on *agreement* and *liveness* properties. In this series of posts, we highlight some classic and some more recent research on **validity** in the context of consensus and blockchain protocols. 
 
@@ -46,12 +46,12 @@ Note that Neiger called this problem *Strong Consensus* but we choose to use a m
 
 ### A lower bound for honest input validity in synchrony
 
-**Theorem [[Neiger, 1994]((https://smartech.gatech.edu/bitstream/handle/1853/6776/GIT-CC-93-45.pdf))]**: Consensus with honest input validity and $m$ possible input values cannot be solved in *synchrony* for $n \leq \max(3, m) f$ and a malicious adversary controlling $f$ parties.
+**Theorem [Neiger, 1994]**: Consensus with honest input validity and $m$ possible input values cannot be solved in *synchrony* for $n \leq \max(3, m) f$ and a malicious adversary controlling $f$ parties.
 
 *Proof idea*: $n \leq 3f$ is the [standard FLM impossibility](https://decentralizedthoughts.github.io/2019-08-02-byzantine-agreement-is-impossible-for-$n-slash-leq-3-f$-is-the-adversary-can-easily-simulate/). 
 
 
-Neiger's original proof was for determisitic protocols, here we present a modern version that covers even randomized protocols.
+Neiger's original proof was for deterministic protocols, here we present a modern version that covers even randomized protocols.
 
 Seeking a contradiction, assume $n=mf$ and $n > 3f$. So there must be $m>3$ possible input values. Assume with loss of generality that the possible input values are $1,\dots,m$. Partition the parties into sets of size $f$: $S_1,\dots,S_m$ and have parties in set $S_i$ start with input $i$. 
 
