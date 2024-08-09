@@ -15,7 +15,7 @@ The *threat* of potentially having a failure forces us to run for longer, even i
 
 This result follows from the fundamental lower bound on **early stopping**: the number of rounds for consensus protocols in the synchronous model that can tolerate at most $t$ crash failures in executions where there at most $f \le t$ failures is at least $\min \{f+2,t+1\}$.
 
-Just to repeat this subtle point, we [already know](https://decentralizedthoughts.github.io/2019-12-15-consensus-model-for-FLP/) that if we want to design a protocol to be resilient to $t$ faults, in the worst case we might need $t+1$ rounds. However, even in executions of this protocol with a small number of errors $f<t$, we need at least $f+2$ rounds.
+Just to repeat this subtle point, we [already know](https://decentralizedthoughts.github.io/2019-12-15-consensus-model-for-FLP/) that if we want to design a protocol to be resilient to $t$ faults, in the worst case we might need $t+1$ rounds. However, even in executions of this protocol with a few actual failures $f<t$, we need at least $f+2$ rounds.
 
 This post is based on the beautiful 2001 tutorial by Idit Keidar and Sergio Rajsbaum: [On the Cost of Fault-Tolerant Consensus When There are No Faults - A Tutorial](https://iditkeidar.com/wp-content/uploads/files/ftp/consensus-bounds.pdf). 
 

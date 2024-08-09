@@ -1,5 +1,5 @@
 ---
-title: In Between Crash and Omission failures
+title: In between Crash and Omission failures
 date: 2024-01-30 12:05:00 -05:00
 tags:
 - lowerbound
