@@ -21,25 +21,23 @@ The [consensus cheat sheet](https://decentralizedthoughts.github.io/2021-10-29-c
 This post covers several [relaxations of Broadcast](/2019-10-22-flavours-of-broadcast/).
 
 
-
 ## Synchronous Protocols
 
-The Synchronous model is a good place to start because protocols are simpler. 
+The Synchronous model is a good place to start because protocols are simpler.
 
 - Classic Byzantine agreement protocol: the [Phase-King](https://decentralizedthoughts.github.io/2022-06-09-phase-king-via-gradecast/).
-
 - Classic Byzantine Broadcast protocol (with a PKI) for $f < n$: the [Dolev-Strong Authenticated Broadcast protocol](/2019-12-22-dolev-strong/). 
-
 - A non-equivocation protocol (with a PKI) for  $f < n$: [Crusader Broadcast](https://decentralizedthoughts.github.io/2022-06-19-crusader-braodcast/). 
 
 More recent State Machine Replication protocols:
+
 - [Sync HotStuff](/2019-11-12-Sync-HotStuff/).
 - An [optimal optimistically responsive synchronous protocol](/2020-06-12-optimal-optimistic-responsiveness/).
 - A simple, streamlined synchronous protocol called [Streamlet](/2020-05-14-streamlet/). 
 - Survey of [authenticated protocols under the synchrony assumption](/2019-11-11-authenticated-synchronous-bft/).
 
-
 Use of randomization in synchronous agreement protocols:
+
 - For [crash failures](https://decentralizedthoughts.github.io/2023-02-18-rand-and-consensus-1/).
 - For [omission failures](https://decentralizedthoughts.github.io/2023-02-19-rand-and-consensus-2/).
 
@@ -53,6 +51,7 @@ Single shot [Paxos](https://decentralizedthoughts.github.io/2022-11-04-paxos-via
 
 
 Taking ideas from the Byzantine setting and applying them to the benign setting:
+
  -  [Benign Hotstuff](https://decentralizedthoughts.github.io/2021-04-02-benign-hotstuff/).
  -  [Simplifing Raft with Chaining](https://decentralizedthoughts.github.io/2021-07-17-simplifying-raft-with-chaining/). 
  -  [Log Paxos](https://decentralizedthoughts.github.io/2021-09-30-distributed-consensus-made-simple-for-real-this-time/) is a modern take on multi-Paxos. 
@@ -73,7 +72,7 @@ Important building blocks in asynchrony:
 
 1. The [Reliable Broadcast](https://decentralizedthoughts.github.io/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/) protocol. 
 2. The [Reliable Gather](https://decentralizedthoughts.github.io/2021-03-26-living-with-asynchrony-the-gather-protocol/) is a multi-leader generalization of reliable broadcast.
-3. We discusses how to measure [round complexity in asynchrony](https://decentralizedthoughts.github.io/2021-09-29-the-round-complexity-of-reliable-broadcast/) and also improved round complexity for reliable broadcast. 
+3. We discuss how to measure [round complexity in asynchrony](https://decentralizedthoughts.github.io/2021-09-29-the-round-complexity-of-reliable-broadcast/) and also improved round complexity for reliable broadcast. 
 
 Series on Asynchronous Agreement: 
 
@@ -187,24 +186,18 @@ What is player replaceability? A series:
 
 
 - [Cryptographic hash functions](/2020-08-28-what-is-a-cryptographic-hash-function/).
-
 - [Merkle trees](https://decentralizedthoughts.github.io/2020-12-22-what-is-a-merkle-tree/).
-
 - A glimpse at [Zero knowledge proofs](https://decentralizedthoughts.github.io/2020-12-08-a-simple-and-succinct-zero-knowledge-proof/)
-
 - [Bilinear accumulators](/2020-04-02-bilinear-accumulators-for-cryptocurrency/) from polynomial commitments.
-
-- [range proofs](/2020-03-03-range-proofs-from-polynomial-commitments-reexplained/) from polynomial commitments.
-
+- [Range proofs](/2020-03-03-range-proofs-from-polynomial-commitments-reexplained/) from polynomial commitments.
 - Private set intersection: [part 1](/2020-03-29-private-set-intersection-a-soft-introduction/) and [part 2](/2020-07-26-private-set-intersection-2/). Apple is using PSI for [CSAM detection](https://decentralizedthoughts.github.io/2021-08-29-the-private-set-intersection-psi-protocol-of-the-apple-csam-detection-system/).
 
 ### Polynomials
 
-- A lightweight mathematical intro to [Polynomials over a finite field](/2020-07-17-the-marvels-of-polynomials-over-a-field/).
-
+- A lightweight intro to [Polynomials over a finite field](/2020-07-17-the-marvels-of-polynomials-over-a-field/).
 - The basics of [Polynomial secret sharing](/2020-07-17-polynomial-secret-sharing-and-the-lagrange-basis/).
-
 - [The Fast Fourier Transform over finite fields](https://decentralizedthoughts.github.io/2023-09-01-FFT/).
+- What is [Verifiable Information Dispersal](https://decentralizedthoughts.github.io/2024-08-08-vid/).
 
 ### Secret Sharing and MPC
 
@@ -212,9 +205,7 @@ Polynomial secret sharing is a base for deep connections between cryptography an
 
 - Polynomial secret sharing against a [passive adversary](https://decentralizedthoughts.github.io/2020-07-17-polynomial-secret-sharing-and-the-lagrange-basis/)
 - Against a [crash adversary](https://decentralizedthoughts.github.io/2022-08-17-secret-sharing-with-crash/).
-
 - The [BGW88](https://inst.eecs.berkeley.edu/~cs276/fa20/notes/BGW88.pdf) protocol for [Verifiable Secret Sharing](https://decentralizedthoughts.github.io/2022-08-24-BGW-secret-sharing/).
-
 - Chaum’s [Dining Cryptographers](https://users.ece.cmu.edu/~adrian/731-sp04/readings/dcnets.html) and [the additivity of polynomial secret sharing](https://decentralizedthoughts.github.io/2022-08-25-dining-cryptographers-additive/).
 
 # Research Oriented Posts
@@ -256,3 +247,7 @@ Polynomial secret sharing is a base for deep connections between cryptography an
 - [DAG Meets BFT - The Next Generation of BFT Consensus](https://decentralizedthoughts.github.io/2022-06-28-DAG-meets-BFT/).
 
 - [He-HTLC - Revisiting Incentives in HTLC](https://decentralizedthoughts.github.io/2022-08-12-hehtlc/).
+
+- [Decentralization of Ethereum Builder Market](https://decentralizedthoughts.github.io/2024-05-07-decentralization-ethereum/).
+- [Sailfish: Improving the Latency of DAG-based BFT](https://decentralizedthoughts.github.io/2024-05-23-sailfish/).
+- [Shoal++: High Throughput DAG-BFT Can Be Fast!](https://decentralizedthoughts.github.io/2024-06-12-shoalpp/)
