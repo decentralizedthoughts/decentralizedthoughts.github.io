@@ -1,0 +1,216 @@
+---
+title: The Prefix Speculation Dilemma in BFT Consensus
+date: 2024-08-24 07:00:00 -04:00
+tags:
+- blockchain
+author: Dakai Kang, Suyash Gupta, Dahlia Malkhi, Mohammad Sadoghi
+---
+
+Several approaches aim to reduce the number of network hops to reach finality in BFT Consensus protocols through **speculation**. They differ in their methods and in their guarantees, yet they all face a common phenomenon referred to as the ***prefix speculation dilemma***. 
+
+This post explains three principal speculation approaches and underscores their differences: [Speculation in HotStuff-1](#Speculation-in-HotStuff-1), [Speculation in PBFT](#Speculation-in-PBFT), and [Speculation in Zyzzyva](#Speculation-in-Zyzzyva). It describes how the prefix speculation dilemma is manifested and handled in each one of them.
+
+
+---
+
+## Speculation in HotStuff-1
+
+### A Brief Recap of HotStuff
+Most practical BFT solutions are organized as a sequence of *views*, each having a designated leader that aims to drive progress within one view. Each view allows a certain time period for a designated leader to propose a client-request and for validators to accept it. At the end of a view, the next leader is promoted. 
+
+In 2018, [[HotStuff]](https://arxiv.org/abs/1803.05069) transformed the landscape of practical BFT consensus solutions by introducing two key contributions, **linearity** and **streamlining**. HotStuff is the first BFT protocol that achieves linear communication complexity per view, including when a leader is replaced. Additionally, each view consists of a single broadcast step, such that views can be *streamlined* and each one extends the global sequence of decisions by one position.
+
+More specifically, the family of HotStuff protocols bear a common core, a view sub-protocol which has two network hops and incurs linear communication overhead: (i) a leader broadcasts a proposal, (ii) validators send votes to the next leader signed via a threshold-signature scheme for combining. 
+
+A new leader must manage a transition through a *view-change* sub-protocol, that must not introduce changes to previously commited decisions. HotStuff embodies a simplified view-change regime which was introduced in [[Tendermint]](https://www.semanticscholar.org/paper/Tendermint%3A-Byzantine-Fault-Tolerance-in-the-Age-of-Buchman/07ebd46dc1f020cfbad17c9285ba372c040695d5?utm_source=direct_link), while harnessing modern cyptographic primitives to achieve linearity. If the leader receives $n-f$ votes for the previous leader's proposal, it combines them using the threshold signature scheme to form a *quorum-certificate ("QC")*. Otherwise, it wait for more votes or until the maximal network propagation latency. 
+
+The new leader proposes a client request to the next available sequence position by *chaining* it to the highest QC it knows and broadcasting it. Due to chaining, when a request (say $T_s$) is committed at position $s$ in the sequence, the chain of transactions preceding $T_s$ becomes committed by the consensus decision as well. 
+
+Additionally, HotStuff has a *streamlined* flow that borrows from [[Casper the FFG]](https://arxiv.org/abs/1710.09437). A proposal becomes committed by being the head of a sub-chain of two QCs[^1] from two consecutive leaders, as depicted below. QC chains are *streamlined*, in that the second QC in a sub-chain is simultaneously the first QC of the next position.
+
+![image](https://hackmd.io/_uploads/BJbWWZKcR.png =70%x)
+
+[^1]: A sub-chain of two QCs suffices for a commit decision in the [[HotStuff-2]](https://eprint.iacr.org/2023/397.pdf) variant.
+
+Upon learning a commit decision, validators execute the committed transaction and respond to the client. When a client receives $f+1$ identical responses, it learns that the transaction has committed and at that time, it obtains the result of applying the transaction at the designated chain position.
+
+In the good case (no-failures), a [[HotStuff-2]](https://eprint.iacr.org/2023/397.pdfHotStuff-2 client receives responses within 7 network hops (measured as the longest causal-chain of messages). The diagram below depicts the communication flow in a failure-free HotStuff-2 scenario. The scenario is depicted in a system with $f=1$ resilience, $n=3f+1=4$ validators (replicas), and one client.
+
+
+![image](https://hackmd.io/_uploads/Bk-SmxhqR.png =70%x)
+
+It is worth remarking that due to streamlining, the *expected* wait-time for a client submitting a request for leaders to propose is only 1 network delay.  
+
+### HotStuff-1
+Recent work [[HotStuff-1]](https://arxiv.org/abs/2408.04728) introduces a two-hop latency reduction to the HotStuff family through speculation. HotStuff-1 achieves this enhancement while maintaining linear communication complexity of each view. Moreover, unlike optimistic fast-path tracks (described below) found in, e.g., [[FaB](https://www.semanticscholar.org/paper/Fast-Byzantine-Consensus-Martin-Alvisi/a59d3e0f0ceaf4b35959e13863f9c304a461567e?utm_source=direct_link), [Zyzzyva](https://www.semanticscholar.org/paper/Zyzzyva%3A-Speculative-Byzantine-fault-tolerance-Kotla-Alvisi/0a9cc699ed94b4729de3255d76305b91b6a56aaa?utm_source=direct_link), [SBFT](https://arxiv.org/abs/1804.01626), [Wendy](https://eprint.iacr.org/2021/1308)], the speculative regime of HotStuff-1 is fault-tolerant and the latency improvement does not rely on optimism. 
+
+HotStuff-1 achieves a reduction of two network hops by sending clients execution responses, speculatively, after one QC is formed instead of two. That is, when a validator receives a proposal for a transaction $T$ carrying a QC for the immediately preceding view, it applies $T$ to the chain of transactions preceding it and sends the execution result of to the client that requested $T$.   
+
+When a client receives notifications from  $n-f$ replicas, it learns two things: its request has been committed, and the execution result which has been prepared in advance. The figure below depicts a HotStuff-1 flow with speculative responses. 
+
+![image](https://hackmd.io/_uploads/ryYW4l2q0.png =70%x)
+
+One way of viewing this idea is that $n-f$ parties receiving a QC for a transaction $T$ guarantees it is committed. Then, the client is the first party to learn about it. 
+
+To guarantee that responses are sent for each committed transaction, upon a commit of any transaction $T$, a validator sends a response to the client if it did not send a speculative result on $T$ already.
+
+### Why is This Considered Speculation?
+
+A request that has been speculatively executed by a validator may *abort* and be replaced by a different transaction at the same position. Consequently, speculative execution entails a certain risk: each validator locally applies the request without being guaranteed it will commit. If the request aborts, the validator will have wasted execution resources and furthermore, it may need to spend more resources to undo the speculation. 
+
+Notwithstanding, it is worth noting that the speculative path carries fairly little risk for a validator, because speculation is done after the validator receives a QC. Only one proposal per view can obtain a QC and therefore, it is very likely to become committed. In fact, in timely executions, the validator reports its highest known QC to the next leader, thereby helping it to become committed.
+
+### The Speculation Dilemma in HotStuff-1
+
+The problem is that when a validator (speculatively) applies a transaction $T_{s}$ at sequence position $s$, it must execute all preceding transactions as well. It would appear, naively, that the validator could respond to clients on transactions preceding $T_{s}$, because if $T_{s}$ commits, the entire chain of transactions preceding it becomes committed as well.
+
+Unfortunately, this would be unsafe, but the reason is quite subtle.
+
+Suppose that a validator receives a (proposal carrying a) QC for a transaction $T_s$ which is chained to $T_{s-1}$. A group of $2f$ validators receive a (different proposal carrying a) QC for a transaction $T'_s$ which is also chained to $T_{s-1}$. Neither one of $T_s$, $T'_s$ receives $n-f$ responses and neither one commits. Furthermore, it is possible that $T_{s-1}$ may end up being aborted as well. However, should the validators send responses for $T_{s-1}$, the client may receive $n-f$ responses and wrongly conclude that $T_{s-1}$ is committed. 
+
+The frame below exemplifies this scenario (the [HotStuff-1](https://arxiv.org/abs/2408.04728) paper explains this scenario in more detail).
+
+> * View $v$: $T_{s-1}$ is proposed at position $s-1$ and a QC formed for it. 
+> * View $v+1$: $U_{s-1}$ (conflicting with $T_{s-1}$ for position $s-1$) is proposed and a QC formed for it. 
+> * View $v+2$: $T_{s}$ is proposed at position $s$ chained to $T_{s-1}$ and a QC formed for it.
+> * View $v+3$: $T'_{s}$ (conflicting with $T_s$ is proposed at position $s$ also chained to $T_{s-1}$ and a QC formed for it.
+> * Views $v+4$, $v+5$ propose extensions of $U_{s-1}$ and commit the entire branch. The branch on which $T_{s-1}$ hangs is aborted.
+
+At the same time, if the validator does not send results on $T_{s-1}$, then should (say) $𝑇_s$ become committed, there would be a gap: the results from $𝑇_s$ were sent, but results from $𝑇_{s-1}$ are missing. This is the prefix speculation dilemma. 
+
+### Safe Speculation in HotStuff-1
+
+There are two possible ways to resolve the prefix speculation dilemma in HotStuff-1. 
+
+Upon receiving a QC for a proposal $T_s$ chained to $T_{s-1}$:
+
+* **Conservative speculation rule**: a validator can speculate on $T_{s}$ only if $T_{s-1}$ is already committed. 
+
+* **Permissive speculation rule**: a validator can speculate on $T_{s}$ but withhold responses to the client on $T_{s-1}$. 
+
+The advantage of the conservative rule is that it is simple. The drawback is that it does not benefit from reduced latency if there are view gaps.
+
+The advantage of the permissive rule is that it allows speculation as soon as a QC is disseminated to validators. The drawback is sending responses out of order to clients.
+
+---
+
+## Speculation in PBFT
+
+Speculative execution in HotStuff-1 resembles an  optimization  called *tentative execution*, which was briefly mentioned in a the discussion section of [[PBFT]](https://www.semanticscholar.org/paper/Practical-byzantine-fault-tolerance-and-proactive-Castro-Liskov/48326c5da8fd277cc32e1440b544793c397e41d6?utm_source=direct_link) and later expanded in [[POE]](https://www.semanticscholar.org/paper/Proof-of-Execution%3A-Reaching-Consensus-through-Gupta-Hellings/c3777d09098b298f586c8e98f2b1a9789f76d1af?utm_source=direct_link). Since PBFT is not chained and allows out-of-order commits, the prefix speculation dilemma is somewhat different than HotStuff-1 and is explained below.  
+
+### A brief recap of PBFT
+
+The flow of one view with a successful proposal in PBFT, from when a client submits a request to a leader until the client receives results, consists of $5$ network hops:
+
+1. The client sends a request to the validator designated as the leader.
+2. The leader broadcasts a proposal to order the client request at the next uncommitted sequence position $s$. The leader must not propose any change to a committed decision at the proposed sequence number, as explained below under *view-change*.
+3. If a validator accepts the leader proposal, it broadcasts a *prepare*-vote. A quorum of $n-f$ prepare-votes are considered a *prepare-certificate*. 
+4. Upon collecting a prepare-certificate, a validator broadcasts a *commit*-vote. A quorum of $n-f$ commit-votes are considered a *commit-certificate*. 
+5. Upon collecting a commit-certificate, a validator learns that the request has committed. It applies the request to its local ledger state at position $s$ and sends the results to the client. 
+
+Upon receiving f+1 identical responses, the client learns two things simultaneously: (i) that its request has been committed to the globally ordered sequence, and (ii) the execution result from applying the request at the committed position in the sequence.
+
+The diagram below depicts a single view with a successful commit decision. 
+
+![image](https://hackmd.io/_uploads/SyS2ePdq0.png =70%x)
+
+### View-change
+
+When validators detect no progress for a certain time period, they switch views. The *view-change* sub-protocol must guarantee that the next leader will not introduce any changes in a history that has already committed at any learner. The new leader does this by collecting reports about prepare-certificates from $n-f$ validators. Let the highest committed position known to the leader be $c$. For any position $s > c$ which has a prepare-certificate for $T_s$, the leader re-proposes $T_s$; for any holes $s$ in the sequence, it proposes $\bot_s$; and it proceeds to propose new requests at the next available position.   
+
+### Out of Order Commits
+
+A leader may propose the next position (say $s+1$) in the sequence before the current one, $s$, reached a decision. Because communication channels are not necessarily FIFO, requests may commit out of order even under a steady state with a correct leader. 
+
+Moreover, if the leader is replaced in a *view-change*, the earlier proposal at position $s$ might not commit while the latter one, $s+1$, does. More specifically, a view-change protocol may replace an uncomitted proposal $s$ with $\bot$. 
+
+We will explain the prefix speculation dilemma this causes in PBFT after we introduce speculation via *tentative execution*.  
+
+### Optimization: *Tentative* Execution
+
+The PBFT paper introduces an optimization that reduces the latency of the above flow through *tentative execution* (the term used in the PBFT paper) by one network-hop. The idea is to allow validators to tentatively apply requests at step 4. That is, upon collecting a prepare-certificate, a validator should tentatively apply the request to its local ledger and send a tentative execution result to the client.
+
+Upon receiving 2f+1 (identical) tentative responses, the client learns a commit-certificate directly, without having to wait for validators to collect a commit-certificate. It simultaneously learns the execution result which has been prepared in advance.
+
+The diagram below depicts the optimized PBFT flow. 
+
+![image](https://hackmd.io/_uploads/rJJoxwd50.png =70%x)
+
+
+## The Prefix Speculation Dilemma in PBFT
+
+The problem is that PBFT allows commitment to be out-of-order but not execution, but tentative execution occurs during a commit decision, hence, possibly out of order. This causes the prefix speculation dilemma to manifest in a slightly different manner than before.
+
+More specifically, recall that a leader may submit a proposal for (say) position $s+1$ before the proposal for $s$ has become committed. 
+
+Suppose that a validator collects a prepare-certificate for $T_s$ at position $s$, and proceeds to tentatively execute it and send a tentative result to the client. Next, the validator may collect a prepare-certificate for request $T_{s+1}$ at position $s+1$. It would appear, naively, that the validator could proceed to do the same with $T_{s+1}$: tentatively execute $T_{s+1}$ and send a tentative result to the client.
+
+Unfortunately, this would be unsafe, but (again) the reason is quite subtle.
+
+Upon receiving $n-f$ tentative responses for $T_{s+1}$, a client can learn that $T_{s+1}$ has committed and simultaneously learn the execution result of applying $T_{s+1}$ at the designated position in the sequence. Normally, these $n-f$ responses are sent in the same view as those for $T_s$, in which case $T_s$ also becomes committed. However, if the leader is replaced between $T_s$ and $T_{s+1}$ in a *view-change*, then the existence of $n-f$ responses on $T_{s+1}$ does **not** indicate that $T_{s}$ will be committed. The frame below exemplifies this with a scenario that spans three views.
+
+> In the following scenario, $2f+1$ validators collect prepare-certificates for both $T_s$ and $T_{s+1}$, albeit in different views. In the end, $T_{s+1}$ is committed and $T_{s}$ is replaced by $\bot$: 
+> - Denote the following **disjoint** subsets of validators: $G$ contains $f$ honest validators, $B$ contains $f$ bad validators, $g_1$ and $g_2$ are good validators outside $G$.  
+> - View $v$: the leader proposes $T_s$, $n-f$ validators broadcast prepare-votes on $T_s$, the $f$ validators in $G$ collect a prepare-certificate for $T_s$ in view $v$. 
+> - View $v+1$: the leader proposes $\bot_s$ at position $s$, $n-f$ validators excluding $G$ broadcast prepare-votes on $\bot_s$, one honest validator $g_2$ collect a prepare-certificate for $\bot_s$ in view $v+1$.  
+> - View $v+2$: the leader proposes $T_s$ (again), $n-f$ validators excluding $g_2$ broadcast prepare-votes on $T_s$, $f$ bad validators in $B$ and one good validator $g_1$ collect a prepare-certificate for $T_s$ in view $v+2$. 
+> - (Still in view $v+2$): the leader proposes $T_{s+1}$ at position $s+1$, $n-f$ validators broadcast prepare-votes on $T_{s+1}$. All validators collect a prepare-certificate on $T_{s+1}$.
+> - View $v+3$: the leader proposes $\bot_s$ at position $s$. $n-f$ validators excluding $G$ broadcast prepare-votes on $\bot_s$ and eventually, it becomes committed. 
+> 
+> The scenario satisfies: each of the $n-f$  validators in $G \cup B \cup \{g_1\}$ collected prepare-certificates for both $T_s$ and $T_{s+1}$.
+
+In particular, if $T_{s}$ does not commit, the tentative execution of $T_{s+1}$ must abort and get redone. The $2f+1$ validators that accept a prepare-certificates for $T_{s+1}$ after a prepare-certificate for $T_{s}$ must not proceed and tentatively execute $T_{s+1}$, for otherwise, a client could learn a wrong result reflecting an execution where $T_{s+1}$ follows $T_s$. 
+
+### Safe Speculation in PBFT 
+To guarantee safe speculation, PBFT allows tentative execution only a single position ahead of a contiguously committed prefix of transactions.
+
+More specifically, the modified step 4 is as follows:
+
+**Modified step 4.:** Upon collecting a prepare-certificate, if a validator has locally committed all positions lower than $s$ and applied them to its local ledger, it tentatively applies the request at $s$ to its local ledger state and sends a tentative execution result to the client.
+
+Thus, on the one hand, PBFT allows a leader to advance quickly to the next position in the sequence in order to increase throughput. On the other hand, unless the previous position it known to have committed, the optimized flow through speculation is ineffective.
+
+We remark that in *chained* BFT consensus protocols (such as HotStuff-1), the commit decision of $T_{s+1}$ would indirectly commit all preceding requests. That solves the dilemma here, but a different  dilemma exists in chained protocols as explained above. 
+
+---
+
+## Speculation in Zyzzyva 
+
+A completely different approach to speculation in PBFT, an *optimistic fast-path*, track, was introduced for one-time consensus in [[FaB]](https://www.semanticscholar.org/paper/Fast-Byzantine-Consensus-Martin-Alvisi/a59d3e0f0ceaf4b35959e13863f9c304a461567e?utm_source=direct_link), and adopted in several state-machine-replication protocols like [[Zyzzyva](https://www.semanticscholar.org/paper/Zyzzyva%3A-Speculative-Byzantine-fault-tolerance-Kotla-Alvisi/0a9cc699ed94b4729de3255d76305b91b6a56aaa?utm_source=direct_link), [SBFT](https://arxiv.org/abs/1804.01626), [Wendy](https://eprint.iacr.org/2021/1308)].
+
+
+### A Brief Recap of Zyzzyva
+The optimistic fast-path approach allows validators to speculatively apply requests at step 2 of the protocol. That is, upon accepting a leader proposal to sequence a request at a certain position $s$, a validator should speculatively apply the request locally and send a speculative execution result to the client.
+
+The optimistic fast-path relies on having no failures or unpredictable communication delays: upon receiving **n=3f+1** (identical) speculative responses, the client learns the commit decision early, without having to wait to the validators to go through the prepare and commit stages. The client simultaneously learns the execution result which has been prepared in advance.
+
+When it is successful, the Zyzzyva optimistic fast-path reduces the latency of PBFT by two network-hops. Compared with the *tentative execution* optimization introduced in PBFT, it improves latency by one hop. However, the optimistic fast-path works only in failure-free runs. The fast-path has $3$ network hops and the normal one $6$: 
+
+
+1. The client sends a request to the validator designated as the leader.
+2. The leader broadcasts a proposal to order the client request at the next uncommitted sequence number $s$. Each proposal references via a cryptographic hash the transaction preceding it in the sequence. The leader must not propose any change to a committed decision at the proposed sequence number, as explained below under *view-change*.
+3. If a validator accepts the leader proposal, it speculatively applies the request at $s$ to its local ledger state and sends a speculative execution result to the client. Upon collecting $n$ identical responses, a client learns that the request has **committed in the fast-path** and the execution result from applying the request at the committed position in the sequence.
+5. If the client expires a fast-path timer before collecting $n$ responses, upon collecting $n-f$ responses forming a prepare-certificate, it broadcasts the prepare-certificate to the validators. 
+6. If a validator accepts a prepare-certificate from the client, it responds with a *commit*-vote. A quorum of $n-f$ commit-votes are considered a *commit-certificate*. Upon collecting a commit-certificate, a client learns that the request has **committed in the normal path** and the result of applying transactions in sequence order. 
+
+The diagram below depicts the optimistic fast-path flow in Zyzzyva; the normal path is similar to PBFT (WIP depict normal path as well). 
+
+![image](https://hackmd.io/_uploads/r1ROgwu5A.png =70%x)
+
+### View-change
+
+Combining two rules to commit a decision required Zyzzyva to introduce a non-trivial modification to the view-change sub-protocol (which needed a subtle fix, ["Revisiting Fast Practical BFT"](https://arxiv.org/pdf/1712.01367)). 
+
+The Zyzzyva view-change sub-protocol must guarantee that the next leader will not introduce any changes in a history that has already committed at any learner **on either one of the commit paths**, the optimistic fast one and the regular one. The new leader does this by collecting reports about the history of committed decisions from $n-f$ validators. For any uncommitted position $s$, the leader considers any request $T_s$ which has either a prepare-certificate **or $f+1$ prepare-votes**, whichever occurred at a higher view, and reproposes it; and proceeds to propose new requests at the next available position. Different from PBFT, proposals are chained, hence there are no $\bot$ proposals. 
+
+### The Prefix Speculation Dilemma in Zyzzyva
+
+Because transactions are chained, the problem encountered when validators speculate in Zyzzyva is very similar to the one in HotStuff-1. However, the speculative responses in Zyzzyva follow a different rule: a validator sends the client responses for every transaction proposed in the current view, even if it already responded to the same transaction previously. Responses carry the view number they originate from. The client concludes that a request has committed only if collects responses with a matching view number. 
+
+The advantage of this approach is that it  allows a leader to propose the next position in the sequence without waiting for the current one to commit. 
+
+The drawback is that it requires the client to be aware of view-numbers, which are internal to the consensus protocol. Additionally, the client might suffer receiving multiple responses from validators for the same request.
+
+----
+
+*The authors are thankful to Kartik Nayak for carefully reading this post and suggesting improvements.*
