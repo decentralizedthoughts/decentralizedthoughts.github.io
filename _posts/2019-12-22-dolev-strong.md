@@ -96,13 +96,13 @@ Party $i$ does the following:
 
 For a message m arriving at the beginning of round j:
   if party i has sent less than two messages; and
-    if m is a valid (j-1)-signature chain on $v$, then
+    if m is a valid (j-1)-signature chain on $v$ not already signed by i, then
         add v to V
         send <m, sign(m,i)> to all parties
 
 At the end of round t+1:
   if party i has sent less than two messages; and
-    if m is a valid (t+1)-signature chain on $v$, then
+    if m is a valid (t+1)-signature chain on $v$  not already signed by i, then
         add v to V
 ```
 
