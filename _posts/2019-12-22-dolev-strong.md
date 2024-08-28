@@ -94,7 +94,7 @@ Party $i$ does the following:
 ```
 // Party i in round j = 2 to t+1
 
-For a message m sent in round j-1:
+For a message m received in round j-1:
   if party i has sent less than two messages; and
     if m is a valid (j-1)-signature chain on $v$ not already signed by i, then
         add v to V
