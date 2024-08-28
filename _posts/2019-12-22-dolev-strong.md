@@ -100,7 +100,7 @@ For a message m sent in round j-1:
         add v to V
         send <m, sign(m,i)> to all parties
 
-At the end of round t+1:
+For a message m received in round t+1:
   if m is a valid (t+1)-signature chain on $v$  not already signed by i, then
         add v to V
 ```
