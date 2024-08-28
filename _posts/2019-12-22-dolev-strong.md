@@ -79,7 +79,6 @@ A **1-signature chain** on $v$ is a pair $(v, sign(v,1))$.
 For $k>1$, a **k-signature chain** on $v$ is a pair $(m, sign (m,i))$ where $m$ is a $(k-1)$-signature chain on $v$ that *does not* contain a signature from $i$. In other words, a message (signature chain) received by party $i$ at the end of round $k$ is said to be valid if
 - The first signer of the signature chain is the leader
 - All signers in the chain are distinct
-- Party $i$ is not in the signature chain
 - All signatures are valid
 - The signature chain has length $k$
 
@@ -93,13 +92,18 @@ Round 1: send <v, sign(v,1)> to all parties.
 
 Party $i$ does the following:
 ```
-// Party i in round j
+// Party i in round j = 2 to t+1
 
 For a message m arriving at the beginning of round j:
   if party i has sent less than two messages; and
     if m is a valid (j-1)-signature chain on $v$, then
         add v to V
         send <m, sign(m,i)> to all parties
+
+At the end of round t+1:
+  if party i has sent less than two messages; and
+    if m is a valid (t+1)-signature chain on $v$, then
+        add v to V
 ```
 
 
