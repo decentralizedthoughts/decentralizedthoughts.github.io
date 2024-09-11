@@ -4,7 +4,7 @@ date: 2020-09-19 09:05:00 -04:00
 tags:
 - dist101
 - asynchrony
-author: Ittai Abraham
+author: Ittai Abraham and Kartik Nayak
 ---
 
 In this series of posts, we explore what can be done in the Asynchronous model. This model seems challenging because the adversary can delay messages by any bounded time. By the end of this series, you will see that [almost](https://decentralizedthoughts.github.io/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/) everything that can be done in synchrony can be obtained in asynchrony. The next posts in this series are about [gather](https://decentralizedthoughts.github.io/2021-03-26-living-with-asynchrony-the-gather-protocol/), [round complexity](https://decentralizedthoughts.github.io/2021-09-29-the-round-complexity-of-reliable-broadcast/), and finally our series on [Asynchronous Agreement](https://decentralizedthoughts.github.io/2022-03-30-asynchronous-agreement-part-one-defining-the-problem/).
@@ -18,7 +18,7 @@ There are just two properties:
 
 **(validity)**: If the leader is non-faulty then eventually all non-faulty parties will output the leader's input.
 
-**(agreement)**: If some non-faulty party outputs a value then eventually all non-faulty parties will output the same value.
+**(agreement)**: If some non-faulty party outputs a value then eventually all non-faulty parties will output the same value (this property is sometimes called *totality*).
 
 Since this protocol is supposed to work in the asynchronous model, both these properties use the term *eventually*. This term is often used in asynchrony to indicate that no matter what the adversary does and for how long it delays messages, some event will occur after a bounded number of message processing at each party (assuming a bounded threshold adversary).
 
@@ -61,7 +61,7 @@ The pseudo-code is simple:
 
 **Claim 2:**: No two non-faulty will send conflicting votes.
 
-*Proof:* Seeking a contradiction, consider the first vote for $v$ and the first vote for $v' \neq v$ by two non-faulty parties $a$ and $b$. Since these are the first, party $a$ must have seen a set $A$ of $n-f$ echoes for $v$ and party $b$ must have seen a set $B$ of $n-f$ echoes for $v' \neq v$ (since they are the first, they could not have voted due to seeing $f+1$ votes). Observe that since $\|A\|=\|B\|=n-f$, then $\|A \cap B\| \geq f+1$ (this is the famous "quorum intersection" property).  This implies that there must be at least $f+1$ parties that sent an echo to both of them, which implies that at least one non-faulty party sent two votes for different values, which contradicts the code.
+*Proof:* Seeking a contradiction, consider the first vote for $v$ and the first vote for $v' \neq v$ by two non-faulty parties $a$ and $b$. Since these are the first, party $a$ must have seen a set $A$ of $n-f$ echoes for $v$ and party $b$ must have seen a set $B$ of $n-f$ echoes for $v' \neq v$ (since they are the first, they could not have voted due to seeing $f+1$ votes). Observe that since $\|A\|=\|B\|=n-f$, then $\|A \cap B\| \geq f+1$ (this is the famous "quorum intersection" property).  This implies that there must be at least $f+1$ parties that sent an echo to both of them, which implies that at least one non-faulty party sent two echoes for different values, which contradicts the code.
  
 
 **Claim 3 (agreement)**: If a non-faulty delivers $v$, then all non-faulty will eventually deliver $v$.
@@ -70,16 +70,14 @@ The pseudo-code is simple:
 
 ### Notes
 
+
+Note that the protocol only needs authenticated channels (no other cryptography) and that there is no need to
+
 Bracha used Reliable Broadcast to improve Ben-Or's [Asynchonrus Byzantine Agreement](https://allquantor.at/blockchainbib/pdf/ben1983another.pdf) from $n>5f$ to the optimal resilience of $n>3f$. 
 
 Reliable broadcast requires sending $O(n^2)$ messages that contain the value $v$.  In the next post of this series, we will see what we can improve if we allow using collision-resistant hash functions. 
 
-
 Christian Cachin has [excellent course notes](https://dcl.epfl.ch/site/_media/education/sdc_byzconsensus.pdf) on Byzantine Broadcasts and Randomized Consensus including Bracha's Reliable broadcast.
-
-
-
-
 
 ### Scratch your Brains!
 
@@ -99,7 +97,7 @@ Prove correctness (or provide a counterexample) of the following optimization th
            deliver v
 
 
-**Acknowledgment.** We would like to thank Kartik Nayak for his help with this post and [hemengjie](https://twitter.com/VfRy8lQUeL9t4y6) for fixing an error in the exercise. 
+**Acknowledgment.** We would like to thank [hemengjie](https://twitter.com/VfRy8lQUeL9t4y6) for fixing an error in the exercise. 
 
 
 Please answer/discuss/comment/ask on [Twitter](https://twitter.com/ittaia/status/1307772031954546697?s=20). 
