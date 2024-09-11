@@ -71,7 +71,7 @@ The pseudo-code is simple:
 ### Notes
 
 
-Note that the protocol only needs authenticated channels (no other cryptography) and that there is no need to
+Note that the protocol only needs authenticated channels (no other cryptography).
 
 Bracha used Reliable Broadcast to improve Ben-Or's [Asynchonrus Byzantine Agreement](https://allquantor.at/blockchainbib/pdf/ben1983another.pdf) from $n>5f$ to the optimal resilience of $n>3f$. 
 
