@@ -1,6 +1,7 @@
 ---
-title: Divide and Conquer in Distributed Computing - near quadratic communication via recursive phase king
-date: 2024-09-15 06:00:00 -05:00
+title: Divide and Conquer in Distributed Computing - near quadratic communication
+  via recursive phase king
+date: 2024-09-15 07:00:00 -04:00
 tags:
 - dist101
 author: Ittai Abraham, Renas Bacho, and Gilad Stern
