@@ -85,3 +85,4 @@ Which is smaller than $d n^2$ for $d >8$.
 
 This is a follow-up post to our post on [graded consensus and the phase king protocol](https://decentralizedthoughts.github.io/2022-06-09-phase-king-via-gradecast/).
 
+Your thoughts/comments on [Twitter](https://x.com/ittaia/status/1835357484195709231). 
