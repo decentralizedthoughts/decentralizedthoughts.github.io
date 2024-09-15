@@ -7,7 +7,7 @@ tags:
 author: Ittai Abraham, Renas Bacho, and Gilad Stern
 ---
 
-The idea of decomposing a hard problem into two easier problems is a fundamental algorithm design pattern in Computer Science. [Divide and Conquer](https://en.wikipedia.org/wiki/Divide-and-conquer_algorithm) is a used in so many domains: sorting, [multiplication](https://www.youtube.com/watch?v=JCbZayFr9RE), and [FFT](https://decentralizedthoughts.github.io/2023-09-01-FFT/), to mention a few. But what about distributed computing?
+The idea of decomposing a hard problem into two easier problems is a fundamental algorithm design pattern in Computer Science. [Divide and Conquer](https://en.wikipedia.org/wiki/Divide-and-conquer_algorithm) is used in so many domains: sorting, [multiplication](https://www.youtube.com/watch?v=JCbZayFr9RE), and [FFT](https://decentralizedthoughts.github.io/2023-09-01-FFT/), to mention a few. But what about distributed computing?
 
 
 In this post we will highlight how divide and conquer can help reduce message complexity in synchronous byzantine agreement - obtaining **quadratic communication**, which is asymptotically optimal due to [Dolev and Reischuk's lower bound](https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/).

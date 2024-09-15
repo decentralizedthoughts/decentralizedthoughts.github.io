@@ -77,6 +77,6 @@ End of round 3(t+1):
 
 *Proof of Agreement:* Consider the first phase with an honest king. If any honest party has a value with grade 2 in this phase, then from the Knowledge of Agreement property, this is the king's value and the value of any honest with grade 2, so all honest parties will either switch to the king's value, or already have that value with grade 2. Otherwise, all honest have grade $< 2$ in this phase, so they will switch to the king's value. In either case at the end of this phase all honest have the same value. Similar to the Validity argument above, will keep this value to the end and ignore all later kings, because all later Graded Consensus instances will end with grade 2 to all honest parties.
 
-This concludes the proof for the Phase-King protocol. In the next post, we will show how to use it recursively to reduce the bit complexity to the optimal $O(n^2)$.
+This concludes the proof for the Phase-King protocol. In the [next post](https://x.com/ittaia/status/1835357484195709231), we show how to use it recursively to reduce the message complexity to the optimal $O(n^2)$.
 
 Your thoughts/comments on [Twitter](https://twitter.com/ittaia/status/1534873601358368769?s=20&t=h3N-bj0BKuqFb-D5eFreig).
