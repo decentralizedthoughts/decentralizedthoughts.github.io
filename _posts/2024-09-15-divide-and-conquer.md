@@ -14,7 +14,7 @@ In this post we will highlight how divide and conquer can help reduce message co
 
 ***Theorem: [Coan and Welch, 1992](https://www.sciencedirect.com/science/article/pii/089054019290004Yhttps://www.sciencedirect.com/science/article/pii/089054019290004Y), [Berman, Garay, and Perry, 1992](https://link.springer.com/chapter/10.1007/978-1-4615-3422-8_27): there exists a synchronous agreement protocol with the $O(n^2)$ message complexity against $f<n/3$ Byzantine parties.***
 
-In this post we will prove a simple variant that focuses on message complexity. The idea is to run a [phase king protocol](https://decentralizedthoughts.github.io/2022-06-09-phase-king-via-gradecast/), with two (instead of $f+1$) phases, where each king is implemented by a consensus on half the parties. Recall that in each phase a **Graded Consensus** is run (see the [previous post](https://decentralizedthoughts.github.io/2022-06-09-phase-king-via-gradecast/) for its properties).
+We prove a simple variant that focuses on message complexity. The idea is to run a [phase king protocol](https://decentralizedthoughts.github.io/2022-06-09-phase-king-via-gradecast/), with two (instead of $f+1$) phases, where each king is implemented by a consensus on half the parties. Recall that in each phase a **Graded Consensus** is run (see the [previous post](https://decentralizedthoughts.github.io/2022-06-09-phase-king-via-gradecast/) for its properties).
 
 
 
@@ -28,7 +28,8 @@ v[0] := input
 
 (v[1], grade[1]) := gradeconsensus(v[0])
 
-Parties in N1 run consensus with input v[1], output c
+Parties in N1:
+    c: = Consensus-on-N1(v[1])
 
 Each party in N1 sends its c value to everyone, 
 if grade[1] < 2 then v[1] := majority of N1 c values
@@ -38,7 +39,8 @@ if grade[1] < 2 then v[1] := majority of N1 c values
 
 (v[2], grade[2]) := gradeconsensus(v[1])
 
-Parties in N2 run consensus with input v[2], output c
+Parties in N2:
+    c: = Consensus-on-N2(v[1])
 
 Each party in N2 sends its c value to everyone, 
 if grade[2] < 2 then v[2] := majority of N2 c values
@@ -48,7 +50,7 @@ Decide v[2]
 ```
 
 
-At first glance, it seems like we're solving consensus using consensus, which isn't all that impressive. However, note that consensus for $n$ parties is solved assuming we know how to solve consensus for $n/2$ parties. Each consensus instance is then solved recursively by breaking that instance into two as well. We can continue dividing the number of parties until we get to such a small number of parties that solving consensus is almost trivial. At that point we can use whichever protocol we want (as long as it's not very inefficient). We then use the output in the small instances to reach consensus in the bigger instances.
+At first glance, it seems like we're solving consensus using consensus, which isn't all that impressive. However, note that consensus for $n$ parties is solved assuming we know how to solve consensus for $n/2$ parties. Each consensus instance is then solved recursively by breaking that instance into two as well. We can continue dividing the number of parties until we get to such a small number of parties that solving consensus is almost trivial. At that point we can use any protocol we want (as long as it's not very inefficient). We then use the output in the small instances to reach consensus in the bigger instances.
 
 
 ### Proof
