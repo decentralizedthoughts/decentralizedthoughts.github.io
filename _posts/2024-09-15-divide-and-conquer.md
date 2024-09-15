@@ -40,7 +40,7 @@ if grade[1] < 2 then v[1] := majority of N1 c values
 (v[2], grade[2]) := gradeconsensus(v[1])
 
 Parties in N2:
-    c: = Consensus-on-N2(v[1])
+    c: = Consensus-on-N2(v[2])
 
 Each party in N2 sends its c value to everyone, 
 if grade[2] < 2 then v[2] := majority of N2 c values
