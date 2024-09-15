@@ -1,6 +1,6 @@
 ---
-title: Divide and Conquer in Distributed Computing - synchronous BFT with quadratic communication
-  via recursive phase king
+title: Divide and Conquer in Distributed Computing - synchronous BFT with quadratic
+  communication via recursive phase king
 date: 2024-09-15 07:00:00 -04:00
 tags:
 - dist101
