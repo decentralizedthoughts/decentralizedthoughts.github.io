@@ -32,7 +32,7 @@ Maintaining a state machine using a single server is prone to crashes or Byzanti
 
 The server replicas all initially start with the same state. When they receive concurrent commands from clients, honest replicas first need to agree on the sequence of client commands they receive. This problem is called **log replication**, and it is a multi-shot version of consensus. After the sequence is agreed upon, the replicas apply the commands one by one, in the order they appear in the log, using the `apply` transition function. Assuming the transition function is deterministic, all honest server replicas maintain an identical state at all times.
 
-{: .box-note} Note: the formal definition and discussion below are updated in October 2024 to improve clarity. 
+(Note: the formal definition and discussion below are updated in October 2024 to improve rigor and clarity.) 
 
 Next, we will give a formal definition of the FT-SMR problem. Let $log_i[s]$ be the $s$-th entry in the log of replica $i$. Initially, $log_i[s]=\bot$ for all $s$ and $i$. Replica $i$ writes each $log_i[s]$ only once to a value that is not $\bot$. 
 
