@@ -1,7 +1,6 @@
 ---
 title: Consensus for State Machine Replication
 date: 2019-10-15 22:58:00 -04:00
-published: true
 tags:
 - dist101
 author: Kartik Nayak, Ittai Abraham, Ling Ren
