@@ -20,7 +20,7 @@ Gradecast and Graded Consensus are key building blocks. In **Graded Consensus** 
 * **(Validity):** If all honest parties have the same input value, then all of them output this value with grade 2.
 * **(Knowledge of Agreement):** If an honest party outputs a value with grade 2, then all honest parties output this value and grade > 0.
 
-In Gradecast we assume there is a designated sender, and we replace the validity condition with the condition that the sender is honest. An authenticated variant of Graded Consensus called *Graded Byzantine Agreement* appears in [Momose and Ren 2021](https://arxiv.org/pdf/2007.13175).
+In Gradecast we assume there is a designated sender, and we replace the validity condition with the condition that the sender is honest. An authenticated variant of Graded Consensus called *Graded Byzantine Agreement* appears in [Momose and Ren 2021](https://arxiv.org/pdf/2007.13175), see this [blog post](https://decentralizedthoughts.github.io/2021-09-20-optimal-communication-complexity-of-authenticated-byzantine-agreement/ ) for more details.
 
 Consider the following two-round Graded Consensus protocol for $t<n/3$: 
 

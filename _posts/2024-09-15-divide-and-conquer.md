@@ -85,9 +85,7 @@ Which is smaller than $d n^2$ for $d >8$.
 
 * This is a follow-up post to our post on [graded consensus and the phase king protocol](https://decentralizedthoughts.github.io/2022-06-09-phase-king-via-gradecast/).
 
-* When viewd
-
-* This recursive solution can also be used in the authenticated setting to obtain $O(n^2)$ communication and resilience of $t<n/2$ (or $t<n/(2+\epsilon)$). See [Momose and Ren 2021](https://arxiv.org/pdf/2007.13175), they are also the first to make the connection to an abstract graded consensus (or graded Byzantine agreement) as a building block.
+* This recursive solution can also be used in the authenticated setting to obtain $O(n^2)$ communication and resilience of $t<n/2$ (or $t<n/(2+\epsilon)$). See [Momose and Ren 2021](https://arxiv.org/pdf/2007.13175), they are also the first to make the connection to an abstract graded consensus (or graded Byzantine agreement) as a building block. See this [blog post](https://decentralizedthoughts.github.io/2021-09-20-optimal-communication-complexity-of-authenticated-byzantine-agreement/ ) for more details.
 
 
 ### Acknowledgments
