@@ -15,14 +15,14 @@ Each party has an input $v \in \{V\}$ and parties are ordered $P_1,\dots, P_n$. 
 
 ### Gradecast and Graded Consensus
 
-Gradecast and Graded Consensus are key building blocks. In **Graded Consensus** each party has an input $v \in \{V\}$ and needs to output a  $value \in \{V\}$ and a $grade \in \{0, 1,2\}$ with the following properties:
+Gradecast and Graded Consensus are key building blocks. In **Graded Consensus** each party has an input $v \in \{V\}$ and needs to output a $value \in \{V\}$ and a $grade \in \{0, 1,2\}$ with the following properties:
 
 * **(Validity):** If all honest parties have the same input value, then all of them output this value with grade 2.
-* **(Knowledge of Agreement):** If an honest party outputs a value with grade 2, then all honest parties output this value.
+* **(Knowledge of Agreement):** If an honest party outputs a value with grade 2, then all honest parties output this value and grade > 0.
 
-In Gradecast we assume there is a designated sender, and we replace the validity condition with the condition that the sender is honest.
+In Gradecast we assume there is a designated sender, and we replace the validity condition with the condition that the sender is honest. An authenticated variant of Graded Consensus called *Graded Byzantine Agreement* appears in [Momose and Ren 2021](https://arxiv.org/pdf/2007.13175).
 
-Consider the following two-round Graded Consensus protocol: 
+Consider the following two-round Graded Consensus protocol for $t<n/3$: 
 
 ```
 v := input

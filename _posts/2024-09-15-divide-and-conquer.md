@@ -9,13 +9,13 @@ author: Ittai Abraham, Renas Bacho, and Gilad Stern
 
 The idea of decomposing a hard problem into easier problems is a fundamental algorithm design pattern in Computer Science. [Divide and Conquer](https://en.wikipedia.org/wiki/Divide-and-conquer_algorithm) is used in so many domains: sorting, [multiplication](https://www.youtube.com/watch?v=JCbZayFr9RE), and [FFT](https://decentralizedthoughts.github.io/2023-09-01-FFT/), to mention a few. But what about distributed computing?
 
-
-In this post we will highlight how divide and conquer can help synchronous Byzantine agreement obtain **quadratic communication**, which is asymptotically optimal due to [Dolev and Reischuk's lower bound](https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/).
+In this post we will highlight how divide and conquer can help unauthenticated synchronous Byzantine agreement obtain **quadratic communication**, which is asymptotically optimal due to [Dolev and Reischuk's lower bound](https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/).
 
 ***Theorem: [Coan and Welch, 1992](https://www.sciencedirect.com/science/article/pii/089054019290004Yhttps://www.sciencedirect.com/science/article/pii/089054019290004Y), and [Berman, Garay, and Perry, 1992](https://link.springer.com/chapter/10.1007/978-1-4615-3422-8_27): there exists a synchronous agreement protocol with $O(n^2)$ message complexity that can tolerate $f<n/3$ Byzantine parties.***
 
-The idea is to run a [phase king protocol](https://decentralizedthoughts.github.io/2022-06-09-phase-king-via-gradecast/), with two (instead of $f+1$) phases, where each king is implemented by a consensus protocol on half the parties. Recall that in each phase a **Graded Consensus** is run (see the [previous post](https://decentralizedthoughts.github.io/2022-06-09-phase-king-via-gradecast/) for its properties) and then parties that do not have a grade of 2 adopt the value of the "king".
+The idea is to run a [phase king protocol](https://decentralizedthoughts.github.io/2022-06-09-phase-king-via-gradecast/), with two (instead of $f+1$) phases. Recall that in the original phase king protocol, each phase had a king whose value was used if the **graded consensus** does not have grade 2. Here we replace the king, with taking majority on the outcome of a recursive call on half the parties.
 
+See our [previous post](https://decentralizedthoughts.github.io/2022-06-09-phase-king-via-gradecast/) for implementing graded consensus and its properties.
 
 
 ```
@@ -83,6 +83,15 @@ Which is smaller than $d n^2$ for $d >8$.
 
 ### Notes
 
-This is a follow-up post to our post on [graded consensus and the phase king protocol](https://decentralizedthoughts.github.io/2022-06-09-phase-king-via-gradecast/).
+* This is a follow-up post to our post on [graded consensus and the phase king protocol](https://decentralizedthoughts.github.io/2022-06-09-phase-king-via-gradecast/).
+
+* When viewd
+
+* This recursive solution can also be used in the authenticated setting to obtain $O(n^2)$ communication and resilience of $t<n/2$ (or $t<n/(2+\epsilon)$). See [Momose and Ren 2021](https://arxiv.org/pdf/2007.13175), they are also the first to make the connection to an abstract graded consensus (or graded Byzantine agreement) as a building block.
+
+
+### Acknowledgments
+
+Many thanks to Ling Ren for insightful comments and pointers
 
 Your thoughts/comments on [Twitter](https://x.com/ittaia/status/1835357484195709231). 
