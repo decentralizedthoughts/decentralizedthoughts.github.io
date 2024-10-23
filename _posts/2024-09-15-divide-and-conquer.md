@@ -49,9 +49,7 @@ if grade[2] < 2 then v[2] := majority of N2 c values
 Decide v[2]
 ```
 
-
 At first glance, it seems like we're solving consensus using consensus, which isn't all that impressive. However, note that consensus for $n$ parties is solved assuming we know how to solve consensus for $n/2$ parties. Each consensus instance is then solved recursively by breaking that instance into two as well. We can continue dividing the number of parties until we get to such a small number of parties that solving consensus is almost trivial. At that point we can use any protocol we want (as long as it's not very inefficient). We then use the output in the small instances to reach consensus in the bigger instances.
-
 
 ### Proof
 
@@ -64,8 +62,6 @@ At first glance, it seems like we're solving consensus using consensus, which is
 * Case 2: no honest party gets grade 2 in the graded consensus of phase $i$, then let $b$ be the decision value in the consensus on $N_i$. So all honest parties will hear a majority of parties in $N_i$ say $b$ and hence adopt that value because their grade is $<2$ and thus set $v[i] := b$. 
 
 Finally, in either of the above cases, if $i=1$, then all honest parties will get grade 2 in phase 2, hence agree on this value ($v[1] = v[2]$). On the other hand, if $i=2$, they will simply output $v[2]$ after phase $2$.
-
-
 
 ### Quadratic message complexity
 
