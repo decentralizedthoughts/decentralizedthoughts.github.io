@@ -97,6 +97,7 @@ In the client centric definition we will denote by $L$ a log of consecutive comm
 
 See our [follow-up post](https://decentralizedthoughts.github.io/2022-11-19-from-single-shot-to-smr/) for more about this definition.
 
+Observe that given the server centric definitions what is missing to implement the client centric definitions is a client protocol that maintains the SMR Correctness property. We plan to discuss this in future posts.
 
 
 ### Optimizing for a sequence of values
