@@ -61,9 +61,11 @@ Our key idea is to forward votes along the expander edges. We observe that the g
 
 Suppose $n-f$ "decide on $b$" are sent. Then at least $n-2f \ge 2\varepsilon n$ honest nodes must have forwarded $n-f$ votes on $b$ in round 2. Due to the expansion property of $G_{n,\varepsilon}$, more than $(1-2\varepsilon)n = 2f$ nodes must have received $n-f$ votes on $b$.  Out of these, more than $f$ are honest nodes, and they would not send "decide on $b'$". Therefore, $n-f$ "decide on $b'$" cannot exist, and honest nodes will not decide on $b'$. Since the expander $G_{n,\varepsilon}$ has a constant degree, the total communication is quadratic.
 
-We utilize the above technique to improve the communication complexity of a primitive called *Graded Agreement (GA)* to quadratic. Inspired by Berman et al's protocol, we show that quadratic Byzantine Agreement (BA) can be built from quadratic GA. We refer interested readers to [our paper](https://arxiv.org/abs/2007.13175) for more details.
+## From equivocation detection to graded agreement and Byzantine agreement 
 
-Let us know your thoughts, 
+We utilize the above equivocation detection technique to improve a primitive called *Graded Agreement (GA)* to have quadratic communication and tolerate minority Byzantine faults. 
+We also observe that the Berman et al. paper can be viewed as a recursive method to build a quadratic Byzantine Agreement (BA) from quadratic GA. 
+We refer interested readers to [our paper](https://arxiv.org/abs/2007.13175) and a [future post](https://decentralizedthoughts.github.io/2024-09-15-divide-and-conquer/) for more details on the GA constructions and the recursive method. 
 
 [Atsuki Momose](https://twitter.com/AtsukiMomose) and [Ling Ren](https://sites.google.com/view/renling) 
 
