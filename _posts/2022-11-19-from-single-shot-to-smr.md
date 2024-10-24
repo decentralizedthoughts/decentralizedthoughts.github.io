@@ -64,7 +64,7 @@ Clients can have multiple input values at different times.
 
 **Log Validity**: Each value in the log can be uniquely mapped to a write request.
 
-**Log Correctness**: For a write request with value $v$, its response, and any response from a request that started after this write response, returns a log of values that includes $v$.
+**Log Correctness**: For a write request with value $v$, its response, and any response from a request that started after this write response arrives, returns a log of values that includes $v$.
 
 The ```read``` request may not scale well because the log may have an unbounded size. A more refined read request can ask for parts of the log. We choose this generic interface for simplicity.
 
@@ -87,11 +87,11 @@ The properties of Termination, Agreement, Validity, and Correctness are all as i
 
 **Termination**: If a non-faulty client issues a *request* then it eventually gets a *response*.
 
-**SMR Agreement**: If two requests return outputs $out_1$ and $out_2$ then there are two logs $L_1$ and $L_2$ such that one is a prefix of the,  $out_1$ is the output of $SM(L_1)$, and $out_2$ is the output of $SM(L_2)$.
+**SMR Agreement**: If two requests return outputs $out_1$ and $out_2$ then there are two logs $L_1$ and $L_2$ such that: one is a prefix of the other, $out_1$ is the output of $SM(L_1)$, and $out_2$ is the output of $SM(L_2)$.
 
-**SMR Validity**:  The request returns $out$ which is the output of some $SM(L)$ and each value in $L$ can be mapped uniquely to a client request.
+**SMR Validity**: The request returns $out$ which is the output of some $SM(L)$ and each value in $L$ can be mapped uniquely to a client request.
 
-**SMR Correctness**: For a request with value $cmd$, its response, and any response from a request that started after this response for $cmd$, returns the output of some $SM(L)$ such that $L$ includes $cmd$.
+**SMR Correctness**: For a request with value $cmd$, its response, and any response from a request that started after this response for $cmd$ arrives, returns the output of some $SM(L)$ such that $L$ includes $cmd$.
 
 
 Note that SMR replication can implement *any* state machine. In particular, it can also (trivially) implement Log Replication. See this [post](https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/) and [Schneider's classic](https://www.cs.cornell.edu/fbs/publications/ibmFault.sm.pdf) for more. 
