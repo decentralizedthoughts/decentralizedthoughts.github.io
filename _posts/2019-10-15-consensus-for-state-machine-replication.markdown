@@ -30,7 +30,6 @@ In a client-server setting, the server maintains the state machine, and clients 
 An example state machine is the Bitcoin ledger. The state consists of the set of public keys along with the associated Bitcoins (see [UTXO](https://www.mycryptopedia.com/bitcoin-utxo-unspent-transaction-output-set-explained/)). Each input (or cmd) to the state machine is a transaction (see [Bitcoin core api](https://bitcoin.org/en/developer-reference#bitcoin-core-apis)). The log corresponds to the Bitcoin ledger. The transition function `apply` is the function that determines whether a transaction is valid, and if it is, performs the desired bitcoin script operation (see [script](https://en.bitcoin.it/wiki/Script)).
 
 
-
 ### Multi-shot consensus - a server centric definition
 
 The central building block of state machine replication is *multi-shot consensus*. In this variant of the consensus problem, a set of servers (also called replicas) agree on a dynamically growing log of commands. These commands arrive as input to the servers over time (presumably from clients but we abstract that away).
@@ -69,25 +68,23 @@ The requirements for state machine replication are:
 
 **SMR Safety**: If two requests return outputs $out_1$ and $out_2$, then there are two logs $L_1$ and $L_2$ such that: one is a prefix of the other, $out_1$ is the output of $SM(L_1)$, and $out_2$ is the output of $SM(L_2)$.
 
-**SMR Validity**: Any response $out$ returned to a non-faulty client is the output of some $SM(L)$ where there is an injective mapping from values in $L$ to the set of client requests.
+**SMR Validity**: Any response returned to a non-faulty client is the output of some $SM(L)$ where each value in $L$ can be mapped uniquely to a client request.
 
-**SMR Correctness**: For a request with value $cmd$, its response, and any response from a request that started after this response for $cmd$ arrives, returns the output of some $SM(L)$ such that $L$ includes $cmd$.
+**SMR Correctness**: For a request $cmd$, its response, and any response to a request that started after the response for $cmd$ arrives, returns the output of some $SM(L)$ such that $L$ includes $cmd$.
 
 * The first three requirements are analogous to the *Liveness, Safety, and Validity* of multi-shot consensus. The SMR Correctness property has no analog as it is a consistency property between the client, not the servers. There may be variants of this property that provide weaker consistency between clients, or slightly stronger properties that aim to simulate an ideal functionality (see [this post](https://decentralizedthoughts.github.io/2021-10-16-the-ideal-state-machine-model-multiple-clients-and-linearizability/)).
 
-See our [follow-up post](https://decentralizedthoughts.github.io/2022-11-19-from-single-shot-to-smr/) for more about this definition.
-
-The client centric nature of SMR has a direct consequence on fault tolerance. We know of Byzantine broadcast protocols such as Dolev-Strong that can tolerate $f < n-1$ Byzantine faults among $n$ parties. A client centric SMR protocol can tolerate at most minority Byzantine faults.
+The client centric nature of SMR has a direct consequence on fault tolerance. Multi-shot consensus in synchrony can be based on the Dolev-Strong broadcast protocol and tolerate $f < n-1$ Byzantine faults among $n$ parties. A client centric SMR protocol can tolerate at most minority Byzantine faults.
 
 
 ### From multi-shot consensus to state machine replication
 
-To achieve the client centric state machine replication given a multi-shot consensus protocol, all we need is a client protocol that maintains the SMR Correctness property. We present one next.
+To obtain client centric state machine replication from a multi-shot consensus, all we need is a client protocol that ensures the SMR Correctness property. Here is a natural client protocol. 
 
 The servers run a multi-shot consensus protocol. The clients send requests to the servers. Once a server sees a request, it uses the request as an input to the multi-shot consensus. 
-A server executes a request $cmd \neq \bot$, if all the previous entries in the log are non-$\bot$ and have been executed. A server returns a response to the client once it executes the request.
+A server executes the request and sends a response to the client after the request is added to the log *and* all the previous entries in the log are non-$\bot$ and have been executed. 
 
-#### Proof sketch
+**Proof sketch:**
 SMR Liveness follows from Liveness and Prefix completeness of multi-shot consensus.
 SMR Safety follows directly from Safety of multi-shot consensus.
 SMR Validity follows directly from Validity of multi-shot consensus.
