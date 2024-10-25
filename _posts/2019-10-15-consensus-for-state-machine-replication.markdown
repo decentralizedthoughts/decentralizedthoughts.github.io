@@ -10,7 +10,6 @@ We introduced definitions for consensus, Byzantine Broadcast (BB) and Byzantine 
 
 (Note: the definitions and discussion below are updated in October 2024 to improve rigor and clarity.) 
 
-
 ### State machine
 
 Let's start with the definition of a state machine. A state machine, at any point, stores a *state* of the system. It receives *inputs* (also referred to as *commands*). The state machine applies these inputs in a *sequential order* using a deterministic *transition function* to generate an *output* and an *updated* state. A succinct description of the state machine is as follows:
@@ -28,96 +27,82 @@ Here, the state machine is initialized to an initial state `init`. When it recei
 
 In a client-server setting, the server maintains the state machine, and clients send commands to the server. The output is then sent back to the client.
 
-An example state machine is the Bitcoin ledger. The state consists of the set of public keys along with the associated Bitcoins (see [UTXO](https://www.mycryptopedia.com/bitcoin-utxo-unspent-transaction-output-set-explained/)). The input (or cmd) to the state machine is a transaction (see [Bitcoin core api](https://bitcoin.org/en/developer-reference#bitcoin-core-apis)). The log corresponds to the Bitcoin ledger. The transition function `apply` is the function that determines whether a transaction is valid, and if it is, performs the desired bitcoin script operation (see [script](https://en.bitcoin.it/wiki/Script)).
+An example state machine is the Bitcoin ledger. The state consists of the set of public keys along with the associated Bitcoins (see [UTXO](https://www.mycryptopedia.com/bitcoin-utxo-unspent-transaction-output-set-explained/)). Each input (or cmd) to the state machine is a transaction (see [Bitcoin core api](https://bitcoin.org/en/developer-reference#bitcoin-core-apis)). The log corresponds to the Bitcoin ledger. The transition function `apply` is the function that determines whether a transaction is valid, and if it is, performs the desired bitcoin script operation (see [script](https://en.bitcoin.it/wiki/Script)).
 
 
 
 ### Multi-shot consensus - a server centric definition
 
-An important building block of state machine replication is *multi-shot consensus*. In this problem, a set of servers maintain a dynamically growing log of commands. We assume these commands arrive as input to the servers over time (presumably from clients but we abstract that away).
+The central building block of state machine replication is *multi-shot consensus*. In this variant of the consensus problem, a set of servers (also called replicas) agree on a dynamically growing log of commands. These commands arrive as input to the servers over time (presumably from clients but we abstract that away).
 
 Let $log_i[s]$ be the $s$-th entry in the log of replica $i$. Initially, $log_i[s]=\bot$ for all $s$ and $i$. Replica $i$ writes each $log_i[s]$ *only once* to a value that is not $\bot$. 
 
-**Safety:** Non-faulty replicas agree on each log entry. More precisely, if two non-faulty replicas $i$ and $j$ have $log_i[s] \neq \bot$ and $log_j[s] \neq \bot$, then $log_i[s] = log_j[s]$.
+**Safety:** Non-faulty replicas agree on each log entry, i.e., if two non-faulty replicas $i$ and $j$ have $log_i[s] \neq \bot$ and $log_j[s] \neq \bot$, then $log_i[s] = log_j[s]$.
 
-**Liveness:** Every input that arrives to a non-faulty server is eventually recorded in the log. 
+**Liveness:** Every input $x$ that arrives at a non-faulty replica is eventually recorded in the log, i.e., eventually  $\exists s$ and non-faulty replica $i$ such that $log_i[s] = x$.
 
-**Validity:** There is an *injective mapping* between every entry $log_i[s] \neq \bot$ and the set of inputs. In other words, it cannot be that a log entry does not originate from an input or that two log entries originate from a single input. 
+**Validity:** There is an *injective mapping* from the set of log entries (not including $\bot$) to the set of inputs. In other words, every log entry must originate from an input and every input appears in the log at most once. Many systems have additional *external validity* requirements (discussed soon).
   
-**Prefix completeness:** If a non-faulty replica $i$ has $log_i[s] \neq \bot$, then for all non-faulty replica $j$ and all indexes $s' \le s$, eventually $log_j[s'] \neq \bot$. 
-
+**Prefix completeness:** If a non-faulty replica $i$ has $log_i[s] \neq \bot$, then for all non-faulty replica $j$ and all indices $s' \le s$, eventually $log_j[s'] \neq \bot$. 
 
 #### Comparison to single-shot consensus, broadcast, and other notes
 
-Note that the requirements are similar in multi-shot and single-shot.  However, there are some differences:
+The requirements are similar in multi-shot consensus and single-shot consensus.  However, there are some differences:
 
-1. **Consensus on a sequence of values.** Conceptually, one can sequentially compose single-shot consensus protocol instances. In practice, there are better designs than sequential composition (more discussed below and in future posts).
+1. **Consensus on a sequence of values.** Conceptually, one can sequentially compose single-shot consensus instances to obtain multi-shot consensus. In practice, there are better designs than sequential composition, such as the popular steady-state + view-change paradigm.
 
-2. **External validity.** Multi-shot consensus typically satisfies *external validity*, i.e., validity is left to the application. For example, some systems may require that any command that makes it into the log pass some application-level validity checks or be generated by the right client (e.g., in the right format or signed by the client who owns the bitcoin). Other systems are more "liberal" when adding commands to the log and choose to weed out invalid commands at the execution stage. 
+2. **External validity.** Besides the above injective mapping validity, multi-shot consensus typically satisfies *external validity*, i.e., additional validity requirements imposed by the application. For example, a system may require that any command that makes it into the log must have the right format and be generated by the right client (e.g., signed by the client who owns the bitcoin). Other systems may be more "liberal" when adding commands to the log and choose to weed out invalid commands at the execution stage. 
  
-3. **Fairness.** The liveness requirement above only guarantees that each input is *eventually* committed but does not say how two different inputs need to be ordered relative to each other. Many protocols desire some stronger degree of fairness on the ordering of commands. We plan to expand on this in future posts and it is deeply connected to challenges in MEV.
+3. **Fairness.** The liveness requirement above only guarantees that each input is *eventually* committed but does not say how two different inputs need to be ordered relative to each other. Many protocols desire some stronger degree of fairness on the ordering of commands. We plan to expand on this issue in future posts as it is deeply connected to challenges in MEV.
 
 We now move to a client centric view of the world for state machine replication and show how multi-shot consensus can be used to implement state machine replication. 
 
 ### State machine replication - a client centric definition
 
-Here, we assume that in addition to servers (some of which may be corrupted), there is a set of clients. Any number of clients can be fault -- crash, omission, or Byzantine in the respective model. 
+Here, we assume that in addition to servers (some of which may be faulty), there are also clients. Any number of clients can be fault -- crash, omission, or Byzantine in the respective model. 
 
-Let $L$ be a log of consecutive commands and $SM(L)$ is the state machine after applying this sequence of commands. The state machine also returns an output as part of its new state, denoted as $out$, and sends $out$ back to the client as a response. The requirements are:
+Let $L$ be a log of consecutive commands and $SM(L)$ be the state machine after applying this sequence of commands. Each $SM(L)$ also includes an output, denoted $out$, as part of the resulting state, and $out$ is sent back to the client as a response. 
+
+The requirements for state machine replication are:
 
 **SMR Liveness**: If a non-faulty client issues a *request*, then it eventually gets a *response*. 
 
-* This definition is the analog of the *Liveness* property in the previous section. It depends on both the Liveness and Prefix completeness of multi-shot consensus.
-
 **SMR Safety**: If two requests return outputs $out_1$ and $out_2$, then there are two logs $L_1$ and $L_2$ such that: one is a prefix of the other, $out_1$ is the output of $SM(L_1)$, and $out_2$ is the output of $SM(L_2)$.
 
-* This definition is the analog of the *Safety* property in the previous section. 
-
-**SMR Validity**: The response $out$ returned to any non-faulty client is the output of some $SM(L)$ where each value in $L$ can be mapped uniquely to a client request.
-
-* This definition is the analog of the *Validity* property in the above section.
+**SMR Validity**: Any response $out$ returned to a non-faulty client is the output of some $SM(L)$ where there is an injective mapping from values in $L$ to the set of client requests.
 
 **SMR Correctness**: For a request with value $cmd$, its response, and any response from a request that started after this response for $cmd$ arrives, returns the output of some $SM(L)$ such that $L$ includes $cmd$.
 
-* This property has no analogue as it is a consistency property between the client, not the servers. There may be variants of this property that provide weaker consistency between clients, or slightly stronger properties that aim to simulate an ideal functionality (see [this post](https://decentralizedthoughts.github.io/2021-10-16-the-ideal-state-machine-model-multiple-clients-and-linearizability/)). 
+* The first three requirements are analogous to the *Liveness, Safety, and Validity* of multi-shot consensus. The SMR Correctness property has no analog as it is a consistency property between the client, not the servers. There may be variants of this property that provide weaker consistency between clients, or slightly stronger properties that aim to simulate an ideal functionality (see [this post](https://decentralizedthoughts.github.io/2021-10-16-the-ideal-state-machine-model-multiple-clients-and-linearizability/)).
 
 See our [follow-up post](https://decentralizedthoughts.github.io/2022-11-19-from-single-shot-to-smr/) for more about this definition.
 
-The client centric definition of SMR has a direct consequence on the ault tolerance. In Byzantine broadcast, we know of protocols such as Dolev-Strong that can tolerate $f < n-1$ Byzantine faults among $n$ parties. A client centric SMR protocol can tolerate at most minority Byzantine faults.
-
-
-Observe that given a multi-shot consensus protocol in the server centric definition, what is missing to implement the client centric state machine replication is a client protocol that maintains the SMR Correctness property. We plan to discuss this in future posts.
+The client centric nature of SMR has a direct consequence on fault tolerance. We know of Byzantine broadcast protocols such as Dolev-Strong that can tolerate $f < n-1$ Byzantine faults among $n$ parties. A client centric SMR protocol can tolerate at most minority Byzantine faults.
 
 
 ### From multi-shot consensus to state machine replication
 
-The clients send requests to the servers. Once a server sees a request it uses it as its input.
-The servers run a multi-shot consensus protocol. 
-A server executes a command $cmd \neq \bot$, if all the previous entries in its log are non-$\bot$ and have been executed as well.
-A server returns a response to the client once it executes it.
+To achieve the client centric state machine replication given a multi-shot consensus protocol, all we need is a client protocol that maintains the SMR Correctness property. We present one next.
 
+The servers run a multi-shot consensus protocol. The clients send requests to the servers. Once a server sees a request, it uses the request as an input to the multi-shot consensus. 
+A server executes a request $cmd \neq \bot$, if all the previous entries in the log are non-$\bot$ and have been executed. A server returns a response to the client once it executes the request.
 
-#### Proof
-
+#### Proof sketch
 SMR Liveness follows from Liveness and Prefix completeness of multi-shot consensus.
 SMR Safety follows directly from Safety of multi-shot consensus.
-SMR Validity follows directly from Validity  of multi-shot consensus.
-For SMR Correctness, consider a response for $cmd$ that is placed in $\log[k]$ then we know that all log entries from 1 to $k$ are full. So clearly any request that starts after this response must be allocated to a higher slot. Hence, from SMR Safety, this new response will see $\log[k]=cmd$ as required.
+SMR Validity follows directly from Validity of multi-shot consensus.
+For SMR Correctness, consider a response for $cmd$ that is placed in $\log_i[k]$. We know that all log entries from 1 to $k$ are filled and executed. So clearly any request that starts after this response must be committed to a slot $>k$ in the log. Hence, from SMR Safety, this new response will see $\log[k]=cmd$ as required.
 
-### Optimizing for a sequence of values
 
-Since FT-SMR protocols agree on a sequence of values, practical approaches for SMR (such as [PBFT](http://pmg.csail.mit.edu/papers/osdi99.pdf), [Paxos](https://lamport.azurewebsites.net/pubs/paxos-simple.pdf), etc.) use a steady-state-and-view-change approach to design log replication. In the steady state, there is a designated leader that drives consensus. Typically, the leader does not change until it fails to make progress (e.g., due to network delays) or if Byzantine behavior is detected. In either case, the replicas vote to de-throne the leader and elect a new one. The process of choosing a new leader is called view-change. The stable leader for extended periods yields simplicity and efficiency when the leader is honest. However, it also reduces the amount of *decentralization* and can cause delays if Byzantine replicas are elected as leaders.
+### Separation into sub-systems
 
-### Separation of concerns
-
-The process of adding a new command to a FT-SMR can be decomposed into three tasks:
+The process of adding a new command to a state machine replication protocol can be decomposed into three tasks:
 
 1. Disseminating the command 
-2. Committing the command
+2. Committing the command in multi-shot consensus
 3. Executing the command  
 
-Many modern FT-SMR systems have separate sub-systems for each task. This allows each task to work as a separate system in parallel. Each sub-system can optimize for parallelization, can have a separate buffer of incoming requests, and can stream tasks to the next sub-system. Separating into sub-systems allows to optimize and tune each one and to better detect bottlenecks. See [this post](https://decentralizedthoughts.github.io/2019-12-06-dce-the-three-scalability-bottlenecks-of-state-machine-replication/) for the basics of SMR task separation and [this post](https://decentralizedthoughts.github.io/2022-06-28-DAG-meets-BFT/) for the modern separation of the data dissemination stage. 
-
+Many modern state machine replication systems have separate sub-systems for each task. This allows us to optimize and tune each sub-system separately. See [this post](https://decentralizedthoughts.github.io/2019-12-06-dce-the-three-scalability-bottlenecks-of-state-machine-replication/) for the basics of SMR task separation and [this post](https://decentralizedthoughts.github.io/2022-06-28-DAG-meets-BFT/) for the modern separation of the data dissemination stage. 
 
 ### Acknowledgments
 
