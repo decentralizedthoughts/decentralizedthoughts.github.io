@@ -32,7 +32,7 @@ There are many examples of protocols that work in the above threshold models. He
 
 There are other less common thresholds. For example, [perfect asynchronous verifiable secret sharing](https://decentralizedthoughts.github.io/2020-07-15-asynchronous-fault-tolerant-computation-with-optimal-resilience/) requires $f<n/4$. And there are even bounds that are not integer divisions of $n$. For example, [2 round unauthenticated reliable broadcast](https://decentralizedthoughts.github.io/2021-09-29-the-round-complexity-of-reliable-broadcast/) requires $f < (n+1)/4$.
 
-## What to the $1/2$ and $1/3$ threshold provide? Quorum intersection
+## What does the $1/2$ and $1/3$ threshold provide? Quorum intersection
 
 Since the adversary can corrupt $f$ parties, and often this corrupt may include crash failures, then protocols often collect $n-f$ message to guarantee they don't get stuck. These sets of $n-f$ parties have very useful properties based on quorum intersection (essentially the [Pigeonhole principle](https://en.wikipedia.org/wiki/Pigeonhole_principle)):
 
