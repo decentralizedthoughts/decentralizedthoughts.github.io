@@ -84,11 +84,22 @@ To obtain client centric state machine replication from a multi-shot consensus, 
 The servers run a multi-shot consensus protocol. The clients send requests to the servers. Once a server sees a request, it uses the request as an input to the multi-shot consensus. 
 A server executes the request and sends a response to the client after the request is added to the log *and* all the previous entries in the log are non-$\bot$ and have been executed. 
 
-**Proof sketch:**
-SMR Liveness follows from Liveness and Prefix completeness of multi-shot consensus.
-SMR Safety follows directly from Safety of multi-shot consensus.
-SMR Validity follows directly from Validity of multi-shot consensus.
-For SMR Correctness, consider a response for $cmd$ that is placed in $\log_i[k]$. We know that all log entries from 1 to $k$ are filled and executed. So clearly any request that starts after this response must be committed to a slot $>k$ in the log. Hence, from SMR Safety, this new response will see $\log[k]=cmd$ as required.
+#### Proof sketch
+
+We will use the multi-shot consensus (MSC) properties above.
+
+**SMR Liveness**: A client the sends a request to the servers then due to *Liveness* of MSC this request will be eventually added to the log. Due to *Prefix completeness* of MSC all previous log entries will also eventually become non $\bot$. Hence, eventually the client will receive a response.
+
+**SMR Safety**: This follows directly from *Safety* of MSC.
+
+
+**SMR Validity**: This follows directly from Validity of MSC.
+
+
+**SMR Correctness**: consider a $cmd$ that is uniquely placed in $\log_i[k]$ (from the Validity and Safety of MS). When the client receives a response, due the the protocol above, all log entries from 1 to $k$ are filled and executed. So clearly any request that starts after this response arrives must be committed to a slot $>k$ in the log. Hence, from SMR Safety, this new response will see $\log[k]=cmd$ as required.
+
+
+Note that we can use the point in time that the fist party sends a (valid) response to define the **linearization point** of the client request. Clearly this point is after the request and before the response (because it's the first). Also note that this linearization order is exactly the log order, this can be shown via induction. 
 
 
 ### Separation into sub-systems
