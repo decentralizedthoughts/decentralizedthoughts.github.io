@@ -12,13 +12,13 @@ In addition to limiting the adversary via a communication model [synchrony, asyn
 > Power tends to corrupt, and absolute power corrupts absolutely.
 > -- <cite> [John Dalberg-Acton 1887](https://en.wikipedia.org/wiki/John_Dalberg-Acton,_1st_Baron_Acton) </cite>
 
-As John observed almost 150 years ago, if the adversary has no limits to his power, then there is very little we can do. Let's begin with the traditional notion of a *threshold adversary* as used in Distributed Computing and Cryptography to limit the power of the adversary. 
+As John observed almost 150 years ago, if the adversary has no limits to its power, then there is very little we can do. Let's begin with the traditional notion of a *threshold adversary* as used in Distributed Computing and Cryptography to limit the power of the adversary.
 
 ## The threshold adversary 
 
-The traditional and simple model is that of a *threshold adversary* given a static group of ***n*** nodes. 
+The traditional and simple model is that of a *threshold adversary* given a static group of $n$ nodes. 
 
-A threshold adversary is an adversary that can corrupt up to ***f*** nodes. There are three typical thresholds:
+A threshold adversary is an adversary that can corrupt up to $f$ nodes. There are three typical thresholds:
 
 1. $f<n$ where the adversary can corrupt all parties but one. Sometimes called the *dishonest majority* model or the [anytrust](https://www.ohmygodel.com/publications/d3-eurosec12.pdf) model.
 2. $f<n/2$ where the adversary can corrupt a minority of the nodes. Often called the *dishonest minority* model.  
@@ -31,6 +31,22 @@ There are many examples of protocols that work in the above threshold models. He
 3. Ben Or's [randomized protocol](http://www.cs.utexas.edu/users/lorenzo/corsi/cs380d/papers/p27-ben-or.pdf) solves Byzantine agreement in the Asynchronous model assuming a $f<n/5$ threshold. This was later [improved by Bracha](https://core.ac.uk/download/pdf/82523202.pdf) to the optimal $f<n/3$ bound. See [this series of posts](https://decentralizedthoughts.github.io/2022-03-30-asynchronous-agreement-part-one-defining-the-problem/) for details.
 
 There are other less common thresholds. For example, [perfect asynchronous verifiable secret sharing](https://decentralizedthoughts.github.io/2020-07-15-asynchronous-fault-tolerant-computation-with-optimal-resilience/) requires $f<n/4$. And there are even bounds that are not integer divisions of $n$. For example, [2 round unauthenticated reliable broadcast](https://decentralizedthoughts.github.io/2021-09-29-the-round-complexity-of-reliable-broadcast/) requires $f < (n+1)/4$.
+
+## What to the $1/2$ and $1/3$ threshold provide? Quorum intersection
+
+Since the adversary can corrupt $f$ parties, and often this corrupt may include crash failures, then protocols often collect $n-f$ message to guarantee they don't get stuck. These sets of $n-f$ parties have very useful properties based on quorum intersection (essentially the [Pigeonhole principle](https://en.wikipedia.org/wiki/Pigeonhole_principle)):
+
+For example, for $f<n/2$:
+
+1. Any two sets of size $n-f$ have at least one party in the intersection.
+2. If you hear $n-f$ parties that sent a message, then you know at least one of them is non-faulty. In synchrony, you know all parties will hear from this non-faulty party in the same round.
+
+For example, for $f<n/3$:
+
+1. Any two sets of size $n-f$ have at least one non-faulty party in the intersection.
+2. If you hear $n-f$ parties that sent a message, then you know at least $f+1$ of them are non-faulty. So any set of size $n-f$ must hear from at least one these $f+1$ parties.
+
+More generally, observe that any two sets of size $n-f$ intersect with at least $n-2f$ parties, so with at least $n-3f$ non-faulty parties. 
 
 ## Proof of work and proof of stake
 
