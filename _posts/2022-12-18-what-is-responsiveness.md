@@ -33,13 +33,13 @@ Can we obtain responsiveness for every execution of consensus in the synchronous
 
 *Second condition*: The bane of responsiveness in the Byzantine model is the *split brain attack* where one party commits to $v$ and another party commits to $v' \neq v$.
 
-To avoid this attack, a responsive commit strategy needs to hear from at least $>f+ (n-f)/2 = (n+f)/2$ parties, where $f$ denotes the number of Byzantine parties.
+To avoid this attack, a responsive commit strategy needs to hear from a majority of honest parties. So at least $>f+ (n-f)/2 = (n+f)/2$ parties, where $f$ denotes the number of Byzantine parties.
 
 This quorum size ensures that the condition cannot be satisfied for two non-faulty parties: while the $f$ Byzantine parties may potentially equivocate with the two non-faulty parties, only one of the two honest parties would have the honest majority $> (n+f)/2$. Consequently, in an execution with responsiveness, the number of non-faulty parties in the system $n-t$ needs to be at least $> (n+f)/2$ where $t\le f$ is the actual number of failures in the execution.
 
 
-
 #### Responsive broadcast protocols: worst case resilience and conditions for responsiveness
+
 It turns out that these two conditions are sufficient! There exist responsive protocols requiring only these two conditions to be met. Here are some examples:
 
 
@@ -51,12 +51,12 @@ It turns out that these two conditions are sufficient! There exist responsive pr
 | $f<n/2$ Byzantine faults under synchrony | non-faulty leader and $t < n/4$ | [PS'17](https://eprint.iacr.org/2017/913.pdf), [ANRS'21](https://eprint.iacr.org/2020/458.pdf),    [ANS'22](https://eprint.iacr.org/2021/1138.pdf)   |
 
 
-In words, omission failure resilient protocols can be  responsive in executions where the leader is non-faulty. Byzantine failure resilient protocols, in addition, require $n-t > (n+f)/2$ where $f$ is the maximum number of faults and $t \le f$ is the actual number of faults in the execution. This condition is always true for $f<n/3$ protocols, but for $n=2f+1$ this only holds when $t<n/4$.
-
+In words, omission failure resilient protocols can be responsive in executions where the leader is non-faulty. Byzantine failure resilient protocols, in addition, require $n-t > (n+f)/2$ where $f$ is the maximum number of faults and $t \le f$ is the actual number of faults in the execution. This condition is always true for $f<n/3$ protocols, but for $n=2f+1$ this only holds when $t<n/4$.
 
 These protocols have the maximal resilience and in addition provide responsiveness is some subset of optimistic executions.
 
 #### Responsiveness in the multi-shot case
+
 When designing protocols for multi-shot consensus, the conditions for responsiveness are a function of exactly how the protocol is designed. For a view-based protocol that performs one consensus per view and switches views, every say $10\Delta$ timeout, then to do $k$ decisions, even if all parties are non-faulty, would take $O(\Delta k)$ time even if the actual network delays are $<< \Delta$. The question naturally extends to whether we can achieve responsive [log replication](https://decentralizedthoughts.github.io/2022-11-19-from-single-shot-to-smr/).
 
 **Responsiveness for log replication**: an execution is responsive if the actual network delays are at most $\delta$ then to drive $k$ decisions the total latency is $O(k \delta)$.
@@ -67,11 +67,9 @@ We can again ask the natural question:
 
 For *leader based* protocols, a responsive log replication protocol for $k$ decisions terminates in $O(k \delta)$ latency when the leader is non-faulty. When considering a *stable leader* protocol, the leader needs to be non-faulty. When considering a *rotating leader* protocol, we need each of the rotating leaders for the $k$ decisions to be non-faulty. In fact, the examples described in the table earlier are all multi-shot instances. While PBFT, SBFT, PS'17, and ANRS'21 assume a stable leader, HotStuff and ANS'22 allow for rotating leaders. 
 
-
 ### Does responsiveness matter?
 
-
-Does it matter if we get $(k \Delta)$ or $O(k \delta)$? The answer is that it depends. If the gap between $\delta$ and $\Delta$ is not large, then it does not matter much. In some systems, there is no need to move faster than one decision per $O(\Delta)$ time, while in other systems obtaining better good-case performance is critical. 
+Does it matter if we get $(k \Delta)$ or $O(k \delta)$? If the gap between $\delta$ and $\Delta$ is not large, then it does not matter much. In some systems, there is no need to move faster than one decision per $O(\Delta)$ time. However, in some settings obtaining better good-case performance is critical for higher performance when the system is not under active attack. 
 
 In the worst case, even one decision may take $O(\Delta f)$ time, so being responsiveness only improves in some good conditions but not in the worst case.
 
