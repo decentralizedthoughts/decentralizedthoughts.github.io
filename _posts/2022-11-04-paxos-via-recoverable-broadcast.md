@@ -24,7 +24,7 @@ In essence, our goal is to focus first on *safety* and move as much of the *live
 
 The protocol progresses in **views**, each view has a designated **primary** party. The role of the primary is rotated. For simplicity, the primary of view $v$ is party $v \bmod n$. 
 
-Clocks are perfectly synchronized, and $\Delta$ (the maximum message delay after GST) is known. View $v$ is set to be the time interval $[v(10 \Delta),(v+1)(10 \Delta))$ (see liveness proof for how this can be optimized). In other words, each $10\Delta$ clock ticks each party triggers a **view change** and increments the view by one. Clocks are assumed to be perfectly synchronized, so all parties move in and out of each view in complete synchrony (lock step).
+In Partial Synchrony, the parameter $\Delta$ (the maximum message delay after GST) is known. So we define **view $v$** is set to be the time interval $[v(10 \Delta),(v+1)(10 \Delta))$ (see liveness proof for how this can be optimized). In other words, each $10\Delta$ clock ticks each party triggers a **view change** and increments the view by one. Here we assume clocks are perfectly synchronized, so all parties move in and out of each view in complete synchrony (lock step). We will discuss relaxations in future posts.
 
 ## Single-shot consensus
 
@@ -32,7 +32,7 @@ In this setting, each party has some *input value* and the goal is to *output a 
 
 **Uniform Agreement**: if any two parties output $X$ and $X'$ then $X=X'$. Note that this is a strictly stronger property than **Agreement** which just requires that all *non-faulty* parties that output a value, output the same value.
 
-**Termination**: all non-faulty parties eventually output a value and terminate. Note that this is a strictly stronger property than **Liveness** which just requires that all non-faulty parties eventually output a value. Note that we are in partial synchrony, and obtaining this property will require reasoning about events after GST.
+**Termination**: all non-faulty parties eventually output a value and terminate. This is a strictly stronger property than **Liveness** which just requires that all non-faulty parties eventually output a value. Note that we are in partial synchrony, and our protocol is deterministic, obtaining this property will require reasoning about events after GST.
 
 **Validity**: the output is an input of one of the parties. Note that this is a strictly stronger property than **Weak Validity** which just requires that if *all* parties have the same input value then this is the output value.
 
@@ -40,11 +40,17 @@ In this setting, each party has some *input value* and the goal is to *output a 
 
 The core safety problem that all view-based consensus protocols need to solve is the risk of an agreement violation when one primary causes some parties to commit $X$, but some later primary misses this event and causes other parties to commit to $Y \neq X$.
 
-To avoid this despite both asynchrony and omission corruptions, all Paxos type protocols do the following:
+With synchrony and crash failures, this is easy, the primary sends its decision to all the next primaries. But with asynchrony and omission corruptions, how can a primary write a message in a way that later primaries will be guaranteed to read it?
 
-1. The primary broadcasts its value via a **recoverable broadcast protocol** that guarantees that if some party commits to the primary's value $X$ in view $v$, then there is sufficient evidence to *recover* the pair $(v,X)$ in a later view.
-2. The primary of any view (except the first) tries to recover a previously committed value via a **recover protocol** that guarantees that if some previous primary caused some party to commit, then the recover protocol will return this value. The primary will then **adopt** this recovered value, instead of using its own input value, as the value it tries to broadcast for committing. 
-3. In more detail, the primary uses a **recover max protocol** that may recover multiple pairs $(v_1, X_1),\dots,(v_k, X_k)$ and returns the pair $(v^\star, X^\star)$ that has the highest view ($\forall i, v^\star \geq v_i$). By adopting the value associated with the highest view we can guarantee that the new primary will adopt a value that was committed by a previous primary.
+The solution that all Paxos based protocols use a **Quorum System**: The primary guarantees that it writes to a write-quorum (typically of size $n-f$) and then each new primary first reads from a read-quorum (again, typically of size $n-f$). This guarantees that the new primary read-quorum will intersect with any previous write-quorum and be able to *recover* these previous values.
+
+The second challenge then emerges: a new primary that reads from a read-quorum may see many messages from many previous primaries. Which one should it use? It turns our that it is critical that each primary also includes its view number and then the new primary can *adopt the value associated to the highest view it saw*. This choice is essential for the safety of all Paxos protocols (see proof below).
+
+Here we will do this by decomposing Paxos to a *recoverable-broadcast* protocol that write to a quorum and a *recover max protocol* that reads from a quorum and chooses the value associated with the highest view:
+
+1. The primary runs a **recoverable-broadcast** protocol that guarantees that if some party commits to the primary's value $X$ in view $v$, then there is *sufficient* evidence to *recover* the pair $(v,X)$ in a later view. Sufficient evidence here is write-quorum set $W$ of size $n-f$ that holds $(v,X)$.
+2. The primary of any view (except the first) tries to recover a previously committed value via a **recover protocol** that guarantees that if some previous primary caused some party to commit, then the recover protocol will return this value. The primary will then **adopt** this recovered value, instead of using its own input value, as the value it tries to broadcast for committing. The recover protocol does this by reading from a read-quorum $R$ of size $n-f$ that will hence intersect any previous write-quorum. 
+3. The primary may recover different pairs $(v_1, X_1),\dots,(v_k, X_k)$. So it runs a uses a **recover max protocol** that returns the pair $(v^\star, X^\star)$ that has the highest view ($\forall i, v^\star \geq v_i$). By adopting the value associated with the highest view we can guarantee that the new primary will adopt a value that was committed by a previous primary.
 
 In this post we *decompose* Paxos into an outer *view-based protocol* and two inner protocols:  *recoverable broadcast*  and *recover max*.
 
@@ -77,7 +83,7 @@ We'll next define ```recoverable-broadcast``` and ```recover-max```.
 ### Recoverable-broadcast protocol
 
 
-The ```recoverable-broadcast``` protocol has a designated *primary* party with *input value* ```Z``` and a view number ```v```:
+The ```recoverable-broadcast``` protocol has a designated *primary* party with *input value* ```Z``` and a view number ```v```. 
 
 ```
 Upon start of view v,
@@ -87,7 +93,7 @@ Upon receiving n-f <"echo", v, Z>,
  output Z
 ```
 
-All parties run the following while in view  ```v```:
+All parties run the following while in view ```v```:
 ```
 Upon receiving <v, Z> from primary, 
  send <"echo", v, Z> to all
@@ -101,7 +107,7 @@ Observe that for simplicity, the primary also acts as a regular party. So it als
 
 **Weak Termination**: If the primary of view ```v``` is non-faulty and all non-faulty are in view ```v``` then all non-faulty parties output a value and terminate.
 
-**Recoverability**: If some party outputs ```Z``` in view ```v``` then at least $n-f$ parties sent ```<"echo", v, Z>```.
+**Recoverability**: If some party outputs ```Z``` in view ```v``` then at least $n-f$ parties sent ```<"echo", v, Z>```. Note this is the write-quorum.
 
 #### Proof of recoverable-broadcast properties
 
@@ -126,7 +132,7 @@ Observe that for simplicity, the primary also acts as a regular party. So it als
 
 ### Recover-max protocol
 
- The ```recover-max``` protocol has a view number ```u``` as input and outputs either a broadcast value or a special $\bot$ value (which we write as ```bot``` in pseudo-code). Each replica sends ```<"recover", u, w, Z>``` associated with the *highest* view echo ```<"echo", w, Z>``` it ever sent. The primary waits for $n-f$ ``` <recover, u, *, *>```  messages and outputs $\bot$ if all recover messages are $\bot$, and otherwise outputs the value associated with the *highest* view it saw:
+ The ```recover-max``` protocol has a view number ```u``` as input and outputs either a broadcast value or a special $\bot$ value (which we write as ```bot``` in pseudo-code). Each replica sends ```<"recover", u, w, Z>``` associated with the *highest* view echo ```<"echo", w, Z>``` it ever sent. The primary waits for $n-f$ ``` <"recover", u, *, *>```  messages and outputs $\bot$ if all recover messages are $\bot$, and otherwise outputs the value associated with the *highest* view it saw:
 
 ```
 Upon start of view u,
@@ -154,7 +160,6 @@ Upon primary receiving n-f <"recover", u, *>,
 
 ### Proof of recover-max properties:
 
-  
 **Validity**: 
 
 1. The primary outputs a value in `recover-max` upon receiving $n-f$ ```<"recover", u, *, *>``` messages.
@@ -169,13 +174,13 @@ Upon primary receiving n-f <"recover", u, *>,
 
 **Recover-max after recoverable-broadcast**:
 
-1. *From recoverability of recoverable-broadcast*: At least $n-f$ parties sent `"<echo", v, Z>`. Let's denote the set of these parties as $ W $ (for the "write set").
+1. *From recoverability of recoverable-broadcast*: At least $n-f$ parties sent `"<echo", v, Z>`. Let's denote the set of these parties as $ W $ (for the write-quorum).
 
 2. *Progression of Echoes*: At view $u$, parties in $ W $ send echoes from views that are at least $ v $ (and possibly from higher views if they've encountered them).
 
-3. *Quorum intersection*: The primary of view $u$ waits for $n-f$ `recover` messages. Let's denote the set of these sending parties as $R$ (for the "read set"). Given $ f < n/2 $ and the fact that both $ W $ and $ R $ have at least $ n-f $ parties, the intersection of $ W $ and $ R $ is non-empty. This is because $W \cap R$ contains at least $ 2(n-f) - n = n - 2f \geq 1 $ parties.
+3. *Quorum intersection*: The primary of view $u$ waits for $n-f$ `recover` messages. Let's denote the set of these sending parties as $R$ (for the read-quorum). Given $ f < n/2 $ and the fact that both $ W $ and $ R $ have at least $ n-f $ parties, the intersection of $ W $ and $ R $ is non-empty. This is because $W \cap R$ contains at least $ 2(n-f) - n = n - 2f \geq 1 $ parties.
 
-4. *Primary chooses the highest*: Because of the non-empty intersection between $ W $ and $ R $ the primary receives recover messages that indicate echoes from a view of at least $ v $ (or higher because it chooses the highest and there may be others). The primary then chooses the value associated with the highest view number.
+4. *Primary chooses the highest*: Because of the non-empty intersection between $ W $ and $ R $ the primary receives recover messages that indicate echoes from a view of at least $ v $. Note that the view may be higher since (1) the party in the intersection may have a higher view echo, or the set $W$ contains some higher higher view echo. The primary then chooses the value associated with the highest view number.
 
 
 

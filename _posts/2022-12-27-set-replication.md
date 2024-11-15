@@ -6,24 +6,32 @@ tags:
 author: Ittai Abraham
 ---
 
-While state machine replication is the gold standard for implementing any (public) ideal functionality, its power comes at the cost of needing to totally order all transactions and as a consequence solve (Byzantine) agreement. In some cases this overhead is unnecessary.
+State machine replication is the gold standard for implementing any (public) ideal functionality. It totally orders all transactions and as a consequence solves (Byzantine) agreement. By Agreement in the worst case is quadratic and not constant time. In some cases this overhead is unnecessary because there is no need to totally order all transactions.
+
+As a canonical example, suppose Alice is transferring a token to Bob and Carol is transferring a token to Dan. There is no need to totally order these two coin transfer transactions. It is okay that some clients see the first transfer happened before the second while some other clients see the second transfer as happening before the first.
 
 In the non-byzantine setting, the *fundamental* observation that sometimes a weaker problem than consensus needs to be solved goes back to the foundational work of [Lamport 2005](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/tr-2005-33.pdf):
 
 > Consensus has been regarded as the fundamental problem that must be solved to implement a fault-tolerant distributed system. However, only a weaker problem than traditional consensus need be solved. We generalize the consensus problem to include both traditional consensus and this weaker version. --[Generalized Consensus and Paxos, 2005](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/tr-2005-33.pdf)
 
+In many natural use cases, in particular the canonical simple token payment use case, do not need total ordering. This approach is taken by [FastPay](https://arxiv.org/pdf/2003.11506.pdf), [Guerraoui et al, 2019](https://arxiv.org/pdf/1906.05574), [Sliwinski and Wattenhofer, 2019](https://arxiv.org/abs/1909.10926), applied to privacy preserving transactions (see [UTT](https://eprint.iacr.org/2022/452.pdf) and [Zef](https://eprint.iacr.org/2022/083.pdf)), planned to be used in the [Sui platform](https://github.com/MystenLabs/sui/blob/main/doc/paper/sui.pdf) and in [Linera](https://linera.io/whitepaper).
+
 There is considerable research in ways to relax total ordering requirements to gain better performance. For example, see [EPaxos](https://www.cs.cmu.edu/~dga/papers/epaxos-sosp2013.pdf) (and also [EPaxos Revisited](https://www.usenix.org/conference/nsdi21/presentation/tollman)). The first work that aimed to relax the total order requirements in the blockchain space is by [Lewenberg, Sompolinsky, and Zohar, 2015](https://fc15.ifca.ai/preproceedings/paper_101.pdf) and it’s follow-up work [Specture, 2016](https://eprint.iacr.org/2016/1159.pdf). See this post on [DAG-based protocols](https://decentralizedthoughts.github.io/2022-06-28-DAG-meets-BFT/) for advances in recent years and how DAG-based protocols are emerging as a powerful tool for getting better throughput mempools and BFT.
 
-It turns out that in many natural use cases, in particular the canonical simple token payment use case, do not need total ordering. As a concrete example, suppose Alice is transferring a token to Bob and Carol is transferring a token to Dan. There is no need to totally order these two transactions. 
+### The benefits of single writer objects vs multi writer objects
 
-This approach is taken by [FastPay](https://arxiv.org/pdf/2003.11506.pdf), [Guerraoui et al, 2019](https://arxiv.org/pdf/1906.05574), [Sliwinski and Wattenhofer, 2019](https://arxiv.org/abs/1909.10926), applied to privacy preserving transactions (see [UTT](https://eprint.iacr.org/2022/452.pdf) and [Zef](https://eprint.iacr.org/2022/083.pdf)), planned to be used in the [Sui platform](https://github.com/MystenLabs/sui/blob/main/doc/paper/sui.pdf) and in [Linera](https://linera.io/whitepaper).
+In the traditional approach for state machine replication,a total ordering protocol is used and the state machine is modeled as a single object that has multiple writers. Since this requires solving agreement, we know that in the worst case this takes a quadratic number of messages (for omission failures) and non-constant (linear in synchrony or infinite in asynchrony) number of rounds.
 
-In a totally ordered system, clients write to and read from the same *ordered log* of transactions. Here we just want to write to and read from the same *unordered set* of transactions. Let's start with a refresh of *log replication* and then define *set replication*.
+Instead, we may be able to decompose the state machine into independent single writer state machines (objects). Now all we need is to totally order commands for each single writer object and we do not care about ordering commands across different objects. It turns out that this can be done with linear communication and constant time (even in asynchrony with Byzantine failures)
+
+
+## Set Replication
+
+Just like *log replication* is a way to model the agreement essence of state machine replication, here we define **set replication** as a way to model the (weaker) agreement essence of a set of single writer state machines. We start by recalling the definition of [log replication](https://decentralizedthoughts.github.io/2022-11-19-from-single-shot-to-smr/):
 
 ### Reminder: definition of Log Replication
 
-Recall the definition of [log replication](https://decentralizedthoughts.github.io/2022-11-19-from-single-shot-to-smr/):
-Clients and $n$ servers. Clients can make two types of requests: ```read``` which returns a **log of values** (or $\bot$ for the empty log)  as a response; and ```write(v)``` which gets an input value and also returns a response that is a log of values.
+There are clients and $n$ servers. Clients can make two types of requests: ```read``` which returns a **log of values** (or $\bot$ for the empty log)  as a response; and ```write(v)``` which gets an input value and also returns a response that is a log of values.
 
 Clients can have multiple input values at different times. 
 
@@ -35,7 +43,7 @@ Clients can have multiple input values at different times.
 
 **Correctness**: For a write request with value $v$, its response, and any response from a request that started after this write response, returns a log of values that includes $v$.
 
-We simply **remove the agreement property** to get ***set replication***.
+The definition for set replication is simply to **remove the agreement property**.
 
 ### Definition of Set Replication
 
@@ -51,22 +59,19 @@ Clients and $n$ servers. Clients can make two types of requests: ```read``` whic
 
 Observe that when there is a just a single writer client there is no difference between log replication and set replication - the (single writer) client can sequentially submit commands by adding a sequence number to its operations and implement a log of its commands on top of the set abstraction.
 
-
 In fact set replication is solving multi-shot consensus for single writer objects (see [Guerraoui et al, 2019](https://arxiv.org/pdf/1906.05574)).
 
-
-Moreover, the space is partitioned into objects, and each object can be written to by a single client (the owner of the private key associated with the object's public key) then multiple clients can transact in parallel as long as each one is writing to a different object.
+Moreover, if the system is partitioned into single writer objects, so each object can be written to by a single client (the owner of the private key associated with the object's public key) then multiple clients can transact in parallel as long as each one is writing to a different object.
 
 The difference between log replication and set replication can be seen when there are two or more writers. For example if two writers need to decide which one wrote first (say they both want to swap money on an [AMM](https://arxiv.org/pdf/2102.11350.pdf)) then log replication will provide an ordering of these two transactions but set replication cannot do this. 
 
 
-### Implementing Set Replication via Locked Broadcast
+### Implementing Set Replication via Locked Broadcast: its linear and works in asynchrony
 
-Log replication requires solving multi-shot agreement and even one agreement may take $f+1$ rounds in the worst case. In previous posts [we showed](https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/) how to solve [log replication](https://decentralizedthoughts.github.io/2022-11-24-two-round-HS/) via a repeated application of [locked broadcast](https://decentralizedthoughts.github.io/2022-09-10-provable-broadcast/).
+Log replication requires solving multi-shot agreement and even one agreement may take $f+1$ rounds in the worst case in synchrony and have infinite executions in asynchrony. Moreover, even one agreement needs $\Omega(f^2)$ messages is the worst case for omission failures and beyond. In previous posts [we showed](https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/) how to solve [log replication](https://decentralizedthoughts.github.io/2022-11-24-two-round-HS/) via a repeated application of [locked broadcast](https://decentralizedthoughts.github.io/2022-09-10-provable-broadcast/) in the Byzantine setting.
 
 
-
-Set replication is an easier problem. It can be implemented as a single instance of *locked broadcast*:
+Set replication is an easier problem. In the asynchronous Byzantine setting, it can be implemented as a single instance of *locked broadcast*:
 
 ```
 Write(v): 
@@ -78,19 +83,21 @@ Read():
     client waits for n-f responses and takes the union
 ```
 
+Writing a value is just running a single locked broadcast. Reading all values is just reading all the lock certificates. 
 
 
+### Complexity
 
-Writing a value is just running a single locked broadcast. Reading all values is just reading all the lock certificates. Note that both Write and Read take constant rounds and work in asynchrony!
-
-
+Observe: both Write and Read protocols take constant rounds and work in asynchrony. Each such operation can have a linear message complexity.
 
 
 ### Analysis
 
-Recall that Locked Broadcast produces a *delivery-certificate*, such that $n-2f$ honest parties received a *lock-certificate* for this value, and no other value can have a *lock-certificate*. Moreover, the value in the certificate has  *External-Validity*.
+Recall that Locked Broadcast produces a *delivery-certificate*, such that $n-2f$ honest parties received a *lock-certificate* for this value, and no other value can have a *lock-certificate*. Moreover, the value in the certificate has *External-Validity*.
 
-The analysis follows directly from the locked broadcast properties: Termination for Write operation follows from the termination of locked broadcast for non-faulty client. Termination for Read operation from waiting for just $n-f$ parties. Validity follows from the fact that write requests are validated and signed by the client. Finally, Correctness follows from the *Unique-Lock-Availability* property and from quorum intersection of any Read operation.
+The analysis follows directly from the locked broadcast properties: Termination for a write operation of a non-faulty client follows from the termination of locked broadcast for a non-faulty client. Termination for read operation from waiting for just $n-f$ parties. Validity follows from the fact that write requests are validated and signed by the client. 
+
+Finally, Correctness follows from the *Unique-Lock-Availability* property of locked broadcast and from quorum intersection of any read operation with that set of $f+1$ non-faulty parties.
 
 
 ### From set replication to UTXO replication.
@@ -99,21 +106,28 @@ A simple example for using set replication is to maintain a *UTXO* set (a set of
 
 This means that each token is essentially a write-once object. A transaction marks an active token as spent and creates a new active token in the UTXO set.
 
-Real systems also need to implement more efficient read operations via indexing and times tamping, add check-pointing and garbage collection. Reads can also be made linearizable by adding an additional round. It is also possible to carefully *combine* log replication with set replication to get the best of both worlds (fulfilling Lamport’s vision). See [Kuznetsov, Pignolet, Ponomarev, Tonkikh, 2022](https://arxiv.org/pdf/2212.04895.pdf). We plan to cover this in future posts.
+Real systems also need to implement more efficient read operations via indexing and times tamping, add check-pointing and garbage collection. 
+
+Reads can also be made linearizable by adding an additional round. We will discuss this in later rounds. For now just mention that the property we would like to obtain is:
+
+* Read correctness: For a read request with response $S$, any response from a request that started after this response, returns a set of values that includes $S$.
+
+Its a good exercise to see why the above protocol does not obtain read correctness and how to fix that (and stay linear communication). Another good exercise is to see how correctness and read correctness implies [linearizability](https://decentralizedthoughts.github.io/2021-10-16-the-ideal-state-machine-model-multiple-clients-and-linearizability/).
+
+It is also possible to carefully *combine* log replication with set replication to get the best of both worlds (fulfilling Lamport’s vision for the Byzantine setting). See [Kuznetsov, Pignolet, Ponomarev, Tonkikh, 2022](https://arxiv.org/pdf/2212.04895.pdf). We plan to cover this in future posts.
 
 
-### Set Replication and Data Availability
+### Set Replication, Data Availability, and Verifiable Information Dispersal 
 
-Set replication is a formal way to define some of the requirements that are often informally called **data availability** in the blockchain space.
+Set replication is a formal way to define some of the requirements that are often informally called **data availability** in the blockchain space and can be formally mapped to [verifiable information dispersal](https://decentralizedthoughts.github.io/2024-08-08-vid/).
 
 > Data availability is the guarantee that the block proposer published all transaction data for a block and that the transaction data is available to other network participants.  --[ethereum](https://ethereum.org/en/developers/docs/data-availability/)
 
-In later posts, we will discuss how to obtain better guarantees for set replication. In particular, how lightweight clients can efficiently **audit** a set of replicas and punish them for misbehaving (claiming to store the set but censoring read requests). See [Al-Bassam, Sonnino, and Buterin, 2019](https://arxiv.org/abs/1809.09044) and stay tuned for future posts.
+
+Note that while our protocol above is linear in terms of number of messages, it uses $O(\ell n)$ bits to write and read a message of size $\ell$ bits. In later posts, we will discuss how [VIDs](https://decentralizedthoughts.github.io/2024-08-08-vid/) obtain better guarantees for set replication - for example paying just $O(1)$ per bit when $\ell$ is large enough.
 
 ### Acknowledgments
 
 Many thanks to Adithya Baht and Kartik Nayak for insightful comments.
-
-
 
 Your thoughts on [Twitter](https://twitter.com/ittaia/status/1607674657397694465?s=61&t=5e3KM2Kmf3CDaCNUuFLing).
