@@ -1,6 +1,6 @@
 ---
 title: Broadcast from Agreement and Agreement from Broadcast
-date: 2020-09-14 07:07:00 -07:00
+date: 2020-09-14 10:07:00 -04:00
 tags:
 - dist101
 author: Ittai Abraham, Kartik Nayak
