@@ -6,9 +6,9 @@ tags:
 author: Ittai Abraham
 ---
 
-[PBFT](https://pmg.csail.mit.edu/bft/) is a foundational multi-year project lead by [Barbara Liskov](https://pmg.csail.mit.edu/~liskov/) and her students, obtaining major advances in both the theory and practice of Byzantine Fault Tolerance. The PBFT [conference version](https://pmg.csail.mit.edu/papers/osdi99.pdf), [journal version](https://pmg.csail.mit.edu/papers/bft-tocs.pdf), Castro's [thesis](https://pmg.csail.mit.edu/~castro/thesis.pdf), Liskov's [talk](https://www.youtube.com/watch?v=Uj638eFIWg8), and follow up work on [BASE](http://www.sosp.org/2001/papers/rodrigues.pdf) are all required reading for anyone who wants to deeply understand BFT systems.
+[PBFT](https://pmg.csail.mit.edu/bft/) is a foundational multi-year project led by [Barbara Liskov](https://pmg.csail.mit.edu/~liskov/) and her students, obtaining major advances in both the theory and practice of Byzantine Fault Tolerance. The PBFT [conference version](https://pmg.csail.mit.edu/papers/osdi99.pdf), [journal version](https://pmg.csail.mit.edu/papers/bft-tocs.pdf), Castro's [thesis](https://pmg.csail.mit.edu/~castro/thesis.pdf), Liskov's [talk](https://www.youtube.com/watch?v=Uj638eFIWg8), and follow-up work on [BASE](http://www.sosp.org/2001/papers/rodrigues.pdf) are all required reading for anyone who wants to deeply understand BFT systems.
 
-In this post we describe a variation of the authenticated version of [PBFT](https://pmg.csail.mit.edu/papers/osdi99.pdf) using [Locked Broadcast](https://decentralizedthoughts.github.io/2022-09-10-provable-broadcast/) that follows a similar path as our previous post on [Paxos using Recoverable Broadcast](https://decentralizedthoughts.github.io/2022-11-04-paxos-via-recoverable-broadcast/). I call this protocol **linear PBFT** because the number of messages per view is linear. However, the size of the view change message in the worst case is large. We discuss improving this in [later post](https://decentralizedthoughts.github.io/2022-11-24-two-round-HS/) on [Two Round HotStuff](https://arxiv.org/pdf/1803.05069v1.pdf) using [Locked Broadcast](https://decentralizedthoughts.github.io/2022-09-10-provable-broadcast/). Other ways of reducing the view change message size is by using [Three Round HotStuff](https://arxiv.org/pdf/1803.05069.pdf) via [Keyed Broadcast](https://decentralizedthoughts.github.io/2022-09-10-provable-broadcast/), or by using SNARKS.
+In this post we describe a variation of the authenticated version of [PBFT](https://pmg.csail.mit.edu/papers/osdi99.pdf) using [Locked Broadcast](https://decentralizedthoughts.github.io/2022-09-10-provable-broadcast/) that follows a similar path as our previous post on [Paxos using Recoverable Broadcast](https://decentralizedthoughts.github.io/2022-11-04-paxos-via-recoverable-broadcast/). I call this protocol **linear PBFT** because the number of messages per view is linear. However, the size of the view change message in the worst case is large. We discuss improving this in a [later post](https://decentralizedthoughts.github.io/2022-11-24-two-round-HS/) on [Two Round HotStuff](https://arxiv.org/pdf/1803.05069v1.pdf) using [Locked Broadcast](https://decentralizedthoughts.github.io/2022-09-10-provable-broadcast/). Other ways of reducing the view change message size is by using [Three Round HotStuff](https://arxiv.org/pdf/1803.05069.pdf) via [Keyed Broadcast](https://decentralizedthoughts.github.io/2022-09-10-provable-broadcast/), or by using SNARKs.
 
 Variants of the linear PBFT protocol are used by [SBFT](https://arxiv.org/pdf/1804.01626.pdf), [Tusk](https://arxiv.org/pdf/2105.11827.pdf), [Jolteon](https://arxiv.org/pdf/2106.10362.pdf), [DiemBFTv4](https://developers.diem.com/papers/diem-consensus-state-machine-replication-in-the-diem-blockchain/2021-08-17.pdf), and [Aptos](https://github.com/aptos-labs/aptos-core/blob/main/developer-docs-site/static/papers/whitepaper.pdf).
 
@@ -61,13 +61,15 @@ For view v>1, the primary of view v with input (val, val-proof):
 
 ```
 
+Termination protocol:
+
 ```
 If a Locked-Broadcast outputs a valid delivery-certificate dc for x
     Send <decide, x, dc> to all
     Terminate
     
 Upon receiving a valid <decide, x, dc> 
-    Send <decide, x, x-dc> to all
+    Send <decide, x, dc> to all
     Terminate
 ``` 
 
@@ -148,15 +150,15 @@ This completes the description of the consensus protocol. The protocol is detail
 
 **Safety Lemma**: Let $v^{\star}$ be the first view with a commit-certificate on $(v^\star, x)$, then for any view $v \geq v^\star$, if a lock-certificate forms for view $v$, it must be with value $x$.
 
-*Exercise: prove the Agreement property follows from the Safety Lemma above.*
+*Exercise: Prove the Agreement property follows from the Safety Lemma above.*
 
 Let's prove the safety lemma, which is the essence of PBFT.
 
-*Proof of Safety Lemma*: Let $S$ (for Sentinels) be the set of **non-faulty** parties among the $n{-}f$ parties that sent a lock-certificate in the second round of locked broadcast of view $v^\star$. Note that $\|S\| \geq n{-}2f \geq f{+}1$. 
+*Proof of Safety Lemma*: Let $S$ (for Sentinels) be the set of **non-faulty** parties among the $n{-}f$ parties that sent a lock-certificate in the second round of locked broadcast of view $v^\star$. Note that $\|S\| \geq n{-}2f \geq f{+}1$.
 
 Induction statement: for any view $v\geq v^\star$:
 
-1. If there is a lock-certificate for view $v$ then it has value $x$.
+1. If there is a lock-certificate for view $v$, then it has value $x$.
 2. For each party in $S$, in view $v$, its lock-certificate with the highest view $v'$ is such that: 
     1. $v' \geq v^\star$; and
     2. The value of this lock-certificate is $x$.
@@ -167,15 +169,15 @@ Now suppose the induction statement holds for all views $v^\star \leq v$ and con
 
 Use the *External Validity* property of locked broadcast and the definition of $EV_{\text{LB-PBFT}}$ above: to form a lock-certificate, the primary needs at least $n{-}2f$ non-faulty parties to view its proposal as valid. 
 
-Observe that by definition of $EV_{\text{LB-PBFT}}$ for view $v+1$: any valid ```R``` must include a lock-certificate sent by some member of $S$ for view $v+1$. This is true because ```R``` must include $n{-}f$ distinct and valid ```<echoed-max v, *>``` responses and the set $S$ is of size at lest $f+1$. 
+Observe that by definition of $EV_{\text{LB-PBFT}}$ for view $v+1$: any valid ```R``` must include a lock-certificate sent by some member of $S$ for view $v+1$. This is true because ```R``` must include $n{-}f$ distinct and valid ```<echoed-max v, *>``` responses and the set $S$ is of size at least $f+1$. 
 
-Use the induction hypothesis on views $v^\star \leq v$: from (2.) and the above argument, ```R``` must contain a lock-certificate of view at least $v^\star $ and value $x$. From (1.) any lock-certificate in ```R``` is either of view $< v^\star$ or of value $x$. Hence the value associated with the maximal view lock-certificate in ```R``` must be $x$. This concludes the proof of (1.) for view $v+1$.
+Use the induction hypothesis on views $v^\star \leq v$: from (2.) and the above argument, ```R``` must contain a lock-certificate of view at least $v^\star $ and value $x$. From (1.) any lock-certificate in ```R``` is either of view $< v^\star$ or of value $x$. Hence, the value associated with the maximal view lock-certificate in ```R``` must be $x$. This concludes the proof of (1.) for view $v+1$.
 
-Given (1.) for view $v+1$, (2.) follows, the only thing that may happen is that some members in $S$ see a lock-certificate for view $v+1$ and update their highest lock-certificate. The value will remain $x$. This concludes the proof of the Safety Lemma.
+Given (1.) for view $v+1$, (2.) follows, because the only thing that may happen is that some members in $S$ see a lock-certificate for view $v+1$ and update their highest lock-certificate. The value will remain $x$. This concludes the proof of the Safety Lemma.
 
 ### Liveness
 
-Consider the view $v^+$ with the *first* non-faulty Primary that started after GST. Denote this start time as time $T$. Due to clock synchronization and being after GST, then on or before time $T+ \Delta$ the primary will receive ```<echoed-max(v+,*)>``` from all non-faulty parties (at least $n{-}f$ parties). Hence the non-faulty will send a value $LB(v^+, *)$ that (1) will arrive at all non-faulty parties on or before time $T+2\Delta$ and (2) will have a $proof$ that is valid. Hence all non-faulty parties will pass the $EV_{\text{LB-PBFT}}$ condition for view $v^+ $ (they are still in view $v^+$). So the primary will obtain a delivery-certificate on or before time $T+5\Delta$ (locked broadcast takes at most $4 \Delta$) and all non-faulty will decide on or before time $T+6\Delta$.
+Consider the view $v^+$ with the *first* non-faulty Primary that started after GST. Denote this start time as time $T$. Due to clock synchronization and being after GST, then on or before time $T+ \Delta$ the primary will receive ```<echoed-max(v+,*)>``` from all non-faulty parties (at least $n{-}f$ parties). So the non-faulty will send a value $LB(v^+, *)$ that (1) will arrive at all non-faulty parties on or before time $T+2\Delta$ and (2) will have a $proof$ that is valid. Hence, all non-faulty parties will pass the $EV_{\text{LB-PBFT}}$ condition for view $v^+ $ (they are still in view $v^+$). So the primary will obtain a delivery-certificate on or before time $T+5\Delta$ (locked broadcast takes at most $4 \Delta$) and all non-faulty will decide on or before time $T+6\Delta$.
 
 This concludes the proof of Liveness.
 
@@ -205,7 +207,7 @@ External validity is proven by induction on the chain of lock-certificates. For 
 
 The time and number of messages before GST can be both unbounded, so we measure the time and message complexity after GST.
 
-**Time complexity**:  since the liveness proof requires waiting for the first non-faulty primary after GST this may take: an interrupted view of an honest primary, then in the worst case this may require $f$ views of faulty primaries, then a good view. So all parties will output a value in at most $(f+2)10 \Delta = O(f \Delta)$ time after GST. This is asymptotically optimal but not optimized.
+**Time complexity**:  since the liveness proof requires waiting for the first non-faulty primary after GST, this may take: an interrupted view of an honest primary, then in the worst case, another $f$ views of faulty primaries, then finally a good view. So all parties will output a value in at most $(f+2)10 \Delta = O(f \Delta)$ time after GST. This is asymptotically optimal but not optimized.
 
 **Message Complexity**: since each view has a linear message exchange, the total number of messages sent after GST is $O(f \times n) = O(n^2)$. This is asymptotically optimal. 
 
@@ -215,10 +217,11 @@ Lock-certificates can be reduced to a single signature by using threshold signat
 
 ## Notes
 
-In later posts, we will show other view synchronization solutions, and HotStuff which also provides responsiveness.
+In later posts, we will show other view synchronization solutions, and HotStuff also provides responsiveness.
 
 ## Acknowledgments
 
 Many thanks to Kartik Nayak for insightful comments.
 
 Your comments on [Twitter](https://twitter.com/ittaia/status/1599893500866088961?s=20&t=RUTyrxNgaIvudyiV5O5IAA).
+
