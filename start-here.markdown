@@ -3,7 +3,6 @@ title: Start Here
 date: 2020-09-21 09:34:00 -04:00
 ---
 
-
 {: .box-note}
 This page contains material for a graduate course on Blockchains and Distributed Computing with a dash of Cryptography (stay tuned for more). Or read [posts chronologically](https://decentralizedthoughts.github.io/).
 
