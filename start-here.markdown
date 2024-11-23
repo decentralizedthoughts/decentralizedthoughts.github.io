@@ -3,10 +3,11 @@ title: Start Here
 date: 2020-09-21 09:34:00 -04:00
 ---
 
+
 {: .box-note}
 This page contains material for a graduate course on Blockchains and Distributed Computing with a dash of Cryptography (stay tuned for more). Or read [posts chronologically](https://decentralizedthoughts.github.io/).
 
-We would love to get your feedback. If you find a post helpful, have a suggestion to improve, or any other comment: [drop us a comment](https://twitter.com/ittaia/status/1421066572207169544?s=20) or send us email - your feedback is very valuable.
+We would love to get your feedback. If you find a post helpful, have a suggestion to improve, or any other comment: [drop us a comment](https://twitter.com/ittaia/status/1421066572207169544?s=20) or send us an email - your feedback is very valuable.
 
 
 ## Basics, Foundations, and Classics
@@ -35,6 +36,7 @@ More recent State Machine Replication protocols:
 - An [optimal optimistically responsive synchronous protocol](/2020-06-12-optimal-optimistic-responsiveness/).
 - A simple, streamlined synchronous protocol called [Streamlet](/2020-05-14-streamlet/). 
 - Survey of [authenticated protocols under the synchrony assumption](/2019-11-11-authenticated-synchronous-bft/).
+- How [recursion helps solve consensus](https://decentralizedthoughts.github.io/2024-09-15-divide-and-conquer/) with optimal $O(n^2)$ message complexity.
 
 Use of randomization in synchronous agreement protocols:
 
@@ -44,7 +46,7 @@ Use of randomization in synchronous agreement protocols:
 
 ## Partially Synchronous Protocols
 
-[Partial synchrony](/2019-09-13-flavours-of-partial-synchrony/) is one of the most used models in real word systems today.
+[Partial synchrony](/2019-09-13-flavours-of-partial-synchrony/) is one of the most used models in real-world systems today.
 
 
 Single shot [Paxos](https://decentralizedthoughts.github.io/2022-11-04-paxos-via-recoverable-broadcast/).
@@ -53,7 +55,7 @@ Single shot [Paxos](https://decentralizedthoughts.github.io/2022-11-04-paxos-via
 Taking ideas from the Byzantine setting and applying them to the benign setting:
 
  -  [Benign Hotstuff](https://decentralizedthoughts.github.io/2021-04-02-benign-hotstuff/).
- -  [Simplifing Raft with Chaining](https://decentralizedthoughts.github.io/2021-07-17-simplifying-raft-with-chaining/). 
+ -  [Simplifying Raft with Chaining](https://decentralizedthoughts.github.io/2021-07-17-simplifying-raft-with-chaining/). 
  -  [Log Paxos](https://decentralizedthoughts.github.io/2021-09-30-distributed-consensus-made-simple-for-real-this-time/) is a modern take on multi-Paxos. 
 
 The Byzantine setting:
@@ -66,7 +68,7 @@ The Byzantine setting:
 
 ## Asynchronous Protocols
 
-Fundamental lower bound in asynchrony: The  [FLP lower bound](/2019-12-15-consensus-model-for-FLP/) showing the impossibility of consensus under even one crash fault. 
+Fundamental lower bound in asynchrony: The [FLP lower bound](/2019-12-15-consensus-model-for-FLP/) showing the impossibility of consensus under even one crash fault. 
 
 Important building blocks in asynchrony:
 
@@ -83,6 +85,9 @@ Series on Asynchronous Agreement:
 5. use BCA to efficiently solve [Binary Byzantine Agreement from a strong common coin](https://decentralizedthoughts.github.io/2022-04-05-aa-part-five-ABBA/).
  
 Reaching [Asynchronous Agreement on a Core Set](https://decentralizedthoughts.github.io/2023-07-22-agreeemnt-on-a-core-set/).
+
+[Verifiable Information Dispersal](https://decentralizedthoughts.github.io/2024-08-08-vid/).
+
 
 ## State Machine Replication
 
@@ -101,7 +106,7 @@ To learn about upper bounds, start with a [simple SMR for crash failures](/2019-
 
 ## Nakamoto Consensus
 
-The bitcoin revolution brought many breakthroughs in distributed computing, economics and cryptography. One of the striking breakthroughs in distributed computing was a new form of Byzantine Agreement now called **Nakamoto Consensus**.
+The Bitcoin revolution brought many breakthroughs in distributed computing, economics, and cryptography. One of the striking breakthroughs in distributed computing was a new form of Byzantine Agreement now called **Nakamoto Consensus**.
 
 - What is [Nakamoto consensus](https://decentralizedthoughts.github.io/2021-10-15-Nakamoto-Consensus/)?
 - Bitcoin's [setup assumption](https://decentralizedthoughts.github.io/2019-07-18-do-bitcoin-and-ethereum-have-any-trusted-setup-assumptions/).
@@ -122,7 +127,7 @@ Lower bounds give us powerful tools to understand the fundamental limitations an
   - [CAP type theorems in the permissionless setting](https://decentralizedthoughts.github.io/2022-03-03-blockchain-resource-pools-and-a-cap-esque-impossibility-result/)
   
 - Split brain lower bounds:
-  - Dwork, Lynch, Stockmeyer 1988 ([DLS](https://groups.csail.mit.edu/tds/papers/Lynch/jacm88.pdf)) lower bound: [Byzantine Consensus in Partial Synchrony](/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/) requires $f<n/3$.
+  - Dwork, Lynch, Stockmeyer ([DLS 1988](https://groups.csail.mit.edu/tds/papers/Lynch/jacm88.pdf)) lower bound: [Byzantine Consensus in Partial Synchrony](/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/) requires $f<n/3$.
   - CJKR lower bound: Neither Non-equivocation nor Transferability alone is enough for [tolerating minority corruptions in asynchrony](https://decentralizedthoughts.github.io/2021-06-14-neither-non-equivocation-nor-transferability-alone-is-enough-for-tolerating-minority-corruptions-in-asynchrony/).
   - TEEs without state need $3f+1$ in Partial Synchrony because of the [rollback adversary](https://decentralizedthoughts.github.io/2023-06-26-dls-meets-rollback/).
 
@@ -144,7 +149,7 @@ Lower bounds give us powerful tools to understand the fundamental limitations an
 - [Early stopping lower bounds](https://decentralizedthoughts.github.io/2024-01-28-early-stopping-lower-bounds/) provide a bound on the number of rounds in execution where there are $0\leq f\leq t$ faults. In particular, in the best case executions where there are no faults at all ($f=0$).
   - $\min\\{f+2,t+1\\}$ round lower bound for Early Stopping for consensus with crashes and Early Deciding for uniform consensus with omission (crashes with fixed first)
 
-- Fischer, Lynch, Paterson 1985 ([FLP](https://groups.csail.mit.edu/tds/papers/Lynch/jacm85.pdf)) lower bound, three part series using bi-valency (uncommitted configuration) arguments: 
+- Fischer, Lynch, Paterson 1985 ([FLP](https://groups.csail.mit.edu/tds/papers/Lynch/jacm85.pdf)) lower bound, three-part series using bi-valency (uncommitted configuration) arguments: 
   - Consensus must have some initial state that is [uncommitted](/2019-12-15-consensus-model-for-FLP/):
   - This implies [executions with at least $f+1$ rounds in Synchrony](/2019-12-15-synchrony-uncommitted-lower-bound/).
   - The FLP result: [non-terminating executions in Asynchrony](/2019-12-15-asynchrony-uncommitted-lower-bound/).
@@ -155,6 +160,9 @@ Lower bounds give us powerful tools to understand the fundamental limitations an
 ### Lower bounds due to privacy requirements
 
 - Ben-Or, Kelmer, Rabin 1994 ([BKR](https://dl.acm.org/doi/10.1145/197917.198088)) lower bound: Asynchronous Verifiable Secret Sharing must have a [non-zero probability of not terminating](https://decentralizedthoughts.github.io/2020-07-15-asynchronous-fault-tolerant-computation-with-optimal-resilience/) when $n/4 \leq f < n/3$. So Asynchronous Verifiable Secret sharing (and Asynchronous MPC) with perfect security needs $f<n/4$. 
+
+- [The SAP theorem for storing secret keys](https://decentralizedthoughts.github.io/2024-08-09-sap/) the analog of the CAP theorem for storing private keys.
+
 
 ### Liveness attacks
 
@@ -216,7 +224,7 @@ Polynomial secret sharing is a base for deep connections between cryptography an
 
 - [Sync HotStuff](/2019-11-12-Sync-HotStuff/).
 
-- [Optimal Optimistic Responsivness](/2020-06-12-optimal-optimistic-responsiveness/).
+- [Optimal Optimistic Responsiveness](/2020-06-12-optimal-optimistic-responsiveness/).
 
 - Encrypted Blockchain Databases [part 1](/2020-07-10-encrypted-blockchain-databases-part-i/) and [part 2](/2020-07-10-encrypted-blockchain-databases-part-ii/).
 
@@ -250,4 +258,5 @@ Polynomial secret sharing is a base for deep connections between cryptography an
 
 - [Decentralization of Ethereum Builder Market](https://decentralizedthoughts.github.io/2024-05-07-decentralization-ethereum/).
 - [Sailfish: Improving the Latency of DAG-based BFT](https://decentralizedthoughts.github.io/2024-05-23-sailfish/).
-- [Shoal++: High Throughput DAG-BFT Can Be Fast!](https://decentralizedthoughts.github.io/2024-06-12-shoalpp/)
+- [Shoal++: High Throughput DAG-BFT Can Be Fast!](https://decentralizedthoughts.github.io/2024-06-12-shoalpp/).
+- [HotStuff-1 and the Prefix Speculation Dilemma in BFT Consensus](https://decentralizedthoughts.github.io/2024-08-24-hotstuff1/).
