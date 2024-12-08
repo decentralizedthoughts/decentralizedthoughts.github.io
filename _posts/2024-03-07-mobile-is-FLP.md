@@ -25,7 +25,7 @@ We prove both results by a *reduction* to a common weaker adversary we call the 
 
 A *configuration* is a set of all the states of all the parties and the set of currently undelivered messages.
 
-***Definition***: For a configuration $C$ let $val(C)$ be the decision value in the *failure-free extension* that starts with configuration $C$ and runs in synchrony (all messages arrive after one lockstep delay)with no failures.
+***Definition***: For a configuration $C$ let $val(C)$ be the decision value in the *failure-free extension* that starts with configuration $C$ and runs in synchrony (all messages arrive after one lockstep delay) with no failures.
 
 Minor note: we assume $val(C)$ is well-defined because the execution reaches a decision - if it does not terminate then we have found a non-terminating execution.
 
@@ -41,7 +41,7 @@ In words, a $p$-pivot configuration is a configuration where the decision value 
 
 The mobile delay adversary with one failure, in lockstep, at each round, can choose one party to *delay* some of its messages. Once a party is delayed, its remaining outgoing messages suffer one additional round of delay. The adversary can corrupt a party with a delay at any point in the round. So for example it can delay all the outgoing messages, or only the last outgoing message, etc.
 
-Note that the adversary can continue to delay the same party indefinitely and this is equivalent to crashing the party.
+Note that the adversary can continue to delay the same party for any finite number of rounds and this is essentially equivalent to crashing the party.
 
 ## Mobile delay adversary lower bound
 
@@ -57,11 +57,13 @@ $$val(C_{i-1}-i)=val(C_i-i)$$
 
 If this value is 1 then $C_{i-1}$ is an $i$-pivot configuration and similarly if this value is 0 then $C_i$ is an $i$-pivot configuration. This completes the proof.
 
-We now show that we can always extend a $p$-pivot configuration $C$ by one round to a $p'$-pivot configuration $C'$, thus creating an infinite execution. In this round all parties progress in lockstep except for at most one party which we may delay.
+We now show that we can always extend a $p$-pivot configuration $C$ by one round to a $p'$-pivot configuration $C'$, thus creating an infinite execution. In each such *round* all parties progress in lockstep except for at most one party which we may delay its outgoing messages.
 
 ***Lemma 2***: *If $C$ is a $p$-pivot configuration at the beginning of round $k$, then there is an extension of $C$ to $C'$ by one round in the mobile delay model where $C'$ is a $p'$-pivot configuration at the beginning of round $k+1$.*
 
-*Proof*: Given a $p$-pivot configuration $C$ at the beginning of round $k$, define $D$ as the extension of $C$ by one round (to the beginning of round $k+1$), where all of party $p$'s outgoing messages are delayed in round $k$ by one more round.
+*Proof*: Given a $p$-pivot configuration $C$ at the beginning of round $k$:
+
+Define configuration $D$ as: the extension of configuration $C$ by one round (to the beginning of round $k+1$), where all of party $p$'s outgoing messages are delayed in round $k$ by one more round.
 
 Note that we delay also outgoing messages by $p$ that have not been delivered in $C$ and that in the failure-free extension of $D$ all delayed messages will be delivered in round $k+1$.
 
@@ -73,7 +75,7 @@ Observe that the only difference between $C$ and $D$ is that in $D$ we delay all
 
 Consider the $n+1$ configurations $D=C_0,C_1,\dots,C_n$ where $C_j$ is the configuration in which the adversary delays party $p$'s outgoing messages after it sends its messages to $j$ parties. 
 
-Note that $C_n$ is simply the first failure-free round after $C$, hence $val(C_n)=val(C)=1. Also note that by definition $D=C_0$, hence $val(C_0)=0$
+Note that $C_n$ is simply the first failure-free round after $C$, hence $val(C_n)=val(C)=1$. Also note that by definition $D=C_0$, hence $val(C_0)=0$
 
 The (trivial) [one-dimensional Sperner's Lemma](https://en.wikipedia.org/wiki/Sperner%27s_lemma#One-dimensional_case) implies that there exists $1 \le q \le n$ and two adjacent configurations such that $val(C_{q-1}) =0$ and $val(C_{q})=1$.
 
