@@ -25,13 +25,17 @@ We prove both results by a *reduction* to a common weaker adversary we call the 
 
 A *configuration* is a set of all the states of all the parties and the set of currently undelivered messages.
 
-***Definition***: For a configuration $C$ let $val(C)$ be the decision value in the *failure-free extension* that starts with configuration $C$ and runs in synchrony with no failures. 
+***Definition***: For a configuration $C$ let $val(C)$ be the decision value in the *failure-free extension* that starts with configuration $C$ and runs in synchrony (all messages arrive after one lockstep delay)with no failures.
 
-***Definition***: For a configuration $C$ and party $p$ let $val(C-p)$ be the decision in the extension that starts with configuration $C$ and runs in synchrony except that all of party $p$'s outgoing messages are infinitely delayed ($p$ is crashed) and all other parties are failure-free.
+Minor note: we assume $val(C)$ is well-defined because the execution reaches a decision - if it does not terminate then we have found a non-terminating execution.
+
+***Definition***: For a configuration $C$ and party $p$ let $val(C-p)$ be the decision in the extension that starts with configuration $C$ and runs in synchrony (all messages arrive after one lockstep delay) except that all party $p$'s outgoing messages are infinitely delayed  and all other parties are failure-free. 
+
+Minor note: The outgoing messages sent by $p$ in $C$ that have not been delivered are also delayed. Since we assume the execution $val(C-p)$ terminates in a finite number of rounds, we can set the delay of $p$'s messages to be longer than this time.
 
 ***Definition of a $p$-pivot configuration:*** For a party $p$ we say that a configuration $C$ is a $p$-pivot if $val(C) \neq val (C-p)$.
 
-In words, a $p$-pivot configuration is a configuration where the decision value of its failure-free extension is *different* from the decision value of its extension where $p$ crashes and all others are failure-free. Compared to the definition of bi-valency, this definition is more explicit and constructive in terms of the extensions that lead to opposing decision values.
+In words, a $p$-pivot configuration is a configuration where the decision value of its failure-free extension is *different* from the decision value of its extension where no party sees any message from $p$ and all others are failure-free. Compared to the definition of bi-valency, this definition is more explicit and constructive in terms of the extensions that lead to opposing decision values.
 
 ## Mobile delay adversary
 
@@ -53,35 +57,38 @@ $$val(C_{i-1}-i)=val(C_i-i)$$
 
 If this value is 1 then $C_{i-1}$ is an $i$-pivot configuration and similarly if this value is 0 then $C_i$ is an $i$-pivot configuration. This completes the proof.
 
-We now show that we can always extend a $p$-pivot configuration $C$ by one round to a $p'$-pivot configuration $C'$, thus creating an infinite execution.
+We now show that we can always extend a $p$-pivot configuration $C$ by one round to a $p'$-pivot configuration $C'$, thus creating an infinite execution. In this round all parties progress in lockstep except for at most one party which we may delay.
 
 ***Lemma 2***: *If $C$ is a $p$-pivot configuration at the beginning of round $k$, then there is an extension of $C$ to $C'$ by one round in the mobile delay model where $C'$ is a $p'$-pivot configuration at the beginning of round $k+1$.*
 
-*Proof*: Given a $p$-pivot configuration $C$ at the beginning of round $k$, define $D$ as the extension of $C$ by one round (to the beginning of round $k+1$), where all of party $p$'s messages are delayed in round $k$ by one more round.
+*Proof*: Given a $p$-pivot configuration $C$ at the beginning of round $k$, define $D$ as the extension of $C$ by one round (to the beginning of round $k+1$), where all of party $p$'s outgoing messages are delayed in round $k$ by one more round.
 
-Note that in the failure-free extension of $D$ these messages will be delivered in round $k+1$.
+Note that we delay also outgoing messages by $p$ that have not been delivered in $C$ and that in the failure-free extension of $D$ all delayed messages will be delivered in round $k+1$.
 
 Case 1 (trivial): If $val(D) \neq val(D-p)$ then $D$ is one round extension of $C$ and it is a $p$-pivot configuration. So the Lemma holds.
 
-Case 2: Otherwise $val(D) = val(D-p)$. From the definition of $D$, $val(C-p)=val(D-p)$ because both executions are identical: we delay all messages from $p$ at the beginning of round $k$. From the assumption that $C$ is a $p$-pivot, $val(C-p) \neq val(C)$. Therefore $val(D) \neq val(C)$. Without loss of generality, assume that $val(D)=0$, hence $val(C)=1$.
+Case 2: Otherwise $val(D) = val(D-p)$. From the definition of $D$, $val(C-p)=val(D-p)$ because both executions are identical: no message sent from $p$ arrives after the beginning of round $k$. From the assumption that $C$ is a $p$-pivot, $val(C-p) \neq val(C)$. Therefore $val(D) \neq val(C)$. Without loss of generality, assume that $val(D)=0$, hence $val(C)=1$.
 
-Observe that the only difference between $C$ and $D$ is that in $D$ we delay $p$'s messages in round $k$ for one round.
+Observe that the only difference between $C$ and $D$ is that in $D$ we delay all of $p$'s outgoing messages in round $k$ for one more round.
 
-Consider the $n+1$ configurations $D=C_0,C_1,\dots,C_n=C$ where $C_j$ is the configuration in which the adversary delays party $p$ after it sends its messages to $j$ parties. 
+Consider the $n+1$ configurations $D=C_0,C_1,\dots,C_n$ where $C_j$ is the configuration in which the adversary delays party $p$'s outgoing messages after it sends its messages to $j$ parties. 
+
+Note that $C_n$ is simply the first failure-free round after $C$, hence $val(C_n)=val(C)=1. Also note that by definition $D=C_0$, hence $val(C_0)=0$
 
 The (trivial) [one-dimensional Sperner's Lemma](https://en.wikipedia.org/wiki/Sperner%27s_lemma#One-dimensional_case) implies that there exists $1 \le q \le n$ and two adjacent configurations such that $val(C_{q-1}) =0$ and $val(C_{q})=1$.
 
-The only difference between $C_{q-1}$ and $C_q$ is the state of party $q$ that either receives the messages from $p$ to $q$ or does not receive it in round $k$. Consider the case where $q$'s messages are delayed forever from round $k+1$. 
+The only difference between $C_{q-1}$ and $C_q$ is the state of party $q$ that either receives the messages from $p$ to $q$ or does not receive it in round $k$. In both worlds, consider the extension where $q$'s outgoing messages are delayed forever from round $k+1$. 
 
-As in Lemma 1, the configurations  $C_{q-1} - q$ and $C_q -q$ are indistinguishable. So again we have 
+As in Lemma 1, the configurations  $C_{q-1} - q$ and $C_q -q$ are indistinguishable for all non-$q$ parties. Because in both worlds no party hears from party $q$ in round $k+1$ or later so it does not matter what party $q$ saw in round $k$. So
+
 
 $$val(C_{q-1} - q)=val(C_q - q)$$ 
 
-Assume this value is 1, then $C_{q-1}$ is a $q$-pivot configuration at the beginning of round $k+1$ and similarly if this value is 0 then $C_q$ is a $q$-pivot configuration at the beginning of round $k+1$. This completes the proof.
+If this value is 1, then $C_{q-1}$ is a $q$-pivot configuration at the beginning of round $k+1$. Otherwise, if this value is 0 then $C_q$ is a $q$-pivot configuration at the beginning of round $k+1$. This completes the proof.
 
 ## Extending the proof to non-uniform agreement
 
-Consider the execution which proceeds through an infinite series of $p$-pivot configurations (with different $p$'s). Assume by way of contradiction that some round $k$ in this execution is the first round in which at least two different parties decide on a value before the beginning of round $k$.
+Consider the execution which proceeds through an infinite series of pivot configurations. Assume by way of contradiction that some round $k$ in this execution is the first round in which at least two different parties decide on a value before the beginning of round $k$.
 
 Let $C$ be the $p$-pivot configuration in the beginning of round $k$. At least one of the two deciding parties is not the pivot $p$ of the round $k$. If party $q\neq p$ decided $val(C)$ before the beginning of round $k$, crash $p$ in round $k$ to reach a contradiction. Otherwise, party $q$ decides $val(C-p)$, in which case we continue the execution without faults to reach the contradiction.
 
