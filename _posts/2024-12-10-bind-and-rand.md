@@ -52,4 +52,4 @@ The second protocol is the **common randomness protocol**, it has the following 
 * The binding property implies the existence of an extractor that can extract the binded value at the time the first non-faulty completes the binding protocol.
 * The unpredictability property is often proven by proving a stronger property, like the unpredictability of the [common coin](https://decentralizedthoughts.github.io/2022-04-05-aa-part-five-ABBA/), or of the random beacon value, or the unpredictability of the random rank of some parties (in particular those in the core).
 
-Your thoughts on [X]().
+Your thoughts on [X](https://x.com/ittaia/status/1866421772838383981).

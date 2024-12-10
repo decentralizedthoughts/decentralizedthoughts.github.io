@@ -12,7 +12,7 @@ In this post, we show how to solve Validated Asynchronous Byzantine Agreement vi
 ## What is Validated Asynchronous Byzantine Agreement?
 
 
-Given $n$ parties, and at most $t<n/3$ of them can be malicious (this is the optimal ratio for consensus with asynchronous communication). Parties have an agreed-upon **external validity function** $EV(val)$ that defines the set of *valid* values. 
+Given $n$ parties, and at most $f<n/3$ of them can be malicious (this is the optimal ratio for consensus with asynchronous communication). Parties have an agreed-upon **external validity function** $EV(val)$ that defines the set of *valid* values. 
 
 Each party possesses a valid input value (the adversary may have multiple valid input values). 
 
@@ -62,14 +62,14 @@ Multi-world VABA is a *view-based protocol*. Here is the sketch of view $v$:
 
 Run $n$ instances (or worlds) of view $v$. In instance $i$, the proposer is party $i$. Each instance runs logically as if the other instances do not exist.
 
-Once the proposer has a *commit certificate* in its instance, it sends that certificate to all parties and waits for $n-f$ confirmations, which we call a **done certificate**. The proposer then sends the done certificate to all parties.
+Once the proposer has a *commit certificate* in its instance, it sends that certificate to all parties and waits for $n{-}f$ confirmations, which we call a **done certificate**. The proposer then sends the done certificate to all parties.
 
 
-Each party then waits for $n-f$ done certificates from different instances. Seeing proof that $n-f$ instances have a done certificate is the trigger for it to reveal its share of the beacon random value for view $v$.
+Each party then waits for $n{-}f$ done certificates from different instances. Seeing proof that $n{-}f$ instances have a done certificate is the trigger for it to reveal its share of the beacon random value for view $v$.
 
 Once the beacon value $b_v$ is revealed, the parties act as they would if the partial synchrony protocol mapped proposer $b_v$ in view $v$. All other instances are ignored (they are essentially decoys in hindsight).
 
-Obtaining the beacon value (typically when $n-f$ parties reveal their beacon share for view $v$) also serves as a *view change trigger* to move to the next view (view $v+1$).
+Obtaining the beacon value (typically when $n{-}f$ parties reveal their beacon share for view $v$) also serves as a *view change trigger* to move to the next view (view $v+1$).
 
 
 To start view $v+1$, parties send their *view change* information based on having $b_v$ as the proposer in view $v$. 
@@ -80,7 +80,7 @@ To start view $v+1$, parties send their *view change* information based on havin
 With constant probability, the beacon chooses an instance that has completed a done certificate, so just like in a partial synchrony protocol, there is now a commit certificate and all parties will see this certificate in view $v+1$.
 
 
-Note that the adversary needs to bind to a set of $n-f$ instances that have a done certificate **before** seeing the beacon value at a stage when the beacon is unpredictable. This is an example of the [general framework of using binding and randomization](/2024-12-10-bind-and-rand.md).
+Note that the adversary needs to bind to a set of $n{-}f$ instances that have a done certificate **before** seeing the beacon value at a stage when the beacon is unpredictable. This is an example of the [general framework of using binding and randomization](/2024-12-10-bind-and-rand.md).
 
 #### Sketch of safety:
 
