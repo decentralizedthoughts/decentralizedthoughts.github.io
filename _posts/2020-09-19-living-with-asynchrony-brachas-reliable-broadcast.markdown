@@ -14,13 +14,15 @@ We begin with [Bracha's Reliable Broadcast from 1987](https://core.ac.uk/downloa
 
 
 ## Reliable Broadcast Properties
-There are just two properties: 
 
 **(validity)**: If the leader is non-faulty then eventually all non-faulty parties will output the leader's input.
 
-**(agreement)**: If some non-faulty party outputs a value then eventually all non-faulty parties will output the same value (this property is sometimes called *totality*).
 
-Since this protocol is supposed to work in the asynchronous model, both these properties use the term *eventually*. This term is often used in asynchrony to indicate that no matter what the adversary does and for how long it delays messages, some event will occur after a bounded number of message processing at each party (assuming a bounded threshold adversary).
+**(totality)**: If some non-faulty party outputs a value then eventually all non-faulty parties will output a value.
+
+**(agreement)**: All non-faulty parties that output a value, output the same value.
+
+Since this protocol is supposed to work in the asynchronous model, these properties use the term *eventually*. This term is often used in asynchrony to indicate that no matter what the adversary does and for how long it delays messages, some event will occur after a bounded number of message processing at each party (assuming a bounded threshold adversary).
 
 ## Reliable Broadcast
 
@@ -64,18 +66,18 @@ The pseudo-code is simple:
 *Proof:* Seeking a contradiction, consider the first vote for $v$ and the first vote for $v' \neq v$ by two non-faulty parties $a$ and $b$. Since these are the first, party $a$ must have seen a set $A$ of $n-f$ echoes for $v$ and party $b$ must have seen a set $B$ of $n-f$ echoes for $v' \neq v$ (since they are the first, they could not have voted due to seeing $f+1$ votes). Observe that since $\|A\|=\|B\|=n-f$, then $\|A \cap B\| \geq f+1$ (this is the famous "quorum intersection" property).  This implies that there must be at least $f+1$ parties that sent an echo to both of them, which implies that at least one non-faulty party sent two echoes for different values, which contradicts the code.
  
 
-**Claim 3 (agreement)**: If a non-faulty delivers $v$, then all non-faulty will eventually deliver $v$.
+**Claim 3 (agreement and totality)**: If a non-faulty delivers $v$, then all non-faulty will eventually deliver $v$.
 
 *Proof:* From the previous claim, we know that all non-faulty that vote, will vote for the same value. So if a non-faulty delivers, it has seen $n-f$ distinct votes, of which at least $n-2f \geq f+1$ came from non-faulty parties. So all non-faulty parties will either vote $v$ due to seeing $n-f$ echoes or eventually due to seeing the votes from these $f+1$ non-faulty parties. Note that a non-faulty will never vote for $v' \neq v$ because from claim 2, there will not be $n-f$ echoes for $v'$, and there will not be $f+1$ votes for $v'$.
 
 ### Notes
 
 
-Note that the protocol only needs authenticated channels (no other cryptography).
+The protocol only needs authenticated channels (no other cryptography).
 
 Bracha used Reliable Broadcast to improve Ben-Or's [Asynchonrus Byzantine Agreement](https://allquantor.at/blockchainbib/pdf/ben1983another.pdf) from $n>5f$ to the optimal resilience of $n>3f$. 
 
-Reliable broadcast requires sending $O(n^2)$ messages that contain the value $v$.  In the next post of this series, we will see what we can improve if we allow using collision-resistant hash functions. 
+Reliable broadcast requires sending $O(n^2)$ messages that contain the value $v$. If $v$ has $\ell$ bits this is a total of $O(\ell n^2)$ bits.  Our post about [Verifiable Information dispersal](https://decentralizedthoughts.github.io/2024-08-08-vid/) shows how this can be improved to $O(\ell n +  n^2)$ bits.
 
 Christian Cachin has [excellent course notes](https://dcl.epfl.ch/site/_media/education/sdc_byzconsensus.pdf) on Byzantine Broadcasts and Randomized Consensus including Bracha's Reliable broadcast.
 
