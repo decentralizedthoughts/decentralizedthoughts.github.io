@@ -5,7 +5,7 @@ date: 2024-12-10 06:00:00 -05:00
 tags:
 - dist101
 - asynchrony
-author: Ittai Abraham and Gilad Stern
+author: Ittai Abraham, Gilad Stern
 ---
 
 The prevailing view on fault-tolerant agreement is that it is impossible in asynchrony for deterministic protocols, but adding randomization solves the problem. This statement is confusing in two aspects:
