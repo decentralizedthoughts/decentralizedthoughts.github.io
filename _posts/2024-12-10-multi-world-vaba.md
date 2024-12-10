@@ -1,6 +1,6 @@
 ---
 title: Multi-world Validated Asynchronous Byzantine Agreement
-date: 2024-12-10 06:15:00 -05:00
+date: 2024-12-10 06:15:00 -02:00
 tags:
 - dist101
 - asynchrony
