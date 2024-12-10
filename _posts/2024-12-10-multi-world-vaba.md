@@ -114,4 +114,4 @@ Extending the sketch above from a single shot to a log replication protocol is s
 
 Improving the latency requires changing the protocol. We will discuss this and dealing with non-perfect randomness beacons in a later post.
 
-Your thoughts and comments on [X]()
+Your thoughts and comments on [X](https://x.com/ittaia/status/1866608517140062650).
