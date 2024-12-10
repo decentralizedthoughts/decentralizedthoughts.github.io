@@ -7,7 +7,6 @@ tags:
 author: Ittai Abraham, Alexander Spiegelman
 ---
 
-
 In this post, we show how to solve Validated Asynchronous Byzantine Agreement via the Multi-world VABA approach of [Abraham, Malkhi, and Spiegelman 2018](https://arxiv.org/pdf/1811.01332). 
 
 ## What is Validated Asynchronous Byzantine Agreement?
