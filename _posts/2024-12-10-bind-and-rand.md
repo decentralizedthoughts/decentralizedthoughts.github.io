@@ -1,7 +1,7 @@
 ---
 title: Living with asynchrony and eventually reaching agreement by combining binding
   and randomness
-date: 2024-12-10 06:00:00 -02:00
+date: 2024-12-10 03:00:00 -05:00
 tags:
 - dist101
 - asynchrony
