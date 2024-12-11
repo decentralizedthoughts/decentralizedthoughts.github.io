@@ -44,18 +44,13 @@ The [multi-world VABA](https://arxiv.org/pdf/1811.01332) works via a combination
 
 
 
-
-
 ### The advantages of the multi-world VABA approach to solving VABA
 
 1. It deconstructs asynchronous challenges into simpler challenges: partial synchrony "worlds" and a randomness beacon. This modular nature may help with component reuse and simplify learning.
 2. It can obtain the asymptotically optimal $O(n^2)$ expected communication complexity.
 3. As we show in later posts, it is possible to add significant throughput and latency improvements to this basic scheme.
 
-
-
 ## A sketch of the multi-world VABA protocol
-
 
 
 Multi-world VABA is a *view-based protocol*. Here is the sketch of view $v$:
@@ -65,52 +60,47 @@ Run $n$ instances (or worlds) of view $v$. In instance $i$, the proposer is part
 Once the proposer has a *commit certificate* in its instance, it sends that certificate to all parties and waits for $n{-}f$ confirmations, which we call a **done certificate**. The proposer then sends the done certificate to all parties.
 
 
-Each party then waits for $n{-}f$ done certificates from different instances. Seeing proof that $n{-}f$ instances have a done certificate is the trigger for it to reveal its share of the beacon random value for view $v$.
+Each party then waits for $n{-}f$ done certificates from $n{-}f$ *different instances*. Seeing proof that $n{-}f$ different instances have a done certificate is the trigger for the party to reveal its *share* of the beacon random value for view $v$.
 
-Once the beacon value $b_v$ is revealed, the parties act as they would if the partial synchrony protocol mapped proposer $b_v$ in view $v$. All other instances are ignored (they are essentially decoys in hindsight).
+Once the beacon value $b_v$ is revealed (typically when $n{-}f$ parties reveal their beacon share for view $v$), the parties act as they would in the partial synchrony protocol where all parties agree that party $b_v$ is the proposer in view $v$. All other instances are ignored (they are essentially decoys in hindsight).
 
-Obtaining the beacon value (typically when $n{-}f$ parties reveal their beacon share for view $v$) also serves as a *view change trigger* to move to the next view (view $v+1$).
-
+Obtaining the beacon value also serves as a *view change trigger* to move to the next view (change from view $v$ to view $v+1$).
 
 To start view $v+1$, parties send their *view change* information based on having $b_v$ as the proposer in view $v$. 
 
 
 ### Sketch of liveness:
 
-With constant probability, the beacon chooses an instance that has completed a done certificate, so just like in a partial synchrony protocol, there is now a commit certificate and all parties will see this certificate in view $v+1$.
-
+Consider the first nonfualty to see a set of $n{-}f$ done certificates from $n{-}f$ different worlds. With constant probability, the beacon chooses an instance in this set, where its proposer completed a done certificate. So just like in a partial synchrony protocol, there are at least $f+1$ nonfualty that hold a commit certificate, so all parties will see this certificate in view $v+1$ (because any $n{-}f$ will see at least one nonfualty with a commit certificate).
 
 Note that the adversary needs to bind to a set of $n{-}f$ instances that have a done certificate **before** seeing the beacon value at a stage when the beacon is unpredictable. This is an example of the [general framework of using binding and randomization](/2024-12-10-bind-and-rand.md).
 
+The end result is that all nonfualty will see a commit certificate after a constant expected number of views.
+
 ### Sketch of safety:
 
-Each view has one real instance of a partial synchrony protocol, and all the others are decoys. So each view has one agreed upon proposer, which is exactly what happens in the partial synchrony protocol - so the safety of this protocol is immediate from the safety of the partial synchrony protocol.
-
+Each view has one real instance of a partial synchrony protocol, and all the others are decoys. Each view has one agreed upon proposer, which is exactly what happens in the partial synchrony protocol - so the safety of this protocol is immediate from the safety of the partial synchrony protocol.
 
 ### Sketch of external validity:
 
 Just like safety, this follows directly from the external validity of the partial synchrony protocol.
 
-
-
 ### Scaling the multi-world VABA protocol:
-
 
 The multi-world protocol requires running $n$ instances per view. If each instance is linear then the expected cost is $O(n^2)$ words since the expected number of views till decision is constant.
 
 A concrete way to obtain linear cost in each instance is to run the **robust keyed broadcast** which is just running 4 instances of [provable broadcast](https://decentralizedthoughts.github.io/2022-09-10-provable-broadcast/).
 
-So we spend $O(n^2)$ communication to agree on a $O(1)$ size data. This gives a $O(n^2)$ ratio. We can improve the throughput while keeping the same communication to reduce this ratio?
+So we spend $O(n^2)$ communication to agree on a $O(1)$ size data. This gives a $O(n^2)$ ratio. We can improve the throughput while keeping the same communication to reduce this ratio by using [batching](https://decentralizedthoughts.github.io/2023-09-30-scaling/).
 
 We will expand on these ideas in future posts. For now here is an overview:
 
-1. Agreeing on a linear-size validated input by using a **provable AVID** protocol (see [here](https://decentralizedthoughts.github.io/2024-08-08-vid/)). This keeps the $O(n^2)$ communication while allowing to agree on $O(n)$ size data improving the throughput. This gives a $O(n)$ ratio.
-2. If different proposers have different validated inputs then each proposer can aggregate $O(n)$ dispersals and aggregate that into a single proposal. This still keeps the $O(n^2)$ communication while allowing to agree on $O(n)$ different validated inputs each of size $O(n^2)$. This improves the throughput to asymptotically optimal $O(1)$ ratio.
-
+1. Agreeing on a linear-size validated input by using a **provable AVID** protocol (see [here](https://decentralizedthoughts.github.io/2024-08-08-vid/)). Each instance disperses its $O(n)$ input via a provable dispersal that costs $O(n)$ and after the beacon we retrieve just the chosen instance at a $O(n^2)$ cost. This keeps the $O(n^2)$ communication while allowing to agree on $O(n)$ size data. The result is improving the throughput which results in a $O(n)$ ratio.
+2. If different proposers have different validated inputs then each proposer can aggregate $O(n)$ dispersals and aggregate that into a single proposal. This still keeps the $O(n^2)$ communication while allowing to agree on $O(n)$ different validated inputs each of size $O(n^2)$. If all we want is data availability then this improves the scalability to [the asymptotically optimal $O(1)$ ratio](https://decentralizedthoughts.github.io/2023-09-30-scaling/).
 
 ### What about latency and log replication?
 
-Extending the sketch above from a single shot to a log replication protocol is strait forward: just use a log replication partial synchrony protocol in each instance.
+Extending the sketch above from a single shot protocol to a log replication protocol is strait forward: just use a log replication partial synchrony protocol in each instance.
 
 Improving the latency requires changing the protocol. We will discuss this and dealing with non-perfect randomness beacons in a later post.
 
