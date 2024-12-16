@@ -1,6 +1,6 @@
 ---
 title: Agreement against strongly adaptive adversaries needs quadratic communication
-date: 2024-12-16 17:30:00 -05:00
+date: 2024-12-16 07:30:00 -05:00
 tags:
 - lowerbound
 - adaptive
@@ -21,6 +21,16 @@ The lower bound in this post holds even for **randomized protocols* but assumes 
 * The core idea of the Dolev and Reischuk lower bound is to isolate some party $p$ and make sure it does not receive any message and hence will not reach agreement. But in a randomized protocol, how can the adversary isolate party $p$? The answer is that it uses its ability to claw back: once it sees any party send a message to $p$, it immediately corrupts that party and claws back that message.
 
 Note that the lower bound on broadcast in synchrony implies a lower bound on agreement in synchrony. In turn, this implies a lower bound on agreement in asynchrony.
+
+
+### Proof idea
+
+As in Dolev and Reischuk 1982, we will show that some party $p$ gets no message and hence must cause a error with a (large) constant probability. This is done by defining two worlds. In world 1 there are $f/2$ parties with omission failures. In world 2, we choose a uniformly random party $p$ from this set of $f/2$ and un-corrupt it. Instead we add omission failures to the $f/2$ first messages sent to $p$.
+
+Seeking a contradiction, we look at world 1 and use Markov inequity to argue that with a large probability the protocol sends not too much messages. Conditioned on this event, there is still a large probability that the party $p$ gets no more than $f/2$ messages. Conditioned on this event, there is a probability that all parties output the leader value (there is no error).
+
+We then show indistingushability between world 1 and world 2. Then in world 2, conditioned on these three events, party $p$ sees no message, so there is a constant probability that party $p$ has either a safety error or a liveness error. 
+
 
 ### Proof
 
