@@ -1,6 +1,6 @@
 ---
-title: 'Agreement against strongly adaptive adversaries needs quadratic communication'
-date: 2024-12-16 18:30:00 -04:00
+title: Agreement against strongly adaptive adversaries needs quadratic communication
+date: 2024-12-16 17:30:00 -05:00
 tags:
 - lowerbound
 - adaptive
