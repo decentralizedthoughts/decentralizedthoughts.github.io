@@ -11,9 +11,9 @@ In this post, we prove a result of [Abraham, Hubert Chan, Dolev, Nayak, Pass, Re
 
 **Theorem: Any broadcast protocol in synchrony that is resilient to $f$ strongly adaptive omission failures and has less than $1/8$ probability of error must have an expected communication of at least $f^2/64$ messages.**  
 
-The classic [Dolev and Reischuk 1982](https://www.cs.huji.ac.il/~dolev/pubs/p132-dolev.pdf) lower bound is for deterministic protocols. We cover [in this post](https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/).
+The classic [Dolev and Reischuk 1982](https://www.cs.huji.ac.il/~dolev/pubs/p132-dolev.pdf) lower bound for *deterministic* protocols is covered [in this post](https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/).
 
-The lower bound in this post holds even for **randomized protocols* but assumes the adversary is [strongly adaptive](https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/).
+The lower bound in this post extends this proof to holds even for *randomized protocols* but assumes the adversary is [strongly adaptive](https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/).
 
 > What are strongly adaptive adversaries and why are they required for the lower bound?
 
