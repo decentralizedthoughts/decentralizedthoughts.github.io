@@ -82,11 +82,18 @@ For the second round, the adversary learns $v_1,\dots,v_n$, which corresponds to
 
 ### What else can we do with the additivity of polynomial secret sharing?
 
+#### Unpredictable randomness
+
 One of the main uses of additivity of polynomial secret sharing is for generating **unpredictable randomness**. By adding $f+1$ secret sharings of *uniformly random secrets*, we can guarantee that the adversary cannot predict the sum!
 
 This idea is a key ingredient to many [Distributed Key Generation protocols](https://arxiv.org/pdf/2102.09041.pdf), efficient [Randomized Consensus protocols](https://eprint.iacr.org/2006/065.pdf), and the core of [Secure Multi Party Computation](https://eprint.iacr.org/2011/136.pdf).
 
+
+#### Degree reduction for MPC
+
 As we will see in later posts, additivity and the linearity of interpolation are the key enablers for building interactive MPC multiplication protocols from addition protocols - once addition and multiplication are both possible, the sky is the limit.
+
+While addition is possible, multiplication has the annoying property that the degree of the secret increases. The solution is to run a *degree reduction* protocol after each multiplication gate. The degree reduction is simply a protocol that uses the additively of polynomials to compute a linear combination using the Lagrange coefficients. So given a secret shared polynomial of degree $2f$, each party can share its share as a polynomial of degree $f$ and the linear combination (using the degree $2f$ Lagrange coefficients) produces a degree $f$ polynomial that shares the same secret as the original degree $2f$ one! 
 
 ### Notes
 

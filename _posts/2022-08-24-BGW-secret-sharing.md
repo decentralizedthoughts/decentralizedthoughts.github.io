@@ -25,12 +25,14 @@ The three properties of VSS:
 Note that the binding property forces a malicious dealer to **fix** its shared value by the end of the Share protocol. 
 
 We also need termination properties:
+
 1. **Termination of Share**: if an honest party completes the Share protocol then all honest parties complete the Share protocol.
 2. **Termination of Reconstruct**: if all honest parties complete the Share protocol and all honest parties start the Reconstruct protocol then all honest parties complete the Reconstruct protocol.
 
 ### The main idea
 
 There are 5 challenges VSS needs to solve:
+
 1. What if during the Reconstruct protocol the corrupted parties send incorrect shares? The solution is to uniquely interpolate with errors by using  [Reed Solomon error correction](http://cyber.biu.ac.il/wp-content/uploads/2020/02/Threshold-Secret-SharingToPublish.pdf). To overcome $f$ errors of a degree $f$ polynomial with unique decoding requires at least $2f+1$ correct shares. Hence VSS requires $n>3f$ and that all honest parties have the correct share (assume $n=3f+1$ for this post).
 2. What if a malicious dealer sends shares to some honest parties, but not to all of them? The BGW approach is to enable the honest parties that are missing their share to publicly broadcast a *complaint*, asking for their shares. The dealer will need to publicly broadcast these shares.
 3. What if a malicious dealer sends inconsistent shares to the honest parties? Inconsistent shares imply that the shares held at the honest parties form a polynomial of degree higher than $f$. This will lead to failure of unique interpolation during Reconstruct. The BGW solution is to prove that the sharing is of degree at most $f$ by an interactive distributed zero knowledge protocol. The insight is to share a bi-variate polynomial of degree at most $f$ in each variable:
@@ -62,6 +64,7 @@ The **Share protocol** has five rounds: share, exchange sub-shares, publicly com
 
 
 The **Reconstruct protocol** is just robust univariate interpolation using the public values:
+
 1. Each non-public party $i$ sends $\langle col_i(0) \rangle$ to all parties. 
 2. Each party interpolates a degree at most $f$ polynomial with at most $f$ errors using the values  $col_1(0),\dots, col_n(0)$, where $col_j(0)$ uses the public value if party $j$ is *public*, or the value party $j$ sent during reconstruct otherwise. If a non-public party sends nothing you can interpret this as 0. 
 
@@ -150,7 +153,7 @@ Total of $O(n^2)$ words in private channels and $O(n^2)$ words of broadcast for 
  
 -*Future posts* on VSS: we will explore how VSS is the gateway to full MPC, benefits of VSS in the computational setting, how VSS works in asynchrony, how to pack many secrets in a single VSS, and much more.
 
-##### Acknowledgements
+#### Acknowledgements
 
 We would like to thank Gilad Stern for insightful comments and feedback.
 

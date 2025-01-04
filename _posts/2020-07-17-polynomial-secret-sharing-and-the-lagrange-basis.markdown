@@ -183,6 +183,11 @@ In what sense does this mean that the adversary learns nothing about the secret 
 
 In other words, anything the adversary could learn by observing the distribution of its views, it could learn by just sampling from this distribution without any interaction.
 
+### Notes
+
+
+* The adversary in this post is *passive*, so the main challenge is in the hiding property. The binding propoerty will be less trivial in future posts about stronger adversaries. See our [follow-up post on the Byzantine case](https://decentralizedthoughts.github.io/2022-08-24-BGW-secret-sharing/).
+* In the share protocol we rather arbitrarily used the integers from 1 to $n$ as the shares sent to parties 1 to $n$. In fact one can use any fixed set $w_1,\dots,w_n$ of field elements. Since in many cases we want to use [FFT](https://decentralizedthoughts.github.io/2023-09-01-FFT/) it is often beneficial to **use roots of unity** and set $w_i \omega^i$, so party $i$ gets the share $P(\omega^i)$.
 
 
 Please leave comments on [Twitter](https://twitter.com/ittaia/status/1284267077587677184?s=20).
