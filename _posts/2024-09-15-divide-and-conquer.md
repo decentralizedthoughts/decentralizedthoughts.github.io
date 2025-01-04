@@ -11,7 +11,7 @@ The idea of decomposing a hard problem into easier problems is a fundamental alg
 
 In this post we will highlight how divide and conquer can help unauthenticated synchronous Byzantine agreement obtain **quadratic communication**, which is asymptotically optimal due to [Dolev and Reischuk's lower bound](https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/).
 
-***Theorem: [Coan and Welch, 1992](https://www.sciencedirect.com/science/article/pii/089054019290004Yhttps://www.sciencedirect.com/science/article/pii/089054019290004Y), and [Berman, Garay, and Perry, 1992](https://link.springer.com/chapter/10.1007/978-1-4615-3422-8_27): there exists a synchronous agreement protocol with $O(n^2)$ message complexity that can tolerate $f<n/3$ Byzantine parties.***
+***Theorem: [Coan and Welch, 1992](https://www.sciencedirect.com/science/article/pii/089054019290004Y), and [Berman, Garay, and Perry, 1992](https://link.springer.com/chapter/10.1007/978-1-4615-3422-8_27): there exists a synchronous agreement protocol with $O(n^2)$ message complexity that can tolerate $f<n/3$ Byzantine parties.***
 
 The idea is to run a [phase king protocol](https://decentralizedthoughts.github.io/2022-06-09-phase-king-via-gradecast/), with two (instead of $f+1$) phases. Recall that in the original phase king protocol, each phase had a king whose value was used if the **graded consensus** does not have grade 2. Here we replace the king, with taking majority on the outcome of a recursive call on half the parties.
 

@@ -116,5 +116,5 @@ $$\Pr[\mathcal{X}_1 \cap \mathcal{X}_2 \cap \mathcal{X}_3 \cap \mathcal{Y}] > 1/
 Which is a contradiction.
 
 
-Please leave comments on [X](...) 
+Please leave comments on [X](https://x.com/ittaia/status/1868794373267448243). 
 
