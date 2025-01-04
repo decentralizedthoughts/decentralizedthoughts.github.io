@@ -4,14 +4,21 @@ date: 2020-09-21 09:34:00 -04:00
 ---
 
 {: .box-note}
-This page contains material for a graduate course on Blockchains and Distributed Computing with a dash of Cryptography (stay tuned for more). Or read [posts chronologically](https://decentralizedthoughts.github.io/).
+This page contains material for a graduate course on Blockchains, Distributed Computing, and Cryptography.
 
 We would love to get your feedback. If you find a post helpful, have a suggestion to improve, or any other comment: [drop us a comment](https://twitter.com/ittaia/status/1421066572207169544?s=20) or send us an email - your feedback is very valuable.
 
 
 ## Basics, Foundations, and Classics
 
-Start with the definition of [Consensus and Agreement](/2019-06-27-defining-consensus/). Then learn about the [network model](/2019-06-01-2019-5-31-models/), the [threshold adversary](/2019-06-17-the-threshold-adversary/) model, and the [power of the adversary](/2019-06-07-modeling-the-adversary/). Many protocols need a [trusted setup phase](/2019-07-19-setup-assumptions/).
+1. Definition of [Consensus and Agreement](/2019-06-27-defining-consensus/). 
+2. The [network model](/2019-06-01-2019-5-31-models/): Synchrony, Asynchrony and Partial synchrony.
+3. The [threshold adversary](/2019-06-17-the-threshold-adversary/) model.
+4. The [power of the adversary](/2019-06-07-modeling-the-adversary/): Type (passive, crash, omission, or Byzantine), Power (unbounded, computational, or fine-grained), Adaptivity (static, delayed adaptive, weak adaptive, adaptive, or strongly adaptive), Visibility (full information or private channel), Mobility (fixed or mobile).
+5. Many protocols need a [trusted setup phase](/2019-07-19-setup-assumptions/).
+
+## Consensus cheat sheet
+
 The [consensus cheat sheet](https://decentralizedthoughts.github.io/2021-10-29-consensus-cheat-sheet/) gives a quick overview of what is possible and impossible. You can build half a course just from the upper bounds and lower bounds linked from it. 
 
 ### Variants of Consensus and Broadcast 
@@ -27,7 +34,7 @@ The Synchronous model is a good place to start because protocols are simpler.
 
 - Classic Byzantine agreement protocol: the [Phase-King](https://decentralizedthoughts.github.io/2022-06-09-phase-king-via-gradecast/).
 - Classic Byzantine Broadcast protocol (with a PKI) for $f < n$: the [Dolev-Strong Authenticated Broadcast protocol](/2019-12-22-dolev-strong/). 
-- A non-equivocation protocol (with a PKI) for  $f < n$: [Crusader Broadcast](https://decentralizedthoughts.github.io/2022-06-19-crusader-braodcast/). 
+- A non-equivocation protocol (with a PKI) for $f < n$: [Crusader Broadcast](https://decentralizedthoughts.github.io/2022-06-19-crusader-braodcast/). 
 
 More recent State Machine Replication protocols:
 
@@ -75,14 +82,22 @@ Important building blocks in asynchrony:
 2. The [Reliable Gather](https://decentralizedthoughts.github.io/2021-03-26-living-with-asynchrony-the-gather-protocol/) is a multi-leader generalization of reliable broadcast.
 3. We discuss how to measure [round complexity in asynchrony](https://decentralizedthoughts.github.io/2021-09-29-the-round-complexity-of-reliable-broadcast/) and also improved round complexity for reliable broadcast. 
 
-Series on Asynchronous Agreement: 
+
+### Asynchronous Agreement
+
+[Living with asynchrony and eventually reaching agreement by combining binding and randomness](https://decentralizedthoughts.github.io/2024-12-10-bind-and-rand/).
+
+[Multi-world Validated Asynchronous Byzantine Agreement](https://decentralizedthoughts.github.io/2024-12-10-multi-world-vaba/)
+
+Series on Binary Asynchronous Agreement: 
 
 1. [Define the problem](https://decentralizedthoughts.github.io/2022-03-30-asynchronous-agreement-part-one-defining-the-problem/);
 2. present [Ben-Or's protocol](https://decentralizedthoughts.github.io/2022-03-30-asynchronous-agreement-part-two-ben-ors-protocol/);
 3. provide a [modern version](https://decentralizedthoughts.github.io/2022-03-30-asynchronous-agreement-part-three-a-modern-version-of-ben-ors-protocol/);
 4. Introduce [Crusader Agreement and Binding Crusader Agreement](https://decentralizedthoughts.github.io/2022-04-05-aa-part-four-CA-and-BCA/); 
 5. use BCA to efficiently solve [Binary Byzantine Agreement from a strong common coin](https://decentralizedthoughts.github.io/2022-04-05-aa-part-five-ABBA/).
- 
+
+
 Reaching [Asynchronous Agreement on a Core Set](https://decentralizedthoughts.github.io/2023-07-22-agreeemnt-on-a-core-set/).
 
 [Verifiable Information Dispersal](https://decentralizedthoughts.github.io/2024-08-08-vid/).
@@ -138,6 +153,7 @@ Lower bounds give us powerful tools to understand the fundamental limitations an
 
 - Dolev and Reischuk 1982 ([DR](https://www.cs.huji.ac.il/~dolev/pubs/p132-dolev.pdf)) lower bound: [Consensus (even with omission failures) needs a quadratic number of messages](/2019-08-16-byzantine-agreement-needs-quadratic-messages/).
 - Extending Dolev and Reischuk to [Byzantine crusader broadcast](https://decentralizedthoughts.github.io/2022-08-14-new-DR-LB/).
+- Extending Dolev and Reischuk to [randomized protocols against a strongly adaptive adversary](https://decentralizedthoughts.github.io/2024-12-16-strong-adaptive-lower-bound/).
 
 ### Lower bounds on the round complexity and existence of infinite executions
 
