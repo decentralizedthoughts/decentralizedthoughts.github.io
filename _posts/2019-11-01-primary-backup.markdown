@@ -123,7 +123,7 @@ while true:
       resend = cmd        
    // as a Primary
    on receiving cmd from a client library (and view == j):
-      send cmd to all replicas
+      send cmd to all replicas (in order)
       log.append(cmd)
       state, output = apply(cmd, state)
       send output to the client library
