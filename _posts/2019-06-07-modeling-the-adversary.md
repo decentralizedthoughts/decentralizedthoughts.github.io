@@ -12,7 +12,7 @@ After we fix the communication model, [synchrony, asynchrony, or partial synchro
 
 1. The type of corruption (passive, crash, omission, or Byzantine).
 2. The computational power of the adversary (unbounded, computational, or fine-grained).
-3. The adaptivity of the adversary ( static, delayed adaptive, weak adaptive, adaptive, or strongly adaptive).
+3. The adaptivity of the adversary (static, delayed adaptive, weak adaptive, adaptive, or strongly adaptive).
 4. The visibility of the adversary (full information or private channel).
 5. The mobility of the adversary (fixed or mobile).
 
@@ -38,6 +38,13 @@ There are sub-variants of omission corruption worth mentioning:
 
  * **Send omission** and **Receive omission**: which are in between crash and omission. See [this](https://decentralizedthoughts.github.io/2024-01-30-between-crash-and-omission/) post.
 
+There is a subtle modeling choice for crash corruptions when a party sends messages to multiple parties in the same round:
+
+* In the traditional model, **prescribed order model**, the protocol is allowed to prescribe the *order* of the messages, so the adversary can choose any *prefix* of this prescribed order to be sent before crashing. This requires the protocol to explicitly mention the order. 
+* In the more challenging model, **adversarial order model**, the protocol sends to a set of parties and the adversary can choose any sub-set of these messages to be sent before crashing.
+
+These two models have a fundamental round complexity difference in [early stopping](https://decentralizedthoughts.github.io/2024-01-28-early-stopping-lower-bounds/), and seem to [require another round for SMR](https://decentralizedthoughts.github.io/2019-11-01-primary-backup/).
+
 
 ## 2. Computational power 
 
@@ -60,15 +67,15 @@ The computational power of the adversary:
 
 Adaptivity is the ability of the adversary to corrupt dynamically based on information the adversary learns during the execution. 
 
-1. **Static**: the adversary has to decide which $f$ parties to corrupt in advance before the execution of the protocol. Note that this is always sufficient when the protocol is deterministic because there are no surprises for the adversary. One natural thing for randomized protocols in this setting it to operate on a random subcommittee. This often leads to $O(n)$ message complexity.
+1. **Static**: the adversary has to decide which $f$ parties to corrupt in advance before the execution of the protocol. Note that this is always sufficient when the protocol is deterministic because there are no surprises for the adversary. One natural thing for randomized protocols in this setting it to operate on a random subcommittee. This often leads to $O(n)$ message complexity. 
 
-2. **Delayed Adaptive**: given a parameter $k$, once the adversary asks to corrupt a party, the party is corrupted after $k \Delta$ time. Leader based protocols in synchrony and partial synchrony can often obtain $O(1)$ expected time in this paradigm (using a weak leader election). Linear-per-view protocols can obtain $O(n)$ expected messages after GST in this model.
+2. **Delayed Adaptive**: given a parameter $k$, once the adversary asks to corrupt a party, the party is corrupted after $k \Delta$ time (or some notion of $k$ rounds in asynchrony). Leader based protocols in synchrony and partial synchrony can often obtain $O(1)$ expected time in this paradigm (using a weak randomness beacon). Linear-per-view protocols can obtain $O(n)$ expected messages after GST in this model.
 
-3. **Weak Adaptive**: once the adversary asks to corrupt a party, the party is corrupted after it completes sending all its outgoing messages. So while the adversary is adaptive, the actual corruption may be delayed to after the party sends all its messages in that round (or in asynchrony after is sends all the messages it wants to immediately send). Sometimes in this model, it is also required that honest parties can [safely erase](https://eprint.iacr.org/2008/291.pdf) some information in order to get forward security, or assume that messages always maintain FIFO order in each channel.
+3. **Weak Adaptive**: once the adversary asks to corrupt a party, the party is corrupted after it completes sending all its outgoing messages. Said differently, the corruption starts once the party looks at its incoming messages. So while the adversary is adaptive, the actual corruption may be delayed to after the party sends all its messages in that round (or in asynchrony after is sends all the messages it wants to immediately send). Sometimes in this model, it is also required that honest parties can [safely erase](https://eprint.iacr.org/2008/291.pdf) some information in order to get forward security, or assume that messages always maintain FIFO order in each channel. This is the model used by Algorand and YOSO type protocols in synchrony.
 
 4. **Adaptive**: once the adversary asks to corrupt a party, the party is immediately corrupted. Messages sent from the party before corruption cannot be erased (so will eventually arrive in asynchrony or in arrive in at most $\Delta$ time in synchrony).
 
-5. **Strong Adaptive**: once the adversary asks to corrupt a party, the party is immediately corrupted. Moreover, messages sent from the party before corruption that have not yet arrived can be erased (or claw-backed) by the adversary. Some [lower bounds](https://users.cs.duke.edu/~kartik/papers/podc2019.pdf) assume this model to obtain a constant error.
+5. **Strong Adaptive**: once the adversary asks to corrupt a party, the party is immediately corrupted. Moreover, messages sent from the party before corruption that have not yet arrived can be erased (or claw-backed) by the adversary. Some [lower bounds](https://users.cs.duke.edu/~kartik/papers/podc2019.pdf) assume this model to obtain a constant error. This model is sometimes called adaptive with *claw back*.
 
 ## 4. Visibility 
 
@@ -81,6 +88,8 @@ The visibility is the power of the adversary to see the messages and the states 
 
 3. **Oblivious**: the adversary can see the header of each message (source, destination, and message length) sent to and from a corrupt party, and based on that can decide its actions (crash, omit, delay, modify) depending on the adversary corruption type and network model. This type of adversary can model an adversary that has peripheral control (via a corrupt NIC, or local router/gateway). An oblivious omission adversary is often used to model an adversary that can maliciously corrupt parties that have a Trusted Execution Enclaves that cannot be corrupted.
 
+
+### Rushing
 
 For models that are round-based, another visibility distinction is the adversary's ability to *rush*. When does the adversary see the messages sent to parties it controls? In the *rushing adversary model*, the adversary is allowed to see all the messages sent to parties it controls in round $i$ *before* it needs to decide what messages to send in its round $i$ messages. In the *non-rushing adversary model*, the adversary must commit to the round $i$ messages it sends before it receives any round $i$ messages from non-faulty parties.
 
@@ -110,7 +119,7 @@ The [Flexible BFT model](https://eprint.iacr.org/2019/270.pdf) introduces two va
 
 ## Acknowledgments
 
-Special thanks to [Alin Tomescu](http://twitter.com/alinush407), Kartik Nayak, and Gilad Stern for insightful comments. 
+Special thanks to [Alin Tomescu](http://twitter.com/alinush407), Kartik Nayak, Gilad Stern, and Tim Roughgarden for insightful comments. 
 
 Please leave comments on [Twitter](https://twitter.com/ittaia/status/1141481767121170434?s=20)
 
