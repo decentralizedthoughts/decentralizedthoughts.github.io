@@ -103,9 +103,10 @@ Due to the invariant maintained by the primary, a client knows that the response
 
 When there are $n>2$ replicas the new primary must do some more work to continue to maintain the invariant: **send the command to all the backups before responding back to the client**. 
 
-Each ```replica j``` maintains a *resend* variable that stores the last command it received from the primary. If $j$ becomes the new primary it resends the last command to all replicas when it does a view change. Assume $n$ replicas with identifiers $\{0,1,2,\dots,n-1\}$.
+Assume $n$ replicas with identifiers $\{0,1,2,\dots,n-1\}$. A major problem is that a replica may crash in the middle of sending to all the backups. We fix this using two measures:
 
-
+1. The primary sends the command to the backup **in order**, so messages first arrive to the next primary, then to the next next primary and so on.
+2. Each ```replica j``` maintains a *resend* variable that stores the last command it received from the primary. If $j$ becomes the new primary it resends the last command to all replicas when it does a view change. 
 
 ```
 // Replica j
@@ -137,10 +138,18 @@ while true:
       send "heartbeat" to all replicas (in order)
 ```
 
-Notes:
+This protocol implements state machine replication with $n$ servers in synchrony that is resilient to $n-1$ crash failures.
+
+
+### Notes
 
 1. Clients need a mechanism to discover who is the current primary. For example, they can send a query to all replicas to learn what is the current view number.
 2. The crash model is actually quite useful to model replicas with secure hardware.  
+3. If sending in a particular order is not allowed, or we want to use randomization to choose the next primary, then an additional round is needed where each party sends to the new primary its latest command, and then the new primary can resend it.
 
+
+### Acknowledgments
+
+We would like to thank Tim Roughgarden for insightful comments and noticing an error in the $n>2$ case. 
 
 Please leave comments on [Twitter](https://twitter.com/ittaia/status/1191141070685507586?s=20)

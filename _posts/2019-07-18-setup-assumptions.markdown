@@ -16,7 +16,7 @@ layout: post
 > By failing to prepare, you are preparing to fail
 > <cite> [The Biblical World, 1919](https://quoteinvestigator.com/2018/07/08/plan/) </cite>
 
-When you want to understand a decentralized system, one of the first things you need to ask is: *does it have a trusted setup phase?*
+When you want to understand a decentralized system, one of the first things you need to ask is: *does it have a trusted setup phase?* 
 
 Here is a question: [do Bitcoin and Ethereum have a trusted setup phase?](https://ittaiab.github.io/2019-07-18-do-bitcoin-and-ethereum-have-any-trusted-setup-assumptions/)
 

@@ -13,7 +13,7 @@ In this post, we prove a result of [Abraham, Hubert Chan, Dolev, Nayak, Pass, Re
 
 The classic [Dolev and Reischuk 1982](https://www.cs.huji.ac.il/~dolev/pubs/p132-dolev.pdf) lower bound for *deterministic* protocols is covered [in this post](https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/).
 
-The lower bound in this post extends this proof to holds even for *randomized protocols* but assumes the adversary is [strongly adaptive](https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/).
+Here we extend this lower bound to hold even for *randomized protocols* but require the adversary to be [strongly adaptive](https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/).
 
 > What are strongly adaptive adversaries and why are they required for the lower bound?
 
@@ -25,11 +25,11 @@ Note that the lower bound on broadcast in synchrony implies a lower bound on agr
 
 ### Proof idea
 
-As in Dolev and Reischuk 1982, we will show that some party $p$ gets no message and hence must cause a error with a (large) constant probability. This is done by defining two worlds. In world 1 there are $f/2$ parties with omission failures. In world 2, we choose a uniformly random party $p$ from this set of $f/2$ and un-corrupt it. Instead we add omission failures to the $f/2$ first messages sent to $p$.
+As in Dolev and Reischuk's proof from 1982, we show that some designated party gets no message and hence must violate agreement or termination with a (large) constant probability. This is done by defining two worlds. In world 1 there are $f/2$ parties, $V$, with omission failures. In world 2, we choose a uniformly random party $p \in V$ and un-corrupt it. In addition, we cause omission failures to the $f/2$ first messages sent to $p$. This is where claw back may be required.
 
-Seeking a contradiction, we look at world 1 and use Markov inequity to argue that with a large probability the protocol sends not too much messages. Conditioned on this event, there is still a large probability that the party $p$ gets no more than $f/2$ messages. Conditioned on this event, there is a probability that all parties output the leader value (there is no error).
+Seeking a contradiction, we look at world 1 and use Markov inequity to argue that with a large probability the protocol sends not too many messages to parties in $V$. Conditioned on this event, there is a large probability that the party $p$ gets no more than $f/2$ messages. Conditioned on this event, there is a probability that all parties output the leader value (there is no error).
 
-We then show indistingushability between world 1 and world 2. Then in world 2, conditioned on these three events, party $p$ sees no message, so there is a constant probability that party $p$ has either a safety error or a liveness error. 
+We then show indistingushability between world 1 and world 2. Then in world 2, conditioned on these three events, party $p$, which is non-faulty, sees no message, so there is a constant probability that party $p$ has either a safety error or a liveness error.
 
 
 ### Proof
@@ -38,7 +38,7 @@ Consider a broadcast problem, where the *designated sender* has a binary input.
 
 Observe what happens to a party that receives no messages: it will either not decide 0 with probability at least 1/2 or not decide 1 with probability at least 1/2. Without loss of generality, assume that a majority of parties (other than the designated sender) that receive no message will not decide 1 with probability at least 1/2. Let $Q$ be this set of parties and note that $\|Q\| \geq (n-1)/2$.
 
-As with Dolev and Reischuk 1982, the proof describes two worlds and uses indistinguishability. 
+As with Dolev and Reischuk's proof from 1982, the proof describes two worlds and uses indistinguishability. 
 
 ### World 1
 
@@ -97,7 +97,7 @@ The only difference between worlds 1 and 2 is that in world 1 it’s party $p$ t
 
 #### The event $\mathcal{Y}$
 
-Due to world 1 and 2 being  indistinguishable, we have that, conditioned on $\mathcal{X}_1 \cap \mathcal{X}_2 \cap \mathcal{X}_3$, in world 2, with probability at least $1/4$:
+Due to world 1 and 2 being indistinguishable, we have that, conditioned on $\mathcal{X}_1 \cap \mathcal{X}_2 \cap \mathcal{X}_3$, in world 2, with probability at least $1/4$:
 
 1. All non-faulty parties output 0.
 2. The non-faulty party $p$ sees no messages.
