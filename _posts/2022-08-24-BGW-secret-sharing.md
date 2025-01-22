@@ -53,20 +53,20 @@ The **Share protocol** has five rounds: share, exchange sub-shares, publicly com
     $$
     
     It defines projection univariate polynomials: $row_i(x)=p(i, x)$ and $col_i(x)=p(x, i)$, and sends each party $i$ the two polynomials $\langle row_i(x), col_i(x)\rangle$.
-    If a party does not receive a valid message, it sets its value to 0.
+    If a party does not receive a valid message, it sets its value to two zero polynomials.
 1. **Parties exchange sub-shares**: Each party $i$ sends each party $j$ the two values $\langle row_i(j)$, $col_i(j)\rangle$.
    
-2. **Parties publicly complain**: If a party $i$ receives a pair from party $j$ that is different than its share, it **broadcasts** a complaint with 4 values $\langle i,j,row_i(j), col_i(j)\rangle$.
-3. **Dealer publicly resolves complaints**: if the dealer hears a complaint from party $i$ that does not agree with $p(x,y)$ then it **broadcasts** $\langle row_i(x), col_i(x)\rangle$ of the row and column of party $i$. We call party $i$ *public*.
-4. **Parties publicly accept**: if a non-public party $i$: (1) has row and column shares that agree with all the public parties values and all the non-public parties complaint values; (2) for each two parties $j,k$ with disagreeing complaints, at least one of them is public, then it is *happy* and **broadcasts** $\langle 1 \rangle$. Otherwise it **broadcasts** $\langle 0\rangle$. 
+2. **Parties publicly complain**: If a party $i$ receives a pair from party $j$ that is different from its share, it **broadcasts** a complaint with 4 values it things are the correct values $\langle i,j,row_i(j), col_i(j)\rangle$.
+3. **Dealer publicly resolves complaints**: if the dealer hears a complaint from party $i$ that does not agree with $p(x,y)$ then it **broadcasts** $\langle i, row_i(x), col_i(x)\rangle$ of the row and column of party $i$. Such a party $i$ is called *public*.
+4. **Parties publicly accept**: if a non-public party $i$: (1) has row and column shares that agree with: (A) all the public parties values broadcast by the dealer and (B) all the non-public parties that broadcast complaint values; (2) for each two parties $j,k$ with disagreeing complaints, at least one of them is public, then it is *happy* and **broadcasts** $\langle 1 \rangle$. Otherwise, it **broadcasts** $\langle 0\rangle$. 
 
-   If less than $2f+1$ parties broadcast $\langle 1\rangle$ then set your shares $row_i(x), col_i(x)$ to be zero.
+   If less than $2f+1$ parties broadcast $\langle 1\rangle$ then set your shares $row_i(x), col_i(x)$ to be the zero polynomials.
 
 
 The **Reconstruct protocol** is just robust univariate interpolation using the public values:
 
 1. Each non-public party $i$ sends $\langle col_i(0) \rangle$ to all parties. 
-2. Each party interpolates a degree at most $f$ polynomial with at most $f$ errors using the values  $col_1(0),\dots, col_n(0)$, where $col_j(0)$ uses the public value if party $j$ is *public*, or the value party $j$ sent during reconstruct otherwise. If a non-public party sends nothing you can interpret this as 0. 
+2. Each party interpolates a degree at most $f$ polynomial with at most $f$ errors using the values $col_1(0),\dots, col_n(0)$, where $col_j(0)$ uses the public value if party $j$ is *public*, or the value party $j$ sent during reconstruct otherwise. If a non-public party sends nothing you can interpret this as 0. 
 
 ### Proof of Validity (when the dealer is honest)
 
@@ -74,9 +74,9 @@ Since the dealer is honest, no two honest parties will complain on each other.
 
 If a corrupt party complains about an honest party or vice versa, then the honest dealer will agree with the honest party so only the corrupt party may become public. Moreover, these two points $p(i,j), p(j,i)$ are already known to the adversary from the dealer so the adversary learns no new information.
 
-Finally, if two corrupt parties complain about each other, then the adversary learns no new information and they may become public.
+Finally, if two corrupt parties complain about each other, then the adversary learns no new information, and they may become public.
 
-So in the end of the Share protocol, all honest parties will remain non-public and will agree with each other privately and agree with the public values. If a pair of corrupted parties send conflicting values, at least one of them will become public. Hence all honest parties will broadcast $\langle 1\rangle$.
+So in the end of the Share protocol, all honest parties will remain non-public and will agree with each other privately and agree with the public values. If a pair of corrupted parties send conflicting values, at least one of them will become public. Hence, all honest parties will broadcast $\langle 1\rangle$.
 
 The validity of the Reconstruct protocol follows from the fact that the $n-f \geq 2f+1$ honest parties are enough to error correct any $f$ errors.
 
