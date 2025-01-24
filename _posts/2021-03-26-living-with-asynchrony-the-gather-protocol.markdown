@@ -16,6 +16,8 @@ We discuss this primitive, called *Agreement on a Core Set* (ACS) in a [separate
 
 In this post, we explore a surprising alternative, called **Gather** which runs in a constant number of rounds. To the best of our knowledge, this primitive first appeared as the main building block in Canetti and Rabin's [Asynchronous Byzantine Agreement protocol](https://dl.acm.org/doi/10.1145/167088.167105). Variations of this primitive have many uses, for example in [Asynchronous Approximate Agreement](https://www.cs.huji.ac.il/~ittaia/papers/AAD-OPODIS04.pdf), [Asynchronous Distributed Key Generation](https://arxiv.org/abs/2102.09041) and recently for [multi-valued oblivious common coin](https://eprint.iacr.org/2023/1003) and [ACS](https://eprint.iacr.org/2023/1130) in constant expected time. 
 
+
+
 In a Gather protocol, each party has an input, and each party outputs a set of received values and the parties who sent them (i.e. of pairs $(j,x)$ where $j$ is the index of a party, and $x$ is the value it sent). The properties are:
 
 
@@ -26,6 +28,12 @@ In a Gather protocol, each party has an input, and each party outputs a set of r
 3. **Agreement**: All parties that include some pair for a party $j$ agree on the value it sent. More precisely, if two nonfaulty parties include the pairs $(j,x)$ and $(j,x')$ in their outputs, then $x=x'$. 
 
 At first glance, it may seem as if Gather is solving agreement, but that is not the case!  The crucial observation is that all parties output a set that includes the core $S^{\*}$ but they don't necessarily know what $S^{\*}$ is.
+
+
+### Basic Gather in not always enough
+
+It is very important to note that the gather protocol in this post is no enough for applications that need unpredictable randomness. For that one needs a binding core property. See [this post](https://decentralizedthoughts.github.io/2024-01-09-gather-with-binding-and-verifiability/) for gather with additional properties. See [this paper of Shoup](https://eprint.iacr.org/2024/1235.pdf) on cases were a basic gather can cause liveness violations.
+
 
 ## The basic Gather protocol
 
@@ -70,8 +78,11 @@ By the weak core property, there is a set $S^{\*}$  such that at least $\|W\|=f+
 
 Each party sends a single broadcast (which requires $O(n^2)$ words), requiring $O(n^3)$ words to be sent overall. In addition, we have a constant number of all-to-all communication rounds in which parties send sets of $O(n)$ elements to each other. This also totals in $O(n^3)$ words sent overall. This brings our sum-total to $O(n^3)$ words sent overall.
 
-In future posts, we will talk about how to enhance the Gather protocol even further: add binding properties, add verification properties and see how cryptography can help... stay tuned!
 
+
+## Acknowledgments
+
+We would like to thank Victor Should for insightful comments.
 
 Please answer/discuss/comment/ask on [Twitter](https://twitter.com/ittaia/status/1375454545103499264?s=20).  
 
