@@ -82,7 +82,7 @@ Each party sends a single broadcast (which requires $O(n^2)$ words), requiring $
 
 ## Acknowledgments
 
-We would like to thank Victor Should for insightful comments.
+We would like to thank Victor Shoup for insightful comments.
 
 Please answer/discuss/comment/ask on [Twitter](https://twitter.com/ittaia/status/1375454545103499264?s=20).  
 
