@@ -60,7 +60,7 @@ The **Share protocol** has five rounds: share, exchange sub-shares, publicly com
 3. **Dealer publicly resolves complaints**: if the dealer hears a complaint from party $i$ that does not agree with $p(x,y)$ then it **broadcasts** $\langle i, row_i(x), col_i(x)\rangle$ of the row and column of party $i$. Such a party $i$ is called *public*.
 4. **Parties publicly accept**: if a non-public party $i$: (1) has row and column shares that agree with: (A) all the public parties values broadcast by the dealer and (B) all the non-public parties that broadcast complaint values; (2) for each two parties $j,k$ with disagreeing complaints, at least one of them is public, then it is *happy* and **broadcasts** $\langle 1 \rangle$. Otherwise, it **broadcasts** $\langle 0\rangle$. 
 
-   If less than $2f+1$ parties broadcast $\langle 1\rangle$ then set your shares $row_i(x), col_i(x)$ to be the zero polynomials.
+   If less than $2f+1$ non-public parties broadcast $\langle 1\rangle$ then set your shares $row_i(x), col_i(x)$ to be the zero polynomials.
 
 
 The **Reconstruct protocol** is just robust univariate interpolation using the public values:
@@ -76,7 +76,7 @@ If a corrupt party complains about an honest party or vice versa, then the hones
 
 Finally, if two corrupt parties complain about each other, then the adversary learns no new information, and they may become public.
 
-So in the end of the Share protocol, all honest parties will remain non-public and will agree with each other privately and agree with the public values. If a pair of corrupted parties send conflicting values, at least one of them will become public. Hence, all honest parties will broadcast $\langle 1\rangle$.
+So in the end of the Share protocol, all honest parties will remain non-public and will agree with each other privately and agree with all the public values. If a pair of corrupted parties send conflicting values, at least one of them will become public. Hence, all honest parties are non-public and will broadcast $\langle 1\rangle$.
 
 The validity of the Reconstruct protocol follows from the fact that the $n-f \geq 2f+1$ honest parties are enough to error correct any $f$ errors.
 
@@ -91,15 +91,11 @@ The one-to-one mapping means that for any secret $s$, the dealer's uniform distr
 
 So the view of the adversary reveals nothing about $s$. Note that whenever the honest dealer publicly reveals some polynomial, it is a polynomial that is already known to the adversary and the adversary learns nothing new when resolving the complaints. 
 
-<details>
-  <summary><b>More proof details</b>:</summary> <p>
+#### More proof detail  
   
-  
-  Fix a set $I \subset N$ such that $|I|=f$ are the parties controlled by the adversary. Let $V_I=\{p(i,j) \mid i,j \in I\} \cup \{ p(0,i), p(i,0) \mid I \in I\}$ and observe that $V_I$ completely defines the view of the adversary and that $|V_I|=f^2+2f$.
-  
+Fix a set $I \subset N$ such that $|I|=f$ are the parties controlled by the adversary. Let $V_I=\{p(i,j) \mid i,j \in I\} \cup \{ p(0,i), p(i,0) \mid I \in I\}$ and observe that $V_I$ completely defines the view of the adversary and that $|V_I|=f^2+2f$.
   
 Observe that a bi-variate polynomial where each variable has degree at most $f$ has $(f+1)^2$ coefficients.
-
 
 Fix a secret $s$ and consider the function $\phi: \mathbb{F}^{f^2+2f} \to V_I$ that maps the remaining coefficients of $p$ to the points that the adversary sees. The domain and co-domain have equal cardinality. So in order to prove that $\phi$ is one-to-one all we need is to prove that $\phi$ is a bijection.
 
@@ -111,17 +107,15 @@ Similarly, for any $j \in I \cup \{0\}$, $p'(x,j)$ is the zero polynomial.
 Now consider any $k$ and the univariate polynomial $p'(k,x)$. Since $p'(k,i)=0$ for all $i\in I \cup \{0\}$, it follows that $p'(k,x)$ is the zero polynomial.
 Similarly, $p'(x,k)$ is the zero polynomial.
 
-
 Hence $p'$ is the zero polynomial, so $a=b$, and therefore $\phi$ is a bijection.
 
-
-
 Since $\phi$ is one-to-one, then for any secret $s$, the  uniform distribution on the $f^2+2f$ remaining coefficients induces a uniform distribution on $V_I$. 
-</p></details>
 
 ### Proof of Binding (when the dealer is corrupt)
 
-In this case consider the set $G$, consisting of the first $f+1$ honest parties that broadcast $\langle 1\rangle$.
+If all honest parties have the zero polynomial as output then the binded value is 0. Otherwise, there are at least $f+1$ non-public honest parties that broadcast $\langle 1\rangle$. 
+
+In this case consider the set $G$, consisting of the first $f+1$ honest parties that broadcast $\langle 1\rangle$. 
 
 We will show that the rows and columns of the parties in $G$ define a unique bi-variate polynomial $g(x,y)$ of degree at most $f$ such that $g(0,0)$ is the binded value.
 
@@ -144,9 +138,7 @@ In particular, all honest parties are either: non-public and agree with $g$ or p
 
 Total of $O(n^2)$ words in private channels and $O(n^2)$ words of broadcast for the Share protocol. Note that $O(n^2)$ words of broadcast requires at least $O(n^3)$ words to be received overall. 
 
-
-  
-*Open question*: can the worst case word complexity of VSS Share protocol in this setting be reduced to  $o(n^3)$ received words?
+*Open question*: can the worst case word complexity of VSS Share protocol in this setting be reduced to $o(n^3)$ received words?
 
 *Good case complexity*: if all parties are honest, then we can use [two rounds of silence](https://arxiv.org/abs/1805.07954) to replace the broadcast protocol to indicate the public complain round is empty which implies that the protocol can be optimized to use just two rounds of $O(n^2)$ words followed by two rounds of silence. 
  
