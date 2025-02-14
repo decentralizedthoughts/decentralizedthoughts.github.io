@@ -17,7 +17,7 @@ A **multi-exponentiation** is a computation of the form $\prod_{i=1}^{n} v_i^{d_
 A **multi-scalar multiplication (MSM)** is the equivalent to a multi-exponentiation in cyclic additive groups, typically elliptic curves. It involves calculating the sum of multiple scalar multiplications, and can be expressed as computing $\sum_{i=1}^{n} d_i P_i$, where the $P_i$ values are points on the curve and the $d_i$ values are scalars.
 In the rest of this note, we will interleave the usage of the terms *multi-exponentiation* and *multi-scalar multiplication (MSM)*, as our optimization can be applied to both tasks in an almost identical way. In the description of the schemes, we use a multiplicative notation that corresponds to multi-exponentiations.
 
-#### The runtime of computing an MSM
+### The runtime of computing an MSM
 
 Computing a multi-exponentiation or an MSM is resource-intensive in terms of computation. There are three common approaches for improving the run time of these operations. 
 
@@ -25,7 +25,7 @@ Computing a multi-exponentiation or an MSM is resource-intensive in terms of com
 * The second approach uses some precomputation, which is beneficial if the same bases $v_i$ are used in multiple multi-exponentiations.
 * The third approach speeds MSM computation using hardware accelerators such are GPUs or FPGAs. (See, for example, the following [review](https://medium.com/@ingonyama/deep-dive-into-the-latest-msm-hardware-implementation-a9739b2cd107).)
 
-#### Cryptographic use-cases of MSMs
+### Cryptographic use-cases of MSMs
 
 MSMs are used in various cryptographic tasks, particularly in the creation  of zero-knowledge proofs and their verification. We are motivated by use-cases in which the runtime of proof verification is dominated by MSM computation. For example, MSMs dominate the runtime of the verifier in Bullet proofs (see page 29 in the [Bullet proofs](https://eprint.iacr.org/2017/1066.pdf) paper), and in [Halo2](https://zcash.github.io/halo2/) proofs. Both of these proof systems are widely used in numerous applications. 
 
