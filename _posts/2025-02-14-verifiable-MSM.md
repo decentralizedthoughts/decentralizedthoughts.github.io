@@ -187,8 +187,8 @@ $$
 \end{eqnarray*}
 $$
 
-It holds that $|S_{1,1}| \approx |S_{0,1}| \approx |S_{1,0}| \approx n/4$.
-Let $P_{1,1} = \prod_{i\in S_{1,1}} v_i$, $P_{0,1} = \prod_{i\in S_{0,1}} v_i$, and $P_{1,0} = \prod_{i\in S_{1,0}} v_i$. Then $w_0 = P_{1,1}\cdot P_{1,0}$ and $w_1 = P_{1,1}\cdot P_{0,1}$. Therefore, after computing $P_{1,1},P_{0,1},P_{1,0}$ the dealer can compute each of $w_0$ and $w_1$ using a single multiplication. The entire computation requires  $|S_{1,1}| + |S_{0,1}| + |S_{1,0}| +2 \approx 0.75n$ multiplications, and thus computing each $w_i$ value takes about $0.375n$ multiplications, compared to about $n/2$ multiplications in  the naive computation.
+It holds that $\|S_{1,1}\| \approx \|S_{0,1}\| \approx \|S_{1,0}\| \approx n/4$.
+Let $P_{1,1} = \prod_{i\in S_{1,1}} v_i$, $P_{0,1} = \prod_{i\in S_{0,1}} v_i$, and $P_{1,0} = \prod_{i\in S_{1,0}} v_i$. Then $w_0 = P_{1,1}\cdot P_{1,0}$ and $w_1 = P_{1,1}\cdot P_{0,1}$. Therefore, after computing $P_{1,1},P_{0,1},P_{1,0}$ the dealer can compute each of $w_0$ and $w_1$ using a single multiplication. The entire computation requires  $\|S_{1,1}\| + \|S_{0,1}\| + \|S_{1,0}\| +2 \approx 0.75n$ multiplications, and thus computing each $w_i$ value takes about $0.375n$ multiplications, compared to about $n/2$ multiplications in the naive computation.
 
 In the general case, considering the computation of $s$ random subset multiplications,  $w_0,\ldots,w_{s-1}$, a similar approach for the computation requires about $(1-2^{-s}) n$  $+ s\cdot (2^{s-1}-1)$ multiplications in total, or $(1-2^{-s}) n/s$ + $(2^{s-1}-1)$ multiplications per value. This should be compared with the naive computation that requires about ${sn\over 2}$ multiplications in total, or $n/2$ multiplications per value.  Due to the $2^{s-1}$ term, the improvement is only significant for $s\ll \log n$.
 
@@ -235,7 +235,7 @@ The table also shows the gain factor by which the runtime is improved compared t
 | 1,024,000 | 2321.2               | 5.25               | 3702.4                | 3.29               | 12192                  |
 | Ideal gain |                     | 5.31               |                       | 3.54               |                        |
 
-#### Acknowledgements
+### Acknowledgements
 
 We would like to thank Ittai Abraham, Dan Boneh, Zhoujun Ma, Omer Shlomovits and Alin Tomescu for their help and feedback. 
 
