@@ -76,20 +76,25 @@ Prerequisites:
 #### Solution
 
 Denote the binary representation of the exponent $d_i$ as $d_i = d_{i,0} + 2d_{i,1} + \ldots + 2^{m-1}d_{i,m-1}$. The multi-exponentiation can be written as:
+
 $$
 \prod_{i=1}^{n} v_i^{d_i} = \prod_{i=1}^{n} v_i^{\sum_{j=0}^{m-1} 2^j d_{i,j}} = \prod_{i=1}^{n} \prod_{j=0}^{m-1} v_i^{2^j d_{i,j}} = \prod_{j=0}^{m-1} \prod_{i=1}^{n} v_i^{2^j d_{i,j}}
     = \prod_{j=0}^{m-1} (\prod_{i=1}^{n} v_i^{d_{i,j}})^{2^j}
 $$
     
 Let us define 
+
 $$
 w_j = \prod_{i=1}^{n} v_i^{d_{i,j}}
 $$
+
 That is, $w_j$ is the multiplication of the values $v_i$ for which the $j$th bit of the corresponding exponent is 1. 
 The multi-exponentiation can therefore be written as:
+
 $$
 \prod_{j=0}^{m-1} w_j^{2^j}
 $$
+
 The prover is asked to compute the intermediate values $w_0,\ldots,w_{m-1}$ and send them to the verifier. The verifier can then compute the multi-exponentiation by computing $\prod_{j=0}^{m-1} w_j^{2^j}$ (this computation can be done using $m$ multiplications and $m$ squarings, as we show [below](#More-details-about-the-overhead)). The primary challenge is to facilitate the verifier’s efficient verification of the accuracy of the $w_j$ values.
 
 ### Verification -- checking the correctness of the $w_i$ values
@@ -106,20 +111,24 @@ In other words, the verifier computes the following two values, compares them an
 **Claim:** If not all $w_i$ values are correct, then the two values $w'$ and $w''$ are different with  probability $\geq 1- 2^{\lambda}$.
 
 **Proof:** Note that 
+
 $$
 w'' = \prod_{i=1}^{n} v_i^{\sum_{j=0}^{m-1} r_j d_{i,j}} =  \prod_{i=1}^{n} \prod_{j=0}^{m-1} v_i^{ r_j d_{i,j}} =  \prod_{j=0}^{m-1} \prod_{i=1}^{n} v_i^{ r_j d_{i,j}}
 =  \prod_{j=0}^{m-1} (\prod_{i=1}^{n} v_i^{d_{i,j}})^{r_j}
 $$
 
 The value $w''$ is compared with $w' = \prod_{j=0}^{m-1} w_j^{r_j}$. Suppose that there is a $j$ index such that $w_j$ is incorrect. For example, $j=0$ and $w_0 \neq \prod_{i=1}^{n} v_i^{d_{i,0}}$. The test done by the verifier is equivalent to checking whether  
+
 $$
 1\stackrel{?}{=} {w'\over w''} = \prod_{j=0}^{m-1} \left( { w_j \over  \prod_{i=1}^{n} v_i^{d_{i,j}}}\right)^{r_j} =  \left( { w_0 \over  \prod_{i=1}^{n} v_i^{d_{i,0}}}\right)^{r_0} \cdot \prod_{j=1}^{m-1} \left( { w_j \over  \prod_{i=1}^{n} v_i^{d_{i,j}}}\right)^{r_j}
 $$
 
 Verification is only successful if 
+
 $$
    \left( { w_0 \over  \prod_{i=1}^{n} v_i^{d_{i,0}}}\right)^{r_0} =  \left( \prod_{j=1}^{m-1} \left( { w_j \over  \prod_{i=1}^{n} v_i^{d_{i,j}}}\right)^{r_j}\right)^{-1}  
 $$
+
 Since ${ w_0 /  \prod_{i=1}^{n} v_i^{d_{i,0}}} \neq 1$ and the order of the group is prime and  greater than $2^{\lambda}$, all values $({ w_0 /  \prod_{i=1}^{n} v_i^{d_{i,0}}})^{r_0}$ are different. The choice of $r_0$ is independent of the right-hand side, and, therefore, the probability that the above equation holds is at most $2^{-\lambda}$. 
 
 #### On setting the security parameter $\lambda$
@@ -138,9 +147,11 @@ The overhead of our optimized approach is composed of the following components:
 
 * The prover needs to send $m$ group elements to the verifier. (This is a communication of $m$ extra group elements compared to the baseline.)
 * The verifier needs to compute 
+
 $$
 \prod_{j=0}^{m-1} w_j^{2^j} = w_0\cdot w_1^2 \cdot w_2^4\cdots w_{m-1}^{2^{m-1}} = w_0\cdot  (w_1 \cdots (w_{m-2}\cdot w_{m-1}^2)^2\cdots )^2
 $$ 
+
 This can be done using $m$ multiplications and $m$ squarings, which is much faster than computing an $n$-wise multi-exponentiation directly.
 * The verifier needs to verify that each $w_j$ value is correct. As we described, this property can be batch-verified for $w_j$ values using a single $n$-wide multi-exponentiation, where the exponents are $\lambda+\log(m)$ bits long. 
 
@@ -168,11 +179,13 @@ The dealer must compute $m=256$ values  $w_j = \prod_{i=1}^{n} v_i^{d_{i,j}}$. A
 
 The overhead of computing these subset multiplications can be reduced by observing that they have large intersections. Consider for example the computation of $w_0$ and $w_1$. Define the following subsets of indexes
 
+$$
 \begin{eqnarray*}
     S_{1,1} & = & \{ i\in [n] \mid d_{i,0} = 1 \; \mathrm{and} \; d_{i,1} = 1\} \\    
     S_{0,1} & = & \{ i\in [n] \mid d_{i,0} = 0 \; \mathrm{and} \; d_{i,1} = 1\} \\    
     S_{1,0} & = & \{ i\in [n] \mid d_{i,0} = 1 \; \mathrm{and} \; d_{i,1} = 0\}     
 \end{eqnarray*}
+$$
 
 It holds that $|S_{1,1}| \approx |S_{0,1}| \approx |S_{1,0}| \approx n/4$.
 Let $P_{1,1} = \prod_{i\in S_{1,1}} v_i$, $P_{0,1} = \prod_{i\in S_{0,1}} v_i$, and $P_{1,0} = \prod_{i\in S_{1,0}} v_i$. Then $w_0 = P_{1,1}\cdot P_{1,0}$ and $w_1 = P_{1,1}\cdot P_{0,1}$. Therefore, after computing $P_{1,1},P_{0,1},P_{1,0}$ the dealer can compute each of $w_0$ and $w_1$ using a single multiplication. The entire computation requires  $|S_{1,1}| + |S_{0,1}| + |S_{1,0}| +2 \approx 0.75n$ multiplications, and thus computing each $w_i$ value takes about $0.375n$ multiplications, compared to about $n/2$ multiplications in  the naive computation.
