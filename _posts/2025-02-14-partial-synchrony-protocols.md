@@ -89,3 +89,6 @@ In each iteration, do the following:
 **Step 2:** The leader then runs the modified reliable broadcast protocol with the block in progress (or a new block). In the proposal, it shares an appropriate proof that enables parties to vote on the proposal.
 
 Armed with this intuition, in the [next post](https://decentralizedthoughts.github.io/2025-02-14-PBFT/) we will describe the Practical Byzantine Fault Tolerance (PBFT) protocol.
+
+
+Please leave comments on [X](). 
