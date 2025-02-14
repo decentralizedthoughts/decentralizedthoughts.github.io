@@ -76,16 +76,24 @@ Prerequisites:
 #### Solution
 
 Denote the binary representation of the exponent $d_i$ as $d_i = d_{i,0} + 2d_{i,1} + \ldots + 2^{m-1}d_{i,m-1}$. The multi-exponentiation can be written as:
-$$\prod_{i=1}^{n} v_i^{d_i} = \prod_{i=1}^{n} v_i^{\sum_{j=0}^{m-1} 2^j d_{i,j}} = \prod_{i=1}^{n} \prod_{j=0}^{m-1} v_i^{2^j d_{i,j}} = \prod_{j=0}^{m-1} \prod_{i=1}^{n} v_i^{2^j d_{i,j}}
-    = \prod_{j=0}^{m-1} (\prod_{i=1}^{n} v_i^{d_{i,j}})^{2^j}$$
+$$
+\prod_{i=1}^{n} v_i^{d_i} = \prod_{i=1}^{n} v_i^{\sum_{j=0}^{m-1} 2^j d_{i,j}} = \prod_{i=1}^{n} \prod_{j=0}^{m-1} v_i^{2^j d_{i,j}} = \prod_{j=0}^{m-1} \prod_{i=1}^{n} v_i^{2^j d_{i,j}}
+    = \prod_{j=0}^{m-1} (\prod_{i=1}^{n} v_i^{d_{i,j}})^{2^j}
+$$
     
-Let us define $$w_j = \prod_{i=1}^{n} v_i^{d_{i,j}}$$
+Let us define 
+$$
+w_j = \prod_{i=1}^{n} v_i^{d_{i,j}}
+$$
 That is, $w_j$ is the multiplication of the values $v_i$ for which the $j$th bit of the corresponding exponent is 1. 
 The multi-exponentiation can therefore be written as:
-$$\prod_{j=0}^{m-1} w_j^{2^j}$$
+$$
+\prod_{j=0}^{m-1} w_j^{2^j}
+$$
 The prover is asked to compute the intermediate values $w_0,\ldots,w_{m-1}$ and send them to the verifier. The verifier can then compute the multi-exponentiation by computing $\prod_{j=0}^{m-1} w_j^{2^j}$ (this computation can be done using $m$ multiplications and $m$ squarings, as we show [below](#More-details-about-the-overhead)). The primary challenge is to facilitate the verifier’s efficient verification of the accuracy of the $w_j$ values.
 
 ### Verification -- checking the correctness of the $w_i$ values
+
 For $j=1,\ldots,m-1$, the verifier must check that $w_j = \prod_{i=1}^{n} v_i^{d_{i,j}}$, where the $v_i$ bases and the $d_{i,j}$ bits are public, and the same $v_i$ bases are used for computing all $w_j$ values.
 
 The verifier chooses $m$ random coefficients $r_0,\ldots,r_{m-1} \in \{ 0,1\}^{m\times \lambda}$, and runs two computations. In the first computation that it makes, it raises each $w_j$ to the power of $r_j$, and multiplies the results. In the second computation that it makes, it raises each $v_i$ to the power of $\sum_{j=0}^{m-1} r_j d_{i,j}$ (namely, the sum of the $r_j$ coefficients for which $d_{i,j}=1$), and multiplies the results. The verifier compares the two resulting values.
@@ -98,38 +106,54 @@ In other words, the verifier computes the following two values, compares them an
 **Claim:** If not all $w_i$ values are correct, then the two values $w'$ and $w''$ are different with  probability $\geq 1- 2^{\lambda}$.
 
 **Proof:** Note that 
-$$w'' = \prod_{i=1}^{n} v_i^{\sum_{j=0}^{m-1} r_j d_{i,j}} =  \prod_{i=1}^{n} \prod_{j=0}^{m-1} v_i^{ r_j d_{i,j}} =  \prod_{j=0}^{m-1} \prod_{i=1}^{n} v_i^{ r_j d_{i,j}}
-=  \prod_{j=0}^{m-1} (\prod_{i=1}^{n} v_i^{d_{i,j}})^{r_j}$$
+$$
+w'' = \prod_{i=1}^{n} v_i^{\sum_{j=0}^{m-1} r_j d_{i,j}} =  \prod_{i=1}^{n} \prod_{j=0}^{m-1} v_i^{ r_j d_{i,j}} =  \prod_{j=0}^{m-1} \prod_{i=1}^{n} v_i^{ r_j d_{i,j}}
+=  \prod_{j=0}^{m-1} (\prod_{i=1}^{n} v_i^{d_{i,j}})^{r_j}
+$$
 
-The value $w''$ is compared with $w' = \prod_{j=0}^{m-1} w_j^{r_j}$. Suppose that there is a $j$ index such that $w_j$ is incorrect. For example, $j=0$ and $w_0 \neq \prod_{i=1}^{n} v_i^{d_{i,0}}$. The test done by the verifier is equivalent to checking whether  $$1\stackrel{?}{=} {w'\over w''} = \prod_{j=0}^{m-1} \left( { w_j \over  \prod_{i=1}^{n} v_i^{d_{i,j}}}\right)^{r_j} =  \left( { w_0 \over  \prod_{i=1}^{n} v_i^{d_{i,0}}}\right)^{r_0} \cdot \prod_{j=1}^{m-1} \left( { w_j \over  \prod_{i=1}^{n} v_i^{d_{i,j}}}\right)^{r_j}$$
+The value $w''$ is compared with $w' = \prod_{j=0}^{m-1} w_j^{r_j}$. Suppose that there is a $j$ index such that $w_j$ is incorrect. For example, $j=0$ and $w_0 \neq \prod_{i=1}^{n} v_i^{d_{i,0}}$. The test done by the verifier is equivalent to checking whether  
+$$
+1\stackrel{?}{=} {w'\over w''} = \prod_{j=0}^{m-1} \left( { w_j \over  \prod_{i=1}^{n} v_i^{d_{i,j}}}\right)^{r_j} =  \left( { w_0 \over  \prod_{i=1}^{n} v_i^{d_{i,0}}}\right)^{r_0} \cdot \prod_{j=1}^{m-1} \left( { w_j \over  \prod_{i=1}^{n} v_i^{d_{i,j}}}\right)^{r_j}
+$$
 
 Verification is only successful if 
-$$   \left( { w_0 \over  \prod_{i=1}^{n} v_i^{d_{i,0}}}\right)^{r_0} =  \left( \prod_{j=1}^{m-1} \left( { w_j \over  \prod_{i=1}^{n} v_i^{d_{i,j}}}\right)^{r_j}\right)^{-1}  $$
+$$
+   \left( { w_0 \over  \prod_{i=1}^{n} v_i^{d_{i,0}}}\right)^{r_0} =  \left( \prod_{j=1}^{m-1} \left( { w_j \over  \prod_{i=1}^{n} v_i^{d_{i,j}}}\right)^{r_j}\right)^{-1}  
+$$
 Since ${ w_0 /  \prod_{i=1}^{n} v_i^{d_{i,0}}} \neq 1$ and the order of the group is prime and  greater than $2^{\lambda}$, all values $({ w_0 /  \prod_{i=1}^{n} v_i^{d_{i,0}}})^{r_0}$ are different. The choice of $r_0$ is independent of the right-hand side, and, therefore, the probability that the above equation holds is at most $2^{-\lambda}$. 
 
 #### On setting the security parameter $\lambda$
+
 The verification is done by a verifier that chooses its own randomness. This choice cannot be affected by the prover. (If multiple verifiers check the same multi-exponentiation, each one of them chooses its random exponents $r_j$ independently of the other verifiers.) The property that is guaranteed by the verification is that, independently of the prover's choice of $w_j$ values, the verifier can detect incorrect values with probability $1-2^{-\lambda}$. This is a statistical security guarantee. Commonly used values for the statistical security parameter are  $\lambda=40$ or $\lambda=64$. Even smaller values of $\lambda$ might be used in specific applications, as is further discussed below. 
 
 #### A note about the inadequacy of using the Fiat-Shamir paradigm
+
 When the Fiat-Shamir proof paradigm is used, a prover can mount a brute-force search for a challenge, namely a set of $r_i$ exponents that makes the proof pass. Therefore, the analysis given here does not hold when the exponents are chosen by the prover using the Fiat-Shamir paradigm. (In that case, the security parameter $\lambda$ should be set to be at least $\lambda=128$.) The correct procedure involves the verifier selecting the random exponents $r_0,\ldots,r_{m-1}$ and executing the computations using these values.
 
 ### More details about the overhead
+
 The baseline with which we compare performance is where the verifier computes the multi-exponentiation  $\prod_{i=1}^{n} v_i^{d_i}$ directly.
 
 The overhead of our optimized approach is composed of the following components:
+
 * The prover needs to send $m$ group elements to the verifier. (This is a communication of $m$ extra group elements compared to the baseline.)
-* The verifier needs to compute $$\prod_{j=0}^{m-1} w_j^{2^j} = w_0\cdot w_1^2 \cdot w_2^4\cdots w_{m-1}^{2^{m-1}} = w_0\cdot  (w_1 \cdots (w_{m-2}\cdot w_{m-1}^2)^2\cdots )^2$$ 
+* The verifier needs to compute 
+$$
+\prod_{j=0}^{m-1} w_j^{2^j} = w_0\cdot w_1^2 \cdot w_2^4\cdots w_{m-1}^{2^{m-1}} = w_0\cdot  (w_1 \cdots (w_{m-2}\cdot w_{m-1}^2)^2\cdots )^2
+$$ 
 This can be done using $m$ multiplications and $m$ squarings, which is much faster than computing an $n$-wise multi-exponentiation directly.
 * The verifier needs to verify that each $w_j$ value is correct. As we described, this property can be batch-verified for $w_j$ values using a single $n$-wide multi-exponentiation, where the exponents are $\lambda+\log(m)$ bits long. 
 
 Since the overhead of the multi-exponentiation is linear in the length of the exponents, performance is roughtly improved by a factor of $m/(\lambda+\log m)$.
 
 #### Methods for improving the runtime of multi-exponentiations / MSMs
+
 Computing a multi-exponentiation can be optimized using *Pippinger's algorithm* [[P80](https://scholarship.claremont.edu/cgi/viewcontent.cgi?article=1141&context=hmc_fac_pub), [B02](https://cr.yp.to/papers/pippenger-20020118-retypeset20220327.pdf)]. The overhead is roughly the same as computing $O(n/ \log n)$ independent exponentiations with exponents of the same length as the original exponents. The overhead of both the straightforward computation of a multi-exponentiation and  that of Pippinger's algorithm, depends linearly on the length of the exponents. Our optimization reduces the length of the exponents and can therefore be applied with an equal effect to Pippinger's optimization. (This is demonstrated by the experiments described below, which measure the runtime of a multi-exponentiation library that uses Pippinger's optimization.)
 
 There are well-known methods for improving the runtime of multi-exponenitations, and in particular MSMs, using *precomputation*. These methods require knowing in advance the values of the base points $v_i$. If that is the case then these precomputation methods can be applied to our optimized computation as well
 
 ### Further efficiency improvements
+
 **Changing the range of the exponents:** Choosing the exponents $r_j$ from the range $[-2^{\lambda-1},2^{\lambda-1}]$ makes the sums $\sum_{j=0}^{m-1} r_j d_{i,j}$  concentrated w.h.p. in the range $[-O(2^{\lambda-1}\sqrt{m}), O(2^{\lambda-1}\sqrt{m})]$. This means that computing the value $w''$, which is the main overhead of the verification,  now involves computing a multi-exponentiation with exponents of length about $\lambda+ 0.5\log m$ bits, instead of $\lambda+ \log m$ bits. (For $\lambda = 64, m=256$ the reduction is by a factor of $72/68 \approx 1.06$, which is quite marginal.)
 
 We note that in order to use this approach it is not essential that all sums are in the range $[-O(2^{\lambda-1}\sqrt{m}),O(2^{\lambda-1}\sqrt{m})]$. Rather, it is sufficient to observe that w.h.p. the sums do not deviate by much from this range. The additional cost of computing sums that are outside of the range is small.  
@@ -139,6 +163,7 @@ We note that in order to use this approach it is not essential that all sums are
 In some consensus applications it might be possible to reduce $\lambda$ based on another argument that is more interleaved with the consensus protocol. Suppose, for example, that the number of potentially corrupt parties is  $t<n/3$, and that the transcript sent by a participant must be signed by $2t+1$ participants. Then, even if each verifier identifies cheating with some moderate probability $p$, say $p=1/4$, the probability that $t+1$ out of the $2t+1$ honest verifiers agree to sign the transcript is exponentially small in $t$.
 
 ### A comment about the run time of the dealer
+
 The dealer must compute $m=256$ values  $w_j = \prod_{i=1}^{n} v_i^{d_{i,j}}$. Assuming that the $d_{i,j}$ values are random bits, these $w_j$ values are the results of multiplying random subsets of the same $n$ group elements. A straightforward implementation of this computation requires computing about ${m n\over 2}$ multiplications.
 
 The overhead of computing these subset multiplications can be reduced by observing that they have large intersections. Consider for example the computation of $w_0$ and $w_1$. Define the following subsets of indexes
@@ -155,7 +180,8 @@ Let $P_{1,1} = \prod_{i\in S_{1,1}} v_i$, $P_{0,1} = \prod_{i\in S_{0,1}} v_i$, 
 In the general case, considering the computation of $s$ random subset multiplications,  $w_0,\ldots,w_{s-1}$, a similar approach for the computation requires about $(1-2^{-s}) n$  $+ s\cdot (2^{s-1}-1)$ multiplications in total, or $(1-2^{-s}) n/s$ + $(2^{s-1}-1)$ multiplications per value. This should be compared with the naive computation that requires about ${sn\over 2}$ multiplications in total, or $n/2$ multiplications per value.  Due to the $2^{s-1}$ term, the improvement is only significant for $s\ll \log n$.
 
 ## Experiments
-We ran experiments using a multi-exponentiation library written by Zhoujun Ma, which implements Pippinger's multi-exponentiation algorithm. The library is written in Rust and can be found at  https://github.com/zjma/pippenger.
+
+We ran experiments using a multi-exponentiation library written by Zhoujun Ma, which implements Pippinger's multi-exponentiation algorithm. The library is written in Rust and can be found at [https://github.com/zjma/pippenger].
 
 The first experiment was run to verify that the runtime of computing multi-exponentiations in this library is linear in the length of the exponent. The following table shows the results of benchmarks for computing multi-exponentiations over BLS12-381, with different exponent lengths of 16, 32, 64, 128 and 256 bits. The order of the group is about $2^{255}$, corresponding to $m
 \approx 255$. The results were computed for multi-exponentiation widths ($n$) of 1000, 2000, 4000 and 8000. The run time is measured in milliseconds and is the median of 100 runs. All measurements were conducted on a MacBook Pro M1.  
@@ -197,6 +223,7 @@ The table also shows the gain factor by which the runtime is improved compared t
 | Ideal gain |                     | 5.31               |                       | 3.54               |                        |
 
 #### Acknowledgements
+
 We would like to thank Ittai Abraham, Dan Boneh, Zhoujun Ma, Omer Shlomovits and Alin Tomescu for their help and feedback. 
 
 
