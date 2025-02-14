@@ -89,6 +89,9 @@ The visibility is the power of the adversary to see the messages and the states 
 3. **Oblivious**: the adversary can see the header of each message (source, destination, and message length) sent to and from a corrupt party, and based on that can decide its actions (crash, omit, delay, modify) depending on the adversary corruption type and network model. This type of adversary can model an adversary that has peripheral control (via a corrupt NIC, or local router/gateway). An oblivious omission adversary is often used to model an adversary that can maliciously corrupt parties that have a Trusted Execution Enclaves that cannot be corrupted.
 
 
+4. **Erasure model**: in this model, once a party is corrupted, the adversary can see all the current state of the party, but cannot see data that was erased before the party was corrupted. This model is in contrast to a model where, once a party is corrupted, the adversary can see the full history of the party. 
+
+
 ### Rushing
 
 For models that are round-based, another visibility distinction is the adversary's ability to *rush*. When does the adversary see the messages sent to parties it controls? In the *rushing adversary model*, the adversary is allowed to see all the messages sent to parties it controls in round $i$ *before* it needs to decide what messages to send in its round $i$ messages. In the *non-rushing adversary model*, the adversary must commit to the round $i$ messages it sends before it receives any round $i$ messages from non-faulty parties.
