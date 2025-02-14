@@ -85,7 +85,9 @@ The first step involving the first round of votes still guarantees that parties 
 Coming back to the big picture, the high-level sketch for partial synchrony protocols look like the following:
 
 In each iteration, do the following:
+
 **Step 1:** A designated leader learns if there is some block "in progress", i.e., potentially committed by some party, in previous iterations. This is done by learning the locks from sufficiently many parties.
+
 **Step 2:** The leader then runs the modified reliable broadcast protocol with the block in progress (or a new block). In the proposal, it shares an appropriate proof that enables parties to vote on the proposal.
 
 Armed with this intuition, in the [next post](https://decentralizedthoughts.github.io/2025-02-14-PBFT/) we will describe the Practical Byzantine Fault Tolerance (PBFT) protocol.
