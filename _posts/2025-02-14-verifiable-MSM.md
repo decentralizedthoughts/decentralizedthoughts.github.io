@@ -6,7 +6,6 @@ tags:
 author: Benny Pinkas
 ---
 
-
 Multi-exponentiations and multi-scalar multiplications (MSMs) are computations that are widely used in cryptographic proof systems, mostly in proof generation and proof verification. This note outlines an efficient method for verifying the results of these computations, which opens the door to outsourcing them. In particular, by employing this technique it is possible to have the *prover* in a cryptographic proof system perform a significant portion of the computation that is usually run by the *verifier*.
 
 
