@@ -1,5 +1,5 @@
 ---
-title: Byzantine Fault Tolerant Partial Synchrony Protocols
+title: Key Principles in Partial Synchrony BFT
 date: 2025-02-14 09:30:00 -05:00
 tags:
 - BFT
