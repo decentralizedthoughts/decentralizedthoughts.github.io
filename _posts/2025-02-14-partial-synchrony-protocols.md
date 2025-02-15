@@ -9,7 +9,7 @@ author: Kartik Nayak, Ittai Abraham
 
 Many blockchain protocols work under [partial synchrony](https://decentralizedthoughts.github.io/2019-09-13-flavours-of-partial-synchrony/). Examples include [PBFT](https://pmg.csail.mit.edu/papers/osdi99.pdf), [SBFT](https://arxiv.org/abs/1804.01626), Cosmos ([Tendermint](https://arxiv.org/abs/1807.04938)), Diem ([DiemBFT](https://developers.diem.com/papers/diem-consensus-state-machine-replication-in-the-diem-blockchain/2021-08-17.pdf)), [Jolteon](https://arxiv.org/abs/2106.10362),  Espresso Systems ([HotStuff](https://eprint.iacr.org/2023/397.pdf)), Dfinity ([Internet Computer Consensus](https://eprint.iacr.org/2021/632.pdf)) and Ethereum ([Casper](https://arxiv.org/pdf/1710.09437)).
 
-In this post, we discuss key principles behind the design of partially synchronous blockchain protocols. These principles are applicable to all of these protocols (even though the exact protocol specification for each one may appear different). In a [subsequent post](https://decentralizedthoughts.github.io/2025-02-14-PBFT/), we will elaborate on PBFT which is a canonical and classic use of these principles.
+In this post, we discuss key principles behind the design of partially synchronous blockchain protocols. These principles, in some form, apply to all of these protocols (even though the exact protocol specification may be different, and protocols may use slight variants of these ideas). In a [subsequent post](https://decentralizedthoughts.github.io/2025-02-14-PBFT/), we will elaborate on PBFT, a canonical and classic use of these principles.
 
 ## High-Level Approach
 
