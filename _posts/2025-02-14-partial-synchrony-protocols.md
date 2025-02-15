@@ -92,5 +92,6 @@ In each iteration, do the following:
 
 Armed with this intuition, in the [next post](https://decentralizedthoughts.github.io/2025-02-14-PBFT/) we will describe the Practical Byzantine Fault Tolerance (PBFT) protocol.
 
+We thank Nibesh Shrestha for feedback on this post.
 
 Please leave comments on [X](). 
