@@ -94,4 +94,4 @@ Armed with this intuition, in the [next post](https://decentralizedthoughts.gith
 
 We thank Nibesh Shrestha for feedback on this post.
 
-Please leave comments on [X](). 
+Please leave comments on [X](https://x.com/kartik1507/status/1890808857456259516). 
