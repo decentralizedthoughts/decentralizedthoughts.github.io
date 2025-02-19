@@ -36,7 +36,7 @@ Naively, the overhead of the verifier can be reduced by asking the *prover* to c
 
 #### Checking instead of computing
 
-Our goal is to *verify* the computation of a multi-exponentiation in a multiplicative group $\cal G$. As we wrote earlier, we focus on the scenario where a multi-exponentiation or a multi-scalar multiplication (MSM) is employed during the verification of a cryptographic proof, and represents a significant computational bottleneck for the verifier. (It it important to emphasize that "verification" is performed twice: First, in a cryptographic proof system there is a verifier that needs to verify a proof. The work of this verifier is dominated by computing an MSM. The verifier therefore outsources the computation of the MSM and needs to verify the result it receives. It is natural to outsource the computation of the MSM to the prover of the cryptographic proof. The proof then contains the orignal proof, the result of the MSM, and a proof that the MSM was computed correctly. The verifier verifies the result of the MSM, and then uses it to verify the original proof.)
+Our goal is to *verify* the computation of a multi-exponentiation in a multiplicative group $G$. As we wrote earlier, we focus on the scenario where a multi-exponentiation or a multi-scalar multiplication (MSM) is employed during the verification of a cryptographic proof, and represents a significant computational bottleneck for the verifier. (It it important to emphasize that "verification" is performed twice: First, in a cryptographic proof system there is a verifier that needs to verify a proof. The work of this verifier is dominated by computing an MSM. The verifier therefore outsources the computation of the MSM and needs to verify the result it receives. It is natural to outsource the computation of the MSM to the prover of the cryptographic proof. The proof then contains the orignal proof, the result of the MSM, and a proof that the MSM was computed correctly. The verifier verifies the result of the MSM, and then uses it to verify the original proof.)
 
 Observe that the cost of computing an MSM by a verifier might be significantly higher than the cost of the prover computing this MSM. This can be caused by several factors:
 
@@ -70,7 +70,7 @@ The multi-exponentiation is an $n$-wise multi-exponentiation with $m$-bit long e
 
 Prerequisites:
 
-* It is crucial that the group $\cal G$ in which the multi-exponentiation is computed has an order that does not have small factors. This is the case, for example, with the popular Ristretto255 and BLS12-381 groups, which have a prime order. (The property that is ensured by this, and must be satisfied in order for the protocol to be secure, is that each value different than $1$ has an order of at least $2^{\lambda}$.)
+* It is crucial that the group $G$ in which the multi-exponentiation is computed has an order that does not have small factors. This is the case, for example, with the popular Ristretto255 and BLS12-381 groups, which have a prime order. (The property that is ensured by this, and must be satisfied in order for the protocol to be secure, is that each value different than $1$ has an order of at least $2^{\lambda}$.)
 * The efficiency gain that we anticipate is based on the assumption that the multi-exponentiation uses exponents that are uniformly distributed, or at least that the expected value of the exponent is close to the order of the group. (If that is not the case, then the expected gain in performance will be smaller.)
 
 #### Solution
@@ -194,7 +194,7 @@ In the general case, considering the computation of $s$ random subset multiplica
 
 ## Experiments
 
-We ran experiments using a multi-exponentiation library written by Zhoujun Ma, which implements Pippinger's multi-exponentiation algorithm. The library is written in Rust and can be found at [https://github.com/zjma/pippenger].
+We ran experiments using a multi-exponentiation library written by Zhoujun Ma, which implements Pippinger's multi-exponentiation algorithm. The library is written in Rust and can be found [here](https://github.com/zjma/pippenger).
 
 The first experiment was run to verify that the runtime of computing multi-exponentiations in this library is linear in the length of the exponent. The following table shows the results of benchmarks for computing multi-exponentiations over BLS12-381, with different exponent lengths of 16, 32, 64, 128 and 256 bits. The order of the group is about $2^{255}$, corresponding to $m
 \approx 255$. The results were computed for multi-exponentiation widths ($n$) of 1000, 2000, 4000 and 8000. The run time is measured in milliseconds and is the median of 100 runs. All measurements were conducted on a MacBook Pro M1.  
