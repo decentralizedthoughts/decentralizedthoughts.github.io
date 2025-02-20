@@ -18,21 +18,21 @@ We introduce Paxos with two simplifications:
 1. Use a *simple revolving primary* strategy based on the assumptions of perfectly synchronized clocks. A later post shows how to extend to a *stable leader* strategy, how to rotate leaders with *responsiveness*, and how not to rely on clock synchronization.
 2. Focus on a *single-shot* consensus. A [later post](https://decentralizedthoughts.github.io/2022-11-19-from-single-shot-to-smr/) shows how to extend to *multi-shot* consensus and *state machine replication*.
 
-In essence, our goal is to focus first on *safety* and move as much of the *liveness* and *multi-shot* complications to a later post. 
+In essence, we focus first on *safety* and move as much of the *liveness* and *multi-shot* complications to a later post. 
 
 ## View-based protocol with simple revolving primary
 
 The protocol progresses in **views**, each view has a designated **primary** party. The role of the primary is rotated. For simplicity, the primary of view $v$ is party $v \bmod n$. 
 
-In Partial Synchrony, the parameter $\Delta$ (the maximum message delay after GST) is known. So we define **view $v$** is set to be the time interval $[v(10 \Delta),(v+1)(10 \Delta))$ (see liveness proof for how this can be optimized). In other words, each $10\Delta$ clock ticks each party triggers a **view change** and increments the view by one. Here we assume clocks are perfectly synchronized, so all parties move in and out of each view in complete synchrony (lock step). We will discuss relaxations in future posts.
+In Partial Synchrony, the parameter $\Delta$ (the maximum message delay after GST) is known. So we define **view $v$** to be the time interval $[v(10 \Delta),(v+1)(10 \Delta))$ (see liveness proof for how this can be optimized). In other words, each $10\Delta$ clock ticks each party triggers a **view change** and increments the view by one. Here we assume clocks are perfectly synchronized, so all parties move in and out of each view in complete synchrony (lock step). We will discuss relaxations in future posts.
 
 ## Single-shot consensus
 
-In this setting, each party has some *input value* and the goal is to *output a single value* with the following three properties:
+Each party has some *input value* and the goal is to *output a single value* with the following three properties:
 
 **Uniform Agreement**: if any two parties output $X$ and $X'$ then $X=X'$. Note that this is a strictly stronger property than **Agreement** which just requires that all *non-faulty* parties that output a value, output the same value.
 
-**Termination**: all non-faulty parties eventually output a value and terminate. This is a strictly stronger property than **Liveness** which just requires that all non-faulty parties eventually output a value. Note that we are in partial synchrony, and our protocol is deterministic, obtaining this property will require reasoning about events after GST.
+**Termination**: all non-faulty parties eventually output a value and terminate. This is a strictly stronger property than **Liveness** which just requires that all non-faulty parties eventually output a value. Note that we are in partial synchrony, and our protocol is deterministic, so obtaining this property will require reasoning about events after GST.
 
 **Validity**: the output is an input of one of the parties. Note that this is a strictly stronger property than **Weak Validity** which just requires that if *all* parties have the same input value then this is the output value.
 
@@ -42,15 +42,15 @@ The core safety problem that all view-based consensus protocols need to solve is
 
 With synchrony and crash failures, this is easy, the primary sends its decision to all the next primaries. But with asynchrony and omission corruptions, how can a primary write a message in a way that later primaries will be guaranteed to read it?
 
-The solution that all Paxos based protocols use a **Quorum System**: The primary guarantees that it writes to a write-quorum (typically of size $n-f$) and then each new primary first reads from a read-quorum (again, typically of size $n-f$). This guarantees that the new primary read-quorum will intersect with any previous write-quorum and be able to *recover* these previous values.
+The solution that all Paxos based protocols use is a **Quorum System**: The primary guarantees that it writes to a *write-quorum* (typically of size $n-f$) and then each new primary first reads from a *read-quorum* (again, typically of size $n-f$). This guarantees that the new primary read-quorum will intersect with any previous write-quorum and be able to *recover* these previous values.
 
-The second challenge then emerges: a new primary that reads from a read-quorum may see many messages from many previous primaries. Which one should it use? It turns our that it is critical that each primary also includes its view number and then the new primary can *adopt the value associated to the highest view it saw*. This choice is essential for the safety of all Paxos protocols (see proof below).
+The second challenge then emerges: a new primary that reads from a read-quorum may see many messages from many previous primaries. Which one should it use? It turns our that it is critical that each primary also includes its view number, this way the new primary can *use the value associated to the highest view it saw*. This choice is essential for the safety of all Paxos protocols (see proof below).
 
-Here we will do this by decomposing Paxos to a *recoverable-broadcast* protocol that write to a quorum and a *recover max protocol* that reads from a quorum and chooses the value associated with the highest view:
+Here we will do this by decomposing Paxos to a *recoverable-broadcast* protocol that writes to a quorum and a *recover max protocol* that reads from a quorum and chooses the value associated with the highest view:
 
-1. The primary runs a **recoverable-broadcast** protocol that guarantees that if some party commits to the primary's value $X$ in view $v$, then there is *sufficient* evidence to *recover* the pair $(v,X)$ in a later view. Sufficient evidence here is write-quorum set $W$ of size $n-f$ that holds $(v,X)$.
-2. The primary of any view (except the first) tries to recover a previously committed value via a **recover protocol** that guarantees that if some previous primary caused some party to commit, then the recover protocol will return this value. The primary will then **adopt** this recovered value, instead of using its own input value, as the value it tries to broadcast for committing. The recover protocol does this by reading from a read-quorum $R$ of size $n-f$ that will hence intersect any previous write-quorum. 
-3. The primary may recover different pairs $(v_1, X_1),\dots,(v_k, X_k)$. So it runs a uses a **recover max protocol** that returns the pair $(v^\star, X^\star)$ that has the highest view ($\forall i, v^\star \geq v_i$). By adopting the value associated with the highest view we can guarantee that the new primary will adopt a value that was committed by a previous primary.
+1. The primary runs a **recoverable-broadcast** protocol that guarantees that if some party commits to the primary's value $X$ in view $v$, then there is *sufficient* evidence to *recover* the pair $(v,X)$ in a later view. Sufficient evidence here is a write-quorum set $W$ of size $n-f$ that holds $(v,X)$.
+2. The primary of any view (except the first) tries to recover a previously committed value via a **recover protocol**. This guarantees that if some previous primary caused some party to commit, then the recover protocol will return this value. The primary will then **adopt** this recovered value, instead of using its own input value, as the value it tries to broadcast for committing. The recover protocol does this by reading from a read-quorum $R$ of size $n-f$ that will hence intersect any previous write-quorum. 
+3. The primary may recover different pairs $(v_1, X_1),\dots,(v_k, X_k)$. So it runs a **recover**  ***max*** **protocol** that returns the pair $(v^\star, X^\star)$ that has the highest view ($\forall i, v^\star \geq v_i$). By adopting the value associated with the highest view we can guarantee that the new primary will adopt a value that was committed by a previous primary.
 
 In this post we *decompose* Paxos into an outer *view-based protocol* and two inner protocols:  *recoverable broadcast*  and *recover max*.
 
