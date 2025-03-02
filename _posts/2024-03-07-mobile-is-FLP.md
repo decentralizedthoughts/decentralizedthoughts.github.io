@@ -66,7 +66,7 @@ If this value is 1 then $C_{i-1}$ is an $i$-pivot configuration and similarly if
 
 We now show that we can always extend a $p$-pivot configuration $C$ by $\ell \geq 1$ rounds to a $p'$-pivot configuration $C'$, thus creating an infinite execution. In each *round* of this infinite execution, all parties progress in lockstep except for at most one party which we may delay its outgoing messages for a finite time.
 
-***Lemma 2***: *If $C$ is a $p$-pivot configuration at the beginning of round $k$, then there is an extension of $C$ to $C'$ by \ell \geq 1 rounds in the mobile delay model where $C'$ is a $p'$-pivot configuration, where $p' \neq p.*
+***Lemma 2***: *If $C$ is a $p$-pivot configuration at the beginning of round $k$, then there is an extension of $C$ to $C'$ by \ell \geq 1$ rounds in the mobile delay model where $C'$ is a $p'$-pivot configuration, where $p' \neq p$.*
 
 *Proof*: Given a $p$-pivot configuration $C$ at the beginning of round $k$:
 
@@ -75,7 +75,7 @@ For any $\ell$, let $C_{k+\ell}$ be the configuration that extends $C$ for $\ell
 
 Observe that the view of any party $\neq p$ after $C$ but before $C_{k+\ell}$ is as if party $p$ crashed after $C$.
 
-Since $C$ is a $p$-pivot configuration, there must be some finite delay $L$ such that all parties decide $val(C-p) \neq val(C)$. So define $D=C_{k+\ell}$ as the configuration with the minimal $\ell$ for which $\val(D) = val(C-p) \neq val(C)$. Clearly $\ell>0$, because $val(C_{k+0})=val(C)$.
+Since $C$ is a $p$-pivot configuration, there must be some finite delay $L$ such that all parties decide $val(C-p) \neq val(C)$. So define $D=C_{k+\ell}$ as the configuration with the minimal $\ell$ for which $val(D) = val(C-p) \neq val(C)$. Since $val(C_{k+0})=val(C)$, it must be that $\ell>0$.
 
 By the minimality of $D$, $val(C_{k+\ell-1})=val(C)$.
 
@@ -89,15 +89,15 @@ The (trivial) [one-dimensional Sperner's Lemma](https://en.wikipedia.org/wiki/Sp
 
 The only difference between $D_{q-1}$ and $D_q$ is the state of party $q$ that either receives the messages from $p$ to $q$ or does not receive it in round $k+\ell$. In both worlds, consider the extension where $q$'s outgoing messages are delayed forever from round $k+\ell+1$. 
 
-As in Lemma 1, the configurations  $C_{q-1} - q$ and $C_{q} -q$ are indistinguishable for all non-$q$ parties. Because in both worlds no party hears from party $q$ in round $k+\ell+1$ or later so it does not matter what message party $q$ received in round $k+\ell$.
+As in Lemma 1, the configurations  $D_{q-1} - q$ and $D_{q} -q$ are indistinguishable for all non-$q$ parties. Because in both worlds no party hears from party $q$ in round $k+\ell+1$ or later so it does not matter what message party $q$ received in round $k+\ell$.
 
 So
 
 $$
-val(C_{q-1} - q)=val(C_q - q)
+val(D_{q-1} - q)=val(D_q - q)
 $$ 
 
-Without loss of generality, if this value is 1, then $C_{q-1}$ is a $q$-pivot configuration at the beginning of round $k+\ell+1$. Otherwise, if this value is 0 then $C_q$ is a $q$-pivot configuration at the beginning of round $k+\ell+1$. This completes the proof.
+Without loss of generality, if this value is 1, then $D_{q-1}$ is a $q$-pivot configuration at the beginning of round $k+\ell+1$. Otherwise, if this value is 0 then $D_q$ is a $q$-pivot configuration at the beginning of round $k+\ell+1$. This completes the proof.
 
 
 
