@@ -58,7 +58,7 @@ Not surprisingly, we start by showing that some initial configuration must be a 
 
 *Proof*: For $0 \leq i \le n$ let $C_i$ be the initial configuration where parties 1 to $i$ have input 1 (empty set for $i=0$) and the rest have input 0.  From validity, $val(C_0)=0$ and $val(C_n)=1$, so the (trivial) [one-dimensional Sperner's Lemma](https://en.wikipedia.org/wiki/Sperner%27s_lemma#One-dimensional_case) implies that there exists $1 \le i \le n$ and two adjacent configurations such that $val(C_{i-1}) =0$ and $val(C_{i})=1$.
 
-Note that the only difference between $C_{i-1}$ and $C_i$ is the initial value of party $i$. Consider executions where party $i$ crashes (is delayed forever) at the beginning of the execution. Since there is no way to know the state of party $i$, we have
+Note that the only difference between $E(C_{i-1})$ and $E(C_i)$ is the initial value of party $i$. Consider executions where party $i$ crashes (is delayed forever) at the beginning of the execution. Since there is no way to know the state of party $i$, we have
 
 $$val(C_{i-1}-i)=val(C_i-i)$$
 
@@ -89,7 +89,7 @@ The (trivial) [one-dimensional Sperner's Lemma](https://en.wikipedia.org/wiki/Sp
 
 The only difference between $D_{q-1}$ and $D_q$ is the state of party $q$ that either receives the messages from $p$ to $q$ or does not receive it in round $k+\ell$. In both worlds, consider the extension where $q$'s outgoing messages are delayed forever from round $k+\ell+1$. 
 
-As in Lemma 1, the configurations  $D_{q-1} - q$ and $D_{q} -q$ are indistinguishable for all non-$q$ parties. Because in both worlds no party hears from party $q$ in round $k+\ell+1$ or later so it does not matter what message party $q$ received in round $k+\ell$.
+As in Lemma 1, the executions  $E(D_{q-1} - q)$ and $E(D_{q} -q)$ are indistinguishable for all non-$q$ parties. Because in both worlds no party hears from party $q$ in round $k+\ell+1$ or later so it does not matter what message party $q$ received in round $k+\ell$.
 
 So
 
