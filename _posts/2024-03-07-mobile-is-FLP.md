@@ -66,7 +66,7 @@ If this value is 1 then $C_{i-1}$ is an $i$-pivot configuration and similarly if
 
 We now show that we can always extend a $p$-pivot configuration $C$ by $\ell \geq 1$ rounds to a $p'$-pivot configuration $C'$, thus creating an infinite execution. In each *round* of this infinite execution, all parties progress in lockstep except for at most one party which we may delay its outgoing messages for a finite time.
 
-***Lemma 2***: *If $C$ is a $p$-pivot configuration at the beginning of round $k$, then there is an extension of $C$ to $C'$ by \ell \geq 1$ rounds in the mobile delay model where $C'$ is a $p'$-pivot configuration, where $p' \neq p$.*
+***Lemma 2***: *If $C$ is a $p$-pivot configuration at the beginning of round $k$, then there is an extension of $C$ to $C'$ by $\ell \geq 1$ rounds in the mobile delay model where $C'$ is a $p'$-pivot configuration, where $p' \neq p$.*
 
 *Proof*: Given a $p$-pivot configuration $C$ at the beginning of round $k$:
 
