@@ -66,7 +66,7 @@ If this value is 1 then $C_{i-1}$ is an $i$-pivot configuration and similarly if
 
 We now show that we can always extend a $p$-pivot configuration $C$ by $\ell \geq 1$ rounds to a $p'$-pivot configuration $C'$, thus creating an infinite execution. In each *round* of this infinite execution, all parties progress in lockstep except for at most one party which we may delay its outgoing messages for a finite time.
 
-***Lemma 2***: *If $C$ is a $p$-pivot configuration at the beginning of round $k$, then there is an extension of $C$ to $C'$ by $\ell \geq 1$ rounds in the mobile delay model where $C'$ is a $p'$-pivot configuration, where $p' \neq p$.*
+***Lemma 2***: *If $C$ is a $p$-pivot configuration at the beginning of round $k$, then there is an extension of $C$ to $C'$ by $\ell \geq 1$ rounds in the mobile delay model where $C'$ is a $p'$-pivot configuration.*
 
 *Proof*: Given a $p$-pivot configuration $C$ at the beginning of round $k$:
 
@@ -75,7 +75,7 @@ For any $\ell$, let $C_{k+\ell}$ be the configuration that extends $C$ for $\ell
 
 Observe that the view of any party $\neq p$ after $C$ but before $C_{k+\ell}$ is as if party $p$ crashed after $C$.
 
-Since $C$ is a $p$-pivot configuration, there must be some finite delay $L$ such that all parties decide $val(C-p) \neq val(C)$. So define $D=C_{k+\ell}$ as the configuration with the minimal $\ell$ for which $val(D) = val(C-p) \neq val(C)$. Since $val(C_{k+0})=val(C)$, it must be that $\ell>0$.
+Since $C$ is a $p$-pivot configuration, there must be some finite delay $L$ such that all parties decide $val(C-p) \neq val(C)$ in $C_{k+L}$. So define $D=C_{k+\ell}$ as the configuration with the minimal $\ell$ for which $val(D) = val(C-p) \neq val(C)$. Since $val(C_{k+0})=val(C)$, it must be that $\ell>0$.
 
 By the minimality of $D$, $val(C_{k+\ell-1})=val(C)$.
 
