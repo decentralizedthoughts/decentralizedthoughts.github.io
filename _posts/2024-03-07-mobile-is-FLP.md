@@ -42,7 +42,7 @@ We are now ready for a key definition:
 
 ***Definition of a $p$-pivot configuration:*** For a party $p$ we say that a configuration $C$ is a $p$-pivot if $val(C) \neq val (C-p)$.
 
-In words, a $p$-pivot configuration is a configuration where the decision value of its failure-free extension is *different* from the decision value of its extension where no party sees any message from $p$ after $c(p)$ and all others are failure-free. Compared to the definition of bi-valency, this definition is more explicit and constructive in terms of the extensions that lead to opposing decision values.
+In words, a $p$-pivot configuration is a configuration where the decision value of its failure-free extension is *different* from the decision value of its extension where no party sees any message from $p$ after $C$ and all others are failure-free. Compared to the definition of bi-valency, this definition is more explicit and constructive in terms of the extensions that lead to opposing decision values.
 
 ## Mobile delay adversary
 
