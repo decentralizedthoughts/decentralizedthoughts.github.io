@@ -70,18 +70,19 @@ We now show that we can always extend a $p$-pivot configuration $C$ by $\ell \ge
 
 *Proof*: Given a $p$-pivot configuration $C$ at the beginning of round $k$:
 
-
-For any $\ell$, let $C_{k+\ell}$ be the configuration that extends $C$ for $\ell$ rounds of lock step with no errors except for party $p$. For party $p$, any outgoing message at $C$ is immediately delivered, but all other outgoing messages that $p$ sends afterwards are delayed and arrive only at the end of round $k+\ell$.
+For any $\ell$, let $C_{k+\ell}$ be the configuration that extends $C$ for $\ell$ rounds of lock step with no failures except for party $p$. For party $p$, any outgoing message at $C$ is immediately delivered, but all other outgoing messages that $p$ sends afterwards are delayed and arrive only at the end of round $k+\ell$.
 
 Observe that the view of any party $\neq p$ after $C$ but before $C_{k+\ell}$ is as if party $p$ crashed after $C$.
 
-Since $C$ is a $p$-pivot configuration, there must be some finite delay $L$ such that all parties decide $val(C-p) \neq val(C)$ in $C_{k+L}$. So define $D=C_{k+\ell}$ as the configuration with the minimal $\ell$ for which $val(D) = val(C-p) \neq val(C)$. Since $val(C_{k+0})=val(C)$, it must be that $\ell>0$.
+Since $C$ is a $p$-pivot configuration, there must be some finite delay $L$ such that all parties decide $val(C-p) \neq val(C)$ in $C_{k+L}$. On the other hand, $val(C_{k+0})=val(C)$.
 
-By the minimality of $D$, $val(C_{k+\ell-1})=val(C)$.
+The (trivial) [one-dimensional Sperner's Lemma](https://en.wikipedia.org/wiki/Sperner%27s_lemma#One-dimensional_case) implies that there exists $1 \le \ell \le L$ and two adjacent configurations such that $val(C_{k+\ell -1}) \neq val(C_{k+\ell})$.
+
+Denote $D=C_{k+\ell}$, and so $val(D) = val(C-p) \neq val(C) = val(C_{k+\ell-1})$.
 
 Consider the $n+1$ configurations $D_0,D_1,\dots,D_n$ where $D_j$ is the configuration that extends $C_{k+\ell-1}$ by one round, in which the adversary causes $p$'s outgoing messages to arrive to the parties $\{i \mid 0<i\le j\}$, and delays all other $p$'s outgoing messages by one round. 
 
-By definition, $D_0$ is equal to $D$. Hence $val(D_0)=val(D) \neq val(C)$
+By definition, $D_0$ is equal to $D$. Hence $val(D_0)=val(D) \neq val(C)$.
 
 Also by definition, $D_n$ is equal to $C_{k+\ell-1}$. Hence $val(D_n)=val(C_{k+\ell-1})=val(C)$.
 
