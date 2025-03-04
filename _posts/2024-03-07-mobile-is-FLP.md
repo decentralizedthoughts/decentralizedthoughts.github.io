@@ -102,7 +102,7 @@ Without loss of generality, if this value is 1, then $D_{q-1}$ is a $q$-pivot co
 
 ### Pictorial view of Lemma 2
 
-At a high level, Lemma 2 starts with a pivot $p$ (where the value flips between $C$ and $C-p$), then zooms in to the critical round $\ell$ (where the value flips between $C_{k+\ell-1}$ and $C_{k+\ell$}), then zooms in to the critical party $q$ (where the value flips between $D_q$ and $D_{q-1}$). 
+At a high level, Lemma 2 starts with a pivot $p$, where the value flips between $C$ and $C-p$. It then zooms in to the critical round $\ell$, where the value flips between $C_{k+\ell-1}$ and $C_{k+\ell}$. Finally, it zooms in to the critical party $q$, where the value flips between $D_q$ and $D_{q-1}$. 
 
 ![Sketch of Lemma 2](/uploads/zoominginmobile.JPG)
 
