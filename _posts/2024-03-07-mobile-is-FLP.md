@@ -101,6 +101,11 @@ $$
 Without loss of generality, if this value is 1, then $D_{q-1}$ is a $q$-pivot configuration at the beginning of round $k+\ell+1$. Otherwise, if this value is 0 then $D_q$ is a $q$-pivot configuration at the beginning of round $k+\ell+1$. This completes the proof.
 
 
+At a high level, Lemma 2 starts with a pivot $p$ (where the value flips), then zooms in to the critical round $\ell$ (where the value flips between $\ell-1$ and $\ell$), then zooms in to the critical party $q$ (where the value flips between $q$ and $q-1$). 
+
+![Sketch of Lemma 2](/uploads/zoominginmobile.JPG)
+
+
 
 ## Extending the proof to non-uniform agreement
 
