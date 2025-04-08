@@ -66,7 +66,7 @@ On the other hand, under synchrony even a single honest party can inform all oth
     
 5. A similar lower bound holds for crash (or omission) failures if $n \leq 2f$ in the partial synchrony model. See this [post on this and the CAP theorem](https://decentralizedthoughts.github.io/2023-07-09-CAP-two-servers-in-psynch/) for more.
 
-6. This lower bound holds for [Broadcast](https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/), not just for Agreement.
+6. This lower bound holds for [Broadcast](https://decentralizedthoughts.github.io/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/) (aka Reliable Broadcast) in partial synchrony, not just for [Agreement](https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/).
 
 
 Please leave comments on [Twitter](https://twitter.com/ittaia/status/1144014000113328129?s=20)

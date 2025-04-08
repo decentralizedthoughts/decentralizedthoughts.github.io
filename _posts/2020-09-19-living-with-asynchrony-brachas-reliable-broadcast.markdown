@@ -9,14 +9,13 @@ author: Ittai Abraham and Kartik Nayak
 
 In this series of posts, we explore what can be done in the Asynchronous model. This model seems challenging because the adversary can delay messages by any bounded time. By the end of this series, you will see that [almost](https://decentralizedthoughts.github.io/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/) everything that can be done in synchrony can be obtained in asynchrony. The next posts in this series are about [gather](https://decentralizedthoughts.github.io/2021-03-26-living-with-asynchrony-the-gather-protocol/), [round complexity](https://decentralizedthoughts.github.io/2021-09-29-the-round-complexity-of-reliable-broadcast/), and finally our series on [Asynchronous Agreement](https://decentralizedthoughts.github.io/2022-03-30-asynchronous-agreement-part-one-defining-the-problem/).
 
-We begin with [Bracha's Reliable Broadcast from 1987](https://core.ac.uk/download/pdf/82523202.pdf) ([conference version from 1984](https://ecommons.cornell.edu/bitstream/handle/1813/6430/84-590.pdf?sequence=1&isAllowed=y)). This is one of the most important build blocks for [Byzantine Fault Tolerant](https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/) protocols in the [Asynchronous model](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/). In this standard setting there are $n$ parties, where one of them is designated as the *leader*. The malicious [threshold adversary](https://decentralizedthoughts.github.io/2019-06-17-the-threshold-adversary/) can control at most $f<n/3$ parties. The leader has some *input value* $v$ and a party that *terminates* needs to *output* a value.
+We begin with [Bracha's Reliable Broadcast from 1987](https://core.ac.uk/download/pdf/82523202.pdf) ([conference version from 1984](https://ecommons.cornell.edu/bitstream/handle/1813/6430/84-590.pdf?sequence=1&isAllowed=y)). This is one of the most important build blocks for [Byzantine Fault Tolerant](https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/) protocols in the [Asynchronous model](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/). In this standard setting there are $n$ parties, where one of them is designated as the *leader*. The malicious [threshold adversary](https://decentralizedthoughts.github.io/2019-06-17-the-threshold-adversary/) can corrupt at most $f<n/3$ parties. The leader has some *input value* $v$ and a party that *terminates* needs to *output* a value.
 
 
 
 ## Reliable Broadcast Properties
 
 **(validity)**: If the leader is non-faulty then eventually all non-faulty parties will output the leader's input.
-
 
 **(totality)**: If some non-faulty party outputs a value then eventually all non-faulty parties will output a value.
 
@@ -73,13 +72,15 @@ The pseudo-code is simple:
 ### Notes
 
 
-The protocol only needs authenticated channels (no other cryptography).
+1. The protocol only needs authenticated channels (no other cryptography).
 
-Bracha used Reliable Broadcast to improve Ben-Or's [Asynchonrus Byzantine Agreement](https://allquantor.at/blockchainbib/pdf/ben1983another.pdf) from $n>5f$ to the optimal resilience of $n>3f$. 
+2. Even in partial synchrony, the resilience threshold of $3f+1 optimal due to the [DLS split brain](https://decentralizedthoughts.github.io/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/) lower bounds.
 
-Reliable broadcast requires sending $O(n^2)$ messages that contain the value $v$. If $v$ has $\ell$ bits this is a total of $O(\ell n^2)$ bits.  Our post about [Verifiable Information dispersal](https://decentralizedthoughts.github.io/2024-08-08-vid/) shows how this can be improved to $O(\ell n +  n^2)$ bits.
+3. Bracha used Reliable Broadcast to improve Ben-Or's [Asynchonrus Byzantine Agreement](https://allquantor.at/blockchainbib/pdf/ben1983another.pdf) from $n>5f$ to the optimal resilience of $n>3f$. 
 
-Christian Cachin has [excellent course notes](https://dcl.epfl.ch/site/_media/education/sdc_byzconsensus.pdf) on Byzantine Broadcasts and Randomized Consensus including Bracha's Reliable broadcast.
+4. Reliable broadcast requires sending $O(n^2)$ messages that contain the value $v$. If $v$ has $\ell$ bits this is a total of $O(\ell n^2)$ bits.  The post about [Verifiable Information dispersal](https://decentralizedthoughts.github.io/2024-08-08-vid/) shows how this can be improved to $O(\ell n +  n^2)$ bits.
+
+5. Christian Cachin has [excellent course notes](https://dcl.epfl.ch/site/_media/education/sdc_byzconsensus.pdf) on Byzantine Broadcasts and Randomized Consensus including Bracha's Reliable broadcast.
 
 ### Scratch your Brains!
 
