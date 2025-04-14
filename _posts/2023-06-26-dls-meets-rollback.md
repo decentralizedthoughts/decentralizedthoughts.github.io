@@ -43,9 +43,9 @@ For the $n=3, f=1$ case, assume the adversary is $B$ and the honest parties are 
 A rollback adversary that has two inputs can do the following:
 
 1. Start $B$ in its initial correct state; 
-2. Give $B$ input 1, and communicate only with $A$", using its power of omission failures to block messages to $C$;
+2. Give $B$ input 1, and communicate only with $A$, using its power of omission failures to block messages to $C$;
 3. Wait for $B$ to terminate, and then rollback $B$ to its initial correct state;
-4. Give $B$ input 1, and communicate only with $C", using its power of omission failures to block messages to $A$;
+4. Give $B$ input 1, and communicate only with $C$, using its power of omission failures to block messages to $A$;
 
 We also need to assume the adversary has access to two different inputs, in this case "0" and "1" (and that the input is not part of its "sealed" correct beginning state). In the state machine replication setting, this implies having more than one client or having one client that has more than one choice of input value.
 
@@ -55,7 +55,7 @@ This concludes the observation that the main "split brain" world can be conducte
 
 As in [this post](https://decentralizedthoughts.github.io/2021-06-14-neither-non-equivocation-nor-transferability-alone-is-enough-for-tolerating-minority-corruptions-in-asynchrony/), the lower bound also holds for [Reliable Broadcast](https://decentralizedthoughts.github.io/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/), in fact, it even holds for [Provable Broadcast](https://decentralizedthoughts.github.io/2022-09-10-provable-broadcast/). In the state machine replication setting, this implies that the lower bound holds if the client can be malicious and may have (at least) two different values to output. In particular, it holds for [write once objects](https://decentralizedthoughts.github.io/2022-12-27-set-replication/) in this setting.
 
-### ROTE: Rollback Protection for Trusted Execution reuqires $3f+1$ to be safe and live
+### ROTE: Rollback Protection for Trusted Execution requires $3f+1$ to be safe and live
 
 [Matetic et al 2017](https://www.usenix.org/system/files/conference/usenixsecurity17/sec17-matetic.pdf) suggest a system called **ROTE** that provides rollback protection. ROTE uses $n=f+2u+1$ severs to overcome $f$ malicious servers and to provide liveness when there are $u$ unresponsive servers. With $f$ malicious servers that can also be unresponsive, Rote would need $u=f$ and hence $n=3f+1$ servers to obtain safety and liveness (not circumventing the lower bound). Setting $u$ < $f$ would imply that ROTE is not live if $f$ servers are unresponsive and hence any protocol relying on it would not obtain liveness so would not solve agreement (again not circumventing the lower bound).
 
@@ -63,6 +63,13 @@ As in [this post](https://decentralizedthoughts.github.io/2021-06-14-neither-non
 ### A snapshot rollback adversary
 
 The rollback adversary needed for this lower bound could only rollback to the initial correct state. In reality a slightly more powerful adversary may be able to create snapshots and rollback a corrected party to any previous snapshot (not just the initial state). This can be a useful attack in a multi-shot (SMR or ledger) setting.
+
+
+### Rollback or Crash with no FIFO
+
+Instead of assuming adversary can rollback and omit. Assume a model where the adversary can rollback or crash and assume channels have no FIFO. We use asynchrony to delay the messages as if they are omissions.
+
+Note that in practical settings, if servers try to establish say a TLS connection, then the attack can happen assuming rollback or crash, because TLS handshake blocks for an ack.
 
 ### Acknowledgments
 
