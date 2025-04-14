@@ -74,14 +74,22 @@ Instead of assuming adversary can rollback and omit. Assume a model where the ad
 Note that in practical settings, if servers try to establish say a TLS connection, then the attack can happen assuming rollback or crash, because TLS handshake blocks for an ack.
 
 
-## So how can you get $2f+1$ using a TEE?
+## How Can You Achieve $2f + 1$ Fault Tolerance Using TEEs?
 
 There are two ingredients:
 
-1.  The first is to make sure each TEE chooses a new unique private key each time it reboots, and it uses its corresponding public key as its unique identifier. This means that a TEE that reboots is essentially a new TEE that needs to join the system. The security of this technique depends on the assumption that the memory of the TEE is indeed rollback protected.
-2.  The second is to use a *consensus oracle* or a *setup assumption of a consensus* on the unique identities (public keys) of the TEEs. Note that these identities are fragile, as they are reboot dependent and the security of the system depends on the security of the setup assumption or the consensus oracle.
-  
-As eluded above, in order to deal with reboots, you need to reconfigure the system to add a new TEE. This can be done if there are $n-f$ TEES that have not rebooted (and hence the system is live), but this means that the system will halt if $>f$ TEE reboot at the same time. The alternative is to use an external "consensus oracle" (similar to the one used during setup) and then of course the security of the system depends on the security of that oracle.
+1.  **Ephemeral TEE Identities via Reboot-Sensitive Keys**: Each TEE chooses a new unique private key each time it reboots, and it uses its corresponding public key as its unique identifier. This means that a TEE that reboots is essentially a new TEE that needs to join the system. The security of this technique depends on the assumption that the memory of the TEE is indeed rollback protected, so the only option for the adversary is to fully reboot the TEE.
+
+2.  **Consensus on TEE Identities**: Because TEE identities are tied to volatile public keys, there needs to be a *trusted setup* or *consensus oracle* that allows all parties (servers and clients) to agree on the set of currently valid TEE identities (i.e., their public keys). This setup is fragile, because any reboot changes the TEE’s key, and thus its identity. The system’s correctness and security rely on the security of this shared agreement (the setup assumption or the consensus oracle). So, if an adversary reboots a server, the new TEE identity is not recognized unless the system is explicitly reconfigured to include it.
+
+
+### Handling Reboots via Reconfiguration
+
+To tolerate reboots, the system must support reconfiguration: the ability to add new TEEs dynamically. This reconfiguration is safe as long as at least $f+1$ TEEs remain live (i.e., not rebooted). If more than $f$ TEEs reboot simultaneously, leaving fewer than $f+1$ active, the system will halt, as it no longer meets the liveness threshold.
+
+Alternatively, one can invoke an external consensus oracle (like the one used during initial setup) to help reconfigure or re-establish quorum. However, the system’s security now hinges on the trustworthiness and availability of that oracle.
+
+For a formal and modern treatment of this approach, see [Niu etal 2025](https://dl.acm.org/doi/abs/10.1145/3689031.3717457).
 
 
 ### Acknowledgments
