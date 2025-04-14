@@ -7,16 +7,18 @@ tags:
 author: Ittai Abraham
 ---
 
+In this post we show that trusted execution environments (TEEs) don't help against the classic $3f$ lower bound for partial synchrony, when these TEEs have no persistent storage, against a rollback adversary.
+
 We covered the classic [DLS88 split brain](https://decentralizedthoughts.github.io/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/) impossibility result against a Byzantine adversary in a previous post:
 
 **[DLS88](https://groups.csail.mit.edu/tds/papers/Lynch/jacm88.pdf):** (Theorem 4.4) It is impossible to solve [Agreement](https://ittaiab.github.io/2019-06-27-defining-consensus/) under partial synchrony against a ***Byzantine adversary*** if $f \geq n/3$.
 
-In a follow up post, we discussed how [CJKR12](https://decentralizedthoughts.github.io/2021-06-14-neither-non-equivocation-nor-transferability-alone-is-enough-for-tolerating-minority-corruptions-in-asynchrony/) strengthen this result by observing that it holds even if the adversary is weaker in that it must faithfully transfer messages. 
+In a follow-up post, we discussed how [CJKR12](https://decentralizedthoughts.github.io/2021-06-14-neither-non-equivocation-nor-transferability-alone-is-enough-for-tolerating-minority-corruptions-in-asynchrony/) strengthen this result by observing that it holds even if the adversary is weaker in that it must faithfully transfer messages. 
 In this post we strengthen this result yet again by observing that it holds even against a much weaker **rollback adversary** suggested by [Matetic, Kostiainen, Dhar, Sommer, Gervais, Juels, Capkun 2017](https://www.usenix.org/system/files/conference/usenixsecurity17/sec17-matetic.pdf):
 
 **DLS88:** (modern version) It is impossible to solve Agreement under partial synchrony against a ***rollback adversary*** if $f \geq n/3$.
 
-The rollback adversary is a model that tries to capture the power of the adversary given a secure enclave (trusted execution environment) that does not have any local trusted state.
+The rollback adversary is a model that captures the power of the adversary given a  trusted execution environment (TEE) that does not have any local trusted state or persistent storage.
 
 ### The Rollback Adversary
 
@@ -29,7 +31,7 @@ A **Rollback adversary** has slightly more power than an omission adversary:
    * Either make one more step forward in executing the honest protocol;
    * Or rollback the execution to its correct initial state
 
-The Rollback adversary models an adversary that cannot corrupt the execution, but since the execution is stateless, it can rollback the execution and feed it different interactions and inputs. See [Matetic et al 2017](https://www.usenix.org/system/files/conference/usenixsecurity17/sec17-matetic.pdf) for more discussion on this adversary. This model tries to capture the (limited) power of an adversary that can control everything inside a node except for a secure enclave (trusted execution environment) under the assumption that the secure enclave (or TEE) does not have any access to trusted storage (like a trusted monotonic counter). 
+The Rollback adversary models an adversary that cannot corrupt the execution, but since the execution is stateless, it can rollback the execution to an earlier state and feed it different interactions and inputs. See [Matetic et al 2017](https://www.usenix.org/system/files/conference/usenixsecurity17/sec17-matetic.pdf) for more discussion on this adversary. This model captures the (limited) power of an adversary that can control everything inside a node except for a secure enclave (trusted execution environment) under the assumption that the secure enclave (or TEE) does not have any access to trusted storage (like a trusted monotonic counter). 
 
 
 ### The proof
@@ -51,9 +53,9 @@ We also need to assume the adversary has access to two different inputs, in this
 
 This concludes the observation that the main "split brain" world can be conducted by a rollback adversary. The remainder of the proof follows exactly as in [our blog post about the DLS88 lower bound](https://decentralizedthoughts.github.io/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/) showing that agreement is impossible in partial synchrony.
 
-### Extension to Broadcast
+### Extension to Broadcast and write once objects
 
-As in [this post](https://decentralizedthoughts.github.io/2021-06-14-neither-non-equivocation-nor-transferability-alone-is-enough-for-tolerating-minority-corruptions-in-asynchrony/), the lower bound also holds for [Reliable Broadcast](https://decentralizedthoughts.github.io/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/), in fact, it even holds for [Provable Broadcast](https://decentralizedthoughts.github.io/2022-09-10-provable-broadcast/). In the state machine replication setting, this implies that the lower bound holds if the client can be malicious and may have (at least) two different values to output. In particular, it holds for [write once objects](https://decentralizedthoughts.github.io/2022-12-27-set-replication/) in this setting.
+As in [this post](https://decentralizedthoughts.github.io/2021-06-14-neither-non-equivocation-nor-transferability-alone-is-enough-for-tolerating-minority-corruptions-in-asynchrony/), the lower bound also holds for [Reliable Broadcast](https://decentralizedthoughts.github.io/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/), in fact, it even holds for [Provable Broadcast](https://decentralizedthoughts.github.io/2022-09-10-provable-broadcast/). In the state machine replication setting, this implies that the lower bound holds if the client can be malicious and may have (at least) two different values to output, or if there are two different clients and clients can have omission failures. In particular, it holds for [write once objects](https://decentralizedthoughts.github.io/2022-12-27-set-replication/) in this setting.
 
 ### ROTE: Rollback Protection for Trusted Execution requires $3f+1$ to be safe and live
 
