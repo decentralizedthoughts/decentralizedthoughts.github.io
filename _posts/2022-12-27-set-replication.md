@@ -6,28 +6,32 @@ tags:
 author: Ittai Abraham
 ---
 
-State machine replication is the gold standard for implementing any (public) ideal functionality. It totally orders all transactions and as a consequence solves (Byzantine) agreement. By Agreement in the worst case is quadratic and not constant time. In some cases this overhead is unnecessary because there is no need to totally order all transactions.
+State machine replication is the gold standard for implementing any (public) ideal functionality. It totally orders all transactions and as a consequence solves (Byzantine) agreement. But solving agreement, in non-optimistic cases, is quadratic in cost and is not constant time. In some cases this overhead is unnecessary because there is no need to totally order all transactions.
 
-As a canonical example, suppose Alice is transferring a token to Bob and Carol is transferring a token to Dan. There is no need to totally order these two coin transfer transactions. It is okay that some clients see the first transfer happened before the second while some other clients see the second transfer as happening before the first.
+As a canonical example, suppose Alice is transferring a token to Bob and Carol is transferring a token to Dan. There is no need to totally order these two token transfer transactions. It is okay that some clients see the first transfer happened before the second while some other clients see the second transfer as happening before the first.
 
 In the non-byzantine setting, the *fundamental* observation that sometimes a weaker problem than consensus needs to be solved goes back to the foundational work of [Lamport 2005](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/tr-2005-33.pdf):
 
 > Consensus has been regarded as the fundamental problem that must be solved to implement a fault-tolerant distributed system. However, only a weaker problem than traditional consensus need be solved. We generalize the consensus problem to include both traditional consensus and this weaker version. --[Generalized Consensus and Paxos, 2005](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/tr-2005-33.pdf)
 
-In many natural use cases, in particular the canonical simple token payment use case, do not need total ordering. This approach is taken by [FastPay](https://arxiv.org/pdf/2003.11506.pdf), [Guerraoui et al, 2019](https://arxiv.org/pdf/1906.05574), [Sliwinski and Wattenhofer, 2019](https://arxiv.org/abs/1909.10926), applied to privacy preserving transactions (see [UTT](https://eprint.iacr.org/2022/452.pdf) and [Zef](https://eprint.iacr.org/2022/083.pdf)), planned to be used in the [Sui platform](https://github.com/MystenLabs/sui/blob/main/doc/paper/sui.pdf) and in [Linera](https://linera.io/whitepaper).
+In many natural use cases, in particular the canonical simple token transfer use case, do not need total ordering. This approach is taken by [FastPay](https://arxiv.org/pdf/2003.11506.pdf), [Guerraoui et al, 2019](https://arxiv.org/pdf/1906.05574), [Sliwinski and Wattenhofer, 2019](https://arxiv.org/abs/1909.10926), applied to privacy preserving transactions (see [UTT](https://eprint.iacr.org/2022/452.pdf) and [Zef](https://eprint.iacr.org/2022/083.pdf)), planned to be used in the [Sui platform](https://github.com/MystenLabs/sui/blob/main/doc/paper/sui.pdf) and in [Linera](https://linera.io/whitepaper).
 
 There is considerable research in ways to relax total ordering requirements to gain better performance. For example, see [EPaxos](https://www.cs.cmu.edu/~dga/papers/epaxos-sosp2013.pdf) (and also [EPaxos Revisited](https://www.usenix.org/conference/nsdi21/presentation/tollman)). The first work that aimed to relax the total order requirements in the blockchain space is by [Lewenberg, Sompolinsky, and Zohar, 2015](https://fc15.ifca.ai/preproceedings/paper_101.pdf) and it’s follow-up work [Specture, 2016](https://eprint.iacr.org/2016/1159.pdf). See this post on [DAG-based protocols](https://decentralizedthoughts.github.io/2022-06-28-DAG-meets-BFT/) for advances in recent years and how DAG-based protocols are emerging as a powerful tool for getting better throughput mempools and BFT.
 
-### The benefits of single writer objects vs multi writer objects
+### The benefits of decomposing a multi writer object into independent single writer objects
 
-In the traditional approach for state machine replication,a total ordering protocol is used and the state machine is modeled as a single object that has multiple writers. Since this requires solving agreement, we know that in the worst case this takes a quadratic number of messages (for omission failures) and non-constant (linear in synchrony or infinite in asynchrony) number of rounds.
+In traditional state machine replication, the system is modeled as a single multi-writer object, and a total ordering protocol is used to serialize all commands. This requires solving agreement among replicas, which is costly: even in the case of omission failures, it can require a quadratic number of messages, and the number of rounds is worst case linear in the synchronous case and unbounded in the asynchronous case.
 
-Instead, we may be able to decompose the state machine into independent single writer state machines (objects). Now all we need is to totally order commands for each single writer object and we do not care about ordering commands across different objects. It turns out that this can be done with linear communication and constant time (even in asynchrony with Byzantine failures)
+An alternative is to decompose the state machine into independent single-writer objects. In this setting, we only need to totally order commands per object, rather than across the entire system. This relaxation dramatically reduces complexity: for each single-writer object, total ordering can be achieved with linear communication and constant time, even in the presence of Byzantine failures and asynchrony.
 
 
 ## Set Replication
 
-Just like *log replication* is a way to model the agreement essence of state machine replication, here we define **set replication** as a way to model the (weaker) agreement essence of a set of single writer state machines. We start by recalling the definition of [log replication](https://decentralizedthoughts.github.io/2022-11-19-from-single-shot-to-smr/):
+
+Just as **log replication** captures the core agreement requirements of traditional state machine replication, we define **set replication** to model the weaker agreement essence that arises when the system is composed of independent single-writer state machines.
+
+To ground this idea, we begin by recalling the definition of log replication, which formalizes the agreement problem inherent in totally ordering commands for a shared, multi-writer state machine.
+
 
 ### Reminder: definition of Log Replication
 
@@ -37,13 +41,13 @@ Clients can have multiple input values at different times.
 
 **Termination**: If a non-faulty client issues a *request* then it eventually receives a *response*.
 
-**Agreement**: Any two requests return logs then one is a prefix of the other.
+**Agreement**: Any two requests return logs such that one is a prefix of the other.
 
 **Validity**: Each value in the log can be uniquely mapped to a valid write request.
 
 **Correctness**: For a write request with value $v$, its response, and any response from a request that started after this write response, returns a log of values that includes $v$.
 
-The definition for set replication is simply to **remove the agreement property**.
+The definition for set replication is simply to **remove the agreement property** and return unordered **sets** instead of sequential **logs**.
 
 ### Definition of Set Replication
 
@@ -61,7 +65,7 @@ Observe that when there is a just a single writer client there is no difference 
 
 In fact set replication is solving multi-shot consensus for single writer objects (see [Guerraoui et al, 2019](https://arxiv.org/pdf/1906.05574)).
 
-Moreover, if the system is partitioned into single writer objects, so each object can be written to by a single client (the owner of the private key associated with the object's public key) then multiple clients can transact in parallel as long as each one is writing to a different object.
+Moreover, if the system is partitioned into single writer objects, such that each object can be written to by a single client (the owner of the private key associated with the object's public key) then multiple clients can transact in parallel as long as each one is writing to a different object.
 
 The difference between log replication and set replication can be seen when there are two or more writers. For example if two writers need to decide which one wrote first (say they both want to swap money on an [AMM](https://arxiv.org/pdf/2102.11350.pdf)) then log replication will provide an ordering of these two transactions but set replication cannot do this. 
 
