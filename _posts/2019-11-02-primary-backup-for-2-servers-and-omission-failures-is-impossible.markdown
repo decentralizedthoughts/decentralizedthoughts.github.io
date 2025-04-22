@@ -13,7 +13,7 @@ In a [previous post](https://decentralizedthoughts.github.io/2019-11-01-primary-
 
 **Theorem:** *It is impossible to implement State Machine Replication with two replicas for two clients and an adversary that can cause omission failures to one replica (and any number of clients) even in a lock-step model.* 
 
-As in our previous [lower bounds](https://decentralizedthoughts.github.io/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/), we assume an implementation of a Write Once Register State Machine that obtains [Termination, Agreement, Validity and Termination](https://decentralizedthoughts.github.io/2022-11-19-from-single-shot-to-smr/) and reach a contradiction. For the contradiction, we define three worlds and use an indistinguishability argument. In each world, there are two clients called client $1$ and client $2$ and two servers called server $1$ and server $2$.
+As in our previous [lower bounds](https://decentralizedthoughts.github.io/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/), we assume an implementation of a Write Once Register State Machine that obtains [Termination, Agreement, Validity and Correctness](https://decentralizedthoughts.github.io/2022-11-19-from-single-shot-to-smr/) and reach a contradiction. For the contradiction, we define three worlds and use an indistinguishability argument. In each world, there are two clients called client $1$ and client $2$ and two servers called server $1$ and server $2$.
 
 ### World A:
 
