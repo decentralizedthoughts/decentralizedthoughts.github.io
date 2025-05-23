@@ -42,5 +42,6 @@ This is where [trace validation](https://arxiv.org/pdf/2404.16075) entered the p
 
 Smart casual verification is not without its limitations; it does not come with the same iron strong guarantees as rigorous formally verified implementations and requires more time investments than casual verification alone. However, it might still be worth considering adding smart causal verification to your verification wardrobe in your latest distributed systems project. 
 
+**Learn more about our journey with smart casual verification in ["Smart Casual Verification of the Confidential Consortium Framework"](https://www.usenix.org/system/files/nsdi25-howard.pdf) by Heidi Howard, Markus Kuppe, Edward Ashton, Amaury Chamayou and Natacha Crooks, presented last month at [NSDI 2025](https://www.usenix.org/conference/nsdi25).** 
  
-**_Acknowledgements: Thank you to Markus Kuppe for his feedback on this post._** 
+_Acknowledgements: Thank you to Markus Kuppe for his feedback on this post._
