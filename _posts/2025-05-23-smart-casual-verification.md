@@ -4,7 +4,6 @@ date: 2025-05-23 08:00:00 -01:00
 tags:
 - verification
 - consensus
-- TEE
 - raft
 - research
 author: Heidi Howard
