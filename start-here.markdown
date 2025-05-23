@@ -275,3 +275,4 @@ Polynomial secret sharing is a base for deep connections between cryptography an
 - [Sailfish: Improving the Latency of DAG-based BFT](https://decentralizedthoughts.github.io/2024-05-23-sailfish/).
 - [Shoal++: High Throughput DAG-BFT Can Be Fast!](https://decentralizedthoughts.github.io/2024-06-12-shoalpp/).
 - [HotStuff-1 and the Prefix Speculation Dilemma in BFT Consensus](https://decentralizedthoughts.github.io/2024-08-24-hotstuff1/).
+- [Reasoning about Distributed Protocols with Smart Casual Verification](https://decentralizedthoughts.github.io/2025-06-23-smart-casual-verification/).
