@@ -1,8 +1,12 @@
 ---
 title: 'Reasoning about Distributed Protocols with Smart Casual Verification'
-date: 2025-06-26 18:00:00 -04:00
+date: 2025-05-23 08:00:00 -01:00
 tags:
-- Consensus
+- verification
+- consensus
+- TEE
+- raft
+- research
 author: Heidi Howard
 ---
 
