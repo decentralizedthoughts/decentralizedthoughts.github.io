@@ -1,6 +1,6 @@
 ---
-title: 'Reasoning about Distributed Protocols with Smart Casual Verification'
-date: 2025-05-23 08:00:00 -01:00
+title: Reasoning about Distributed Protocols with Smart Casual Verification
+date: 2025-05-23 05:00:00 -04:00
 tags:
 - verification
 - consensus
