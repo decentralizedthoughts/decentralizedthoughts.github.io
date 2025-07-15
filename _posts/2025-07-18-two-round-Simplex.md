@@ -5,6 +5,7 @@ tags:
 - consensus
 - BFT
 author: Ittai Abraham, Yuval Efron, and Ling Ren
+published: false
 ---
 
 [Simplex](https://simplex.blog/) is a recent partially synchronous Byzantine Fault Tolerant (BFT) protocol that some in the field find easier to understand. We will take this opportunity to rehash several classic results in the Simplex style. [The first post](https://decentralizedthoughts.github.io/2025-06-18-simplex/) explained the key difference between Simplex and Tendermint. This second post is on 2-round BFT. The next post will explore protocols that integrate parallel 2-round and 3-round paths. 
