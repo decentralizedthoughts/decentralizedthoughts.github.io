@@ -1,19 +1,14 @@
 ---
-title: "An Analysis of Latency and Block Capacity in Nakamoto Consensus"
+title: An Analysis of Latency and Block Capacity in Nakamoto Consensus
 date: 2025-07-14 00:00:00 -04:00
 published: false
 tags:
-  - blockchain
-  - consensus
-  - game theory
-  - latency
-author: Michele Fabi 
-
-
-
-
+- blockchain
+- consensus
+- game theory
+- latency
+author: Michele Fabi
 ---
-
 
 > While research is now focusing on application–layer topics—MEV extraction, roll‑up economics, danksharding—several questions on **Layer‑1 fundamentals** remain open.  This post provides a game‑theoretical analysis of one such gap: **the impact of block propagation latency on the supply of block capacity**, based on Fabi’s paper “Latency Trade-offs in Blockchain Capacity Management” (2025).  
 
