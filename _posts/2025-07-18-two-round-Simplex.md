@@ -1,7 +1,6 @@
 ---
 title: 2-round BFT in Simplex style
 date: 2025-07-18 00:00:00 -04:00
-published: false
 tags:
 - consensus
 - BFT
@@ -26,10 +25,10 @@ Given that $p$ has committed $x$, there were $n-f$ votes for $x$. If another par
 
 It is natural that parties "prefer" the most voted value. Therefore, we need $n-3f>2f$, i.e., $n \geq 5f+1$. Otherwise, parties have no reason to prefer $x$ over $x'$, and safety would be violated. (As it turns out, [$n \geq 5f-1$](https://decentralizedthoughts.github.io/2021-03-03-2-round-bft-smr-with-n-equals-4-f-equals-1/) would be sufficient and necessary to get 2-round commit. But we assume $n \geq 5f+1$ in this post for simplicity.) 
 
-To our knowledge, [FaB](https://ieeexplore.ieee.org/document/1467815) (2005) was the first 2-round BFT protocol, building on the earlier work of [Kursawe](https://ieeexplore.ieee.org/abstract/document/1180196) (2002). In this post, we adapt Simplex to 2-round with $n\ge 5f+1$. 
+To our knowledge, [FaB](https://ieeexplore.ieee.org/document/1467815) (2005) was the first 2-round $n\ge 5f+1$ BFT protocol, building on an earlier work by [Kursawe](https://ieeexplore.ieee.org/abstract/document/1180196) (2002). In this post, we adapt Simplex to 2-round with $n\ge 5f+1$. 
 
 
-## Two round commit Simplex protocol for $n=5f+1$
+## Two-round Simplex protocol with $n=5f+1$
 
 The main idea of Simplex is to generate for each view either a lock certificate or a no-commit certificate. Subsequent leaders use these to justify their proposals. We refer the reader to our [last post](https://decentralizedthoughts.github.io/2025-06-18-simplex/) or [the Simplex blog](https://simplex.blog/) for a more detailed explanation. 
 
@@ -59,7 +58,7 @@ We consider single-shot consensus for simplicity. The protocol proceeds in incre
 
 6. Upon receiving Cert(k, *) 
     Forward Cert(k, *) 
-    Enter view k+1 if in view k   
+    Enter view k+1 if in view k  
 ```
 
 
@@ -71,8 +70,7 @@ But recall that we argued earlier that if a value $x$ has been committed, then t
 
 We remark that the $n-f$ (Vote, k, \*) messages that contain no commit certificate could also serve as a no-commit certificate. The only downside is that this no-commit certificate cannot be compressed into a threshold/multi-signature. If one does not plan to use threshold/multi-signature, this extra step is not needed.
 
-## Safety and liveness intuition
-
+## Safety and liveness proof sketches
 
 **Lemma 1**: If an honest party commits $x$ in view $k$, then Cert(k, $\bot$) or Cert(k, x') for $x' \neq  x$ cannot form. 
 
@@ -84,17 +82,13 @@ We remark that the $n-f$ (Vote, k, \*) messages that contain no commit certifica
 
 Safety is straightforward from Lemma 2. Liveness follows from the lemmas below. 
 
-**Lemma 3**: If one honest party commits, all honest parties eventually commit.
-
-*Proof*: immediate, as the commit certificate is forwarded.
-
-**Lemma 4**: If no honest party commits in views $k$ or lower, then every honest party eventually receives either Cert(k, x) for some $x \neq \bot$ or Cert(k, $\bot$). 
+**Lemma 3**: If no honest party commits in views $k$ or lower, then every honest party eventually receives either Cert(k, x) for some $x \neq \bot$ or Cert(k, $\bot$). 
 
 *Proof sketch*: If any honest gets Cert(k, x), it forwards the certificate. Otherwise, all honest eventually vote for $\bot$ by the fifth Upon rule, so all honest eventually get a Cert(k, $\bot$). 
 
-**Lemma 5**: If no honest party commits in views $k$ or lower, view $k$ starts after GST, and the leader of view $k$ is honest, then all honest parties commit in view $k$.
+**Lemma 4**: If view $k$ starts after GST, and the leader of view $k$ is honest, then all honest parties commit in view $\leq k$.
 
-*Proof sketch*: follows from the protocol and synchrony after GST. 
+*Proof sketch*: If an honest party commits in view $<k$, it forwards the commit certificate, so all honest parties commit in view $<k$. If no honest party commits in view $<k$, then given synchrony after GST, all honest parties enter view $k$, vote for the honest leader, and commit in time.
 
 ### Acknowledgment
 The work is done during the authors' visit to a16z Crypto Research. The authors thank Kartik Nayak for helpful discussions. 
