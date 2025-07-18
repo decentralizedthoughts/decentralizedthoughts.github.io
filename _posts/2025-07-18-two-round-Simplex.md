@@ -78,17 +78,17 @@ We remark that the $n-f$ (Vote, k, \*) messages that contain no commit certifica
 
 **Lemma 2**: If an honest party commits $x$ in view $k$, no honest party votes for $x' \neq x$ ($x' \neq \bot$) in any view higher than $k$.
 
-*Proof sketch*: Since all honest leave view $k$ with Cert(k, x), then inductivly it can be shown that in any higher view $k'>k$, any honest only votes for $x$ or $\bot$, and only gets Cert(k', $\bot$) or Cert(k', x). 
+*Proof sketch*: Since all honest parties leave view $k$ with Cert(k, x), then inductivly it can be shown that in any higher view $k'>k$, any honest party only votes for $x$ or $\bot$, and only gets Cert(k', $\bot$) or Cert(k', x). 
 
 Safety is straightforward from Lemma 2. Liveness follows from the lemmas below. 
 
 **Lemma 3**: If no honest party commits in views $k$ or lower, then every honest party eventually receives either Cert(k, x) for some $x \neq \bot$ or Cert(k, $\bot$). 
 
-*Proof sketch*: If any honest gets Cert(k, x), it forwards the certificate. Otherwise, all honest eventually vote for $\bot$ by the fifth Upon rule, so all honest eventually get a Cert(k, $\bot$). 
+*Proof sketch*: If any honest party gets Cert(k, x), it forwards the certificate. Otherwise, all honest parties eventually vote for $\bot$ by the fifth Upon rule, so all honest parties eventually get a Cert(k, $\bot$). 
 
 **Lemma 4**: If view $k$ starts after GST, and the leader of view $k$ is honest, then all honest parties commit in view $\leq k$.
 
-*Proof sketch*: If an honest party commits in view $<k$, it forwards the commit certificate, so all honest parties commit in view $<k$. If no honest party commits in view $<k$, then given synchrony after GST, all honest parties enter view $k$, vote for the honest leader, and commit in time.
+*Proof sketch*: If an honest party commits in view $<k$, it forwards the commit certificate, so all honest parties commit in view $<k$. If no honest party commits in view $<k$, then given synchrony after GST, all honest parties enter view $k$, vote for the honest leader, and commit in view $k$.
 
 ### Acknowledgment
-The work is done during the authors' visit to a16z Crypto Research. The authors thank Kartik Nayak for helpful discussions. 
+The work is done during the authors' visits to a16z Crypto Research. The authors thank Kartik Nayak for helpful discussions.
