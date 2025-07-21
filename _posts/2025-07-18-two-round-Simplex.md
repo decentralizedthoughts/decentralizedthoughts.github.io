@@ -20,8 +20,9 @@ As usual, the first round is for a leader to propose a value, and the second rou
 The tricky case (for BFT in general) is that some party $p$ receives $n-f$ votes and commits $x$, and then $p$ experiences a network outage immediately after committing $x$. The remaining parties cannot wait for $p$ indefinitely, so they must proceed without $p$. To preserve the safety of the protocol, they must eventually commit $x$ rather than any other value. 
 
 Given that $p$ has committed $x$, there were $n-f$ votes for $x$. If another party $q$ waits for a set of $n-f$ votes, it is guaranteed to see: 
+
 * At least $n-3f$ votes for $x$: there are at most $f$ honest parties whose votes did not make it to $p$, and $f$ Byzantine parties who may equivocate; 
-* At most $2f$ votes for $x'\neq x$: $f$ honest parties who legitemaly voted $x'$, and $f$ Byzantine parties who voted $x$ but lie. 
+* At most $2f$ votes for $x'\neq x$: $f$ honest parties who legitimately voted $x'$, and $f$ Byzantine parties who voted $x$ but lie. 
 
 It is natural that parties "prefer" the most voted value. Therefore, we need $n-3f>2f$, i.e., $n \geq 5f+1$. Otherwise, parties have no reason to prefer $x$ over $x'$, and safety would be violated. (As it turns out, [$n \geq 5f-1$](https://decentralizedthoughts.github.io/2021-03-03-2-round-bft-smr-with-n-equals-4-f-equals-1/) would be sufficient and necessary to get 2-round commit. But we assume $n \geq 5f+1$ in this post for simplicity.) 
 
@@ -90,5 +91,10 @@ Safety is straightforward from Lemma 2. Liveness follows from the lemmas below.
 
 *Proof sketch*: If an honest party commits in view $<k$, it forwards the commit certificate, so all honest parties commit in view $<k$. If no honest party commits in view $<k$, then given synchrony after GST, all honest parties enter view $k$, vote for the honest leader, and commit in view $k$.
 
-### Acknowledgment
-The work is done during the authors' visits to a16z Crypto Research. The authors thank Kartik Nayak for helpful discussions.
+### Acknowledgments
+
+The work is done during the authors' visits to a16z Crypto Research. The authors thank Kartik Nayak for helpful discussions. We thank Max Resnick for valuable feedback.
+
+
+Your thoughts/comments on [X](https://x.com/ittaia/status/1946296784587776058).
+

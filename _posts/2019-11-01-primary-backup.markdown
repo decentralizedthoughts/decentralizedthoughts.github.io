@@ -28,7 +28,7 @@ while true:
 1. To avoid duplication of input, each command ```cmd``` includes a unique identifier. 
 2. To avoid duplication of output, each ```output``` includes a unique identifier and also the unique identifier of the ```cmd```.
 
-The above state machine can made fault tolerant to a single crash failure with a simple primary-backup paradigm. 
+The above state machine can be made tolerant to a single crash failure with via the primary-backup paradigm. 
 
 **Primary.** The ```primary``` behaves exactly like an ideal state machine until it crashes. However, if it does crash, it needs the backup to take over the execution and continue serving the client. 
 
