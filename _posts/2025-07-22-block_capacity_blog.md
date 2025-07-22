@@ -39,7 +39,7 @@ Building directly on this setting,  choose the block capacity k strategically.
 The timeline below illustrates how honest blocks that are mined too close in time (< Δk) may *fork* or *tailgate* one another.
 
 <p align="center">
-  <img src="uploads/fork-probability.png" width="60%">
+  <img src="/uploads/fork-probability.png" width="60%">
    <figcaption><em> Poisson arrivals and tailgated blocks under a bounded network delay (adapted from Ren 2019).</em></figcaption>
 </p>
 
@@ -126,7 +126,7 @@ $$\lambda=\mu\,e^{-\mu\Delta k(\pi,\tau,\mu)}$$
 is the **growth rate of the honest chain**—the block production rate μ multiplied by the probability that a produced block is not orphaned.
 
 <p align="center">
-  <img src="uploads/process.png" width="80%" alt="Sample path of the mempool size process">
+  <img src="/uploads/process.png" width="80%" alt="Sample path of the mempool size process">
    <figcaption><em> Evolution of the sample path of the mempool size process.</em></figcaption>
 </p>
 
@@ -142,12 +142,12 @@ To further quantify this user experience, we can derive two specific metrics fro
 
 * **Partial‑utilization probability**: This is the probability that all pending transactions in the mempool can be recorded in the next block. It effectively answers the user's question: *"Is the network currently congested?"* A high probability indicates low congestion and implies a  short expected waiting time for transaction confirmation.
     <p align="center">
-      <img src="uploads/partial_utilization_with_asympt.png" width="50%" alt="Graph of partial-utilization probability">
+      <img src="/uploads/partial_utilization_with_asympt.png" width="50%" alt="Graph of partial-utilization probability">
     </p>
 
 * **Block‑inclusion probability**: This is the probability that a transaction arriving at a random time is included in the very next block. It directly answers: *"What are the chances my transaction gets confirmed quickly?"* It provides an immediate sense of the service delay a user will face.
     <p align="center">
-      <img src="uploads/inclusion_prob_continuous.png" width="50%" alt="Graph of block-inclusion probability">
+      <img src="/uploads/inclusion_prob_continuous.png" width="50%" alt="Graph of block-inclusion probability">
     </p>
 
 Ultimately, all these user-centric metrics improve as the load $\rho$ decreases. For a given blockspace demand, an optimally designed system from a user's point of view is arguably one that minimizes this load.
