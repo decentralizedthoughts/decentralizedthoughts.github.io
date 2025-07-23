@@ -9,7 +9,7 @@ This page contains material for a graduate course on Blockchains, Distributed Co
 We would love to get your feedback. If you find a post helpful, have a suggestion to improve, or any other comment: [drop us a comment](https://twitter.com/ittaia/status/1421066572207169544?s=20) or send us an email - your feedback is very valuable.
 
 
-## Basics, Foundations, and Classics
+## Basics, foundations, and classics
 1. Definition of [Consensus, Agreement, and Broadcast](/2019-06-27-defining-consensus/). 
 2. The [network model](/2019-06-01-2019-5-31-models/): Synchrony, Asynchrony and Partial synchrony.
 3. The [threshold adversary](/2019-06-17-the-threshold-adversary/) model.
@@ -20,14 +20,12 @@ We would love to get your feedback. If you find a post helpful, have a suggestio
 The [consensus cheat sheet](https://decentralizedthoughts.github.io/2021-10-29-consensus-cheat-sheet/) gives a quick overview of what is possible and impossible. You can build half a course just from the upper bounds and lower bounds linked from it. 
 
 ## Basic protocols
-The Synchronous model is a good place to start because protocols are simpler.
-- Classic Byzantine agreement protocol: the [Phase-King](https://decentralizedthoughts.github.io/2022-06-09-phase-king-via-gradecast/).
-- Classic Byzantine Broadcast protocol (with a PKI) for $f < n$: the [Dolev-Strong Authenticated Broadcast protocol](/2019-12-22-dolev-strong/). 
-
-[Partial synchrony](/2019-09-13-flavours-of-partial-synchrony/) is one of the most used models in real-world systems today.
-- Single-shot [Paxos](https://decentralizedthoughts.github.io/2022-11-04-paxos-via-recoverable-broadcast/).
-- Single shot [PBFT](https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/).
-- Some [design principles]{https://decentralizedthoughts.github.io/2025-02-14-partial-synchrony-protocols/}
+- The Synchronous model is a good place to start because protocols are simpler.
+  - Classic Byzantine agreement protocol: the [Phase-King](https://decentralizedthoughts.github.io/2022-06-09-phase-king-via-gradecast/).
+  - Classic Byzantine Broadcast protocol (with a PKI) for $f < n$: the [Dolev-Strong Authenticated Broadcast protocol](/2019-12-22-dolev-strong/). 
+- [Partial synchrony](/2019-09-13-flavours-of-partial-synchrony/) is one of the most used models in real-world systems today.
+  - Single-shot [Paxos](https://decentralizedthoughts.github.io/2022-11-04-paxos-via-recoverable-broadcast/).
+  - Single shot [PBFT](https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/).
 
 ## More variants of consensus and broadcast 
 - [Approximate agreement](https://decentralizedthoughts.github.io/2022-06-07-approx-agreement-one/) is a variation that considers rational input values.
@@ -38,7 +36,7 @@ The Synchronous model is a good place to start because protocols are simpler.
 - An [optimal optimistically responsive synchronous protocol](/2020-06-12-optimal-optimistic-responsiveness/).
 - A simple, streamlined synchronous protocol called [Streamlet](/2020-05-14-streamlet/). 
 - Survey of [authenticated protocols under the synchrony assumption](/2019-11-11-authenticated-synchronous-bft/).
-- How [recursion helps solve consensus](https://decentralizedthoughts.github.io/2024-09-15-divide-and-conquer/) with [optimal $O(n^2)$ communication]{https://decentralizedthoughts.github.io/2021-09-20-optimal-communication-complexity-of-authenticated-byzantine-agreement/}.
+- How [recursion helps solve consensus](https://decentralizedthoughts.github.io/2024-09-15-divide-and-conquer/) with [optimal $O(n^2)$ communication](https://decentralizedthoughts.github.io/2021-09-20-optimal-communication-complexity-of-authenticated-byzantine-agreement/).
 - A non-equivocation protocol (with a PKI) for $f < n$: [Crusader Broadcast](https://decentralizedthoughts.github.io/2022-06-19-crusader-braodcast/). 
 - Use of randomization in synchronous agreement protocols for [crash failures](https://decentralizedthoughts.github.io/2023-02-18-rand-and-consensus-1/) and [omission failures](https://decentralizedthoughts.github.io/2023-02-19-rand-and-consensus-2/).
 
@@ -50,6 +48,7 @@ Taking ideas from the Byzantine setting and applying them to the benign setting:
 
 The Byzantine setting:
 - An important building block: [provable broadcast](https://decentralizedthoughts.github.io/2022-09-10-provable-broadcast/).
+- Some [design principles](https://decentralizedthoughts.github.io/2025-02-14-partial-synchrony-protocols/)
 - Single shot [PBFT](https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/).
 - [Two Round HotStuff](https://decentralizedthoughts.github.io/2022-11-24-two-round-HS/) with SMR and accountability. 
 - [Information Theoretic HotStuff](https://decentralizedthoughts.github.io/2021-09-20-information-theoretic-hotstuff-it-hs-part-one/).
