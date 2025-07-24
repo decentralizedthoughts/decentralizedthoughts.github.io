@@ -1,7 +1,6 @@
 ---
 title: An Analysis of Latency and Block Capacity in Nakamoto Consensus
-date: 2025-07-14 00:00:00 -04:00
-published: false
+date: 2025-07-24 00:00:00 -04:00
 tags:
 - blockchain
 - consensus
@@ -12,7 +11,7 @@ author: Michele Fabi
 
 > Achieving high throughput is essential for blockchain ecosystems to become competitive alternatives to their centralized counterparts across a wide range of domains. For example, high-frequency trading on decentralized platforms cannot be competitive unless transaction processing times are reduced to well below one second. The predominant strategy to address this challenge has been the development of Layer 2 (L2) scaling solutions. However, this approach often introduces trade-offs, potentially compromising decentralization and, consequently, the core value proposition of blockchain technology. This reality underscores the importance of scaling the Layer 1 (L1) protocol directly. But to what extent is this possible?
 
-> As we push L1s into fast-block regimes, new challenges arise. One challenge is that, in the presence of transmission latency, strategic behavior by miners can create a bottleneck. This post provides a game-theoretical analysis of the impact of block propagation latency on the supply of block capacity in Nakamoto consensus, based on the paper “Latency Trade-offs in Blockchain Capacity Management” by Fabi (2025). The framework outlined here is most relevant when target block times are on the order of seconds or milliseconds, making propagation latency quantitatively significant.
+> As we push L1s into fast-block regimes, new challenges arise. One challenge is that, in the presence of transmission latency, strategic behavior by miners can create a bottleneck. This post provides a game-theoretical analysis of the impact of block propagation latency on the supply of block capacity in Nakamoto consensus, based on the paper [Latency Trade-offs in Blockchain Capacity Management(https://ideas.repec.org/p/crs/wpaper/2024-10.html) by [Michele Fabi](https://michelefabi.com/) (2025). The framework outlined here is most relevant when target block times are on the order of seconds or milliseconds, making propagation latency quantitatively significant.
 
 
 ## The Latency-Revenue Trade-off
