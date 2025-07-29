@@ -8,8 +8,6 @@ tags:
 author: Ittai Abraham, Yuval Efron, Kartik Nayak, and Ling Ren
 ---
 
-
-
 In the last two posts, we presented two partially synchronous BFT protocols in the [Simplex style](https://eprint.iacr.org/2023/463.pdf): a [3-round protocol](https://decentralizedthoughts.github.io/2025-06-18-simplex/) with $n\geq3f+1$ and a [2-round protocol](https://decentralizedthoughts.github.io/2025-07-18-two-round-Simplex/) with $n\geq 5f+1$. In this post, we describe a protocol that runs a 2-round commit rule and a 3-round commit rule concurrently. 
 
 A new parameter $p$ ($0 \leq p \leq f$) is introduced and the goal is to design protocols that have $n \geq 3f+2p+1$ parties and the following properties:
