@@ -16,7 +16,7 @@ A new parameter $p$ ($0 \leq p \leq f$) is introduced and the goal is to design 
 - If the leader is honest, the network is synchronous (GST=0), and at most $f$ parties are Byzantine, then all honest parties commit in 3 rounds; and
 - If the leader is honest, the network is synchronous (GST=0), and at most $p$ parties are Byzantine, then all honest parties commit in 2 rounds. 
 
-To our knowledge, such protocols were first proposed in [FaB](https://ieeexplore.ieee.org/document/1467815) and [Zyzzyva](https://dl.acm.org/doi/10.1145/1658357.1658358) around 2005. Those initial protocols [had safety and liveness errors](https://arxiv.org/abs/1712.01367) that were later [fixed](https://arxiv.org/pdf/1801.10022) (and implemented in [SBFT](https://arxiv.org/pdf/1804.01626)). Recenlty, there has been increased interest in this line of research with [Banyan](https://arxiv.org/pdf/2312.05869), [Kudzu](https://arxiv.org/abs/2505.08771), and [Alpenglow](https://www.anza.xyz/alpenglow-1-1) that gave [Simplex](https://simplex.blog/)-inspired variants.
+To our knowledge, such protocols were first proposed in [FaB](https://ieeexplore.ieee.org/document/1467815) and [Zyzzyva](https://dl.acm.org/doi/10.1145/1658357.1658358) around 2005. Those initial protocols [had safety and liveness errors](https://arxiv.org/abs/1712.01367) that were later [fixed](https://arxiv.org/pdf/1801.10022) (and implemented in [SBFT](https://arxiv.org/pdf/1804.01626)). Recently, there has been increased interest in this line of research with [Banyan](https://arxiv.org/pdf/2312.05869), [Kudzu](https://arxiv.org/abs/2505.08771), and [Alpenglow](https://www.anza.xyz/alpenglow-1-1) that gave [Simplex](https://simplex.blog/)-inspired variants.
 
 
 In this post, we describe a natural Simplex-style protocol achieving the above guarantees. Our approach is simply to merge the 3-round and 2-round protocols from our last two posts with virtually no additional modifications. 
@@ -164,7 +164,7 @@ Two important aspects of the merge:
 
 *Proof sketch:* Consider the leader's proposal in view $k+1$, with accompaning certificate X-Cert(k',x). There are two cases:
 
-1. $k'<k$: Lemma 1 and Lemma 2 imply that X-Cert(k,$\bot$) do not exist for *both* $X\in \{Fast,Slow\}$, and hence the proposal isnt valid.
+1. $k'<k$: Lemma 1 and Lemma 2 imply that X-Cert(k,$\bot$) do not exist for *both* $X\in \{Fast,Slow\}$, and hence the proposal isn't valid.
 2. $k'=k$: Lemma 1 and Lemma 2 imply that the proposal must be for x.
 
 This completes the proof for $k+1$, the proof for higher views follows by induction.
