@@ -35,19 +35,21 @@ To start, here is the $n=5f+1$ protocol, adapted to $n=3f+2p+1$ to obtain safety
     Everyone starts a local timer T_k 
     Leader sends (Propose, k, x, Fast-Cert(k’, x)) for the highest k’ 
     
-2. Upon received (Propose, k, x, Fast-Cert(k’, x)) and Fast-Cert(l, bot) for all k' < l < k and has not sent Vote 
-    Send (Vote, k, x) to all     // Denote n-2f-p (Vote, k, x) as Fast-Cert(k, x)  
+2. Upon received (Propose, k, x, Fast-Cert(k’, x)) 
+            and Fast-Cert(l, ⊥) for all k' < l < k 
+            and has not sent Vote 
+    Send (Vote, k, x) to all   // Denote n-2f-p (Vote, k, x) as Fast-Cert(k, x)  
 
 3. Upon T_k = 2 Δ and has not sent Vote
-    Send (Vote, k, bot) to all   // Denote n-2f-p (Vote, k, bot) as Fast-Cert(k, bot) 
+    Send (Vote, k, ⊥) to all  // Denote n-2f-p (Vote, k, ⊥) as Fast-Cert(k, ⊥) 
 
-4. Upon receiving n-p (Vote, k, x)   // Monitored even after exiting view k
+4. Upon receiving n-p (Vote, k, x)  // Monitored even after exiting view k
     Decide x 
     Forward these n-p (Vote, k, x)
     Terminate 
 
 5. Upon receiving n-f (Vote, k, *) but no Fast-Cert(k, x) for any x 
-    Send (Vote, k, bot) to all
+    Send (Vote, k, ⊥) to all
 
 6. Upon receiving Fast-Cert(k, *) 
     Forward Fast-Cert(k, *) 
@@ -68,16 +70,18 @@ Now here is the $n=3f+1$ protocol, adopted to $n=3f+2p+1$ to obtain safety and l
     Everyone starts a local timer T_k 
     Leader sends (Propose, k, x, Slow-Cert(k’, x)) for the highest k’ 
     
-2. Upon received (Propose, k, x, Slow-Cert(k’, x)) and Slow-Cert(l, bot) for all k' < l < k and has not sent Vote 
-    Send (Vote, k, x) to all     // Denote n-f-p (Vote, k, x) as Slow-Cert(k, x)  
+2. Upon received (Propose, k, x, Slow-Cert(k’, x)) 
+            and Slow-Cert(l, ⊥) for all k' < l < k
+            and has not sent Vote 
+    Send (Vote, k, x) to all   // Denote n-f-p (Vote, k, x) as Slow-Cert(k, x)  
 
-3. Upon receiving n-f-p (Vote, k, x)   // Monitored even after exiting view k
+3. Upon receiving n-f-p (Vote, k, x)  // Monitored even after exiting view k
     Send (Final, k, x) to all     
     
 4. Upon T_k = 3 Δ; and has not sent Final
-    Send (Final, k, bot) to all   // Denote n-f-p (Final, k, bot) as Slow-Cert(k, bot) 
+    Send (Final, k, ⊥) to all // Denote n-f-p (Final, k, ⊥) as Slow-Cert(k, ⊥) 
 
-5. Upon receiving n-f-p (Final, k, x)   // Monitored even after exiting view k
+5. Upon receiving n-f-p (Final, k, x)  // Monitored even after exiting view k
     Decide x 
     Forward these n-f-p (Final, k, x)
     Terminate 
@@ -116,22 +120,22 @@ Two important aspects of the merge:
 2. Upon received (Propose, k, x, X-Cert(k’, x)) for some X in {Fast, Slow} 
             and ⊥ certificates for all higher certificates of view <k, 
             and has not sent Vote 
-    Send (Vote, k, x) to all     // Denote n-2f-p (Vote,k,x) as Fast-Cert(k,x)
-                                 // Denote n-f-p (Vote,k,x) as Slow-Cert(k,x) 
+    Send (Vote, k, x) to all   // Denote n-2f-p (Vote,k,x) as Fast-Cert(k,x)
+                               // Denote n-f-p (Vote,k,x) as Slow-Cert(k,x) 
 
 3. Upon Slow-Cert(k,x); and has not sent Final
     Send (Final, k, x) to all  
     
-4. Upon receiving n-f-p (Final, k, x) or n-p (Vote, k, x)    // Monitored even after exiting view k
-    Decide x 
+4. Upon receiving n-f-p (Final, k, x) or n-p (Vote, k, x)    
+    Decide x                // Monitored even after exiting view k
     Forward commit proof 
     Terminate 
 
 5. Upon T_k = 2 Δ; and has not sent Vote
-    Send (Vote, k, ⊥) to all   // Denote n-2f-p (Vote,k,⊥) as Fast-Cert(k,⊥)
+    Send (Vote, k, ⊥) to all  // Denote n-2f-p (Vote,k,⊥) as Fast-Cert(k,⊥)
 
 6. Upon T_k = 3 Δ; and has not sent Final
-    Send (Final, k, ⊥) to all   // Denote n-f-p (Final,k,⊥) as Slow-Cert(k,⊥) 
+    Send (Final, k, ⊥) to all // Denote n-f-p (Final,k,⊥) as Slow-Cert(k,⊥) 
 
 7. Upon receiving n-f (Vote, k, *) but no Cert(k, x) for any x 
     Send (Vote, k, ⊥) to all
