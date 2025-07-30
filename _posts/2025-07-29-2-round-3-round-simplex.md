@@ -24,7 +24,7 @@ In this post, we describe a natural Simplex-style protocol achieving the above g
 
 ## 2 round $n=5f+1$ recast to $n=3f+2p+1$
 
-To start, here is the $n=5f+1$ protocol, adapted to $n=3f+2p+1$ to obtain safety for $f$ Byzantine and liveness for $p$ Byzantine and honest leader. The only changes are that the commit quorum size becomes $n-p$, and the certificate size becomes $n-p-2f$. (See our [last post](https://decentralizedthoughts.github.io/2025-07-18-two-round-Simplex/) for why the certificate size should be $2f$ less than commit quorum size.) 
+To start, here is the $n=5f+1$ protocol, adapted to $n=3f+2p+1$ to obtain safety for up to $f$ Byzantine faults and liveness assuming up to $p$ Byzantine and an honest leader. The only changes are that the commit quorum size becomes $n-p$, and the certificate size becomes $n-p-2f$. (See our [last post](https://decentralizedthoughts.github.io/2025-07-18-two-round-Simplex/) for why the certificate size should be $2f$ less than commit quorum size.) 
 
 
 
