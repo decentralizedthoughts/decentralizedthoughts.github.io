@@ -1,5 +1,5 @@
 ---
-title: Concurrent 2-round and 3-round BFT in Simplex style
+title: Concurrent 2-round and 3-round Simplex-style BFT
 date: 2025-07-29 00:00:00 -04:00
 published: false
 tags:
