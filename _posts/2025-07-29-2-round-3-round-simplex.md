@@ -10,7 +10,7 @@ author: Ittai Abraham, Yuval Efron, Kartik Nayak, and Ling Ren
 
 In the last two posts, we presented two partially synchronous BFT protocols in the [Simplex-style](https://eprint.iacr.org/2023/463.pdf): a [3-round protocol](https://decentralizedthoughts.github.io/2025-06-18-simplex/) with $n\geq3f+1$ and a [2-round protocol](https://decentralizedthoughts.github.io/2025-07-18-two-round-Simplex/) with $n\geq 5f+1$. In this post, we describe a protocol that runs a 2-round commit rule and a 3-round commit rule concurrently. 
 
-A new parameter $p$ ($0 \leq p \leq f$) is introduced and the goal is to design protocols that have $n \geq 3f+2p+1$ parties and the following properties:
+A new parameter $p$ ($0 \leq p \leq f$) is introduced, and the goal is to design protocols that have $n \geq 3f+2p+1$ parties and the following properties:
 
 - Safety and liveness in the presence of $f$ Byzantine parties;
 - If the leader is honest, the network is synchronous (GST=0), and at most $f$ parties are Byzantine, then all honest parties commit in 3 rounds; and
@@ -181,7 +181,7 @@ Safety is straightforward from Lemma 3. Liveness follows from the lemmas below.
 
 *Proof sketch*: If an honest party commits in view $<k$, it forwards the commit certificate, so all honest parties commit in view $<k$. If no honest party commits in view $<k$, then given synchrony after GST, all honest parties enter view $k$, vote for the honest leader.
 
-If there are $<p$ Byzantine then all will and commit in view $k$ in 2 rounds.
+If there are $<p$ Byzantine then all will vote and commit in view $k$ in 2 rounds.
 
 If there are $<f$ Byzantine then all honest will send final and commit in view $k$ in 3 rounds.
 
