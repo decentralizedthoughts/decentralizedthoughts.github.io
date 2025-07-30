@@ -22,7 +22,7 @@ To our knowledge, such protocols were first proposed in [FaB](https://ieeexplore
 In this post, we describe a natural Simplex-style protocol achieving the above guarantees. Our approach is simply to merge the 3-round and 2-round protocols from our last two posts with virtually no additional modifications. 
 
 
-## 2 round $n=5f+1$ recast to $n=3f+2p+1$
+## 2-round $n=5f+1$ recast to $n=3f+2p+1$
 
 To start, here is the $n=5f+1$ protocol, adapted to $n=3f+2p+1$ to obtain safety for up to $f$ Byzantine faults and liveness assuming up to $p$ Byzantine and an honest leader. The only changes are that the commit quorum size becomes $n-p$, and the certificate size becomes $n-p-2f$. (See our [last post](https://decentralizedthoughts.github.io/2025-07-18-two-round-Simplex/) for why the certificate size should be $2f$ less than commit quorum size.) 
 
@@ -56,7 +56,7 @@ To start, here is the $n=5f+1$ protocol, adapted to $n=3f+2p+1$ to obtain safety
 ```
 
 
-## 3 round $n=3f+1$ recast to $n=3f+2p+1$
+## 3-round $n=3f+1$ recast to $n=3f+2p+1$
 
 Now here is the $n=3f+1$ protocol, adopted to $n=3f+2p+1$ to obtain safety and liveness for $f$ Byzantine. The only change is that the quorum size is reduced from $n-f$ to $n-f-p$, because now two quorums of $n-f-p$ intersect at $2(n-f-p)-n \geq f+1$.
 
