@@ -195,4 +195,4 @@ If there are $<f$ Byzantine then all honest will send final and commit in view $
 We would like to thank Quentin Kniep, Jakub Sliwinski, and Roger Wattenhofer for insightful discussions and feedback. Yuval participated in this work while affiliated with a16z Crypto Research.
 
 
-Your thoughts/comments on [X]().
+Your thoughts/comments on [X](https://x.com/ittaia/status/1950642366483992880).
