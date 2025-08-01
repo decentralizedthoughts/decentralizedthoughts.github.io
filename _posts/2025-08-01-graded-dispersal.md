@@ -19,17 +19,17 @@ It's natural to ask:
 > Do VID protocols require cryptography? Can they obtain $O(1)$ storage overhead without computational assumptions?
 
 
-In 2020 [Jinyuan Chen](https://arxiv.org/abs/2009.10965) published a breakthrough result, published in [DISC 2021](https://drops.dagstuhl.de/storage/00lipics/lipics-vol209-disc2021/LIPIcs.DISC.2021.17/LIPIcs.DISC.2021.17.pdf), proving that Multi-valued Byzantine agreement in synchrony can be obtained with the optimal $O(n^2)$ communication!
+In 2020 [Jinyuan Chen](https://arxiv.org/abs/2009.10965) published a breakthrough result, in [DISC 2021](https://drops.dagstuhl.de/storage/00lipics/lipics-vol209-disc2021/LIPIcs.DISC.2021.17/LIPIcs.DISC.2021.17.pdf), proving that Multi-valued Byzantine agreement with perfect security and optimal resilience in synchrony can be obtained with the asymptotically optimal $O(n)$ overhead!
 
 The crux of Jinyuan's breakthrough is a new VID variation that has **perfect security**, where dispersal of $O(n\log n)$ bits cost just $O(n^2 \log n)$ bits.
 
-Jinyuan' VID protocol is very natural. However, its proof is based on rather intricate arguments that combine coding theory ideas, graph theory, and linear algebra. In this post we show an improved version of this result with a simpler proof that is based on our recent work  [Simple is COOL: Graded Dispersal and its Applications for Byzantine Fault Tolerance](https://eprint.iacr.org/2024/2036). You can also watch a video about this work [here](https://www.youtube.com/watch?v=QuGvDU2NFuE).
+Jinyuan' VID protocol is very natural. However, its proof is based on rather intricate arguments that combine coding theory ideas, graph theory, and linear algebra. In this post we show a slightly improved version of this result with a simpler proof that is based on our recent work  [Simple is COOL: Graded Dispersal and its Applications for Byzantine Fault Tolerance](https://eprint.iacr.org/2024/2036). You can also watch a video about this work [here](https://www.youtube.com/watch?v=QuGvDU2NFuE).
 
-Using this graded VID we prove two results from [COOL](https://arxiv.org/abs/2009.10965):
+Using this graded VID we prove two results:
 
 **Theorem 1 [[SZR22]](https://eprint.iacr.org/2022/052)**: perfect security Reliable broadcast of $O(n\log n)$ bits at a cost of $O(n^2 \log^2 n)$ bits and $O(1)$ rounds in asynchrony against $f<n/3$ malicious corruptions.
 
-**Theorem 2 [[C20]](https://arxiv.org/abs/2009.10965)**: perfect security Agreement with inputs of $O(n\log n)$ bits at a cost of $O(n^2 \log^2 n)$ bits and $O(n)$ rounds in synchrony against $f<n/3$ malicious corruptions.
+**Theorem 2 [[C20]](https://arxiv.org/abs/2009.10965)**: perfect security multi-valued Agreement with inputs of $O(n\log n)$ bits at a cost of $O(n^2 \log^2 n)$ bits and $O(n)$ rounds in synchrony against $f<n/3$ malicious corruptions.
 
 
 ## Does perfect security matter
