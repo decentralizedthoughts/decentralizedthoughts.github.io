@@ -2,7 +2,7 @@
 title: Polynomial Secret Sharing with crash failures
 date: 2022-08-17 08:00:00 -04:00
 tags:
-- secret sharing
+- cryptography
 author: Ittai Abraham
 ---
 

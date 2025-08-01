@@ -3,7 +3,7 @@ title: Asynchronous Agreement on a Core Set
 date: 2023-07-22 08:00:00 -04:00
 tags:
 - consensus
-- MPC
+- asynchrony
 author: Gilad Stern, Ittai Abraham
 ---
 

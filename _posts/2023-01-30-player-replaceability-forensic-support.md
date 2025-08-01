@@ -2,7 +2,6 @@
 title: Can we Obtain Player Replaceability and Forensic Support Simultaneously?
 date: 2023-01-30 20:00:00 -05:00
 tags:
-- accountability
 - research
 author: Peiyao Sheng, Gerui Wang, Kartik Nayak, Sreeram Kannan, Pramod Viswanath
 ---

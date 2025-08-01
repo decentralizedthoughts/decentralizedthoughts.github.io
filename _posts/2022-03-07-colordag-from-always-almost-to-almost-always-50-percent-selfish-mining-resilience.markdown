@@ -3,7 +3,7 @@ title: 'Colordag: From always-almost to almost-always 50% selfish mining resilie
 date: 2022-03-07 10:19:00 -05:00
 tags:
 - blockchain
-- game_theory
+- incentives
 author: Ittay Eyal, Ittai Abraham
 ---
 

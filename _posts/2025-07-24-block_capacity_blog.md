@@ -3,9 +3,7 @@ title: An Analysis of Latency and Block Capacity in Nakamoto Consensus
 date: 2025-07-24 00:00:00 -04:00
 tags:
 - blockchain
-- consensus
-- game theory
-- latency
+- incentives
 author: Michele Fabi
 ---
 

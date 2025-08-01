@@ -3,7 +3,6 @@ title: Dining Cryptographers and the additivity of polynomial secret sharing
 date: 2022-08-25 08:00:00 -04:00
 tags:
 - cryptography
-- secret sharing
 author: Ittai Abraham
 ---
 

@@ -2,7 +2,7 @@
 title: The BGW Verifiable Secret Sharing Protocol
 date: 2022-08-24 08:00:00 -04:00
 tags:
-- secret sharing
+- cryptography
 author: Ittai Abraham and Gilad Asharov
 ---
 

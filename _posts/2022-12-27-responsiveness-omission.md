@@ -2,9 +2,8 @@
 title: Responsiveness under omission failures
 date: 2022-12-27 08:00:00 -05:00
 tags:
-- dist101
+- research
 - omission
-- responsiveness
 author: Ittai Abraham and Kartik Nayak
 ---
 

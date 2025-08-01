@@ -3,7 +3,7 @@ title: Agreement against strongly adaptive adversaries needs quadratic communica
 date: 2024-12-16 07:30:00 -05:00
 tags:
 - lowerbound
-- adaptive
+- research
 author: Ittai Abraham, Kartik Nayak, Ling Ren
 ---
 

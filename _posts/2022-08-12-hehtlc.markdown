@@ -3,7 +3,6 @@ title: He-HTLC - Revisiting Incentives in HTLC
 date: 2022-08-12 01:00:00 -04:00
 tags:
 - blockchain
-- L2
 - incentives
 author: Kartik Nayak, Sarisht Wadhwa, Jannis Stoeter, Fan Zhang
 ---

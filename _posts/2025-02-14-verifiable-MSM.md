@@ -2,7 +2,7 @@
 title: Verifiable Multi-Exponentiation and Multi-Scalar Multiplication (MSM)
 date: 2025-02-14 11:30:00 -05:00
 tags:
-- MSM
+- cryptography
 author: Benny Pinkas
 ---
 

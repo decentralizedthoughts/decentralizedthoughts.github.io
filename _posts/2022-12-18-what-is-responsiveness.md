@@ -2,7 +2,8 @@
 title: What is Responsiveness?
 date: 2022-12-18 04:00:00 -05:00
 tags:
-- dist101
+- models
+- research
 author: Ittai Abraham and Kartik Nayak
 ---
 

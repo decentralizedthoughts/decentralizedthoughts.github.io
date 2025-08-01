@@ -2,7 +2,7 @@
 title: Decentralization of Ethereum Builder Market
 date: 2024-05-07 13:05:00 -04:00
 tags:
-- MEV
+- incentives
 author: Sen Yang, Kartik Nayak, and Fan Zhang
 ---
 
