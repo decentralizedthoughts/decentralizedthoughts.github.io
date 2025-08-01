@@ -2,9 +2,7 @@
 title: The Trusted Setup Phase
 date: 2019-07-19 02:29:00 -04:00
 tags:
-- dist101
 - models
-- crypto101
 layout: post
 ---
 

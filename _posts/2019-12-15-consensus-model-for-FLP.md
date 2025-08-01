@@ -2,7 +2,7 @@
 title: Consensus Lower Bounds via Uncommitted Configurations
 date: 2019-12-15 12:03:00 -05:00
 tags:
-- dist101
+- asynchrony
 - lowerbound
 author: Ittai Abraham
 ---

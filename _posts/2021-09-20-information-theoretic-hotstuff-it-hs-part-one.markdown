@@ -2,7 +2,7 @@
 title: 'Information Theoretic HotStuff (IT-HS): Part One'
 date: 2021-09-20 08:07:00 -04:00
 tags:
-- dist101
+- research
 author: Gilad Stern, Ittai Abraham
 ---
 

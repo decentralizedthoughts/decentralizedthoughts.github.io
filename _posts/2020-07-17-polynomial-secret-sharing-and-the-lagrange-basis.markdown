@@ -2,7 +2,7 @@
 title: Polynomial Secret Sharing and the Lagrange Basis
 date: 2020-07-17 14:23:00 -04:00
 tags:
-- secret sharing
+- cryptography101
 author: Ittai Abraham, Alin Tomescu
 ---
 

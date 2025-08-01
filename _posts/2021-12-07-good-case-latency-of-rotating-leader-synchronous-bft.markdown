@@ -2,7 +2,6 @@
 title: Good-case Latency of Rotating Leader Synchronous BFT
 date: 2021-12-07 04:39:00 -05:00
 tags:
-- synchronous protocols
 - research
 author: Nibesh Shrestha, Ittai Abraha, Kartik Nayak
 ---

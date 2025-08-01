@@ -2,8 +2,8 @@
 title: Benign Hotstuff
 date: 2021-04-02 05:54:00 -04:00
 tags:
-- dist101
-- blockchain101
+- blockchain
+- SMR
 author: Ittai Abraham, Heidi Howard, and Kartik Nayak
 ---
 

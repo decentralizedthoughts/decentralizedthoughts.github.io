@@ -2,7 +2,7 @@
 title: Sync HotStuff, A Simple and Practical State Machine Replication
 date: 2019-11-12 02:10:00 -08:00
 tags:
-- dist101
+- consensus101
 - SMR
 - research
 author: Kartik Nayak, Ling Ren

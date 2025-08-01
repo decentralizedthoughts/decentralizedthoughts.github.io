@@ -2,7 +2,8 @@
 title: 'The Ideal State Machine Model: Multiple Clients and Linearizability'
 date: 2021-10-16 15:45:00 -04:00
 tags:
-- dist101
+- SMR
+- model
 author: Ittai Abraham
 ---
 

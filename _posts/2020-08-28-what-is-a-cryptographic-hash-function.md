@@ -2,13 +2,7 @@
 title: What is a Cryptographic Hash Function?
 date: 2020-08-28 13:05:00 -04:00
 tags:
-- cryptography
-- hashing
-- hash-function
-- random-oracle
-- collision-resistance
-- one-wayness
-- integrity
+- cryptography101
 author: Alin Tomescu
 ---
 

@@ -2,7 +2,6 @@
 title: Synchronous Consensus Lower Bound via Uncommitted Configurations
 date: 2019-12-15 12:05:00 -05:00
 tags:
-- dist101
 - lowerbound
 author: Ittai Abraham
 ---

@@ -3,7 +3,6 @@ title: 'Private Set Intersection #2'
 date: 2020-07-26 16:00:00 -07:00
 tags:
 - cryptography
-- private-set-intersection
 layout: post
 author: Avishay Yanai
 ---

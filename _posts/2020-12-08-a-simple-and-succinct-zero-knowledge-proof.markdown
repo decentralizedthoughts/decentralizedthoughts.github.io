@@ -2,8 +2,7 @@
 title: A Simple and Succinct Zero Knowledge Proof
 date: 2020-12-08 13:37:00 -05:00
 tags:
-- zero-knowledge
-- crypto101
+- cryptography
 author: Ittai Abraham, Alin Tomescu
 ---
 

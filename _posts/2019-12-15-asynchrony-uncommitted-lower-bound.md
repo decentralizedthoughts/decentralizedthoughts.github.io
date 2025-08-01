@@ -2,7 +2,7 @@
 title: The FLP Impossibility, Asynchronous Consensus Lower Bound via Uncommitted Configurations
 date: 2019-12-15 12:15:00 -05:00
 tags:
-- dist101
+- asynchrony
 - lowerbound
 author: Ittai Abraham
 ---

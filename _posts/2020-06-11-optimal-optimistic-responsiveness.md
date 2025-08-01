@@ -2,8 +2,6 @@
 title: On the Optimality of Optimistic Responsiveness
 date: 2020-06-11 21:10:00 -11:00
 tags:
-- blockchain 101
-- SMR
 - research
 author: Nibesh Shrestha, Kartik Nayak
 redirect_from: "/2020-06-12-optimal-optimistic-responsiveness/"

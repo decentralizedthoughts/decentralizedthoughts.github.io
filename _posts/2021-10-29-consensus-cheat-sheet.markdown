@@ -2,7 +2,7 @@
 title: Consensus cheat sheet
 date: 2021-10-29 08:18:00 -04:00
 tags:
-- dist101
+- consensus101
 author: Ittai Abraham
 ---
 

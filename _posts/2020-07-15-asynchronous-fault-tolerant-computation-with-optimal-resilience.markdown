@@ -3,7 +3,7 @@ title: Asynchronous Fault Tolerant Computation with Optimal Resilience
 date: 2020-07-15 01:39:00 -07:00
 tags:
 - lowerbound
-- VSS
+- asynchrony
 author: Ittai Abraham, Danny Dolev, Gilad Stern
 ---
 

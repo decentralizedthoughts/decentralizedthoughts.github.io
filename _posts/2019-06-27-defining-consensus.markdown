@@ -2,7 +2,7 @@
 title: What is Consensus?
 date: 2019-06-27 15:00:00 -04:00
 tags:
-- dist101
+- consensus101
 author: Kartik Nayak, Ittai Abraham
 ---
 

@@ -2,7 +2,6 @@
 title: The round complexity of Reliable Broadcast
 date: 2021-09-29 06:05:00 -04:00
 tags:
-- dist101
 - research
 - lowerbound
 author: Ittai Abraham, Zhuolun Xiang, Ling Ren

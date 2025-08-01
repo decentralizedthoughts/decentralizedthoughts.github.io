@@ -3,6 +3,7 @@ title: Flavours of Partial Synchrony
 date: 2019-09-13 18:00:00 -04:00
 tags:
 - dist101
+- model
 author: Ittai Abraham
 ---
 

@@ -3,7 +3,6 @@ title: Blockchain Selfish Mining
 date: 2020-02-26 07:00:00 -08:00
 tags:
 - blockchain
-- game_theory
 author: Ittay Eyal
 ---
 

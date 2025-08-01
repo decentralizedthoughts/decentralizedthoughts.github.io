@@ -2,7 +2,7 @@
 title: Dolev-Strong Authenticated Broadcast
 date: 2019-12-22 12:05:00 -05:00
 tags:
-- dist101
+- consensus
 author: Ittai Abraham, Kartik Nayak
 ---
 

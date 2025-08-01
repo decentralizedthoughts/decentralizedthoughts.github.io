@@ -4,7 +4,6 @@ title: Crusader Agreement with $\leq 1/3$ Error is Impossible for $n\leq 3f$ if 
 date: 2021-10-04 10:46:00 -04:00
 tags:
 - lowerbound
-- dist101
 author: Ittai Abraham and Kartik Nayak
 ---
 

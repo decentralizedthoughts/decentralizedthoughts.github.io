@@ -2,7 +2,6 @@
 title: 'Living with Asynchrony: Bracha''s Reliable Broadcast'
 date: 2020-09-19 09:05:00 -04:00
 tags:
-- dist101
 - asynchrony
 author: Ittai Abraham and Kartik Nayak
 ---

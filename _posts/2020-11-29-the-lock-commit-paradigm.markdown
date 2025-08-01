@@ -2,7 +2,7 @@
 title: The Lock-Commit Paradigm
 date: 2020-11-29 08:02:00 -05:00
 tags:
-- dist101
+- consensus101
 author: Ittai Abraham, Kartik Nayak
 ---
 

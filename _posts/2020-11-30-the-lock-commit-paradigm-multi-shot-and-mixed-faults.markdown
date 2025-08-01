@@ -2,7 +2,7 @@
 title: 'The Lock-Commit Paradigm: Multi-shot and Mixed Faults'
 date: 2020-11-30 09:01:00 -05:00
 tags:
-- dist101
+- consensus
 author: Ittai Abraham, Kartik Nayak
 ---
 

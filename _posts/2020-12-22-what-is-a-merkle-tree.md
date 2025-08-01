@@ -2,10 +2,7 @@
 title: What is a Merkle Tree?
 date: 2020-12-22 09:05:00 -05:00
 tags:
-- cryptography
-- merkle-hash-tree
-- collision-resistant-hash-function
-- integrity
+- cryptography101
 author: Alin Tomescu
 ---
 

@@ -2,7 +2,6 @@
 title: Byzantine Agreement is Impossible for $n \leq 3 f$ if the Adversary can Simulate
 date: 2019-08-02 13:55:00 -04:00
 tags:
-- dist101
 - lowerbound
 author: Kartik Nayak, Ittai Abraham
 share-img: "/uploads/FLM-world3.png"

@@ -3,7 +3,7 @@ title: Progress in Synchronous BFT Protocols
 date: 2019-10-13 19:58:00 -07:00
 published: false
 tags:
-- dist101
+- research
 - synchronous protocols
 author: Kartik Nayak
 ---

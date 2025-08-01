@@ -2,7 +2,6 @@
 title: 'Living with Asynchrony: the Gather protocol'
 date: 2021-03-26 06:54:00 -04:00
 tags:
-- dist101
 - asynchrony
 author: Gilad Stern and Ittai Abraham
 ---

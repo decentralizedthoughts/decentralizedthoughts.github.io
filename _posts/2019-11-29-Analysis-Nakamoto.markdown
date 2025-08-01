@@ -2,7 +2,7 @@
 title: Security proof for Nakamoto Consensus
 date: 2019-11-29 13:05:00 -08:00
 tags:
-- blockchain101
+- blockchain
 author: Ling Ren
 ---
 

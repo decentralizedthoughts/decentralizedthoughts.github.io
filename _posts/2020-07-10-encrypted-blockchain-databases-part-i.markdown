@@ -2,8 +2,7 @@
 title: Encrypted Blockchain Databases (Part I)
 date: 2020-07-10 13:10:00 -07:00
 tags:
-- blockchain databases
-- encrypted search
+- research
 author: Daniel Adkins, Archita Agarwal, Seny Kamara, Tarik Moataz
 ---
 

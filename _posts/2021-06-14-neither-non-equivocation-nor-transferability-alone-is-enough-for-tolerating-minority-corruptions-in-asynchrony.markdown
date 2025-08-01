@@ -3,9 +3,8 @@ title: Neither Non-equivocation nor Transferability alone is enough for tolerati
   minority corruptions in asynchrony
 date: 2021-06-14 12:04:00 -04:00
 tags:
-- dist101
-- non-equivocation
 - lowerbound
+- research
 author: Sravya Yandamuri, Naama Ben David
 ---
 

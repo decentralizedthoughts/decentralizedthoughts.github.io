@@ -4,7 +4,6 @@ date: 2021-02-28 13:07:00 -05:00
 tags:
 - research
 - lowerbound
-- SMR
 author: Zhuolun Xiang
 ---
 

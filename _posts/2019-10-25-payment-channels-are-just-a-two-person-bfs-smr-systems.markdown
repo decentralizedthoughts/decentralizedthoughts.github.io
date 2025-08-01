@@ -2,7 +2,7 @@
 title: A Payment Channel is a two person BFS-SMR system
 date: 2019-10-25 14:22:00 -07:00
 tags:
-- dist101
+- SMR
 - blockchain101
 author: Ittai Abraham
 ---

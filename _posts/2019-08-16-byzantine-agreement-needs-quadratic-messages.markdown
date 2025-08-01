@@ -3,7 +3,6 @@ title: 'The Dolev and Reischuk Lower Bound: Does Agreement need Quadratic Messag
 date: 2019-08-16 18:30:00 -04:00
 tags:
 - lowerbound
-- dist101
 author: Kartik Nayak, Ittai Abraham
 ---
 

@@ -3,7 +3,6 @@ title: Optimal Communication Complexity of Authenticated Byzantine Agreement
 date: 2021-09-20 15:28:00 -04:00
 tags:
 - research
-- synchronous protocols
 author: Atsuki Momose, Ling Ren
 ---
 

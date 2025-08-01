@@ -2,8 +2,8 @@
 title: The Marvels of Polynomials over a Field
 date: 2020-07-17 13:55:00 -04:00
 tags:
-- secret sharing
-- dist101
+- math
+- cryptography
 author: Ittai Abraham
 ---
 
