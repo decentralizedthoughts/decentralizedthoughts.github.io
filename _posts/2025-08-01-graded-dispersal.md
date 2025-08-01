@@ -197,4 +197,4 @@ End of round 2
 
 
 
-Your feedback on [X]().
+Your feedback on [X](https://x.com/ittaia/status/1951364975265718756).
