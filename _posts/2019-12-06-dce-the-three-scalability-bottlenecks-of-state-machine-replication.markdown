@@ -1,7 +1,7 @@
 ---
 title: 'Data, Consensus, Execution: Three Scalability Bottlenecks for State Machine
   Replication'
-date: 2019-12-06 06:05:00 -11:00
+date: 2019-12-06 12:05:00 -05:00
 tags:
 - blockchain
 author: Ittai Abraham

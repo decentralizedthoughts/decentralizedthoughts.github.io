@@ -1,6 +1,6 @@
 ---
 title: Asynchronous Fault Tolerant Computation with Optimal Resilience
-date: 2020-07-15 01:39:00 -07:00
+date: 2020-07-15 04:39:00 -04:00
 tags:
 - lowerbound
 - asynchrony

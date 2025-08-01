@@ -1,6 +1,6 @@
 ---
 title: 'Streamlet: A Simple Textbook Blockchain Protocol'
-date: 2020-05-14 10:48:00 -07:00
+date: 2020-05-14 13:48:00 -04:00
 tags:
 - blockchain
 ---

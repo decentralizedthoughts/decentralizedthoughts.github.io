@@ -1,6 +1,6 @@
 ---
 title: Resolving the Availability-Finality Dilemma
-date: 2020-10-31 18:16:00 -11:00
+date: 2020-11-01 01:16:00 -04:00
 tags:
 - SMR
 - research

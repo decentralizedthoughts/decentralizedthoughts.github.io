@@ -1,6 +1,6 @@
 ---
 title: Dont Trust. Verify. and Checkpoint?
-date: 2019-09-13 13:32:00 -07:00
+date: 2019-09-13 16:32:00 -04:00
 tags:
 - blockchain
 author: Ittai Abraham
