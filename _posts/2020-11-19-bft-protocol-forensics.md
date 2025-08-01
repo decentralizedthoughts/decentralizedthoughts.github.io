@@ -1,6 +1,6 @@
 ---
 title: BFT Protocol Forensics
-date: 2020-11-19 14:00:00 -11:00
+date: 2020-11-19 20:00:00 -05:00
 tags:
 - research
 author: Peiyao Sheng, Gerui Wang, Kartik Nayak, Sreeram Kannan, Pramod Viswanath

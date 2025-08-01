@@ -1,6 +1,6 @@
 ---
 title: Blockchain Selfish Mining
-date: 2020-02-26 07:00:00 -08:00
+date: 2020-02-26 10:00:00 -05:00
 tags:
 - blockchain
 - incentives

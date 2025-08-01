@@ -1,6 +1,6 @@
 ---
 title: Progress in Synchronous BFT Protocols
-date: 2019-10-13 19:58:00 -07:00
+date: 2019-10-13 22:58:00 -04:00
 published: false
 tags:
 - research

@@ -1,6 +1,6 @@
 ---
 title: On the Optimality of Optimistic Responsiveness
-date: 2020-06-11 21:10:00 -11:00
+date: 2020-06-12 04:10:00 -04:00
 tags:
 - research
 author: Nibesh Shrestha, Kartik Nayak

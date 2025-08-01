@@ -1,6 +1,6 @@
 ---
 title: Commit-Notify Paradigm for Synchronous Consensus with Omission Faults
-date: 2020-09-13 12:09:00 -07:00
+date: 2020-09-13 15:09:00 -04:00
 tags:
 - consensus
 - SMR

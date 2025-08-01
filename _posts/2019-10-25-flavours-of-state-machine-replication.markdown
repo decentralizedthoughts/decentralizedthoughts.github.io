@@ -1,6 +1,6 @@
 ---
 title: Flavours of State Machine Replication
-date: 2019-10-25 12:54:00 -07:00
+date: 2019-10-25 15:54:00 -04:00
 tags:
 - SMR
 author: Ittai Abraham
