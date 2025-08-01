@@ -1,10 +1,10 @@
 ---
-title: 'Graded dispersal with perfect security'
-date: 2025-08-01 06:00:00 -05:00
+title: Graded dispersal with perfect security
+date: 2025-08-01 07:00:00 -04:00
 tags:
 - perfect security
 - VID
-author: Ittai Abraham, Gilad Asharov, Anirudh Chandramouli 
+author: Ittai Abraham, Gilad Asharov, Anirudh Chandramouli
 ---
 
 In a [previous post](https://decentralizedthoughts.github.io/2024-08-08-vid) we covered the basics of *Asynchronous Verifiable Information Dispersal* (AVID) and the classic AVID of [Cachin and Tessaro, 2004](https://homes.cs.washington.edu/~tessaro/papers/dds.pdf). 
