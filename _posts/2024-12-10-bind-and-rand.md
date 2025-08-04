@@ -3,7 +3,7 @@ title: Living with asynchrony and eventually reaching agreement by combining bin
   and randomness
 date: 2024-12-10 03:00:00 -05:00
 tags:
-- dist101
+- randomness
 - asynchrony
 author: Ittai Abraham, Gilad Stern
 ---

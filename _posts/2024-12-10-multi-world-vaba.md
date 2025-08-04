@@ -2,7 +2,7 @@
 title: Multi-world Validated Asynchronous Byzantine Agreement
 date: 2024-12-10 03:15:00 -05:00
 tags:
-- dist101
+- research
 - asynchrony
 author: Ittai Abraham, Alexander Spiegelman
 ---

@@ -2,7 +2,8 @@
 title: Provable Broadcast
 date: 2022-09-10 08:00:00 -04:00
 tags:
-- dist101
+- consensus
+- research
 author: Ittai Abraham, Alexander Spiegelman
 ---
 

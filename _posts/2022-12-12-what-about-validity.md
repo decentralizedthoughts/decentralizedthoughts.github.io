@@ -2,7 +2,7 @@
 title: What about Validity?
 date: 2022-12-12 04:00:00 -05:00
 tags:
-- dist101
+- consensus
 - lowerbound
 author: Ittai Abraham and Christian Cachin
 ---

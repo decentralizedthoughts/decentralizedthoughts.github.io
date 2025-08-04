@@ -2,7 +2,6 @@
 title: Graded dispersal with perfect security
 date: 2025-08-01 07:00:00 -04:00
 tags:
-- perfect security
 - VID
 author: Ittai Abraham, Gilad Asharov, Anirudh Chandramouli
 ---

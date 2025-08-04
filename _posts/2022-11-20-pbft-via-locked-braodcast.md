@@ -2,7 +2,7 @@
 title: 'Linear PBFT: a gentle introduction to Practical Byzantine Fault Tolerance'
 date: 2022-11-20 04:00:00 -05:00
 tags:
-- dist101
+- consensus
 author: Ittai Abraham
 ---
 

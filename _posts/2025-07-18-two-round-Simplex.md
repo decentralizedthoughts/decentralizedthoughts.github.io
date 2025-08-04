@@ -3,7 +3,6 @@ title: 2-round BFT in Simplex style
 date: 2025-07-18 00:00:00 -04:00
 tags:
 - consensus
-- BFT
 author: Ittai Abraham, Yuval Efron, and Ling Ren
 ---
 

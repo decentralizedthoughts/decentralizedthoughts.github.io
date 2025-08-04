@@ -3,6 +3,7 @@ title: Simpler Security proof for Nakamoto Consensus
 date: 2023-10-30 02:55:00 -04:00
 tags:
 - blockchain101
+- blockchain
 author: Ling Ren
 ---
 

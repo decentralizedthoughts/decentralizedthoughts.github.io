@@ -2,7 +2,7 @@
 title: Crusader Broadcast
 date: 2022-06-19 03:11:00 -04:00
 tags:
-- dist101
+- consensus
 author: Gilad Stern and Ittai Abraham
 ---
 

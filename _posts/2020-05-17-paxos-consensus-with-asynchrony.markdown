@@ -5,6 +5,8 @@ published: false
 tags:
 - dist101
 - SMR
+- consensus
+- crash
 author: Kartik Nayak
 ---
 

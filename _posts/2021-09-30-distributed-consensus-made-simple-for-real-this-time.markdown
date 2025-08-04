@@ -2,7 +2,8 @@
 title: Distributed consensus made simple (for real this time!)
 date: 2021-09-30 03:39:00 -04:00
 tags:
-- dist101
+- consensus
+- consensus101
 author: Chris Jensen, Heidi Howard
 ---
 

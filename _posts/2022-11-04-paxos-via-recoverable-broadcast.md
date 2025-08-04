@@ -2,7 +2,7 @@
 title: On Paxos from Recoverable Broadcast
 date: 2022-11-04 05:00:00 -04:00
 tags:
-- dist101
+- crash
 - omission
 author: Ittai Abraham
 ---

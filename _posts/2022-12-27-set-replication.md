@@ -2,7 +2,7 @@
 title: Set Replication - fault tolerance without total ordering
 date: 2022-12-27 04:00:00 -05:00
 tags:
-- dist101
+- research
 author: Ittai Abraham
 ---
 

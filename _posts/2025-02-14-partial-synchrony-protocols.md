@@ -2,8 +2,7 @@
 title: Key Principles Underlying Partial Synchrony BFT
 date: 2025-02-14 09:30:00 -05:00
 tags:
-- BFT
-- dist101
+- consensus
 author: Kartik Nayak, Ittai Abraham
 ---
 

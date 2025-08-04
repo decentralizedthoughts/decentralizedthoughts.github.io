@@ -3,7 +3,8 @@ title: 'Asynchronous Agreement Part One: Defining the problem'
 date: 2022-03-30 07:11:00 -04:00
 tags:
 - asynchrony
-- dist101
+- consensus
+- consensus101
 author: 'Ittai Abraham, Naama Ben-David, Sravya Yandamuri '
 ---
 

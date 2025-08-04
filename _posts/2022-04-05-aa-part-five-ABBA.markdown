@@ -4,7 +4,7 @@ title: 'Asynchronous Agreement Part 5: Binary Byzantine Agreement from a strong 
 date: 2022-04-05 08:11:00 -04:00
 tags:
 - asynchrony
-- dist101
+- consensus
 - research
 author: 'Ittai Abraham, Naama Ben-David, Sravya Yandamuri '
 ---

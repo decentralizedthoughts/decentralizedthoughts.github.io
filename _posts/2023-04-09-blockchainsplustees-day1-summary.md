@@ -3,8 +3,6 @@ title: Blockchains + TEEs Day 1 Summary
 date: 2023-04-09 01:00:00 -04:00
 tags:
 - blockchain
-- TEE
-- workshop
 author: Kartik Nayak, Ittai Abraham, Aniket Kate
 ---
 

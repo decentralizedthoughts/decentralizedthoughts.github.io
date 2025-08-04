@@ -3,7 +3,8 @@ title: Randomization and Consensus - synchronous binary agreement for minority o
   failures
 date: 2023-02-19 06:00:00 -05:00
 tags:
-- dist101
+- omission
+- consensus
 - randomness
 author: Ittai Abraham
 ---

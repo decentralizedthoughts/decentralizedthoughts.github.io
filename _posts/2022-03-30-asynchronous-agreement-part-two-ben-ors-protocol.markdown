@@ -3,7 +3,8 @@ title: 'Asynchronous Agreement Part Two: Ben-Or''s protocol'
 date: 2022-03-30 07:16:00 -04:00
 tags:
 - asynchrony
-- dist101
+- consensus101
+- consensus
 author: Ittai Abraham, Namma Ben-David, Sravya Yandamuri
 ---
 

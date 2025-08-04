@@ -4,6 +4,7 @@ date: 2022-03-07 10:19:00 -05:00
 tags:
 - blockchain
 - incentives
+- research
 author: Ittay Eyal, Ittai Abraham
 ---
 

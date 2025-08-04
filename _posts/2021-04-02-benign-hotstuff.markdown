@@ -4,6 +4,7 @@ date: 2021-04-02 05:54:00 -04:00
 tags:
 - blockchain
 - SMR
+- crash
 author: Ittai Abraham, Heidi Howard, and Kartik Nayak
 ---
 

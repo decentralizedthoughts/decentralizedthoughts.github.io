@@ -2,7 +2,7 @@
 title: 'Approximate Agreement: definitions and the robust midpoint protocol'
 date: 2022-06-07 03:11:00 -04:00
 tags:
-- dist101
+- consensus
 author: Ittai Abraham and Gilad Stern
 ---
 

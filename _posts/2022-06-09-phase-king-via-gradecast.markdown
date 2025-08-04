@@ -3,7 +3,8 @@ title: 'Phase-King through the lens of Gradecast: A simple unauthenticated synch
   Byzantine Agreement protocol'
 date: 2022-06-09 07:11:00 -04:00
 tags:
-- dist101
+- consensus101
+- consensus
 author: Ittai Abraham and Andrew Lewis-Pye
 ---
 

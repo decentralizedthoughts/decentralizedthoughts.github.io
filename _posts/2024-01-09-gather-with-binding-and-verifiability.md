@@ -2,7 +2,7 @@
 title: Gather with Binding and Verifiability
 date: 2024-01-09 18:00:00 -05:00
 tags:
-- asynchrony
+- research
 author: Gilad Stern and Ittai Abraham
 ---
 

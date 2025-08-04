@@ -3,7 +3,7 @@ title: 'Asynchronous Agreement Part Three: a Modern version of Ben-Or''s protoco
 date: 2022-03-30 07:21:00 -04:00
 tags:
 - asynchrony
-- dist101
+- consensus
 - research
 author: Ittai Abraham, Naama Ben-David, Sravya Yandamuri
 ---

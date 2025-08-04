@@ -3,7 +3,7 @@ title: 'Asynchronous Agreement Part 4: Crusader Agreement and Binding Crusader A
 date: 2022-04-05 06:11:00 -04:00
 tags:
 - asynchrony
-- dist101
+- consensus
 - research
 author: 'Ittai Abraham, Naama Ben-David, Sravya Yandamuri '
 ---

@@ -3,7 +3,7 @@ title: Concurrent 2-round and 3-round Simplex-style BFT
 date: 2025-07-29 00:00:00 -04:00
 tags:
 - consensus
-- BFT
+- research
 author: Ittai Abraham, Yuval Efron, Kartik Nayak, and Ling Ren
 ---
 

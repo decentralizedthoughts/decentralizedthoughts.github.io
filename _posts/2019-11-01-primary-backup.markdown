@@ -3,6 +3,7 @@ title: Primary-Backup State Machine Replication for Crash Failures
 date: 2019-11-01 06:10:00 -04:00
 tags:
 - SMR
+- crash
 author: Ittai Abraham, Kartik Nayak
 ---
 

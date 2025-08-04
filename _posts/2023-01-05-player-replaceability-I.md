@@ -4,6 +4,7 @@ title: Player Replaceability - Towards Adaptive Security and Sub-quadratic Commu
 date: 2023-01-05 00:00:00 -05:00
 tags:
 - blockchain
+- research
 author: Kartik Nayak
 ---
 

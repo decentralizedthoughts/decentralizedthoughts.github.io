@@ -3,8 +3,10 @@ title: Randomization and Consensus - synchronous binary agreement for crash fail
   with a perfect common coin
 date: 2023-02-18 06:00:00 -05:00
 tags:
-- dist101
+- consensus
+- consensus101
 - randomness
+- crash
 author: Ittai Abraham
 ---
 
