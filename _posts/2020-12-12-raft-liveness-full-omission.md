@@ -1,10 +1,10 @@
 ---
 title: Raft does not Guarantee Liveness in the face of Network Faults
 date: 2020-12-12 09:01:00 -05:00
-author: Heidi Howard, Ittai Abraham
 tags:
 - omission
 - consensus
+author: Heidi Howard, Ittai Abraham
 ---
 
 Last month, [Cloudflare published a postmortem](https://blog.cloudflare.com/a-byzantine-failure-in-the-real-world/) of a recent 6-hour outage caused by a partial switch failure which left [etcd](https://etcd.io) unavailable as it was unable to establish a stable leader. This outage has understandably led to [discussion online](https://twitter.com/heidiann360/status/1332711011451867139) about exactly what liveness guarantees are provided by the [Raft](https://raft.github.io) consensus algorithm in the face of network failures.

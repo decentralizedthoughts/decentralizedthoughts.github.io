@@ -1,11 +1,11 @@
 ---
 title: Simplifying Raft with Chaining
 date: 2021-07-17 11:25:00 -04:00
-author: Heidi Howard, Natacha Crooks, Ittai Abraham
 tags:
 - SMR
 - crash
 - omission
+author: Heidi Howard, Natacha Crooks, Ittai Abraham
 ---
 
 [Raft](https://raft.github.io/raft.pdf) is a consensus algorithm for deciding a sequence of commands to execute on a [replicated state machine](https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/). Raft is famed for its understandability (relative to other consensus algorithms such as [Paxos](https://www.microsoft.com/en-us/research/uploads/prod/2016/12/The-Part-Time-Parliament.pdf)) yet some aspects of the protocol still require careful treatment. For instance, determining when it is safe for a leader to commit commands from previous leaders or when it is safe for servers to delete or overwrite commands in their logs.

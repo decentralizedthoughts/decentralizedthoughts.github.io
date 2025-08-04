@@ -1,6 +1,6 @@
 ---
 title: Paxos - Consensus with Crash Failures under Asynchrony
-date: 2020-05-17 03:10:00 -07:00
+date: 2020-05-17 06:10:00 -04:00
 published: false
 tags:
 - dist101
