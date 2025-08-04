@@ -3,7 +3,6 @@ title: Bilinear Accumulators for Cryptocurrency Enthusiasts
 date: 2020-04-02 04:10:00 -04:00
 tags:
 - cryptography
-- polynomials
 author: Alin Tomescu
 ---
 
