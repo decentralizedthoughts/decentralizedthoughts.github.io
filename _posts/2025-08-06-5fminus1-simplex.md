@@ -23,11 +23,11 @@ Let $n = 5f-1$ where $f$ is the maximum number of Byzantine faults.
 * $n-f = 4f-1$ votes are needed for commit.
 * Among these, at least $n-2f = 3f-1$ are honest votes.
 * Any other honest party waiting for $n-f$ votes will see at least $n-3f = 2f-1$ votes for $x$. 
-* Now there are two cases:
-* 
+* Two cases:
+  
    - **(No leader equivocation**): If the leader does not equivocate, a commit implies that any other honest party receives at least $2f-1$ votes for $x$ and the rest of the votes are for $\bot$.  
-       - *Special cert for $x$* is $2f-1$ votes for $x$ and $2f$ votes for $\bot$.
-       - *Regular cert for $x$* is  $2f$ votes for $x$.
+       - Define **Special certificate for $x$** as $2f-1$ votes for $x$ and $2f$ votes for $\bot$.
+       - DEfine **Regular certificate for $x$** as  $2f$ votes for $x$.
    - **(With leader equivocation)**: If a party detects leader equivocation, it ignores the leader's vote and waits for one more vote. Then it will see at least $n-3f+1 = 2f$ votes for $x$, which form a regular cert for $x$ 
        - There are at most $2f-1$ non-$x$ votes, so the party favors $x$.
 
