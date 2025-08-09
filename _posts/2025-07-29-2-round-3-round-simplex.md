@@ -188,7 +188,9 @@ If there are $<p$ Byzantine then all will vote and commit in view $k$ in 2 round
 
 If there are $<f$ Byzantine then all honest will send final and commit in view $k$ in 3 rounds.
 
+## Notes
 
+In a [follow-up post](https://decentralizedthoughts.github.io/2025-08-06-5fminus1-simplex/) we show how to get the optimal $n=3f+2p-1$.
 
 ## Acknowledgments
 

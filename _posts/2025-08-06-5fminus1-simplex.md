@@ -127,4 +127,4 @@ If the leader of some view $k$ is honest and GST has occurred, all honest partie
 
 We want to thank Yuval and Kartik for insightful discussions.
 
-Your thoughts/comments on [X]().
+Your thoughts/comments on [X](https://x.com/ittaia/status/1954109234917883985).
