@@ -18,11 +18,11 @@ It's natural to ask:
 > Do VID protocols require cryptography? Can they obtain $O(1)$ storage overhead without computational assumptions?
 
 
-In 2020 [Jinyuan Chen](https://arxiv.org/abs/2009.10965) published a breakthrough result, in [DISC 2021](https://drops.dagstuhl.de/storage/00lipics/lipics-vol209-disc2021/LIPIcs.DISC.2021.17/LIPIcs.DISC.2021.17.pdf), proving that Multi-valued Byzantine agreement with perfect security and optimal resilience in synchrony can be obtained with the asymptotically optimal $O(n)$ overhead!
+In 2020 Jinyuan Chen published a [breakthrough result](https://arxiv.org/abs/2009.10965) (also see [DISC 2021](https://drops.dagstuhl.de/storage/00lipics/lipics-vol209-disc2021/LIPIcs.DISC.2021.17/LIPIcs.DISC.2021.17.pdf)), proving that Multi-valued Byzantine agreement with perfect security and optimal resilience in synchrony can be obtained with the asymptotically optimal $O(n)$ overhead!
 
 The crux of Jinyuan's breakthrough is a new VID variation that has **perfect security**, where dispersal of $O(n\log n)$ bits cost just $O(n^2 \log n)$ bits.
 
-Jinyuan' VID protocol is very natural. However, its proof is based on rather intricate arguments that combine coding theory ideas, graph theory, and linear algebra. In this post we show a slightly improved version of this result with a simpler proof that is based on our recent work  [Simple is COOL: Graded Dispersal and its Applications for Byzantine Fault Tolerance](https://eprint.iacr.org/2024/2036). You can also watch a video about this work [here](https://www.youtube.com/watch?v=QuGvDU2NFuE).
+Jinyuan's VID protocol is natural, but its proof is based on rather intricate arguments that combine coding theory, graph theory, and linear algebra. In this post we show a slightly improved version of this result with a simpler proof that is based on our recent work  [Simple is COOL: Graded Dispersal and its Applications for Byzantine Fault Tolerance](https://eprint.iacr.org/2024/2036). You can also watch a video about this work [here](https://www.youtube.com/watch?v=QuGvDU2NFuE).
 
 Using this graded VID we prove two results:
 
@@ -45,7 +45,7 @@ Let's first answer the question: in a world with abundant cryptography why shoul
 
 The core building block is a new **graded dispersal** protocol with **perfect security**. There are $n=3t+1$ parties that work over a field $\mathbb{F}$ with $n<\|\mathbb{F}\|$. Denote $w= \log \|\mathbb{F}\|$ and assume there are $t$ malicious parties. 
 
-In ***Graded Dispersal*** parties start with an input value of size $(t/3) w$ bits and output a value and a grade $0,1,2$, with the following properties:
+In this ***Graded Dispersal*** parties start with an input value of size $(t/3) w$ bits and output a value and a grade $0,1,2$, with the following properties:
 
 1. **Validity**: If all honest parties start with the same input, they all output this value and grade $2$.
 2. **Weak Graded Agreement**: If an honest party outputs grade 2, then all honest parties with grade $\geq 1$ output the same value and there are at least $t+1$ honest with grade $\geq 1$.
@@ -123,7 +123,7 @@ So we conclude that there are at most two inputs that have honest parties that s
 
 
 - From claim 1, at most two values may send $OK_1$. Call them, the majority set with input $g$ and the minority set with input $f$.
-- Any party $i$ in the minority set such that $f(i) \neq g(i)$ will not send $OK_1$ because they can get at most $t+t$ values in $A^1$. Because at most $t$ from being the minority and at most $t$ from the adversary).
+- Any party $i$ in the minority set such that $f(i) \neq g(i)$ will not send $OK_1$ because they can get at most $t+t$ values in $A^1$. Because at most $t$ from being the minority and at most $t$ from the adversary.
 - So at most $d$ parties in the minority set can send $OK_1$.
 - Moreover, their $A^1$ set contains at most $d$ parties from the majority set, so no party in the minority set will see enough $OK_1$ in their $A^1$ set to send an $OK_2$.  Because at most $d$ from the majority, $d$ from the minority, and $t$ from the adversary, and using $2d+t<2t+1$ (since 2d<t).
 
@@ -170,12 +170,12 @@ In this variation, parties with grade 2 enter a binary agreement with 1 and othe
 
 ### Retrieval protocol:
 
-The retrieval protocol is run after the graded dispersal protocol. In has the following properties:
+The retrieval protocol is run after the graded dispersal protocol. It has the following properties:
 
 * **Binding**: If some honest party has output $f,2$ in the graded dispersal protocol then all parties output $f$ in the retrieval.
 
 
-If some honest party has output $f$ with grade 2 then from Weak Graded Agreement there are $t+1$ honest that have $f$ and all other honest either have $f$ or know they dont.
+If some honest party has output $f$ with grade 2 then from Weak Graded Agreement there are $t+1$ honest that have $f$ and all other honest either have $f$ or know they don't.
 
 ```
 Retrieval protocol

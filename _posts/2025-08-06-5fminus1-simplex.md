@@ -27,7 +27,7 @@ Let $n = 5f-1$ where $f$ is the maximum number of Byzantine faults.
   
    - **(No leader equivocation**): If the leader does not equivocate, a commit implies that any other honest party receives at least $2f-1$ votes for $x$ and the rest of the votes are for $\bot$.  
        - Define **Special certificate for $x$** as $2f-1$ votes for $x$ and $2f$ votes for $\bot$.
-       - DEfine **Regular certificate for $x$** as  $2f$ votes for $x$.
+       - Define **Regular certificate for $x$** as  $2f$ votes for $x$.
    - **(With leader equivocation)**: If a party detects leader equivocation, it ignores the leader's vote and waits for one more vote. Then it will see at least $n-3f+1 = 2f$ votes for $x$, which form a regular cert for $x$ 
        - There are at most $2f-1$ non-$x$ votes, so the party favors $x$.
 
@@ -86,7 +86,7 @@ A. `Cert(k, x)` is a collection of votes for $x  \neq \bot$ in view $k$ sufficie
 
 B. `Cert(k, bot)` is a collection of $f+p+1$ votes for $\bot$ in view $k$.
 
-C.  The commit rule requires $n-p$ votes:
+C. The commit rule requires $n-p$ votes:
 
 ```
 4. Upon receiving n-p (Vote, k, x):
