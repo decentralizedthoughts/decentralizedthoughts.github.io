@@ -1,10 +1,8 @@
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
-gem "github-pages", '193', group: :jekyll_plugins
+gem "github-pages", group: :jekyll_plugins
 
-# enable tzinfo-data for local build
-# gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw]
-gem 'jekyll-paginate'
-
-# add emoji
-gem 'jekyll-emoji'
+# Your three plugins (also included in github-pages, but we list them for clarity)
+gem "jekyll-paginate"
+gem "jekyll-sitemap"
+gem "jekyll-redirect-from"
