@@ -1,6 +1,6 @@
 ---
 title: Non-uniform agreement and weak validity with omission failures
-date: 2025-08-012 12:05:00 -05:00
+date: 2025-08-12 12:05:00 -05:00
 tags:
 - omission
 author: Ittai Abraham and Gilad Stern
