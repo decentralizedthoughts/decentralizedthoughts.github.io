@@ -1,10 +1,11 @@
 ---
 title: Non-uniform agreement and weak validity with omission failures
-date: 2025-08-12 12:05:00 -05:00
+date: 2025-08-12 13:05:00 -04:00
 tags:
 - omission
 author: Ittai Abraham and Gilad Stern
 ---
+
 In this post, we study non-uniform agreement and weak validity under [synchronous networks](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/) with general omission failures, where faulty parties may lose both incoming and outgoing messages.
 
 In this model, agreement is required only among non-faulty parties. Omission faulty parties may disagree and validity is weak: the output must be the input of some party. We present a protocol for $f < n$ omission faults that runs in $\min\{f+1,n-1\}$ rounds. We then show that both non-uniformity and weak validity are required for $f < n$. 
