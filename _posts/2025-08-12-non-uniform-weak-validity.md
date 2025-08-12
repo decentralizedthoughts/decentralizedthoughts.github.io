@@ -10,7 +10,6 @@ In this post, we study non-uniform agreement and weak validity under [synchronou
 In this model, agreement is required only among non-faulty parties. Omission faulty parties may disagree and validity is weak: the output must be the input of some party. We present a protocol for $f < n$ omission faults that runs in $\min\{f+1,n-1\}$ rounds. We then show that both non-uniformity and weak validity are required for $f < n$. 
 
 
-
 ## Broadcast for $f<n$
 
 > Think of it as: PBFT is to Paxos as Dolev–Strong is to this protocol.
@@ -27,7 +26,6 @@ Rounds 2...k: if you hear a value for the first time, send it to everyone
 End of round k: if you heard a value at any time then output it, 
                 otherwise output bot
 ```
-
 
 
 **Liveness (all non-faulty output):**
