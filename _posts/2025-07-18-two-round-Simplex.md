@@ -92,7 +92,7 @@ Safety is straightforward from Lemma 2. Liveness follows from the lemmas below.
 
 ### Acknowledgments
 
-The work is done during the authors' visits to a16z Crypto Research. The authors thank Kartik Nayak for helpful discussions. We thank Max Resnick for valuable feedback.
+The work is done during the authors' visits to a16z Crypto Research. The authors thank Kartik Nayak and Max Resnick for valuable feedback.
 
 
 Your thoughts/comments on [X](https://x.com/ittaia/status/1946296784587776058).

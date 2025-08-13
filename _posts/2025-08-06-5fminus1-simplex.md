@@ -125,6 +125,6 @@ If the leader of some view $k$ is honest and GST has occurred, all honest partie
 
 ## Acknowledgments
 
-We want to thank Yuval and Kartik for insightful discussions.
+The work is done in part during the authors' visits to a16z Crypto Research. The authors thank Yuval Efron and Kartik Nayak for insightful discussions.
 
 Your thoughts/comments on [X](https://x.com/ittaia/status/1954109234917883985).
