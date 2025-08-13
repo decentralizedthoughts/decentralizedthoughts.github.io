@@ -194,7 +194,6 @@ In a [follow-up post](https://decentralizedthoughts.github.io/2025-08-06-5fminus
 
 ## Acknowledgments
 
-We would like to thank Quentin Kniep, Jakub Sliwinski, and Roger Wattenhofer for insightful discussions and feedback. The work is done during the authors' visits to a16z Crypto Research.
-
+This work is done while Yuval Efron is affiliated with and the other authors are visiting a16z Crypto Research. We would like to thank Quentin Kniep, Jakub Sliwinski, and Roger Wattenhofer for insightful discussions and feedback. 
 
 Your thoughts/comments on [X](https://x.com/ittaia/status/1950642366483992880).
