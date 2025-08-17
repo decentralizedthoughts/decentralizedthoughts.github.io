@@ -14,12 +14,14 @@ In fact, we will observe that the result is stronger and holds even for omission
 
 **[Dolev and Reischuk 1982, (modern)](http://cs.huji.ac.il/~dolev/pubs/p132-dolev.pdf): any deterministic Broadcast protocol that is resilient to $f$** ***omission*** **failures must have an execution where the non-faulty parties send  $> (f/2)^2$ messages.** 
 
+In a [follow-up post](https://decentralizedthoughts.github.io/2024-12-16-strong-adaptive-lower-bound/) we address randomization.
+
 
 In 1980, [PSL](https://lamport.azurewebsites.net/pubs/reaching.pdf) showed the *first* feasibility result for consensus in the presence of Byzantine adversaries. However, their solution had an *exponential* (in $n$, the number of parties) communication complexity. An obvious question then is to figure out the lowest communication complexity that could be obtained. Dolev and Resichuk showed that the barrier to quadratic communication complexity cannot be broken by deterministic protocols. 
 
 At a high level, the Dolev and Resichuk lower bound says that if the non-faulty always send few messages (specifically $< (f/2)^2$), then the adversary can cause some non-faulty party to receive no message! The party that receives no message has no way of reaching agreement with the rest. 
 
-Here’s the proof intuition: In any set of $f/2$ parties, if each of these parties receives $> f/2$ messages from non-faulty parties, then we have a protocol with $> (f/2)^2$ messages being sent by non-faulty parties. So, if there exists a protocol sending fewer messages, there must exist one party, say $p$, that receives $\leq f/2$ messages. Now imagine that all of the parties sending messages to $p$ (there can be at most $f/2$ of them) are have omission corruptions that omit all messages sent to $p$. Hence $p$ receives no message.
+Here’s the proof intuition: In any set of $f/2$ parties, if each of these parties receives $> f/2$ messages from non-faulty parties, then we have a protocol with $> (f/2)^2$ messages being sent by non-faulty parties. So, if there exists a protocol sending fewer messages, there must exist one party, say $p$, that receives $\leq f/2$ messages. Now imagine that all the parties sending messages to $p$ (there can be at most $f/2$ of them) have omission corruptions that omit all messages sent to $p$. Hence $p$ receives no message.
 
 We use a two-world indistinguishability argument to prove that the reaction of $p$ to not receiving messages (which may include sending messages) still maintains the property that $p$ receives $\leq f/2$ messages.
 
@@ -60,10 +62,10 @@ What do honest parties in $U$ output in World 2? We argue that they will output 
 The lower bound uses the fact that the protocol is deterministic. There have been several attempts at circumventing the lower bound using **randomness** and even against an adaptive adversary. Here are a few notable ones:
 - [King-Saia](https://arxiv.org/pdf/1002.4561.pdf): Through a sequence of fascinating new ideas, King and Saia presented a beautiful information-theoretic protocol that broke the quadratic communication complexity. Their protocol uses randomness, assumes that honest parties can erase data, and does not allow the adversary to claw back messages. 
 - [Algorand](https://www.sciencedirect.com/science/article/pii/S030439751930091X?via%3Dihub) uses  cryptographic randomness (VRFs) to form small committees. Algorand assumes the adaptive adversary is weak: it cannot cause the corrupt parties to remove the in-flight messages that were sent before the party was corrupted.
-- [Randomized version of Dolev-Reischuk.](https://users.cs.duke.edu/~kartik/papers/podc2019.pdf) Any (possibly randomized) Byzantine Agreement protocol must in expectation incur at least $\Omega(f^2)$ communication in the presence of a strongly adaptive adversary capable of performing "after-the-fact removal", where $f$ denotes the number of corrupt parties.
+- [Randomized version of Dolev-Reischuk.](https://decentralizedthoughts.github.io/2024-12-16-strong-adaptive-lower-bound/) Any (possibly randomized) Byzantine Agreement protocol must in expectation incur at least $\Omega(f^2)$ communication in the presence of a strongly adaptive adversary capable of performing "after-the-fact removal", where $f$ denotes the number of corrupt parties (see [paper](https://users.cs.duke.edu/~kartik/papers/podc2019.pdf)).
 - The above result implies that even against a static adversary, any protocol that runs in $o(n^2)$ complexity must have a non-zero probability of error.
 - The work of [Spiegelman, DISC 2021](https://arxiv.org/pdf/2002.06993.pdf) proves a generalization in the early stopping setting: if the actual number of failures in an execution is $k\leq f$ then $\Omega(f+kf)$ messages are required.
-- See this [follow up](https://decentralizedthoughts.github.io/2022-08-14-new-DR-LB/) post on new Dolev-Reischuk style lower bounds for *Crusader Agreement* against a Byzantine adversary.
+- See this [follow-up](https://decentralizedthoughts.github.io/2022-08-14-new-DR-LB/) post on new Dolev-Reischuk style lower bounds for *Crusader Agreement* against a Byzantine adversary.
 
 
 ## Broadcast vs Agreement

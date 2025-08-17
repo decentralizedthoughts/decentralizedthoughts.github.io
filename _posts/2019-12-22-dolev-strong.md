@@ -41,7 +41,7 @@ Decision rule:
 
 So does this protocol work?
 
-No! the problem with agreement is that a Byzantine leader can send no value in round 1, then send a value to only a few honest parties in round 2. The honest parties who receive the value will output that value whereas other honest parties will output a $\bot$.
+No! The problem with agreement is that a Byzantine leader can send no value in round 1, then send a value to only a few honest parties in round 2. The honest parties who receive the value will output that value whereas other honest parties will output a $\bot$.
 
 The core problem is that you may learn the decision value in the last round (round 2) but you are not sure that all other honest parties will also receive this value. You cannot forward your messages because this is the last round. Dolev and Strong show a very elegant way to guarantee agreement even if the value decided is revealed in the last round.
 
@@ -63,7 +63,7 @@ Decision rule:
          Otherwise output a default value bot
 ```
 
-This protocol is resilient to 1 Byzantine failure because you only accept a value in the last round if t+1=2 parties signed it! if there are two signatures then one of them is from an honest party, so all honest parties will see this value. 
+This protocol is resilient to 1 Byzantine failure because you only accept a value in the last round if t+1=2 parties signed it! If there are two signatures then one of them is from an honest party, so all honest parties will see this value. 
 
 The principle is to only accept a value in the last round if its contents can certify that all parties have received this value. This leads to a very powerful idea in the synchronous model:
 ***The validity of a message is a function also of the time it is received***
@@ -76,7 +76,8 @@ Messages in the protocol are signature chains where a *k-signature chain* is def
 
 A **1-signature chain** on $v$ is a pair $(v, sign(v,1))$.
 
-For $k>1$, a **k-signature chain** on $v$ is a pair $(m, sign (m,i))$ where $m$ is a $(k-1)$-signature chain on $v$ that *does not* contain a signature from $i$. In other words, a message (signature chain) received by party $i$ at the end of round $k$ is said to be valid if
+For $k>1$, a **k-signature chain** on $v$ is a pair $(m, sign (m,i))$ where $m$ is a $(k-1)$-signature chain on $v$ that *does not* contain a signature from $i$. In other words, a message (signature chain) received by party $i$ at the end of round $k$ is said to be valid if:
+
 - The first signer of the signature chain is the leader
 - All signers in the chain are distinct
 - All signatures are valid
@@ -125,6 +126,7 @@ The protocol satisfies agreement, validity, and termination:
 **Agreement.** If an honest party receives a $k$-signature chain at the end of round $k$, then it will send it to all honest parties in round $k+1$. This holds for all rounds except the last round, round $t+1$. But since the honest party can only receive a $t+1$-sized chain in round $t+1$ and a $t+1$-sized chain contains at least one honest party $h$, $h$ must have already sent this value to all other honest parties. Thus, every value received by one honest party will be received by all other parties. (This does not hold in the case where the leader has sent more than two values. But the protocol ensures that all honest parties receive at least two of the values and hence they will agree on a default value).
 
 #### Complexity measures and Notes
+
 Every party sends at most two values, and each value may contain $O(t)$ signatures. The total communication is $O(n^2t)$ signatures.
 
 Here is an open question: for $t<n$, reduce communication to $o(n^3)$ against some type of adaptive adversary, or perhaps show that $O(n^3)$ is required under some conditions.
