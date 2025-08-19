@@ -40,7 +40,7 @@ To start, here is the $n=5f+1$ protocol, adapted to $n=3f+2p+1$ to obtain safety
             and has not sent Vote 
     Send (Vote, k, x)  // Denote n-2f-p (Vote, k, x) as Fast-Cert(k, x)  
 
-3. Upon T_k = 2 Δ and has not sent Vote
+3. Upon T_k = 2Δ and has not sent Vote
     Send (Vote, k, ⊥)   // Denote n-2f-p (Vote, k, ⊥) as Fast-Cert(k, ⊥) 
 
 4. Upon receiving n-p (Vote, k, x)  // Monitored even after exiting view k
@@ -78,7 +78,7 @@ Now here is the $n=3f+1$ protocol, adopted to $n=3f+2p+1$ to obtain safety and l
 3. Upon receiving Slow-Cert(k, x) and has not sent Final
     Send (Final, k, x)     
 
-4. Upon T_k = 3 Δ 
+4. Upon T_k = 3Δ 
     Send (Final, k, ⊥)  // Denote n-f-p (Final, k, ⊥) as Slow-Cert(k, ⊥) 
 
 5. Upon receiving n-f-p (Final, k, x)  // Monitored even after exiting view k
@@ -131,10 +131,10 @@ Two important aspects of the merge:
     Forward commit proof 
     Terminate 
 
-5. Upon T_k = 2 Δ and has not sent Vote
+5. Upon T_k = 2Δ and has not sent Vote
     Send (Vote, k, ⊥)   // Denote n-2f-p (Vote,k,⊥) as Fast-Cert(k,⊥)
 
-6. Upon T_k = 3 Δ and has not sent Final
+6. Upon T_k = 3Δ and has not sent Final
     Send (Final, k, ⊥)  // Denote n-f-p (Final,k,⊥) as Slow-Cert(k,⊥) 
 
 7. Upon receiving n-f (Vote, k, *) but no Fast-Cert(k, x) for any x 

@@ -47,7 +47,7 @@ We consider single-shot consensus for simplicity. The protocol proceeds in incre
         and has not sent Vote 
     Send (Vote, k, x)  // Denote n-3f (Vote, k, x) as Cert(k, x)  
 
-3. Upon T_k = 2 Delta; and has not sent Vote
+3. Upon T_k = 2Δ and has not sent Vote
     Send (Vote, k, bot)  // Denote n-3f (Vote, k, bot) as Cert(k, bot) 
 
 4. Upon receiving n-f (Vote, k, x) // Monitored even after exiting view k
