@@ -38,10 +38,10 @@ To start, here is the $n=5f+1$ protocol, adapted to $n=3f+2p+1$ to obtain safety
 2. Upon received (Propose, k, x, Fast-Cert(k’, x)) 
             and Fast-Cert(l, ⊥) for all k' < l < k 
             and has not sent Vote 
-    Send (Vote, k, x) to all   // Denote n-2f-p (Vote, k, x) as Fast-Cert(k, x)  
+    Send (Vote, k, x)  // Denote n-2f-p (Vote, k, x) as Fast-Cert(k, x)  
 
 3. Upon T_k = 2 Δ and has not sent Vote
-    Send (Vote, k, ⊥) to all  // Denote n-2f-p (Vote, k, ⊥) as Fast-Cert(k, ⊥) 
+    Send (Vote, k, ⊥)   // Denote n-2f-p (Vote, k, ⊥) as Fast-Cert(k, ⊥) 
 
 4. Upon receiving n-p (Vote, k, x)  // Monitored even after exiting view k
     Decide x 
@@ -49,9 +49,9 @@ To start, here is the $n=5f+1$ protocol, adapted to $n=3f+2p+1$ to obtain safety
     Terminate 
 
 5. Upon receiving n-f (Vote, k, *) but no Fast-Cert(k, x) for any x 
-    Send (Vote, k, ⊥) to all
+    Send (Vote, k, ⊥) 
 
-6. Upon receiving Fast-Cert(k, *) 
+6. Upon receiving Fast-Cert(k, *) and has sent Vote
     Forward Fast-Cert(k, *) 
     Enter view k+1 if in view k  
 ```
@@ -73,21 +73,21 @@ Now here is the $n=3f+1$ protocol, adopted to $n=3f+2p+1$ to obtain safety and l
 2. Upon received (Propose, k, x, Slow-Cert(k’, x)) 
             and Slow-Cert(l, ⊥) for all k' < l < k
             and has not sent Vote 
-    Send (Vote, k, x) to all   // Denote n-f-p (Vote, k, x) as Slow-Cert(k, x)  
+    Send (Vote, k, x)  // Denote n-f-p (Vote, k, x) as Slow-Cert(k, x)  
 
-3. Upon receiving n-f-p (Vote, k, x)  // Monitored even after exiting view k
-    Send (Final, k, x) to all     
-    
-4. Upon T_k = 3 Δ; and has not sent Final
-    Send (Final, k, ⊥) to all // Denote n-f-p (Final, k, ⊥) as Slow-Cert(k, ⊥) 
+3. Upon receiving Slow-Cert(k, x) and has not sent Final
+    Send (Final, k, x)     
+
+4. Upon T_k = 3 Δ 
+    Send (Final, k, ⊥)  // Denote n-f-p (Final, k, ⊥) as Slow-Cert(k, ⊥) 
 
 5. Upon receiving n-f-p (Final, k, x)  // Monitored even after exiting view k
     Decide x 
     Forward these n-f-p (Final, k, x)
     Terminate 
 
-6. Upon receiving Slow-Cert(k, *) 
-    Forward Cert(k, *) 
+6. Upon receiving Slow-Cert(k, *) and has sent Final
+    Forward Slow-Cert(k, *) 
     Enter view k+1 if in view k  
 ```
 
@@ -120,28 +120,29 @@ Two important aspects of the merge:
 2. Upon received (Propose, k, x, X-Cert(k’, x)) for some X in {Fast, Slow} 
             and ⊥ certificates for all higher certificates of view <k, 
             and has not sent Vote 
-    Send (Vote, k, x) to all   // Denote n-2f-p (Vote,k,x) as Fast-Cert(k,x)
-                               // Denote n-f-p (Vote,k,x) as Slow-Cert(k,x) 
-
-3. Upon Slow-Cert(k,x); and has not sent Final
-    Send (Final, k, x) to all  
+    Send (Vote, k, x)    // Denote n-2f-p (Vote,k,x) as Fast-Cert(k,x)
+                         // Denote n-f-p (Vote,k,x) as Slow-Cert(k,x) 
     
+3. Upon receiving Slow-Cert(k, x) and has not sent Final
+    Send (Final, k, x)     
+
 4. Upon receiving n-f-p (Final, k, x) or n-p (Vote, k, x)    
     Decide x                // Monitored even after exiting view k
     Forward commit proof 
     Terminate 
 
-5. Upon T_k = 2 Δ; and has not sent Vote
-    Send (Vote, k, ⊥) to all  // Denote n-2f-p (Vote,k,⊥) as Fast-Cert(k,⊥)
+5. Upon T_k = 2 Δ and has not sent Vote
+    Send (Vote, k, ⊥)   // Denote n-2f-p (Vote,k,⊥) as Fast-Cert(k,⊥)
 
-6. Upon T_k = 3 Δ; and has not sent Final
-    Send (Final, k, ⊥) to all // Denote n-f-p (Final,k,⊥) as Slow-Cert(k,⊥) 
+6. Upon T_k = 3 Δ and has not sent Final
+    Send (Final, k, ⊥)  // Denote n-f-p (Final,k,⊥) as Slow-Cert(k,⊥) 
 
-7. Upon receiving n-f (Vote, k, *) but no Cert(k, x) for any x 
-    Send (Vote, k, ⊥) to all
+7. Upon receiving n-f (Vote, k, *) but no Fast-Cert(k, x) for any x 
+    Send (Vote, k, ⊥) 
 
 8. Upon receiving Slow-Cert(k, *) and Fast-Cert(k, *) 
-    Forward both 
+            and has sent Vote and Final
+    Forward Slow-Cert(k, *) and Fast-Cert(k, *) 
     Enter view k+1 if in view k  
 ```
 
@@ -194,6 +195,7 @@ In a [follow-up post](https://decentralizedthoughts.github.io/2025-08-06-5fminus
 
 ## Acknowledgments
 
-This work is done while Yuval Efron is affiliated with and the other authors are visiting a16z Crypto Research. We would like to thank Quentin Kniep, Jakub Sliwinski, and Roger Wattenhofer for insightful discussions and feedback. 
+This work is done while Yuval Efron is affiliated with and the other authors are visiting a16z Crypto Research. We would like to thank Quentin Kniep, Jakub Sliwinski, and Roger Wattenhofer for insightful discussions and feedback. We thank Brendan Kobayashi Chou, Andrew Lewis-Pye, Patrick O'Grady for spotting a liveness error in a previous version. 
+
 
 Your thoughts/comments on [X](https://x.com/ittaia/status/1950642366483992880).

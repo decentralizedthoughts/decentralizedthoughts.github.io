@@ -53,20 +53,20 @@ Once we define the certs above (with modified thresholds and the special cert), 
 
 2. Upon receiving (Propose, k, x, Cert(k’, x)) 
         and Cert(l, bot) for all k' < l < k and has not sent Vote
-    Send (Vote, k, x) to all
+    Send (Vote, k, x) 
 
-3. Upon T_k = 2Δ and has not sent Vote:
-    Send (Vote, k, bot) to all
+3. Upon T_k = 2Δ and has not sent Vote
+    Send (Vote, k, bot) 
 
-4. Upon receiving n-f (Vote, k, x):
+4. Upon receiving n-f (Vote, k, x)
     Decide x
     Forward these votes
     Terminate
 
-5. Upon receiving n-f (Vote, k, *), but no Cert(k, x):
-    Send (Vote, k, bot) to all
+5. Upon receiving n-f (Vote, k, *), but no Cert(k, x)
+    Send (Vote, k, bot) 
 
-6. Upon receiving Cert(k, *):
+6. Upon receiving Cert(k, *) and has sent Vote
     Forward Cert(k, *)
     Enter view k+1
 ```
@@ -75,7 +75,7 @@ Once we define the certs above (with modified thresholds and the special cert), 
 
 ## Two-round Simplex protocol for $n=3f+2p-1$ where $0<p\leq f$
 
-Lets extend this protocol to get safety for $f$ and liveness for $0<p\leq f$. So a commit requires $3f+p-1$ votes and this means at least $2f+p+1$ honest votes. So waiting for $n-f$ votes gives at least $f+p-1$ honest votes. If there is an equivocation, a party can again wait for one more vote.
+Let's extend this protocol to get safety for $f$ and liveness for $0<p\leq f$. So a commit requires $3f+p-1$ votes and this means at least $2f+p+1$ honest votes. So waiting for $n-f$ votes gives at least $f+p-1$ honest votes. If there is an equivocation, a party can again wait for one more vote.
 
 This calls for three obvious generalizations to the protocol:
 
@@ -125,6 +125,7 @@ If the leader of some view $k$ is honest and GST has occurred, all honest partie
 
 ## Acknowledgments
 
-This work is done in part during the authors' visits to a16z Crypto Research. The authors thank Yuval Efron and Kartik Nayak for insightful discussions.
+This work is done in part during the authors' visits to a16z Crypto Research. The authors thank Yuval Efron and Kartik Nayak for insightful discussions. We thank Brendan Kobayashi Chou, Andrew Lewis-Pye, Patrick O'Grady for spotting a liveness error in a previous version. 
+
 
 Your thoughts/comments on [X](https://x.com/ittaia/status/1954109234917883985).

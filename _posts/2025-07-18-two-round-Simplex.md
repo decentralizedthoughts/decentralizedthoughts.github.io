@@ -10,7 +10,7 @@ author: Ittai Abraham, Yuval Efron, and Ling Ren
 
 Mainstream partially synchronous BFT protocols tolerate $f<n/3$ Byzantine faults and have [3-round commit latency](https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/) under an honest leader. This latency can be reduced to 2 rounds, if we decrease the fault tolerance from <33% to <20%. 
 
-Recently, there has been renewed interest in 2-round partially synchronous BFT. In this post, we present a natural 2-round BFT protocol in the Simplex style. A very similar protocol is independently proposed by Commonware and called [Minimmit](https://commonware.xyz/blogs/minimmit.html). 
+Recently, there has been renewed interest in 2-round partially synchronous BFT. In this post, we present a natural 2-round BFT protocol in the Simplex style. A very similar protocol is independently proposed by Commonware and called [Minimmit](https://commonware.xyz/blogs/minimmit.html), also see [Chou, Lewis-Pye, O'Grady 2025](https://arxiv.org/pdf/2508.10862).
 
 ## Two-round commit intuition
 
@@ -42,27 +42,31 @@ We consider single-shot consensus for simplicity. The protocol proceeds in incre
     Everyone starts a local timer T_k 
     Leader sends (Propose, k, x, Cert(k’, x)) for the highest k’ 
     
-2. Upon received (Propose, k, x, Cert(k’, x)) and Cert(l, bot) for all k' < l < k and has not sent Vote 
-    Send (Vote, k, x) to all     // Denote n-3f (Vote, k, x) as Cert(k, x)  
+2. Upon received (Propose, k, x, Cert(k’, x)) 
+        and Cert(l, bot) for all k' < l < k 
+        and has not sent Vote 
+    Send (Vote, k, x)  // Denote n-3f (Vote, k, x) as Cert(k, x)  
 
 3. Upon T_k = 2 Delta; and has not sent Vote
-    Send (Vote, k, bot) to all   // Denote n-3f (Vote, k, bot) as Cert(k, bot) 
+    Send (Vote, k, bot)  // Denote n-3f (Vote, k, bot) as Cert(k, bot) 
 
-4. Upon receiving n-f (Vote, k, x)   // Monitored even after exiting view k
+4. Upon receiving n-f (Vote, k, x) // Monitored even after exiting view k
     Decide x 
     Forward these n-f (Vote, k, x)
     Terminate 
 
 5. Upon receiving n-f (Vote, k, *) but no Cert(k, x) for any x 
-    Send (Vote, k, bot) to all
+    Send (Vote, k, bot) 
 
-6. Upon receiving Cert(k, *) 
-    Forward Cert(k, *) 
+6. Upon receiving Cert(k, *) and has sent Vote
+    Forward Cert(k, *)  
     Enter view k+1 if in view k  
 ```
 
 
-The first four Upon blocks correspond to leader proposal, vote, timeout, and commit, respectively. The sixth Upon block is Simplex's mechanism of advancing views using certificates (for either a value or no-commit).
+The first four Upon blocks correspond to leader proposal, vote, timeout, and commit, respectively. 
+
+The sixth Upon block is Simplex's mechanism of advancing views using certificates (for either a value or no-commit) and a mechanism to ensure voting before leaving the view.
 
 The fifth Upon block warrants additional explanation. Without it, there is one subtle liveness challenge. A Byzantine leader can propose different values to different parties. Then, it could happen that none of the value (including $\bot$) gets enough votes to form a certificate. Since Simplex advances views using certificates, the protocol gets stuck and loses liveness. 
 
@@ -88,11 +92,13 @@ Safety is straightforward from Lemma 2. Liveness follows from the lemmas below.
 
 **Lemma 4**: If view $k$ starts after GST, and the leader of view $k$ is honest, then all honest parties commit in view $\leq k$.
 
-*Proof sketch*: If an honest party commits in view $<k$, it forwards the commit certificate, so all honest parties commit in view $<k$. If no honest party commits in view $<k$, then given synchrony after GST, all honest parties enter view $k$, vote for the honest leader, and commit in view $k$.
+*Proof sketch*: If an honest party commits in view $<k$, it forwards the commit certificate, so all honest parties commit in view $<k$. If no honest party commits in view $<k$, then given synchrony after GST, all honest parties enter view $k$, vote for the honest leader (either by seeing the leader's propose or by seeing a certificate) in view $k$, and hence commit.
 
 ### Acknowledgments
 
+We thank Brendan Kobayashi Chou, Andrew Lewis-Pye, Patrick O'Grady for fixing a liveness error in a previous version. 
 The work is done while Yuval Efron is affiliated with and the other authors are visiting a16z Crypto Research. The authors thank Kartik Nayak and Max Resnick for valuable feedback.
+
 
 
 Your thoughts/comments on [X](https://x.com/ittaia/status/1946296784587776058).
