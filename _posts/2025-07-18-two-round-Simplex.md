@@ -16,12 +16,12 @@ Recently, there has been renewed interest in 2-round partially synchronous BFT. 
 
 As usual, the first round is for a leader to propose a value, and the second round is for parties to vote for the leader's proposal. In partial synchrony, since $f$ parties can be Byzantine, we can only wait for $n-f$ messages at any step. Thus, if any party receives $n-f$ votes on the *same* value $x$, it commits $x$. 
 
-The tricky case (for BFT in general) is that some party $p$ receives $n-f$ votes and commits $x$, and then $p$ experiences a network outage immediately after committing $x$. The remaining parties cannot wait for $p$ indefinitely, so they must proceed without $p$. To preserve the safety of the protocol, they must eventually commit $x$ rather than any other value. 
+The tricky case (for BFT in general) is that some party $p$ receives $n-f$ votes and commits $x$, and then $p$ experiences a network outage immediately after committing $x$. The remaining parties cannot wait for $p$ indefinitely, so they must proceed without $p$. To preserve the safety of the protocol, they must eventually commit to $x$ rather than any other value. 
 
 Given that $p$ has committed $x$, there were $n-f$ votes for $x$. If another party $q$ waits for a set of $n-f$ votes, it is guaranteed to see: 
 
-* At least $n-3f$ votes for $x$: there are at most $f$ honest parties whose votes did not make it to $p$, and $f$ Byzantine parties who may equivocate; 
-* At most $2f$ votes for $x'\neq x$: $f$ honest parties who legitimately voted $x'$, and $f$ Byzantine parties who voted $x$ but lie. 
+* At least $n-3f$ votes for $x$: at most $f$ honest parties’ votes may not have reached $p$, and up to $f$ Byzantine parties may equivocate; 
+* At most $2f$ votes for $x'\neq x$: $f$ honest parties may have legitimately voted for $x'$, and $f$ Byzantine parties may have pretended to support $x$ while equivocating. 
 
 It is natural that parties "prefer" the most voted value. Therefore, we need $n-3f>2f$, i.e., $n \geq 5f+1$. Otherwise, parties have no reason to prefer $x$ over $x'$, and safety would be violated. (As it turns out, [$n \geq 5f-1$](https://decentralizedthoughts.github.io/2021-03-03-2-round-bft-smr-with-n-equals-4-f-equals-1/) would be sufficient and necessary to get 2-round commit. But we assume $n \geq 5f+1$ in this post for simplicity.) 
 
@@ -68,9 +68,9 @@ The first four Upon blocks correspond to leader proposal, vote, timeout, and com
 
 The sixth Upon block is Simplex's mechanism of advancing views using certificates (for either a value or no-commit) and a mechanism to ensure voting before leaving the view.
 
-The fifth Upon block warrants additional explanation. Without it, there is one subtle liveness challenge. A Byzantine leader can propose different values to different parties. Then, it could happen that none of the value (including $\bot$) gets enough votes to form a certificate. Since Simplex advances views using certificates, the protocol gets stuck and loses liveness. 
+The fifth Upon block warrants additional explanation because without it, there is a subtle liveness challenge. A Byzantine leader can propose different values to different parties. Then, it could happen that none of the value (including $\bot$) gets enough votes to form a certificate. Since Simplex advances views using certificates, the protocol gets stuck and loses liveness. 
 
-But recall that we argued earlier that if a value $x$ has been committed, then there must be a Cert(k, x) among the $n-f$ (Vote, k, \*) messages. Therefore, if no certificate exists among the $n-f$ (Vote, k, \*) messages, the party can be confident that no commit could occur in this view, and hence can send (Vote, k, $\bot$) **even if** it has already voted for some proposal of the leader. With this additional $\bot$ vote step, a certificate (possibly for $\bot$) is guaranteed to form. 
+But recall that we argued earlier that if a value $x$ has been committed, then there must be a Cert(k, x) among the $n-f$ (Vote, k, \*) messages. Therefore, if no certificate exists among the $n-f$ (Vote, k, \*) messages, the party can be confident that no commit has occurred in this view, and hence can send (Vote, k, $\bot$) **even if** it has already voted for some proposal of the leader. With this additional $\bot$ vote step, a certificate (possibly for $\bot$) is guaranteed to form. 
 
 We remark that the $n-f$ (Vote, k, \*) messages that contain no commit certificate could also serve as a no-commit certificate. The only downside is that this no-commit certificate cannot be compressed into a threshold/multi-signature. If one does not plan to use threshold/multi-signature, this extra step is not needed.
 
@@ -82,17 +82,17 @@ We remark that the $n-f$ (Vote, k, \*) messages that contain no commit certifica
 
 **Lemma 2**: If an honest party commits $x$ in view $k$, no honest party votes for $x' \neq x$ ($x' \neq \bot$) in any view higher than $k$.
 
-*Proof sketch*: Since all honest parties leave view $k$ with Cert(k, x), then inductivly it can be shown that in any higher view $k'>k$, any honest party only votes for $x$ or $\bot$, and only gets Cert(k', $\bot$) or Cert(k', x). 
+*Proof sketch*: Since all honest parties leave view $k$ with Cert(k, x), then inductively it follows that in any higher view $k'>k$, any honest party only votes for $x$ or $\bot$, and only gets Cert(k', $\bot$) or Cert(k', x). 
 
 Safety is straightforward from Lemma 2. Liveness follows from the lemmas below. 
 
 **Lemma 3**: If no honest party commits in views $k$ or lower, then every honest party eventually receives either Cert(k, x) for some $x \neq \bot$ or Cert(k, $\bot$). 
 
-*Proof sketch*: If any honest party gets Cert(k, x), it forwards the certificate. Otherwise, all honest parties eventually vote for $\bot$ by the fifth Upon rule, so all honest parties eventually get a Cert(k, $\bot$). 
+*Proof sketch*: If any honest party gets Cert(k, x), it forwards the certificate. Otherwise, all honest parties eventually vote for $\bot$ by the fifth Upon rule, so eventually all honest parties receive a Cert(k, $\bot$). 
 
 **Lemma 4**: If view $k$ starts after GST, and the leader of view $k$ is honest, then all honest parties commit in view $\leq k$.
 
-*Proof sketch*: If an honest party commits in view $<k$, it forwards the commit certificate, so all honest parties commit in view $<k$. If no honest party commits in view $<k$, then given synchrony after GST, all honest parties enter view $k$, vote for the honest leader (either by seeing the leader's propose or by seeing a certificate) in view $k$, and hence commit.
+*Proof sketch*: If an honest party commits in view $<k$, it forwards the commit certificate, so all honest parties commit in view $<k$. If no honest party commits in view $<k$, then given synchrony after GST, all honest parties enter view $k$, vote for the honest leader (either by receiving the leader's proposal or by seeing a certificate), and hence commit in that view.
 
 ### Acknowledgments
 
@@ -102,4 +102,3 @@ The work is done while Yuval Efron is affiliated with and the other authors are 
 
 
 Your thoughts/comments on [X](https://x.com/ittaia/status/1946296784587776058).
-
