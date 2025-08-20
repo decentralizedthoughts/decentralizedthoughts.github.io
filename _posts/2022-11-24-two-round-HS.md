@@ -6,27 +6,27 @@ tags:
 author: Ittai Abraham
 ---
 
-In the first part of this post we describe a single-shot variation of Two Round HotStuff (see [HotStuff v1 paper, march 2018](https://arxiv.org/pdf/1803.05069v1.pdf) and [this march 2018 post](https://malkhi.com/posts/2018/03/bft-lens-casper/)) using [Locked Broadcast](https://decentralizedthoughts.github.io/2022-09-10-provable-broadcast/) that follows a similar path as our previous posts on [Paxos](https://decentralizedthoughts.github.io/2022-11-04-paxos-via-recoverable-broadcast/) and [Linear PBFT](https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/). 
+In the first part of this post, we describe a single-shot variation of Two Round HotStuff (see [HotStuff v1 paper, March 2018](https://arxiv.org/pdf/1803.05069v1.pdf) and [this March 2018 post](https://malkhi.com/posts/2018/03/bft-lens-casper/)) using [Locked-Broadcast](https://decentralizedthoughts.github.io/2022-09-10-provable-broadcast/) that follows a similar path as our previous posts on [Paxos](https://decentralizedthoughts.github.io/2022-11-04-paxos-via-recoverable-broadcast/) and [Linear PBFT](https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/). 
 
 In the second part, we describe a fully pipelined multi-shot State Machine Replication version of Two Round HotStuff that is similar to [Casper FFG](https://arxiv.org/abs/1710.09437) and [Streamlet](https://decentralizedthoughts.github.io/2020-05-14-streamlet/). For safety, we prove a stronger **accountable safety** statement inspired by [Casper FFG](https://arxiv.org/abs/1710.09437). For liveness, we present a "two option" view change inspired by [Fast-HotStuff](https://arxiv.org/abs/2010.11454). The responsiveness property of this "two option" view change is discussed and formally analyzed in the [HotStuff-2 manuscript](https://eprint.iacr.org/2023/397.pdf) and the corresponding [HotStuff-2 blog post](https://decentralizedthoughts.github.io/2023-04-01-hotstuff-2/).
 
-The model is [partial synchrony](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/) and $f<n/3$ [Byzantine failures](https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/). 
+The model is [partial synchrony](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/) with $f<n/3$ [Byzantine failures](https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/). 
 
 
-# Part one: single shot two round HotStuff with rotating leaders
+# Part one: single-shot two-round HotStuff with rotating leaders
 
-The simplified single-shot two round HotStuff variation captures the essence of the [Tendermint](https://tendermint.com/static/docs/tendermint.pdf) view change protocol (also see more recent [Tendermint paper](https://arxiv.org/pdf/1807.04938.pdf)) which reduces the size of the view change messages relative to PBFT.
+The simplified single-shot two-round HotStuff variation captures the essence of the [Tendermint](https://tendermint.com/static/docs/tendermint.pdf) view change protocol (also see more recent [Tendermint paper](https://arxiv.org/pdf/1807.04938.pdf)) which reduces the size of the view change messages relative to PBFT.
 
 We use the same view based framework as in the [PBFT post](https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/):
 
 1. The goal in this part is single-shot agreement with external validity.
-2. Using a view based protocol where view $v$ has primary $v \bmod n$ and is the time interval $[v(10 \Delta),(v+1)(10 \Delta))$.
-3. As in PBFT, the protocol uses [Locked broadcast](https://decentralizedthoughts.github.io/2022-09-10-provable-broadcast/).
+2. Using a view-based protocol where view $v$ has primary $v \bmod n$ and is the time interval $[v(10 \Delta),(v+1)(10 \Delta))$.
+3. As in PBFT, the protocol uses [Locked-Broadcast](https://decentralizedthoughts.github.io/2022-09-10-provable-broadcast/).
 
 Here is the outer-shell pseudocode which is (almost) the same as the outer-shell pseudocode in the [PBFT post](https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/):
 
 ```
-Two round HotStuff single-shot protocol
+Two-round HotStuff single-shot protocol
 
 View 1 primary:
     TNDRMNT-LB(1, val, val-proof)
@@ -49,21 +49,20 @@ Upon valid delivery-certificate dc for (v,x)
     output x    
 ```
 
-A minor difference is that when $p= \bot$ then $p{-}proof$ is not sent in the Locked Broadcast.
+A minor difference is that when $p= \bot$ then $p{-}proof$ is not sent in the Locked-Broadcast.
 
-
-The major difference is in the recover max lock ($TNDRMNT-RML$) sub-protocol and external validity of the locked broadcast ($TNDRMNT-LB$) sub-protocol:
-1. *Recover max lock* protocol: In PBFT a set of $n-f$ lock-certificates is used to prove the maximum view lock certificate is used. In HS just **one** lock-certificate is used the prove its a valid lock certificate (but not that its the maximum). This is where Tendermint based protocols (like Two Round HotStuff) save on message size.
-2. The *external validity* of the *Locked broadcast* $EV_{\text{LB}}$ is changed from $EV_{\text{LB-PBFT}}$ to $EV_{\text{LB-TNDRMNT}}$ to work with the change above in the Recover Max Lock protocol. In PBFT, the proposed value's lock certificate is compared relative to $n-f$ parties's locks. In Tendermint based protocols (like Two Round HotStuff) the proposed value's lock certificate is compared  relative to the recipient's highest lock certificate.
+The major difference is in the Recover-Max Lock ($TNDRMNT-RML$) sub-protocol and the external validity of the Locked-Broadcast ($TNDRMNT-LB$) sub-protocol:
+1. *Recover max lock* protocol: In PBFT a set of $n-f$ lock-certificates is used to prove the maximum view lock certificate is used. In HS, just **one** lock-certificate is used to prove that it is a valid lock certificate (but not that it is the maximum). This is where Tendermint-based protocols (like Two Round HotStuff) save on message size.
+2. The *external validity* of the *Locked-Broadcast* $EV_{\text{LB}}$ is changed from $EV_{\text{LB-PBFT}}$ to $EV_{\text{LB-TNDRMNT}}$ to work with the change above in the Recover Max Lock protocol. In PBFT, the proposed value's lock certificate is compared relative to $n-f$ parties' locks. In Tendermint-based protocols (like Two Round HotStuff) the proposed value's lock certificate is compared  relative to the recipient's highest lock certificate.
 
 We go over these changes in more detail:
 
 
-### Recover Max Lock for Tendermint based protocols
+### Recover-Max Lock for Tendermint-based protocols
 
-The ```TNDRMNT-RML(v)``` protocol for view $v$ finds the lock-certificate with the highest view and returns only the associated value and the lock-certificate (unlike PBFT with returns all $n-f$ lock certificates). 
+The ```TNDRMNT-RML(v)``` protocol for view $v$ finds the lock-certificate with the highest view and returns only the associated value and the lock-certificate (unlike PBFT which returns all $n-f$ lock certificates). 
 
-The other major change in ```TNDRMNT-RML(v)``` is the additional wait of $\Delta$ at the primary (in addition to waiting for at least $n-f$). This additional wait is not needed if there is a lock-certificate from the previous view (because it's clearly the highest).
+The other major change in ```TNDRMNT-RML(v)``` is an additional wait of $\Delta$ at the primary (in addition to waiting for at least $n-f$). This additional wait is not needed if there is a lock-certificate from the previous view (because it's clearly the highest).
 
 ```
 TNDRMNT-RML(v):
@@ -76,22 +75,21 @@ Party i upon start of view v:
 
 Primary waits for:
     (1) at least n-f valid responses <echoed-max(v,*)>; and
-    (2) Delta time or one of the responses has a lock-certificate form view v-1:
+    (2) Delta time or one of the responses has a lock-certificate from view v-1:
     if all are bot then output (bot, bot)
     otherwise, output (proposal, LC(v',proposal)) 
         where proposal is associated with the highest view in responses
         and LC(v',proposal) is the associated lock-certificate
 ```
 
-An ```<echoed-max(v, v', p, LC(v',p) )>_i``` is valid if it's the first message  for view $v$ signed by $i$ and the lock-certificate $LC$ is valid for view $v'$ and value $p'$ ($LC$ implies $n-f$ unique signatures from view $v'$ on $p'$).
+An ```<echoed-max(v, v', p, LC(v',p) )>_i``` is valid if it's the first message for view $v$ signed by $i$ and the lock-certificate $LC$ is valid for view $v'$ and value $p'$ ($LC$ implies $n-f$ unique signatures from view $v'$ on $p'$).
 
- 
-### External Validity for the Locked Broadcast of Tendermint based protocols
+### External Validity for the Locked-Broadcast of Tendermint-based protocols
 
 
 $EV_{\text{LB-TNDRMNT}}$ checks the validity relative to the ```TNDRMNT-RML(v)``` protocol. Unlike the $EV_{\text{LB-PBFT}}$ check, the $EV_{\text{LB-TNDRMNT}}$ verification is *stateful*, the check compares the input to the highest lock-certificate that the party has seen.
 
-To be explicit about this, each part maintains state  ```my-lock``` that contains the lock-certificate with the highest view it saw. Denote by ```view(my-lock)``` the view number of this lock-certificate. Initially ```my-lock := bot``` and ```view(my-lock) := 0```.
+To be explicit about this, each party maintains state  ```my-lock``` that contains the lock-certificate with the highest view it saw. Denote by ```view(my-lock)``` the view number of this lock-certificate. Initially ```my-lock := bot``` and ```view(my-lock) := 0```.
 
 Define $EV_{\text{LB-TNDRMNT}}$:
 
@@ -105,11 +103,10 @@ For view $v>1$ there are two cases:
 2. Otherwise, given a 3-tuple $(v, p, p{-}proof)$:
     1. Check that $p{-}proof$ is a valid lock-certificate $LC(v',p')$ for view $v'$ and value $p'$.
     2. Check that $view(my{-}lock) \leq v'$ 
-    3. Check that of $p=p'$.
+    3. Check that $p=p'$.
 
     
-In words: the external validity check (inside the locked broadcast) makes sure that the proposed value has a valid lock-certificate that has a view that is at least as high as the view of the lock-certificate this server currently holds.
- 
+In words: the external validity check (inside the Locked-Broadcast) makes sure that the proposed value has a valid lock-certificate that has a view that is at least as high as the view of the lock-certificate this server currently holds.
  
 The ```TNDRMNT-RML(v)```  and $EV_{\text{LB-TNDRMNT}}$ are defined. This fully defines the single-shot consensus protocol. Let's prove Agreement and Liveness (the Validity argument is the same as in PBFT).
 
@@ -129,9 +126,9 @@ This concludes the proof of Safety Lemma.
 
 ### Liveness
 
-The only difference relative the Liveness proof for [PBFT](https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/) is that we need to show that all non-faulty parties will verify $EV_{\text{LB-TNDRMNT}}$ for any honest primary proposal. This is where the additional wait for $\Delta$ time in the gathering phase of ```TNDRMNT-RML(v)``` is required - it guarantees that after GST, by waiting for $\Delta$ time, the primary will hear from all non-faulty parties, to choose the lock-certificate that is high enough to verify $EV_{\text{LB-TNDRMNT}}$ for all non-faulty parties. 
+The only difference relative to the Liveness proof for [PBFT](https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/) is that we need to show that all honest parties will verify $EV_{\text{LB-TNDRMNT}}$ for any honest primary proposal. This is where the additional wait for $\Delta$ time in the gathering phase of ```TNDRMNT-RML(v)``` is required - it guarantees that after GST, by waiting for $\Delta$ time, the primary will hear from all honest parties, to choose the lock-certificate that is high enough to verify $EV_{\text{LB-TNDRMNT}}$ for all honest parties. 
 
-There is no need to wait if there is lock-certificate from the previous view because this is clearly the highest possible view so it will be accepted by all honest parties.
+There is no need to wait if there is a lock-certificate from the previous view because this is clearly the highest possible view so it will be accepted by all honest parties.
 
 This concludes the proof of Liveness.
 
@@ -140,13 +137,13 @@ This concludes the proof of Liveness.
 
 Like PBFT, the time complexity is $O(f \Delta)$.
 
-Unlike PBFT, the size of a proposal message is just one lock-certificate instead of $n-f$ lock-certificates. With a threshold signature setup, the size of a lock-certificate can also be a constant (in the security parameter). So the total number of messages is $O(n^2)$ and the size of each message can be just $O(1)$ words - where a word constants a constant number of values and cryptographic signatures.
+Unlike PBFT, the size of a proposal message is just one lock-certificate instead of $n-f$ lock-certificates. With a threshold signature setup, the size of a lock-certificate can also be a constant (in the security parameter). So the total number of messages is $O(n^2)$ and the size of each message can be just $O(1)$ words - where a word contains a constant number of values and cryptographic signatures.
 
 
 
-# Part two: pipelined multi-shot State Machine Replication two round HotStuff
+# Part two: pipelined multi-shot State Machine Replication two-round HotStuff
 
-The protocol revolves around a data structure which is a chain of blocks and three certificates (each certificate is a set of $n-f$ signatures on the block). Lets define:
+The protocol revolves around a data structure which is a chain of blocks and three certificates (each certificate is a set of $n-f$ signatures on the block). Let's define:
 
 A ```block``` $B$ contains a triplet $B=(cmd, view, pointer)$ where *cmd* is an externally valid client command, *view* is the view this block was proposed in, and *pointer* is a link to a previous block (that has a smaller view).
 
@@ -192,14 +189,14 @@ Commit-cert on (c1,1), (c2,2). Lock-cert on (c2,2)
 Commit-cert on (c1,1), (c2,2). Lock-cert on (c4,4)
 
 (Genesis,0)<-(c1,1)<-(c2,2)<-(c4,4)<-(c5,5)
-Commit-cert on (c2,2),(c3,3). Lock-cert on (c5,5)
+Commit-cert on (c2,2), (c3,3). Lock-cert on (c5,5)
 
 ```
 
 1. The first example is an empty chain. By default, it implicitly has a commit-cert and lock-cert on the genesis.
 2. Second example shows a commit-cert and lock-cert that share the block-cert of a block from view 2.
 3. Third example shows a lock-cert is on a block of view 4 and there are more blocks after the lock-cert (in this case a block from view 5).
-4. Forth example shows a commit-cert that uses a block-cert $(c3,3)$ that supports the block-cert on $(c2,2)$ but this supporting block $(c3,3)$ is **not** on the chain.
+4. Fourth example shows a commit-cert that uses a block-cert $(c3,3)$ that supports the block-cert on $(c2,2)$ but this supporting block $(c3,3)$ is **not** on the chain.
 
 
 ## The protocol
@@ -217,7 +214,7 @@ On start view v
     Send <"start view", v, my-chain>_i to view v primary
 ```
 
-The primary of view $v$ waits for least $n-f$ valid responses and if they are not the same then also waits $\Delta$ time. There are two cases:
+The primary of view $v$ waits for at least $n-f$ valid responses, and if they are not the same, then also waits $\Delta$ time. There are two cases:
 
 1. If $n-f$ parties send the *same* valid chain, and its tip is from view $v-1$ then:
     1. The primary creates a *new* block-cert for the tip and updates the lock-cert to be this new block-certificate ```chain.updateLockCert(tip(chain))```.
@@ -225,7 +222,7 @@ The primary of view $v$ waits for least $n-f$ valid responses and if they are no
     3. The primary appends its new block as the new tip.
 2. Otherwise the primary chooses the valid chain with the lock-certificate of the highest view and appends its new block to it as the new tip.
 
-Finally the primary sends this as the proposal for view $v$ to all parties.
+Finally, the primary sends this as the proposal for view $v$ to all parties.
 
 
 ```    
@@ -344,7 +341,7 @@ This concludes the proof of accountable safety.
 *Proof sketch*
 
 1. Assuming perfect clock synchronization to obtain view synchronization.
-2. In the worst case the first honest primary will wait for $\Delta$ time so it hears the valid chain with the lock-certificate of highest view among all non-faulty parties.
+2. In the worst case the first honest primary will wait for $\Delta$ time so it hears the valid chain with the lock-certificate of the highest view among all honest parties.
 3. Need 3 consecutive honest parties. The first creates valid proposal; the second creates the first block-cert on it; the third creates the second block-cert on the block with one view above it, so a commit cert is formed and sent to all parties.
 
 We will show in later posts how to use other mechanisms for view synchronization.

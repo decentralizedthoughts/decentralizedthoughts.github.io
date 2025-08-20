@@ -19,10 +19,10 @@ The three properties of VSS:
 
 1. **Validity**: If the dealer is honest, the Reconstruct protocol outputs the dealer's input value $s$.
 2. **Hiding**: If the dealer is honest and no honest party has begun the Reconstruct protocol, then the adversary learns nothing about $s$.
-3. **Binding**: At the end of the Share protocol, the output of the Reconstruct protocol is well-defined. Namely, there exists an (efficient) algorithm that takes the view of the honest parties in the end of the Share protocol and outputs a value $s$ such that, when parties later execute the Reconstruction protocol, the output will be $s$. 
+3. **Binding**: At the end of the Share protocol, the output of the Reconstruct protocol is well-defined. There exists an efficient algorithm that takes the view of the honest parties at the end of the Share protocol and outputs a value $s$. Later, when the parties execute the Reconstruct protocol, the output will necessarily be $s$.
 
 
-Note that the binding property forces a malicious dealer to **fix** its shared value by the end of the Share protocol. 
+Note that the binding property ensures that by the end of the Share protocol, even a malicious dealer must have fixed the value to be reconstructed.
 
 We also need termination properties:
 
@@ -56,9 +56,14 @@ The **Share protocol** has five rounds: share, exchange sub-shares, publicly com
     If a party does not receive a valid message, it sets its value to two zero polynomials.
 1. **Parties exchange sub-shares**: Each party $i$ sends each party $j$ the two values $\langle row_i(j)$, $col_i(j)\rangle$.
    
-2. **Parties publicly complain**: If a party $i$ receives a pair from party $j$ that is different from its share, it **broadcasts** a complaint with 4 values it things are the correct values $\langle i,j,row_i(j), col_i(j)\rangle$.
+2. **Parties publicly complain**: If a party $i$ receives a pair from party $j$ that is different from its share, it **broadcasts** a complaint with 4 values it thinks are the correct values $\langle i,j,row_i(j), col_i(j)\rangle$.
 3. **Dealer publicly resolves complaints**: if the dealer hears a complaint from party $i$ that does not agree with $p(x,y)$ then it **broadcasts** $\langle i, row_i(x), col_i(x)\rangle$ of the row and column of party $i$. Such a party $i$ is called *public*.
-4. **Parties publicly accept**: if a non-public party $i$: (1) has row and column shares that agree with: (A) all the public parties values broadcast by the dealer and (B) all the non-public parties that broadcast complaint values; (2) for each two parties $j,k$ with disagreeing complaints, at least one of them is public, then it is *happy* and **broadcasts** $\langle 1 \rangle$. Otherwise, it **broadcasts** $\langle 0\rangle$. 
+4. **Parties publicly accept**: if a non-public party $i$:
+   (1) has row and column shares that agree with:
+       (A) all the public parties values broadcast by the dealer and
+       (B) all the non-public parties that broadcast complaint values;
+   (2) for each two parties $j,k$ with disagreeing complaints, at least one of them is public,
+   then it is *happy* and **broadcasts** $\langle 1 \rangle$. Otherwise, it **broadcasts** $\langle 0\rangle$.
 
    If less than $2f+1$ non-public parties broadcast $\langle 1\rangle$ then set your shares $row_i(x), col_i(x)$ to be the zero polynomials.
 
@@ -66,7 +71,7 @@ The **Share protocol** has five rounds: share, exchange sub-shares, publicly com
 The **Reconstruct protocol** is just robust univariate interpolation using the public values:
 
 1. Each non-public party $i$ sends $\langle col_i(0) \rangle$ to all parties. 
-2. Each party interpolates a degree at most $f$ polynomial with at most $f$ errors using the values $col_1(0),\dots, col_n(0)$, where $col_j(0)$ uses the public value if party $j$ is *public*, or the value party $j$ sent during reconstruct otherwise. If a non-public party sends nothing you can interpret this as 0. 
+2. Each party interpolates a degree at most $f$ polynomial with at most $f$ errors using the values $col_1(0),\dots, col_n(0)$, where $col_j(0)$ uses the public value if party $j$ is *public*, or the value party $j$ sent during Reconstruct otherwise. If a non-public party sends nothing you can interpret this as 0.
 
 ### Proof of Validity (when the dealer is honest)
 
@@ -113,16 +118,16 @@ Since $\phi$ is one-to-one, then for any secret $s$, the  uniform distribution o
 
 ### Proof of Binding (when the dealer is corrupt)
 
-If all honest parties have the zero polynomial as output then the binded value is 0. Otherwise, there are at least $f+1$ non-public honest parties that broadcast $\langle 1\rangle$. 
+If all honest parties have the zero polynomial as output then the bound value is 0. Otherwise, there are at least $f+1$ non-public honest parties that broadcast $\langle 1\rangle$.
 
-In this case consider the set $G$, consisting of the first $f+1$ honest parties that broadcast $\langle 1\rangle$. 
+In this case consider the set $G$, consisting of the first $f+1$ honest parties that broadcast $\langle 1\rangle$.
 
-We will show that the rows and columns of the parties in $G$ define a unique bi-variate polynomial $g(x,y)$ of degree at most $f$ such that $g(0,0)$ is the binded value.
+We will show that the rows and columns of the parties in $G$ define a unique bi-variate polynomial $g(x,y)$ of degree at most $f$ such that $g(0,0)$ is the bound value.
 
 
 Indeed, observe that the parties in $G$ define $(f+1)^2$ points from each pair $i,j \in G$. Consider the unique polynomial $g(x,y)$ induced by these points, we will show that all honest parties and all public resolutions agree with $g(x,y)$ and hence it is as if the dealer was honest and shared $g(x,y)$ (but may have caused honest parties to be public).
 
-Clearly, $g(x,y)$ agrees with all the points of all the parties in $G$. 
+Clearly, $g(x,y)$ agrees with all the points of all the parties in $G$.
 
 If an honest party $\notin G$ agrees with all the sub-shares of all the $f+1$ parties in $G$ then this party must agree with $g(x,y)$ as well.
 
@@ -136,7 +141,7 @@ In particular, all honest parties are either: non-public and agree with $g$ or p
 
 *Complexity*: in the Share protocol, the dealer first sends $O(n)$ words to each party. In the second round, each party privately sends $O(n)$ words. In the public complain round, each party broadcasts at most $O(n)$ words. In the resolve round, the dealer broadcasts at most $O(n^2)$ words. Finally in the fifth round, each party broadcasts one word.
 
-Total of $O(n^2)$ words in private channels and $O(n^2)$ words of broadcast for the Share protocol. Note that $O(n^2)$ words of broadcast requires at least $O(n^3)$ words to be received overall. 
+Total of $O(n^2)$ words in private channels and $O(n^2)$ words of broadcast for the Share protocol. Since each $O(n^2)$ broadcast word must be received by $n$ parties, the total communication received is $O(n^3)$ words.
 
 *Open question*: can the worst case word complexity of VSS Share protocol in this setting be reduced to $o(n^3)$ received words?
 

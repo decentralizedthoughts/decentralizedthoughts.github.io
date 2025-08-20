@@ -16,11 +16,11 @@ Provable Broadcast based protocols are the backbone of many authenticated consen
   
 
 **Provable Broadcast**: is a simple one round-trip building block going back to [Reiter 94](https://dl.acm.org/doi/pdf/10.1145/191177.191194)'s **Echo Broadcast**. Echo Broadcast produces a *delivery-certificate* proving that $n-2f$ honest parties delivered the sender's value. This is the *Weak-Availability* property. Moreover, even if the sender is Byzantine, the *Uniqueness* property guarantees that there is at most one such value.
-Echo Broadcast can be slightly extended to *Validated Echo Broadcast* which we call [Provable Broadcast](https://research.vmware.com/files/attachments/0/0/0/0/0/7/8/practical_aba_2_.pdf) that also provides an *External-Validity* property (see [below](#on-external-validity)). This allows sequencing provable broadcast instances to achieve stronger properties:
+Echo Broadcast can be slightly extended to *Validated Echo Broadcast*, which we call [Provable Broadcast](https://research.vmware.com/files/attachments/0/0/0/0/0/7/8/practical_aba_2_.pdf), which also provides an *External-Validity* property (see [below](#on-external-validity)). This allows sequencing provable broadcast instances to achieve stronger properties:
 
-1. **Locked Broadcast**:  by running *two* consecutive $PB$s, we get a two round-trip protocol. This protocol additionally provides a *Unique-Lock-Availability* pretty: a *delivery-certificate* is a proof that $n-2f$ honest parties received a *lock-certificate* for this value, and no other value can have a *lock-certificate*.  Locked Broadcast is the main sub-loop of [Tendermint](https://arxiv.org/abs/1807.04938), [Casper FFG](https://arxiv.org/abs/1710.09437), [linear PBFT](https://research.vmware.com/files/attachments/0/0/0/0/0/7/2/sbft_scaling_up_byzantine_fault_tolerance_5_.pdf), [two-chain-HotStuff](https://arxiv.org/pdf/1803.05069v1.pdf).
+1. **Locked Broadcast**:  by running *two* consecutive $PB$s, we get a two round-trip protocol. This protocol additionally provides a *Unique-Lock-Availability* property: a *delivery-certificate* is a proof that $n-2f$ honest parties received a *lock-certificate* for this value, and no other value can have a *lock-certificate*.  Locked Broadcast is the main sub-loop of [Tendermint](https://arxiv.org/abs/1807.04938), [Casper FFG](https://arxiv.org/abs/1710.09437), [linear PBFT](https://research.vmware.com/files/attachments/0/0/0/0/0/7/2/sbft_scaling_up_byzantine_fault_tolerance_5_.pdf), [two-chain-HotStuff](https://arxiv.org/pdf/1803.05069v1.pdf).
 2. **Keyed Broadcast**: by running *three* consecutive $PB$s, we get a three round-trip protocol. As before, a *delivery-certificate* is a proof that $n-2f$ honest parties received a *lock-certificate*. In addition, this protocol provides a *Unique-Key-Availability* property: if a *lock-certificate* exists, then $n-2f$ honest parties hold a *key-certificate* and there can only be one value with a *key-certificate*. Keyed Broadcast is the main loop of [three-chain-HotStuff](https://research.vmware.com/files/attachments/0/0/0/0/0/7/7/podc.pdf) and overcomes the *hidden lock problem*.
-6. **Robust Keyed Broadcast**: by running *four* consecutive $PB$s, we get a four round-trip protocol. This protocol additionally provides a *Robust-Delivery* property: there is proof that at least $n-2f$ honest parties have a *Delivery-Certificate*.  Robust Keyed Broadcast is the main sub-loop of Asynchronous protocols: [VABA](https://research.vmware.com/files/attachments/0/0/0/0/0/7/8/practical_aba_2_.pdf), [ACE](https://arxiv.org/abs/1911.10486), [AllYouNeedIsDag](https://arxiv.org/abs/2102.08325).
+3. **Robust Keyed Broadcast**: by running *four* consecutive $PB$s, we get a four round-trip protocol. This protocol additionally provides a *Robust-Delivery* property: there is proof that at least $n-2f$ honest parties have a *Delivery-Certificate*.  Robust Keyed Broadcast is the main sub-loop of Asynchronous protocols: [VABA](https://research.vmware.com/files/attachments/0/0/0/0/0/7/8/practical_aba_2_.pdf), [ACE](https://arxiv.org/abs/1911.10486), [AllYouNeedIsDag](https://arxiv.org/abs/2102.08325).
 
 
 *Note:* Some recent consensus protocols opt for *three* consecutive $PB$s for obtaining **Robust Locked Broadcast** that provides *Robust-Delivery* with *Unique-Lock-Availability* (but without *Unique-Key-Availability*), see [Tusk](https://arxiv.org/abs/2105.11827?context=cs.DC).
@@ -82,7 +82,7 @@ Make sure you go over the proof once in detail. Now, let's start composing :-)
 
 ## Locked Broadcast and Unique-Lock-Availability
 
-The sender runs **two** $PB$ consecutively: $PB_1,PB_2$. For $PB_1$ the external validity function $EV_1$ for now just checks the sender signature (in later posts, we will use Locked Broadcast as part of a consensus protocol, and add a PBFT style view change check to $EV_1$). For $PB_2$ we define $EV_2(v,p)$ to check that $p$ is a *delivery-certificate* on $v$ from $PB_1$ (so $EV_2$ checks that $p$ contains $n-f$ distinct valid signatures on $<v,proof>$). That’s it!
+The sender runs **two** $PB$ consecutively: $PB_1,PB_2$. For $PB_1$ the external validity function $EV_1$ for now just checks the sender signature (in later posts, we will use Locked Broadcast as part of a consensus protocol, and add a PBFT-style view change check to $EV_1$). For $PB_2$ we define $EV_2(v,p)$ to check that $p$ is a *delivery-certificate* on $v$ from $PB_1$ (so $EV_2$ checks that $p$ contains $n-f$ distinct valid signatures on $<v,proof>$). That’s it!
 
 ![Locked Broadcast](https://i.imgur.com/dKKXky7.jpg)
 
@@ -105,7 +105,7 @@ For the first <v, cert_1(v)> you receive from s:
 Cert_1(v), "lock-certificate for v":
     n-f distinct signers on <v, proof> 
 
-Cert_2(v), "delivery-certifiacte for v":
+Cert_2(v), "delivery-certificate for v":
     n-f distinct signers on <v, cert_1(v)>
 ```
 
@@ -113,7 +113,7 @@ Cert_2(v), "delivery-certifiacte for v":
 
 *Note 1*: Unique-Lock-Availability is the core of what allows a safe view-change in all [authenticated PBFT](https://pmg.csail.mit.edu/papers/osdi99.pdf) style protocols.
 <details>
-  <summary><b>More on PBFT style view change</b>:</summary> <p>
+  <summary><b>More on PBFT-style view change</b>:</summary> <p>
   
   
  
@@ -124,11 +124,11 @@ Moreover, the new leader, by sending all the $n-f$ certificates it queried as th
     </p></details>
 
 
-*Note 2*: In some protocols, Unique-Lock-Availability is not enough. When using Tendermint style view change, if not using a timeout, the new leader may not be aware of all the Lock-Certificates held by honest parties. This is called the  **hidden lock problem**. HotStuff is a Tendermint style protocol that has the property that if any honest party has a Lock-Certificate then the new leader will not miss this lock, even if the new leader just waits for the first $n-f$ responses. HotStuff obtains this property by using *Keyed Broadcast*.  
+*Note 2*: In some protocols, Unique-Lock-Availability is not enough. When using Tendermint-style view change, if not using a timeout, the new leader may not be aware of all the Lock-Certificates held by honest parties. This is called the  **hidden lock problem**. HotStuff is a Tendermint-style protocol that has the property that if any honest party has a Lock-Certificate then the new leader will not miss this lock, even if the new leader just waits for the first $n-f$ responses. HotStuff obtains this property by using *Keyed Broadcast*.  
 
 
 <details>
-  <summary><b>More on Tendermint style view change</b>:</summary> <p>
+  <summary><b>More on Tendermint-style view change</b>:</summary> <p>
   
   
  
@@ -142,7 +142,7 @@ In the Tendermint view change protocol, the new leader only sends $cert_1(v,k)$,
 
 Solving the hidden lock problem is critical for *efficient* solutions in asynchrony and *efficient* solutions obtaining responsiveness in partial synchrony. 
 
-In Keyed Broadcast the sender runs **three** $PB$s consecutively: $PB_1,PB_2, PB_3$. As before, for $PB_1$ we assume for now $EV_1$ just checks the sender signature (in later posts, we will use Keyed Broadcast as part of a consensus protocol, and add a Tendermint style lock check condition to $EV_1$). As before, $EV_2(v,proof)$ checks that $proof$ is a delivery-certificate on $v$ from $PB_1$. As you can imagine, $EV_3(v,proof)$ just checks that $proof$ is a *delivery-certificate* on $v$ from $PB_2$. That’s it!
+In Keyed Broadcast the sender runs **three** $PB$s consecutively: $PB_1,PB_2, PB_3$. As before, for $PB_1$ we assume for now $EV_1$ just checks the sender signature (in later posts, we will use Keyed Broadcast as part of a consensus protocol, and add a Tendermint-style lock check condition to $EV_1$). As before, $EV_2(v,proof)$ checks that $proof$ is a delivery-certificate on $v$ from $PB_1$. As you can imagine, $EV_3(v,proof)$ just checks that $proof$ is a *delivery-certificate* on $v$ from $PB_2$. That’s it!
 
 ![](https://i.imgur.com/aK4WmFP.jpg)
 
@@ -158,13 +158,13 @@ send <v, cert_1(v)>_s to all when you obtain cert_1(v)
 send <v, cert_2(v)>_s to all when you obtain cert_2(v)
 
 Party i:
-For first <v, proof> received from s:
+For the first <v, proof> received from s:
     If EV_1(v,proof) then send <v, proof>_i to s
 
-For first <v, cert_1(v)> received from s:
+For the first <v, cert_1(v)> received from s:
     If EV_2(v, cert_1(v)) then send <v, cert_1(v)>_i to s
     
-For first <v, cert_2(v)> received from s:
+For the first <v, cert_2(v)> received from s:
     If EV_3(v, cert_2(v)) then send <v, cert_2(v)>_i to s
 
 Cert_1(v), "key-certificate for v":
@@ -177,7 +177,7 @@ Cert_3(v), "delivery-certificate for v":
     n-f distinct signers on <v, cert_2(v)>
 ```
 
-***Proof***: *External Validity* and *Uniqueness* follows from $PB_1$, *Unique-Lock-Availability* from  $PB_2 + PB_3$, *Unique-Key-Availability* follows from $PB_1 + PB_2$, and *Termination* follows from needing just $n-f$ in each of the three $PB$s. 
+***Proof***: *External Validity* and *Uniqueness* follow from $PB_1$, *Unique-Lock-Availability* from  $PB_2 + PB_3$, *Unique-Key-Availability* follows from $PB_1 + PB_2$, and *Termination* follows from needing just $n-f$ in each of the three $PB$s. 
 
 To guarantee that there is no hidden lock: if an honest party has a *lock-certificate*  $cert_2(v)$ then at least $n-2f$ honest have a *key-certificate* $cert_1(v)$ and there cannot be *key-certificates* on other values (due to $PB_1$). Hence during view change, even in asynchrony, a new honest leader is guaranteed to see at least one *key-certificate* for any *lock-certificate* held by any honest party. So the new honest leader can propose the value that has the *key-certificate* with the highest view.
 
@@ -199,22 +199,22 @@ Sender s:
 input v
 input proof = <v>_s 
 
-send <v, proof> to all
-send <v, cert_1(v)> to all when you obtain cert_1(v)
-send <v, cert_2(v)> to all when you obtain cert_2(v)
-send <v, cert_3(v)> to all when you obtain cert_3(v)
+send <v, proof>_s to all
+send <v, cert_1(v)>_s to all when you obtain cert_1(v)
+send <v, cert_2(v)>_s to all when you obtain cert_2(v)
+send <v, cert_3(v)>_s to all when you obtain cert_3(v)
 
 Party i:
-For first <v, proof> received from s:
+For the first <v, proof> received from s:
     If EV_1(v,proof) then send <v, proof>_i to s
 
-For first <v, cert_1(v)> received from s:
+For the first <v, cert_1(v)> received from s:
     If EV_2(v, cert_1(v)) then send <v, cert_1(v)>_i to s
     
-For first <v, cert_2(v)> received from s:
+For the first <v, cert_2(v)> received from s:
     If EV_3(v, cert_2(v)) then send <v, cert_2(v)>_i to s
 
-For first <v, cert_3(v)> received from s:
+For the first <v, cert_3(v)> received from s:
     If EV_4(v, cert_3(v)) then 
         Deliver v; and
         send <v, cert_3(v)>_i to s
@@ -226,19 +226,19 @@ Cert_1(v), "key-certificate for v":
 Cert_2(v), "lock-certificate for v":
     n-f distinct signers on <v, cert_1(v)>
 
-Cert_3(v), "delivery-certifiacte for v":
+Cert_3(v), "delivery-certificate for v":
     n-f distinct signers on <v, cert_2(v)>
 
 Cert_4(v), "robust-certificate for v":
     n-f distinct signers on <v, cert_3(v)>
 ```
 
-***Proof***: *Termination* is again obtained since we just need $n-f$ valid responses. *Robust-Delivery* follows from  weak-availability of $PB_4$ and the uniqueness of $PB_1$.
+***Proof***: *Termination* is again obtained since we just need $n-f$ valid responses. *Robust-Delivery* follows from Weak-Availability of $PB_4$ and the uniqueness of $PB_1$.
 
 
 ## Linearity
 
-All $PB$ protocols have a linear message complexity. When using threshold signatures they require a total of just $O(n)$ words of communication. When using multi signatures they require just $O(n)$ authenticators (where each authenticator includes $n$ bits and a single signature whose length depends on the security parameter).
+All $PB$ protocols have a linear message complexity. When using threshold signatures they require a total of just $O(n)$ words of communication. When using multi-signatures they require just $O(n)$ authenticators (where each authenticator includes $n$ bits and a single signature whose length depends on the security parameter).
 
 ## Next Posts and Notes
 

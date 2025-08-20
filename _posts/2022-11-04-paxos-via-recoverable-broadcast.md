@@ -24,7 +24,7 @@ In essence, we focus first on *safety* and move as much of the *liveness* and *m
 
 The protocol progresses in **views**, each view has a designated **primary** party. The role of the primary is rotated. For simplicity, the primary of view $v$ is party $v \bmod n$. 
 
-In Partial Synchrony, the parameter $\Delta$ (the maximum message delay after GST) is known. So we define **view $v$** to be the time interval $[v(10 \Delta),(v+1)(10 \Delta))$ (see liveness proof for how this can be optimized). In other words, each $10\Delta$ clock ticks each party triggers a **view change** and increments the view by one. Here we assume clocks are perfectly synchronized, so all parties move in and out of each view in complete synchrony (lock step). We will discuss relaxations in future posts.
+In Partial Synchrony, the parameter $\Delta$ (the maximum message delay after GST) is known. So we define **view $v$** to be the time interval $[v(10 \Delta),(v+1)(10 \Delta))$ (see liveness proof for how this can be optimized). In other words, every $10\Delta$ ticks, each party triggers a **view change** and increments the view by one. Here we assume clocks are perfectly synchronized, so all parties move in and out of each view in complete synchrony (lockstep). We will discuss relaxations in future posts.
 
 ## Single-shot consensus
 
@@ -42,19 +42,19 @@ The core safety problem that all view-based consensus protocols need to solve is
 
 With synchrony and crash failures, this is easy, the primary sends its decision to all the next primaries. But with asynchrony and omission corruptions, how can a primary write a message in a way that later primaries will be guaranteed to read it?
 
-The solution that all Paxos based protocols use is a **Quorum System**: The primary guarantees that it writes to a *write-quorum* (typically of size $n-f$) and then each new primary first reads from a *read-quorum* (again, typically of size $n-f$). This guarantees that the new primary read-quorum will intersect with any previous write-quorum and be able to *recover* these previous values.
+The solution that all Paxos-based protocols use is a **Quorum System**: The primary guarantees that it writes to a *write-quorum* (typically of size $n-f$) and then each new primary first reads from a *read-quorum* (again, typically of size $n-f$). This guarantees that the new primary read-quorum will intersect with any previous write-quorum and be able to *recover* these previous values.
 
-The second challenge then emerges: a new primary that reads from a read-quorum may see many messages from many previous primaries. Which one should it use? It turns our that it is critical that each primary also includes its view number, this way the new primary can *use the value associated to the highest view it saw*. This choice is essential for the safety of all Paxos protocols (see proof below).
+The second challenge then emerges: a new primary that reads from a read-quorum may see many messages from many previous primaries. Which one should it use? It turns out that it is critical that each primary also includes its view number, this way the new primary can *use the value associated with the highest view it saw*. This choice is essential for the safety of all Paxos protocols (see proof below).
 
-Here we will do this by decomposing Paxos to a *recoverable-broadcast* protocol that writes to a quorum and a *recover max protocol* that reads from a quorum and chooses the value associated with the highest view:
+Here we will do this by decomposing Paxos to a *recoverable-broadcast* protocol that writes to a quorum and a *recover-max protocol* that reads from a quorum and chooses the value associated with the highest view:
 
 1. The primary runs a **recoverable-broadcast** protocol that guarantees that if some party commits to the primary's value $X$ in view $v$, then there is *sufficient* evidence to *recover* the pair $(v,X)$ in a later view. Sufficient evidence here is a write-quorum set $W$ of size $n-f$ that holds $(v,X)$.
 2. The primary of any view (except the first) tries to recover a previously committed value via a **recover protocol**. This guarantees that if some previous primary caused some party to commit, then the recover protocol will return this value. The primary will then **adopt** this recovered value, instead of using its own input value, as the value it tries to broadcast for committing. The recover protocol does this by reading from a read-quorum $R$ of size $n-f$ that will hence intersect any previous write-quorum. 
-3. The primary may recover different pairs $(v_1, X_1),\dots,(v_k, X_k)$. So it runs a **recover**  ***max*** **protocol** that returns the pair $(v^\star, X^\star)$ that has the highest view ($\forall i, v^\star \geq v_i$). By adopting the value associated with the highest view we can guarantee that the new primary will adopt a value that was committed by a previous primary.
+3. The primary may recover different pairs $(v_1, X_1),\dots,(v_k, X_k)$. So it runs a **recover-max protocol** that returns the pair $(v^\star, X^\star)$ that has the highest view ($\forall i, v^\star \geq v_i$). By adopting the value associated with the highest view we can guarantee that the new primary will adopt a value that was committed by a previous primary.
 
-In this post we *decompose* Paxos into an outer *view-based protocol* and two inner protocols:  *recoverable broadcast*  and *recover max*.
+In this post we *decompose* Paxos into an outer *view-based protocol* and two inner protocols:  *recoverable broadcast*  and *recover-max*.
 
-## The Paxos Outer Shell Protocol
+## The Paxos Outer-Shell Protocol
 
 This outer shell protocol is rather simple. The main thing to note is that if the ```recover-max(v)``` protocol returns a non-$\bot$ value then the primary must adopt it.
 
@@ -132,7 +132,7 @@ Observe that for simplicity, the primary also acts as a regular party. So it als
 
 ### Recover-max protocol
 
- The ```recover-max``` protocol has a view number ```u``` as input and outputs either a broadcast value or a special $\bot$ value (which we write as ```bot``` in pseudo-code). Each replica sends ```<"recover", u, w, Z>``` associated with the *highest* view echo ```<"echo", w, Z>``` it ever sent. The primary waits for $n-f$ ``` <"recover", u, *, *>```  messages and outputs $\bot$ if all recover messages are $\bot$, and otherwise outputs the value associated with the *highest* view it saw:
+ The ```recover-max``` protocol has a view number ```u``` as input and outputs either a broadcast value or a special $\bot$ value (which we write as ```bot``` in pseudocode). Each replica sends ```<"recover", u, w, Z>``` associated with the *highest* view echo ```<"echo", w, Z>``` it ever sent. The primary waits for $n-f$ ``` <"recover", u, *, *>```  messages and outputs $\bot$ if all recover messages are $\bot$, and otherwise outputs the value associated with the *highest* view it saw:
 
 ```
 Upon start of view u,
@@ -184,7 +184,7 @@ Upon primary receiving n-f <"recover", u, *>,
 
 
 
-## The Paxos outer shell protocol (repeated from above for readability)
+## The Paxos Outer-Shell Protocol (repeated from above for readability)
 
 **The main Paxos algorithmic insight is that for guaranteeing agreement the primary must:**
 > **Choose the recovered value associated with the most recent view you hear!**
@@ -262,7 +262,7 @@ Upon receiving n-f <decide, Z>
 
 *Proof*:
 
-The tricky party of the proof is to only use the liveness property when we are sure all non-faulty parties are still running the protocol. 
+The tricky part of the proof is to only use the liveness property when we are sure all non-faulty parties are still running the protocol. 
 
 Claim: It cannot be the case that there is an execution where no honest party receives a `<decide, Z>` message. Proof of claim: in that case all honest parties will continue to run the protocol and by the liveness property, consider the time the first non-faulty outputs a value - it will send a decide message to all.
 
@@ -298,7 +298,7 @@ All these examples will have $n=3$ and $f=1$. Assume party 1 has input ```A``` a
 
 1. **Only party 1 outputs in view 1**. In view 1: party 1 sends ```A```, parties 1 and 2 echo and party 1 outputs ```A```. In view 2: party 2 receives recover from parties 1 and 2, hence will see the echo from view 1, hence will use that echo as its value  ```recoverable-broadcast(2, A)```.
 2. **No one outputs in view 1** In view 1: party 1 sends ```A```, party 1 sends echo. View 2 is *exactly* like in the above example. Party 2 receives recover from parties 1 and 2, hence uses ```B```, but in fact its just because it cannot distinguish between this and the previous example.
-3. **View 1 like example 2 and View 2 only party 2 outputs**. In view 1: party 1 sends ```A```, party 1 sends echo. In view 2:  party 2 receives recover from parties 2 and 3, hence will see $\bot$ so it will use it input for ```recoverable-broadcast(2, B)```. Parties 2 and 3 echo, party 2 outputs ```B```. Now at view 3: party 3 receives  ecover from parties 1 and 3: it hears ```A``` from 1 and ```B``` from 3, so what will it choose? Since ```A``` is associated with view 1 and ```B``` is associated with view 2, so ```B``` must be chosen.
+3. **View 1 like example 2 and View 2 only party 2 outputs**. In view 1: party 1 sends ```A```, party 1 sends echo. In view 2:  party 2 receives recover from parties 2 and 3, hence will see $\bot$ so it will use its input for ```recoverable-broadcast(2, B)```. Parties 2 and 3 echo, party 2 outputs ```B```. Now at view 3: party 3 receives recover from parties 1 and 3: it hears ```A``` from 1 and ```B``` from 3, what will it choose? Since ```A``` is associated with view 1 and ```B``` is associated with view 2, so ```B``` must be chosen.
 
 ## Acknowledgments
 

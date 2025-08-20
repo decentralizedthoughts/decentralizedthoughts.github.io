@@ -6,18 +6,18 @@ tags:
 author: Ittai Abraham
 ---
 
-## TLDR: a Blockchain is a trusted coordination mechanism;
+## TLDR: A blockchain is a trusted coordination mechanism.
 
 Of course, the answer depends on who you ask :-)
 
-My 7-word answer: **a blockchain is a trusted coordination mechanism**. 
+My 7-word answer: **A blockchain is a trusted coordination mechanism**. 
 
 What is your definition of a blockchain? [Reply with your 7-word answer on Twitter](https://twitter.com/ittaia/status/1566870358837321731?s=46&t=VDqZSRpxsraPaBX11I_JaA). 
 
 
-My answer to this question evolved over the years: from a more trust oriented "*a computer with trust*" (inspired by [Ben Horowitz](https://www.youtube.com/watch?v=l7QdIQVTly0)) to adding an economic angle "*trusted coordination mechanism*" (inspired by [Yuval Noah Harari](https://www.ted.com/talks/yuval_noah_harari_what_explains_the_rise_of_humans/transcript?language=en)).
+My answer to this question evolved over the years: from a more trust-oriented description: "*a computer with trust*" (inspired by [Ben Horowitz](https://www.youtube.com/watch?v=l7QdIQVTly0)) to adding an economic angle "*trusted coordination mechanism*" (inspired by [Yuval Noah Harari](https://www.ted.com/talks/yuval_noah_harari_what_explains_the_rise_of_humans/transcript?language=en)).
 
-Other very similar answers: [Dan Boneh's](https://berkeley-defi.github.io/assets/material/lec2-dan-tech-intro.pdf)  "*a blockchain provides coordination between many parties, when there is no single trusted party*". [Chris Dixons's](https://a16z.com/2020/01/27/computers-that-make-commitments/)  "*Blockchains are Computers That Can Make Commitments*",  [Albert Wagner's](https://continuations.com/post/671863718643105792/web3crypto-why-bother) *a blockchain is a database not controlled by a single entity*, and [Tim Roughgarden's](https://timroughgarden.github.io/fob21/l/l1.pdf) "*a programmable computer that lives in the sky, that is not owned by anyone and that anyone can use*" -- which is a great metaphor! but slightly more than 7 words :-).
+Other very similar answers: [Dan Boneh's](https://berkeley-defi.github.io/assets/material/lec2-dan-tech-intro.pdf)  "*a blockchain provides coordination between many parties, when there is no single trusted party*". [Chris Dixon's](https://a16z.com/2020/01/27/computers-that-make-commitments/)  "*Blockchains are Computers That Can Make Commitments*",  [Albert Wenger's](https://continuations.com/post/671863718643105792/web3crypto-why-bother) *a blockchain is a database not controlled by a single entity*, and [Tim Roughgarden's](https://timroughgarden.github.io/fob21/l/l1.pdf) "*a programmable computer that lives in the sky, that is not owned by anyone and that anyone can use*" -- which is a great metaphor! but slightly more than 7 words :-).
 
 All these answers have a common theme, but let's start with the origin of the word "Blockchain"
 
@@ -71,15 +71,15 @@ As Yuval Noah Harari writes in [Sapiens 2014](https://www.ynharari.com/topic/pow
 
 > Fiction has enabled us not merely to imagine things, but to do so collectively. We can weave common myths ...(which) give Sapiens the unprecedented ability to cooperate flexibly in large numbers 
 
-In these lens, trust in Blockchains can be viewed as a common fiction that allows untrusting parties to coordinate on a common source of truth. How can such a system provide trusted system for coordinatation? Technically, a Byzantine faulty tolerant state machine provides this trusted coordination. But how can parties trust the state machine? and how can they guarantee access to such a system?
+In these lens, trust in Blockchains can be viewed as a common fiction that allows untrusting parties to coordinate on a common source of truth. How can such a system provide trusted system for coordination? Technically, a Byzantine faulty tolerant state machine provides this trusted coordination. But how can parties trust the state machine? and how can they guarantee access to such a system?
 
-Two properties of *permissionless blockchains* that allow such untrusted coordination are  **openness** and **auditability**. These properties are not captured explicitly by traditional BFT SMR and aim at allowing untrusting parties to trust the system and hence enable them to coordiante. 
+Two properties of *permissionless blockchains* that allow such untrusted coordination are  **openness** and **auditability**. These properties are not captured explicitly by traditional BFT SMR and aim at allowing untrusting parties to trust the system and hence enable them to coordinate. 
 
 Conceptually, *Openness* can be viewed as the blockchain equivalent of the [US First Amendment](https://en.wikipedia.org/wiki/First_Amendment_to_the_United_States_Constitution). Technically it can be split in two parts. The first is that the set of validators (or block producers) is not fixed, but dynamic and open for participation. Often, a certain type of resource is required to become a validator, but minimal discrimination beyond this resource requirement. In Bitcoin to become a block producer (validator) all that is needed is the ability to compute proof-of-work puzzles. In several proof-of-stake systems, to become a block producer (validator) all that is needed is to stake some amount.
 
 The second part of *Openness* is about the execution engine (the state machine), which can again be split in two: (1) openness in writing:  there is often minimal inherent discrimination as to who can submit a transaction; (2) openness in reading: there is minimal inherent discrimination in the ability to read the state of the ledger and verify the transitions of the state machine;
 
-Openness is not an absolute property, there are often various requirements to limit it or balance it with other values. Regulator pressure could in the future require a more limited form of openness. A recent example is the [US treasury sanctions](https://home.treasury.gov/news/press-releases/jy0916) imposed on the tornado cash mixer, and the resulting debate on [First Amendment rights](https://www.eff.org/deeplinks/2022/08/code-speech-and-tornado-cash-mixer) and [Forth Amendment rights](https://mirror.xyz/haunventures.eth/E-iD-jqgD-WmqrZOjCnGjv6U-R_N5tUk8xPzxUHhQGc).
+Openness is not an absolute property, there are often various requirements to limit it or balance it with other values. Regulator pressure could in the future require a more limited form of openness. A recent example is the [US treasury sanctions](https://home.treasury.gov/news/press-releases/jy0916) imposed on the tornado cash mixer, and the resulting debate on [First Amendment rights](https://www.eff.org/deeplinks/2022/08/code-speech-and-tornado-cash-mixer) and [Fourth Amendment rights](https://mirror.xyz/haunventures.eth/E-iD-jqgD-WmqrZOjCnGjv6U-R_N5tUk8xPzxUHhQGc).
 
 
 Another important historical example of the limits of openness is that to update themselves, Blockchains sometime need to hard fork. As an example, [an early Bitcoin hard fork](https://freedom-to-tinker.com/2015/07/28/analyzing-the-2013-bitcoin-fork-centralized-decision-making-saved-the-day/) inadvertently discriminated against some transactions and caused a perceived [double spend](https://bitcointalk.org/index.php?topic=152348.0). Another famous example is the Ethereum DAO hard fork that caused a form of [discrimination against a presumed attacker](https://blog.slock.it/hard-fork-specification-24b889e70703#.io9ej36yq).
@@ -91,10 +91,10 @@ Another important historical example of the limits of openness is that to update
 
 ### 3. Incentives to provide guarantees ("mechanism")
 
-Finally, traditional cryptographic models in computer science assume a binary: *good guys / bad guys* view of the world. These models assume some fraction of parties are inherently honest and the remaining parties are controlled by a malicious adversary whose sole goal is to break the protocol guarntees. 
+Finally, traditional cryptographic models in computer science assume a binary: *good guys / bad guys* view of the world. These models assume some fraction of parties are inherently honest and the remaining parties are controlled by a malicious adversary whose sole goal is to break the protocol guarantees. 
 
 Arguably, the breakthrough in blockchain systems is going beyond this model and focus on a 
-**Cryptoeconomic model** where most parties are presume to be motivated by rational preferences and incentives.
+**Cryptoeconomic model** where most parties are presumed to be motivated by rational preferences and incentives.
 
 As Buterin says in his 2019 [talk on Cryptoeconomics](https://youtu.be/GQR1xjQn5Pg):
 
@@ -106,12 +106,12 @@ Taking into account incentives and modeling parties as rational agents is a non-
 
 Instead of assuming most parties are honest and will follow the consensus protocol to maintain safety and liveness, some blockchains explicitly offer incentives to [maintain safety](https://medium.com/@VitalikButerin/minimal-slashing-conditions-20f0b500fc6c) and [maintain liveness](https://eth2book.info/altair/part2/incentives/inactivity#inactivity-leak).  
 
-The use of punishment strategies to disincentive unwanted behavior is particularly effective when the blockchain system has a native means to force parties to commit economic resources and suffer **slashing** events in case of misbehavior. This is the bases of [optimistic rollups](https://ethereum.org/en/developers/docs/scaling/optimistic-rollups/) and the usability of fraud proofs.
+The use of punishment strategies to disincentive unwanted behavior is particularly effective when the blockchain system has a native means to force parties to commit economic resources and suffer **slashing** events in case of misbehavior. This is the basis of [optimistic rollups](https://ethereum.org/en/developers/docs/scaling/optimistic-rollups/) and the usability of fraud proofs.
 
 Another key aspect of blockchains is that as a limited resource, they need some way to decide which transactions to include. This is a classic resource allocation problem with limited supply. The cryptoeconomic solution is to have a mechanism that selects the transactions whose users are willing to pay the most. For example the Ethereum [1559 transaction pricing mechanism](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md) whose goal is to incentivize participation from users. As a side effect, these mechanisms also allocate revenue to validators. 
 
 
-Cryptoeconomics and incentive considerations appear in many surprising places across blockchain technologies, from [selfish mining](https://decentralizedthoughts.github.io/2020-02-26-selfish-mining/) to the equilibrium between [staking and lending](https://decentralizedthoughts.github.io/2020-02-26-selfish-mining/).
+Cryptoeconomics and incentive considerations appear in many surprising places across blockchain technologies, from [selfish mining](https://decentralizedthoughts.github.io/2020-02-26-selfish-mining/) to the equilibrium between *staking and lending*.
 
 #### What is a Blockchain? Notable responses
 
@@ -137,4 +137,3 @@ Many thanks to Tim Roughgarden for insightful comments and suggestions.
 
 
 Your thoughts on [Twitter](https://twitter.com/ittaia/status/1566870358837321731?s=46&t=VDqZSRpxsraPaBX11I_JaA)
-
