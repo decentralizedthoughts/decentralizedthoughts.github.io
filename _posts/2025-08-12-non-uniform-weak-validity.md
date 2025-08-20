@@ -1,5 +1,5 @@
 ---
-title: Non-uniform agreement and weak validity with omission failures
+title: Agreement under omission failures: non-uniformity and weak validity
 date: 2025-08-12 00:05:00 -04:00
 tags:
 - omission
@@ -8,7 +8,7 @@ author: Ittai Abraham and Gilad Stern
 
 In this post, we study non-uniform agreement and weak validity under [synchronous networks](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/) with general omission failures, where faulty parties may lose both incoming and outgoing messages.
 
-In this model, agreement is required only among non-faulty parties. Omission faulty parties may disagree and validity is weak: the output must be the input of some party. We present a protocol for $f < n$ omission faults that runs in $\min\{f+1,n-1\}$ rounds. We then show that both non-uniformity and weak validity are required for $f < n$. 
+In this model, agreement concerns only non-faulty parties. Omission-faulty parties may disagree, and validity is weak: the output must equal some party’s input. We present a protocol for $f < n$ omission faults that runs in $\min\{f+1,n-1\}$ rounds. We then show that both non-uniformity and weak validity are necessary for $f < n$.
 
 
 
@@ -26,7 +26,7 @@ let k=min{f+1,n-1}
 Round 1: leader sends its value to everyone
 Rounds 2...k: if you hear a value for the first time, send it to everyone
 End of round k: if you heard a value at any time then output it, 
-                otherwise output bot
+                otherwise output ⊥
 ```
 
 
@@ -40,13 +40,13 @@ The first part follows from the first round and the second from an easy inductio
 **Non-uniform Agreement (all non-faulty output same value)**:
 It is useful to reason in terms of message chains: if some party sends a value in round $r$, then some party must have sent that value in round $r-1$, which in turn must have come from a send in round $r-2$, and so on—tracing back to the leader’s initial message in round $1$. Each link in the chain is a distinct sender, since parties send a value at most once.
 
-* Case 1: No non-faulty party receives a value during the entire protocol. Then all output $\bot$.
-* Case 2: Some non-faulty party receives a value before the final round.
-It forwards the value, ensuring that by the next round, all non-faulty parties receive it and output the same value.
-* Case 3: A non-faulty party first receives a value in the final round $k$.
-This message is the end of a chain of length $k$.
-    * If $k = f+1$, then the chain must include at least one non-faulty sender. By the previous case, all non-faulty parties will have received the value by the end of the protocol.
-    * If $k = n-1$, then the chain must include all other parties. This implies that all other parties are faulty, in which case agreement of a single non-faulty parties is trivial.
+*Case 1.* No non-faulty party receives a value during the entire protocol. Then all output ⊥.  
+
+*Case 2.* Some non-faulty party receives a value before the final round. It forwards the value, ensuring that by the next round, all non-faulty parties receive it and output the same value.  
+
+*Case 3.* A non-faulty party first receives a value in the final round $k$. This message is the end of a chain of length $k$:  
+– If $k = f+1$, the chain must include at least one non-faulty sender. By Case 2, all non-faulty parties will have received the value by the end.  
+– If $k = n-1$, the chain must include all other parties. This implies all others are faulty, so agreement among the single non-faulty party is trivial.
 
 Thus, in all cases, all non-faulty parties output the same value, completing the proof.
 
@@ -59,7 +59,7 @@ Agreement for f<n:
 
 let k=min{f+1,n-1}
 Round 1: each party broadcasts its value (using above)
-End of round k: output the maximum non-bot value from any broadcast
+End of round k: output the maximum non-⊥ value from any broadcast
 ```
 
 **Weak Validity (output is the input of some party):**
