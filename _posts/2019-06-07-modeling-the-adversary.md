@@ -8,7 +8,7 @@ author: Ittai Abraham
 layout: post
 ---
 
-After we fix the communication model, [synchrony, asynchrony, or partial synchrony](/2019-06-01-2019-5-31-models/), and a [threshold adversary](/2019-06-17-the-threshold-adversary/) we still have 5 important modeling decisions about the adversary power:
+After we fix the communication model, [synchrony, asynchrony, or partial synchrony](/2019-06-01-2019-5-31-models/), and a [threshold adversary](/2019-06-17-the-threshold-adversary/) there are still five important modeling decisions regarding the adversary's power:
 
 1. The type of corruption (passive, crash, omission, or Byzantine).
 2. The computational power of the adversary (unbounded, computational, or fine-grained).
@@ -26,15 +26,15 @@ After we fix the communication model, [synchrony, asynchrony, or partial synchro
 The first fundamental aspect is what *type* of corruption the adversary can inflict on the $f$ parties it can corrupt. There are four classic types of corruption: Passive, Crash, Omission, and Byzantine.
 
 1. **Passive**: a passively corrupted party must follow the protocol just like an honest party, but it allows the adversary to learn information. A passive adversary (sometimes called [Honest-But-Curious](https://eprint.iacr.org/2011/136.pdf) or [Semi-Honest](http://www.wisdom.weizmann.ac.il/~oded/foc-vol2.html)) does not deviate from the protocol but can learn all possible information from its _view_: i.e., the messages sent and received by parties it controls. The adversary can aggregate all the views of the corrupted parties. Typically, the goal of the adversary designer is to limit the information that the adversary learns.
-2. **Crash**: in addition to passive, once the party is corrupted, the adversary can decide to cause a crash event which causes the party to stop sending and receiving all messages. Note that the crash event may happen in the middle of sending messages and once it happens it is irrevocable.
-3. **Omission**: in addition to passive, once corrupted, the adversary can decide, for each message sent or each message received, to either drop or allow it to continue. Note that the party is not informed that it is corrupted. 
-4. **Byzantine**: this gives the adversary full power to control the party and take any (arbitrary) action on the corrupted party. Sometimes this model is called active corruption or arbitrary corruption.
+2. **Crash**: in addition to passive, once the party is corrupted, the adversary can decide to cause a crash event which causes the party to stop sending and receiving all messages. The crash may occur mid-message, and once it happens, it is irrevocable.
+3. **Omission**: in addition to passive, once corrupted, the adversary can decide, for each message sent or each message received, to either drop or allow it to continue. The party is unaware of its corruption. 
+4. **Byzantine**: this gives the adversary full power to control the party and take any (arbitrary) action on the corrupted party. This is also called active or arbitrary corruption.
 
 Note that each corruption type subsumes the previous one.
 
 There are other types of corruption. Most notable are variants of [Covert adversaries](https://eprint.iacr.org/2007/060.pdf). *Covert adversaries* can be used to model rational behavior where there is fear (utility loss) from punishment through some form of detection. 
 
-There are sub-variants of omission corruption worth mentioning:
+There are sub-variants of omission corruption:
 
  * **Send omission** and **Receive omission**: which are in between crash and omission. See [this](https://decentralizedthoughts.github.io/2024-01-30-between-crash-and-omission/) post.
 
@@ -54,9 +54,9 @@ These two models have a fundamental round complexity difference in [early stoppi
 
 The computational power of the adversary:
 
-1. **Unbounded**: the adversary has unbounded computational power. This model often leads to notions of *perfect security* or *statistical security*. The advantage of this model is that will remain secure forever.
+1. **Unbounded**: the adversary has unbounded computational power. This model often leads to notions of *perfect security* or *statistical security*. The advantage of this model is that it remains secure indefinitely.
 
-2. **Computationally bounded**: the adversary has a polynomial advantage in computational power over the honest parties. Typically, this means that the adversary cannot (except with negligible probability) break the cryptographic primitives being used. For example, typically assume the adversary cannot forge signatures of parties not in its control (see [Goldreich's chapter one](http://www.wisdom.weizmann.ac.il/~oded/PSBookFrag/part1N.pdf) for traditional CS formal definitions of polynomially bounded adversaries). All of modern cryptography depends on this type of adversary and typically there is a security parameter that needs to be updated over time (as computation becomes cheaper).
+2. **Computationally bounded**: the adversary has a polynomial advantage in computational power over the honest parties. Typically, this means that the adversary cannot (except with negligible probability) break the cryptographic primitives being used. For example, we typically assume the adversary cannot forge signatures of parties outside its control (see [Goldreich's chapter one](http://www.wisdom.weizmann.ac.il/~oded/PSBookFrag/part1N.pdf) for traditional CS formal definitions of polynomially bounded adversaries). All of modern cryptography depends on this type of adversary and typically there is a security parameter that needs to be updated over time (as computation becomes cheaper).
 3. **Fine-grained computationally bounded**: there is some concrete measure of computational power and the adversary is limited concretely. This model is used in proof-of-work based protocols. For example, see [Andrychowicz and Dziembowski](https://www.iacr.org/archive/crypto2015/92160235/92160235.pdf) for a way to model the hash rate. It is often needed for [Verifiable Delay Functions](https://eprint.iacr.org/2018/601.pdf) and time lock puzzles.
 
 ## 3. Adaptivity
@@ -71,22 +71,22 @@ Adaptivity is the ability of the adversary to corrupt dynamically based on infor
 
 2. **Delayed Adaptive**: given a parameter $k$, once the adversary asks to corrupt a party, the party is corrupted after $k \Delta$ time (or some notion of $k$ rounds in asynchrony). Leader based protocols in synchrony and partial synchrony can often obtain $O(1)$ expected time in this paradigm (using a weak randomness beacon). Linear-per-view protocols can obtain $O(n)$ expected messages after GST in this model.
 
-3. **Weak Adaptive**: once the adversary asks to corrupt a party, the party is corrupted after it completes sending all its outgoing messages. Said differently, the corruption starts once the party looks at its incoming messages. So while the adversary is adaptive, the actual corruption may be delayed to after the party sends all its messages in that round (or in asynchrony after is sends all the messages it wants to immediately send). Sometimes in this model, it is also required that honest parties can [safely erase](https://eprint.iacr.org/2008/291.pdf) some information in order to get forward security, or assume that messages always maintain FIFO order in each channel. This is the model used by Algorand and YOSO type protocols in synchrony.
+3. **Weak Adaptive**: once the adversary asks to corrupt a party, the party is corrupted after it completes sending all its outgoing messages. Said differently, the corruption starts once the party looks at its incoming messages. So while the adversary is adaptive, the actual corruption may be delayed to after the party sends all its messages in that round (or in asynchrony after it sends all the messages it wants to immediately send). Sometimes in this model, it is also required that honest parties can [safely erase](https://eprint.iacr.org/2008/291.pdf) some information in order to get forward security, or assume that messages always maintain FIFO order in each channel. This is the model used by Algorand and YOSO type protocols in synchrony.
 
-4. **Adaptive**: once the adversary asks to corrupt a party, the party is immediately corrupted. Messages sent from the party before corruption cannot be erased (so will eventually arrive in asynchrony or in arrive in at most $\Delta$ time in synchrony).
+4. **Adaptive**: once the adversary asks to corrupt a party, the party is immediately corrupted. Messages sent from the party before corruption cannot be erased (so will eventually arrive in asynchrony or arrive within $\Delta$ time in synchrony).
 
-5. **Strong Adaptive**: once the adversary asks to corrupt a party, the party is immediately corrupted. Moreover, messages sent from the party before corruption that have not yet arrived can be erased (or claw-backed) by the adversary. Some [lower bounds](https://users.cs.duke.edu/~kartik/papers/podc2019.pdf) assume this model to obtain a constant error. This model is sometimes called adaptive with *claw back*.
+5. **Strong Adaptive**: once the adversary asks to corrupt a party, the party is immediately corrupted. Moreover, messages sent from the party before corruption that have not yet arrived can be erased (or clawed back) by the adversary. Some [lower bounds](https://users.cs.duke.edu/~kartik/papers/podc2019.pdf) assume this model to obtain a constant error. This model is sometimes called adaptive with *claw back*.
 
 ## 4. Visibility 
 
 The visibility is the power of the adversary to see the messages and the states of corrupted and non-corrupted parties. 
 
-1. **Full information**: the adversary sees the internal state of *all* parties and the content of *all* message sent. This often severely limits the protocol designer. See for example: [Feige's](www.wisdom.weizmann.ac.il/~feige/Others/leader.ps) selection protocols, or [Ben-Or et al's](https://people.csail.mit.edu/vinodv/BA.pdf) Byzantine agreement. Often, the only thing that the adversary cannot do is predict the value of coins that have not been tossed yet.
+1. **Full information**: the adversary sees the internal state of *all* parties and the content of *all* message sent. This often severely limits the protocol designer. See for example: [Feige's](https://www.wisdom.weizmann.ac.il/~feige/Others/leader.ps) selection protocols, or [Ben-Or et al's](https://people.csail.mit.edu/vinodv/BA.pdf) Byzantine agreement. Often, the only thing that the adversary cannot do is predict the value of coins that have not been tossed yet.
  
 2. **Private channels**: in this model, we assume the adversary cannot see the internal state of honest parties and cannot see the internal content of messages between honest parties. Each time a message between two honest parties is sent, the adversary learns the source, target, and message size. Depending on the communication model, it can decide to delay it by any value that is allowed by the communication model. The adversary can see the full internal state of corrupted parties.
 
 
-3. **Oblivious**: the adversary can see the header of each message (source, destination, and message length) sent to and from a corrupt party, and based on that can decide its actions (crash, omit, delay, modify) depending on the adversary corruption type and network model. This type of adversary can model an adversary that has peripheral control (via a corrupt NIC, or local router/gateway). An oblivious omission adversary is often used to model an adversary that can maliciously corrupt parties that have a Trusted Execution Enclaves that cannot be corrupted.
+3. **Oblivious**: the adversary can see the header of each message (source, destination, and message length) sent to and from a corrupt party, and based on that can decide its actions (crash, omit, delay, modify) depending on the adversary corruption type and network model. This type of adversary can model an adversary that has peripheral control (via a corrupt NIC, or local router/gateway). An oblivious omission adversary is often used to model an adversary that can maliciously corrupt parties that have a Trusted Execution Environments (TEEs) that cannot be corrupted.
 
 
 4. **Erasure model**: in this model, once a party is corrupted, the adversary can see all the current state of the party, but cannot see data that was erased before the party was corrupted. This model is in contrast to a model where, once a party is corrupted, the adversary can see the full history of the party. 
@@ -98,7 +98,7 @@ For models that are round-based, another visibility distinction is the adversary
 
 ## 5. Mobility
 
-In the traditional **fixed model** the adversary is allowed to corrupt honest parties with some fixed budget of up to $f$ parties, but is not allowed to *un-corrupt* (or heal) corrupt parties back to being honest. In the **mobile model** the adversary is allowed to dynamically decide to corrupt and un-corrupt parties. The total number of corrupted parties at any given time is at most $f$, but over time the set of corrupted parties may change. It is often required that there is a *gap* between the time the adversary un-corrupts one party and the time it is allowed to corrupt another. This model was introduced by [Ostrovsky and Yung](https://web.cs.ucla.edu/~rafail/PUBLIC/05.pdf) and exemplified by [proactive secret sharing](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.40.8922&rep=rep1&type=pdf). Another modeling decision is whether the party is aware that it is un-corrupted (in which case it may be able to remove in-memory corrupt data).
+In the traditional **fixed model** the adversary is allowed to corrupt honest parties with some fixed budget of up to $f$ parties, but is not allowed to un-corrupt (or heal) corrupt parties back to being honest. In the **mobile model** the adversary is allowed to dynamically decide to corrupt and un-corrupt parties. The total number of corrupted parties at any given time is at most $f$, but over time the set of corrupted parties may change. It is often required that there is a *gap* between the time the adversary un-corrupts one party and the time it is allowed to corrupt another. This model was introduced by [Ostrovsky and Yung](https://web.cs.ucla.edu/~rafail/PUBLIC/05.pdf) and exemplified by [proactive secret sharing](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.40.8922&rep=rep1&type=pdf). Another modeling decision is whether the party is aware that it is un-corrupted (in which case it may be able to remove in-memory corrupt data).
 
 ## More models
 
@@ -106,11 +106,11 @@ There are many more models and variations - here is an incomplete list (let us k
 
 ### Mixed corruptions
 
-In some cases, we are interested in a mix of say $f$ Byzantine and $k$ crash corruptions (for example [here](https://eprint.iacr.org/2022/805)) or any other mix. For example, when the requirement is $n>3k+2k$ it can be thought of as if the adversary has a corruption budget of $n-1$ where each Byzantine corruption costs 3 and each crash corruption costs 2.
+In some cases, we are interested in a mix of say $f$ Byzantine and $k$ crash corruptions (for example [here](https://eprint.iacr.org/2022/805)) or any other mix. For example, when the requirement is $n>3f+2k$ it can be thought of as if the adversary has a corruption budget of $n-1$ where each Byzantine corruption costs 3 and each crash corruption costs 2.
 
 ### Sleepy model
 
-In the [sleepy model](https://eprint.iacr.org/2016/918.pdf) of Pass and Shi, in addition to being either honest or corrupt, parties can be either *active* or *inactive* each round. The assumption is that the threshold bound on the adversary holds at each round on the actual number of active parties in that round. This is sometimes called the [dynamic participation](https://eprint.iacr.org/2023/280.pdf) model. This is similar to a model assuming a mix of Byzantine failures (with a corruption cost of 2) and mobile oblivious crash failures (with a corruption cost of 1).
+In the [sleepy model](https://eprint.iacr.org/2016/918.pdf) of Pass and Shi, in addition to being either honest or corrupt, parties may be *active* or *inactive* in each round. The assumption is that the threshold bound on the adversary holds at each round on the actual number of active parties in that round. This is sometimes called the [dynamic participation](https://eprint.iacr.org/2023/280.pdf) model. This is similar to a model assuming a mix of Byzantine failures (with a corruption cost of 2) and mobile oblivious crash failures (with a corruption cost of 1).
 
 ### Mobile sluggish
 
@@ -118,11 +118,10 @@ One of the challenges in the mobile model is the fact that the adversary can acc
 
 ### Flexible model
 
-The [Flexible BFT model](https://eprint.iacr.org/2019/270.pdf) introduces two variations. First, a model where different properties are held under different threshold assumptions. Second, a model where the same protocol may serve different clients, where each client may have a different adversary threshold in mind. 
+The [Flexible BFT model](https://eprint.iacr.org/2019/270.pdf) introduces two variations. First, a model where different properties hold under different threshold assumptions. Second, a model where the same protocol may serve different clients, where each client may have a different adversary threshold in mind. 
 
 ## Acknowledgments
 
 Special thanks to [Alin Tomescu](http://twitter.com/alinush407), Kartik Nayak, Gilad Stern, and Tim Roughgarden for insightful comments. 
 
 Please leave comments on [Twitter](https://twitter.com/ittaia/status/1141481767121170434?s=20)
-

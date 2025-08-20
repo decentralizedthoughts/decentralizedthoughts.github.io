@@ -6,7 +6,7 @@ tags:
 author: Kartik Nayak, Ittai Abraham
 ---
 
-How scalable is Byzantine agreement? Specifically, does solving agreement require the non-faulty parties to send a quadratic number of messages (in the number of potential faults)? In this post, we highlight the [Dolev and Reischuk](http://cs.huji.ac.il/~dolev/pubs/p132-dolev.pdf) lower bound from 1982 that addresses this fundamental question.
+How scalable is Byzantine agreement? Does solving agreement require non-faulty parties to send a quadratic number of messages in the number of potential faults? In this post, we highlight the [Dolev and Reischuk](http://cs.huji.ac.il/~dolev/pubs/p132-dolev.pdf) lower bound from 1982 that addresses this fundamental question.
 
 **[Dolev and Reischuk 1982](http://cs.huji.ac.il/~dolev/pubs/p132-dolev.pdf): any deterministic Broadcast protocol that is resilient to $f$ Byzantine failures must have an execution where the non-faulty parties send  $> (f/2)^2$ messages.** 
 
@@ -17,9 +17,9 @@ In fact, we will observe that the result is stronger and holds even for omission
 In a [follow-up post](https://decentralizedthoughts.github.io/2024-12-16-strong-adaptive-lower-bound/) we address randomization.
 
 
-In 1980, [PSL](https://lamport.azurewebsites.net/pubs/reaching.pdf) showed the *first* feasibility result for consensus in the presence of Byzantine adversaries. However, their solution had an *exponential* (in $n$, the number of parties) communication complexity. An obvious question then is to figure out the lowest communication complexity that could be obtained. Dolev and Resichuk showed that the barrier to quadratic communication complexity cannot be broken by deterministic protocols. 
+In 1980, [PSL](https://lamport.azurewebsites.net/pubs/reaching.pdf) showed the *first* feasibility result for consensus in the presence of Byzantine adversaries. However, their solution had an *exponential* (in $n$, the number of parties) communication complexity. The obvious next question is to determine the lowest possible communication complexity. Dolev and Resichuk showed that the barrier to quadratic communication complexity cannot be broken by deterministic protocols. 
 
-At a high level, the Dolev and Resichuk lower bound says that if the non-faulty always send few messages (specifically $< (f/2)^2$), then the adversary can cause some non-faulty party to receive no message! The party that receives no message has no way of reaching agreement with the rest. 
+At a high level, the Dolev and Resichuk lower bound says that if the non-faulty send few messages (specifically $< (f/2)^2$), then the adversary can cause some non-faulty party to receive no message! The party that receives no message has no way of reaching agreement with the rest. 
 
 Here’s the proof intuition: In any set of $f/2$ parties, if each of these parties receives $> f/2$ messages from non-faulty parties, then we have a protocol with $> (f/2)^2$ messages being sent by non-faulty parties. So, if there exists a protocol sending fewer messages, there must exist one party, say $p$, that receives $\leq f/2$ messages. Now imagine that all the parties sending messages to $p$ (there can be at most $f/2$ of them) have omission corruptions that omit all messages sent to $p$. Hence $p$ receives no message.
 
@@ -27,7 +27,7 @@ We use a two-world indistinguishability argument to prove that the reaction of $
 
 ### Proof
 
-Consider a broadcast problem, where the *designated sender* has a binary input. First, we need to guarantee that the isolated party $p$ will indeed not decide like all the other non-faulty parties. Observe what happens to a party that receives no messages. It will either not decide 0 or not decide 1. Without loss of generality, assume that a majority of parties (other than the designated sender) that receive no message will not decide 0. Let $Q$ be this set of parties and note that $\|Q\| \geq (n-1)/2$.
+Consider a broadcast problem, where the *designated sender* has a binary input. First, we need to guarantee that the isolated party $p$ will indeed not decide like all the other non-faulty parties. Consider a party that receives no messages: it will either not decide 0 or not decide 1. Without loss of generality, assume that a majority of parties (other than the designated sender) that receive no message will not decide 0. Let $Q$ be this set of parties and note that $\|Q\| \geq (n-1)/2$.
 
 We will prove the theorem by describing two worlds and using indistinguishability for all honest parties. 
 
@@ -53,13 +53,14 @@ Set the non-faulty designated sender with input 0. So from the validity property
   <img src="/uploads/dr-world2.png" width="352" title="DR world 2">
 </p>
 
-In World 2, the adversary does everything as in World 1, except (i) it does not corrupt party $p$, and (ii) it corrupts all parties in $U$ that send messages to $p$ (this may also include the designated sender). Messages sent by these omission corrupt parties to $p$ are omitted. Since $p$ receives $\leq f/2$ messages in World 1, at most $f$ parties are corrupted in World 2 ($\leq f/2$ senders and $\|V\| = f/2$).
+In World 2, the adversary does everything as in World 1, except (i) it does not corrupt party $p$, and (ii) it corrupts all parties in $U$ that send messages to $p$ (this may also include the designated sender). Messages sent by these omission corrupt parties to $p$ are omitted. Since $p$ received $\leq f/2$ messages in World 1, at most $f$ parties are corrupted in World 2 ($\leq f/2$ senders plus $\|V\| = f/2$).
 
 What do honest parties in $U$ output in World 2? We argue that they will output 0. Observe that for the non-faulty parties, the two worlds are indistinguishable. Since the protocol is deterministic, they receive exactly the same messages in both worlds. However, since party $p$ does not receive any messages and $p \in Q$, then it will not output 0, so will either violate the agreement property (if it outputs 1) or violate the termination property (if it does not output anything).
 
 ## Extending the lower bound 
 
 The lower bound uses the fact that the protocol is deterministic. There have been several attempts at circumventing the lower bound using **randomness** and even against an adaptive adversary. Here are a few notable ones:
+
 - [King-Saia](https://arxiv.org/pdf/1002.4561.pdf): Through a sequence of fascinating new ideas, King and Saia presented a beautiful information-theoretic protocol that broke the quadratic communication complexity. Their protocol uses randomness, assumes that honest parties can erase data, and does not allow the adversary to claw back messages. 
 - [Algorand](https://www.sciencedirect.com/science/article/pii/S030439751930091X?via%3Dihub) uses  cryptographic randomness (VRFs) to form small committees. Algorand assumes the adaptive adversary is weak: it cannot cause the corrupt parties to remove the in-flight messages that were sent before the party was corrupted.
 - [Randomized version of Dolev-Reischuk.](https://decentralizedthoughts.github.io/2024-12-16-strong-adaptive-lower-bound/) Any (possibly randomized) Byzantine Agreement protocol must in expectation incur at least $\Omega(f^2)$ communication in the presence of a strongly adaptive adversary capable of performing "after-the-fact removal", where $f$ denotes the number of corrupt parties (see [paper](https://users.cs.duke.edu/~kartik/papers/podc2019.pdf)).
@@ -70,7 +71,7 @@ The lower bound uses the fact that the protocol is deterministic. There have bee
 
 ## Broadcast vs Agreement
 
-The lower bound is presented for Broadcast (not Agreement). In terms of feasibility, [both problems are equivalent](https://decentralizedthoughts.github.io/2020-09-14-broadcast-from-agreement-and-agreement-from-broadcast/) and each of them can be reduced from the other. In particular, if Agreement can be solved with communication complexity $\leq Y$ then broadcast can be solved in communication complexity $\leq Y+n$; the leader can send the value to all parties, and then they can run the Agreement protocol. Thus, if $(f/2)^2$ messages are required for Broadcast then at least $(f/2)^2 - n$ messages are required for Agreement.
+The lower bound is presented for Broadcast (not Agreement). In terms of feasibility, the two problems are [equivalent](https://decentralizedthoughts.github.io/2020-06-02-broadcast-vs-agreement/). In particular, if Agreement can be solved with communication complexity $\leq Y$ then broadcast can be solved in communication complexity $\leq Y+n$; the leader can send the value to all parties, and then they can run the Agreement protocol. Thus, if $(f/2)^2$ messages are required for Broadcast then at least $(f/2)^2 - n$ messages are required for Agreement.
 
 This post was updated in November 2021 to reflect that the lower bound holds for omission failures.
 

@@ -17,8 +17,8 @@ For simplicity, we abstract consensus and broadcast away, and assume parties hav
 A *secret sharing scheme* is composed of two protocols: *Share* and *Reconstruct*. These protocols are run by the $n$ parties. A designated *dealer* has a *secret* $s$ in a commonly known finite field $\mathbb{F}_p$ with $p>n$, which is given as *input* to the Share protocol. The adversary is malicious - and corrupted parties are not guaranteed to follow the protocol specification. A secret sharing protocol that tolerates such adversaries is called **verifiable secret sharing (VSS)**. 
 The three properties of VSS:
 
-1. **Validity**: If the dealer is honest, the output of the Reconstruct protocol is the dealer's input value $s$.
-2. **Hiding**: If the dealer is honest and no honest party has begun the Reconstruct protocol, then the adversary can gain no information about $s$.
+1. **Validity**: If the dealer is honest, the Reconstruct protocol outputs the dealer's input value $s$.
+2. **Hiding**: If the dealer is honest and no honest party has begun the Reconstruct protocol, then the adversary learns nothing about $s$.
 3. **Binding**: At the end of the Share protocol, the output of the Reconstruct protocol is well-defined. Namely, there exists an (efficient) algorithm that takes the view of the honest parties in the end of the Share protocol and outputs a value $s$ such that, when parties later execute the Reconstruction protocol, the output will be $s$. 
 
 
