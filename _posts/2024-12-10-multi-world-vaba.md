@@ -7,101 +7,93 @@ tags:
 author: Ittai Abraham, Alexander Spiegelman
 ---
 
-In this post, we show how to solve Validated Asynchronous Byzantine Agreement via the multi-world VABA approach of [Abraham, Malkhi, and Spiegelman 2018](https://arxiv.org/pdf/1811.01332). 
+In this post, we show how to solve Validated Asynchronous Byzantine Agreement using the multi-world VABA approach from [Abraham, Malkhi, and Spiegelman 2018](https://arxiv.org/pdf/1811.01332). 
 
 ## What is Validated Asynchronous Byzantine Agreement?
 
+Given $n$ parties, with at most $f < n/3$ malicious (the optimal ratio for consensus with asynchronous communication), parties share an agreed-upon **external validity function** $EV(val)$ that defines the set of *valid* values. 
 
-Given $n$ parties, and at most $f<n/3$ of them can be malicious (this is the optimal ratio for consensus with asynchronous communication). Parties have an agreed-upon **external validity function** $EV(val)$ that defines the set of *valid* values. 
-
-Each party possesses a valid input value (the adversary may have multiple valid input values). 
+Each party holds a valid input value (the adversary may have multiple valid inputs). 
 
 A **commit certificate** consists of a value and a **commit proof**. 
 
-A **VABA** (Validated Asynchronous Byzantine Agreement) is a **protocol** that includes a **commit proof validity function** $CV(cert)$ and has three essential properties:
+A **VABA** (Validated Asynchronous Byzantine Agreement) is a **protocol** that includes a **commit proof validity function** $CV(cert)$ and satisfies three essential properties:
 
-
-1. **External validity**: If $CV(cert)=true$, then $EV(cert.val)=true$. Any commit certificate that the commit proof validity function returns true on has a value that the external validity function returns true on.
-2. **Liveness**: In an expected constant number of rounds, all nonfaulty parties hold some $cert$ such that $CV(cert)=true$ (a commit certificate that the commit proof validity function returns true on).
-3. **Safety**: If $CV(cert)=true$ and $CV(cert')=true$, then $cert.val=cert'.val$. There cannot be two commit certificates on two different values that the commit proof validity function returns true on.
-
+1. **External validity**: If $CV(cert) = true$, then $EV(cert.val) = true$. Any commit certificate accepted by the commit proof validity function has a value accepted by the external validity function.
+2. **Liveness**: In an expected constant number of rounds, all nonfaulty parties hold some $cert$ such that $CV(cert) = true$.
+3. **Safety**: If $CV(cert) = true$ and $CV(cert') = true$, then $cert.val = cert'.val$. There cannot be two commit certificates on different values both accepted by the commit proof validity function.
 
 ## How to solve Validated Asynchronous Byzantine Agreement?
 
-The [multi-world VABA](https://arxiv.org/pdf/1811.01332) works via a combination of two primitives:
+The [multi-world VABA](https://arxiv.org/pdf/1811.01332) combines two primitives:
 
-1. A **randomness beacon** (for example, a [threshold verifiable random function](https://eprint.iacr.org/2000/034.pdf) or [unique threshold signature scheme](https://www.iacr.org/archive/asiacrypt2001/22480516.pdf)) with the following properties:
+1. A **randomness beacon** (e.g., a [threshold verifiable random function](https://eprint.iacr.org/2000/034.pdf) or [unique threshold signature scheme](https://www.iacr.org/archive/asiacrypt2001/22480516.pdf)) with these properties:
 
     1. *Beacon correctness*: For a given round, all parties output the same beacon value in $[1..n]$.  
-    2. *Beacon liveness*: If all non-faulty parties output their beacon share, then all will compute the beacon value.
-    3. *Beacon unpredictability*: The adversary’s probability of guessing the beacon value for round $r$ before any non-faulty party releases its beacon share for round $r$ is $1/n$ (up to a negligible advantage).
+    2. *Beacon liveness*: If all non-faulty parties output their beacon share, all will compute the beacon value.
+    3. *Beacon unpredictability*: The adversary’s probability of guessing the beacon value for round $r$ before any non-faulty party releases its beacon share for round $r$ is $1/n$ (up to negligible advantage).
 
-2. Running $n$ **instances in parallel** of (almost any) view-based **partial synchrony** validated Byzantine agreement protocol (for example, [PBFT](https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/) or [HotStuff](https://arxiv.org/pdf/1803.05069)). We will use the following properties:
- 
-    1. *Asynchronous Safety*: The partial synchrony protocol maintains safety for any *agreed* mapping of proposers to views. Looking ahead, we will use the beacon above to choose (in hindsight) the agreed-upon mapping in each view.
-    2. *Asynchronous Responsiveness*: If all non-faulty parties start a view whose proposer is non-faulty and no non-faulty leaves the view for a constant number of rounds, then they will all decide and terminate. Note that this property does not hold if, for example, a protocol needs a timeout in addition to a constant number of rounds (as may happen sometimes in two-round hotstuff). In this sense, this property is stronger than the minimum *liveness in synchrony* needed by partial synchrony protocols. 
-    3. *External Validity*: The partial synchrony protocol decision is externally valid.
+2. Running $n$ **instances in parallel** of (almost any) view-based **partial synchrony** validated Byzantine agreement protocol — for example, [PBFT](https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/) or [HotStuff](https://arxiv.org/pdf/1803.05069). These protocols satisfy:
 
+    1. *Asynchronous Safety*: The partial synchrony protocol maintains safety for any *agreed* mapping of proposers to views. The beacon is used to choose (in hindsight) the agreed-upon mapping in each view.
+    2. *Asynchronous Responsiveness*: If all non-faulty parties start a view whose proposer is non-faulty and no non-faulty party leaves the view for a constant number of rounds, they will all decide and terminate. This property is stronger than the minimum *liveness in synchrony* required by partial synchrony protocols.
+    3. *External Validity*: The partial synchrony protocol’s decision is externally valid.
 
+### Advantages of the multi-world VABA approach
 
-### The advantages of the multi-world VABA approach to solving VABA
-
-1. It deconstructs asynchronous challenges into simpler challenges: partial synchrony "worlds" and a randomness beacon. This modular nature may help with component reuse and simplify learning.
-2. It can obtain the asymptotically optimal $O(n^2)$ expected communication complexity.
-3. As we show in later posts, it is possible to add significant throughput and latency improvements to this basic scheme.
+1. It decomposes asynchronous challenges into simpler components: partial synchrony "worlds" and a randomness beacon. This modularity aids component reuse and simplifies understanding.
+2. It achieves the asymptotically optimal $O(n^2)$ expected communication complexity.
+3. As we will show in later posts, it can be extended to improve throughput and latency significantly.
 
 ## A sketch of the multi-world VABA protocol
 
+Multi-world VABA is a *view-based protocol*. For view $v$:
 
-Multi-world VABA is a *view-based protocol*. Here is the sketch of view $v$:
+Run $n$ instances (or worlds) of view $v$. In instance $i$, party $i$ is the proposer. Each instance runs independently as if others do not exist.
 
-Run $n$ instances (or worlds) of view $v$. In instance $i$, the proposer is party $i$. Each instance runs logically as if the other instances do not exist.
+Once the proposer has a *commit certificate* in its instance, it sends that certificate to all parties and waits for $n{-}f$ confirmations, called a **done certificate**. The proposer then broadcasts the done certificate to all parties.
 
-Once the proposer has a *commit certificate* in its instance, it sends that certificate to all parties and waits for $n{-}f$ confirmations, which we call a **done certificate**. The proposer then sends the done certificate to all parties.
+Each party waits for $n{-}f$ done certificates from $n{-}f$ *different instances*. Seeing proof that $n{-}f$ different instances have done certificates triggers the party to reveal its *share* of the beacon random value for view $v$.
 
+Once the beacon value $b_v$ is revealed (typically after $n{-}f$ parties reveal their beacon shares for view $v$), parties proceed as in the partial synchrony protocol where $b_v$ is the agreed proposer for view $v$. All other instances are ignored (they become decoys in hindsight).
 
-Each party then waits for $n{-}f$ done certificates from $n{-}f$ *different instances*. Seeing proof that $n{-}f$ different instances have a done certificate is the trigger for the party to reveal its *share* of the beacon random value for view $v$.
+Obtaining the beacon value also triggers a *view change* to move from view $v$ to view $v+1$.
 
-Once the beacon value $b_v$ is revealed (typically when $n{-}f$ parties reveal their beacon share for view $v$), the parties act as they would in the partial synchrony protocol where all parties agree that party $b_v$ is the proposer in view $v$. All other instances are ignored (they are essentially decoys in hindsight).
-
-Obtaining the beacon value also serves as a *view change trigger* to move to the next view (change from view $v$ to view $v+1$).
-
-To start view $v+1$, parties send their *view change* information based on having $b_v$ as the proposer in view $v$. 
-
+To start view $v+1$, parties send their *view change* information based on having $b_v$ as the proposer in view $v$.
 
 ### Sketch of liveness:
 
-Consider the first nonfualty to see a set of $n{-}f$ done certificates from $n{-}f$ different worlds. With constant probability, the beacon chooses an instance in this set, where its proposer completed a done certificate. So just like in a partial synchrony protocol, there are at least $f+1$ nonfualty that hold a commit certificate, so all parties will see this certificate in view $v+1$ (because any $n{-}f$ will see at least one nonfualty with a commit certificate).
+Consider the first nonfaulty party to see $n{-}f$ done certificates from $n{-}f$ different worlds. With constant probability, the beacon selects an instance in this set whose proposer completed a done certificate. Thus, as in a partial synchrony protocol, at least $f+1$ nonfaulty parties hold a commit certificate, so all parties will see this certificate in view $v+1$ (since any $n{-}f$ parties include at least one nonfaulty party with a commit certificate).
 
-Note that the adversary needs to bind to a set of $n{-}f$ instances that have a done certificate **before** seeing the beacon value at a stage when the beacon is unpredictable. This is an example of the [general framework of using binding and randomization](/2024-12-10-bind-and-rand.md).
+Note that the adversary must commit to a set of $n{-}f$ instances with done certificates **before** seeing the beacon value at a time when the beacon is unpredictable. This exemplifies the [general framework of using binding and randomization](/2024-12-10-bind-and-rand.md).
 
-The end result is that all nonfualty will see a commit certificate after a constant expected number of views.
+The result is that all nonfaulty parties will see a commit certificate after a constant expected number of views.
 
 ### Sketch of safety:
 
-Each view has one real instance of a partial synchrony protocol, and all the others are decoys. Each view has one agreed upon proposer, which is exactly what happens in the partial synchrony protocol - so the safety of this protocol is immediate from the safety of the partial synchrony protocol.
+Each view has one real instance of a partial synchrony protocol; all others are decoys. Each view has exactly one agreed proposer, as in the partial synchrony protocol, so safety directly follows from the partial synchrony protocol’s safety.
 
 ### Sketch of external validity:
 
-Just like safety, this follows directly from the external validity of the partial synchrony protocol.
+Like safety, this follows immediately from the external validity of the partial synchrony protocol.
 
 ### Scaling the multi-world VABA protocol:
 
-The multi-world protocol requires running $n$ instances per view. If each instance is linear then the expected cost is $O(n^2)$ words since the expected number of views till decision is constant.
+The multi-world protocol runs $n$ instances per view. If each instance is linear, the expected cost is $O(n^2)$ words since the expected number of views until decision is constant.
 
-A concrete way to obtain linear cost in each instance is to run the **robust keyed broadcast** which is just running 4 instances of [provable broadcast](https://decentralizedthoughts.github.io/2022-09-10-provable-broadcast/).
+One way to ensure linear cost per instance is to run the **robust keyed broadcast**, which involves running 4 instances of [provable broadcast](https://decentralizedthoughts.github.io/2022-09-10-provable-broadcast/).
 
-So we spend $O(n^2)$ communication to agree on a $O(1)$ size data. This gives a $O(n^2)$ ratio. We can improve the throughput while keeping the same communication to reduce this ratio by using [batching](https://decentralizedthoughts.github.io/2023-09-30-scaling/).
+Thus, $O(n^2)$ communication is spent to agree on $O(1)$ sized data, yielding an $O(n^2)$ ratio. We can improve throughput while keeping communication the same by using [batching](https://decentralizedthoughts.github.io/2023-09-30-scaling/).
 
-We will expand on these ideas in future posts. For now here is an overview:
+We will expand on these ideas in future posts. For now, here is an overview:
 
-1. Agreeing on a linear-size validated input by using a **provable AVID** protocol (see [here](https://decentralizedthoughts.github.io/2024-08-08-vid/)). Each instance disperses its $O(n)$ input via a provable dispersal that costs $O(n)$ and after the beacon we retrieve just the chosen instance at a $O(n^2)$ cost. This keeps the $O(n^2)$ communication while allowing to agree on $O(n)$ size data. The result is improving the throughput which results in a $O(n)$ ratio.
-2. If different proposers have different validated inputs then each proposer can aggregate $O(n)$ dispersals and aggregate that into a single proposal. This still keeps the $O(n^2)$ communication while allowing to agree on $O(n)$ different validated inputs each of size $O(n^2)$. If all we want is data availability then this improves the scalability to [the asymptotically optimal $O(1)$ ratio](https://decentralizedthoughts.github.io/2023-09-30-scaling/).
+1. Agreeing on a linear-size validated input using a **provable AVID** protocol (see [here](https://decentralizedthoughts.github.io/2024-08-08-vid/)). Each instance disperses its $O(n)$ input via provable dispersal costing $O(n)$, and after the beacon, we retrieve only the chosen instance at $O(n^2)$ cost. This maintains $O(n^2)$ communication while allowing agreement on $O(n)$ size data, improving throughput and achieving an $O(n)$ ratio.
+2. If different proposers have different validated inputs, each can aggregate $O(n)$ dispersals into a single proposal. This keeps $O(n^2)$ communication while agreeing on $O(n)$ different validated inputs, each of size $O(n^2)$. If only data availability is needed, this improves scalability to [the asymptotically optimal $O(1)$ ratio](https://decentralizedthoughts.github.io/2023-09-30-scaling/).
 
 ### What about latency and log replication?
 
-Extending the sketch above from a single shot protocol to a log replication protocol is strait forward: just use a log replication partial synchrony protocol in each instance.
+Extending this single-shot protocol to log replication is straightforward: just use a log replication partial synchrony protocol in each instance.
 
-Improving the latency requires changing the protocol. We will discuss this and dealing with non-perfect randomness beacons in a later post.
+Improving latency requires protocol modifications. We will discuss this and handling imperfect randomness beacons in a later post.
 
 Your thoughts and comments on [X](https://x.com/ittaia/status/1866608517140062650).
