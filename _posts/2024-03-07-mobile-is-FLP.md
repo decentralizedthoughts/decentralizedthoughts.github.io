@@ -1,18 +1,19 @@
 ---
-title: Consensus with One Mobile Crash in Synchrony or One Crash in Asynchrony Must
-  Have Infinite Executions
+title: Consensus with One Mobile Crash in Synchrony or One Crash in Asynchrony Has Infinite Executions
 date: 2024-03-07 12:05:00 -05:00
 tags:
 - lowerbound
 author: Ittai Abraham and Gilad Stern
 ---
 
-In a consensus protocol, parties have an input (with at least two possible values, such as 0 or 1) and must output a decision value that satisfies the following properties:
+**TL;DR:** We give a simple, unified proof that consensus with one mobile crash in synchrony, or one crash in asynchrony, inevitably admits infinite executions. The proof uses a single reduction to a *mobile delay adversary*, a weaker but expressive fault model and then shows that every consensus protocol resilient to it must fail to terminate. This approach streamlines the classic FLP83 and SW89 results and highlights the close connection between asynchrony and mobile faults.
+
+In a consensus protocol, each party begins with an input (with at least two possible values, such as 0 or 1) and must eventually output a decision value that satisfies the following properties:
 
 * **Uniform Agreement**: all decision values are the same.
 * **Validity**: if all inputs are the same, then this is the output value.
 
-The third property is **Termination**, and the following two influential lower bounds correspond to two [Dijkstra prizes](https://www.podc.org/dijkstra/) (awarded in [2001](https://www.podc.org/influential/2001-influential-paper/) and [2024](https://www.podc.org/2024-edsger-w-dijkstra-prize-in-distributed-computing/)) on fundamental limits to termination properties:
+The third property is **Termination**. Two influential lower bounds, both recognized by [Dijkstra prizes](https://www.podc.org/dijkstra/) (awarded in [2001](https://www.podc.org/influential/2001-influential-paper/) and [2024](https://www.podc.org/2024-edsger-w-dijkstra-prize-in-distributed-computing/)), establish fundamental limits on termination:
 
 **Theorem [[FLP83](https://decentralizedthoughts.github.io/2019-12-15-asynchrony-uncommitted-lower-bound/)]**: any protocol solving consensus in an asynchronous model that is resilient to one crash failure must have an infinite execution.
 
@@ -46,7 +47,7 @@ In words, a $p$-pivot configuration is a configuration where the decision value 
 
 ## Mobile delay adversary
 
-The mobile delay adversary with one failure, in lockstep, at each round, can choose one party to *delay* some of its messages. Once a party is delayed, its remaining outgoing messages suffer one additional round of delay. The adversary can delay a party at any point in the round. So for example it can delay all the outgoing messages, or only the last outgoing message, etc.
+The mobile delay adversary with one failure, in lockstep, at each round, can choose one party to *delay* some of its messages. Once a party is delayed, its remaining outgoing messages suffer one additional round of delay. The adversary may delay a party at any point in a round. For example, delaying all its outgoing messages, or just its last one.
 
 Note that the adversary can continue to delay the same party for any finite number of rounds and this is essentially equivalent to crashing the party.
 
@@ -56,7 +57,7 @@ Not surprisingly, we start by showing that some initial configuration must be a 
 
 ***Lemma 1***: *Any consensus protocol that is resilient to at least 1 mobile delay failure has a $p$-pivot initial configuration.*
 
-*Proof*: For $0 \leq i \le n$ let $C_i$ be the initial configuration where parties 1 to $i$ have input 1 (empty set for $i=0$) and the rest have input 0.  From validity, $val(C_0)=0$ and $val(C_n)=1$, so the (trivial) [one-dimensional Sperner's Lemma](https://en.wikipedia.org/wiki/Sperner%27s_lemma#One-dimensional_case) implies that there exists $1 \le i \le n$ and two adjacent configurations such that $val(C_{i-1}) =0$ and $val(C_{i})=1$.
+*Proof*: For $0 \leq i \le n$ let $C_i$ be the initial configuration where parties 1 to $i$ have input 1 (empty set for $i=0$) and the rest have input 0.  By validity, $val(C_0)=0$ and $val(C_n)=1$. The (trivial) [one-dimensional Sperner's Lemma](https://en.wikipedia.org/wiki/Sperner%27s_lemma#One-dimensional_case) then implies that there exists $1 \le i \le n$ and two adjacent configurations such that $val(C_{i-1}) =0$ and $val(C_{i})=1$.
 
 Note that the only difference between $E(C_{i-1})$ and $E(C_i)$ is the initial value of party $i$. Consider executions where party $i$ crashes (is delayed forever) at the beginning of the execution. Since there is no way to know the state of party $i$, we have
 
@@ -102,7 +103,7 @@ Without loss of generality, if this value is 1, then $D_{q-1}$ is a $q$-pivot co
 
 ### Pictorial view of Lemma 2
 
-At a high level, Lemma 2 starts with a pivot $p$, where the value flips between $C$ and $C-p$. It then zooms in to the critical round $\ell$, where the value flips between $C_{k+\ell-1}$ and $C_{k+\ell}$. Finally, it zooms in to the critical party $q$, where the value flips between $D_q$ and $D_{q-1}$. 
+At a high level, Lemma 2 begins with a pivot $p$, where the value flips between $C$ and $C-p$. It then zooms in to the critical round $\ell$, where the value flips between $C_{k+\ell-1}$ and $C_{k+\ell}$. Finally, it zooms in to the critical party $q$, where the value flips between $D_q$ and $D_{q-1}$. 
 
 ![Sketch of Lemma 2](/uploads/zoominginmobile.JPG)
 
@@ -128,7 +129,7 @@ The following claims are almost immediate, we provide them for completeness:
 
 **Claim 2**: If there is a protocol that is resilient to one mobile crash in synchrony, then there is a protocol resilient to one mobile delay in lock step.
 
-*Proof of claim 2*: Mobile crash has more power because it erases the messages sent after the crash, while mobile delay just delays them. So a mobile crash protocol can be transformed into a mobile delay protocol, by instructing parties to ignore any message they receive late and running the original protocol (thus simulating crashes).
+*Proof of claim 2*: A mobile crash adversary is strictly stronger: it erases all messages sent after the crash, whereas mobile delay merely postpones them. So a mobile crash protocol can be transformed into a mobile delay protocol, by instructing parties to ignore any message they receive late and running the original protocol (thus simulating crashes).
 
 The theorems at the top of this post follow from Claims 1 and 2 and the existence of infinite execution in the mobile delay lock-step model.
 
@@ -144,7 +145,7 @@ Gafni and Losa prove an even stronger result, showing that synchronous single mo
 * The mobile delay adversary is used as a base for reductions to both the mobile crash and the asynchronous case. This highlights how little asynchrony is needed and the deep connection between asynchrony and mobile faults. 
 * Compared to the FLP proof via [bi-valency](https://decentralizedthoughts.github.io/2019-12-15-asynchrony-uncommitted-lower-bound/), this proof is more constructive in showing a fair execution. The FLP notion of [bi-valency](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=043ac773bfcc3adb84dcdad6e726f2096a742f5b) may not be the most natural definition for proving these results.
 * Compared to the *Almost Same but Failure Free different* notion of our post on [early stopping](https://decentralizedthoughts.github.io/2024-01-28-early-stopping-lower-bounds/), here we maintain just one configuration instead of two. However, the proofs are very similar. It currently seems that early stopping needs to maintain two configurations because it needs to reason about a configuration that is one round in the future.
-* The constructive round by round nature of this proof approach shows that all the adversary needs to do is guess the pivot and its action (which can be done with probability $1/2n$ each round). This immediately shows that any protocol (even a randomized one and even one that uses fancy cryptography) that runs for at most $c$ rounds must have an error probability of at least $(2n)^{-c} (1/2)$.
+* The constructive round by round nature of this proof approach shows that all the adversary needs to do is guess the pivot and its action (which can be done with probability $1/2n$ each round). This immediately implies that any protocol—even a randomized one, or one that uses cryptographic techniques—that runs for at most $c$ rounds must have an error probability of at least $(2n)^{-c} (1/2)$.
 
 ## Acknowledgments
 

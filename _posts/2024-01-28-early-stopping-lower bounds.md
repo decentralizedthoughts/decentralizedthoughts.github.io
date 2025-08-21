@@ -1,17 +1,18 @@
 ---
-title: 'Early Stopping is same but different: two rounds are needed even in failure
-  free executions'
+title: 'Early Stopping, Same but Different: Two Rounds Are Needed Even in Failure Free Executions'
 date: 2024-01-28 12:05:00 -05:00
 tags:
 - lowerbound
 author: Ittai Abraham and Gilad Stern
 ---
 
-Many systems try to optimize executions that are *failure free*. If we absolutely knew that there will be no failures, parties could simply send each other messages with our inputs and reach consensus by outputting, say, the majority value. Thus completing the protocol after one round. What happens if there may be a crash failure? Say you have 100 servers and at most one can crash, can you devise a consensus protocol that stops in just one round *in executions where there are no failures*? 
+**TL;DR:** Even in *failure-free* executions, consensus protocols resilient to crash failures often require at least two rounds. This follows from the early stopping lower bound: executions with $f$ actual crashes require at least $\min \{f+2, t+1\}$ rounds when tolerating $t$ possible failures. Thus, the possibility of a failure forces extra rounds, even when no failures occur.
 
-> The answer is **No**, one round is not always enough. Sometimes you need 2 rounds even in *failure free* executions.
+Many systems aim to optimize executions that are *failure-free*. If we knew with certainty that there would be no failures, parties could simply exchange their inputs and reach consensus by outputting, for example, the majority value. The protocol would then complete in just one round. What happens if there may be a crash failure? Say you have 100 servers and at most one can crash, can you devise a consensus protocol that stops in just one round *in executions where there are no failures*? 
 
-The *threat* of potentially having a failure forces us to run for longer, even if there is no failure!
+> The answer is **No**: one round is not always enough. Sometimes you need 2 rounds even in *failure-free* executions.
+
+The *threat* of a potential failure forces the protocol to run longer, even if no failure actually occurs.
 
 This result follows from the fundamental lower bound on **early stopping**: the number of rounds for consensus protocols in the synchronous model that can tolerate at most $t$ crash failures in executions where there at most $f \le t$ failures is at least $\min \{f+2,t+1\}$.
 
@@ -43,7 +44,7 @@ There are slightly different lower bounds for 3 different adversary models and p
 
 ## The $f=0$ case
 
-***Theorem for $f=0$***: *Let there be a protocol in the synchronous model for $n$ parties that is resilient to $n-2 \geq t \geq 1$ failures. Then in error free executions:*
+***Theorem for $f=0$***: *Let there be a protocol in the synchronous model for $n$ parties that is resilient to $n-2 \geq t \geq 1$ failures. Then in failure-free executions:*
 
 1. $ES{-}C{-}Cfix$ : *the protocol must have an execution with at least 2 rounds.*
 2. $ED{-}UC{-}Cfix$ : *for $t>1$, the protocol must have an execution where a decision is made after at least 2 rounds.*
@@ -54,7 +55,7 @@ The theorem follows from Lemma 1 and Lemma 2.
 
 ***Lemma 1***: *Any consensus protocol that is resilient to at least 1 crash failure must have two initial configurations that are Almost Same but Failure Free Different (AS but FFD).*
 
-*Proof*: For any $0 \leq i \le n$ consider the initial configuration $C_i$ where parties 1 to $i$ have input 1 (empty set for $i=0$) and the rest have input 0. Let $val(i)$ be the decision in the failure free execution that starts with configuration $C_i$. From validity, $val(0)=0$ and $val(n)=1$, so the (trivial) [one dimension Sperner's Lemma](https://en.wikipedia.org/wiki/Sperner%27s_lemma#One-dimensional_case) implies that there exists $1 \le i \le n$ and two configurations $C_{i-1},C_{i}$ such that:
+*Proof*: For any $0 \leq i \le n$ consider the initial configuration $C_i$ where parties 1 to $i$ have input 1 (empty set for $i=0$) and the rest have input 0. Let $val(i)$ be the decision in the failure free execution that starts with configuration $C_i$. By validity, $val(0)=0$ and $val(n)=1$. The (trivial) [one dimensional Sperner's Lemma](https://en.wikipedia.org/wiki/Sperner%27s_lemma#One-dimensional_case) then implies that there exists $1 \le i \le n$ and two configurations $C_{i-1},C_{i}$ such that:
 
 * $val(i-1) = 0$ while $val(i) = 1$
 * The only difference between configurations $C_{i-1}$ and $C_i$ is the state of party $i$.
@@ -71,7 +72,7 @@ This might not sound like much, but the next lemma shows that if there are two A
 3. $ES{-}C{-}C$ : *for $c=2$, must have an execution with at least 2 more rounds.*
 
 
-*Proof*: Seeking a contradiction, assume a binary consensus protocol in which all parties stop in one more round in any failure free execution (or for case 2 above, all parties decide in one more round in failure free executions).
+*Proof*: For contradiction, assume a binary consensus protocol where all parties stop in one more round in any failure free execution (or for case 2 above, all parties decide in one more round in failure free executions).
 
 Let party $i$ be the difference between $C$ and $C'$. We will start by proving this lemma with the simplifying assumption that $i$ sends its messages in the same order starting in either configuration $C$ or $C'$ (model $ES{-}C{-}Cfix$).
 
@@ -83,7 +84,7 @@ The executions in worlds $A$ and $A'$ look like continuations of configuration $
 
 This completes the proof when parties have a fixed sending order because in both worlds $A$ and $A'$ it is party $j$ that stops. In model $ES{-}C{-}Cfix$ we can force this to be the case by simply choosing some specific party $j$ to be the first to receive messages from $i$.
 
-For model $ED{-}UC{-}Cfix$, uniform consensus - the adversary also crashes party $j$ and this proves that party $j$ cannot decide early. This requires $c = 2$ because the adversary crashes both $i$ and $j$.
+For model $ED{-}UC{-}Cfix$, uniform consensus, the adversary also crashes party $j$ and this proves that party $j$ cannot decide early. This requires $c = 2$ because the adversary crashes both $i$ and $j$.
 
 For model $ES{-}C{-}C$, for crash failures where parties can control the order of messages, party $i$ may send its first message to party $j_1$ in world $A$ and send its first message to another party $j_2$ in world $A'$. This will prevent our previous attack from working because $j$ stops responding in both worlds, so other parties cannot tell the difference.
 
@@ -120,7 +121,7 @@ This completes the proof of Lemma 3.
 
 * Comparing the technique of [uncommitted configurations](https://decentralizedthoughts.github.io/2019-12-15-consensus-model-for-FLP/) (bi-valency) to the technique of a pair of AS FFD configurations: The latter is strictly stronger:
     1. If $C,C'$ are two AS but FFD configurations then both are uncommitted (bi-valent).
-    2. Moreover, their uncommitted-ness is structured: for each configuration, one side is from an error free execution. 
+    2. Moreover, their uncommitted-ness is structured: for each configuration, one side is from a failure free execution. 
 
 * Lemma 3 can be applied $t$ times (after Lemma 1) to prove that protocols resilient to $t$ crashes cannot always terminate after $t$ rounds. This is an alternative proof for the $t+1$ round lower bound to the [proof that uses uncommitted configurations](https://decentralizedthoughts.github.io/2019-12-15-synchrony-uncommitted-lower-bound/).
 
@@ -138,7 +139,7 @@ $$
  \end{align}
 $$
 
-* *Exercise*: devise a protocol that stops early in one round for $t=1$ and the crash model $ES{-}C{-}C$ where parties can choose the order they send messages in each round. That is, show that if there are no faults and parties can choose to send messages in different orders depending on their state, they can complete the protocol after one round in all error free executions. Note that your protocol has to deal with the case that some party terminated early because it did not see faults, but others might continue running because they did.
+* *Exercise*: devise a protocol that stops early in one round for $t=1$ and the crash model $ES{-}C{-}C$ where parties can choose the order they send messages in each round. That is, show that if there are no faults and parties can choose to send messages in different orders depending on their state, they can complete the protocol after one round in all failure free executions. Note that your protocol has to deal with the case that some party terminated early because it did not see faults, but others might continue running because they did.
 
 
 
