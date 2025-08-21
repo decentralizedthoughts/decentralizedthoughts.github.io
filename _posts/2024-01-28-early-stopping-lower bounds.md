@@ -1,5 +1,6 @@
 ---
-title: 'Early Stopping, Same but Different: Two Rounds Are Needed Even in Failure Free Executions'
+title: 'Early Stopping, Same but Different: Two Rounds Are Needed Even in Failure
+  Free Executions'
 date: 2024-01-28 12:05:00 -05:00
 tags:
 - lowerbound

@@ -1,5 +1,6 @@
 ---
-title: Consensus with One Mobile Crash in Synchrony or One Crash in Asynchrony Has Infinite Executions
+title: Consensus with One Mobile Crash in Synchrony or One Crash in Asynchrony Has
+  Infinite Executions
 date: 2024-03-07 12:05:00 -05:00
 tags:
 - lowerbound
