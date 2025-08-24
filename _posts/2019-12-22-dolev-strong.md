@@ -41,7 +41,7 @@ Decision rule:
 
 So does this protocol work?
 
-No! The problem with agreement is that a Byzantine leader can send no value in round 1, then send a value to only a few honest parties in round 2. The honest parties who receive the value will output that value whereas other honest parties will output a $\bot$.
+No! The problem is last-round reveals: a Byzantine leader may withhold a value in round 1 and release it to only a few parties in round 2. Those parties would decide on the value, while others output $\bot$, breaking agreement.
 
 The core problem is that you may learn the decision value in the last round (round 2) but you are not sure that all other honest parties will also receive this value. You cannot forward your messages because this is the last round. Dolev and Strong show a very elegant way to guarantee agreement even if the value decided is revealed in the last round.
 
@@ -127,16 +127,18 @@ The protocol satisfies agreement, validity, and termination:
 
 #### Complexity measures and Notes
 
-Every party sends at most two values, and each value may contain $O(t)$ signatures. The total communication is $O(n^2t)$ signatures.
+Every party sends at most two chains, each of length at most $t+1$ (that is, $O(t)$ signatures). The total communication is $O(n^2t)$ signatures.
 
 Here is an open question: for $t<n$, reduce communication to $o(n^3)$ against some type of adaptive adversary, or perhaps show that $O(n^3)$ is required under some conditions.
 
 Note that this protocol relies heavily on synchrony and [does not work for $t \geq n/2$](https://decentralizedthoughts.github.io/2019-11-02-primary-backup-for-2-servers-and-omission-failures-is-impossible/) in the client-server model where the clients are passive or maybe offline.
-In the Dolev-Strong protocol,  an online server accepts a length $k$ chain in round $k$ but must reject it in round $>k$. However, there is no way for a server to prove to a client when it received a message (other than to sign and send and the client to verify online in the next round).
+In Dolev–Strong, a party must accept a length-$k$ chain only in round $k$, but offline clients cannot verify timing. Thus the protocol fails when $t \geq n/2$ or clients are not continuously online.
 
 Another great description and proof of the Dolev-Strong protocol can be found in Jonathan Katz's [Advanced Topics in Cryptography course notes](http://www.cs.umd.edu/~jkatz/gradcrypto2/NOTES/lecture26.pdf). In the blockchain space, the Dolev-Strong protocol is mentioned by [Spacemesh](https://spacemesh.io/byzantine-agreement-algorithms-and-dolev-strong/). Buterin's [post](https://vitalik.ca/general/2018/08/07/99_fault_tolerant.html) explains how to implement Dolev-Strong in the synchronous model and hints at how it could be used as a finality gadget for stronger $99\%$ fault tolerance for online observers.
 
 Historically, a very similar protocol for the authenticated setting was suggested by Lamport, Shostak, and Pease in their seminal paper [The Byzantine Generals problem](https://lamport.azurewebsites.net/pubs/byz.pdf). However, it seems that the authenticated protocol in Section 4 does not explicitly mention that length $k$ chains must not be accepted at time $>k$.
+
+See [this post](https://decentralizedthoughts.github.io/2025-08-12-non-uniform-weak-validity/) for the analog protocol for $f<n$ non-uniform omission failures with weak validity.
 
 
 Please leave comments on [Twitter](https://twitter.com/ittaia/status/1208871356516966401?s=20)
