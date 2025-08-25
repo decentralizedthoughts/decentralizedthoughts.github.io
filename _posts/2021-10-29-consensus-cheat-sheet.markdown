@@ -13,10 +13,14 @@ author: Ittai Abraham
 | Asynchrony |  ![](https://github.githubassets.com/images/icons/emoji/unicode/1f422.png?v8) FLP: non-terminating executions [must exist](https://decentralizedthoughts.github.io/2019-12-15-asynchrony-uncommitted-lower-bound/)| ![](https://github.githubassets.com/images/icons/emoji/unicode/2714.png?v8) $f<n/2$ possible in $O(1)$ expected rounds| ![](https://github.githubassets.com/images/icons/emoji/unicode/2714.png?v8) $f<n/3$ [possible](https://dspace.mit.edu/bitstream/handle/1721.1/14368/20051076-MIT.pdf) in $O(1)$ [expected](https://decentralizedthoughts.github.io/2024-12-10-multi-world-vaba/) rounds|
 
 
-Here $n$ is the number of parties, and $f$ is the number of parties that the [adversary can corrupt](https://decentralizedthoughts.github.io/2019-06-17-the-threshold-adversary/). Recall [that](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/) **Synchrony** $\subseteq$ **Partial Synchrony** $\subseteq$ **Asynchrony**. Similarly, [that](https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/) **Crash**  $\subseteq$ **Omission** $\subseteq$ **Byzantine**. Therefore,
+Here $n$ is the number of parties, and $f$ is the number of parties that the [adversary can corrupt](https://decentralizedthoughts.github.io/2019-06-17-the-threshold-adversary/). Recall that [that](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/) **Synchrony** $\subseteq$ **Partial Synchrony** $\subseteq$ **Asynchrony**. Similarly, recall that [that](https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/) **Crash**  $\subseteq$ **Omission** $\subseteq$ **Byzantine**. Therefore,
 
 1. Any upper bound holds if you go up and/or to the left in the table. e.g., the $O(1)$ expected round upper bounds under asynchrony also hold in partial synchrony and in synchrony.
 2. Any lower bound holds if you go down and/or to the right in the table. e.g., the impossibility of $f \geq n/3$ with Byzantine adversaries in partial synchrony carries over to asynchrony, and the $t+1$ round lower bound carries over from crash to omission and Byzantine.
+
+### Where is Dolev-Strong in this table?
+
+The lower bounds in this table assume [State Machine Replication](https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/), which requires **uniform agreement** under omission and **provable agreement** under Byzantine failures. If we relax these requirements, stronger resilience is achievable: with non-uniform omission $f<n$ [is possible](https://decentralizedthoughts.github.io/2025-08-12-non-uniform-weak-validity/), and with non-provable Byzantine agreement (as in Dolev–Strong) $f<n$ [is also possible](https://decentralizedthoughts.github.io/2019-12-22-dolev-strong/).
 
 **Acknowledgments**: many thanks to Kartik Nayak for help with this post!
 
