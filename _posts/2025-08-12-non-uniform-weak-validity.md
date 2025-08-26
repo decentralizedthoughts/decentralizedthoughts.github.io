@@ -34,7 +34,7 @@ End of round k: if you heard a value at any time then output it,
 All non-faulty parties output in round $k$ by construction of the protocol.
 
 
-**Validity (non-faulty leader then output is its input, otherwise may be $\bot$)**: 
+**Validity (leader is non-faulty then output is its input, otherwise may be $\bot$)**: 
 The first part follows from the first round and the second from an easy induction showing that nobody sends a message other than the leader's input.
 
 **Non-uniform Agreement (all non-faulty output same value)**:
@@ -132,4 +132,4 @@ Indeed, the broadcast protocol in omission is similar to the [Dolev Strong broad
 
 ## Acknowledgments
 
-Please leave comments on [X]()
+Please leave comments on [X](https://x.com/ittaia/status/1955311880840315205)
