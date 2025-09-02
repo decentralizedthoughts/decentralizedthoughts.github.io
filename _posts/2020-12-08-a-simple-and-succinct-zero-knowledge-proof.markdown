@@ -12,7 +12,7 @@ There is a popular belief that **succinct proofs** and **zero-knowledge proofs**
 Traditional Computer Science Curriculum typically starts with a zero knowledge scheme based on proving [3-colorability of a graph](https://crypto.stanford.edu/cs355/18sp/lec3.pdf) ([MIT demo](http://web.mit.edu/~ezyang/Public/graph/svg.html) or [Vipul Goyal](https://www.cs.cmu.edu/~goyal/s18/15503/scribe_notes/lecture23.pdf)), or on proving the existence of a Hamiltonian cycle (see [Boaz Barak](https://www.boazbarak.org/cs127spring16/chap14_zero_knowledge.html), or [Sanjam Garg](https://people.eecs.berkeley.edu/~sanjamg/classes/cs294-spring16/scribes/7.pdf)). The wonderful [9th BIU Winter School on Cryptography and Zero Knowledge](https://cyber.biu.ac.il/event/the-9th-biu-winter-school-on-cryptography/) also takes a similar approach.
 
 The advantage of this approach is that it immediately gives very general Zero Knowledge results via [Karp-based reductions](https://en.wikipedia.org/wiki/Polynomial-time_reduction) to any problem in NP. 
-This is because Colorability, Hamilonicity and Satisfiability are all [NP-complete](https://en.wikipedia.org/wiki/NP-completeness) problems.
+This is because Colorability, Hamiltonicity and Satisfiability are all [NP-complete](https://en.wikipedia.org/wiki/NP-completeness) problems.
 
 Succinct proofs (and *arguments*, but will ignore the distinction here) are often taught at a [later phase](https://crypto.stanford.edu/cs355/19sp/lec17.pdf) and in connection to the [PCP](https://en.wikipedia.org/wiki/PCP_theorem) theorem. Alessandro Chiesa's course on [Foundations of Probabilistic Proofs](https://people.eecs.berkeley.edu/~alexch/classes/CS294-F2020.html) is a great resource.
 
@@ -42,7 +42,7 @@ How can the Verifier be *sure* that $S$ is all-zero and hence $g$ is the zero (t
 
 When $S$ is all-zero then $g$ is the (trivial) zero polynomial. But if $S$ is not all-zero then the [fundamental theorem of arithmetic adapted to finite field polynomials](https://decentralizedthoughts.github.io/2020-07-17-the-marvels-of-polynomials-over-a-field/) says that $g$ has at most $d-1$ roots. So the verifier has a way to distinguish: it can query $d=10^{10}$ distinct points and check if they are all zero.
 
-This solution is not succinct as it requires the Verifier to send $d$ queries. Can the Verifier use less queries? Can the Verifier query just one point?
+This solution is not succinct as it requires the Verifier to send $d$ queries. Can the Verifier use fewer queries? Can the Verifier query just one point?
 
 ### A succinct solution, with small error
 We will now use the fact that we are working over the field $\mathbb{F}_p$ where $p\gg d$. By now, it should be quite clear how the Verifier can get a succinct proof that $S$ is all-zero or not.
@@ -78,11 +78,11 @@ We have shown how the Verifier obtains a succinct zero-knowledge proof!
 ### Removing the strange virtual cloud communication channel
 
 A major complaint against this scheme is the strange communication mechanism.
-1. First, it required the Prover to upload the polynomial $g$. This naively seems to be a non-succulent operation and requires some trusted cloud to store a lot of information. Luckily, we will show in a later post how cryptographic tools can implement this succinctly over a standard communication channel.
-2. Secondly, it required the virtual cloud to respond to a query $r$ with the value $g(r)$. This may seem to require a trusted computing cloud. Luckily again, we will show in a later post how cryptographic tools can implement this functionality over a standard communication channel.
+1. First, it required the Prover to upload the polynomial $g$. This naively seems to be a non-succinct operation and requires some trusted cloud to store a lot of information. Luckily, we will show in a later post how cryptographic tools can implement this succinctly over a standard communication channel.
+2. Secondly, it required the virtual cloud to respond to a query $r$ with the value $g(r)$. This may seem to require a trusted computing cloud. Luckily, again, we will show in a later post how cryptographic tools can implement this functionality over a standard communication channel.
 3. Finally, recall that we needed $d\ll p$. There is sometimes a challenge in forcing the Prover to use a degree-at-most-$d$ polynomial and not one of higher degree. Again we will see techniques in later posts to force the Prover to use a low degree polynomial.
 
-### Acknoledgments
+### Acknowledgments
 We thank [Radu Grigore](http://rgrig.appspot.com/) for pointing out typos and helping improve this post.
 
 
