@@ -18,8 +18,8 @@ A new parameter $p$ ($0 \leq p \leq f$) is introduced, and the goal is to design
 To our knowledge, such protocols were first proposed in [FaB](https://ieeexplore.ieee.org/document/1467815) and [Zyzzyva](https://dl.acm.org/doi/10.1145/1658357.1658358) around 2005. Those initial protocols [had safety and liveness errors](https://arxiv.org/abs/1712.01367) that were later [fixed](https://arxiv.org/pdf/1801.10022) (and implemented in [SBFT](https://arxiv.org/pdf/1804.01626)). Recently, there has been increased interest in this line of research with [Banyan](https://arxiv.org/pdf/2312.05869), [Kudzu](https://arxiv.org/abs/2505.08771), and [Alpenglow](https://www.anza.xyz/alpenglow-1-1) that gave [Simplex](https://simplex.blog/)-inspired variants.
 
 
-In this post, we describe a natural Simplex-style protocol achieving the above guarantees. Our approach is simply to merge the 3-round and 2-round protocols from our last two posts with virtually no additional modifications. 
-
+In this post, we describe a natural Simplex-style protocol achieving the above guarantees. Our approach is to merge the 3-round and 2-round protocols with minimal modifications. The key subtlety is enforcing the *Fast < Slow* ordering of certificates and requiring *both* to complete a view.
+ 
 
 ## 2-round $n=5f+1$ recast to $n=3f+2p+1$
 
@@ -33,26 +33,35 @@ To start, here is the $n=5f+1$ protocol, adapted to $n=3f+2p+1$ to obtain safety
 
 1. Upon entering view k: 
     Everyone starts a local timer T_k 
+
     Leader sends (Propose, k, x, Fast-Cert(k’, x)) for the highest k’ 
     
 2. Upon received (Propose, k, x, Fast-Cert(k’, x)) 
             and Fast-Cert(l, ⊥) for all k' < l < k 
             and has not sent Vote 
+
     Send (Vote, k, x)  // Denote n-2f-p (Vote, k, x) as Fast-Cert(k, x)  
 
 3. Upon T_k = 2Δ and has not sent Vote
+
     Send (Vote, k, ⊥)   // Denote n-2f-p (Vote, k, ⊥) as Fast-Cert(k, ⊥) 
 
 4. Upon receiving n-p (Vote, k, x)  // Monitored even after exiting view k
+
     Decide x 
+
     Forward these n-p (Vote, k, x)
+
     Terminate 
 
 5. Upon receiving n-f (Vote, k, *) but no Fast-Cert(k, x) for any x 
+
     Send (Vote, k, ⊥) 
 
 6. Upon receiving Fast-Cert(k, *) and has sent Vote
+
     Forward Fast-Cert(k, *) 
+
     Enter view k+1 if in view k  
 ```
 
@@ -67,27 +76,37 @@ Now here is the $n=3f+1$ protocol, adopted to $n=3f+2p+1$ to obtain safety and l
 
 
 1. Upon entering view k: 
+
     Everyone starts a local timer T_k 
+
     Leader sends (Propose, k, x, Slow-Cert(k’, x)) for the highest k’ 
     
 2. Upon received (Propose, k, x, Slow-Cert(k’, x)) 
             and Slow-Cert(l, ⊥) for all k' < l < k
             and has not sent Vote 
+
     Send (Vote, k, x)  // Denote n-f-p (Vote, k, x) as Slow-Cert(k, x)  
 
 3. Upon receiving Slow-Cert(k, x) and has not sent Final
+
     Send (Final, k, x)     
 
 4. Upon T_k = 3Δ 
+
     Send (Final, k, ⊥)  // Denote n-f-p (Final, k, ⊥) as Slow-Cert(k, ⊥) 
 
 5. Upon receiving n-f-p (Final, k, x)  // Monitored even after exiting view k
+
     Decide x 
+
     Forward these n-f-p (Final, k, x)
+
     Terminate 
 
 6. Upon receiving Slow-Cert(k, *) and has sent Final
+
     Forward Slow-Cert(k, *) 
+
     Enter view k+1 if in view k  
 ```
 
@@ -105,44 +124,58 @@ Let's merge the 2-round and 3-round protocols for $n=3f+2p+1$. Note that the mer
  
 Two important aspects of the merge:
 
-* We order certificates first by view and then by **Fast < Slow**. For example, a proposal in view 4 with Fast-Cert(2,x) would be voted for if Slow-Cert(2,⊥), Fast-Cert(3,⊥), Slow-Cert(3,⊥) exist. While voting for a proposal in view 4 with Slow-Cert(2,x) only needs a Fast-Cert(3,⊥) and Slow-Cert(3,⊥) to exist.
-* We wait to get both a slow cert and fast cert to compete a view (Upon 8). 
+* We order certificates first by view and then by **Fast < Slow**. For example, a proposal in view 4 with Fast-Cert(2, x) would be voted for if Slow-Cert(2, ⊥), Fast-Cert(3, ⊥), Slow-Cert(3, ⊥) exist. While voting for a proposal in view 4 with Slow-Cert(2, x) only needs a Fast-Cert(3, ⊥) and Slow-Cert(3, ⊥) to exist.
+* We wait to get both a slow cert and fast cert to complete a view (Upon 8). 
  
  
 ```
+// This merges the 2-round and 3-round protocols, maintaining both fast and slow commit paths.
+
 2-round and 3-round BTF
 
 1. Upon entering view k: 
+
     Everyone starts a local timer T_k 
+
     Leader sends (Propose, k, x, X-Cert(k’, x)) for the highest k’, 
             where certs are ordered first by view and then by Fast < Slow 
     
 2. Upon received (Propose, k, x, X-Cert(k’, x)) for some X in {Fast, Slow} 
             and ⊥ certificates for all higher certificates of view <k, 
             and has not sent Vote 
-    Send (Vote, k, x)    // Denote n-2f-p (Vote,k,x) as Fast-Cert(k,x)
-                         // Denote n-f-p (Vote,k,x) as Slow-Cert(k,x) 
+
+    Send (Vote, k, x)    // Denote n-2f-p (Vote,k,x) as Fast-Cert(k, x)
+                         // Denote n-f-p (Vote,k,x) as Slow-Cert(k, x) 
     
 3. Upon receiving Slow-Cert(k, x) and has not sent Final
+
     Send (Final, k, x)     
 
 4. Upon receiving n-f-p (Final, k, x) or n-p (Vote, k, x)    
-    Decide x                // Monitored even after exiting view k
+
+    Decide x                // Monitored even after exiting view k
+
     Forward commit proof 
+
     Terminate 
 
 5. Upon T_k = 2Δ and has not sent Vote
-    Send (Vote, k, ⊥)   // Denote n-2f-p (Vote,k,⊥) as Fast-Cert(k,⊥)
+
+    Send (Vote, k, ⊥)   // Denote n-2f-p (Vote,k,⊥) as Fast-Cert(k, ⊥)
 
 6. Upon T_k = 3Δ and has not sent Final
-    Send (Final, k, ⊥)  // Denote n-f-p (Final,k,⊥) as Slow-Cert(k,⊥) 
+
+    Send (Final, k, ⊥)  // Denote n-f-p (Final,k,⊥) as Slow-Cert(k, ⊥) 
 
 7. Upon receiving n-f (Vote, k, *) but no Fast-Cert(k, x) for any x 
+
     Send (Vote, k, ⊥) 
 
 8. Upon receiving Slow-Cert(k, *) and Fast-Cert(k, *) 
             and has sent Vote and Final
-    Forward Slow-Cert(k, *) and Fast-Cert(k, *) 
+
+    Forward Slow-Cert(k, *) and Fast-Cert(k, *) 
+
     Enter view k+1 if in view k  
 ```
 
@@ -154,21 +187,21 @@ Two important aspects of the merge:
 
 ## Safety and liveness proof sketches
 
-**Lemma 1**: If an honest party fast commits $x$ in view $k$, then X-Cert(k, $\bot$) or X-Cert(k, x') for $x' \neq  x$ and $X \in \{Fast, Slow\}$ cannot form. 
+**Lemma 1**: If an honest party fast commits $x$ in view $k$, then X-Cert(k, x') for $x' \neq  x$ and $X \in \{Fast, Slow\}$ cannot form. Furthermore, Fast-Cert(k, ⊥) can not form.
 
-*Proof sketch*: A fast commit requires $n-p$ votes for $x$, so no other value can get $n-2f-p$ votes by quorum intersection. 
+*Proof sketch*: A fast commit requires $n-p$ votes for $x$, so no other value (including ⊥) can get $n-2f-p$ votes, because the $n-p$ votes needed for a fast commit already intersect with any other potential quorum. Note that a Slow-Cert for $x$ or for ⊥ will form, and both are fine.
 
-**Lemma 2**: If an honest party slow commits $x$ in view $k$, then Slow-Cert(k, $\bot$) or Slow-Cert(k, x') for $x' \neq  x$  cannot form. 
+**Lemma 2**: If an honest party slow commits $x$ in view $k$, then Slow-Cert(k, ⊥) or Slow-Cert(k, x') for $x' \neq  x$  cannot form. 
 
-*Proof sketch*: A slow commit requires $n-f-p$ votes for $x$, so no other value can get $n-f-p$ votes by quorum intersection. In addition, a slow commit requires $n-f-p$ final for $x$, so no $n-f-p$ final for $\bot$ by quorum intersection. Note that a we dont care about Fast-Certs for this view because they are weaker.
+*Proof sketch*: A slow commit requires $n-f-p$ votes for $x$, so no other value can get $n-f-p$ votes by quorum intersection. In addition, a slow commit requires $n-f-p$ final for $x$, so no $n-f-p$ final for ⊥ by quorum intersection. Note that we don't care about Fast-Certs for this view because they are weaker.
 
 
 
-**Lemma 3**: If an honest party commits $x$ in view $k$, no honest party votes for $x' \neq x$ ($x' \neq \bot$) in any view higher than $k$.
+**Lemma 3**: If an honest party commits $x$ in view $k$, no honest party votes for $x' \neq x$ ($x' \neq ⊥$) in any view higher than $k$.
 
-*Proof sketch:* Consider the leader's proposal in view $k+1$, with accompaning certificate X-Cert(k',x). There are two cases:
+*Proof sketch:* Consider the leader's proposal in view $k+1$, with accompanying certificate X-Cert(k', x). There are two cases:
 
-1. $k'<k$: Lemma 1 and Lemma 2 imply that X-Cert(k,$\bot$) do not exist for *both* $X\in \{Fast,Slow\}$, and hence the proposal isn't valid.
+1. $k'<k$: Lemma 1 and Lemma 2 imply that either Fast-Cert(k, ⊥) *or* Slow-Cert(k, ⊥) do not exist, and hence the proposal isn't valid.
 2. $k'=k$: Lemma 1 and Lemma 2 imply that the proposal must be for x.
 
 This completes the proof for $k+1$, the proof for higher views follows by induction.
@@ -177,17 +210,17 @@ This completes the proof for $k+1$, the proof for higher views follows by induct
 
 Safety is straightforward from Lemma 3. Liveness follows from the lemmas below. 
 
-**Lemma 4**: If no honest party commits in views $k$ or lower, then every honest party eventually receives either X-Cert(k, x) for some $x \neq \bot$ or X-Cert(k, $\bot$) for each $X \in \{Fast, Slow\}$. 
+**Lemma 4**: If no honest party commits in views $k$ or lower, then every honest party eventually receives either X-Cert(k, x) for some $x \neq \bot$ or X-Cert(k, ⊥) for each $X \in \{Fast, Slow\}$. 
 
-*Proof sketch*: If any honest party gets Fast-Cert(k, x), it forwards the certificate. Otherwise, all honest parties eventually vote for $\bot$ by the fifth Upon rule, so all honest parties eventually get a Fast-Cert(k, $\bot$). Moreover, each party either gets a Slow-Cert(k, x) forwarded to it, or by definition, hold a Slow-Cert(k, ⊥).
+*Proof sketch*: If any honest party gets Fast-Cert(k, x), it forwards the certificate. Otherwise, all honest parties eventually vote for ⊥ by Upon 5 of the protocol, so all honest parties eventually get a Fast-Cert(k, ⊥). Moreover, each party either gets a Slow-Cert(k, x) forwarded to it, or by definition, hold a Slow-Cert(k, ⊥).
 
 **Lemma 5**: If view $k$ starts after GST, and the leader of view $k$ is honest, then all honest parties commit in view $\leq k$.
 
 *Proof sketch*: If an honest party commits in view $<k$, it forwards the commit certificate, so all honest parties commit in view $<k$. If no honest party commits in view $<k$, then given synchrony after GST, all honest parties enter view $k$, vote for the honest leader.
 
-If there are $<p$ Byzantine then all will vote and commit in view $k$ in 2 rounds.
+If at most $p$ Byzantine then all honest will commit in view $k$ in 2 rounds.
 
-If there are $<f$ Byzantine then all honest will send final and commit in view $k$ in 3 rounds.
+If at most $f$ Byzantine then all honest will send final and commit in view $k$ in 3 rounds.
 
 ## Notes
 
@@ -195,7 +228,9 @@ In a [follow-up post](https://decentralizedthoughts.github.io/2025-08-06-5fminus
 
 ## Acknowledgments
 
-This work is done while Yuval Efron is affiliated with and the other authors are visiting a16z Crypto Research. We would like to thank Quentin Kniep, Jakub Sliwinski, and Roger Wattenhofer for insightful discussions and feedback. We thank Brendan Kobayashi Chou, Andrew Lewis-Pye, Patrick O'Grady for spotting a liveness error in a previous version. 
+This work was conducted while Yuval Efron was affiliated with a16z Crypto Research and the other authors were visiting. We would like to thank Quentin Kniep, Jakub Sliwinski, and Roger Wattenhofer for insightful discussions and feedback. We thank Brendan Kobayashi Chou, Andrew Lewis-Pye, Patrick O'Grady for spotting a liveness error in a previous version. 
+
+We thank Eugen Zalinescu from nomadic labs for spotting an error in the safety proof sketch.
 
 
 Your thoughts/comments on [X](https://x.com/ittaia/status/1950642366483992880).
