@@ -6,7 +6,7 @@ tags:
 author: Ittai Abraham
 ---
 
-State machine replication is the gold standard for implementing any (public) ideal functionality. It totally orders all transactions and as a consequence solves (Byzantine) agreement. But solving agreement, in non-optimistic cases, is quadratic in cost and is not constant time. In some cases this overhead is unnecessary because there is no need to totally order all transactions.
+State machine replication is the gold standard for implementing any (public) ideal functionality. It totally orders all transactions and as a consequence solves Byzantine agreement. But solving agreement, in non-optimistic cases, is quadratic in cost and is not constant time. In some cases this overhead is unnecessary because there is no need to totally order all transactions.
 
 As a canonical example, suppose Alice is transferring a token to Bob and Carol is transferring a token to Dan. There is no need to totally order these two token transfer transactions. It is okay that some clients see the first transfer happened before the second while some other clients see the second transfer as happening before the first.
 
@@ -14,9 +14,9 @@ In the non-byzantine setting, the *fundamental* observation that sometimes a wea
 
 > Consensus has been regarded as the fundamental problem that must be solved to implement a fault-tolerant distributed system. However, only a weaker problem than traditional consensus need be solved. We generalize the consensus problem to include both traditional consensus and this weaker version. --[Generalized Consensus and Paxos, 2005](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/tr-2005-33.pdf)
 
-In many natural use cases, in particular the canonical simple token transfer use case, do not need total ordering. This approach is taken by [FastPay](https://arxiv.org/pdf/2003.11506.pdf), [Guerraoui et al, 2019](https://arxiv.org/pdf/1906.05574), [Sliwinski and Wattenhofer, 2019](https://arxiv.org/abs/1909.10926), applied to privacy preserving transactions (see [UTT](https://eprint.iacr.org/2022/452.pdf) and [Zef](https://eprint.iacr.org/2022/083.pdf)), planned to be used in the [Sui platform](https://github.com/MystenLabs/sui/blob/main/doc/paper/sui.pdf) and in [Linera](https://linera.io/whitepaper).
+In many natural use cases, in particular the canonical simple token transfer use case, total ordering is not needed. This approach is taken by [FastPay](https://arxiv.org/pdf/2003.11506.pdf), [Guerraoui et al, 2019](https://arxiv.org/pdf/1906.05574), [Sliwinski and Wattenhofer, 2019](https://arxiv.org/abs/1909.10926), applied to privacy preserving transactions (see [UTT](https://eprint.iacr.org/2022/452.pdf) and [Zef](https://eprint.iacr.org/2022/083.pdf)), planned to be used in the [Sui platform](https://github.com/MystenLabs/sui/blob/main/doc/paper/sui.pdf) and in [Linera](https://linera.io/whitepaper).
 
-There is considerable research in ways to relax total ordering requirements to gain better performance. For example, see [EPaxos](https://www.cs.cmu.edu/~dga/papers/epaxos-sosp2013.pdf) (and also [EPaxos Revisited](https://www.usenix.org/conference/nsdi21/presentation/tollman)). The first work that aimed to relax the total order requirements in the blockchain space is by [Lewenberg, Sompolinsky, and Zohar, 2015](https://fc15.ifca.ai/preproceedings/paper_101.pdf) and it’s follow-up work [Specture, 2016](https://eprint.iacr.org/2016/1159.pdf). See this post on [DAG-based protocols](https://decentralizedthoughts.github.io/2022-06-28-DAG-meets-BFT/) for advances in recent years and how DAG-based protocols are emerging as a powerful tool for getting better throughput mempools and BFT.
+There is considerable research in ways to relax total ordering requirements to gain better performance. For example, see [EPaxos](https://www.cs.cmu.edu/~dga/papers/epaxos-sosp2013.pdf) (and also [EPaxos Revisited](https://www.usenix.org/conference/nsdi21/presentation/tollman)). The first work that aimed to relax the total order requirements in the blockchain space is by [Lewenberg, Sompolinsky, and Zohar, 2015](https://fc15.ifca.ai/preproceedings/paper_101.pdf) and its follow-up work [Specture, 2016](https://eprint.iacr.org/2016/1159.pdf). See this post on [DAG-based protocols](https://decentralizedthoughts.github.io/2022-06-28-DAG-meets-BFT/) for advances in recent years and how DAG-based protocols are emerging as a powerful tool for getting better throughput mempools and BFT.
 
 ### The benefits of decomposing a multi writer object into independent single writer objects
 
@@ -61,7 +61,7 @@ Clients and $n$ servers. Clients can make two types of requests: ```read``` whic
 
 ### Discussion: no difference for a single writer
 
-Observe that when there is a just a single writer client there is no difference between log replication and set replication - the (single writer) client can sequentially submit commands by adding a sequence number to its operations and implement a log of its commands on top of the set abstraction.
+Observe that when there is just a single writer client there is no difference between log replication and set replication - the (single writer) client can sequentially submit commands by adding a sequence number to its operations and implement a log of its commands on top of the set abstraction.
 
 In fact set replication is solving multi-shot consensus for single writer objects (see [Guerraoui et al, 2019](https://arxiv.org/pdf/1906.05574)).
 
@@ -70,9 +70,9 @@ Moreover, if the system is partitioned into single writer objects, such that eac
 The difference between log replication and set replication can be seen when there are two or more writers. For example if two writers need to decide which one wrote first (say they both want to swap money on an [AMM](https://arxiv.org/pdf/2102.11350.pdf)) then log replication will provide an ordering of these two transactions but set replication cannot do this. 
 
 
-### Implementing Set Replication via Locked Broadcast: its linear and works in asynchrony
+### Implementing Set Replication via Locked Broadcast: it is linear and works in asynchrony
 
-Log replication requires solving multi-shot agreement and even one agreement may take $f+1$ rounds in the worst case in synchrony and have infinite executions in asynchrony. Moreover, even one agreement needs $\Omega(f^2)$ messages is the worst case for omission failures and beyond. In previous posts [we showed](https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/) how to solve [log replication](https://decentralizedthoughts.github.io/2022-11-24-two-round-HS/) via a repeated application of [locked broadcast](https://decentralizedthoughts.github.io/2022-09-10-provable-broadcast/) in the Byzantine setting.
+Log replication requires solving multi-shot agreement and even one agreement may take $f+1$ rounds in the worst case in synchrony and have infinite executions in asynchrony. Moreover, even one agreement needs $\Omega(f^2)$ messages in the worst case for omission failures and beyond. In previous posts [we showed](https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/) how to solve [log replication](https://decentralizedthoughts.github.io/2022-11-24-two-round-HS/) via a repeated application of [locked broadcast](https://decentralizedthoughts.github.io/2022-09-10-provable-broadcast/) in the Byzantine setting.
 
 
 Set replication is an easier problem. In the asynchronous Byzantine setting, it can be implemented as a single instance of *locked broadcast*:
@@ -110,7 +110,7 @@ A simple example for using set replication is to maintain a *UTXO* set (a set of
 
 This means that each token is essentially a write-once object. A transaction marks an active token as spent and creates a new active token in the UTXO set.
 
-Real systems also need to implement more efficient read operations via indexing and times tamping, add check-pointing and garbage collection. 
+Real systems also need to implement more efficient read operations via indexing and timestamping, add check-pointing and garbage collection. 
 
 Reads can also be made linearizable by adding an additional round. We will discuss this in later rounds. For now just mention that the property we would like to obtain is:
 
@@ -132,6 +132,6 @@ Note that while our protocol above is linear in terms of number of messages, it 
 
 ### Acknowledgments
 
-Many thanks to Adithya Baht and Kartik Nayak for insightful comments.
+Many thanks to Adithya Bhat and Kartik Nayak for insightful comments.
 
 Your thoughts on [Twitter](https://twitter.com/ittaia/status/1607674657397694465?s=61&t=5e3KM2Kmf3CDaCNUuFLing).
