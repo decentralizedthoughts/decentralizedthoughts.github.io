@@ -8,7 +8,7 @@ tags:
 author: Ittai Abraham and Andrew Lewis-Pye
 ---
 
-In this post we overview a **simple** unauthenticated synchronous Byzantine Agreement protocol that is based on the Phase-King protocol of [Berman, Garay, and Perry 1989-92](http://plan9.bell-labs.co/who/garay/bit.ps). We refer also to [Jonathan Katz's excellent write-up](https://www.cs.umd.edu/~jkatz/gradcrypto2/f13/BA.pdf) on this same protocol from 2013. We offer a modern approach that decomposes the Phase-King protocol into a Graded Consensus building block.
+In this post we present a **simple** unauthenticated synchronous Byzantine Agreement protocol that is based on the Phase-King protocol of [Berman, Garay, and Perry 1989-92](http://plan9.bell-labs.co/who/garay/bit.ps). We refer also to [Jonathan Katz's excellent write-up](https://www.cs.umd.edu/~jkatz/gradcrypto2/f13/BA.pdf) on this same protocol from 2013. We offer a modern approach that decomposes the Phase-King protocol into a Graded Consensus building block.
 
 Phase-King has optimal resilience of $n=3t+1$, runs in asymptotically optimal $3(t+1)$ rounds (recall that $t+1$ rounds is [optimal](https://decentralizedthoughts.github.io/2019-12-15-synchrony-uncommitted-lower-bound/)) and each message contains just a few bits for a total of $O(n^3)$ messages (recall that $\Omega(n^2)$ messages are [needed](https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/) and we will show how to get it in later posts).
 
@@ -23,7 +23,7 @@ Gradecast and Graded Consensus are key building blocks. In **Graded Consensus** 
 
 In Gradecast we assume there is a designated sender, and we replace the validity condition with the condition that the sender is honest. An authenticated variant of Graded Consensus called *Graded Byzantine Agreement* appears in [Momose and Ren 2021](https://arxiv.org/pdf/2007.13175), see this [blog post](https://decentralizedthoughts.github.io/2021-09-20-optimal-communication-complexity-of-authenticated-byzantine-agreement/ ) for more details.
 
-Consider the following two-round Graded Consensus protocol for $t<n/3$: 
+Consider the following two-round `gradedConsensus` protocol for $t<n/3$: 
 
 ```
 v := input
@@ -32,9 +32,9 @@ Round 1: send v to all parties
 Round 2: if n-t distinct parties sent b in round 1, 
                 then send b to all parties
 End of round 2:
-    If n-t distinct parties sent b in round 2,
+    If n-t distinct parties sent the same value b in round 2,
                 then output b with grade 2
-    Otherwise, if t+1 distinct parties sent b in round 2,
+    Otherwise, if t+1 distinct parties sent the same value b in round 2,
                 then output b with grade 1
     Otherwise, output v with grade 0
 ```
@@ -44,10 +44,9 @@ End of round 2:
 To prove the Knowledge of Agreement property, we first prove a Weak Agreement property:
 
 **(Weak Agreement):** No two honest parties send conflicting round 2 messages.
-*Proof of Weak Agreement:* It cannot be the case that one honest party sees $n-t$ round 1 messages for $v$ and another honest party sees $n-t$ messages for $v' \neq v$ because any two sets of $n-t$ parties have least $t+1$ parties in the intersection. At least one of those must be honest, but honest parties send only one value in round 1. 
+*Proof of Weak Agreement:* The intersection of any two sets of $n-t$ parties contains at least $t+1$ parties, of which at least one must be honest. But honest parties send only one value in round 1, so it cannot be the case that one honest party sees $n-t$ round 1 messages for $v$ and another honest party sees $n-t$ messages for $v' \neq v$.
 
-*Proof of Knowledge of Agreement:* If an honest party has grade 2, then it sees at least $n-t$ round 2 messages, hence all honest parties see at least $n-2t=t+1$ round 2 messages. Moreover, from the Weak Agreement property, we know that there cannot be $t+1$ round 2 messages for any other value.
-
+*Proof of Knowledge of Agreement:* If an honest party has grade 2, it must have seen at least $n-t$ identical round 2 messages. Any other honest party will then see at least $(n-t)-t = n-2t = t+1$ identical messages, ensuring consistency. Moreover, from the Weak Agreement property, we know that there cannot be $t+1$ round 2 messages for any other value.
 
 *Note*: If we ran the protocol for just one round (instead of two rounds) we would not get Knowledge of Agreement. One honest party may see $n-t$ for value $b$, but another honest party may see $t+1$ for value $1-b$ (in addition to seeing $t+1$ for value $b$) so would not know which value to choose from.
 
@@ -58,7 +57,7 @@ In this protocol each party has an input $v \in \{V\}$ and needs to decide on a 
 * **(Validity):** If all honest parties have the same input value, then all of them decide this value.
 * **(Agreement):** All honest decide on the same value.
 
-Using Graded Consensus the Phase-King protocol is rather simple. We consider $t+1$ phases, each of which consists of three rounds. In the first two rounds of each phase $i$, we run an instance of Graded Consensus. In the last round of phase $i$, we consider $P_i$ to be 'king'. The role of the king is to establish agreement in the case that honest parties are split between different values. The king sends their value to all parties, who change their value to $P_i$'s value unless their grade is 2: 
+Using Graded Consensus the Phase-King protocol is rather simple. We consider $t+1$ phases, each of which consists of three rounds. In the first two rounds of each phase $i$, we run an instance of Graded Consensus. In the last round of phase $i$, we consider $P_i$ to be 'king'. The king resolves disagreement when honest parties are split between values. The king sends their value to all parties, who change their value to $P_i$'s value unless their grade is 2: 
 
 ```
 input v[0]
