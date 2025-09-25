@@ -66,21 +66,28 @@ The core protocol takes just 3 rounds.
 Graded Dispersal Protocol:
 
 Round 1 - exchange points:
-   - Pi sends (f_i(i), f_i(j)) to each Pj
+   Pi sends (f_i(i), f_i(j)) to each Pj
 
-Round 2 - dynamic Set A1:
-   - Let (u_j, v_j) be the two values that Pi receives from Pj
-   - If f_i(j) = u_j and v_j = f_i(i), then add j to A1
-   - If |A1| >= n - t, then send OK1 to all parties.
+Round 2 - dynamic Set A1
+   Let (u_j, v_j) be the two values that Pi receives from Pj
+   If f_i(j) = u_j and f_i(i) = v_j 
+      add j to A1
+   If |A1| >= n - t
+      send OK1 to all parties.
 
 Round 3 - dynamic Set A2
-   - If OK1 is received from Pj and j in A1, then add j to A2
-   - If |A2| >= n - t, then send OK2 to all parties.
+   If OK1 is received from Pj and j in A1
+      add j to A2
+   If |A2| >= n - t
+      send OK2 to all parties.
 
 End of round 3 - output
-   - If OK2 was sent, and at least 2t + 1 OK2 messages were received, then output (f_i(x), 2)
-   - If OK2 was sent, but <= 2t OK2 messages were received, then output (f_i(x), 1)
-   - Otherwise, output (bot, 0)
+   If OK2 was sent, and at least 2t + 1 OK2 messages were received
+      output (f_i(x), 2)
+   If OK2 was sent, but <= 2t OK2 messages were received
+      output (f_i(x), 1)
+   Otherwise
+      output (bot, 0)
 ```
 
 
@@ -98,7 +105,7 @@ If all honest parties start with the same polynomial $f(x)$:
 4. Since no honest party is excluded from any honest $A^1$ set, all honest parties send $\text{OK}_2$ messages.
 5. Each honest party receives $2t+1$ $\text{OK}_2$ messages, ensuring all output grade 2.
 
-Thus, validity holds as all honest parties output grade 2 when starting with the same polynomial. Observe that this holds also in asynchrony.
+Thus, validity holds as all honest parties output grade 2 when starting with the same polynomial. This reasoning also holds in asynchrony.
 
 ### Proof of the weak graded agreement property 
 
@@ -106,13 +113,13 @@ We do this via three claims:
 
 #### Claim 1: No three honest parties with different inputs can send $\text{OK}_1$ 
 
-Seeking a contradiction, assume there are $t$ malicious parties, so just $2t+1$ honest and that honest parties 1,2,3 have different inputs and $\|A_1^1\|,\|A_2^1\|,\|A_3^1\| \geq 2t+1$.
+Seeking a contradiction, assume there are $t$ malicious parties, so there are 2t+1 honest and that honest parties 1,2,3 have different inputs and $\lvert B_1^1\rvert,\lvert B_2^1\rvert,\lvert B_3^1\rvert \geq 2t+1$.
 
-Let $B_i^1$ be the honest parties in $A_i^1$, so $\|B_i^1\| \geq t+1$:
+Let $B_i^1$ be the honest parties in $A_i^1$, so $\lvert B_i^1\rvert \geq t+1$:
 
 
-- Observe that  $\|B_i^1 \cap B_j^1\| \leq d$ for any $i,j \in \{1,2,3\}$ because we assume they all have a different degree at most $d$ inputs, so [can have at most $d$ points in common](https://decentralizedthoughts.github.io/2020-07-17-the-marvels-of-polynomials-over-a-field/).
-- So by the [Inclusion-Exclusion Principle](https://en.wikipedia.org/wiki/Inclusion–exclusion_principle) we get $\|B_1^1 \cup B_2^1 \cup B_3^1\| \geq 3t+3 -3d$ but since $d=t/3$, this means there are more than $2t+1$ honest, creating a contradiction.
+- Observe that  $\lvert B_i^1 \cap B_j^1\rvert \leq d$ for any $i,j \in \{1,2,3\}$ because we assume they all have a different degree at most $d$ inputs, so [can have at most $d$ points in common](https://decentralizedthoughts.github.io/2020-07-17-the-marvels-of-polynomials-over-a-field/).
+- So by the [Inclusion-Exclusion Principle](https://en.wikipedia.org/wiki/Inclusion–exclusion_principle) we get $\lvert B_1^1 \cup B_2^1 \cup B_3^1\rvert \geq 3t+3 -3d$ but since $d=t/3$, this means there are more than $2t+1$ honest, creating a contradiction.
 
 So we conclude that there are at most two inputs that have honest parties that send $\text{OK}_1$.
 
@@ -131,7 +138,7 @@ So we conclude that there are at most two inputs that have honest parties that s
 
 
 
-- From claim 1, at most two values will may send $OK_1$.
+- From claim 1, at most two values may send $OK_1$.
 - Similar to claim 2, at most $d$ parties in each value will send $OK_1$
 - And similarly, their $A^1$ sets will contain at most $d$ parties from the other value.
 - Hence, no party will see enough $OK_1$ in their $A^1$ set to send an $OK_2$ (because $2d+t<2t+1$).
@@ -145,7 +152,7 @@ By combining these claims, *Weak Graded Agreement* holds: if any party outputs g
 
 
 
-## Theorem 1: adding a post-round for totality in asynchorny
+## Theorem 1: adding a post-round for totality in asynchrony
 
 In the post-round parties send a "grade 2" message if they have grade 2, or they hear $t+1$ "grade 2" messages. Parties terminate if they hear $n-t$ "grade 2" messages.
 
@@ -158,7 +165,7 @@ Note that there is no guaranteed termination in this version.
 
 In dispersal, there is a designated dealer. In the pre-round the dealer sends its input to all parties. Then parties run graded dispersal. So we have
 
-* **Validity**: If the designated sender is honest then all honest parties eventually output the sender value and grade $2$. Moreover, with the post-round, all honest parties are guaranteed to terminate in this case.
+* **Validity**: If the designated sender is honest then all honest parties eventually output the sender's value and grade $2$. Moreover, with the post-round, all honest parties are guaranteed to terminate in this case.
 
 
 
@@ -180,20 +187,20 @@ If some honest party has output $f$ with grade 2 then from Weak Graded Agreement
 ```
 Retrieval protocol
 
-Round 1 - send point:
-   - If Pi has grade >=1, sends f_i(j) to each Pj
+Round 1 - send point
+   If Pi has grade >= 1
+      send f_i(j) to each Pj
 
-Round 2 - take the t+1:
-   - If Pi has grade 0, and a value is sent t+1 times, send this value to all
-   - If Pi has grade >=1, sends f_i(i) to all
+Round 2 - take the t+1
+   If Pi has grade 0, and a value is sent t+1 times
+      send this value to all
+   If Pi has grade >=1
+      send f_i(i) to all
 
 End of round 2
-    - Wait to have 2t+1 values that agree on a degree t polynomial f
-    - output f
-
-
+   Wait to have 2t+1 values that agree on a degree <= t polynomial f
+      output f
 ```
-
 
 
 Your feedback on [X](https://x.com/ittaia/status/1951364975265718756).
