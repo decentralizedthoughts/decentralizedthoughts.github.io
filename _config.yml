@@ -24,7 +24,7 @@ defaults:
   values:
     layout: page
     show-avatar: true
-url: https://decentralizedthoughts.github.io
+url: https://dakaidecentralizedthoughts.github.io
 baseurl: 
 description: Decentralized thoughts about decentralization
 navbar-links:
