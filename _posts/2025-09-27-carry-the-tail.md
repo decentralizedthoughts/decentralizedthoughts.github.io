@@ -1,6 +1,11 @@
-# Carry-the-Tail: <br> Don't Give Up HotStuff's Linearity to Defend Against Tail-Forking
+---
+title: 'Carry-the-Tail: Don't Give Up HotStuff's Linearity to Defend Against Tail-Forking'
+date: 2025-09-27 17:30:00 -08:00
+tags:
+- BFT
+author:  Dakai Kang, Suyash Gupta, Dahlia Malkhi, Mohammad Sadoghi
+---
 
-Authors: Dakai Kang, Suyash Gupta, Dahlia Malkhi, Mohammad Sadoghi
 
 ## Synopsis
 
