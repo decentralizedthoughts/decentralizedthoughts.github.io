@@ -1,12 +1,12 @@
 ---
-title: 'Carry-the-Tail: Don''t Give Up HotStuff''s Linearity to Defend Against Tail-Forking'
+title: 'Carry: HotStuff Linearity with Tail-Forking-Resilience'
 date: 2025-09-27 17:30:00 -08:00
 tags:
 - BFT
 author: Dakai Kang, Suyash Gupta, Dahlia Malkhi, Mohammad Sadoghi
 ---
 
-The recently identified tail-forking attack shows how malicious leaders can degrade throughput by skipping over honest proposals in streamlined BFT protocols like HotStuff. To address this challenge, we introduce Carry, a lightweight mechanism that preserves HotStuff’s linearity while protecting against tail-forking and supporting sluggish honest leaders, culminating in Carry-the-Tail (Ctail), a robust and efficient consensus solution.
+The recently identified tail-forking attack shows how malicious leaders can degrade throughput by skipping over honest proposals in streamlined BFT protocols like HotStuff. To address this challenge, we introduce Carry, a lightweight mechanism that preserves HotStuff’s linearity while protecting against tail-forking. Carry also supports commits by honest-but-sluggish leaders whose messages are benignly delayed.
 
 ## Synopsis
 
@@ -40,7 +40,9 @@ A Quorum-Certificate (`QC`) consists of a threshold-signature by a quorum of `2F
 
 Each proposal `B_v` includes an opaque payload and meta-information. The meta-information references a history known to the leader. It includes `B_v.QC`, the highest known certified tail prior to view `v`. Chaining proposals to one another using cryptographic certificates is utilized along with protocol voting and commit rules to ensure **safety**.
 
-![image](../_uploads/carry_figure1.png)
+<p align="center">
+  <img src="/uploads/carry_figure1.png" width="512" title="carry figure 1">
+</p>
 **Figure 1: Carry-the-tail basic flow.**
 
 Figure 1 depicts a failure-free flow of the protocol with leader proposals chained to one another via QCs. Upon receiving a proposal `B_v`, a replica becomes *locked* on `B_v.QC`. Locking ensures safety: in the future, the replica pledges it will only accept proposals that extend `B_v.QC` or a QC from a higher view. 
@@ -55,7 +57,9 @@ To guarantee **liveness**, a leader proposes if it received a QC from the immedi
 
 The problem exposed in BeeGees is that previously, HotStuff lets a leader pretend the preceding view failed by ignoring votes for the preceding proposal. Figure 2 below shows how a malicious `L_3` could exploit this and omit votes for `B_2` to wrongfully skip it. 
 
-![image](../_uploads/carry_figure2.png)
+<p align="center">
+  <img src="/uploads/carry_figure2.png" width="640" title="carry figure 2">
+</p>
 **Figure 2: Without tail protection, the two cases here are indistinguishable: on left `B_2` failed and is benignly skipped; and on right, `B_2` is tail-forked.**
 
 More precisely, we say that a view `v` suffers a *tail-forking* attack if `2F+1` signature shares are sent by honest replicas on `B_v`, but the next leader `L_v+1` (intentionally ignores and) does not extend `B_v`. Regardless of the cause, tail-forking causes significant performance degradation:
@@ -73,7 +77,9 @@ In lieu of a vote, replicas in any case must send the next leader a NEW-VIEW mes
 
 A leader *justifies* skipping over a tail `B_v` by attaching (in lieu of a QC) an *Empty Certificate* for v, denoted `EC(v)`, consisting of a threshold signature by `2F+1` replicas on `⊥`. Note that a bad leader cannot succeed in forming an EC if `F+1` honest replicas voted for `B_v`. Figure 3 shows on the left a justified skip over `B2` accompanied by `EC(2)`.
 
-![image](../_uploads/carry_figure3.png)
+<p align="center">
+  <img src="/uploads/carry_figure3.png" width="640" title="carry figure 3">
+</p>
 **Figure 3: With Carry protection, on left `B_2` failed and it is skipped via an `EC(2)` justifying skipping it; on right, `B_2` is reinstated.**
 
 ---
@@ -102,7 +108,9 @@ Figure 4 illustates the performance degradation of carry under different choices
 
 
 
-![image](../_uploads/carry_figure4.png)
+<p align="center">
+  <img src="/uploads/carry_figure4.png" width="680" title="carry figure 4">
+</p>
 
 **Figure 4: Performance degradation under different choices of `ρ`.**
 
