@@ -1,6 +1,6 @@
 ---
 title: 'Carry: HotStuff Linearity with Tail-Forking-Resilience'
-date: 2025-09-27 17:30:00 -08:00
+date: 2025-09-27 21:30:00 -04:00
 tags:
 - BFT
 author: Dakai Kang, Suyash Gupta, Dahlia Malkhi, Mohammad Sadoghi
