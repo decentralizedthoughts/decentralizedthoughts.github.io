@@ -10,11 +10,11 @@ The recently identified tail-forking attack shows how malicious leaders can degr
 
 ## Synopsis
 
-In a “streamlined” Byzantine Fault Tolerant (BFT) consensus approach, pioneered by [HotStuff](https://api.semanticscholar.org/CorpusID:197644531), the consensus protocol has a simple and uniform structure: each *view* is a single quorum exchange between a leader and voters, and each such exchange carries a new leader proposal. Herein lies a vulnerability exposed in [BeeGees](https://api.semanticscholar.org/CorpusID:256274482): since a single quorum exchange does not suffice to achieve a consensus decision, leaders must rely on the next leader to drive a second exchange that commits the previous proposal. In a *tail-forking* attack, a malicious next leader might skip over the previous leader’s proposal.Repeated attacks by bad leaders may significantly degrade throughput.
+In a “streamlined” Byzantine Fault Tolerant (BFT) consensus approach, pioneered by [HotStuff](https://api.semanticscholar.org/CorpusID:197644531), the consensus protocol has a simple and uniform structure: each *view* is a single quorum exchange between a leader and voters, and each such exchange carries a new leader proposal. Herein lies a vulnerability exposed in [BeeGees](https://api.semanticscholar.org/CorpusID:256274482): since a single quorum exchange does not suffice to achieve a consensus decision, leaders must rely on the next leader to drive a second exchange that commits the previous proposal. In a *tail-forking* attack, a malicious next leader might skip over the previous leader’s proposal. Repeated attacks by bad leaders may significantly degrade throughput.
 
 The solution presented in BeeGees is to force the next leader to **prove** that it extends the most recent quorum-certified proposal. This proof approach borrows from [PBFT](https://api.semanticscholar.org/CorpusID:221599614), and like it, requires either quadratic communication or computationally heavy SNARKs.
 
-Our recent work ["Carry the Tail in Consensus Protocols"](https://arxiv.org/abs/2508.12173) inroduces **Carry**, a lightweight, drop-in mechanism for streamlined protocols that defends against tail-forking. Notably, Carry incurs only linear communication overhead per view. Not only that, suppose a preceding leader's proposal was benignly sluggish and did not reach all replicas in time. An honest leader in Carry seizes the opportunity to help by *reinstating* the sluggish proposal, without requiring a quorum of votes to certify it. In BeeGees, even if `2F` honest replicas voted for the sluggish proposal, it will not commit. 
+Our recent work ["Carry the Tail in Consensus Protocols"](https://arxiv.org/abs/2508.12173) introduces **Carry**, a lightweight, drop-in mechanism for streamlined protocols that defends against tail-forking. Notably, Carry incurs only linear communication overhead per view. Not only that, suppose a preceding leader's proposal was benignly sluggish and did not reach all replicas in time. An honest leader in Carry seizes the opportunity to help by *reinstating* the sluggish proposal, without requiring a quorum of votes to certify it. In BeeGees, even if `2F` honest replicas voted for the sluggish proposal, it will not commit. 
 
 Carry is a generic mechanism. We demonstrate its application to HotStuff-2 to create **Carry-the-Tail (Ctail)**, a full consensus solution.
 
@@ -73,7 +73,7 @@ Carry prevents these tail-forking attacks.
 
 ### Protecting the Tail
 
-In lieu of a vote, replicas in any case must send the next leader a NEW-VIEW message indicating a timer expiration. In this case, Carry piggybcks a signature-share on an empty vote (`⊥`).
+In lieu of a vote, replicas in any case must send the next leader a NEW-VIEW message indicating a timer expiration. In this case, Carry piggybacks a signature-share on an empty vote (`⊥`).
 
 A leader *justifies* skipping over a tail `B_v` by attaching (in lieu of a QC) an *Empty Certificate* for v, denoted `EC(v)`, consisting of a threshold signature by `2F+1` replicas on `⊥`. Note that a bad leader cannot succeed in forming an EC if `F+1` honest replicas voted for `B_v`. Figure 3 shows on the left a justified skip over `B2` accompanied by `EC(2)`.
 
@@ -104,7 +104,7 @@ To protect against 2--or more generally, against `ρ`--consecutive bad leaders, 
 
 More specifically, each replica piggybacks on a NEW-VIEW message its own vote-shares (possibly empty) from the last `ρ` views (in addition to its highest locked QC). When a leader proposes, if the highest QC it knows is at most `ρ` views earlier, then it must justify every skipped view back to this QC or to an interim reinstated proposal. Care must be taken to interleave reinstated proposals without blowing the communication overhead. For details, see the [Carry full paper](https://arxiv.org/abs/2508.12173). 
 
-Figure 4 illustates the performance degradation of carry under different choices of `ρ`: For `ρ=0` (top left), there is no tail protection.`ρ=1` (top right) provides defense against a single bad leader at a time, but (bottom left), no tail protection against two consecutive bad leaders each time. Finally, `ρ=2` (bottom right) provides defense against two consecutive bad leaders each time.
+Figure 4 illustrates the performance degradation of carry under different choices of `ρ`: For `ρ=0` (top left), there is no tail protection. `ρ=1` (top right) provides defense against a single bad leader at a time, but (bottom left), no tail protection against two consecutive bad leaders each time. Finally, `ρ=2` (bottom right) provides defense against two consecutive bad leaders each time.
 
 
 
