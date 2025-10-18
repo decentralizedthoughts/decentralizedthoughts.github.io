@@ -11,6 +11,29 @@ We introduced definitions for consensus, Byzantine Broadcast (BB) and Byzantine 
 
 (Note: the definitions and discussion below are updated in October 2024 to improve rigor and clarity.) 
 
+### A brief history of consensus and state machine replication
+
+The understanding that a total ordering of events can be used to implement any state machine goes back to the foundational work of [Lamport 1978](https://lamport.azurewebsites.net/pubs/time-clocks.pdf). Work in the early 80s extended this to handle fault tolerance (see [Borg et al. 1983](https://www.andrew.cmu.edu/course/15-440/assets/READINGS/borg-1983.pdf)).
+This approach is articulated in the tutorial of [Schneider 1990](https://www.cs.cornell.edu/fbs/publications/SMSurvey.pdf).
+Here is a concise description from [Lamport's Paxos made simple](https://lamport.azurewebsites.net/pubs/paxos-simple.pdf):
+
+> A simple way to implement a distributed system is as a collection of clients
+that issue commands to a central server. The server can be described as
+a deterministic state machine that performs client commands in some sequence. The state machine has a current state; it performs a step by taking
+as input a command and producing an output and a new state. 
+> An implementation that uses a single central server fails if that server
+fails. We therefore instead use a collection of servers, each one independently
+implementing the state machine. Because the state machine is deterministic,
+all the servers will produce the same sequences of states and outputs if they
+all execute the same sequence of commands. A client issuing a command
+can then use the output generated for it by any server.
+> To guarantee that all servers execute the same sequence of state machine
+commands, we implement a sequence of separate instances of the Paxos
+consensus algorithm, the value chosen by the $i$th instance being the $i$th state
+machine command in the sequence.
+
+
+
 ### State machine
 
 Let's start with the definition of a state machine. A state machine, at any point, stores a *state* of the system. It receives *inputs* (also referred to as *commands*). The state machine applies these inputs in a *sequential order* using a deterministic *transition function* to generate an *output* and an *updated* state. A succinct description of the state machine is as follows:
@@ -35,13 +58,13 @@ An example state machine is the Bitcoin ledger. The state consists of the set of
 
 The central building block of state machine replication is *multi-shot consensus*. In this variant of the consensus problem, a set of servers (also called replicas) agree on a dynamically growing log of commands. These commands arrive as input to the servers over time (presumably from clients but we abstract that away).
 
-Let $log_i[s]$ be the $s$-th entry in the log of replica $i$. Initially, $log_i[s]=\bot$ for all $s$ and $i$. Replica $i$ writes each $log_i[s]$ *only once* to a value that is not $\bot$. 
+Let $\log_i[s]$ be the $s$-th entry in the log of replica $i$. Initially, $\log_i[s]=\bot$ for all $s$ and $i$. Replica $i$ writes each $\log_i[s]$ *only once* to a value that is not $\bot$. 
 
-**Safety:** Non-faulty replicas agree on each log entry, i.e., if two non-faulty replicas $i$ and $j$ have $log_i[s] \neq \bot$ and $log_j[s] \neq \bot$, then $log_i[s] = log_j[s]$.
+**Safety:** Non-faulty replicas agree on each log entry, i.e., if two non-faulty replicas $i$ and $j$ have $\log_i[s] \neq \bot$ and $\log_j[s] \neq \bot$, then $\log_i[s] = \log_j[s]$.
 
-**Liveness:** Every input $x$ that arrives at a non-faulty replica is eventually recorded in the log, i.e., eventually  $\exists s$ and non-faulty replica $i$ such that $log_i[s] = x$.
+**Liveness:** Every input $x$ that arrives at a non-faulty replica is eventually recorded in the log, i.e., eventually  $\exists s$ and non-faulty replica $i$ such that $\log_i[s] = x$.
 
-**Validity:** There is an *injective mapping* from the set of log entries (not including $\bot$) to the set of inputs. In other words, every log entry must originate from an input and every input appears in the log at most once. Many systems have additional *external validity* requirements (discussed soon).
+**Validity:** There exists an injective mapping from non-$\bot$ log entries to inputs, meaning that each log entry originates from a valid input, and no input appears more than once. Many systems have additional *external validity* requirements (discussed soon).
   
 **Prefix completeness:** If a non-faulty replica $i$ has $log_i[s] \neq \bot$, then for all non-faulty replica $j$ and all indices $s' \le s$, eventually $log_j[s'] \neq \bot$. 
 
@@ -87,20 +110,16 @@ A server executes the request and sends a response to the client after the reque
 
 #### Proof sketch
 
-We will use the multi-shot consensus (MSC) properties above.
-
-**SMR Liveness**: A client the sends a request to the servers then due to *Liveness* of MSC this request will be eventually added to the log. Due to *Prefix completeness* of MSC all previous log entries will also eventually become non $\bot$. Hence, eventually the client will receive a response.
+**SMR Liveness**: A client then sends a request to the servers then due to *Liveness* of MSC this request will be eventually added to the log. Due to *Prefix completeness* of MSC all previous log entries will also eventually become non $\bot$. Hence, eventually the client will receive a response.
 
 **SMR Safety**: This follows directly from *Safety* of MSC.
 
-
 **SMR Validity**: This follows directly from Validity of MSC.
 
+**SMR Correctness**: consider a $cmd$ that is uniquely placed in $\log_i[k]$ (from the Validity and Safety of MS). When the client receives a response, due to the protocol above, all log entries from 1 to $k$ are filled and executed. So clearly any request that starts after this response arrives must be committed to a slot $>k$ in the log. Hence, from SMR Safety, this new response will see $\log[k]=cmd$ as required.
 
-**SMR Correctness**: consider a $cmd$ that is uniquely placed in $\log_i[k]$ (from the Validity and Safety of MS). When the client receives a response, due the the protocol above, all log entries from 1 to $k$ are filled and executed. So clearly any request that starts after this response arrives must be committed to a slot $>k$ in the log. Hence, from SMR Safety, this new response will see $\log[k]=cmd$ as required.
 
-
-Note that we can use the point in time that the fist party sends a (valid) response to define the **linearization point** of the client request. Clearly this point is after the request and before the response (because it's the first). Also note that this linearization order is exactly the log order, this can be shown via induction. 
+Note that we can use the point in time that the first party sends a (valid) response to define the **linearization point** of the client request. Clearly this point is after the request and before the response (because it's the first). Also note that this linearization order is exactly the log order, this can be shown via induction. 
 
 
 ### Separation into sub-systems
