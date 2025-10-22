@@ -38,6 +38,7 @@ In the Asynchronous model which of the following are true:
 ---
 
 C
+
 In the Partially Synchronous model with parameter Δ which of the following are true:
 
 1. The protocol designer can design protocols that wait until they detect the Global Stabilization Time (GST) and then take advantage of synchrony.
