@@ -1,6 +1,6 @@
 ---
 title: Test your understanding of the basics of fault tolerant distributed computing
-date: 2025-10-22 10:30:00 -04:00
+date: 2025-10-22 5:30:00 -04:00
 tags:
 - dist101
 - models
@@ -9,7 +9,7 @@ author: Ittai Abraham
 
 The goal of this post is to motivate you to learn the basics of distributed computing by providing a set of simple questions that test your understanding of the basic definitions. In 2025, LLM-based chatbots score 100 on this test, so that's what you should aim for. The questions cover the standard models and fault assumptions you encounter in the first lectures of any distributed computing course.
 
-The [network model](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/), the [threshold adversary model](https://decentralizedthoughts.github.io/2019-06-17-the-threshold-adversary/), and the [power of the adversary](https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/).
+The first questions cover the [network model](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/), the [threshold adversary model](https://decentralizedthoughts.github.io/2019-06-17-the-threshold-adversary/), and the [power of the adversary](https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/).
 
 For the last question see the post on [state machine replication](https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/), then on [primary backup](https://decentralizedthoughts.github.io/2019-11-01-primary-backup/) and optionally [this post on linearizability](https://decentralizedthoughts.github.io/2021-10-16-the-ideal-state-machine-model-multiple-clients-and-linearizability/).
 
