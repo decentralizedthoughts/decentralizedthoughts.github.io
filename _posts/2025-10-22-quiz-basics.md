@@ -1,5 +1,5 @@
 ---
-title: 'Test your understanding of the basics of fault tolerant distributed computing'
+title: Test your understanding of the basics of fault tolerant distributed computing
 date: 2025-10-22 10:30:00 -04:00
 tags:
 - dist101
