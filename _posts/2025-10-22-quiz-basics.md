@@ -126,4 +126,4 @@ Consider a primary backup protocol (two clients and two servers, at most one ser
 
 Once you’ve answered all parts (A–J), compare your reasoning with the models and examples linked above. Understanding not just which statements are true but why they are true is the key to mastering distributed computing.
 
-Share your thoughts and questions on [X](https://x.com/ittaia).
+Share your thoughts and questions on [X](https://x.com/ittaia/status/1980954770472132699).
