@@ -6,9 +6,9 @@ tags:
 author: Ittai Abraham and Gilad Stern
 ---
 
-In this post, we study non-uniform agreement and weak validity under [synchronous networks](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/) with general omission failures, where faulty parties may lose both incoming and outgoing messages.
+In this post, we study non-uniform agreement and weak validity under [synchronous networks](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/) with general omission failures, where faulty parties may lose some or all incoming and outgoing messages.
 
-In this model, agreement concerns only non-faulty parties. Omission-faulty parties may disagree, and validity is weak: the output must equal some party’s input. We present a protocol for $f < n$ omission faults that runs in $\min\{f+1,n-1\}$ rounds. We then show that both non-uniformity and weak validity are necessary for $f < n$.
+In this model, agreement, concerns only non-faulty parties. Omission-faulty parties may disagree, and validity is weak: the output must equal some party’s input. We present a protocol for $f < n$ omission faults that runs in $\min\{f+1,n-1\}$ rounds. We then show that both non-uniformity and weak validity are necessary for $f < n$.
 
 
 
@@ -17,7 +17,7 @@ In this model, agreement concerns only non-faulty parties. Omission-faulty parti
 > Think of it as: PBFT is to Paxos as Dolev–Strong is to this protocol.
 
 
-Let's start with a broadcast protocol that is essentially the non-Byzantine version of the classic [Dolev Strong protocol for Byzantine broadcast](https://decentralizedthoughts.github.io/2019-12-22-dolev-strong/). 
+Let's start with a broadcast protocol that is essentially the non-Byzantine version of the classic [Dolev-Strong protocol for Byzantine broadcast](https://decentralizedthoughts.github.io/2019-12-22-dolev-strong/). 
 
 ```
 Broadcast for f<n:
@@ -35,17 +35,17 @@ All non-faulty parties output in round $k$ by construction of the protocol.
 
 
 **Validity (leader is non-faulty then output is its input, otherwise may be $\bot$)**: 
-The first part follows from the first round and the second from an easy induction showing that nobody sends a message other than the leader's input.
+The first part follows from round 1; the second follows by induction, showing that no party sends any message other than the leader’s input.
 
 **Non-uniform Agreement (all non-faulty output same value)**:
-It is useful to reason in terms of message chains: if some party sends a value in round $r$, then some party must have sent that value in round $r-1$, which in turn must have come from a send in round $r-2$, and so on—tracing back to the leader’s initial message in round $1$. Each link in the chain is a distinct sender, since parties send a value at most once.
+It is useful to reason in terms of message chains: if some party sends a value in round $r$, then some party must have sent that value in round $r-1$, which in turn must have come from a send in round $r-2$, and so on—tracing back to the leader’s initial message in round $1$. Each link in the chain is a distinct sender; since parties send a value at most once.
 
 *Case 1.* No non-faulty party receives a value during the entire protocol. Then all output ⊥.  
 
 *Case 2.* Some non-faulty party receives a value before the final round. It forwards the value, ensuring that by the next round, all non-faulty parties receive it and output the same value.  
 
 *Case 3.* A non-faulty party first receives a value in the final round $k$. This message is the end of a chain of length $k$:  
-– If $k = f+1$, the chain must include at least one non-faulty sender. By Case 2, all non-faulty parties will have received the value by the end.  
+- If $k = f+1$, the chain must include at least one non-faulty sender. By Case 2, all non-faulty parties will have received the value by the end.  
 – If $k = n-1$, the chain must include all other parties. This implies all others are faulty, so agreement among the single non-faulty party is trivial.
 
 Thus, in all cases, all non-faulty parties output the same value, completing the proof.
@@ -69,7 +69,7 @@ Since at least one party is non-faulty, the validity of broadcast ensures that e
 By construction, all non-faulty parties produce an output in round $k$.
 
 **Non-uniform Agreement (all non-faulty output the same value):**
-All non-faulty parties agree on the complete set of broadcast values and compute the same maximum among them. Note: this maximum may originate from a faulty party.
+All non-faulty parties agree on the complete set of broadcast values and computes the same maximum among them. Note: this maximum may originate from a faulty party.
 
 
 
@@ -77,7 +77,7 @@ All non-faulty parties agree on the complete set of broadcast values and compute
 
 In uniform agreement we want all parties that decide (even if faulty) to output the same value. This is useful because a party may not know its faulty or when a party needs to convince an (external) client.
 
-In strong validity we want the decision to be $x$ if all non-faulty have the value $x$. This is useful when we want the inputs of the non-faulty. For example, if the input is some external event that non-faulty parties observe.
+In strong validity we want the decision to be $x$ if all non-faulty parties have the value $x$. This is useful when we want the inputs of the non-faulty parties. For example, if the input is some external event that non-faulty parties observe.
 
 
 
@@ -95,7 +95,7 @@ Construct two executions in a fully synchronous, reliable network, for all parti
 * World $E_0$: The $0$‑holders are designated non‑faulty and the $1$‑holders are designated faulty. Faulty parties behave honestly according to the protocol on input $1$.
 * World $E_1$: Roles swap. The $1$‑holders are non‑faulty; the $0$‑holders are faulty and (again) behave honestly on input $0$.
 
-Because in both worlds every party follows the protocol (faulty parties happen to act in a non-faulty manner), every party sees exactly the same sequence of messages with the same senders. Hence each party’s local view—and thus its output under the protocol—is identical in $E_0$ and $E_1$.
+Because in both worlds every party follows the protocol (the designated faulty parties happen to act in a non-faulty manner), every party sees exactly the same sequence of messages with the same senders. Hence each party’s local view—and thus its output under the protocol—is identical in $E_0$ and $E_1$.
 
 However, strong validity demands different outputs: in $E_0$, all non‑faulty parties (the $0$‑holders) must output $0$; in $E_1$, all non‑faulty parties (the $1$‑holders) must output $1$. This contradicts the indistinguishability of the two executions. Therefore $f<n/2$.
 
@@ -104,14 +104,14 @@ However, strong validity demands different outputs: in $E_0$, all non‑faulty p
 
 We can see this from the simple case $n = 2$ and $f = 1$.
 
-* World A: Both parties input is 0 and party $B$ crashes before sending any messages. By validity, $A$ must decide $0$.
-* World B: Both parties input is 1 and party $A$ crashes before sending any messages. By the same reasoning, $B$ must decide $1$.
-* World C: Party $A$’s input is $0$, party $B$’s input is $1$, and all messages between them are omitted.
+* World A: Both parties’ inputs are 0 and party $B$ crashes before sending any messages. By validity, $A$ must decide $0$.
+* World B: Both parties’ inputs are 1 and party $A$ crashes before sending any messages. By the same reasoning, $B$ must decide $1$.
+* World C: Party $A$’s input is 0 and party $B$’s input is 1, and all messages between them are omitted.
 
-From $A$’s perspective, worlds A and C are indistinguishable: $B$ never sends any messages in either, so $A$ must decide $0$ in world C.
+From $A$’s perspective, worlds A and C are indistinguishable: $B$ never sends any messages in either, therefore $A$ must decide $0$ in world C.
 From $B$’s perspective, worlds B and C are indistinguishable, so $B$ must decide $1$ in world C.
 
-This violates uniform agreement, since in world C the two non-faulty parties output different values.
+This violates uniform agreement, since in world C the two parties output different values (note that one of the parties has omission failures).
 
 Thus, uniform agreement is impossible when $f \ge n/2$.
 
@@ -124,12 +124,15 @@ See a similar statement for [state machine replication](https://decentralizedtho
 
 Note that weak validity in omission is similar to [external validity](https://decentralizedthoughts.github.io/2022-12-12-what-about-validity/) in the Byzantine setting.
 
-Note that uniform agreement in omission is similar to provable agreement in the Byzantine setting. Provable agreement allows clients and other offline parties to verify the agreement outcome.
+Note that uniform agreement in omission is analogous to provable agreement in the Byzantine setting. Provable agreement allows clients and other offline parties to verify the agreement outcome.
 
-Indeed, the broadcast protocol in omission is similar to the [Dolev Strong broadcast](https://decentralizedthoughts.github.io/2019-12-22-dolev-strong/) in the Byzantine setting that has external validity but is not provable.
+Indeed, the broadcast protocol in omission is similar to the [Dolev Strong broadcast](https://decentralizedthoughts.github.io/2019-12-22-dolev-strong/) in the Byzantine setting which provides external validity but not provable agreement.
 
 
 
 ## Acknowledgments
+
+We thank Amit Aminov for pointing out an error in a previous version.
+
 
 Please leave comments on [X](https://x.com/ittaia/status/1955311880840315205)
