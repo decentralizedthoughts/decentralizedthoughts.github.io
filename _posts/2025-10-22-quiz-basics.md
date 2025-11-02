@@ -111,14 +111,14 @@ In the first round, a protocol chooses a uniformly random sub-committee of size 
 
 1. A static adversary can always manage to block the sub-committee from sending messages.
 2. A strongly adaptive adversary can always manage to block the sub-committee from sending messages.
-3. A weakly adaptive adversary with parameter k=3 can always manage to block the sub-committee from sending messages their second round of messages.
+3. A delayed adaptive adversary with parameter k=3 can always manage to block the sub-committee from sending messages their second round of messages.
 4. A delayed adaptive adversary can always block the sub-committee from sending messages their first round of messages.
 
 ---
 
 J
 
-Consider a primary backup protocol (two clients and two servers, at most one server and all clients may crash, links are FIFO):
+Consider a primary backup protocol (two clients and two servers, at most one server may crash, clients may have omissions, links are FIFO):
 
 1. Show a concrete execution where the client library gets the same output sent to it more than once.
 2. Show a concrete execution where the backup gets the same command sent to it more than once.

@@ -28,9 +28,9 @@ while true:
 1. To avoid duplication of input, each command ```cmd``` includes a unique identifier. 
 2. To avoid duplication of output, each ```output``` includes a unique identifier and also the unique identifier of the ```cmd```.
 
-The above state machine can be made tolerant to a single crash failure with via the primary-backup paradigm. 
+The above state machine can be made tolerant to a single crash failure via the primary-backup paradigm. 
 
-**Primary.** The ```primary``` behaves exactly like an ideal state machine until it crashes. However, if it does crash, it needs the backup to take over the execution and continue serving the client. 
+**Primary.** The ```primary``` behaves exactly like an ideal state machine until it crashes. However, if it does crash, it needs the backup to take over execution and continue serving clients. 
 
 ```
 // Primary
@@ -63,7 +63,7 @@ while true:
       state, output = apply(cmd, state)
    if view == 1:
       send output to the client library
-   on missing "heartbeat" from primary in the last t + $\Delta$ time units:
+   on missing any message from primary in the last t + Δ time units:
       view = 1
       send ("view change", 1) to all client libraries
 ```
@@ -71,7 +71,7 @@ while true:
 Note that in some cases ```cmd``` may arrive twice (from both the primary and the client library), in this case the backup ignores the second time (here we use the fact that ```cmd``` contains a unique identifier that can detect this duplication).
 
 
-**Client.** In the ideal world, the client needs to interact with only a single state machine. With the primary-backup paradigm, it needs to be aware of their existence and send messages accordingly. Thus, we augment the client with a *client library*. The ```client library``` acts as the required relay between the client in the ideal world and the real world protocol. It implements a mechanism to switch from primary to backup:
+**Client.** In the ideal world, the client needs to interact with only a single state machine. With the primary-backup paradigm, it needs to be aware of their existence and send messages accordingly. Thus, we augment the client with a *client library*. The ```client library``` acts as the required relay between the client in the ideal world and the real world protocol. It implements a mechanism to switch from the primary to the backup:
 
 ```
 // Client library 
@@ -85,6 +85,7 @@ while true:
       send output to client
    on receiving ("view change", 1) from backup
       view = 1
+      resend cmd to replica[view]
 ```
 
 Note that in some cases, the same ```output``` may arrive twice (from both the primary and the backup), in this case the client library ignores the second time (here we use the fact that ```output``` contains a unique identifier and can detect this duplication).
@@ -93,7 +94,7 @@ Due to the invariant maintained by the primary, a client knows that the response
 
 **A couple of remarks on the setting.**
 
-1. We assumed that the adversary can crash any client and that all non-fualty client messages arrive at the primary/backup and vice-versa. This Primary-Backup protocol works even if we assume that the adversary can fail any client by [omission failures](https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/). To handle this model, even with an ideal state machine we need to maintain a unique identifier for every command sent to the state machine and use a retry mechanism.
+1. We assumed that the adversary can crash any client and that all non-faulty client messages arrive at the primary/backup and vice-versa. This Primary-Backup protocol works even if we assume that the adversary can fail any client by [omission failures](https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/). To handle this model, even with an ideal state machine we need to maintain a unique identifier for every command sent to the state machine and use a retry mechanism.
 
 2. In practice, there is often an out-of-band procedure to reset the system to allow the primary to be the primary again after it recovers from its failure. For example, one can first stop the backup and then restart the whole system. 
 
@@ -101,12 +102,12 @@ Due to the invariant maintained by the primary, a client knows that the response
 
 ### Generalized Primary-Backup
 
-When there are $n>2$ replicas the new primary must do some more work to continue to maintain the invariant: **send the command to all the backups before responding back to the client**. 
+When there are $n>2$ replicas, the new primary must do some more work to continue to maintain the invariant: **send the command to all the backups before responding back to the client**. 
 
 Assume $n$ replicas with identifiers $\{0,1,2,\dots,n-1\}$. A major problem is that a replica may crash in the middle of sending to all the backups. We fix this using two measures:
 
-1. The primary sends the command to the backup **in order**, so messages first arrive to the next primary, then to the next next primary and so on.
-2. Each ```replica j``` maintains a *resend* variable that stores the last command it received from the primary. If $j$ becomes the new primary it resends the last command to all replicas when it does a view change. 
+1. The primary sends the command to the backup **in order**, so messages first arrive to the next primary, then to the next next primary, and so on.
+2. Each ```replica j``` maintains a *resend* variable that stores the last command it received from the primary. If $j$ becomes the new primary, it resends the last command to all replicas when it does a view change. 
 
 ```
 // Replica j
@@ -138,7 +139,7 @@ while true:
       send "heartbeat" to all replicas (in order)
 ```
 
-This protocol implements state machine replication with $n$ servers in synchrony that is resilient to $n-1$ crash failures.
+This protocol implements state machine replication with $n$ servers in a synchronous system that is resilient to $n-1$ crash failures.
 
 
 ### Notes
