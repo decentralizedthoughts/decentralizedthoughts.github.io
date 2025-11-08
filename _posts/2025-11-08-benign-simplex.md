@@ -1,11 +1,10 @@
 ---
 title: Benign Simplex
-date: 2025-11-08 05:30:00 -04:00
+date: 2025-11-08 04:30:00 -05:00
 tags:
 - dist101
 author: Ittai Abraham
 ---
-
 
 The goal of this post is to describe a *single-shot* [consensus](https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/) protocol that is resilient to $f < n/2$ [omission failures](https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/), under [partial synchrony](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/).
 This protocol is inspired by the multi-shot [Simplex for crash faults](https://simplex.blog/crashfaults/) protocol and our earlier posts on [Chained Raft](https://decentralizedthoughts.github.io/2021-07-17-simplifying-raft-with-chaining/), [Benign HotStuff](https://decentralizedthoughts.github.io/2021-04-02-benign-hotstuff/), and [Log Paxos](https://decentralizedthoughts.github.io/2021-09-30-distributed-consensus-made-simple-for-real-this-time/).
