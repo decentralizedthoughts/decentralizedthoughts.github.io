@@ -19,6 +19,9 @@ Each party starts with an *input value*. We denote by $\bot$ a special value tha
 
 ## The single-shot benign simplex protocol
 
+As with all partial synchrony protocols, this one progress with a series of *views*. Each view $k$ has a designated leader denoted by *Leader(k)* (for example using a round-robin).
+
+
 ```text
 B-Simplex
 
@@ -26,7 +29,7 @@ val := input
 
 1. Upon entering view k:
     Start a local timer T_k
-    Leader sends (Vote, k, val)
+    Leader(k) sends (Vote, k, val)
 
 2. Upon receiving (Vote, k, x):
     If x ≠ ⊥:
@@ -75,7 +78,7 @@ If no `Vote` arrives before $T_k = 2\Delta$, every non-faulty party sends `NoVot
 
 
 
-### Claim 3 (good leader decides)
+### Claim 3 (good leader decides after GST)
 
 Let $k$ be the first view where all non-faulty parties start at a time $t > GST$ and that has a non-faulty leader. If no party has seen $n - f$ `Final` messages from any earlier view, then all non-faulty parties decide in view $k$ by time $t + 2\delta$.
 
@@ -93,12 +96,12 @@ After $GST$, Claim 1 keeps views aligned within $\Delta$. There can be at most $
 
 ## Safety
 
-### Claim 5 (univalency)
+### Claim 5 (if any party decides, all parties lock)
 
 If $n - f$ parties send `(Final, k, x)`, then any party leaving view $k$ sets `val := x` during view $k$.
 
 **Proof:**  
-If a party leaves via rule 2 with a non-$\bot$ value, it must have seen some `(Vote, k, x)` and therefore sets `val := x` before leaving. The only way to send `Vote(k, ⊥)` is after receiving $n - f$ `NoVote(k)` messages, which contradicts the existence of $n - f$ `(Final, k, x)` messages for the same view. Hence every party sets `val := x` before leaving view $k$.
+If a party leaves via rule 2 with a non-$\bot$ value, it must have seen some `(Vote, k, x)` and therefore sets `val := x` before leaving. The only way to send `Vote(k, ⊥)` is after receiving $n - f$ `NoVote(k)` messages, which contradicts the existence of $n - f$ `(Final, k, x)` messages for the same view. Hence, every party sets `val := x` before leaving view $k$.
 
 
 ### Claim 6 (uniform agreement)
@@ -106,7 +109,7 @@ If a party leaves via rule 2 with a non-$\bot$ value, it must have seen some `(V
 Let $k$ be the first view where $n - f$ parties send `(Final, k, x)`. Then any later `Vote` is for $x$.
 
 **Proof:**  
-By Claim 5, all non-faulty parties have `val := x` when entering view $k+1$. Rule 2 propagates only the current `val`. Induction over the views gives that all later `Vote` messages must carry $x$, establishing uniform agreement.
+By Claim 5, all non-faulty parties have `val := x` when entering view $k+1$. Rule 2 propagates only the current `val`. Induction over the views gives that any `Vote` in a view grater than $k$ is for the value $x$, establishing uniform agreement.
 
 
 ## Validity
@@ -125,5 +128,11 @@ Initially each `val` equals the party's input. Later views only propagate existi
 
 1. Message complexity is $O(n^2)$ per view, hence $O(n^3)$ after $GST$ in the worst case. This is not optimal, but may be a good practical trade-off.
 2. The protocol does not always wait for $n - f$ to change views. Waiting for $n - f$ happens only when all observed messages are `NoVote`. A single `Vote` is sufficient to move forward, which reduces latency in the common case.
-3. Open problem: is it possible to improve the worst case latency or obtain this latency with $O(n^2)$ message complexity?
+3. The use of an explicit `NoVote` is a critical tool for better latency that is borrowed from Simplex and what makes this protocol different from many other Paxos based protocols.
+4. Open problem: is it possible to improve the worst case latency or obtain this latency with $O(n^2)$ message complexity?
 
+## Acknowledgments
+
+Many thanks for Kartik Nayak for insightful comments.
+
+Your thoughts on [X]()
