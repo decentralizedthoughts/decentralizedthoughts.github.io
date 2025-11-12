@@ -19,7 +19,7 @@ Each party starts with an *input value*. We denote by $\bot$ a special value tha
 
 ## The single-shot benign simplex protocol
 
-As with all partial synchrony protocols, this one progress with a series of *views*. Each view $k$ has a designated leader denoted by *Leader(k)* (for example using a round-robin).
+As with all partial synchrony protocols, this one progress with a series of *views*. Each view $k$ has a designated leader denoted by `Leader(k)` (for example using a round-robin).
 
 
 ```text
