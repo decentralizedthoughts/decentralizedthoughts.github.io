@@ -133,6 +133,6 @@ Initially each `val` equals the party's input. Later views only propagate existi
 
 ## Acknowledgments
 
-Many thanks for Kartik Nayak for insightful comments.
+Many thanks to Kartik Nayak for insightful comments.
 
-Your thoughts on [X]()
+Your thoughts on [X](https://x.com/ittaia/status/1988544565012263147?s=20)
