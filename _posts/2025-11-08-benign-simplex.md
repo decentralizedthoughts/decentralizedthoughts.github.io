@@ -74,7 +74,7 @@ Let $t$ be the time all non-faulty parties have entered view $k$. Then all non-f
 **Proof:**  
 If some `Vote(k, x)` is delivered while $T_k < 2\Delta$, rule 2 makes each receiver immediately send `(Vote, k, x)` and enter view $k+1$, by $t + 2\Delta+\delta$.
 
-If no `Vote` arrives before $T_k = 2\Delta$, every non-faulty party sends `NoVote(k)` by time $t + 2\Delta$. Collecting $n - f$ `NoVote` messages then takes one $\delta$ time, after which rule 4 sends `(Vote, k, ⊥)` and immediately enters view $k+1$. Thus all leave by $t + 2\Delta+\delta$.
+If no `Vote` arrives before $T_k = 2\Delta$, every non-faulty party sends `(NoVote, k)` by time $t + 2\Delta$. Collecting $n - f$ `NoVote` messages then takes one $\delta$ time, after which rule 4 sends `(Vote, k, ⊥)` and immediately enters view $k+1$. Thus all leave by $t + 2\Delta+\delta$.
 
 
 
@@ -106,7 +106,7 @@ If a party leaves via rule 2 with a non-$\bot$ value, it must have seen some `(V
 
 ### Claim 6 (uniform agreement)
 
-Let $k$ be the first view where $n - f$ parties send `(Final, k, x)`. Then any later `Vote` is for $x$.
+Let $k$ be the first view where $n - f$ parties send `(Final, k, x)`. Then any `Vote` in any view $>k$ is for $x$.
 
 **Proof:**  
 By Claim 5, all non-faulty parties have `val := x` when entering view $k+1$. Rule 2 propagates only the current `val`. Induction over the views gives that any `Vote` in a view grater than $k$ is for the value $x$, establishing uniform agreement.
