@@ -83,7 +83,7 @@ If no `Vote` arrives before $T_k = 2\Delta$, every non-faulty party sends `(NoVo
 Let $k$ be the first view where all non-faulty parties start at a time $t > GST$ and that has a non-faulty leader. If no party has seen $n - f$ `Final` messages from any earlier view, then all non-faulty parties decide in view $k$ by time $t + 2\delta$.
 
 **Proof:**  
-At time $t$ the non-faulty leader sends `(Vote, k, x)`. Within one $\delta$ time all non-faulty parties receive this `Vote`. Since $T_k < 2\Delta$ they all send `(Final, k, x)`. Within one $\delta$ time each non-faulty party accumulates $n - f$ `Final(k, x)` messages and triggers decision by rule 5. 
+At time $t$ the non-faulty leader sends `(Vote, k, x)`. Within one $\delta$ time all non-faulty parties receive this `Vote`. Since $T_k < 2\Delta$ they all send `(Final, k, x)`. Within one $\delta$ time each non-faulty party accumulates $n - f$ `(Final, k, x)` messages and triggers decision by rule 5. 
 
 
 ### Claim 4 (liveness)
