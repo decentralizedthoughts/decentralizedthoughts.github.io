@@ -10,11 +10,11 @@ In this post we present a  [Simplex](https://simplex.blog)  protocol that solves
 
 In a previous post we showed [Benign Simplex](https://decentralizedthoughts.github.io/2025-11-08-benign-simplex/) which is resilient to $f<n/2$ omission failures in the same setting. Moving from omission failures to Byzantine failures requires three changes:
 
-1. To prevent the adversary from controlling more than $f$ parties, we add a signatures to all messages. This prevents the adversary from forging incorrect proposals when the leader is honest or forge votes from honest voters.
+1. To prevent the adversary from controlling more than $f$ parties, we add signatures to all messages. This prevents the adversary from forging incorrect proposals when the leader is honest or forge votes from honest voters.
 2. To prevent a malicious leader from equivocating, we require $f<n/3$ and the protocol waits for $n-f$ votes for the same value. When honest parties vote for at most one value, this prevents having $n-f$ votes for two different values. Because for $f<n/3$, any two sets of size $n-f$ must intersect by more than $f$, indicating some honest party voted twice.
 3. To protect against a malicious leader proposing an *unsafe* value in view $k$. A unsafe value is a value that is different than a value that was committed in a previous view. The protocol first obtains the following property:
     * **Skip property**: If a view $v$ has $n-f$ `<Vote, v, ⊥>` messages,  then no decision certificate can form in this view.    
-    The protocols uses this to verify that the leader's proposal comes from the highest view $w<k$ in which there could have been a decision for $x$, this guarantees that the proposal is safe. This is verified by checking that:
+    The protocol uses this to verify that the leader's proposal comes from the highest view $w<k$ in which there could have been a decision for $x$, this guarantees that the proposal is safe. This is verified by checking that:
 
     1. All views $w<v<k$ have $n-f$ `<Vote, v, ⊥>`.
     2. If $w>0$ then there are $n-f$ `<Vote, w, x>`.
