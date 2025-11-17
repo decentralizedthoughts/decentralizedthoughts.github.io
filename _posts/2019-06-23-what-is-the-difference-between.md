@@ -11,15 +11,15 @@ In this post I will try to compare four of my favorite protocols for Byzantine F
 
 1. [PBFT](http://pmg.csail.mit.edu/papers/osdi99.pdf). The gold standard for BFT SMR. Highly recommend to see [this video](https://ttv.mit.edu/videos/16444-practical-byzantine-fault-tolerance) of Barbara Liskov from 2001. Here is the PBFT [project page](http://www.pmg.csail.mit.edu/bft/). Aptos's BFT is based on [Joleton](https://arxiv.org/pdf/2504.18649) which is based on PBFT. See [this post](https://decentralizedthoughts.github.io/2025-02-14-PBFT/) for more on PBFT.
 
-2. [Tendermint](https://arxiv.org/abs/1807.04938). A modern BFT algorithm that also uses peer-to-peer gossip protocol among nodes. Tendermint has evolved to [CometBFT](https://github.com/cometbft/cometbft). In some ways [HotStuff-2](https://eprint.iacr.org/2023/397.pdf) can be viewed as a modern protocol that borrows from both Tendermint and Hotstuff.
+2. [Tendermint](https://arxiv.org/abs/1807.04938). A modern BFT algorithm that also uses peer-to-peer gossip protocol among nodes. Tendermint has evolved to [CometBFT](https://github.com/cometbft/cometbft). In some ways [HotStuff-2](https://eprint.iacr.org/2023/397.pdf) can be viewed as a modern protocol that borrows from both Tendermint and HotStuff.
 
 
 3. [SBFT](https://research.vmware.com/files/attachments/0/0/0/0/0/7/2/sbft_scaling_up_byzantine_fault_tolerance_5_.pdf). A BFT system that builds on PBFT for better scalability and better best-case latency. KudzuBFT and Solana's AlpenGlow represent modern improvements over SBFT.
 
-4. [HotStuff](https://research.vmware.com/files/attachments/0/0/0/0/0/7/7/podc.pdf). A new BFT protocol that provides both linearity and responsiveness. LibraBFT and some of the eary versions of [DiamBFT](https://developers.diem.com/papers/diem-consensus-state-machine-replication-in-the-diem-blockchain/2021-08-17.pdf) were based on HotStuff. [HotStuff-2](https://eprint.iacr.org/2023/397.pdf), [Beegees](https://arxiv.org/abs/2205.11652), [HyperBFT](https://hyperliquid.gitbook.io/hyperliquid-docs/hypercore/overview), [MonadBFT](https://arxiv.org/abs/2502.20692), [Carry](https://decentralizedthoughts.github.io/2025-09-27-carry-the-tail/) represent modern implementations and improvements over HotStuff (also see [this post](https://decentralizedthoughts.github.io/2022-11-24-two-round-HS/)).
+4. [HotStuff](https://research.vmware.com/files/attachments/0/0/0/0/0/7/7/podc.pdf). A new BFT protocol that provides both linearity and responsiveness. LibraBFT and some of the early versions of [DiamBFT](https://developers.diem.com/papers/diem-consensus-state-machine-replication-in-the-diem-blockchain/2021-08-17.pdf) were based on HotStuff. [HotStuff-2](https://eprint.iacr.org/2023/397.pdf), [Beegees](https://arxiv.org/abs/2205.11652), [HyperBFT](https://hyperliquid.gitbook.io/hyperliquid-docs/hypercore/overview), [MonadBFT](https://arxiv.org/abs/2502.20692), [Carry](https://decentralizedthoughts.github.io/2025-09-27-carry-the-tail/) represent modern implementations and improvements over HotStuff (also see [this post](https://decentralizedthoughts.github.io/2022-11-24-two-round-HS/)).
 
 
-This post provides a comparison at the protocol level from the lens of the theory of distributed computing. In particular, this is not a comparison of the system or the software. It's a comparison of the *fundamental measures* by which one should look at these different protocols. Much of the comparison can be summarized in this table, which essentially shows that no one protocol pareto dominates all the others.
+This post provides a comparison at the protocol level from the lens of the theory of distributed computing. In particular, this is not a comparison of the system or the software. It's a comparison of the *fundamental measures* by which one should look at these different protocols. Much of the comparison can be summarized in this table, which essentially shows that no one protocol Pareto dominates all the others.
 
 |           | Best-case Latency     | Normal-case Communication     | View-Change Communication     | View-Change Responsive    |
 |---------- |--------------------   |----------------------------   |----------------------------   |-----------------------    |
@@ -38,20 +38,20 @@ Before saying how these protocols are different it is important to say how simil
 ## The conceptual difference: rotating leaders vs stable leaders
 
 As mentioned above, all these protocols have the ability to replace leaders via a _view-change_ protocol. 
-One key conceptual difference between \{PBFT,SBFT\} and \{Tendermint, HotStuff\} is that \{PBFT,SBFT\} are based on the _stable leaders_ paradigm where a leader is changed only when a problem is detected, so a leader may stay for many commands/blocks. \{Tendermint and HotStuff\} are based on the _rotating leader_ paradigm. A leader is rotated after a single attempt to commit a command/block. In this paradigm, leader rotation (view-change) is part of the normal operation of the system. 
+One key conceptual difference between \{PBFT,SBFT\} and \{Tendermint, HotStuff\} is that \{PBFT,SBFT\} are based on the _stable leaders_ paradigm where a leader is changed only when a problem is detected, so a leader may stay for many commands/blocks. \{Tendermint, HotStuff\} are based on the _rotating leader_ paradigm. A leader is rotated after a single attempt to commit a command/block. In this paradigm, leader rotation (view-change) is part of the normal operation of the system. 
 
 
 Note that \{PBFT,SBFT\} could be rather easily modified to run in the _rotating leader_ paradigm and similarly \{Tendermint, HotStuff\} could be rather easily modified to run in the _stable leaders_ paradigm. Indeed modern versions of \{PBFT,SBFT\} like \{Joleton, KudzuBFT\} do exactly that.
 
-As in many cases this is a **trade-off**. On the one hand, maintaining a stable leader means less overhead and better performance due to stability when the leader is honest and trusted. On the other hand, a stable malicious leader can cause undetectable malicious actions. As an example, one such hard-to-detect malicious action is setting the internal order of commands in a block in a biased manner. Constantly rotating the leader provides a stronger _fairness_ guarantee.
+As in many cases, this is a **trade-off**. On the one hand, maintaining a stable leader means less overhead and better performance due to stability when the leader is honest and trusted. On the other hand, a stable malicious leader can cause undetectable malicious actions. As an example, one such hard-to-detect malicious action is setting the internal order of commands in a block in a biased manner. Constantly rotating the leader provides a stronger _fairness_ guarantee.
 
 ## Technical differences in the normal-case leader commit phase
 
-PBFT uses all-to-all messages that creates $O(n^2)$ communication complexity during the normal-case leader commit phase. It has been [long observed](https://www.cs.unc.edu/~reiter/papers/1994/CCS.pdf) that this phase can be transformed to a linear communication pattern that creates $O(n)$ communication complexity. Both SBFT and HotStuff use this approach to get a linear cost for the leader commit phase. Tendermint uses a gossip all-to-all mechanism, so $O(n \log n)$ messages and $O(n^2)$ words. Since this is not essential for the protocol, in the table above I consider a variant of Tendermint that does $O(n)$ communication in the normal-case leader commit phase as well.
+PBFT uses all-to-all messages that create $O(n^2)$ communication complexity during the normal-case leader commit phase. It has been [long observed](https://www.cs.unc.edu/~reiter/papers/1994/CCS.pdf) that this phase can be transformed to a linear communication pattern that creates $O(n)$ communication complexity. Both SBFT and HotStuff use this approach to get a linear cost for the leader commit phase. Tendermint uses a gossip all-to-all mechanism, so $O(n \log n)$ messages and $O(n^2)$ words. Since this is not essential for the protocol, in the table above I consider a variant of Tendermint that does $O(n)$ communication in the normal-case leader commit phase as well.
 
 ## Technical differences in the view-change phase
 
-The view-change mechanism in PBFT is not optimized to be on the critical path. Algorithmically, it required at least $O(n^2)$ words to be sent (and some PBFT variants that do not use public key signatures use more). SBFT also has a similar $O(n^2)$ word view-change complexity.
+The view-change mechanism in PBFT is not optimized to be on the critical path. Algorithmically, it requires at least $O(n^2)$ words to be sent (and some PBFT variants that do not use public key signatures use more). SBFT also has a similar $O(n^2)$ word view-change complexity.
 
 In Tendermint and HotStuff, leader rotation (view-change) is part of the critical path. A leader rotation is done essentially every 3 rounds, so much more effort is put to optimize this part. Algorithmically, the major innovation of Tendermint is a view-change protocol that requires just $O(n)$ messages (and words).  HotStuff has a similar $O(n)$ word view-change complexity.
 
@@ -62,7 +62,7 @@ One may ask if the Tendermint view-change improvement makes it strictly better t
 Latency is measured as the number of round trips it takes to commit a transaction given an honest leader and after GST. To be precise we will measure this from the time the transaction gets to the leader till the first time any participant (leader/replica/client) learns that the transaction is committed. Note that there may be additional latency from the client perspective and/or potentially due to the learning and checkpointing requirements. These additional latencies are perpendicular to the consensus protocol.
 
 PBFT has a $3\delta$ good-case latency and so does Tendermint (the good-case is when we are after GST and the leader is honest). However, the Tendermint view-change is not _responsive_ in the P2P model, while the PBFT view-change is responsive. We note that Tendermint in a model where gossip is assumed to not fail is responsive.
-A protocol is _reponsive_ if it makes progress at the speed of the network without needing to wait for a predefined time-out that is associated with the Partial synchrony model. Both PBFT and SBFT are responsive, while Tendermint is not.
+A protocol is _responsive_ if it makes progress at the speed of the network without needing to wait for a predefined time-out that is associated with the Partial synchrony model. Both PBFT and SBFT are responsive, while Tendermint is not.
 
 In particular, it can be shown that even after GST, if the Tendermint protocol that only uses explicit point-to-point communication does not have a wait period (time-out) in its view-change phase, then a malicious attacker can cause it to lose all liveness and make no progress (via a hidden lock). With a time-out, Tendermint has no liveness problems (after GST) but this means that it incurs a time-out that happens on the critical path. So it cannot progress faster even if the network delays are significantly smaller than the fixed time-out.
 
@@ -76,7 +76,7 @@ It is natural to ask, is the difference between latency of 2 round-trips and 3 r
 
 ## Minimizing Latency
 
-In fact, if you do care about minimizing latency, then in the best-case even $2\delta$ latency is possible (the best case is after GST and $3t+p+1$ out of $3t+2p+1$ of the validators are honest for some fixed $0\le p\le t$). This is exactly what SBFT achieves. This is not as easy as it [looks](https://arxiv.org/abs/1712.01367). 
+In fact, if you do care about minimizing latency, then in the best-case even $2\delta$ latency is possible (the best-case is after GST and $3t+p+1$ out of $3t+2p+1$ of the validators are honest for some fixed $0\le p\le t$). This is exactly what SBFT achieves. This is not as easy as it [looks](https://arxiv.org/abs/1712.01367). 
 
 SBFT gets a best-case $2\delta$ latency and a good-case latency of $3\delta$. So is it optimal? In terms of latency the answer is yes (see https://arxiv.org/abs/2102.07240), but in a wider view it's a **trade-off**. While SBFT has the better best-case latency, it has a view-change protocol that has $O(n^2)$ complexity in the worst case. 
 
