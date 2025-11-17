@@ -82,7 +82,7 @@ Make sure you go over the proof once in detail. Now, let's start composing :-)
 
 ## Locked Broadcast and Unique-Lock-Availability
 
-The sender runs **two** $PB$ consecutively: $PB_1,PB_2$. For $PB_1$ the external validity function $EV_1$ for now just checks the sender signature (in later posts, we will use Locked Broadcast as part of a consensus protocol, and add a PBFT-style view change check to $EV_1$). For $PB_2$ we define $EV_2(v,p)$ to check that $p$ is a *delivery-certificate* on $v$ from $PB_1$ (so $EV_2$ checks that $p$ contains $n-f$ distinct valid signatures on $<v,proof>$). That’s it!
+The sender runs **two** $PB$ consecutively: $PB_1,PB_2$. For $PB_1$ the external validity function $EV_1$ for now just checks the sender signature (in this [follow up post](https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/), we use Locked Broadcast as part of a consensus protocol, and add a PBFT-style view change check to $EV_1$). For $PB_2$ we define $EV_2(v,p)$ to check that $p$ is a *delivery-certificate* on $v$ from $PB_1$ (so $EV_2$ checks that $p$ contains $n-f$ distinct valid signatures on $<v,proof>$). That’s it!
 
 ![Locked Broadcast](https://i.imgur.com/dKKXky7.jpg)
 
@@ -244,10 +244,14 @@ All $PB$ protocols have a linear message complexity. When using threshold signat
 
 
 In the next posts, we will see how:
-1. Locked Broadcast is the core building block of [two-round-Hotstuff, 2018](https://arxiv.org/pdf/1803.05069v1.pdf).
-2. Keyed Broadcast is the core building block of [Hotstuff, 2018](https://research.vmware.com/files/attachments/0/0/0/0/0/7/7/podc.pdf).
-3. Robust Keyed Broadcast is the core building block for obtaining a [VABA, 2018](https://arxiv.org/pdf/1811.01332.pdf). The exposition in this post is based on the *$f+1$-Provable-Broadcast* and *$4$-stage-$f+1$-Provable-Broadcast* of [VABA, 2018](https://arxiv.org/pdf/1811.01332.pdf).
 
+1. Locked Broadcast is the core building block of [two-round-Hotstuff, 2018](https://arxiv.org/pdf/1803.05069v1.pdf), see [this post](https://decentralizedthoughts.github.io/2022-11-24-two-round-HS/).
+2. Locked Broadcast is the core building block of [Linear PBFT](https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/).
+3. Keyed Broadcast is the core building block of [Hotstuff, 2018](https://research.vmware.com/files/attachments/0/0/0/0/0/7/7/podc.pdf).
+4. Robust Keyed Broadcast is the core building block for obtaining a [VABA, 2018](https://arxiv.org/pdf/1811.01332.pdf). The exposition in this post is based on the *$f+1$-Provable-Broadcast* and *$4$-stage-$f+1$-Provable-Broadcast* of [VABA, 2018](https://arxiv.org/pdf/1811.01332.pdf). See [this post](https://decentralizedthoughts.github.io/2024-12-10-multi-world-vaba/).
+
+
+We thank Samuel Laferriere for helpful feedback on this post.
 
 
 Your thoughts and comments on [Twitter](https://twitter.com/ittaia/status/1569035923668574211?s=21&t=c8iwi-gLXT9wLT-o0wnUbQ).

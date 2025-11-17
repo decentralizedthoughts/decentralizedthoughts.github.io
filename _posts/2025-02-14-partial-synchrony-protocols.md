@@ -22,7 +22,12 @@ However, both of the requirements, namely, honesty of the leader, and synchrony 
 
 **Concern 1:** The leader is Byzantine. Such a leader can choose to send no block, or perhaps send conflicting blocks to parties, or selectively send them to only some parties. If the network is synchronous, the protocol may have consistency (agreement/safety) but not liveness.
 
-**Concern 2:** The network is not synchronous. In this case, we may not have progress, and using a synchronous BB can cause agreement violation too.
+**Concern 2:** If the network is not synchronous, we may not have progress, and using a synchronous BB can cause agreement violation too.
+
+
+At a very high level, we resolve concern 1 via a round of echoing that forces non equivocation. Similarly, we resolve concern 2 via another round of echoing (this is the Paxos locking paradigm). 
+
+Let's start by fixing concern 1 and then seeing why this is not enough.
 
 ## Attempt 1: Using a Reliable Broadcast (RBC) Protocol
 
@@ -41,22 +46,22 @@ on receiving <vote, b>_* signed by n-t distinct parties:
   commit b
 ```
 
-The protocol runs in two rounds where, in the first round the leader sends a proposal (block) to all parties. On receiving the first proposal from the leader, a party sends a vote on that proposal to all the parties. When a party receives $n-t$ distinct votes, it commits the value and sends the distinct votes to all parties. 
+The protocol runs in two rounds where, in the first round the leader sends a proposal (block) to all parties. On receiving the first proposal from the leader, a party sends a vote on that proposal to all parties. When a party receives $n-t$ distinct votes, it commits the value and sends the distinct votes to all parties. 
 
 The first step of voting for a single proposal and then waiting for $n-t$ vote messages ensures that different parties cannot commit on different values. In particular, any two sets of $n-t$ must intersect at $\geq n-2t \geq t+1$ parties. Since honest parties vote for only a single proposal, two different proposals cannot both receive $n-t$ votes.
 
 The second step of forwarding the $n-t$ distinct votes to all parties ensures that if one honest party commits, then eventually all honest parties commit too.
 
-Under asynchrony, the protocol achieves agreement, i.e., two honest parties will not disagree on the output) and validity, i.e., if the leader is honest then eventually all honest parties will output the leader’s input.
+Under asynchrony, the protocol achieves agreement, i.e., two honest parties will not disagree on the output, and validity, i.e., if the leader is honest then eventually all honest parties will output the leader’s input.
 
 
-***Does this work for our purpose in the high-level approach for partial synchrony described earlier?*** The agreement property works well, but the validity part does not. In particular, validity only holds *eventually* in an asynchronous reliable broadcast protocol and *when* the leader is honest. If the leader is Byzantine, then we may not commit on anything and end up waiting forever. This guarantee is not acceptable in a state machine replication protocol where the goal is to agree on a sequence of blocks. In general, when we reach such a state where a party has not committed on a block, it does not know whether this is because the leader is Byzantine or because the network is not currently synchronous.
+***Does this work for our purpose in the high-level approach for partial synchrony described earlier?*** The agreement property works well, but the validity part does not. In particular, validity only holds *eventually* in an asynchronous reliable broadcast protocol and *when* the leader is honest. If the leader is Byzantine, then we may not commit on anything and end up waiting forever. This guarantee is not acceptable in a state machine replication protocol whose goal is to agree on a sequence of blocks. In general, when we reach such a state where a party has not committed a block, it does not know whether this is because the leader is Byzantine or because the network is not currently synchronous.
 
 A typical approach to address this situation is to change leaders after some time (in fact, most of the blockchain protocols change leaders after every iteration). The hope with changing leaders is that, we would eventually reach a state where the leader is honest and the network will become synchronous (GST would have reached). At that point, we would start deciding blocks in the protocol.
 
 Thus, to summarize, parties run the protocol in iterations wherein, in an iteration, a designated leader attempts agreement on a block. Due to the agreement property of the reliable broadcast protocol, two honest parties will never disagree. However, it may be possible that not all parties commit within a time bound, due to which we change leaders in the next iteration.
 
-***What happens if some honest party has committed on a block in an iteration but not all honest parties have?*** This can happen when the network is asynchronous. For concreteness, say a party $P_i$ has committed a block $b$ at some position in the log. In such situations, we need subsequent leaders to ensure that all parties commit on the block $b$ at the same position in the log. How does a new leader learn about this block? It turns out that the above RBC protocol doesn't suffice; we modify it to ensure subsequent leaders have a means to learn about this block.
+***What happens if some honest party has committed a block in an iteration but not all honest parties have?*** This can happen when the network is asynchronous. For concreteness, say a party $P_i$ has committed a block $b$ at some position in the log. In such situations, we need subsequent leaders to ensure that all parties commit on the block $b$ at the same position in the log. How does a new leader learn about this block? It turns out that the above RBC protocol does not suffice, so we modify it to ensure subsequent leaders have a means to learn about this block.
 
 ## Attempt 2: A Modified Protocol within an Iteration
 
@@ -79,7 +84,7 @@ on receiving <vote2, b>_* signed by n-t distinct parties:
 
 The first step involving the first round of votes still guarantees that parties cannot disagree. However, the decision is delayed by one more round of votes to ensure subsequent leaders can learn of a value that may have been committed in this iteration. In particular, after receiving $n-t$ distinct first round of votes, parties collect them as a *certificate* and send this certificate to all parties as another round of votes, denoted vote2. On receiving $n-t$ distinct vote2 messages, a party commits. When a party obtains a certificate and chooses to send a vote2 message, we say that the party is *locked* on this value. Thus, if a party $P_i$ commits $b$ in this iteration, it is guaranteed that at least $n-t$ parties, and thus, at least $n-2t \geq t+1$ honest parties are locked on $b$ in this iteration. In essence, the honest parties locked on $b$ guard the safety of $P_i$'s commit and ensure that any conflicting block proposed in subsequent iterations will not be committed. This principle is commonly referred to as the ***Lock-Commit paradigm***, i.e., if one party commits, then at least $n-2t \geq t+1$ lock on the committed value. 
 
-***How exactly does a subsequent leader learn about the potentially committed value?*** If the leader collects $n-t$ statuses of locks in the next iteration, then at least one of the $n-2t \geq t+1$ honest locks will definitely reach the leader enabling it to propose the next block appropriately. Thus, an honest leader can always choose to propose the correct value. Well, *what if a Byzantine leader chooses to ignore the lock and propose a value inconsistent with the commit?* Addressing this question, requires the leader to somehow prove that it is indeed proposing the correct value. As we will see in the next posts, different protocols will deal with this issue differently.
+***How exactly does a subsequent leader learn the potentially committed value?*** If the leader collects $n-t$ statuses of locks in the next iteration, then at least one of the $n-2t \geq t+1$ honest locks will definitely reach the leader, enabling it to propose the next block appropriately. Thus, an honest leader can always choose to propose the correct value. Well, *what if a Byzantine leader chooses to ignore the lock and propose a value inconsistent with the commit?* Addressing this question, requires the leader to somehow prove that it is indeed proposing the correct value. As we will see in the next posts, different protocols will deal with this issue differently.
 
 Coming back to the big picture, the high-level sketch for partial synchrony protocols look like the following:
 
@@ -91,6 +96,6 @@ In each iteration, do the following:
 
 Armed with this intuition, in the [next post](https://decentralizedthoughts.github.io/2025-02-14-PBFT/) we will describe the Practical Byzantine Fault Tolerance (PBFT) protocol.
 
-We thank Nibesh Shrestha for feedback on this post.
+We thank Nibesh Shrestha and Samuel Laferriere for feedback on this post.
 
 Please leave comments on [X](https://x.com/kartik1507/status/1890808857456259516). 
