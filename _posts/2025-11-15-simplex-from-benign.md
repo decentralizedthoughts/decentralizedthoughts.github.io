@@ -6,19 +6,22 @@ tags:
 author: Ittai Abraham
 ---
 
-In this post we present a  [Simplex](https://simplex.blog)  protocol that solves single shot [consensus](https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/) and is resilient to $f < n/3$ [Byzantine failures](https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/), under [partial synchrony](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/).
+In this post we present a [Simplex](https://simplex.blog)  protocol that solves single shot [consensus](https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/) and is resilient to $f < n/3$ [Byzantine failures](https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/), under [partial synchrony](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/). In a previous post we showed how to move [from Tendermint to Simplex](https://decentralizedthoughts.github.io/2025-06-18-simplex/).
 
-In a previous post we showed [Benign Simplex](https://decentralizedthoughts.github.io/2025-11-08-benign-simplex/) which is resilient to $f<n/2$ omission failures in the same setting. Moving from omission failures to Byzantine failures requires three changes:
+In this post we show how to move from [Benign Simplex](https://decentralizedthoughts.github.io/2025-11-08-benign-simplex/) to Simplex. Benign Simplex is resilient to $f<n/2$ omission failures in the same setting. Moving from omission failures to Byzantine failures requires three changes:
 
 1. To prevent the adversary from controlling more than $f$ parties, we add signatures to all messages. This prevents the adversary from forging incorrect proposals when the leader is honest or forge votes from honest voters.
 2. To prevent a malicious leader from equivocating, we require $f<n/3$ and the protocol waits for $n{-}f$ votes for the same value. When honest parties vote for at most one value, this prevents having $n{-}f$ votes for two different values. Because for $f<n/3$, any two sets of size $n{-}f$ must intersect by more than $f$, indicating some honest party voted twice.
-3. To protect against a malicious leader proposing an *unsafe* value in view $k$. A unsafe value is a value that is different than a value that was committed in a previous view. The protocol first obtains the following property:
+3. To protect against a malicious leader proposing an *unsafe* value in view $k$. An unsafe value is a value that is different from the value that was committed in a previous view. To do this, Simplex obtains the following skip property:
+    
     * **Skip property**: If a view $v$ has $n{-}f$ `<Vote, v, ⊥>` messages,  then no decision certificate can form in this view.    
-    The protocol uses this to verify that the leader's proposal comes from the highest view $w<k$ in which there could have been a decision for $x$, this guarantees that the proposal is safe. This is verified by checking that:
+    
+    Simplex uses this property to verify that the leader's proposal comes from the highest view $w<k$ in which there could have been a decision for $x$, this guarantees that the proposal is safe. This verification is done by checking that:
 
     1. All views $w<v<k$ have $n{-}f$ `<Vote, v, ⊥>`.
     2. If $w>0$ then there are $n{-}f$ `<Vote, w, x>`.
     3. If $w=0$ we check that $x$ is externally valid (signed by a client).
+    
     Safety is provided because a view with a decision certificate cannot be skipped, hence forcing the proposer to use a proposal from that view or higher (and higher is safe via induction).
 
 That's it! With these three changes we get Provable Validated Byzantine Agreement.
@@ -155,3 +158,4 @@ The decided value is externally valid (signed by a client).
 Initially each `val` is externally valid and this is checked before voting. Later views only propagate existing `val` values through $n{-}f$ `Vote`, so by induction the decided value must be externally valid.
 
 
+Your thoughts on [X](...)
