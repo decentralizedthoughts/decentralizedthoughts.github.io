@@ -158,4 +158,4 @@ The decided value is externally valid (signed by a client).
 Initially each `val` is externally valid and this is checked before voting. Later views only propagate existing `val` values through $n{-}f$ `Vote`, so by induction the decided value must be externally valid.
 
 
-Your thoughts on [X](...)
+Your thoughts on [X](https://x.com/ittaia/status/1991596859295727824?s=20)
