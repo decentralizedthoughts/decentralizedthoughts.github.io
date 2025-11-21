@@ -122,4 +122,8 @@ If receive n-f <decide u>, then
 
 Note that the first condition is safe, since it means that at least one non-faulty party sent `<decide u>`. Second, if all non-faulty parties decide, then they terminate in one round due to the third condition. Finally the activation of the third condition implies that all non-faulty parties will eventually activate the first condition which in turn implies all non-faulty parties will terminate (even if they did not decide yet).
 
+### Acknowledgments
+
+Many thanks to Andreas Tzionis for helpful feedback and fixing broken links.
+
 Thoughts and comments on [Twitter](https://twitter.com/ittaia/status/1511665002188574727?s=20&t=gJEZwTvUN72KwbNBJ53eYQ).
