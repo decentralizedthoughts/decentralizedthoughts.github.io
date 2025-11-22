@@ -1,6 +1,6 @@
 ---
 title: Why BFT Needs Three Rounds
-date: 2025-11-22 13:00:00 -05:00
+date: 2025-11-22 09:00:00 -05:00
 tags:
 - lowerbound
 author: Ittai Abraham and Kartik Nayak
@@ -24,13 +24,13 @@ It is known that the worst-case decision latency is [$O(f)$ rounds](https://dece
 
 ## Proof
 
-The proof is by contradiction. Assume we have a protocol that has a good-case decision latency of 2 rounds and show that it must fail.
+The proof is by contradiction. Assume there is a protocol that has a good-case decision latency of 2 rounds and show that it must fail.
 
 For any $f\geq 2$, partition the $n=5f-2$ parties into the *leader* and 5 sets $A,B,C,D,E$ with sizes:
 
 $|A|, |E|=f$ and $|B|,|C|,|D|=f-1$.
 
-(If $n$ is smaller, then we choose these sets to be smaller but non-empty)
+(If $n$ is smaller, then choose these sets to be smaller but non-empty)
 
 We consider three executions: a mixed world $M$, a corrupt world $\hat{D}$, and a validity world $V$.
 
@@ -74,7 +74,7 @@ In PBFT, in world $M$ the first leader would not reach $2/3$ of preprepares, so 
 
 * In [this post](https://decentralizedthoughts.github.io/2021-03-09-good-case-latency-of-byzantine-broadcast-the-synchronous-case/) we discuss the good-case latency for synchronous protocols.
 
-* The proof in [[ANRZ21](https://arxiv.org/abs/2102.07240)] also takes care of protocols in which other parties send round 0 messages. Intuitively, this should not matter as they know nothing about the input. Indeed adding this is a rather straightforward extension and we removed it from this post for clarity of the main argument.
+* The proof in [[ANRZ21](https://arxiv.org/abs/2102.07240)] also takes care of protocols in which other parties send round 0 messages. Intuitively, this should not matter as they know nothing about the input. Indeed, adding this is a rather straightforward extension, and we removed it from this post for clarity of the main argument.
 
 ### Acknowledgments
 
