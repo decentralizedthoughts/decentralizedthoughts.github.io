@@ -29,7 +29,6 @@ A *configuration* is a set of all the states of all the parties and the set of c
 
 ***Definition 1***: For a configuration $C$ let $E(C)$ be the *failure-free extension* that starts with configuration $C$ and runs in lockstep synchrony with no failures. In particular, all pending messages in $C$ arrive immediately, and all messages sent after that arrive after one lockstep delay.
 
-
 ***Definition 2***: For a configuration $C$, let $val(C)$ be the decision value in the execution $E(C)$.
 
 Note that $val(C)$ is well-defined if $E(C)$ reaches a decision - if it does not terminate then we have found a non-terminating execution.

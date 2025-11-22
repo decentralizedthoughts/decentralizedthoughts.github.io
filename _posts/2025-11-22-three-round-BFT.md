@@ -14,7 +14,7 @@ Notice the pattern? Each of these protocols begins with a proposal followed by t
 
 This recurring structure suggests that the two voting rounds are not an accident but a fundamental requirement. Indeed, any BFT protocol that is resilient to $f$ malicious parties and has at most $5f-2$ servers must have a round of proposal and two rounds of voting even in the [*good-case*](https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/).
 
-All the protocols above have optimal resilience of $n=3f+1$ for $f \geq 2$ so fall into that category of $n\le 5f-2$.
+All the protocols above have optimal resilience of $n=3f+1$, so for $f \geq 2$ they fall into that category of $n\le 5f-2$.
 
 The *decision latency* is the time it takes for all honest parties to decide after $GST$.
 
