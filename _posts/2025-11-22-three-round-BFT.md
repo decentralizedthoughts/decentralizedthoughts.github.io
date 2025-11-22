@@ -8,7 +8,7 @@ author: Ittai Abraham and Kartik Nayak
 
 Many modern BFT protocols share a common structural pattern. PBFT uses *preprepare* and *prepare*. Tendermint uses *prevote* and *precommit*. CasperFFG and Simplex uses *notarization* and *finalization*. HotStuff uses a *QC* on top of another *QC*.
 
-Notice the pattern? All these BFT protocols begin with a proposal followed by two rounds of voting. This raises a natural question:
+Notice the pattern? Each of these protocols begins with a proposal followed by two voting rounds. This raises a natural question:
 
 > Is one round of proposing followed by two rounds of voting actually necessary?
 
@@ -38,11 +38,11 @@ We consider three executions: a mixed world $M$, a corrupt world $\hat{D}$, and 
 
 In the mixed world, the leader and parties in $C$ are Byzantine. Also, $GST = 0$. The leader sends $0$ to $A,B$ and 1 to $D,E$.
 
-Let's assume in these executions, without loss of generality, with probability $\geq1/2$ the protocol decides 1.
+In these executions assume without loss of generality that the protocol decides 1 with probability at least one half.
 
 **World $\hat{D}$ (corrupt)**
 
-In this corrupt world, the leader and parties in $D$ are Byzantine. $GST$ appears after $A$ and $E$ decide. The leader sends $0$ to $A,B,C$ and 1 to $E$. The parties in $D$ acts as if it received $1$ to $A,B,E$ and it sends round one of voting messages to $C$ as if it received $0$ from the leader.
+In this corrupt world, the leader and parties in $D$ are Byzantine. $GST$ appears after $A$ and $E$ decide. The leader sends $0$ to $A,B,C$ and 1 to $E$. The parties in $D$ act as if they received 1 when talking to $A$, $B$, and $E$, and they send round one voting messages to $C$ as if they received $0$ from the leader.
 
 Observe that $B$ and $E$ cannot distinguish between worlds $M$ and $\hat{D}$. Thus, they must decide 1 (at least half the time). Consequently, all honest parties (including set $C$) must decide 1.
 
@@ -60,11 +60,11 @@ Now we can reach a contradiction by showing that in world $\hat{D}$ where the de
 
 Applying this to PBFT, assume an (incorrect) PBFT that decides after seeing a certificate of $2/3$ of preprepare messages (instead of $2/3$ of prepare messages), what would go wrong?
 
-In PBFT, in world $M$ the first leader would not reach $2/3$ of preprepares, so let's assume the second leader is honest and will cause all honest to decide 1. But that means that all honest will also decide 1 in world $\hat{D}$. In world $V$ the parties in $C$ will see more than $2/3$ preprepare for 0 and hence early decide on 0. That means that in world $\hat{D}$ these parties in $C$ will decide 0 while the other honest will decide 1.
+In PBFT, in world $M$ the first leader would not reach $2/3$ of preprepares, so let's assume the second leader is honest and will cause all honest to decide 1. But that means that all honest will also decide 1 in world $\hat{D}$. In world $V$ the parties in $C$ will see more than $2/3$ preprepare for 0 and hence early decide on 0. That implies that in world $\hat{D}$ the parties in $C$ will decide 0 while the other honest parties decide 1.
 
 ### Notes
 
-* We used world $\hat{D}$ where $D$ is malicious and that depended on the decision in world $M$ being 1. In the symmetrical case where the decision is 0, we would use world $\hat{B}$ where $B$ is malicious: it plays as if it has $0$ to $A,D,E$, and it sends round one of voting messages to $C$ as if it has 1.
+* We used world $\hat{D}$ where $D$ is malicious. This choice depends on the decision in world $M$ being 1. In the symmetrical case where the decision is 0, we would use world $\hat{B}$ where $B$ is malicious: it plays as if it has $0$ to $A,D,E$, and it sends round one of voting messages to $C$ as if it has 1.
 
 * When $n\geq 5f-1$ it is possible to have a good-case latency of just $2\delta$. For example, see [this post](https://decentralizedthoughts.github.io/2021-03-03-2-round-bft-smr-with-n-equals-4-f-equals-1/) or [this one](https://decentralizedthoughts.github.io/2025-08-06-5fminus1-simplex/).
 
