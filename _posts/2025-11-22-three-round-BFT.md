@@ -1,6 +1,6 @@
 ---
 title: Why BFT Needs Three Rounds
-date: 2025-11-22 14:00:00 -04:00
+date: 2025-11-22 13:00:00 -05:00
 tags:
 - lowerbound
 author: Ittai Abraham and Kartik Nayak
