@@ -6,7 +6,7 @@ tags:
 author: Ittai Abraham and Kartik Nayak
 ---
 
-Many modern BFT protocols share a common structural pattern. PBFT uses *preprepare* and *prepare*. Tendermint uses *prevote* and *precommit*. CasperFFG and Simplex uses *notarization* and *finalization*. HotStuff uses a *QC* on top of another *QC*.
+Many modern BFT protocols share a common structural pattern. PBFT uses *preprepare* and *prepare*. Tendermint uses *prevote* and *precommit*. CasperFFG and Simplex use *notarization* and *finalization*. HotStuff uses a *QC* on top of another *QC*.
 
 Notice the pattern? Each of these protocols begins with a proposal followed by two voting rounds. This raises a natural question:
 
@@ -20,7 +20,7 @@ The *decision latency* is the time it takes for all honest parties to decide aft
 
 It is known that the worst-case decision latency is [$O(f)$ rounds](https://decentralizedthoughts.github.io/2019-12-15-synchrony-uncommitted-lower-bound/). The *good-case latency* of a broadcast protocol is the decision latency when the leader is honest and $GST=0$. The main result we cover in this post is:
 
-**Theorem** [[ANRZ21](https://arxiv.org/abs/2102.07240)]: Any protocol that solves Byzantine Broadcast in partial synchrony for $n\leq 5f-2$ that tolerates $f$ Byzantine failures must have a good-case latency of at least $3$ rounds.
+**Theorem** [[ANRZ21](https://arxiv.org/abs/2102.07240)]: *Any protocol that solves Byzantine Broadcast in partial synchrony for $n\leq 5f-2$ that tolerates $f$ Byzantine failures must have a good-case latency of at least $3$ rounds.*
 
 ## Proof
 
