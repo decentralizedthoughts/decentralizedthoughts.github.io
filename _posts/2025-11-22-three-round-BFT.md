@@ -28,7 +28,7 @@ The proof is by contradiction. Assume there is a protocol that has a good-case d
 
 For any $f\geq 2$, partition the $n=5f-2$ parties into the *leader* and 5 sets $A,B,C,D,E$ with sizes:
 
-$|A|, |E|=f$ and $|B|,|C|,|D|=f-1$.
+$\|A\|, \|E\|=f$ and $\|B\|,\|C\|,\|D\|=f-1$.
 
 (If $n$ is smaller, then choose these sets to be smaller but non-empty)
 
