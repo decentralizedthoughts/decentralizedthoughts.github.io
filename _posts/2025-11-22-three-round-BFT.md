@@ -39,9 +39,16 @@ We consider three executions: a mixed world $M$, a corrupt world $\hat{D}$, and 
 <img src="/uploads/3d World M.png" width=600>
 
 
-In the mixed world, the leader and parties in $C$ are Byzantine. Also, $GST = 0$. The leader sends $0$ to $A,B$ and 1 to $D,E$.
+In the mixed world, the leader is Byzantine and the parties in $C$ are slow (crashed). Also, $GST = 0$. The leader sends a mixed signal: $0$ to $A,B$ and 1 to $D,E$.
 
 In these executions assume without loss of generality that the protocol decides 1 with probability at least one half.
+
+**World $V$ (validity)**
+
+<img src="/uploads/3d World V.png" width=600>
+
+In this validity world, $GST = 0$, the parties in set $E$ are Byzantine. The leader is honest and sends $0$ to all. The set $C$ hears $0$ from $A,B,D$ and decides 0 in two rounds (one round of voting). Deciding 0 is necessary for validity to hold in this world.
+
 
 **World $\hat{D}$ (corrupt)**
 
@@ -51,11 +58,6 @@ In this corrupt world, the leader and parties in $D$ are Byzantine. $GST$ appear
 
 Observe that $B$ and $E$ cannot distinguish between worlds $M$ and $\hat{D}$. Thus, they must decide 1 (at least half the time). Consequently, all honest parties (including set $C$) must decide 1.
 
-**World $V$ (validity)**
-
-<img src="/uploads/3d World V.png" width=600>
-
-In this validity world, $GST = 0$, the parties in set $E$ are Byzantine. The leader is honest and sends $0$ to all. The set $C$ hears $0$ from $A,B,D$ and decides 0 in two rounds (one round of voting). Deciding 0 is necessary for validity to hold in this world.
 
 **The contradiction**
 
