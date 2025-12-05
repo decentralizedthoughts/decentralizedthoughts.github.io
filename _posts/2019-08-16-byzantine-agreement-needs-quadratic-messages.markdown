@@ -21,13 +21,26 @@ In 1980, [PSL](https://lamport.azurewebsites.net/pubs/reaching.pdf) showed the *
 
 At a high level, the Dolev and Resichuk lower bound says that if the non-faulty send few messages (specifically $< (f/2)^2$), then the adversary can cause some non-faulty party to receive no message! The party that receives no message has no way of reaching agreement with the rest. 
 
-Here’s the proof intuition: In any set of $f/2$ parties, if each of these parties receives $> f/2$ messages from non-faulty parties, then we have a protocol with $> (f/2)^2$ messages being sent by non-faulty parties. So, if there exists a protocol sending fewer messages, there must exist one party, say $p$, that receives $\leq f/2$ messages. Now imagine that all the parties sending messages to $p$ (there can be at most $f/2$ of them) have omission corruptions that omit all messages sent to $p$. Hence $p$ receives no message.
 
-We use a two-world indistinguishability argument to prove that the reaction of $p$ to not receiving messages (which may include sending messages) still maintains the property that $p$ receives $\leq f/2$ messages.
+### Proof Intuition
+
+
+  * If a party receives no messages, it cannot decide like the other non-faulty parties.
+  * If a party receives few messages, the adversary can use omission failures to ensure that it receives no messages.
+  * If all parties receive many messages, then the total number of messages sent is large.
+  * Thus, any protocol that sends few messages must have some party that receives few messages, which can be exploited by the adversary to isolate it.
+  * But what if the party that has few messages sent to it, receives none due to receive omission, but in response sends messages that causes more messages to be sent to it? 
+  * This is why the proof considers a world with $f/2$ candidate parties and corrupts all of them to not receive messages.
+  * If each of these parties receives $> f/2$ messages from non-faulty parties, then we have a protocol with $> (f/2)^2$ messages being sent by non-faulty parties. 
+  * So if there exists a protocol sending fewer messages, there must exist one omission faulty party, say $p$, that receives $\leq f/2$ messages, that are all omitted by $p$. 
+  * In the second world we uncorrupt $p$, and corrupt the at most $f/2$ parties sending messages to $p$ to omit messages to $p$. 
+  * Hence, $p$ receives no message and the adversary corrupted at most $f$ parties.
+
+
 
 ### Proof
 
-Consider a broadcast problem, where the *designated sender* has a binary input. First, we need to guarantee that the isolated party $p$ will indeed not decide like all the other non-faulty parties. Consider a party that receives no messages: it will either not decide 0 or not decide 1. Without loss of generality, assume that a majority of parties (other than the designated sender) that receive no message will not decide 0. Let $Q$ be this set of parties and note that $\|Q\| \geq (n-1)/2$.
+Consider a broadcast problem, where the *designated sender* has a binary input. First, we need to guarantee that the isolated party $p$ will indeed not decide like all the other non-faulty parties. Consider a party that receives no messages: it will either not decide 0 or not decide 1. Without loss of generality, assume that a majority of parties (other than the designated sender) that receive no message will not decide 0 (so either decide 1 or never decide). Let $Q$ be this set of parties and note that $\|Q\| \geq (n-1)/2$.
 
 We will prove the theorem by describing two worlds and using indistinguishability for all honest parties. 
 
@@ -76,4 +89,3 @@ The lower bound is presented for Broadcast (not Agreement). In terms of feasibil
 This post was updated in November 2021 to reflect that the lower bound holds for omission failures.
 
 Please leave comments on [Twitter](https://twitter.com/kartik1507/status/1162564876721692675?s=20) 
-

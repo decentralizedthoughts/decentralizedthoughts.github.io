@@ -18,7 +18,7 @@ Provable Broadcast based protocols are the backbone of many authenticated consen
 **Provable Broadcast**: is a simple one round-trip building block going back to [Reiter 94](https://dl.acm.org/doi/pdf/10.1145/191177.191194)'s **Echo Broadcast**. Echo Broadcast produces a *delivery-certificate* proving that $n-2f$ honest parties delivered the sender's value. This is the *Weak-Availability* property. Moreover, even if the sender is Byzantine, the *Uniqueness* property guarantees that there is at most one such value.
 Echo Broadcast can be slightly extended to *Validated Echo Broadcast*, which we call [Provable Broadcast](https://research.vmware.com/files/attachments/0/0/0/0/0/7/8/practical_aba_2_.pdf), which also provides an *External-Validity* property (see [below](#on-external-validity)). This allows sequencing provable broadcast instances to achieve stronger properties:
 
-1. **Locked Broadcast**:  by running *two* consecutive $PB$s, we get a two round-trip protocol. This protocol additionally provides a *Unique-Lock-Availability* property: a *delivery-certificate* is a proof that $n-2f$ honest parties received a *lock-certificate* for this value, and no other value can have a *lock-certificate*.  Locked Broadcast is the main sub-loop of [Tendermint](https://arxiv.org/abs/1807.04938), [Casper FFG](https://arxiv.org/abs/1710.09437), [linear PBFT](https://research.vmware.com/files/attachments/0/0/0/0/0/7/2/sbft_scaling_up_byzantine_fault_tolerance_5_.pdf), [two-chain-HotStuff](https://arxiv.org/pdf/1803.05069v1.pdf).
+1. **Locked Broadcast**: by running *two* consecutive $PB$s, we get a two round-trip protocol. This protocol additionally provides a *Unique-Lock-Availability* property: a *delivery-certificate* is a proof that $n-2f$ honest parties received a *lock-certificate* for this value, and no other value can have a *lock-certificate*.  Locked Broadcast is the main sub-loop of [Tendermint](https://arxiv.org/abs/1807.04938), [Casper FFG](https://arxiv.org/abs/1710.09437), [linear PBFT](https://research.vmware.com/files/attachments/0/0/0/0/0/7/2/sbft_scaling_up_byzantine_fault_tolerance_5_.pdf), [two-chain-HotStuff](https://arxiv.org/pdf/1803.05069v1.pdf).
 2. **Keyed Broadcast**: by running *three* consecutive $PB$s, we get a three round-trip protocol. As before, a *delivery-certificate* is a proof that $n-2f$ honest parties received a *lock-certificate*. In addition, this protocol provides a *Unique-Key-Availability* property: if a *lock-certificate* exists, then $n-2f$ honest parties hold a *key-certificate* and there can only be one value with a *key-certificate*. Keyed Broadcast is the main loop of [three-chain-HotStuff](https://research.vmware.com/files/attachments/0/0/0/0/0/7/7/podc.pdf) and overcomes the *hidden lock problem*.
 3. **Robust Keyed Broadcast**: by running *four* consecutive $PB$s, we get a four round-trip protocol. This protocol additionally provides a *Robust-Delivery* property: there is proof that at least $n-2f$ honest parties have a *Delivery-Certificate*.  Robust Keyed Broadcast is the main sub-loop of Asynchronous protocols: [VABA](https://research.vmware.com/files/attachments/0/0/0/0/0/7/8/practical_aba_2_.pdf), [ACE](https://arxiv.org/abs/1911.10486), [AllYouNeedIsDag](https://arxiv.org/abs/2102.08325).
 
@@ -26,10 +26,12 @@ Echo Broadcast can be slightly extended to *Validated Echo Broadcast*, which we 
 *Note:* Some recent consensus protocols opt for *three* consecutive $PB$s for obtaining **Robust Locked Broadcast** that provides *Robust-Delivery* with *Unique-Lock-Availability* (but without *Unique-Key-Availability*), see [Tusk](https://arxiv.org/abs/2105.11827?context=cs.DC).
 
 #### On External Validity
+
 We assume there is some *External Validity* ($EV$) Boolean predicate that is provided to each party. $EV$ takes as input a  value $v$ and a $proof$. If $EV(v,proof)=1$ we say that $v$ is *externally valid*. A simple example of external validity is a check that the value is signed by the sender and/or is signed by the client that controls the asset etc. External validity is based on the framework of [Cachin, Kursawe, Petzold, and Shoup, 2001](https://www.iacr.org/archive/crypto2001/21390524.pdf). In later posts, we will extend $EV$ to also take the internal state of the party as input.
 
 #### Properties of the Broadcast protocols 
-All four protocols above  have the following properties:
+
+All four protocols above have the following properties:
 
 * **Termination**: If the sender is honest and has an *externally valid* input $v$, then after a constant number of rounds the sender will obtain a *delivery-certificate* of $v$. Note that the Termination property requires just the sender to hold the certificate.
 * **Uniqueness**: There can be at most one value that obtains a *delivery-certificate*. So there cannot be two *delivery-certificates* with different values.
@@ -44,9 +46,7 @@ The four protocols differ by providing additional properties:
 
 ## Provable Broadcast (Validated Echo Broadcast) and Weak-Availability
 
-
 Provable Broadcast calls a Boolean external validity function $EV(v,proof)$ as a subroutine. For now, consider the case where $EV$ just checks that $proof$ is a valid signature on $v$ relative to the designated sender’s public key. 
-
 
 $PB$ is a super simple protocol: the Sender sends a value, parties check the *first* value they see is *valid*, and if it is, *sign* it back to the sender. The sender accumulates signatures  until a *delivery-certificate* is formed.
 
