@@ -6,7 +6,7 @@ tags:
 author: Ittai Abraham
 ---
 
-Agreement needs quadratic communication and linear time in the worst case. **Scalable Agreement** aims for *near linear communication* and *constant time* in expectation. In this post, we show Scalable consensus against a [weak adaptive adversary](https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/) that can cause **omission failures**. This will be the basis for the Byzantine case that we will explore in future posts.
+Agreement needs quadratic communication and linear time in the worst case. **Scalable Agreement** aims for *near linear communication* and *constant time* in expectation. In this post, we show Scalable agreement against a [weak adaptive adversary](https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/) that can cause **omission failures**. This will be the basis for the Byzantine case that we will explore in future posts.
 
 Previous posts focused on simple randomized protocols that solve consensus for [crash failures](https://decentralizedthoughts.github.io/2023-02-18-rand-and-consensus-1/) and for [omission failures](https://decentralizedthoughts.github.io/2023-02-19-rand-and-consensus-2/) in **constant expected time**. However, those protocols had **quadratic message complexity**. 
 
@@ -41,6 +41,7 @@ Each party will choose a random rank in $[1..n]$ and only parties with rank at m
 ### Using measure concentration
 
 Fix a round $j$. Each party independently chooses a fresh random rank in $[1..n]$. Define
+
 $$
 k=\log^6 n,\qquad \ell = k-\log^4 n,\qquad h = k+\log^4 n.
 $$
@@ -50,6 +51,7 @@ Let $C=C_j$ be the random set of parties whose rank is at most $k$ in round $j$ 
 **Lemma 1 (committee size concentration):**
 
 * *Fix $\delta_1=2e^{-\log^2 n/3}=n^{-O(\log n)}$. With probability at least $1-\delta_1$,*
+
 $$
 \|C\|\in[\ell,h].
 $$
@@ -58,15 +60,16 @@ From Lemma 1, with probability $1-\delta_1$ the committee size in round $j$ is i
 
 
 Define
+
 $$
 q=h-\ell/2.
 $$
 
 **Lemma 2 (many non-faulty in the committee):**
 
-* Condition on the event $\mathcal{G}_j$ that $\|C\|\in[\ell,h]$. Then, with probability at least $1-\delta_2$,
+* Condition on the event $\mathcal{G}_j$ that $ \| C \| \in[\ell,h]$. Then, with probability at least $1-\delta_2$,
 $$
-\|C\setminus F\|\ge q,$$  
+\| C\setminus F \| \ge q,$$  
 
 where $\delta_2=\exp(-\Omega(\log^4 n))$.
 
