@@ -67,7 +67,7 @@ $$
 
 **Lemma 2 (many non-faulty in the committee):**
 
-* Condition on the event $\mathcal{G}_j$ that $ \| C \| \in[\ell,h]$. Then, with probability at least $1-\delta_2$,
+* Condition on the event that $ \| C \| \in[\ell,h]$. Then, with probability at least $1-\delta_2$,
 
 $$
 | C\setminus F | \ge q,$$  
@@ -81,7 +81,7 @@ Since $q > \|C\|/2$ hold on the same high probability event:
 * Any set of at least $q$ round $j$ messages contains at least one message sent by a party in $C\setminus F$.
 * Any two sets of at least $q$ round $j$ messages intersect in at least one sender.
 
-These properties will be used repeatedly to obtain probabilistic quorum intersection guarantees.The proofs for both lemmas appear at the end of the post. For convenience, define $\delta=\delta_1+\delta_2$, and note that $\delta=n^{-O(\log n)}$.
+These properties will be used repeatedly to obtain probabilistic quorum intersection guarantees.The proofs for both lemmas appear at the end of the post. For convenience, define $\delta=\delta_1+\delta_2$, and note that $\delta=n^{-O(\log n)}$. From now on, we will condition on the good event that both lemmas hold for all rounds of the protocol. Since we will apply this a polynomially bounded number of times, the overall error remains $\delta=n^{-O(\log n)}$.
 
 
 ### Weak adaptive adversaries
@@ -140,9 +140,7 @@ Each party has an input 0 or 1, and the goal is to output a common value (agreem
 
 We use the same sampling rule in every round: in round $r$, parties with rank at most $k=\log^6 n$ send. Let $C_r$ be the set of parties that speak in round $r$.
 
-Fix any round $r$ and condition on the good event $\mathcal{G}_r$ that Lemma 1 holds for that round, namely $\|C_r\|\in[\ell,h]$. By Lemma 2, with probability at least $1-\delta$ we have $\|C_r\setminus F\|\ge q$. Messages from parties in $C_r\setminus F$ are delivered reliably to all non-faulty parties in round $r$, so every non-faulty party receives at least $q$ round $r$ messages. 
-
-Also under $\mathcal{G}_r$, we have $q > \|C_r\|/2$, so any two sets of at least $q$ round $r$ messages intersect in at least one sender from $C_r\setminus F$. We use this as our probabilistic quorum intersection guarantee.
+Fix any round $r$ from Lemma 1 and 2 there are at least $q$ non-faulty parties in $C_r$. So every non-faulty party receives at least $q$ round $r$ messages. 
 
 The protocol runs in *phases*. Each phase consists of 3 *rounds*. 
 
@@ -189,19 +187,19 @@ Protocol in words: in the first round, a random subset of parties send their val
 
 ### Proof for the Agreement protocol
 
-**Validity**: assume all parties start with input $b$. Condition on $\mathcal{G}_1$ and $\mathcal{G}_2$. In round $1$, every non-faulty party receives at least $q$ messages, and all values received are $b$, so every non-faulty party sets its value to $b$. In round $2$, again every non-faulty party receives at least $q$ messages, all equal to $b$, so every non-faulty party outputs $b$.
+**Validity**: assume all parties start with input $b$. In round $1$, every non-faulty party receives at least $q$ messages, and all values received are $b$, so every non-faulty party sets its value to $b$. In round $2$, again every non-faulty party receives at least $q$ messages, all equal to $b$, so every non-faulty party outputs $b$.
 
 
-**No split values after round $3j-2$**: fix a phase $j$ and condition on $\mathcal{G}_{3j-2}$. Suppose some non-faulty party ends round $3j-2$ with value $b\in\{0,1\}$ (not $\bot$). Then it received at least $q$ messages in round $3j-2$, all equal to $b$. Any other non-faulty party that reaches the end of round $3j-2$ also received at least $q$ messages in that round. Since $q>\|C_{3j-2}\|/2$, the two size-$q$ sender sets intersect in at least one sender from $C_{3j-2}\setminus F$, and that sender sent value $b$ to all parties. Therefore the second party received at least one message with value $b$ and cannot end round $3j-2$ with value $1-b$.
+**No split values after round $3j-2$**: fix a phase $j$. Suppose some non-faulty party ends round $3j-2$ with value $b\in\{0,1\}$ (not $\bot$). Then it received at least $q$ messages in round $3j-2$, all equal to $b$. Any other non-faulty party that reaches the end of round $3j-2$ also received at least $q$ messages in that round. Since $q>\|C_{3j-2}\|/2$, the two size-$q$ sender sets intersect in at least one sender from $C_{3j-2}\setminus F$, and that sender sent value $b$ to all parties. Therefore the second party received at least one message with value $b$ and cannot end round $3j-2$ with value $1-b$.
 
 We conclude that there exists a bit $b\in\{0,1\}$ such that every party that starts the coin round $3j$ has a value in $\{b,\bot\}$.
 
-**Agreement**: let $j^\star$ be the first phase in which some non-faulty party outputs a value at the end of round $3j^\star-1$, and let this value be $b$. Condition on $\mathcal{G}_{3j^\star-1}$. The deciding party received at least $q$ messages in round $3j^\star-1$, all equal to $b$. Any other non-faulty party that reaches the end of round $3j^\star-1$ also received at least $q$ messages in that round, and since $q>\|C_{3j^\star-1}\|/2$ their sender sets intersect in at least one sender from $C_{3j^\star-1}\setminus F$, so it received at least one message with value $b$. Hence any party that enters the next phase has value $b$. In the next phase, conditioned on $\mathcal{G}_{3(j^\star+1)-2}$ and $\mathcal{G}_{3(j^\star+1)-1}$, an argument similar to the validity above implies that all non-faulty parties output $b$ by the end of round $3(j^\star+1)-1$.
+**Agreement**: let $j^\star$ be the first phase in which some non-faulty party outputs a value at the end of round $3j^\star-1$, and let this value be $b$. The deciding party received at least $q$ messages in round $3j^\star-1$, all equal to $b$. Any other non-faulty party that reaches the end of round $3j^\star-1$ also received at least $q$ messages in that round, and since $q>\|C_{3j^\star-1}\|/2$ their sender sets intersect in at least one sender from $C_{3j^\star-1}\setminus F$, so it received at least one message with value $b$. Hence any party that enters the next phase has value $b$. So an argument similar to the validity above implies that all non-faulty parties output $b$ by the end of round $3(j^\star+1)-1$.
 
 
-**Expected Termination**: fix a phase $j$ and condition on the good events $\mathcal{G}_{3j-2}$ and $\mathcal{G}_{3j-1}$. If no party outputs a value by the end of round $3j-1$, then by the previous claim there exists a bit $b$ such that every non-faulty party starts the coin round $3j$ with value in $\{b,\bot\}$. In the coin round, the weak coin is $\alpha$-correct with $\alpha\ge 1/5$, so for this particular bit $b$ we have that with probability at least $1/5$ all non-faulty parties output coin value $b$. Parties with value $\bot$ adopt the coin bit, so at the end of round $3j$ all non-faulty parties have value $b$. In the next phase, conditioned on $\mathcal{G}_{3(j+1)-2}$ and $\mathcal{G}_{3(j+1)-1}$, an argument similar to the validity above implies that all non-faulty parties output $b$ by the end of round $3(j+1)-1$. Therefore, each phase leads to a decision with constant probability, so the expected number of phases, and hence rounds, to decide is constant.
+**Expected Termination**: fix a phase $j$. If no party outputs a value by the end of round $3j-1$, then by the previous claim there exists a bit $b$ such that every non-faulty party starts the coin round $3j$ with value in $\{b,\bot\}$. In the coin round, the weak coin is $\alpha$-correct with $\alpha\ge 1/5$, so for this particular bit $b$ we have that with probability at least $1/5$ all non-faulty parties output coin value $b$. Parties with value $\bot$ adopt the coin bit, so at the end of round $3j$ all non-faulty parties have value $b$. In the next phase, an argument similar to the validity above implies that all non-faulty parties output $b$ by the end of round $3(j+1)-1$. Therefore, each phase leads to a decision with constant probability, so the expected number of phases, and hence rounds, to decide is constant.
 
-**Message complexity**: in each round $r$, only the committee $C_r$ sends messages, and each sender broadcasts to all $n$ parties, so the number of messages in round $r$ is $n\cdot \|C_r\|$. Conditioned on $\mathcal{G}_r$, Lemma 1 gives $\|C_r\|\in[\ell,h]=\Theta(\log^6 n)$, hence the message complexity per round is $\Theta(n\log^6 n)$. In the agreement rounds, each message carries a constant size value, so the bit complexity per agreement round is $\Theta(n\log^6 n)$. In the coin round, each sender also includes a rank in $[1..n]$, which costs $\Theta(\log n)$ bits, so the bit complexity of the coin round is $\Theta(n\log^6 n\log n)$. Over a constant expected number of phases, the expected total communication is $O(n\log^\gamma n)$ for $\gamma=7$.
+**Message complexity**: in each round $r$, only the committee $C_r$ sends messages, and each sender broadcasts to all $n$ parties, so the number of messages in round $r$ is $n\cdot \|C_r\|$. Lemma 1 gives $\|C_r\|\in[\ell,h]=\Theta(\log^6 n)$, hence the message complexity per round is $\Theta(n\log^6 n)$. In the agreement rounds, each message carries a constant size value, so the bit complexity per agreement round is $\Theta(n\log^6 n)$. In the coin round, each sender also includes a rank in $[1..n]$, which costs $\Theta(\log n)$ bits, so the bit complexity of the coin round is $\Theta(n\log^6 n\log n)$. Over a constant expected number of phases, the expected total communication is $O(n\log^\gamma n)$ for $\gamma=7$.
 
 ### Proofs for measure concentration lemmas
 
