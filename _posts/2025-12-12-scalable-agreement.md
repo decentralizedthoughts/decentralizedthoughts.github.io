@@ -241,5 +241,11 @@ $\Pr[X\ge T] \le \exp(-\Omega(\mu\alpha^2)) = \exp(-\Omega(\log^4 n))$.
 
 Therefore, conditioned on $\|C\|\in[\ell,h]$, with probability at least $1-\delta_2$, we have $X\le m-q$, equivalently $\|C\setminus F\|\ge q$.
 
+### Notes
+
+* The protocol can be adapted to multi-valued agreement using a weak leader election instead of a weak common coin.
+* We will explore how to extend this protocol to Byzantine agreement in a future post.
+* Its a good exercise to verify that the protocol can obtain uniform agreement.
+* Its also a good exercise to add an explicit termination detection mechanism so that parties can know when to stop sending messages.
 
 Your thoughts on [Twitter]().
