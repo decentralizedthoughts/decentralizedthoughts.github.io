@@ -6,7 +6,7 @@ tags:
 author: Ittai Abraham
 ---
 
-Agreement needs quadratic communication and linear time in the worst case. **Scalable Agreement** aims for *near linear communication* and *constant time* in expectation. In this post, we show Scalable agreement against a [weak adaptive adversary](https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/) that can cause **omission failures**. This will be the basis for the Byzantine case that we will explore in future posts.
+Agreement needs quadratic communication and linear time in the worst case. **Scalable Agreement** aims for *near linear communication* and *constant time* in expectation. In this post, we show scalable agreement against a [weak adaptive adversary](https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/) that can cause **omission failures**. This will be the basis for the Byzantine case that we will explore in future posts.
 
 Previous posts focused on simple randomized protocols that solve consensus for [crash failures](https://decentralizedthoughts.github.io/2023-02-18-rand-and-consensus-1/) and for [omission failures](https://decentralizedthoughts.github.io/2023-02-19-rand-and-consensus-2/) in **constant expected time**. However, those protocols had **quadratic message complexity**. 
 
@@ -53,7 +53,7 @@ Let $C=C_j$ be the random set of parties whose rank is at most $k$ in round $j$ 
 * *Fix $\delta_1=2e^{-\log^2 n/3}=n^{-O(\log n)}$. With probability at least $1-\delta_1$,*
 
 $$
-\|C\|\in[\ell,h].
+|C| \in[\ell,h].
 $$
 
 From Lemma 1, with probability $1-\delta_1$ the committee size in round $j$ is in $[\ell,h]$. We next show that, conditioned on this event, the committee contains many parties that are not faulty before round $j$.
@@ -68,8 +68,9 @@ $$
 **Lemma 2 (many non-faulty in the committee):**
 
 * Condition on the event $\mathcal{G}_j$ that $ \| C \| \in[\ell,h]$. Then, with probability at least $1-\delta_2$,
+
 $$
-\| C\setminus F \| \ge q,$$  
+| C\setminus F | \ge q,$$  
 
 where $\delta_2=\exp(-\Omega(\log^4 n))$.
 
@@ -188,7 +189,7 @@ Protocol in words: in the first round, a random subset of parties send their val
 
 ### Proof for the Agreement protocol
 
-**Validity**: assume all parties start with input $b$. Condition on $\mathcal{G}_{1}$ and $\mathcal{G}_{2}$. In round $1$, every non-faulty party receives at least $q$ messages, and all values received are $b$, so every non-faulty party sets its value to $b$. In round $2$, again every non-faulty party receives at least $q$ messages, all equal to $b$, so every non-faulty party outputs $b$.
+**Validity**: assume all parties start with input $b$. Condition on $\mathcal{G}_1$ and $\mathcal{G}_2$. In round $1$, every non-faulty party receives at least $q$ messages, and all values received are $b$, so every non-faulty party sets its value to $b$. In round $2$, again every non-faulty party receives at least $q$ messages, all equal to $b$, so every non-faulty party outputs $b$.
 
 
 **No split values after round $3j-2$**: fix a phase $j$ and condition on $\mathcal{G}_{3j-2}$. Suppose some non-faulty party ends round $3j-2$ with value $b\in\{0,1\}$ (not $\bot$). Then it received at least $q$ messages in round $3j-2$, all equal to $b$. Any other non-faulty party that reaches the end of round $3j-2$ also received at least $q$ messages in that round. Since $q>\|C_{3j-2}\|/2$, the two size-$q$ sender sets intersect in at least one sender from $C_{3j-2}\setminus F$, and that sender sent value $b$ to all parties. Therefore the second party received at least one message with value $b$ and cannot end round $3j-2$ with value $1-b$.
