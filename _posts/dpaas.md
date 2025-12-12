@@ -6,7 +6,6 @@ tags:
 author: Chenyang Liu, Ittai Abraham, Matthew Lentz, Kartik Nayak
 ---
 
-
 :::success
 :bulb: In this blog post, we will explain the core ideas of DPaaS, a side-car protocol that removes centralized and unconditionally trusted relays in current Ethereum Proposer-Builder Separation (PBS). The full paper is on the [eprint](https://eprint.iacr.org/2025/2126).
 :::
