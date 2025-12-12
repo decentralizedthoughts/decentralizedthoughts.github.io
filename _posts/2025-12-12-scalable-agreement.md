@@ -74,14 +74,11 @@ $$
 
 where $\delta_2=\exp(-\Omega(\log^4 n))$.
 
-This means that in round $j$, any party can wait for $q$ round $j$ messages.
+This means that in any round $j$, any party can wait for $q$ round $j$ messages.
 
-Since $q > \|C\|/2$ hold on the same high probability event:
+Moreover, since $q > \|C\|/2$ then any two sets of at least $q$ round $j$ messages must intersect. The proofs for both lemmas appear at the end of the post. 
 
-* Any set of at least $q$ round $j$ messages contains at least one message sent by a party in $C\setminus F$.
-* Any two sets of at least $q$ round $j$ messages intersect in at least one sender.
-
-These properties will be used repeatedly to obtain probabilistic quorum intersection guarantees.The proofs for both lemmas appear at the end of the post. For convenience, define $\delta=\delta_1+\delta_2$, and note that $\delta=n^{-O(\log n)}$. From now on, we will condition on the good event that both lemmas hold for all rounds of the protocol. Since we will apply this a polynomially bounded number of times, the overall error remains $\delta=n^{-O(\log n)}$.
+Let $\delta=\delta_1+\delta_2$, and note that $\delta=n^{-O(\log n)}$. From now on, we will condition on the good event that both lemmas hold for all rounds of the protocol. Since we will apply this a polynomially bounded number of times, the overall error remains $\delta=n^{-O(\log n)}$.
 
 
 ### Weak adaptive adversaries
@@ -89,7 +86,6 @@ These properties will be used repeatedly to obtain probabilistic quorum intersec
 As in the [previous post](https://decentralizedthoughts.github.io/2023-02-18-rand-and-consensus-2/), we need to make sure that the randomness is *unpredictable* and that the adversary can only *adapt* to the randomness when it's too late for it to matter.
 
 Recall the weak adaptive adversary in the lock-step model: If the adversary decides to corrupt a party after seeing the content of its round $j$ message then it can only corrupt it after the party sends all its round $j$ messages to all parties.
-
 
 ### A Near Linear Weak Common Coin against a weak adaptive adversary
 
