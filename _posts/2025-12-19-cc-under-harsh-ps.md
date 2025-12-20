@@ -1,12 +1,10 @@
 ---
 title: Communication Complexity under Harsh Partial Synchrony
-date: 2025-12-20 00:00:00 -04:00
+date: 2025-12-19 23:00:00 -05:00
 tags:
 - models
 author: Ittai Abraham, Yuval Efron, Kartik Nayak, and Ling Ren
 ---
-
-
 
 In the last several posts we explored several [Simplex style](https://eprint.iacr.org/2023/463.pdf) protocols in partial synchrony: [3-round protocol](https://decentralizedthoughts.github.io/2025-06-18-simplex/), [2-round protocol](https://decentralizedthoughts.github.io/2025-07-18-two-round-Simplex/), [concurrent 2 and 3 round protocols](https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/), [benign version](https://decentralizedthoughts.github.io/2025-11-08-benign-simplex/).
 
