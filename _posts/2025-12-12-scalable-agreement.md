@@ -244,4 +244,4 @@ Therefore, conditioned on $\|C\|\in[\ell,h]$, with probability at least $1-\delt
 * Its a good exercise to verify that the protocol can obtain uniform agreement.
 * Its also a good exercise to add an explicit termination detection mechanism so that parties can know when to stop sending messages.
 
-Your thoughts on [Twitter]().
+Your thoughts on [X](https://x.com/ittaia/status/1999552330966995097?s=20).

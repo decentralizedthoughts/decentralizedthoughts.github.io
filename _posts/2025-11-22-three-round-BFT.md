@@ -89,4 +89,4 @@ In PBFT, in world $M$ the first leader would not reach $2/3$ of preprepares, so 
 
 Many thanks to our co-authors Ling Ren and Zhuolun Xiang. Thank you, Samuel Laferriere for inspiring us to write this post.  Thank you, Adan Irshead for the drawings.
 
-Please leave comments on [X](...)
+Please leave comments on [X](https://x.com/kartik1507/status/1992311047559262313?s=20)
