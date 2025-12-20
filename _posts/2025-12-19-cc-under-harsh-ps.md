@@ -56,6 +56,7 @@ Nevertheless, implementations of Simplex need to consider the possibility of har
 ### Epilogue
 
 
-Should we design protocols in Partial Synchrony or in Harsh Partial Synchrony? Perhaps like many other cases in distributed systems, there is a model that is a middle ground between the two that captures practical scenarios better.
+Should we design protocols in Partial Synchrony or in Harsh Partial Synchrony? Perhaps, as in many other cases in distributed systems, there is a model that sits between the two and better captures practical deployments. Regardless, it seems important to be explicit about which synchrony assumptions you use, since these assumptions have direct implications for communication complexity under recovery.
+
 
 Your thoughts/comments on [X]().
