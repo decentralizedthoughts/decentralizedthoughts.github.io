@@ -34,8 +34,8 @@ In **Simplex**, safety is maintained because an honest party will vote for a lea
 
 How does a party in Simplex ensure that it has access to these interim skip certificates? 
 
-* In partial synchrony, any message sent at time $t$ by an honest party arrives by time $\max\{t, GST\}+\Delta$. Thus, after GST, the party would receive all the skip certificates for all the previous views. 
-* In harsh partial synchrony though, this does not hold. There may exist an unbounded number of skip certificates sent before GST with unbounded delay (essentially dropped). Overcoming this requires resending an unbounded number of messages, resulting in the worst case in an *unbounded communication complexity* in a view.
+* In partial synchrony, any message sent at time $t$ by an honest party arrives by time $\max\{t, GST\}+\Delta$. Thus, after GST, the party would receive all the skip certificates for all the previous views. There may exist an unbounded number of skip certificates sent before GST, but they will all arrive by time $GST+\Delta$. Hence, the party can always collect these skip certificates without resending any messages. This results in a communication complexity of $O(n^2)$ words per view because these skip certificates can be amortized to messages sent in previous views.
+* In harsh partial synchrony though, this does not hold. There may exist an unbounded number of skip certificates sent before GST with unbounded delay (essentially dropped). Overcoming this requires resending an unbounded number of messages after $GST$, resulting in the worst case in an *unbounded communication complexity* in a view. Moreover, this resending of messages may also cause an additional delay in the view.
 
 In **Tendermint**, the communication complexity remains $O(n^2)$ words per view even in harsh partial synchrony. This is because safety in Tendermint depends on maintaining a single lock certificate, hence requires bounded space and communication. Due to similar reasons, other protocols in the same "family" such as Casper, HotStuff and Hydrangea also have bounded communication complexity in a view.
 
@@ -43,16 +43,19 @@ In **Tendermint**, the communication complexity remains $O(n^2)$ words per view 
 ### Communication Complexity in Partial Synchrony and Harsh Partial Synchrony in Practice
 
 Observe that unbounded communication complexity occurs when both of the following conditions hold:
+
 1. Some honest party does not receive messages for several consecutive views: this could easily happen if for example, a party crashes and is attempting to recover, or if the party loses network access;
 2. During these several consecutive views, none of the blocks was finalized: this is only possible if $>t$ parties crash/lose network access or if there is a catastrophic network failure. 
 
 
 If either of the above conditions are relaxed, or if the number of views is small, then the increase in communication complexity is probably insignificant in practice.
 
+Nevertheless, implementations of Simplex need to consider the possibility of harsh partial synchrony and at the very least implement a protocol for resending certificates.
 
 
 ### Epilogue
 
-Should we design protocols in Partial Synchrony or in Harsh Partial Synchrony? Perhaps like many other cases in distributed systems, there is a model that is a middle ground between the two that captures the practical scenarios better.
+
+Should we design protocols in Partial Synchrony or in Harsh Partial Synchrony? Perhaps like many other cases in distributed systems, there is a model that is a middle ground between the two that captures practical scenarios better.
 
 Your thoughts/comments on [X]().
