@@ -8,7 +8,7 @@ author: Ittai Abraham
 
 Agreement needs quadratic communication and linear time in the worst case. **Scalable Agreement** aims for *near linear communication* and *constant time* in expectation. In this post, we show scalable agreement against a [weak adaptive adversary](https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/) that can cause **omission failures**. This will be the basis for the Byzantine case that we will explore in future posts.
 
-Previous posts focused on simple randomized protocols that solve consensus for [crash failures](https://decentralizedthoughts.github.io/2023-02-18-rand-and-consensus-1/) and for [omission failures](https://decentralizedthoughts.github.io/2023-02-19-rand-and-consensus-2/) in **constant expected time**. However, those protocols had **quadratic message complexity**. 
+This post can be seen as followup to the posts that solve binary consensus for [crash failures](https://decentralizedthoughts.github.io/2023-02-18-rand-and-consensus-1/) and for [omission failures](https://decentralizedthoughts.github.io/2023-02-19-rand-and-consensus-2/) in **constant expected time**. Rhose protocols had **quadratic message complexity**. 
 
 
 ### What is the best we can hope for?
@@ -23,7 +23,7 @@ Three lower bounds and barriers stand in our way:
 3. We know that the [best resilience](https://decentralizedthoughts.github.io/2019-11-02-primary-backup-for-2-servers-and-omission-failures-is-impossible/) one can hope for is $f<n/2$. It is not known how to obtain this tight bound with $o(n^2)$ expected communication (see [Ramboud, Theorem 5](https://eprint.iacr.org/2023/1757)).
     *  So we assume some $\epsilon>0$ and obtain *near-optimal* resilience $f<n/(2+\epsilon)$. 
 
-Given this the best we can hope for is following theorem:
+Given this the best we can hope for:
 
 ***Theorem:*** *there exists a synchronous binary agreement protocol with $\delta$ error that is resilient to a weak adaptive adversary that can cause omission failures to $f<n/(2+\epsilon)$ parties. The expected number of rounds to terminate is constant and the expected communication complexity is $O(n \log^\gamma n)$.*
 
@@ -31,14 +31,14 @@ Specifically, we obtain **super-polynomially small error** $\delta= n^{-O(\log n
 
 This post aims for simplicity and does not optimize the parameter $\gamma$ or explore the full space of options for $\epsilon$ and $\delta$. 
 
-### Main Ideas
+### Main Idea: subsample committees that only speaks once
 
-Instead of having all parties speak in each round, we will have only a *poly-logarithmic* number of parties speak in each round. This reduces the communication from $O(n^2)$ to $O(n \log^{O(1)} n)$. We will then adopt the analysis of the [previous protocols with constant expected time](https://decentralizedthoughts.github.io/2023-02-19-rand-and-consensus-2/) to work with this subsampling.
+* Instead of having all parties speak in each round, only a *poly-logarithmic* number of parties will speak in each round: This reduces the communication from $O(n^2)$ to $O(n \log^{O(1)} n)$. In this post, the committee members will run a variant of [this constant expected time protocol](https://decentralizedthoughts.github.io/2023-02-19-rand-and-consensus-2/), but this idea can be generalized to many other protocols.
 
-Each party will choose a random rank in $[1..n]$ and only parties with rank at most $k=\log^6 n$ will send messages in that round. These elected parties will speak just once. So the weak adaptive adversary cannot predict who will speak in round $j$ before round $j$ starts, and corrupting them after seeing their messages is too late. This paradigm is called *You Only Speak Once* (YOSO) and was first introduced in the context of  [Blockchains by Algorand](https://people.csail.mit.edu/nickolai/papers/gilad-algorand-eprint.pdf) and [MPC by Gentry et al](https://eprint.iacr.org/2021/210).
+* In each round, each party will choose a random rank in $[1..n]$ and only parties with rank at most $k=\log^6 n$ will send messages in that round. These elected parties will speak just once. The weak adaptive adversary cannot predict who will speak in round $j$ before round $j$ starts, and corrupting them after seeing their messages is too late. This paradigm is called **You Only Speak Once** (YOSO) and was first introduced in the context of [Blockchains by Algorand](https://people.csail.mit.edu/nickolai/papers/gilad-algorand-eprint.pdf) and in the context of [MPC by Gentry et al](https://eprint.iacr.org/2021/210).
 
 
-### Using measure concentration
+### Using measure concentration to prove that committees are small and contains many non-faulty parties
 
 Fix a round $j$. Each party independently chooses a fresh random rank in $[1..n]$. Define
 
@@ -101,7 +101,7 @@ A *near linear weak common coin* for round $j$ has the following properties agai
 **$\delta$ error liveness**: all non-faulty parties output a coin value with probability $1-\delta$.
 
 
-The main idea is simple, every party chooses a random rank, and random bit. Only parties with rank at most $k$ send their rank and bit. Parties choose the bit from the *lowest* rank they hear:
+The main idea is simple, every party chooses a random rank and a random bit. Only parties with rank at most $k$ send their rank and bit. Parties output the bit from the *lowest* rank they hear:
 
 ```
 Each party randomly chooses:
@@ -177,7 +177,7 @@ Round 3j:
        value := bit
 ```
 
-Protocol in words: in the first round, a random subset of parties send their value and all parties either keep their value or switch to $\bot$ if they hear a conflict. In the second round, a random subset of parties send their value again. This time parties stay with $\bot$ only if they don't hear value, and they output a bit if all received values are identical and not $\bot$. Finally, in the third round, parties that end with $\bot$ use the weak coin protocol to obtain a new value.
+Protocol in words: in the first round, a random subset of parties sends their values and all parties either keep their value or switch to $\bot$ if they hear a conflict. In the second round, a random subset of parties sends their values again. This time parties stay with $\bot$ only if they don't hear value, and they output a bit if all received values are identical and not $\bot$. Finally, in the third round, parties that end with $\bot$ use the weak coin protocol to obtain a new value.
 
 
 
