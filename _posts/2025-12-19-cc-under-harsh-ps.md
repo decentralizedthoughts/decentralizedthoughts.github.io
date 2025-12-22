@@ -1,12 +1,13 @@
 ---
-title: Simplex vs Tendermint under variants of Partial Synchrony
+title: Partial Synchrony variants
 date: 2025-12-19 23:00:00 -05:00
 tags:
 - models
 author: Ittai Abraham, Yuval Efron, Kartik Nayak, and Ling Ren
 ---
 
-In this post we observe three variants of **Partial Synchrony (PS)**: 
+
+In this post we observe three variants of **Partial Synchrony (PS)** and how they affect (or not) popular BFT protocols like PBFT, Tendermint, and especially the recent [Simplex](https://decentralizedthoughts.github.io/2025-06-18-simplex/) protocol.
 
 1. Many modern systems use the following definition of [Partial Synchrony](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/):
 
@@ -24,27 +25,30 @@ In this post we observe three variants of **Partial Synchrony (PS)**:
     In contrast to (Bounded) Partial Synchrony, UPS allows messages sent before     $GST$ to have unbounded delay. UPS models systems where the network before GST is asynchronous.
 
 
-3. In fact there is an even more harsh definition where messages before $GST$ may be lost. We call that *Lossy Partial Synchrony*:
+3. In fact, the DLS88 paper hints at an even more challenging model where messages sent before $GST$ may be lost. We call it *Lossy Partial Synchrony*:
 
     > **Lossy Partial Synchrony (LPS)**:  A message sent at time $t\geq GST$ arrives at time at most $t+\Delta$. Other messages may have unbounded delay or may be dropped.
     
-    LPS models systems where the network and the local storage of parties before $GST$ are so unreliable that messages may be lost.
+    LPS models systems where the network before GST is so unreliable that messages may be lost.
     
     
 
 
 ## Communication Complexity in Partial Synchrony: Bounded, Unbounded, and Lossy
 
-In **Simplex**, safety is maintained because an honest party will vote for a leader’s proposal only if it has seen a skip certificate for every view higher than the leader’s certificate (this is described as Change \#2 in our [Simplex post](https://decentralizedthoughts.github.io/2025-06-18-simplex/)). If the party does not have these skip certificates, they cannot vote and liveness is lost.
+Many BFT protocols do not discuss these variants of partial synchrony in length, and that is often justified because they retain all their properties in any of the variants. 
+Take **Tendermint** for example. Its communication complexity remains $O(n^2)$ words per view even in lossy partial synchrony. This is because safety in Tendermint depends on maintaining a single lock certificate, and the locks are (re)-sent in the view change of each subsequent view. Due to similar reasons, other protocols in the same "family" such as PBFT, Casper, HotStuff and Hydrangea also have the same communication complexity per view under any of the partial synchrony variants considered in this post.
+
+In **Simplex**, however, the situation is more subtle. Safety in Simplex is maintained because an honest party votes for a leader’s proposal only if it has seen a skip certificate for every view higher than the leader’s certificate (this is described as Change \#2 in our [Simplex post](https://decentralizedthoughts.github.io/2025-06-18-simplex/)). If the party does not have these skip certificates, they cannot vote and liveness is lost.
 
 How does a party in Simplex ensure that it has access to these interim skip certificates? 
 
 1. In bounded partial synchrony, any message sent at time $t$ by an honest party arrives by time $\max\{t, GST\}+\Delta$. Thus, after GST, the party would receive all the skip certificates for all the previous views. There may exist an unbounded number of skip certificates sent before GST, but they will all arrive by time $GST+\Delta$. Hence, the party can always collect these skip certificates without resending any messages. This results in a communication complexity of $O(n^2)$ words per view because these skip certificates can be amortized to messages sent in previous views.
-2. In unbounded partial synchrony though, this does not hold. There may exist an unbounded number of skip certificates sent before GST with unbounded delay. So an honest leader after $GST$ may not obtain these skip certificates in a timely manner, hindering performance significantly, and rendering the protocol to be as slow as asynchronous protocols. The naive way of overcoming this requires resending an unbounded number of messages after $GST$, resulting, in the worst case, in an *unbounded communication complexity* in a view. Moreover, this resending of messages may also cause an additional delay in the view.
-3. In lossy partial synchrony, Simplex without resends is not even eventually live. As in UPS, the naive way to resend certificates after GST in LPS requires *unbounded communication complexity* in a view.
+2. In unbounded partial synchrony though, this does not hold. There may exist an unbounded number of skip certificates sent before GST with unbounded delay. So an honest leader after $GST$ may not obtain these skip certificates in a timely manner, hindering performance significantly. The naive way of overcoming this requires resending an unbounded number of messages after $GST$, resulting, in the worst case, in an **unbounded communication complexity** in a view. Moreover, this resending of messages may cause an additional delay in the view.
+3. In lossy partial synchrony, Simplex as presented (without resends) is not even eventually live. As in UPS, the naive way to resend certificates after GST in LPS requires **unbounded communication complexity** in a view.
 
 
-**Tendermint**, on the other hand, retains all of it's properties even in LSP. In particular, Tendermint's communication complexity remains $O(n^2)$ words per view even in lossy partial synchrony. This is because safety in Tendermint depends on maintaining a single lock certificate, hence liveness requires bounded space and communication. The locks are (re)-sent in the view change of each subsequent view. Due to similar reasons, other protocols in the same "family" such as Casper, HotStuff and Hydrangea also have bounded communication complexity in a view.
+
 
 
 ## Communication Complexity in Partial Synchrony in Practice
@@ -52,7 +56,7 @@ How does a party in Simplex ensure that it has access to these interim skip cert
 Observe that unbounded communication complexity occurs when *both* of the following conditions hold:
 
 1. Some honest party does not receive messages for several consecutive views: this could easily happen if for example, a party crashes and is attempting to recover, or if the party loses network access;
-2. During these several consecutive views, none of the blocks were finalized (so skip certificates where created): this is only possible if $>t$ parties crash/lose network access or if there is a catastrophic network failure. 
+2. During these several consecutive views, none of the blocks were finalized (so skip certificates were created): this is only possible if $>t$ parties crash/lose network access or if there is a catastrophic network failure. 
 
 
 If either of the above conditions is relaxed, or if the number of views is small, then the increase in communication complexity is probably insignificant in practice.
@@ -68,7 +72,7 @@ Nevertheless, implementations of Simplex need to consider the possibility of unb
 * In LPS protocols can never reach a termination configuration where all non-faulty parties are in a state where they do not need to listen to messages. 
 
 
-### Epilogue
+## Epilogue
 
 
 Should we design protocols in Partial Synchrony? Which model should be used: bounded, unbounded, or lossy? Regardless, it seems important to be explicit about which synchrony assumptions you use, since these assumptions have direct implications for communication complexity under recovery.
