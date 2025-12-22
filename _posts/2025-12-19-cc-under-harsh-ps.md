@@ -6,7 +6,6 @@ tags:
 author: Ittai Abraham, Yuval Efron, Kartik Nayak, and Ling Ren
 ---
 
-
 In this post we observe three variants of **Partial Synchrony (PS)**: 
 
 1. Many modern systems use the following definition of [Partial Synchrony](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/):
