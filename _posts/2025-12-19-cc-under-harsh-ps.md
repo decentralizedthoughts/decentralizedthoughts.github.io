@@ -6,7 +6,6 @@ tags:
 author: Ittai Abraham, Yuval Efron, Kartik Nayak, and Ling Ren
 ---
 
-
 In this post we observe three variants of **Partial Synchrony (PS)** and how they affect (or not) popular BFT protocols like PBFT, Tendermint, and especially the recent [Simplex](https://decentralizedthoughts.github.io/2025-06-18-simplex/) protocol.
 
 1. Many modern systems use the following definition of [Partial Synchrony](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/):
