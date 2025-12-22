@@ -1,13 +1,5 @@
 ---
-title: Simplex vs Tendermint under Flavors of Partial Synchrony
-date: 2025-12-19 23:00:00 -05:00
-tags:
-- models
-author: Ittai Abraham, Yuval Efron, Kartik Nayak, and Ling Ren
----
-
----
-title: Partial Synchrony variants
+title: Simplex vs Tendermint under variants of Partial Synchrony
 date: 2025-12-19 23:00:00 -05:00
 tags:
 - models
@@ -42,9 +34,7 @@ In this post we observe three variants of **Partial Synchrony (PS)**:
     
 
 
-
-
-### Communication Complexity in Partial Synchrony: Bounded, Unbounded, and Lossy
+## Communication Complexity in Partial Synchrony: Bounded, Unbounded, and Lossy
 
 In **Simplex**, safety is maintained because an honest party will vote for a leader’s proposal only if it has seen a skip certificate for every view higher than the leader’s certificate (this is described as Change \#2 in our [Simplex post](https://decentralizedthoughts.github.io/2025-06-18-simplex/)). If the party does not have these skip certificates, they cannot vote and liveness is lost.
 
@@ -58,7 +48,7 @@ How does a party in Simplex ensure that it has access to these interim skip cert
 **Tendermint**, on the other hand, retains all of it's properties even in LSP. In particular, Tendermint's communication complexity remains $O(n^2)$ words per view even in lossy partial synchrony. This is because safety in Tendermint depends on maintaining a single lock certificate, hence liveness requires bounded space and communication. The locks are (re)-sent in the view change of each subsequent view. Due to similar reasons, other protocols in the same "family" such as Casper, HotStuff and Hydrangea also have bounded communication complexity in a view.
 
 
-### Communication Complexity in Partial Synchrony in Practice
+## Communication Complexity in Partial Synchrony in Practice
 
 Observe that unbounded communication complexity occurs when *both* of the following conditions hold:
 
@@ -71,10 +61,11 @@ If either of the above conditions is relaxed, or if the number of views is small
 Nevertheless, implementations of Simplex need to consider the possibility of unbounded or lossy partial synchrony, and, at the very least, implement a protocol for resending certificates.
 
 
-### Notes
+## Notes
 
 * The [unknown $\Delta$ flavor](https://decentralizedthoughts.github.io/2019-09-13-flavours-of-partial-synchrony/) of Partial Synchrony is BPS. But it is unclear to us if the $GST$ based flavor as defined in DLS** is UPS or LPS.
 * LPS is not subsumed by asynchrony, where as both UPS and BPS are.
+* In fact in UPS, let $X$ be the maximum delay of any message, then UPS at time $GST+X$ becomes BPS.
 * In LPS protocols can never reach a termination configuration where all non-faulty parties are in a state where they do not need to listen to messages. 
 
 
