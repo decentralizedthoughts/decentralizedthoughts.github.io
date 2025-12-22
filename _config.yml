@@ -74,6 +74,7 @@ paginate: 20
 kramdown:
   input: GFM
 link-tags: true
+gtag: "G-XM1QBM4KRX"
 exclude:
 - CHANGELOG.md
 - CNAME
