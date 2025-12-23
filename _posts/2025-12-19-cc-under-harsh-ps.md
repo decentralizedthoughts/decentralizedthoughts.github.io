@@ -76,5 +76,6 @@ Nevertheless, implementations of Simplex need to consider the possibility of unb
 
 Should we design protocols in Partial Synchrony? Which model should be used: bounded, unbounded, or lossy? Regardless, it seems important to be explicit about which synchrony assumptions you use, since these assumptions have direct implications for communication complexity under recovery.
 
+**Acknowledgment.** This is work done while the authors were visiting a16z Crypto in Summer 2025.
 
-Your thoughts/comments on [X]().
+Your thoughts/comments on [X](https://x.com/kartik1507/status/2003239468518474103?s=20).
