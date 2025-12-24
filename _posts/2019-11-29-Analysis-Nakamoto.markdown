@@ -10,8 +10,16 @@ Bitcoin's underlying consensus protocol, now known as *Nakamoto consensus*, is a
 
 This post gives a walkthrough of a simple proof I wrote recently. Anyone with knowledge in basic probability should be able to follow the proof. You are encouraged to watch the [talk](https://www.youtube.com/watch?v=Nac8uXISc80) or read the [full proof](https://eprint.iacr.org/2019/943.pdf). 
 
+{: .box-note}
+See [the follow-up post](https://decentralizedthoughts.github.io/2023-10-30-Analysis-Nakamoto/) for some additional subtle proof challenges and the ways to solve them.
+
+
+
+
 #### Model and assumptions
+
 I assume you are familiar with how Nakamoto consensus works. Below is a concise description that contains all the important details this post needs. (If you need a more detailed explanations and descriptions, there are plenty of good resources online.)
+
 1. **Longest chain wins.** A node adopts the longest proof-of-work (PoW) chain to its knowledge (breaking ties arbitrarily) and attempts to mine a new block that extends this longest chain;
 2. **Disseminate blocks.** Upon adopting a new longest chain, either through mining or by receiving from others, a node broadcasts the newly acquired block(s);
 3. **$k$-confirmation commit.** A node commits a block if it is buried at least $k$ blocks deep in the longest chain adopted by that node. Here, $k$ is a security parameter (6 is common in practice) that controls the probability of incorrect commit. 
@@ -22,10 +30,12 @@ Before moving on to the actual proof, we give some background on Poisson process
 In our context, each event refers to the creation of a new block and this process is *memoryless* in the sense that the time till the next block does not depend on how much time has already elapsed since the previous block. Regarding the network model, we note that we assume synchrony but not [lock-step execution](https://decentralizedthoughts.github.io/2019-11-11-authenticated-synchronous-bft/). Some papers mistakenly refer to the non-lock-step synchrony assumption as "asynchrony" or "partial synchrony". Our [previous post](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/) explained the differences. It is not hard to show that Nakamoto consensus is insecure under asynchrony or partial synchrony. We will elaborate on this issue in a future post.
 
 Our goal in this post is to prove that Nakamoto consensus solves [state machine replication](https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/), i.e., it guarantees safety and liveness:
+
 1. **safety**: Honest nodes do not commit different blocks at the same height.
 2. **liveness**: Every transaction is eventually committed by all honest nodes.
 
 #### Intuition of the proof
+
 Here is a high-level plan to prove safety. (The liveness proof is easier and will come as a by-product along the way.) We call a block mined by an honest miner an *honest block* and a block mined by a malicious miner a *malicious block*. Ideally, we want to prove that honest blocks contribute to the safety of Nakamoto consensus while malicious blocks undermine it. If this were true, we would be able to prove Nakamoto consensus safe as long as $\alpha > \beta$ (i.e., the well-known honest majority assumption).
 
 Unfortunately, the above simple argument does not hold due to *network delays*. In order for all honest blocks to contribute to safety, they must extend one another and form a chain. But in reality, we know the chain can *fork* even if the malicious nodes do not do anything bad. In this case, not all honest blocks make it to the longest chain, and hence, not all of them contribute to safety. The **crux of the proof** is to show that there cannot be too many such honest blocks, i.e., *most* of the honest blocks *do* contribute to safety.
@@ -39,6 +49,7 @@ The illustration below shows tailgaters in red and non-tailgaters in green and p
 </p>
 
 #### Formal proof sketch
+
 Let us put all honest blocks on a time axis based on when they are mined. (The definitions/lemmas/theorems are numbered to match the [paper](https://eprint.iacr.org/2019/943.pdf)).
 
 **Definition 4(i).** *Suppose an honest block $B$ is mined at time $t$. If no other honest block is mined between time $t-\Delta$ and $t$, then $B$ is a non-tailgater (otherwise, $B$ is a tailgater).*
