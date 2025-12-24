@@ -16,7 +16,7 @@ See [the follow-up post](https://decentralizedthoughts.github.io/2023-10-30-Anal
 
 
 
-#### Model and assumptions
+## Model and assumptions
 
 I assume you are familiar with how Nakamoto consensus works. Below is a concise description that contains all the important details this post needs. (If you need a more detailed explanations and descriptions, there are plenty of good resources online.)
 
@@ -34,7 +34,7 @@ Our goal in this post is to prove that Nakamoto consensus solves [state machine 
 1. **safety**: Honest nodes do not commit different blocks at the same height.
 2. **liveness**: Every transaction is eventually committed by all honest nodes.
 
-#### Intuition of the proof
+## Intuition of the proof
 
 Here is a high-level plan to prove safety. (The liveness proof is easier and will come as a by-product along the way.) We call a block mined by an honest miner an *honest block* and a block mined by a malicious miner a *malicious block*. Ideally, we want to prove that honest blocks contribute to the safety of Nakamoto consensus while malicious blocks undermine it. If this were true, we would be able to prove Nakamoto consensus safe as long as $\alpha > \beta$ (i.e., the well-known honest majority assumption).
 
@@ -48,7 +48,7 @@ The illustration below shows tailgaters in red and non-tailgaters in green and p
 <img src="/uploads/tailgater.png" width="512" title="tailgater">
 </p>
 
-#### Formal proof sketch
+## Formal proof sketch
 
 Let us put all honest blocks on a time axis based on when they are mined. (The definitions/lemmas/theorems are numbered to match the [paper](https://eprint.iacr.org/2019/943.pdf)).
 
