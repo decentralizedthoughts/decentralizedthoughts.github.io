@@ -21,7 +21,7 @@ In this post we observe three variants of **Partial Synchrony (PS)** and how the
     > **Unbounded Partial Synchrony (UPS)**:  A message sent at time $t\geq GST$ arrives at time at most $t+\Delta$. Other messages may have unbounded delay.
 
 
-    In contrast to (Bounded) Partial Synchrony, UPS allows messages sent before     $GST$ to have unbounded delay. UPS models systems where the network before GST is asynchronous.
+    In contrast to (Bounded) Partial Synchrony, UPS allows messages sent before $GST$ to have unbounded delay. UPS models systems where the network before GST is asynchronous.
 
 
 3. In fact, the DLS88 paper hints at an even more challenging model where messages sent before $GST$ may be lost. We call it *Lossy Partial Synchrony*:
@@ -65,10 +65,10 @@ Nevertheless, implementations of Simplex need to consider the possibility of unb
 
 ## Notes
 
-* The [unknown $\Delta$ flavor](https://decentralizedthoughts.github.io/2019-09-13-flavours-of-partial-synchrony/) of Partial Synchrony is BPS. But it is unclear to us if the $GST$ based flavor as defined in DLS** is UPS or LPS.
-* LPS is not subsumed by asynchrony, where as both UPS and BPS are.
-* In fact in UPS, let $X$ be the maximum delay of any message, then UPS at time $GST+X$ becomes BPS.
-* In LPS protocols can never reach a termination configuration where all non-faulty parties are in a state where they do not need to listen to messages. 
+* The [unknown $\Delta$ flavor](https://decentralizedthoughts.github.io/2019-09-13-flavours-of-partial-synchrony/) of Partial Synchrony is BPS. But it is unclear to us if the $GST$ based flavor as defined in DLS88 is UPS or LPS.
+* LPS is not subsumed by asynchrony, whereas both UPS and BPS are.
+* In UPS, let $X$ be the maximum delay of any message, then UPS at time $GST+X$ becomes BPS.
+* In LPS, protocols can never reach a termination configuration where all non-faulty parties are in a state where they do not need to listen to messages. 
 
 
 ## Epilogue
