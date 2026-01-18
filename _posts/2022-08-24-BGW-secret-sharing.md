@@ -14,7 +14,7 @@ For simplicity, we abstract consensus and broadcast away, and assume parties hav
 
 ### Verifiable Secret Sharing properties
 
-A *secret sharing scheme* is composed of two protocols: *Share* and *Reconstruct*. These protocols are run by the $n$ parties. A designated *dealer* has a *secret* $s$ in a commonly known finite field $\mathbb{F}_p$ with $p>n$, which is given as *input* to the Share protocol. The adversary is malicious - and corrupted parties are not guaranteed to follow the protocol specification. A secret sharing protocol that tolerates such adversaries is called **verifiable secret sharing (VSS)**. 
+ A *secret sharing scheme* is composed of two protocols: *Share* and *Reconstruct*. These protocols are run by the $n$ parties. A designated *dealer* has a *secret* $s$ in a commonly known finite field $\mathbb{F}_p$ with $p>n$, which is given as *input* to the Share protocol. We assume $p>n$ to ensure unique polynomial interpolation and to avoid degeneracies. The adversary is malicious - and corrupted parties are not guaranteed to follow the protocol specification. A secret sharing protocol that tolerates such adversaries is called **verifiable secret sharing (VSS)**. 
 The three properties of VSS:
 
 1. **Validity**: If the dealer is honest, the Reconstruct protocol outputs the dealer's input value $s$.
@@ -57,7 +57,8 @@ The **Share protocol** has five rounds: share, exchange sub-shares, publicly com
 1. **Parties exchange sub-shares**: Each party $i$ sends each party $j$ the two values $\langle row_i(j)$, $col_i(j)\rangle$.
    
 2. **Parties publicly complain**: If a party $i$ receives a pair from party $j$ that is different from its share, it **broadcasts** a complaint with 4 values it thinks are the correct values $\langle i,j,row_i(j), col_i(j)\rangle$.
-3. **Dealer publicly resolves complaints**: if the dealer hears a complaint from party $i$ that does not agree with $p(x,y)$ then it **broadcasts** $\langle i, row_i(x), col_i(x)\rangle$ of the row and column of party $i$. Such a party $i$ is called *public*.
+3. **Dealer publicly resolves complaints**: if the dealer hears a complaint from party $i$ that does not agree with $p(x,y)$ then it **broadcasts** $\langle i, row_i(x), col_i(x)\rangle$ of the row and column of party $i$. Such a party $i$ is called *public*.  
+   A public party is one whose entire row and column are treated as public values and used during reconstruction.
 4. **Parties publicly accept**: if a non-public party $i$:
    (1) has row and column shares that agree with:
        (A) all the public parties values broadcast by the dealer and
@@ -98,7 +99,7 @@ So the view of the adversary reveals nothing about $s$. Note that whenever the h
 
 #### More proof detail  
   
-Fix a set $I \subset N$ such that $|I|=f$ are the parties controlled by the adversary. Let $V_I=\{p(i,j) \mid i,j \in I\} \cup \{ p(0,i), p(i,0) \mid I \in I\}$ and observe that $V_I$ completely defines the view of the adversary and that $|V_I|=f^2+2f$.
+Fix a set $I \subset N$ such that $|I|=f$ are the parties controlled by the adversary. Let $V_I=\{p(i,j) \mid i,j \in I\} \cup \{ p(0,i), p(i,0) \mid i \in I\}$ and observe that $V_I$ completely defines the view of the adversary and that $\|V_I\|=f^2+2f$.
   
 Observe that a bi-variate polynomial where each variable has degree at most $f$ has $(f+1)^2$ coefficients.
 
@@ -121,6 +122,8 @@ Since $\phi$ is one-to-one, then for any secret $s$, the  uniform distribution o
 If all honest parties have the zero polynomial as output then the bound value is 0. Otherwise, there are at least $f+1$ non-public honest parties that broadcast $\langle 1\rangle$.
 
 In this case consider the set $G$, consisting of the first $f+1$ honest parties that broadcast $\langle 1\rangle$.
+
+The key invariant is that any two honest non-public parties must agree on all cross points, which forces consistency with a single degree-$f$ polynomial.
 
 We will show that the rows and columns of the parties in $G$ define a unique bi-variate polynomial $g(x,y)$ of degree at most $f$ such that $g(0,0)$ is the bound value.
 
