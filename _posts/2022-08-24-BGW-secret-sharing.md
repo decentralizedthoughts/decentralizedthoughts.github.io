@@ -99,7 +99,7 @@ So the view of the adversary reveals nothing about $s$. Note that whenever the h
 
 #### More proof detail  
   
-Fix a set $I \subset N$ such that $\|I\|=f$ are the parties controlled by the adversary. Let $V_I=\{p(i,j) \mid i,j \in I\} \cup \{ p(0,i), p(i,0) \mid i \in I\}$ and observe that $V_I$ completely defines the view of the adversary and that $\|V_I\|=f^2+2f$.
+Fix a set $I \subset N$ such that $\|I\|=f$ are the parties controlled by the adversary. Let $V_I= \{ p(i,j) \mid i,j \in I \} \cup \{ p(0,i), p(i,0) \mid i \in I \}$ and observe that $V_I$ completely defines the view of the adversary and that $\|V_I\|=f^2+2f$.
   
 Observe that a bi-variate polynomial where each variable has degree at most $f$ has $(f+1)^2$ coefficients.
 

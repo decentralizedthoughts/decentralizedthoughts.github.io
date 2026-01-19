@@ -10,7 +10,7 @@ author: Ittai Abraham, Yuval Efron, and Ling Ren
 
 Mainstream partially synchronous BFT protocols tolerate $f<n/3$ Byzantine faults and have [3-round commit latency](https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/) under an honest leader. This latency can be reduced to 2 rounds, if we decrease the fault tolerance from <33% to <20%. 
 
-Recently, there has been renewed interest in 2-round partially synchronous BFT. In this post, we present a natural 2-round BFT protocol in the Simplex style. A very similar protocol is independently proposed by Commonware and called [Minimmit](https://commonware.xyz/blogs/minimmit.html), also see [Chou, Lewis-Pye, O'Grady 2025](https://arxiv.org/pdf/2508.10862).
+Recently, there has been renewed interest in 2-round partially synchronous BFT. In this post, we present a natural 2-round BFT protocol in the Simplex style. A very similar protocol is independently proposed by Commonware and called [Minimmit](https://commonware.xyz/blogs/minimmit.html), also see [Chou, Lewis-Pye, O'Grady 2025](https://arxiv.org/pdf/2508.10862). Also see ZKSync's [ChonkyBFT](https://arxiv.org/abs/2503.15380?utm_source=chatgpt.com) and Tempo's [research post](https://dankradfeist.de/tempo/2025/12/31/minimmit-simple-fast-consensus.html) on Minimint.
 
 ## Two-round commit intuition
 
