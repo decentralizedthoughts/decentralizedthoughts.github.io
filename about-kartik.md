@@ -5,7 +5,7 @@ layout: page
 
 <img align="left" width="200" height="200" src="../profile-kartik.jpg" hspace="20"> 
 
-Kartik is an assistant professor in the 
+Kartik is an associate professor in the 
 department of computer science at Duke University. 
 
 He works in the area of security, applied cryptography, distributed computing, and blockchains. 
