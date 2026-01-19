@@ -2,6 +2,7 @@
 title: On Optimistic 2-round Fast Path under Partial Synchrony (!?!)
 date: 2026-01-19 01:00:00 -05:00
 author: Ittai Abraham, Kartik Nayak, and Alejandro Ranchal-pedrosa
+published: false
 ---
 
 Consensus protocols for $n=3f+1$ can tolerate $f$ Byzantine faults under partial synchrony. However, they also require a latency of [3 rounds in the good-case](https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/) when the leader is non-faulty and the system is synchronous. *Can we get a protocol with better latency, or tolerate more faults, if we assume $n=3f+2p+1$?*
