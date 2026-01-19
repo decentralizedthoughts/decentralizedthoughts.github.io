@@ -1,6 +1,6 @@
 ---
 title: On Optimistic 2-round Fast Path under Partial Synchrony (!?!)
-date: 2026-01-19 23:00:00 -05:00
+date: 2026-01-19 01:00:00 -05:00
 author: Ittai Abraham, Kartik Nayak, and Alejandro Ranchal-pedrosa
 ---
 
