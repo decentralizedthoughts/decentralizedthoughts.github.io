@@ -40,7 +40,7 @@ We first summarize the quorum sizes of interest:
 
 Fix a delay bound $\Gamma$.
 
-**Assumption.** For every honest party, at all times, there are at most $f$ honest parties whose messages to it may be delayed by more than $\Gamma$.
+**Assumption.** For every honest party, at all times, there are at most $f$ honest parties whose messages to it may be delayed by more than $\Gamma$. We note that this is a specific instantiation of the more general [granular synchrony model](https://arxiv.org/pdf/2408.12853).
 
 This assumption is used for safety, because parties use the absence of a weak certificate after waiting $\Gamma$ to infer that no commit certificate can exist.
 
@@ -63,3 +63,5 @@ Then, at least $n-p - f$ of these votes were sent by honest parties.
 Thus, during view change, by the granular synchrony assumption, an honest leader of view $v+1$ will receive messages from all $f$ parties within $\Delta$ time. Thus, it will receive $\geq (n-p-f)-f = f+p+1$ of the honest votes, which is the threshold for the weak certificate. Observe that, while an equivocating value $B'$ could also have support, $f+p+1$ is a majority among $n-p-f = 2f+p+1$ view change messages.
 
 Contrapositively, if after waiting $\Delta$ the leader does not see any weak certificate of size $f + p + 1$, then no value could receive $n - p$ votes.
+
+**Acknowledgment.** We would like to thank Yuval Efron, Ling Ren, Quentin Kniep, Kobi Sliwinski, and Roger Wattenhofer for discussions and insights on this topic.
