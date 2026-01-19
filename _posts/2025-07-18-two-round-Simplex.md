@@ -34,7 +34,7 @@ The main idea of Simplex is to generate for each view either a lock certificate 
 
 In our context, a party votes for a special timeout value $\bot$ in a view if it does not receive a leader's proposal in time. After that, the party will not vote for any leader proposal in this view. Then, $n-3f$ votes for $\bot$ serve as a no-commit certificate for the view, because at this point, at most $3f$ honest and $f$ Byzantine can vote for the leader, and a commit requires $n-f \geq 4f+1$ votes. 
 
-We consider single-shot consensus for simplicity. The protocol proceeds in increasing views. Let Cert(k, x) denote a collection of $n-f$ votes from view k for value x. For convenience, we think of an empty string as Cert(0, x) for any x. All messages are signed and sent to all. 
+We consider single-shot consensus for simplicity. The protocol proceeds in increasing views. Let `Cert(k, x)` denote a collection of $n-3f$ votes from view $k$ for value $x$. A party commits $x$ in view $k$ only upon receiving $n-f$ votes for $x$. For convenience, we think of an empty string as `Cert(0, x)` for any $x$. All messages are signed and sent to all. 
 
 
 ```
@@ -45,10 +45,10 @@ We consider single-shot consensus for simplicity. The protocol proceeds in incre
 2. Upon received (Propose, k, x, Cert(k’, x)) 
         and Cert(l, bot) for all k' < l < k 
         and has not sent Vote 
-    Send (Vote, k, x)  // Denote n-3f (Vote, k, x) as Cert(k, x)  
+    Send (Vote, k, x)  // Cert(k, x) consists of n-3f votes in view k
 
 3. Upon T_k = 2Δ and has not sent Vote
-    Send (Vote, k, bot)  // Denote n-3f (Vote, k, bot) as Cert(k, bot) 
+    Send (Vote, k, bot)  // n-3f votes for bot form a no-commit certificate Cert(k, bot)
 
 4. Upon receiving n-f (Vote, k, x) // Monitored even after exiting view k
     Decide x 
@@ -78,26 +78,25 @@ We remark that the $n-f$ (Vote, k, \*) messages that contain no commit certifica
 
 **Lemma 1**: If an honest party commits $x$ in view $k$, then Cert(k, $\bot$) or Cert(k, x') for $x' \neq  x$ cannot form. 
 
-*Proof sketch*: A commit requires $n-f$ votes for $x$, so no other value can get $n-3f$ votes by quorum intersection. 
+Proof sketch: A commit requires n-f votes for x, at least n-2f of which are from honest parties that vote only once per view. The remaining parties are fewer than n-3f, so it is impossible for any other value (including bot) to collect enough votes to form a certificate in view k.
 
 **Lemma 2**: If an honest party commits $x$ in view $k$, no honest party votes for $x' \neq x$ ($x' \neq \bot$) in any view higher than $k$.
 
-*Proof sketch*: Since all honest parties leave view $k$ with Cert(k, x), then inductively it follows that in any higher view $k'>k$, any honest party only votes for $x$ or $\bot$, and only gets Cert(k', $\bot$) or Cert(k', x). 
+*Proof sketch*: Since an honest commit of $x$ in view $k$ implies that every honest party eventually receives `Cert(k, x)`, it then inductively follows that in any higher view $k'>k$, any honest party only votes for $x$ or $\bot$, and only gets `Cert(k', ⊥)` or `Cert(k', x)`.
 
 Safety is straightforward from Lemma 2. Liveness follows from the lemmas below. 
 
-**Lemma 3**: If no honest party commits in views $k$ or lower, then every honest party eventually receives either Cert(k, x) for some $x \neq \bot$ or Cert(k, $\bot$). 
+**Lemma 3**: If no honest party commits in views $k$ or lower, then every honest party eventually receives either `Cert(k, x)` for some $x \neq \bot$ or `Cert(k, ⊥)`. 
 
-*Proof sketch*: If any honest party gets Cert(k, x), it forwards the certificate. Otherwise, all honest parties eventually vote for $\bot$ by the fifth Upon rule, so eventually all honest parties receive a Cert(k, $\bot$). 
+*Proof sketch*: If any honest party gets `Cert(k, x)`, it forwards the certificate. Otherwise, all honest parties eventually vote for $\bot$ by the fifth Upon rule, so eventually all honest parties receive a `Cert(k, ⊥)`. 
 
 **Lemma 4**: If view $k$ starts after GST, and the leader of view $k$ is honest, then all honest parties commit in view $\leq k$.
 
-*Proof sketch*: If an honest party commits in view $<k$, it forwards the commit certificate, so all honest parties commit in view $<k$. If no honest party commits in view $<k$, then given synchrony after GST, all honest parties enter view $k$, vote for the honest leader (either by receiving the leader's proposal or by seeing a certificate), and hence commit in that view.
+*Proof sketch*: If an honest party commits in view $<k$, it forwards the $n-f$ votes that form a commit certificate, so all honest parties commit in view $<k$. If no honest party commits in view $<k$, then given synchrony after GST, all honest parties enter view $k$, vote for the honest leader (either by receiving the leader's proposal or by seeing a certificate), and hence commit in that view.
 
 ### Acknowledgments
 
-We thank Brendan Kobayashi Chou, Andrew Lewis-Pye, Patrick O'Grady for fixing a liveness error in a previous version. 
-The work is done while Yuval Efron is affiliated with and the other authors are visiting a16z Crypto Research. The authors thank Kartik Nayak and Max Resnick for valuable feedback.
+We thank Brendan Kobayashi Chou, Andrew Lewis-Pye, Patrick O'Grady for fixing a liveness error in a previous version and thank Kartik Nayak, Max Resnick, and Dan Boneh for valuable feedback. The work is done while Yuval Efron is affiliated with and the other authors are visiting a16z Crypto Research. 
 
 
 
