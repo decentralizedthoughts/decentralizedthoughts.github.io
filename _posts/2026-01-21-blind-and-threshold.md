@@ -4,7 +4,6 @@ date: 2026-01-21 01:00:00 -05:00
 author: Ittai Abraham, Gilad Stern, and Alin Tomescu
 ---
 
-
 A blind signature scheme allows a user to obtain a valid signature on a message while ensuring that the signer learns nothing about the message. The user blinds the message, the signer signs the blinded value, and the user unblinds the response to obtain a valid signature on the original message. Importantly, the signer still retains full control over whether to participate in the protocol, it only gives up visibility into the message being signed.
 
 At first glance, this functionality can seem counterintuitive or even dangerous: why would a signer want to sign a message whose contents it does not know? The key point is that blind signatures are not meant for arbitrary signing, but for settings where the signer wishes to certify *properties of an interaction* rather than the specific message being signed. Typical examples include digital cash, anonymous credentials, and voting systems, where the signer enforces rules such as rate limits, eligibility, or payment, but should not be able to link signatures to specific messages or users. In these settings, blindness is a feature, not a bug.
