@@ -8,7 +8,7 @@ A blind signature scheme allows a user to obtain a valid signature on a message 
 
 At first glance, this functionality can seem counterintuitive or even dangerous: why would a signer want to sign a message whose contents it does not know? The key point is that blind signatures are not meant for arbitrary signing, but for settings where the signer wishes to certify *properties of an interaction* rather than the specific message being signed. Typical examples include digital cash, anonymous credentials, and voting systems, where the signer enforces rules such as rate limits, eligibility, or payment, but should not be able to link signatures to specific messages or users. In these settings, blindness is a feature, not a bug.
 
-For an example of a real-world application of blind signatures, see our post on [simple payment systems with unlinkability](...), where blind signatures are used to mint unlinkable payment tokens.
+For an example of a real-world application of blind signatures, see our post on [simple payment systems with unlinkability](https://decentralizedthoughts.github.io/2026-01-21-simple-payment/), where blind signatures are used to mint unlinkable payment tokens.
 
 This post first defines blind signatures and a concrete [BLS](https://www.iacr.org/archive/asiacrypt2001/22480516.pdf) instantiation, then briefly reviews [threshold BLS signatures](https://www.iacr.org/archive/pkc2003/25670031/25670031.pdf), and finally shows how the two compose with minimal additional machinery.
 
