@@ -4,7 +4,6 @@ date: 2026-01-21 02:00:00 -05:00
 author: Ittai Abraham, Gilad Stern, and Alin Tomescu
 ---
 
-
 In this post, we discuss payment systems. There is a set of *users* who wish to pay each other.
 
 1. We start with perhaps the simplest form, which is based just on [digital signatures](https://alinush.github.io/signatures) and a single *bank*. 
