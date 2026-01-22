@@ -159,3 +159,7 @@ The blind signature approach can be adapted to the decentralized bank setting by
 ### Privacy Properties that depend on non-collusion
 
 Even when the secret key is decentralized, one may worry that $2f+1$ servers may collude and secretly mint more coins. In future posts we will see how to prevent that from happening (using SNARKs).
+
+### Notes
+
+1. A similar system is used by [Apple Private Cloud Compute](https://security.apple.com/blog/private-cloud-compute/) to implement single use credentials, that allows users to authorize valid requests without linking them to their user identifier. The Apple system uses [RSA blind signatures](https://www.rfc-editor.org/rfc/rfc9474.html) instead of BLS.
