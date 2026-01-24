@@ -7,7 +7,7 @@ author: Ittai Abraham, Kartik Nayak, and Alejandro Ranchal-pedrosa
 
 Consensus protocols for $n=3f+1$ can tolerate $f$ Byzantine faults under partial synchrony. However, they also require a latency of [3 rounds in the good-case](https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/) when the leader is non-faulty, and the system is synchronous. *Can we get a protocol with better latency, or tolerate more faults, if we assume $n=3f+2p+1$?*
 
-1. **Better latency:** If the actual number of Byzantine faults in an execution are fewer, then the protocol can commit faster. Starting with [Fab](https://www.cs.cornell.edu/lorenzo/papers/fab.pdf) (and see technical reports [here](https://lpdwww.epfl.ch/upload/documents/publications/567931850DGV-feb-05.pdf) and [here](https://lamport.azurewebsites.net/pubs/lower-bound.pdf)), later [SBFT](https://arxiv.org/pdf/1804.01626.pdf), and recently [KudzuBFT](https://arxiv.org/pdf/2505.08771.pdf), there is a line of protocols for $n = 3f + 2p + 1$ that can have a two round fast path when there are at most $p$ Byzantine faults, and a regular three round path when there are up to $f$ Byzantine faults, for $p\le f$. See [our post on this topic]().
+1. **Better latency:** If the actual number of Byzantine faults in an execution are fewer, then the protocol can commit faster. Starting with [Fab](https://www.cs.cornell.edu/lorenzo/papers/fab.pdf) and [Zyzzyva](https://dl.acm.org/doi/10.1145/1658357.1658358) (also see technical reports [here](https://lpdwww.epfl.ch/upload/documents/publications/567931850DGV-feb-05.pdf) and [here](https://lamport.azurewebsites.net/pubs/lower-bound.pdf)), later [SBFT](https://arxiv.org/pdf/1804.01626.pdf), and recently [KudzuBFT](https://arxiv.org/pdf/2505.08771.pdf), there is a line of protocols for $n = 3f + 2p + 1$ that can have a two round fast path when there are at most $p$ Byzantine faults, and a regular three round path when there are up to $f$ Byzantine faults, for $p\le f$. See [our post on this topic](https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/).
 
 2. **Tolerating more faults:** There are folklore constructions with $n = 3f+2c+1$ that can tolerate up to $f$ Byzantine faults *and* $c$ crash faults, which obtain a latency of 3 rounds in the good case.
 
@@ -78,44 +78,47 @@ Our [2,3 protocol](https://decentralizedthoughts.github.io/2025-07-29-2-round-3-
 
 ```
 
-We modify it by adding a $\Gamma$ wait and changing the threshold from $n-f$ to $n-f-p$:
+We modify it by adding a $\Lambda = 2\Gamma + 2\Delta$ wait and changing the threshold from $n-f$ to $n-f-p$:
 
 ```
 7.   Upon receiving n-f-p (Vote, k, *) but no Fast-Cert(k, x) for any x 
 
      Start timer T2_k
    
-7'.  Upon T2_k = Gamma  // will only happen if we stay in view
+7'.  Upon T2_k = Λ  // will only happen if we stay in view
 
      Send (Vote, k, ⊥)  
 
 ```
 
-Intuitively, reducing the wait threshold from $n-f$ to $n-f-p$ is safe because any fast commit must involve at least $n-p-f = 2f+p+1$ honest votes. Under the granular synchrony assumption, after waiting $\Gamma$ time, every honest party receives all but at most $f$ of these honest votes, and thus observes at least $f+p+1$ votes for the committed value. The purpose of this wait is to ensure that any value that was fast committed will be learned by all honest parties before they leave the view.
+Intuitively, reducing the wait threshold from $n-f$ to $n-f-p$ is safe because any fast commit must involve at least $n-p-f = 2f+p+1$ honest votes. Under the granular synchrony assumption, after waiting $\Lambda$ time, every honest party receives all but at most $f$ of these honest votes, and thus observes at least $f+p+1$ votes for the committed value. The purpose of this wait is to ensure that any value that was fast committed will be learned by all honest parties before they leave the view.
 
-If the leader does not equivocate and the system is post-GST, then honest parties receive the same proposal within $\Delta$ and their votes cannot fragment across multiple values. Consequently, at least half of the honest parties vote either for the leader’s value $x$ or for $\bot$, and in either case, a fast certificate forms before any honest party can reach the $\Gamma$ timeout.
+If the leader does not equivocate and the system is post-GST, then honest parties receive the same proposal within $\Delta$ and their votes cannot fragment across multiple values. Consequently, at least half of the honest parties vote either for the leader’s value $x$ or for $\bot$, and in either case, a fast certificate forms before any honest party can reach the $\Lambda$ timeout.
 
 ## Proof sketch
 
-### Liveness: responsive for a non-equivocating leader
+### Liveness: no additional wait for a non-equivocating leader
 
-After GST with a non-equivocating leader, honest parties receive identical information and therefore at least half of them vote consistently, so a fast certificate of size $f+p+1$ forms without any $\Gamma$ wait.
+After GST with a non-equivocating leader, honest parties receive identical information and therefore at least half of them vote consistently, so a fast certificate of size $f+p+1$ forms without any $\Lambda$ wait.
 
 
-### Liveness: $\Gamma$ wait for an equivocating leader
+### Liveness: additional wait for an equivocating leader
 
-After GST, if no fast cert is formed by the time all honest end their $\Gamma$ wait, then all honest will send a vote for $\bot$ after $\Gamma$ and hence a fast cert will form. These views are at most $\Gamma + 3\Delta+\delta$ and the leader will be detected.
+After GST, if no fast cert is formed by the time all honest end their $\Lambda$ wait, then all honest will send a vote for $\bot$ after $\Lambda$ and hence a fast cert will form. These views are at most $\Lambda + 3\Delta+\delta = 2\Gamma + 5\Delta+\delta$ and the leader will be detected.
 
 
 ### Safety: Fast commit for $x$ implies at most $f+p$ votes for any other value and a fast cert for $x$ after at most $\Gamma$.
 
 The safety goal is to show that if any value is fast committed in a view, then every honest party leaves that view with a fast certificate for the same value.
 
-Assume a fast commit of  $n - p = 3f + p + 1$ votes. So at least $(3f + p + 1) - f = 2f + p + 1$ of these votes were sent by honest parties.
 
-By the granular synchrony assumption, after waiting at most $\Gamma$ an honest party will miss at most $f$ of these honest votes. Therefore it will receive at least $(2f + p + 1) - f = f + p + 1$ votes for $x$ and hence see a fast certificate.
 
-Moreover, no other equivocating value $x'$ can receive more than $f+p$ votes. 
+Now assume an honest party receives $n - f - p = 2f + p + 1$ votes at time $t$, since that contains at least $f+1$ honest votes we know from the granular sycnhrony assumption that all honest parties must have started their view by time $t+\Gamma$.
+
+Those honest parties will only vote for a value in the first $2\Delta$ time after starting the view, so by time $t + \Gamma + 2\Delta + \Gamma = \Lambda$ all honest votes that are at most $\Gamma$ delayed must have been seen.
+
+Therefore, if a fast commit of $n - p = 3f + p + 1$ votes was formed then least $(3f + p + 1) - f = 2f + p + 1$ of these votes were sent by honest parties and from the above reasoning, after the $\Lambda$ wait, each honest party will have seen at least $(2f + p + 1) - f = f + p + 1$ votes for $x$ and hence a fast certificate for $x$.
+
 
 ## Summary
 
