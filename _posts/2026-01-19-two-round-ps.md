@@ -130,7 +130,7 @@ There are currently three ways to get a 2-round good case with $p$ Byzantine and
 
 ## Notes
 
-We note that a similar change under the same granular synchrony assumption allows Hydrangea to operate under $n = 3f+2p+1$. Specifically, if there is a fast commit for $x$ with $n-p$ votes in a view, a subsequent leader will obtain a fast certificate for $x$ since, $n-p-f$ of these votes are honest, and by the granular synchrony assumption, the leader receives $\geq n-p-2f = f+p+1$ of these votes. We believe a similar change can be applied to Alpenglow as well.
+We note that a similar change under the same granular synchrony assumption allows Hydrangea to operate under $n = 3f+2p+1$. Specifically, if there is a fast commit for $x$ with $n-p$ votes in a view, a subsequent leader will obtain a fast certificate for $x$ since, $n-p-f$ of these votes are honest, and by the granular synchrony assumption, the leader receives $\geq n-p-2f = f+p+1$ of these votes. A similar change applies to Alpenglow as well.
 
 ## Acknowledgments
 
