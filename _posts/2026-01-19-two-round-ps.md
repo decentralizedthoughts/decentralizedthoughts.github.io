@@ -1,7 +1,6 @@
 ---
 title: Concurrent 2-round and 3-round BFT protocols under granular synchrony
 date: 2026-01-19 01:00:00 -05:00
-published: false
 author: Ittai Abraham, Kartik Nayak, and Alejandro Ranchal-pedrosa
 ---
 
