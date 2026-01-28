@@ -13,7 +13,7 @@ Consensus protocols for $n=3f+1$ can tolerate $f$ Byzantine faults under partial
 Thus, a natural question is whether we can obtain the best of both worlds:
 
 1.  Good case 2 rounds when there are $\le p$ Byzantine faults, and simultaneously;
-2.  Good case 3 round when there are $f$ Byzantine **and** $p$ crash faults.
+2.  Good case 3 rounds when there are $f$ Byzantine **and** $p$ crash faults.
 
 There are three ways to address this question:
 
@@ -25,13 +25,21 @@ There are three ways to address this question:
 
 3. In this post, we explore potentially weaker synchrony assumptions that still enable the same quorum arithmetic. We show that it is possible to get $n = 3f + 2p + 1$ in a model that is in between partial synchrony and synchrony:
 
-    Fix delay bounds $\Delta \le \Gamma$. Message sent at time $t$ arrive at time $\max\{GST,t\}+\Delta$.
+    Fix delay bounds $\Delta \le \Gamma$. After GST, any message sent at time $t$ arrives by time $t+\Delta$. Before GST, we assume the granular synchrony condition below:
 
     **Granular synchrony before GST:** Before GST, for every honest party, at all times, there are at most $f$ honest parties whose messages to it may be delayed by more than $\Gamma$. We note that this is a specific instantiation of the more general [granular synchrony model](https://arxiv.org/pdf/2408.12853).
 
-    This assumption is strictly stronger than partial synchrony and strictly weaker than full synchrony or a non-equivocating leader assumption. Importantly, it is used only for safety reasoning, specifically to infer the non-existence of a fast commit from the absence of a fast certificate after waiting $\Gamma$.
+    This assumption is strictly stronger than partial synchrony and strictly weaker than full synchrony or a non-equivocating leader assumption. Importantly, it is used primarily for safety reasoning, specifically to infer the non-existence of a fast commit from the absence of a fast certificate after waiting $\Gamma$.
 
     In this post, we will show how to use this assumption to modify the [Concurrent 2-round and 3-round Simplex-style BFT](https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/) by essentially changing *one line*. Similar results can be obtained by minimal changes in similar protocols (like Alpenglow or Hydrangea).
+
+    Specifically, the result obtained is:
+
+    * Honest leader post GST with $p$ Byzantine faults: commit in $2\delta$.
+    * Honest leader post GST with $f$ Byzantine faults and $p$ crashes: commit in $3\delta$.
+    * Non equivocating leader post GST: view completes in at most $3\Delta + \delta$.
+    * Equivocating leader post GST: view completes in at most $2\Gamma + 5\Delta + \delta$ and the leader is publicly detected as malicious.
+    * Safety under up to $f$ Byzantine faults and $p$ crashes given the granular synchrony assumption before GST.
 
 
 
@@ -39,20 +47,20 @@ There are three ways to address this question:
 
 **Why waiting for $n-f$ is required under partial synchrony and equivocation**
 
-In partial synchrony, the only reason the [2,3 protocol](https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/) is required to wait for $n-f$ messages is to provide safety in the case that some party has a fast commit.
+In partial synchrony, the only case where the [2,3 protocol](https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/) is required to wait for $n-f$ messages is to provide safety in the case that some party has a fast commit (see Upon 7 in the [blog post](https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/)).
 
-If a party fast commits, we want all other parties to leave the view with a fast cert for that value. Since a fast commit is $n-p$ votes, then waiting for $n-f$ implies hearing at least $n-p-f-f$ honest votes and since $n-p-2f = f+p+1$, this is a fast cert.
+If a party fast commits, we want all other parties to leave the view with a fast certificate for that value. Since a fast commit is $n-p$ votes, then waiting for $n-f$ implies hearing at least $n-p-f-f$ honest votes and since $n-p-2f = f+p+1$, this is a fast certificate.
 
-If we only wait for $n-p-f$ votes, we will see only $n-p-f-f-p$ honest votes and hence only $f+1$ votes. But this may not be unique; a malicious leader may cause us to see two values with $f+1$ votes!
+If we only wait for $n-p-f$ votes, we may see only $n-p-f-f-p$ honest votes and hence only $f+1$ votes. But this may not be unique; a malicious leader may cause us to see two values with $f+1$ votes!
 
 **Why non-equivocation allows waiting for $n-f-p$**
 
-The first observation is that a non-equivocating leader cannot cause this problem, hence waiting for $n-f-p$ is fine in this case.
+The first observation is that a non-equivocating leader cannot cause this problem. Each honest party either votes for the common value or for $\bot$, hence either half of the $2f+2p+1$ honest parties vote for the leader's value $x$ or half vote for $\bot$. In either case, at least $f+p+1$ honest votes are for the same value, hence fast certificate will eventually form.
+
 
 **Why granular synchrony replaces non-equivocation**
 
-The second observation is that waiting for $n-p-f$ and $\Gamma$ time is always safe under our granular synchrony assumption: Out of the $n-p-f$ honest that helped a fast commit of $n-p$ to form, at most $f$ of them are delayed by more than $\Gamma$, hence everyone waiting $\Gamma$ will hear $n-p-f-f$ of them which is $f+p+1$ and is enough to obtain the required fast certificate.
-
+The second observation is that waiting for $n-p-f$ and a timeout is safe under our granular synchrony assumption: Out of the $n-p-f$ honest that helped a fast commit of $n-p$ to form, at most $f$ of them are delayed by more than $\Gamma$, hence everyone waiting sufficiently long will hear $n-p-f-f$ of them which is $f+p+1$ and is enough to obtain the required fast certificate. If the timeout expires and no fast certificate is seen, then it means it is safe to vote for $\bot$.
 
 
 ## Quorum sizes
@@ -90,33 +98,26 @@ We modify it by adding a $\Lambda = 2\Gamma + 2\Delta$ wait and changing the thr
 
 ```
 
-Intuitively, reducing the wait threshold from $n-f$ to $n-f-p$ is safe because any fast commit must involve at least $n-p-f = 2f+p+1$ honest votes. Under the granular synchrony assumption, after waiting $\Lambda$ time, every honest party receives all but at most $f$ of these honest votes, and thus observes at least $f+p+1$ votes for the committed value. The purpose of this wait is to ensure that any value that was fast committed will be learned by all honest parties before they leave the view.
-
-If the leader does not equivocate and the system is post-GST, then honest parties receive the same proposal within $\Delta$ and their votes cannot fragment across multiple values. Consequently, at least half of the honest parties vote either for the leader’s value $x$ or for $\bot$, and in either case, a fast certificate forms before any honest party can reach the $\Lambda$ timeout.
-
 ## Proof sketch
 
 ### Liveness: no additional wait for a non-equivocating leader
 
-After GST with a non-equivocating leader, honest parties receive identical information and therefore at least half of them vote consistently, so a fast certificate of size $f+p+1$ forms without any $\Lambda$ wait.
-
+After GST with a non-equivocating leader that proposes $x$, all honest parties vote for either $x$ or $\bot$. Hence a majority of the $2f+2p+1$ honest parties  will either form a fast certificate for $x$ or for $\bot$ (a fast certificate requires $f+p+1$ votes). Hence a fast certificate of size $f+p+1$ forms without the $\Lambda$ wait.
 
 ### Liveness: additional wait for an equivocating leader
 
-After GST, if no fast cert is formed by the time all honest end their $\Lambda$ wait, then all honest will send a vote for $\bot$ after $\Lambda$ and hence a fast cert will form. These views are at most $\Lambda + 3\Delta+\delta = 2\Gamma + 5\Delta+\delta$ and the leader will be detected.
+After GST, if no fast certificate is formed by the time all honest end their $\Lambda$ wait, then all honest will send a vote for $\bot$ and hence a fast certificate will form. The worst case latency of such a view is $\Lambda + 3\Delta+\delta = 2\Gamma + 5\Delta+\delta$. Moreover, the leader of this view is publicly detected as malicious.
 
 
-### Safety: Fast commit for $x$ implies at most $f+p$ votes for any other value and a fast cert for $x$ after at most $\Gamma$.
+### Safety: Fast commit for $x$ implies at most $f+p$ votes for any other value and a fast certificate for $x$ after at most $\Gamma$.
 
-The safety goal is to show that if any value is fast committed in a view, then every honest party leaves that view with a fast certificate for the same value.
+Assume a fast commit for $x$ was formed with $n - p = 3f + p + 1$ votes.
 
+Consider any honest party that receives $n - f - p = 2f + p + 1$ votes at time $t$, since that set contains at least $f+1$ honest votes we know from the granular synchrony assumption that every honest party must hear at least one of them by time $t+\Gamma$. Hence all honest must start their view by time $t + \Gamma$.
 
+Honest parties only vote for a non-$\bot$ value in the first $2\Delta$ time after starting the view, so by time $t + \Gamma + 2\Delta + \Gamma = \Lambda$ all honest votes for $x$ that are at most $\Gamma$ delayed must have been seen.
 
-Now assume an honest party receives $n - f - p = 2f + p + 1$ votes at time $t$, since that contains at least $f+1$ honest votes we know from the granular sycnhrony assumption that all honest parties must have started their view by time $t+\Gamma$.
-
-Those honest parties will only vote for a value in the first $2\Delta$ time after starting the view, so by time $t + \Gamma + 2\Delta + \Gamma = \Lambda$ all honest votes that are at most $\Gamma$ delayed must have been seen.
-
-Therefore, if a fast commit of $n - p = 3f + p + 1$ votes was formed then least $(3f + p + 1) - f = 2f + p + 1$ of these votes were sent by honest parties and from the above reasoning, after the $\Lambda$ wait, each honest party will have seen at least $(2f + p + 1) - f = f + p + 1$ votes for $x$ and hence a fast certificate for $x$.
+Therefore, if a fast commit of $n - p = 3f + p + 1$ votes was formed then least $(3f + p + 1) - f = 2f + p + 1$ of these votes were sent by honest parties and from the above reasoning, after the $\Lambda$ wait, each honest party will have seen at least $(2f + p + 1) - f = f + p + 1$ votes for $x$ and hence a fast certificate for $x$ and therefore will not vote for $\bot$.
 
 
 ## Summary
@@ -133,4 +134,4 @@ We note that a similar change under the same granular synchrony assumption allow
 
 ## Acknowledgments
 
-We would like to thank our co-authors Yuval Efron and Ling Ren. We also thank  Quentin Kniep, Kobi Sliwinski, and Roger Wattenhofer for discussions and insights on this topic.
+We would like to thank our co-authors Yuval Efron and Ling Ren. We also thank  Lefteris Kokoris-Kogias, Quentin Kniep, Kobi Sliwinski, and Roger Wattenhofer for discussions and insights on this topic.
