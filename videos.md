@@ -5,6 +5,10 @@ layout: page
 
 ## The Decentralization will not be Televised
 
+**Overview of Consensus Protocols**
+
+<iframe width="560" height="315" src="https://www.youtube.com/watch?v=FifwbDxFHK0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 **Scalability of Decentralized Trust: Some Lessons and some Recent Advances, TPBC21**
 
 
