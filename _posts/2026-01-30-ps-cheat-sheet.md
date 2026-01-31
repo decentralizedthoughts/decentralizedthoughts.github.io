@@ -6,4 +6,5 @@ author: Kartik Nayak
 
 <embed src="/uploads/ps-cheat-sheet.jpg" width="100%" />
 <embed src="/uploads/ps-cheat-sheet.jpg" width="150%" />
+<embed src="/uploads/ps-cheat-sheet.jpg" width="2000" />
 
