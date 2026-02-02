@@ -4,9 +4,9 @@ date: 2026-02-02 09:06:00 -05:00
 author: Kartik Nayak
 ---
 
-<embed src="/uploads/ps-cheat-sheet.jpg" width="180%" />
-
 A walkthrough of this progress is available on the [TheCoordinate](https://www.youtube.com/watch?v=FifwbDxFHK0&t=3765s) podcast. A downloadable [PDF](/uploads/ps-cheat-sheet.pdf) is available here.
+
+<embed src="/uploads/ps-cheat-sheet.jpg" width="180%" />
 
 **The PBFT line of work**
 - A: Comparing PBFT, SBFT, Tendermint, HotStuff, and HotStuff-2: [post1](https://decentralizedthoughts.github.io/2019-06-23-what-is-the-difference-between/), [post2](https://decentralizedthoughts.github.io/2023-04-01-hotstuff-2/)
