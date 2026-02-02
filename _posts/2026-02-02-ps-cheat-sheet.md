@@ -1,7 +1,6 @@
 ---
 title: Partial Synchrony Progress Cheat Sheet
 date: 2026-02-02 09:06:00 -05:00
-published: true
 author: Kartik Nayak
 ---
 
