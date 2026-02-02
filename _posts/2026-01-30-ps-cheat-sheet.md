@@ -7,11 +7,13 @@ author: Kartik Nayak
 
 <embed src="/uploads/ps-cheat-sheet.jpg" width="180%" />
 
+A walkthrough of this progress is available on the [TheCoordinate](https://www.youtube.com/watch?v=FifwbDxFHK0&t=3765s) podcast. A downloadable [PDF](/uploads/ps-cheat-sheet.pdf) is available here.
+
 **The PBFT line of work**
 - A: Comparing PBFT, SBFT, Tendermint, HotStuff, and HotStuff-2: [post1](https://decentralizedthoughts.github.io/2019-06-23-what-is-the-difference-between/), [post2](https://decentralizedthoughts.github.io/2023-04-01-hotstuff-2/)
 - B: Explaining the core ideas behind PBFT: [principles](https://decentralizedthoughts.github.io/2025-02-14-partial-synchrony-protocols/), [PBFT](https://decentralizedthoughts.github.io/2025-02-14-PBFT/)
 - C: Comparing the protocols [Tendermint and Simplex](https://decentralizedthoughts.github.io/2025-06-18-simplex/), a lecture video explaining [Tendermint](https://www.youtube.com/watch?v=pS-ayiCKhBQ)
-- D: Comparing the communication complexity of [PBFT/Tendermint and Simplex] under harsh conditions
+- D: Comparing the communication complexity of [PBFT/Tendermint and Simplex](https://decentralizedthoughts.github.io/2025-12-19-cc-under-harsh-ps/) under harsh conditions
 
 **The Simplex line of work**
 - H: Explaining [Internet Consensus Computer](https://decentralizedthoughts.github.io/2022-03-12-dfinity-partial-synchrony/)
@@ -31,4 +33,4 @@ author: Kartik Nayak
 **Erasure coding**
 - W: Explaining [Verifiable Information Dispersal](https://decentralizedthoughts.github.io/2024-08-08-vid/)
   
-**Acknowledgment.** We would like to thank Soubhik Deb for suggesting that such a chart will be useful for readers, and Ittai Abraham for feedback on improving it. 
+**Acknowledgment.** We would like to thank Soubhik Deb for suggesting that such a chart would be useful to readers, and Ittai Abraham for feedback on improving it. 
