@@ -71,7 +71,7 @@ We see that a selfish miner larger than 1/3 of the mining power would increase h
 ## Conclusion
 
 The analysis has demonstrated that Selfish Mining outperforms honest mining when the selfish miner is larger than 1/3, but this is an optimistic bound.
-For a deeper dive that including weaker models and a patch to strengthen the protocol, take a look at the Selfish Mining paper in [Financial Crypto, 2013](https://webee.technion.ac.il/people/ittay/publications/btcProcFC.pdf) and in the [Communications of the ACM, 2018](https://dl.acm.org/doi/10.1145/3212998).
+For a deeper dive that includes weaker models and a patch to strengthen the protocol, take a look at the Selfish Mining paper in [Financial Crypto, 2013](https://webee.technion.ac.il/people/ittay/publications/btcProcFC.pdf) and in the [Communications of the ACM, 2018](https://dl.acm.org/doi/10.1145/3212998).
 
 [Subsequent](https://link.springer.com/chapter/10.1007/978-3-662-54970-4_30) 
 [work](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=7467362), 
