@@ -11,7 +11,7 @@ This post is about the classic result from 1983 on authenticated broadcast again
 **Theorem ([Dolev-Strong \[1983\]](https://www.cse.huji.ac.il/~dolev/pubs/authenticated.pdf)):** *there exists an authenticated protocol for solving broadcast, against any adversary controlling $t<n$ out of $n$ parties, in $t+1$ rounds, using $O(n^2t)$ words*
 
 
-Recall [Broadcast properties](https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/): (1) *Termination* -  all honest parties decide and terminate; (2) *Validity* - if the leader is honest, its value is the decision value; and (3) *Agreement* - all honest parties decide the same value.
+Recall the [Broadcast properties](https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/): (1) *Termination* -  all honest parties decide and terminate; (2) *Validity* - if the leader is honest, its value is the decision value; and (3) *Agreement* - all honest parties decide the same value.
 
 
 The Dolev-Strong protocol requires: (1) a *synchronous* model, in this post, we will assume *lock-step*; (2) an *authenticated* setting.  In this setting, we assume a PKI infrastructure. Denote the signature of message $m$ by party $i$ as $sign(m,i)$. We assume signature unforgeability.
@@ -37,7 +37,7 @@ Decision rule:
 
 **Termination**: All parties terminate at the end of round 2.
 
-**Agreement (partial)**: If a malicious leader sends a value to some honest in round 1, all honest parties will receive it at the end of round 2. If a malicious leader sends two different values in round 1, then all honest parties will see two different values and decide $\bot$.
+**Agreement (partial)**: If a malicious leader sends a value to some honest parties in round 1, all honest parties will receive it at the end of round 2. If a malicious leader sends two different values in round 1, then all honest parties will see two different values and decide $\bot$.
 
 So does this protocol work?
 
@@ -55,7 +55,7 @@ Round 1: Leader (party 1) sends message <v, sign(v,1)> to all parties
 Round 2: If party i receives <v, sign(v,1)> from leader,
             then add v to V_i and send <v, sign(v,1), sign(v,i)> to all
 End of round 2: 
-         If party i receives <v, sign(v,1), sign (v,j)> from j>1
+         If party i receives <v, sign(v,1), sign (v,j)> from j>1,
             then add v to V_i
 Decision rule:
          If the set V_i contains only a single value v,
