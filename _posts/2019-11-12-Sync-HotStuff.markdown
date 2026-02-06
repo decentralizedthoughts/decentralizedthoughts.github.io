@@ -10,7 +10,7 @@ author: Kartik Nayak, Ling Ren
 
 In the [previous post](https://decentralizedthoughts.github.io/2019-11-12-authenticated-synchronous-bft/), we discussed progress in authenticated synchronous consensus protocols. In this post, we will discuss one of the recent protocols [Sync HotStuff](https://eprint.iacr.org/2019/270), which is a simple and practical Byzantine Fault Tolerant SMR protocol to tolerate $f < n/2$ faults.
 
-We first present one of the key ideas of Sync HotStuff. Later, we  briefly discuss some of the other results in the paper.
+We first present one of the key ideas of Sync HotStuff. Later, we briefly discuss some of the other results in the paper.
 In order to be practical, the main goal of Sync HotStuff is to allow replicas to commit with as low latency as possible.
 Sync HotStuff works in the [steady-state-and-view-change](https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/) paradigm. In the steady-state, it achieves a latency of  $2\Delta$ time, where $\Delta$ is the bounded-message delay. Here is how we achieve it.
 For simplicity, we describe the key idea for agreement on a single value in the steady-state. All messages are digitally signed.
@@ -29,7 +29,7 @@ A pictorial illustration for a three replica execution is presented in the figur
 
 The $2\Delta$ waiting time suffices for two invariants to be satisfied if the committing replica receives no conflicting command: (i) *cmd* will be certified, i.e., it will be voted for by all honest replicas, and (ii) no conflicting command will be certified.
 
-Suppose replica 1 is committing *cmd* at time $t$. Let us understand the sequence of events from its point-of-view, pictorially represented in the picture below.
+Suppose replica 1 is committing *cmd* at time $t$. Let us understand the sequence of events from its point of view, pictorially represented in the picture below.
 
 <p align="center">
 <img src="/uploads/sync-hotstuff-proof.png" width="512" title="Sequence of events from the PoV of replica 1">
@@ -39,9 +39,9 @@ Since replica 1 committed at time $t$, it must have voted at time $t - 2\Delta$.
 
 The above description only explains the scenario where the leader is honest, and there are no conflicting proposals. Otherwise, we will need a mechanism to identify conflicting proposals or lack of progress and perform a view change. We refer readers to the [paper](https://eprint.iacr.org/2019/270) for the details on the view change procedure.
 
-The paper also presents a few other results. One of the disadvantages of synchrony is, a single failed message can result in safety loss. Sync HotStuff can tolerate a weaker synchrony model proposed by [Guo et al.](https://eprint.iacr.org/2019/179). This allows the protocol to work even if the synchrony assumption is violated at a small fraction of honest nodes at any time.
-Moreover, Sync HotStuff is [optimistically responsive](https://eprint.iacr.org/2017/913), i.e., it can commit in less than $\\Delta$ time when $>3n/4$ nodes are honest. Finally, the empirical evaluation shows that its throughput is comparable to the best known partially synchronous protocols.
+The paper also presents a few other results. One of the disadvantages of synchrony is that a single failed message can result in safety loss. Sync HotStuff can tolerate a weaker synchrony model proposed by [Guo et al.](https://eprint.iacr.org/2019/179). This allows the protocol to work even if the synchrony assumption is violated at a small fraction of honest nodes at any time.
+Moreover, Sync HotStuff is [optimistically responsive](https://eprint.iacr.org/2017/913), i.e., it can commit in less than $\Delta$ time when $>3n/4$ nodes are honest. Finally, the empirical evaluation shows that its throughput is comparable to the best known partially synchronous protocols.
 
-This protocol is a joint work with [Ittai](https://research.vmware.com/researchers/ittai-abraham), [Dahlia](https://dahliamalkhi.wordpress.com/) and [Ted](https://www.cs.cornell.edu/~tedyin/). It will be presented in [S&P 2020](https://www.ieee-security.org/TC/SP2020/). Read more about it [here](https://eprint.iacr.org/2019/270.pdf).
+This protocol is a joint work with [Ittai](https://research.vmware.com/researchers/ittai-abraham), [Dahlia](https://dahliamalkhi.wordpress.com/) and [Ted](https://www.cs.cornell.edu/~tedyin/). It is in [S&P 2020](https://www.ieee-security.org/TC/SP2020/). Read more about it [here](https://eprint.iacr.org/2019/270.pdf).
 
 **Acknowledgment.** We would like to thank Ittai for helpful feedback on this post.
