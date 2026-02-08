@@ -21,7 +21,7 @@ A **VABA** (Validated Asynchronous Byzantine Agreement) is a **protocol** that i
 
 1. **External validity**: If $CV(cert) = true$, then $EV(cert.val) = true$. Any commit certificate accepted by the commit proof validity function has a value accepted by the external validity function.
 2. **Liveness**: In an expected constant number of rounds, all nonfaulty parties hold some $cert$ such that $CV(cert) = true$.
-3. **Safety**: If $CV(cert) = true$ and $CV(cert') = true$, then $cert.val = cert'.val$. There cannot be two commit certificates on different values both accepted by the commit proof validity function.
+3. **Safety**: If $CV(cert) = true$ and $CV(cert') = true$, then $cert.val = cert'.val$, where $CV(\cdot)$ is deterministic and globally agreed upon. There cannot be two commit certificates on different values both accepted by the commit proof validity function.
 
 ## How to solve Validated Asynchronous Byzantine Agreement?
 
@@ -31,12 +31,12 @@ The [multi-world VABA](https://arxiv.org/pdf/1811.01332) combines two primitives
 
     1. *Beacon correctness*: For a given round, all parties output the same beacon value in $[1..n]$.  
     2. *Beacon liveness*: If all non-faulty parties output their beacon share, all will compute the beacon value.
-    3. *Beacon unpredictability*: The adversary’s probability of guessing the beacon value for round $r$ before any non-faulty party releases its beacon share for round $r$ is $1/n$ (up to negligible advantage).
+    3. *Beacon unpredictability*: The adversary’s probability of guessing the beacon value for round $r$ before any non-faulty party releases its beacon share for round $r$ is at most $1/n$ (up to negligible advantage).
 
 2. Running $n$ **instances in parallel** of (almost any) view-based **partial synchrony** validated Byzantine agreement protocol — for example, [PBFT](https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/) or [HotStuff](https://arxiv.org/pdf/1803.05069). These protocols satisfy:
 
     1. *Asynchronous Safety*: The partial synchrony protocol maintains safety for any *agreed* mapping of proposers to views. The beacon is used to choose (in hindsight) the agreed-upon mapping in each view.
-    2. *Asynchronous Responsiveness*: If all non-faulty parties start a view whose proposer is non-faulty and no non-faulty party leaves the view for a constant number of rounds, they will all decide and terminate. This property is stronger than the minimum *liveness in synchrony* required by partial synchrony protocols.
+    2. *Asynchronous Responsiveness*: If all non-faulty parties start a view whose proposer is non-faulty and no non-faulty party leaves the view for a constant number of rounds, they will all decide and terminate. This property is stronger than the minimum *liveness in synchrony* required by partial synchrony protocols. This property is what replaces synchrony assumptions in the liveness argument.
     3. *External Validity*: The partial synchrony protocol’s decision is externally valid.
 
 ### Advantages of the multi-world VABA approach
@@ -51,7 +51,7 @@ Multi-world VABA is a *view-based protocol*. For view $v$:
 
 Run $n$ instances (or worlds) of view $v$. In instance $i$, party $i$ is the proposer. Each instance runs independently as if others do not exist.
 
-Once the proposer has a *commit certificate* in its instance, it sends that certificate to all parties and waits for $n{-}f$ confirmations, called a **done certificate**. The proposer then broadcasts the done certificate to all parties.
+Once the proposer obtains a *commit certificate* in its instance, it sends that certificate to all parties and waits for $n{-}f$ confirmations, called a **done certificate**. This ensures that at least one non-faulty party has observed the commit certificate. The proposer then broadcasts the done certificate to all parties.
 
 Each party waits for $n{-}f$ done certificates from $n{-}f$ *different instances*. Seeing proof that $n{-}f$ different instances have done certificates triggers the party to reveal its *share* of the beacon random value for view $v$.
 
@@ -63,15 +63,15 @@ To start view $v+1$, parties send their *view change* information based on havin
 
 ### Sketch of liveness:
 
-Consider the first nonfaulty party to see $n{-}f$ done certificates from $n{-}f$ different worlds. With constant probability, the beacon selects an instance in this set whose proposer completed a done certificate. Thus, as in a partial synchrony protocol, at least $f+1$ nonfaulty parties hold a commit certificate, so all parties will see this certificate in view $v+1$ (since any $n{-}f$ parties include at least one nonfaulty party with a commit certificate).
+Consider the first nonfaulty party to see $n{-}f$ done certificates from $n{-}f$ different worlds. With constant probability, the beacon selects an instance in this set whose proposer completed a done certificate, since the beacon is uniform over $[1..n]$ and the set has size $n{-}f$. Thus, as in a partial synchrony protocol, at least $f+1$ nonfaulty parties hold a commit certificate, so all parties will see this certificate in view $v+1$ (since any $n{-}f$ parties include at least one nonfaulty party with a commit certificate).
 
-Note that the adversary must commit to a set of $n{-}f$ instances with done certificates **before** seeing the beacon value at a time when the beacon is unpredictable. This exemplifies the [general framework of using binding and randomization](/2024-12-10-bind-and-rand.md).
+Note that the adversary must commit to a set of $n{-}f$ instances with done certificates **before** seeing the beacon value at a time when the beacon is unpredictable. This exemplifies the [general framework of using binding and randomization](https://decentralizedthoughts.github.io/2024-12-10-bind-and-rand/).
 
 The result is that all nonfaulty parties will see a commit certificate after a constant expected number of views.
 
 ### Sketch of safety:
 
-Each view has one real instance of a partial synchrony protocol; all others are decoys. Each view has exactly one agreed proposer, as in the partial synchrony protocol, so safety directly follows from the partial synchrony protocol’s safety.
+Each view has one real instance of a partial synchrony protocol; all others are decoys. Each view has exactly one agreed proposer chosen by the beacon, as in the partial synchrony protocol, so safety directly follows from the partial synchrony protocol’s safety.
 
 ### Sketch of external validity:
 
