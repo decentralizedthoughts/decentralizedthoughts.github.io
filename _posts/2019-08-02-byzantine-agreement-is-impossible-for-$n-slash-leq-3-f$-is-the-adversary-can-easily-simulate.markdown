@@ -1,5 +1,5 @@
 ---
-title: Byzantine Agreement is Impossible for $n \leq 3 f$ if the Adversary can Simulate
+title: Modern FLM: Synchronous Byzantine Agreement is impossible for $n \leq 3f$ if the adversary can simulate $n+f$ parties 
 date: 2019-08-02 13:55:00 -04:00
 tags:
 - lowerbound
