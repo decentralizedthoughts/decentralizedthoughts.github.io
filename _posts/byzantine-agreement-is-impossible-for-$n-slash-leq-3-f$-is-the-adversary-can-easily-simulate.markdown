@@ -1,6 +1,9 @@
 ---
-title: 2019 08 02 Byzantine Agreement Is Impossible For $N Slash Leq 3 F$ Is The Adversary
-  Can Easily Simulate
+title: Byzantine Agreement is Impossible for $n \leq 3 f$ if the Adversary can Simulate
+date: 2019-08-02 13:55:00 -04:00
+tags:
+- lowerbound
+author: Kartik Nayak, Ittai Abraham
 ---
 
 The [Fischer, Lynch, and Merritt, 1985](https://groups.csail.mit.edu/tds/papers/Lynch/FischerLynchMerritt-dc.pdf) lower bound states that synchronous Byzantine agreement is impossible if the adversary controls $f>n/3$ parties. It is well known that this lower bound holds in the unauthenticated setting and does *not* hold in a setting with a PKI setup. Naively, one might think that the lower bound always holds if there is no PKI setup, but [Nakamoto consensus](https://decentralizedthoughts.github.io/2021-10-15-Nakamoto-Consensus/) shows that this is not the case! 
