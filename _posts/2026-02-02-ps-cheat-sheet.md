@@ -32,4 +32,4 @@ A walkthrough of this progress is available on the [TheCoordinate](https://www.y
 **Erasure coding**
 - W: Explaining [Verifiable Information Dispersal](https://decentralizedthoughts.github.io/2024-08-08-vid/)
   
-**Acknowledgment.** We would like to thank Soubhik Deb for suggesting that such a chart would be useful to readers, and Ittai Abraham for feedback on improving it. 
+**Acknowledgment.** We would like to thank Soubhik Deb for suggesting that such a chart would be useful to readers, and Ittai Abraham, Vincent Gramoli, Roger Wattenhoffer, and Yann Vonlanthen for feedback on improving it. 
