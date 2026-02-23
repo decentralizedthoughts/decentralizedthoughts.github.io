@@ -9,14 +9,14 @@ author: Ittai Abraham
 
 In this post I will try to compare four of my favorite protocols for Byzantine Fault Tolerant ([BFT](https://en.wikipedia.org/wiki/Byzantine_fault)) State Machine Replication ([SMR](https://en.wikipedia.org/wiki/State_machine_replication)):
 
-1. [PBFT](http://pmg.csail.mit.edu/papers/osdi99.pdf). The gold standard for BFT SMR. Highly recommend to see [this video](https://ttv.mit.edu/videos/16444-practical-byzantine-fault-tolerance) of Barbara Liskov from 2001. Here is the PBFT [project page](http://www.pmg.csail.mit.edu/bft/). Aptos's BFT is based on [Joleton](https://arxiv.org/pdf/2504.18649) which is based on PBFT. See [this post](https://decentralizedthoughts.github.io/2025-02-14-PBFT/) for more on PBFT.
+1. [PBFT](http://pmg.csail.mit.edu/papers/osdi99.pdf). The gold standard for BFT SMR. Highly recommend to see [this video](https://ttv.mit.edu/videos/16444-practical-byzantine-fault-tolerance) of Barbara Liskov from 2001. Here is the PBFT [project page](http://www.pmg.csail.mit.edu/bft/). Aptos's BFT is based on [Jolteon](https://arxiv.org/pdf/2504.18649) which is based on PBFT. See [this post](https://decentralizedthoughts.github.io/2025-02-14-PBFT/) for more on PBFT.
 
 2. [Tendermint](https://arxiv.org/abs/1807.04938). A modern BFT algorithm that also uses peer-to-peer gossip protocol among nodes. Tendermint has evolved to [CometBFT](https://github.com/cometbft/cometbft). In some ways [HotStuff-2](https://eprint.iacr.org/2023/397.pdf) can be viewed as a modern protocol that borrows from both Tendermint and HotStuff.
 
 
 3. [SBFT](https://research.vmware.com/files/attachments/0/0/0/0/0/7/2/sbft_scaling_up_byzantine_fault_tolerance_5_.pdf). A BFT system that builds on PBFT for better scalability and better best-case latency. [KudzuBFT](https://arxiv.org/abs/2505.08771) and Solana's [AlpenGlow](https://www.anza.xyz/blog/alpenglow-a-new-consensus-for-solana) represent modern improvements over SBFT.
 
-4. [HotStuff](https://research.vmware.com/files/attachments/0/0/0/0/0/7/7/podc.pdf). A new BFT protocol that provides both linearity and responsiveness. LibraBFT and some of the early versions of [DiamBFT](https://developers.diem.com/papers/diem-consensus-state-machine-replication-in-the-diem-blockchain/2021-08-17.pdf) were based on HotStuff. [HotStuff-2](https://eprint.iacr.org/2023/397.pdf), [Beegees](https://arxiv.org/abs/2205.11652), [HyperBFT](https://hyperliquid.gitbook.io/hyperliquid-docs/hypercore/overview), [MonadBFT](https://arxiv.org/abs/2502.20692), [Carry](https://decentralizedthoughts.github.io/2025-09-27-carry-the-tail/) represent modern implementations and improvements over HotStuff (also see [this post](https://decentralizedthoughts.github.io/2022-11-24-two-round-HS/)).
+4. [HotStuff](https://research.vmware.com/files/attachments/0/0/0/0/0/7/7/podc.pdf). A new BFT protocol that provides both linearity and responsiveness. LibraBFT and some of the early versions of [DiemBFT](https://developers.diem.com/papers/diem-consensus-state-machine-replication-in-the-diem-blockchain/2021-08-17.pdf) were based on HotStuff. [HotStuff-2](https://eprint.iacr.org/2023/397.pdf), [Beegees](https://arxiv.org/abs/2205.11652), [HyperBFT](https://hyperliquid.gitbook.io/hyperliquid-docs/hypercore/overview), [MonadBFT](https://arxiv.org/abs/2502.20692), [Carry](https://decentralizedthoughts.github.io/2025-09-27-carry-the-tail/) represent modern implementations and improvements over HotStuff (also see [this post](https://decentralizedthoughts.github.io/2022-11-24-two-round-HS/)).
 
 
 This post provides a comparison at the protocol level from the lens of the theory of distributed computing. In particular, this is not a comparison of the system or the software. It's a comparison of the *fundamental measures* by which one should look at these different protocols. Much of the comparison can be summarized in this table, which essentially shows that no one protocol Pareto dominates all the others.
@@ -41,7 +41,7 @@ As mentioned above, all these protocols have the ability to replace leaders via 
 One key conceptual difference between \{PBFT,SBFT\} and \{Tendermint, HotStuff\} is that \{PBFT,SBFT\} are based on the _stable leaders_ paradigm where a leader is changed only when a problem is detected, so a leader may stay for many commands/blocks. \{Tendermint, HotStuff\} are based on the _rotating leader_ paradigm. A leader is rotated after a single attempt to commit a command/block. In this paradigm, leader rotation (view-change) is part of the normal operation of the system. 
 
 
-Note that \{PBFT,SBFT\} could be rather easily modified to run in the _rotating leader_ paradigm and similarly \{Tendermint, HotStuff\} could be rather easily modified to run in the _stable leaders_ paradigm. Indeed modern versions of \{PBFT,SBFT\} like \{Joleton, KudzuBFT\} do exactly that.
+Note that \{PBFT,SBFT\} could be rather easily modified to run in the _rotating leader_ paradigm and similarly \{Tendermint, HotStuff\} could be rather easily modified to run in the _stable leaders_ paradigm. Indeed modern versions of \{PBFT,SBFT\} like \{Jolteon, KudzuBFT\} do exactly that.
 
 As in many cases, this is a **trade-off**. On the one hand, maintaining a stable leader means less overhead and better performance due to stability when the leader is honest and trusted. On the other hand, a stable malicious leader can cause undetectable malicious actions. As an example, one such hard-to-detect malicious action is setting the internal order of commands in a block in a biased manner. Constantly rotating the leader provides a stronger _fairness_ guarantee.
 
@@ -111,7 +111,7 @@ More on randomness and these two protocols in later posts.
 
 ## Acknowledgments
 
-Special thanks to [Dahlia Malkhi](https://dahliamalkhi.wordpress.com/cv/), [Benny Pinkas](http://www.pinkas.net/) and [Alin Tomescu](http://twitter.com/alinush407) for reviewing a draft and sending insightful comments.
+Special thanks to [Dahlia Malkhi](https://dahliamalkhi.wordpress.com/cv/), [Benny Pinkas](http://www.pinkas.net/), [Alin Tomescu](http://twitter.com/alinush407) and [Sam Laferriere](https://x.com/samlafer) for reviewing a draft and sending insightful comments.
 
 Please leave comments on [Twitter](https://twitter.com/ittaia/status/1142845764164554754?s=20)!!
 
