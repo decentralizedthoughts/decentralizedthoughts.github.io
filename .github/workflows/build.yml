@@ -32,3 +32,10 @@ jobs:
         run: |
           python3 tools/check_site.py
 
+
+      - name: Check HTML snapshots
+        run: |
+          cat tests/baseline_urls.txt | python3 tools/snapshot_html.py
+          git diff --exit-code -- tests/snapshots
+
+
