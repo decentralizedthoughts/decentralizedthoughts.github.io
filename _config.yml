@@ -41,15 +41,19 @@ navbar-links:
   Start Here: start-here
   Course: course
 avatar: "/img/DTblog.png"
+round-avatar: true
 navbar-col: "#F5F5F5"
 navbar-text-col: "#404040"
+navbar-border-col: "#DDDDDD"
 navbar-children-col: "#F5F5F5"
 page-col: "#FFFFFF"
+text-col: "#404040"
 link-col: "#008AFF"
 hover-col: "#0085A1"
 footer-col: "#F5F5F5"
 footer-text-col: "#777777"
 footer-link-col: "#404040"
+footer-hover-col: "#0085A1"
 author:
   name: Decentralized Thinkers
 social-network-links:
@@ -67,6 +71,10 @@ staticman:
     siteKey: 
     secret: 
 excerpt_length: 70
+feed_show_excerpt: true
+feed_show_tags: true
+navbar-var-length: false
+date_format: "%B %-d, %Y"
 title-separator: "-"
 markdown: kramdown
 highlighter: rouge
@@ -84,6 +92,8 @@ exclude:
 - Gemfile.lock
 - LICENSE
 - README.md
+- UPGRADE_STOPLINE.md
+- UPGRADE_SEQUENCE.md
 - Vagrantfile
 - vendor
 - vendor/bundle
