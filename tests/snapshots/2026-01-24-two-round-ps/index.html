@@ -3,20 +3,9 @@
 <head>
  <meta charset="utf-8">
  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
- 
- 
- 
  <title>Concurrent 2-round and 3-round BFT protocols under granular synchrony</title>
- 
- 
  <meta name="author" content="Ittai Abraham, Kartik Nayak, and Alejandro Ranchal-pedrosa">
- 
  <meta name="description" content="Consensus protocols for $n=3f+1$ can tolerate $f$ Byzantine faults under partial synchrony. However, they also require a latency of 3 rounds in the good-case when the leader is non-faulty, and the system is synchronous. Can we get a protocol with better latency, or tolerate more faults, if we assume $n=3f+2p+1$? Better latency: If the actual number of Byzantine faults in an execution are fewer, then the protocol can commit faster....">
- 
- 
- 
- 
-
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
 <script>
  window.dataLayer = window.dataLayer || [];
@@ -24,72 +13,30 @@
  gtag('js', new Date());
  gtag('config', 'G-XM1QBM4KRX');
 </script>
- 
- 
- 
- 
- 
- 
- 
  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
- 
- 
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
- 
- 
  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
- 
- 
  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
- 
- 
  <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
- 
  <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
- 
- 
- 
- 
- 
- 
- 
- 
  <meta property="og:site_name" content="Decentralized Thoughts">
  <meta property="og:title" content="Concurrent 2-round and 3-round BFT protocols under granular synchrony">
  <meta property="og:description" content="Consensus protocols for $n=3f+1$ can tolerate $f$ Byzantine faults under partial synchrony. However, they also require a latency of 3 rounds in the good-case when the leader is non-faulty, and the system is synchronous. Can we get a protocol with better latency, or tolerate more faults, if we assume $n=3f+2p+1$? Better latency: If the actual number of Byzantine faults in an execution are fewer, then the protocol can commit faster....">
- 
  <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
- 
- 
  <meta property="og:type" content="article">
- 
  <meta property="og:article:author" content="Ittai Abraham, Kartik Nayak, and Alejandro Ranchal-pedrosa">
- 
  <meta property="og:article:published_time" content="2026-01-24T01:00:00-05:00">
  <meta property="og:url" content="https://decentralizedthoughts.github.io/2026-01-24-two-round-ps/">
  <link rel="canonical" href="https://decentralizedthoughts.github.io/2026-01-24-two-round-ps/">
- 
- 
  <meta name="twitter:card" content="summary">
- 
  <meta name="twitter:site" content="@ittaia">
  <meta name="twitter:creator" content="@ittaia">
  <meta property="twitter:title" content="Concurrent 2-round and 3-round BFT protocols under granular synchrony">
  <meta property="twitter:description" content="Consensus protocols for $n=3f+1$ can tolerate $f$ Byzantine faults under partial synchrony. However, they also require a latency of 3 rounds in the good-case when the leader is non-faulty, and the system is synchronous. Can we get a protocol with better latency, or tolerate more faults, if we assume $n=3f+2p+1$? Better latency: If the actual number of Byzantine faults in an execution are fewer, then the protocol can commit faster....">
- 
  <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
- 
- 
- 
- 
- 
  <link rel="icon" href="/favicon.ico" />
- 
- 
 </head>
  <body>
- 
- 
  <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
  <span class="navbar-toggler-icon"></span>
  </button>
@@ -107,7 +54,6 @@
  <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
  </div>
  </li>
- 
  <li class="nav-item">
  <a class="nav-link" href="/videos">Videos</a>
  </li>
@@ -118,8 +64,6 @@
  <a class="nav-link" href="/course">Course</a>
  </li></ul>
  </div>
- 
- 
  <div class="avatar-container">
  <div class="avatar-img-border">
  <a href="https://decentralizedthoughts.github.io/">
@@ -127,39 +71,25 @@
  </a>
  </div>
  </div>
- 
 </nav>
- 
 <header class="header-section ">
 <div class="intro-header ">
- 
  <div class="container-md">
  <div class="row">
  <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
  <div class="post-heading">
  <h1>Concurrent 2-round and 3-round BFT protocols under granular synchrony</h1>
- 
- 
- 
- 
  By <strong>Ittai Abraham, Kartik Nayak, and Alejandro Ranchal-pedrosa</strong><br>
- 
  <span class="post-meta">Posted on January 24, 2026</span>
- 
- 
- 
  </div>
  </div>
  </div>
  </div>
- 
- 
 </div>
 </header>
 <div class="container">
  <div class="row">
  <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
- 
  <article role="main" class="blog-post">
  <p>Consensus protocols for $n=3f+1$ can tolerate $f$ Byzantine faults under partial synchrony. However, they also require a latency of <a href="https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/">3 rounds in the good-case</a> when the leader is non-faulty, and the system is synchronous. <em>Can we get a protocol with better latency, or tolerate more faults, if we assume $n=3f+2p+1$?</em></p>
 <ol>
@@ -224,7 +154,6 @@
 <p>We modify it by adding a $\Lambda = 2\Gamma + 2\Delta$ wait and changing the threshold from $n-f$ to $n-f-p$:</p>
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>7. Upon receiving n-f-p (Vote, k, *) but no Fast-Cert(k, x) for any x 
  Start timer T2_k
- 
 7'. Upon T2_k = Λ // will only happen if we stay in view
      Send (Vote, k, ⊥) 
 </code></pre></div></div>
@@ -250,48 +179,28 @@
 <h2 id="acknowledgments">Acknowledgments</h2>
 <p>We would like to thank our co-authors Yuval Efron and Ling Ren. We also thank Lefteris Kokoris-Kogias, Quentin Kniep, Kobi Sliwinski, and Roger Wattenhofer for discussions and insights on this topic.</p>
  </article>
- 
- 
- 
 <section id = "social-share-section">
  <span class="sr-only">Share: </span>
- 
  <a href="https://twitter.com/intent/tweet?text=Concurrent+2-round+and+3-round+BFT+protocols+under+granular+synchrony&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2026-01-24-two-round-ps%2F"
  class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
  <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
  <span class="sr-only">X (Twitter)</span>
  </a>
- 
- 
- 
- 
- 
 </section>
- 
  <ul class="pager blog-pager">
- 
  <li class="previous">
  <a href="/2026-01-21-simple-payment/" data-toggle="tooltip" data-placement="top" title="Simple Payment Systems with Unlinkability">&larr; Previous Post</a>
  </li>
- 
- 
  <li class="next">
  <a href="/2026-02-02-ps-cheat-sheet/" data-toggle="tooltip" data-placement="top" title="Partial Synchrony Progress Cheat Sheet">Next Post &rarr;</a>
  </li>
- 
  </ul>
- 
  <div class="disqus-comments">
- 
  </div>
- 
  <div class="staticman-comments">
- 
  </div>
  <div class="justcomments-comments">
- 
  </div>
- 
  </div>
  </div>
 </div>
@@ -299,7 +208,6 @@
  <div class="container-md beautiful-jekyll-footer">
  <div class="row">
  <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
- 
 <ul class="list-inline text-center footer-links"><li class="list-inline-item">
  <a href="https://twitter.com/ittaia" title="X (Twitter)">
  <span class="fa-stack fa-lg" aria-hidden="true">
@@ -309,16 +217,10 @@
  <span class="sr-only">X (Twitter)</span>
  </a>
  </li></ul>
- 
  <p class="copyright text-muted">
- 
  {"name"=>"Decentralized Thinkers"}
  &nbsp;&bull;&nbsp;
- 
  2026
- 
- 
- 
  </p>
  <p class="theme-by text-muted">
  Powered by
@@ -328,25 +230,9 @@
  </div>
  </div>
 </footer>
- 
- 
- 
- 
- 
  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
- 
- 
  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
- 
- 
  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
- 
- 
- 
- 
  <script src="/assets/js/beautifuljekyll.js"></script>
- 
- 
- 
  </body>
 </html>

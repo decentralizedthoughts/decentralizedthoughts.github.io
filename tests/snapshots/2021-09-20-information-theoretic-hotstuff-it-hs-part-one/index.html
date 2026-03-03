@@ -3,20 +3,9 @@
 <head>
  <meta charset="utf-8">
  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
- 
- 
- 
  <title>Information Theoretic HotStuff (IT-HS): Part One</title>
- 
- 
  <meta name="author" content="Gilad Stern, Ittai Abraham">
- 
  <meta name="description" content="This post is the first of two on Information Theoretic HotStuff (IT-HS). Information Theoretic HotStuff is a Byzantine Consensus protocol in the partially synchronous model. It replaces all of HotStuff’s cryptographic signatures with simple information theoretic message passing techniques over authenticated channels. Information theoretic protocols are often easy to reason about, form a great introduction for learning the basics of consensus, have less of an attack surface, and highlight useful...">
- 
- 
- 
- 
-
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
 <script>
  window.dataLayer = window.dataLayer || [];
@@ -24,72 +13,30 @@
  gtag('js', new Date());
  gtag('config', 'G-XM1QBM4KRX');
 </script>
- 
- 
- 
- 
- 
- 
- 
  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
- 
- 
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
- 
- 
  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
- 
- 
  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
- 
- 
  <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
- 
  <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
- 
- 
- 
- 
- 
- 
- 
- 
  <meta property="og:site_name" content="Decentralized Thoughts">
  <meta property="og:title" content="Information Theoretic HotStuff (IT-HS): Part One">
  <meta property="og:description" content="This post is the first of two on Information Theoretic HotStuff (IT-HS). Information Theoretic HotStuff is a Byzantine Consensus protocol in the partially synchronous model. It replaces all of HotStuff’s cryptographic signatures with simple information theoretic message passing techniques over authenticated channels. Information theoretic protocols are often easy to reason about, form a great introduction for learning the basics of consensus, have less of an attack surface, and highlight useful...">
- 
  <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
- 
- 
  <meta property="og:type" content="article">
- 
  <meta property="og:article:author" content="Gilad Stern, Ittai Abraham">
- 
  <meta property="og:article:published_time" content="2021-09-20T08:07:00-04:00">
  <meta property="og:url" content="https://decentralizedthoughts.github.io/2021-09-20-information-theoretic-hotstuff-it-hs-part-one/">
  <link rel="canonical" href="https://decentralizedthoughts.github.io/2021-09-20-information-theoretic-hotstuff-it-hs-part-one/">
- 
- 
  <meta name="twitter:card" content="summary">
- 
  <meta name="twitter:site" content="@ittaia">
  <meta name="twitter:creator" content="@ittaia">
  <meta property="twitter:title" content="Information Theoretic HotStuff (IT-HS): Part One">
  <meta property="twitter:description" content="This post is the first of two on Information Theoretic HotStuff (IT-HS). Information Theoretic HotStuff is a Byzantine Consensus protocol in the partially synchronous model. It replaces all of HotStuff’s cryptographic signatures with simple information theoretic message passing techniques over authenticated channels. Information theoretic protocols are often easy to reason about, form a great introduction for learning the basics of consensus, have less of an attack surface, and highlight useful...">
- 
  <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
- 
- 
- 
- 
- 
  <link rel="icon" href="/favicon.ico" />
- 
- 
 </head>
  <body>
- 
- 
  <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
  <span class="navbar-toggler-icon"></span>
  </button>
@@ -107,7 +54,6 @@
  <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
  </div>
  </li>
- 
  <li class="nav-item">
  <a class="nav-link" href="/videos">Videos</a>
  </li>
@@ -118,8 +64,6 @@
  <a class="nav-link" href="/course">Course</a>
  </li></ul>
  </div>
- 
- 
  <div class="avatar-container">
  <div class="avatar-img-border">
  <a href="https://decentralizedthoughts.github.io/">
@@ -127,39 +71,25 @@
  </a>
  </div>
  </div>
- 
 </nav>
- 
 <header class="header-section ">
 <div class="intro-header ">
- 
  <div class="container-md">
  <div class="row">
  <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
  <div class="post-heading">
  <h1>Information Theoretic HotStuff (IT-HS): Part One</h1>
- 
- 
- 
- 
  By <strong>Gilad Stern, Ittai Abraham</strong><br>
- 
  <span class="post-meta">Posted on September 20, 2021</span>
- 
- 
- 
  </div>
  </div>
  </div>
  </div>
- 
- 
 </div>
 </header>
 <div class="container">
  <div class="row">
  <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
- 
  <article role="main" class="blog-post">
  <p>This post is the first of two on <a href="https://arxiv.org/abs/2009.12828">Information Theoretic HotStuff (IT-HS)</a>. Information Theoretic HotStuff is a <a href="https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/">Byzantine Consensus</a> protocol in the <a href="https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/">partially synchronous</a> model. It replaces all of <a href="https://arxiv.org/abs/1803.05069">HotStuff’s</a> cryptographic signatures with simple information theoretic message passing techniques over <a href="https://decentralizedthoughts.github.io/2019-07-19-setup-assumptions/">authenticated channels</a>. Information theoretic protocols are often easy to reason about, form a great introduction for learning the basics of consensus, have less of an attack surface, and highlight useful core distributed computing techniques.</p>
 <details>
@@ -205,11 +135,9 @@ upon receiving &lt;'propose',l=(b,w),v&gt; from the leader of view v, and
  receiving &lt;'echo',b,w&gt; from n-f parties, and
  w&gt;=lock.view:
  send &lt;'echo',b,view&gt; to all parties
- 
 //accept round
 upon receiving &lt;'echo',b,v&gt; from n-f parties:
  send &lt;'accept',b,v&gt; to all parties 
- 
 //lock round
 upon receiving &lt;'accept',b,v&gt; from n-f parties:
  set lock.view=v, lock.val=b
@@ -227,7 +155,6 @@ upon receiving &lt;'commit',b&gt; from f+1 parties:
  send &lt;'commit',b&gt; to all parties 
 upon receiving &lt;'commit',b&gt; from n-f parties:
  output b and terminate
- 
 </code></pre></div></div>
 <p>In this post, we assume that all clocks are perfectly synchronized. After $GST$, all messages are delivered in at most $\Delta$ time, for some known $\Delta$. Any message sent before $GST$ is delivered by time $GST+\Delta$. This means each replica simply triggers a change to view $i$ at time $i (10 \Delta)$. We use the constant 10 here because it is large enough to allow an honest leader to cause all to commit. Note that at view $i$, parties don’t send messages or take other actions associated with view $&lt;i$ (such as updating locks). The only exceptions are the ones explicitly stated in the background protocol for boosting and terminating. In the next post we will explore the notions of <em>view-change trigger</em>, <em>view synchronization</em>, and <em>responsiveness</em> that allow parties to start a view change early if they ever see that the current leader is acting dishonestly or delaying messages unnecessarily. In this post we present a simpler version of the protocol that assumes synchronized clocks and has all parties trigger view changes based on their clocks.</p>
 <p>We’ve described the protocol, now let’s understand why it works.</p>
@@ -267,57 +194,32 @@ It is essential that this property always holds, even when the network is still 
 <p>Taking a step back, let’s reflect on some key aspects of IT-HS: The locking mechanism makes sure that if an honest party commits, there are $f+1$ honest parties that won’t ever send <code class="language-plaintext highlighter-rouge">echo</code> messages about any other value in any later view. This prevents any other value from having more than $f$ <code class="language-plaintext highlighter-rouge">accept</code> messages sent about it in any later view. In that sense, the $n-f$ <code class="language-plaintext highlighter-rouge">accept</code> messages required for setting a lock are essentially a proof that no other commitment took place in an earlier view. This also means that any party that sees a lock from a view $v$ and receives the required <code class="language-plaintext highlighter-rouge">accept</code> messages can disregard any lock it has from older views because it is not actually required for safeguarding any committed value. Another key property of these proofs comes from the Boosting protocol: if one honest party receives such a proof and believes it, it knows that every other honest party will believe this proof as well. The downside of the approach in this post is that it requires to constantly keep track of messages from previous views, thus requiring storage that is proportional in the worse case to the number of views (that can grow arbitrarily large before $GST$). In our next post we will look into ways to require just a (small) finite amount of storage.</p>
 <p>Let us know your thoughts on <a href="https://twitter.com/ittaia/status/1439932202477932550?s=20">Twitter</a>.</p>
  </article>
- 
  <div class="blog-tags">
  Tags:
- 
- 
  <a href="/tags#research">research</a>
- 
- 
  </div>
- 
- 
- 
 <section id = "social-share-section">
  <span class="sr-only">Share: </span>
- 
  <a href="https://twitter.com/intent/tweet?text=Information+Theoretic+HotStuff+%28IT-HS%29%3A+Part+One&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2021-09-20-information-theoretic-hotstuff-it-hs-part-one%2F"
  class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
  <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
  <span class="sr-only">X (Twitter)</span>
  </a>
- 
- 
- 
- 
- 
 </section>
- 
  <ul class="pager blog-pager">
- 
  <li class="previous">
  <a href="/2021-08-29-the-private-set-intersection-psi-protocol-of-the-apple-csam-detection-system/" data-toggle="tooltip" data-placement="top" title="The Private Set Intersection (PSI) Protocol of the Apple CSAM Detection System">&larr; Previous Post</a>
  </li>
- 
- 
  <li class="next">
  <a href="/2021-09-20-optimal-communication-complexity-of-authenticated-byzantine-agreement/" data-toggle="tooltip" data-placement="top" title="Optimal Communication Complexity of Authenticated Byzantine Agreement">Next Post &rarr;</a>
  </li>
- 
  </ul>
- 
  <div class="disqus-comments">
- 
  </div>
- 
  <div class="staticman-comments">
- 
  </div>
  <div class="justcomments-comments">
- 
  </div>
- 
  </div>
  </div>
 </div>
@@ -325,7 +227,6 @@ It is essential that this property always holds, even when the network is still 
  <div class="container-md beautiful-jekyll-footer">
  <div class="row">
  <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
- 
 <ul class="list-inline text-center footer-links"><li class="list-inline-item">
  <a href="https://twitter.com/ittaia" title="X (Twitter)">
  <span class="fa-stack fa-lg" aria-hidden="true">
@@ -335,16 +236,10 @@ It is essential that this property always holds, even when the network is still 
  <span class="sr-only">X (Twitter)</span>
  </a>
  </li></ul>
- 
  <p class="copyright text-muted">
- 
  {"name"=>"Decentralized Thinkers"}
  &nbsp;&bull;&nbsp;
- 
  2026
- 
- 
- 
  </p>
  <p class="theme-by text-muted">
  Powered by
@@ -354,25 +249,9 @@ It is essential that this property always holds, even when the network is still 
  </div>
  </div>
 </footer>
- 
- 
- 
- 
- 
  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
- 
- 
  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
- 
- 
  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
- 
- 
- 
- 
  <script src="/assets/js/beautifuljekyll.js"></script>
- 
- 
- 
  </body>
 </html>

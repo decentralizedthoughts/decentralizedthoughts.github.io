@@ -3,20 +3,9 @@
 <head>
  <meta charset="utf-8">
  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
- 
- 
- 
  <title>What is Verifiable Information Dispersal?</title>
- 
- 
  <meta name="author" content="Ittai Abraham, Kartik Nayak, Ling Ren, Gilad Stern">
- 
  <meta name="description" content="Verifiable Information Dispersal (or VID) has its roots in the work of Michael Rabin, 1989 which introduced the notion of Information Dispersal (ID). Adding verifiability (referred to as binding in this post) to obtain VIDs was done by Garay, Gennaro, Jutla, and Rabin, 1998 (called SSRI). Cachin and Tessaro, 2004 introduced the notion of Asynchronous VID (or AVID). See LDDRVXG21 for the state-of-the-art. VIDs are important primitives at the intersection...">
- 
- 
- 
- 
-
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
 <script>
  window.dataLayer = window.dataLayer || [];
@@ -24,72 +13,30 @@
  gtag('js', new Date());
  gtag('config', 'G-XM1QBM4KRX');
 </script>
- 
- 
- 
- 
- 
- 
- 
  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
- 
- 
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
- 
- 
  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
- 
- 
  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
- 
- 
  <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
- 
  <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
- 
- 
- 
- 
- 
- 
- 
- 
  <meta property="og:site_name" content="Decentralized Thoughts">
  <meta property="og:title" content="What is Verifiable Information Dispersal?">
  <meta property="og:description" content="Verifiable Information Dispersal (or VID) has its roots in the work of Michael Rabin, 1989 which introduced the notion of Information Dispersal (ID). Adding verifiability (referred to as binding in this post) to obtain VIDs was done by Garay, Gennaro, Jutla, and Rabin, 1998 (called SSRI). Cachin and Tessaro, 2004 introduced the notion of Asynchronous VID (or AVID). See LDDRVXG21 for the state-of-the-art. VIDs are important primitives at the intersection...">
- 
  <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
- 
- 
  <meta property="og:type" content="article">
- 
  <meta property="og:article:author" content="Ittai Abraham, Kartik Nayak, Ling Ren, Gilad Stern">
- 
  <meta property="og:article:published_time" content="2024-08-08T07:00:00-04:00">
  <meta property="og:url" content="https://decentralizedthoughts.github.io/2024-08-08-vid/">
  <link rel="canonical" href="https://decentralizedthoughts.github.io/2024-08-08-vid/">
- 
- 
  <meta name="twitter:card" content="summary">
- 
  <meta name="twitter:site" content="@ittaia">
  <meta name="twitter:creator" content="@ittaia">
  <meta property="twitter:title" content="What is Verifiable Information Dispersal?">
  <meta property="twitter:description" content="Verifiable Information Dispersal (or VID) has its roots in the work of Michael Rabin, 1989 which introduced the notion of Information Dispersal (ID). Adding verifiability (referred to as binding in this post) to obtain VIDs was done by Garay, Gennaro, Jutla, and Rabin, 1998 (called SSRI). Cachin and Tessaro, 2004 introduced the notion of Asynchronous VID (or AVID). See LDDRVXG21 for the state-of-the-art. VIDs are important primitives at the intersection...">
- 
  <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
- 
- 
- 
- 
- 
  <link rel="icon" href="/favicon.ico" />
- 
- 
 </head>
  <body>
- 
- 
  <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
  <span class="navbar-toggler-icon"></span>
  </button>
@@ -107,7 +54,6 @@
  <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
  </div>
  </li>
- 
  <li class="nav-item">
  <a class="nav-link" href="/videos">Videos</a>
  </li>
@@ -118,8 +64,6 @@
  <a class="nav-link" href="/course">Course</a>
  </li></ul>
  </div>
- 
- 
  <div class="avatar-container">
  <div class="avatar-img-border">
  <a href="https://decentralizedthoughts.github.io/">
@@ -127,39 +71,25 @@
  </a>
  </div>
  </div>
- 
 </nav>
- 
 <header class="header-section ">
 <div class="intro-header ">
- 
  <div class="container-md">
  <div class="row">
  <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
  <div class="post-heading">
  <h1>What is Verifiable Information Dispersal?</h1>
- 
- 
- 
- 
  By <strong>Ittai Abraham, Kartik Nayak, Ling Ren, Gilad Stern</strong><br>
- 
  <span class="post-meta">Posted on August 8, 2024</span>
- 
- 
- 
  </div>
  </div>
  </div>
  </div>
- 
- 
 </div>
 </header>
 <div class="container">
  <div class="row">
  <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
- 
  <article role="main" class="blog-post">
  <p><em>Verifiable Information Dispersal</em> (or <strong>VID</strong>) has its roots in the work of <a href="https://dl.acm.org/doi/pdf/10.1145/62044.62050">Michael Rabin, 1989</a> which introduced the notion of <em>Information Dispersal</em> (<strong>ID</strong>). Adding <em>verifiability</em> (referred to as <em>binding</em> in this post) to obtain <strong>VID</strong>s was done by <a href="https://eprint.iacr.org/1998/025">Garay, Gennaro, Jutla, and Rabin, 1998</a> (called SSRI). <a href="https://homes.cs.washington.edu/~tessaro/papers/dds.pdf">Cachin and Tessaro, 2004</a> introduced the notion of <em>Asynchronous VID</em> (or <strong>AVID</strong>). See <a href="https://eprint.iacr.org/2022/775">LDDRVXG21</a> for the state-of-the-art.</p>
 <p>VIDs are important primitives at the intersection of distributed computing and cryptography. Their centrality can be seen through four different perspectives:</p>
@@ -272,57 +202,32 @@ retrieval protocol.</p>
 <p>Many thanks to Qiang Tang for insightful comments and feedback.</p>
 <p>Your feedback on <a href="https://x.com/ittaia/status/1821587801701568626">Twitter</a>.</p>
  </article>
- 
  <div class="blog-tags">
  Tags:
- 
- 
  <a href="/tags#VID">VID</a>
- 
- 
  </div>
- 
- 
- 
 <section id = "social-share-section">
  <span class="sr-only">Share: </span>
- 
  <a href="https://twitter.com/intent/tweet?text=What+is+Verifiable+Information+Dispersal%3F&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2024-08-08-vid%2F"
  class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
  <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
  <span class="sr-only">X (Twitter)</span>
  </a>
- 
- 
- 
- 
- 
 </section>
- 
  <ul class="pager blog-pager">
- 
  <li class="previous">
  <a href="/2024-06-12-shoalpp/" data-toggle="tooltip" data-placement="top" title="Shoal++: High Throughput DAG-BFT Can Be Fast!">&larr; Previous Post</a>
  </li>
- 
- 
  <li class="next">
  <a href="/2024-08-09-sap/" data-toggle="tooltip" data-placement="top" title="The SAP theorem for storing secret keys">Next Post &rarr;</a>
  </li>
- 
  </ul>
- 
  <div class="disqus-comments">
- 
  </div>
- 
  <div class="staticman-comments">
- 
  </div>
  <div class="justcomments-comments">
- 
  </div>
- 
  </div>
  </div>
 </div>
@@ -330,7 +235,6 @@ retrieval protocol.</p>
  <div class="container-md beautiful-jekyll-footer">
  <div class="row">
  <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
- 
 <ul class="list-inline text-center footer-links"><li class="list-inline-item">
  <a href="https://twitter.com/ittaia" title="X (Twitter)">
  <span class="fa-stack fa-lg" aria-hidden="true">
@@ -340,16 +244,10 @@ retrieval protocol.</p>
  <span class="sr-only">X (Twitter)</span>
  </a>
  </li></ul>
- 
  <p class="copyright text-muted">
- 
  {"name"=>"Decentralized Thinkers"}
  &nbsp;&bull;&nbsp;
- 
  2026
- 
- 
- 
  </p>
  <p class="theme-by text-muted">
  Powered by
@@ -359,25 +257,9 @@ retrieval protocol.</p>
  </div>
  </div>
 </footer>
- 
- 
- 
- 
- 
  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
- 
- 
  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
- 
- 
  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
- 
- 
- 
- 
  <script src="/assets/js/beautifuljekyll.js"></script>
- 
- 
- 
  </body>
 </html>

@@ -32,6 +32,7 @@ def normalize_html(s: str) -> str:
         "https%3A%2F%2Fdecentralizedthoughts.github.io%2F",
     )
     s = s.replace("&apos;", "'")
+    s = re.sub(r"(?m)^[ \t]+$", "", s)
 
     # strip multiple whitespace
     s = re.sub(r"[ \t]+", " ", s)

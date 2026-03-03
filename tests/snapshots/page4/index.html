@@ -3,20 +3,9 @@
 <head>
  <meta charset="utf-8">
  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
- 
- 
- 
  <title>Decentralized Thoughts</title>
- 
- 
  <meta name="author" content="{"name"=>"Decentralized Thinkers"}">
- 
  <meta name="description" content="Decentralized Thoughts is a group blog on decentralization, by decentralized thinkers, for decentralized thoughts, of decentralized matters. Decentralized Thoughts is a group blog on decentralization, by decentralized thinkers, for decentralized thoughts, of decentralized matters. {% for post in paginator.posts %} {{ post.title }} {% if post.subtitle %} {{ post.subtitle }} {% endif %} Posted on {{ post.date | date: &quot;%B %-d, %Y&quot; }}, by {{ post.author }} {% if post.image...">
- 
- 
- 
- 
-
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
 <script>
  window.dataLayer = window.dataLayer || [];
@@ -24,68 +13,28 @@
  gtag('js', new Date());
  gtag('config', 'G-XM1QBM4KRX');
 </script>
- 
- 
- 
- 
- 
- 
- 
  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
- 
- 
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
- 
- 
  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
- 
- 
  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
- 
- 
  <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
- 
  <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
- 
- 
- 
- 
- 
- 
- 
- 
  <meta property="og:site_name" content="Decentralized Thoughts">
  <meta property="og:title" content="Decentralized Thoughts">
  <meta property="og:description" content="Decentralized Thoughts is a group blog on decentralization, by decentralized thinkers, for decentralized thoughts, of decentralized matters. Decentralized Thoughts is a group blog on decentralization, by decentralized thinkers, for decentralized thoughts, of decentralized matters. {% for post in paginator.posts %} {{ post.title }} {% if post.subtitle %} {{ post.subtitle }} {% endif %} Posted on {{ post.date | date: &quot;%B %-d, %Y&quot; }}, by {{ post.author }} {% if post.image...">
- 
  <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
- 
- 
  <meta property="og:type" content="website">
  <meta property="og:url" content="https://decentralizedthoughts.github.io/page4/">
  <link rel="canonical" href="https://decentralizedthoughts.github.io/page4/">
- 
- 
  <meta name="twitter:card" content="summary">
- 
  <meta name="twitter:site" content="@ittaia">
  <meta name="twitter:creator" content="@ittaia">
  <meta property="twitter:title" content="Decentralized Thoughts">
  <meta property="twitter:description" content="Decentralized Thoughts is a group blog on decentralization, by decentralized thinkers, for decentralized thoughts, of decentralized matters. Decentralized Thoughts is a group blog on decentralization, by decentralized thinkers, for decentralized thoughts, of decentralized matters. {% for post in paginator.posts %} {{ post.title }} {% if post.subtitle %} {{ post.subtitle }} {% endif %} Posted on {{ post.date | date: &quot;%B %-d, %Y&quot; }}, by {{ post.author }} {% if post.image...">
- 
  <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
- 
- 
- 
- 
- 
  <link rel="icon" href="/favicon.ico" />
- 
- 
 </head>
  <body>
- 
- 
  <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
  <span class="navbar-toggler-icon"></span>
  </button>
@@ -103,7 +52,6 @@
  <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
  </div>
  </li>
- 
  <li class="nav-item">
  <a class="nav-link" href="/videos">Videos</a>
  </li>
@@ -114,8 +62,6 @@
  <a class="nav-link" href="/course">Course</a>
  </li></ul>
  </div>
- 
- 
  <div class="avatar-container">
  <div class="avatar-img-border">
  <a href="https://decentralizedthoughts.github.io/">
@@ -123,13 +69,9 @@
  </a>
  </div>
  </div>
- 
 </nav>
- 
 <header class="header-section ">
 <div class="intro-header ">
- 
- 
 </div>
 </header>
 <div class="container" role="main">
@@ -137,643 +79,386 @@
  <div class="col-lg-10 col-lg-offset-2 col-md-10 col-md-offset-1">
  <title>Decentralized Thoughts is a group blog on decentralization, by decentralized thinkers, for decentralized thoughts, of decentralized matters. Decentralized Thoughts is a group blog on decentralization, by decentralized thinkers, for decentralized thoughts, of decentralized matters. </title>
 <div class="posts-list">
- 
  <article class="post-preview">
  <a href="/2022-12-27-responsiveness-omission/">
  <h2 class="post-title">Responsiveness under omission failures</h2>
- 
  </a>
  <p class="post-meta">
  Posted on December 27, 2022, by <b>Ittai Abraham and Kartik Nayak</b>
  </p>
  <div class="post-entry-container">
- 
  <div class="post-entry">
  In this post, we discuss log replication responsiveness in the context of omission failures. We show how to transform the protocol in our previous post to a multi-shot version of Paxos for omission faults. The Byzantine failure case uses similar ideas and is covered in the next post of this series.
- 
- 
  <a href="/2022-12-27-responsiveness-omission/" class="post-read-more">[Read&nbsp;More]</a>
- 
  </div>
  </div>
- 
  <div class="blog-tags">
  Tags:
- 
- 
  <a href="/tags#research">research</a>
- 
  <a href="/tags#omission">omission</a>
- 
- 
  </div>
- 
  </article>
- 
  <article class="post-preview">
  <a href="/2022-12-27-set-replication/">
  <h2 class="post-title">Set Replication - fault tolerance without total ordering</h2>
- 
  </a>
  <p class="post-meta">
  Posted on December 27, 2022, by <b>Ittai Abraham</b>
  </p>
  <div class="post-entry-container">
- 
  <div class="post-entry">
  State machine replication is the gold standard for implementing any (public) ideal functionality. It totally orders all transactions and as a consequence solves Byzantine agreement. But solving agreement, in non-optimistic cases, is quadratic in cost and is not constant time. In some cases this overhead is unnecessary because there is no need to totally order all transactions.
- 
- 
  <a href="/2022-12-27-set-replication/" class="post-read-more">[Read&nbsp;More]</a>
- 
  </div>
  </div>
- 
  <div class="blog-tags">
  Tags:
- 
- 
  <a href="/tags#research">research</a>
- 
- 
  </div>
- 
  </article>
- 
  <article class="post-preview">
  <a href="/2022-12-18-what-is-responsiveness/">
  <h2 class="post-title">What is Responsiveness?</h2>
- 
  </a>
  <p class="post-meta">
  Posted on December 18, 2022, by <b>Ittai Abraham and Kartik Nayak</b>
  </p>
  <div class="post-entry-container">
- 
  <div class="post-entry">
  In asynchronous protocols, latency to commit is a function of the actual maximum network delay $\delta$. In synchronous protocols, message delay is bounded by $\Delta$, and for $n/3 \leq f &amp;lt; n/2$, the $\Delta$ bound is used to obtain both safety and liveness. In partial synchrony, message delay is bounded by $\Delta$ after GST, and the $\Delta$ bound is used to obtain liveness.
- 
- 
  <a href="/2022-12-18-what-is-responsiveness/" class="post-read-more">[Read&nbsp;More]</a>
- 
  </div>
  </div>
- 
  <div class="blog-tags">
  Tags:
- 
- 
  <a href="/tags#models">models</a>
- 
  <a href="/tags#research">research</a>
- 
- 
  </div>
- 
  </article>
- 
  <article class="post-preview">
  <a href="/2022-12-12-what-about-validity/">
  <h2 class="post-title">What about Validity?</h2>
- 
  </a>
  <p class="post-meta">
  Posted on December 12, 2022, by <b>Ittai Abraham and Christian Cachin</b>
  </p>
  <div class="post-entry-container">
- 
  <div class="post-entry">
  Perhaps the archetypical trilemma is consensus - it requires three properties: agreement, liveness, and validity. Getting any two is easy, but all three together is what makes consensus such a facinating problem that continues to create new challenges even after 40 years of research.
- 
- 
  <a href="/2022-12-12-what-about-validity/" class="post-read-more">[Read&nbsp;More]</a>
- 
  </div>
  </div>
- 
  <div class="blog-tags">
  Tags:
- 
- 
  <a href="/tags#consensus">consensus</a>
- 
  <a href="/tags#lowerbound">lowerbound</a>
- 
- 
  </div>
- 
  </article>
- 
  <article class="post-preview">
  <a href="/2022-11-24-two-round-HS/">
  <h2 class="post-title">Two Round HotStuff</h2>
- 
  </a>
  <p class="post-meta">
  Posted on November 24, 2022, by <b>Ittai Abraham</b>
  </p>
  <div class="post-entry-container">
- 
  <div class="post-entry">
  In the first part of this post, we describe a single-shot variation of Two Round HotStuff (see HotStuff v1 paper, March 2018 and this March 2018 post) using Locked-Broadcast that follows a similar path as our previous posts on Paxos and Linear PBFT.
- 
- 
  <a href="/2022-11-24-two-round-HS/" class="post-read-more">[Read&nbsp;More]</a>
- 
  </div>
  </div>
- 
  <div class="blog-tags">
  Tags:
- 
- 
  <a href="/tags#consensus">consensus</a>
- 
- 
  </div>
- 
  </article>
- 
  <article class="post-preview">
  <a href="/2022-11-20-pbft-via-locked-braodcast/">
  <h2 class="post-title">Linear PBFT: a gentle introduction to Practical Byzantine Fault Tolerance</h2>
- 
  </a>
  <p class="post-meta">
  Posted on November 20, 2022, by <b>Ittai Abraham</b>
  </p>
  <div class="post-entry-container">
- 
  <div class="post-entry">
  PBFT is a foundational multi-year project led by Barbara Liskov and her students, obtaining major advances in both the theory and practice of Byzantine Fault Tolerance. The PBFT conference version, journal version, Castro’s thesis, Liskov’s talk, and follow-up work on BASE are all required reading for anyone who wants to deeply understand BFT systems.
- 
- 
  <a href="/2022-11-20-pbft-via-locked-braodcast/" class="post-read-more">[Read&nbsp;More]</a>
- 
  </div>
  </div>
- 
  <div class="blog-tags">
  Tags:
- 
- 
  <a href="/tags#consensus">consensus</a>
- 
- 
  </div>
- 
  </article>
- 
  <article class="post-preview">
  <a href="/2022-11-19-from-single-shot-to-smr/">
  <h2 class="post-title">From Single-Shot Agreement to State Machine Replication</h2>
- 
  </a>
  <p class="post-meta">
  Posted on November 19, 2022, by <b>Ittai Abraham and Kartik Nayak</b>
  </p>
  <div class="post-entry-container">
- 
  <div class="post-entry">
  In this post we explore the path from Single-Shot Agreement, via Write-Once Registers, to Log Replication, and finally to State Machine Replication. We begin by defining all four problems assuming minority omission failures and partial synchrony. This post continues our previous posts on Paxos from Recoverable Broadcast and on State Machine Replication.
- 
- 
  <a href="/2022-11-19-from-single-shot-to-smr/" class="post-read-more">[Read&nbsp;More]</a>
- 
  </div>
  </div>
- 
  <div class="blog-tags">
  Tags:
- 
- 
  <a href="/tags#SMR">SMR</a>
- 
  <a href="/tags#omission">omission</a>
- 
- 
  </div>
- 
  </article>
- 
  <article class="post-preview">
  <a href="/2022-11-04-paxos-via-recoverable-broadcast/">
  <h2 class="post-title">On Paxos from Recoverable Broadcast</h2>
- 
  </a>
  <p class="post-meta">
  Posted on November 4, 2022, by <b>Ittai Abraham</b>
  </p>
  <div class="post-entry-container">
- 
  <div class="post-entry">
  There are many ways to learn about the Paxos protocol (see Lampson, Cachin, Howard, Howard 2, Guerraoui, Kladov, Krzyzanowski, Lamport, Wikipedia and many more). The emphasis of this post is on a decomposition of Paxos for omission failures that will later help when we do a similar decomposition for Byzantine failures (for PBFT and HotStuff).
- 
- 
  <a href="/2022-11-04-paxos-via-recoverable-broadcast/" class="post-read-more">[Read&nbsp;More]</a>
- 
  </div>
  </div>
- 
  <div class="blog-tags">
  Tags:
- 
- 
  <a href="/tags#crash">crash</a>
- 
  <a href="/tags#omission">omission</a>
- 
- 
  </div>
- 
  </article>
- 
  <article class="post-preview">
  <a href="/2022-09-10-provable-broadcast/">
  <h2 class="post-title">Provable Broadcast</h2>
- 
  </a>
  <p class="post-meta">
  Posted on September 10, 2022, by <b>Ittai Abraham, Alexander Spiegelman</b>
  </p>
  <div class="post-entry-container">
- 
  <div class="post-entry">
  We explore a family of broadcast protocols in the authenticated setting in which a designated sender wants to create a delivery-certificate of its input value. After describing the base protocol we call Provable Broadcast ($PB$), we explore the surprising power of simply running $PB$ two times in a row, then three times, and finally four times in a row.
- 
- 
  <a href="/2022-09-10-provable-broadcast/" class="post-read-more">[Read&nbsp;More]</a>
- 
  </div>
  </div>
- 
  <div class="blog-tags">
  Tags:
- 
- 
  <a href="/tags#consensus">consensus</a>
- 
  <a href="/tags#research">research</a>
- 
- 
  </div>
- 
  </article>
- 
  <article class="post-preview">
  <a href="/2022-09-05-what-is-a-blockchain/">
  <h2 class="post-title">What is a Blockchain?</h2>
- 
  </a>
  <p class="post-meta">
  Posted on September 5, 2022, by <b>Ittai Abraham</b>
  </p>
  <div class="post-entry-container">
- 
  <div class="post-entry">
  TL;DR: A blockchain is a trusted coordination mechanism.
- 
- 
  <a href="/2022-09-05-what-is-a-blockchain/" class="post-read-more">[Read&nbsp;More]</a>
- 
  </div>
  </div>
- 
  <div class="blog-tags">
  Tags:
- 
- 
  <a href="/tags#blockchain101">blockchain101</a>
- 
- 
  </div>
- 
  </article>
- 
  <article class="post-preview">
  <a href="/2022-08-25-dining-cryptographers-additive/">
  <h2 class="post-title">Dining Cryptographers and the additivity of polynomial secret sharing</h2>
- 
  </a>
  <p class="post-meta">
  Posted on August 25, 2022, by <b>Ittai Abraham</b>
  </p>
  <div class="post-entry-container">
- 
  <div class="post-entry">
  David Chaum’s dining cryptographer problem is a pioneering work on the foundations of privacy. It shows the amazing power of information-theoretic Secure Multi Party Computation. The original paper from 1988 is super accessible and fun to read. Many systems in the last 20 years for anonymity and privacy-preserving communication are based on the Dining Cryptographers problem. Herbivore, Dissent, Riposte, Blinder, and many others.
- 
- 
  <a href="/2022-08-25-dining-cryptographers-additive/" class="post-read-more">[Read&nbsp;More]</a>
- 
  </div>
  </div>
- 
  <div class="blog-tags">
  Tags:
- 
- 
  <a href="/tags#cryptography">cryptography</a>
- 
- 
  </div>
- 
  </article>
- 
  <article class="post-preview">
  <a href="/2022-08-24-BGW-secret-sharing/">
  <h2 class="post-title">The BGW Verifiable Secret Sharing Protocol</h2>
- 
  </a>
  <p class="post-meta">
  Posted on August 24, 2022, by <b>Ittai Abraham and Gilad Asharov</b>
  </p>
  <div class="post-entry-container">
- 
  <div class="post-entry">
  In this post, we present the classic Ben-or, Goldwasser, and Wigderson, 1988 (BGW) Verifiable Secret Sharing protocol (VSS) with the simplifications of Feldman, 1988. The analysis and notation in this post are based on the full proof of the BGW MPC protocol of Asharov and Lindell. This post is a continuation of our previous posts on secret sharing for passive and crash failures.
- 
- 
  <a href="/2022-08-24-BGW-secret-sharing/" class="post-read-more">[Read&nbsp;More]</a>
- 
  </div>
  </div>
- 
  <div class="blog-tags">
  Tags:
- 
- 
  <a href="/tags#cryptography">cryptography</a>
- 
- 
  </div>
- 
  </article>
- 
  <article class="post-preview">
  <a href="/2022-08-17-secret-sharing-with-crash/">
  <h2 class="post-title">Polynomial Secret Sharing with Crash Failures</h2>
- 
  </a>
  <p class="post-meta">
  Posted on August 17, 2022, by <b>Ittai Abraham</b>
  </p>
  <div class="post-entry-container">
- 
  <div class="post-entry">
  We continue our series on polynomial secret sharing. In the previous post of this series we discussed secret sharing against a passive adversary. In this post we assume crash failures and in later posts we extend to malicious failures. As before, we assume parties have private channels: the adversary cannot observe messages exchanged between non-faulty parties.
- 
- 
  <a href="/2022-08-17-secret-sharing-with-crash/" class="post-read-more">[Read&nbsp;More]</a>
- 
  </div>
  </div>
- 
  <div class="blog-tags">
  Tags:
- 
- 
  <a href="/tags#cryptography">cryptography</a>
- 
- 
  </div>
- 
  </article>
- 
  <article class="post-preview">
  <a href="/2022-08-14-new-DR-LB/">
  <h2 class="post-title">A new Dolev-Reischuk style Lower Bound</h2>
- 
  </a>
  <p class="post-meta">
  Posted on August 14, 2022, by <b>Gilad Stein, Ittai Abraham</b>
  </p>
  <div class="post-entry-container">
- 
  <div class="post-entry">
  In a previous post we discussed Crusader Broadcast and showed a $O(n^2)$ words, $O(1)$ time solution for $f&amp;lt;n$ and assuming a PKI. In this post, we overview a new Dolev-Reischuk style bower bound (see our full paper):
- 
- 
  <a href="/2022-08-14-new-DR-LB/" class="post-read-more">[Read&nbsp;More]</a>
- 
  </div>
  </div>
- 
  <div class="blog-tags">
  Tags:
- 
- 
  <a href="/tags#consensus">consensus</a>
- 
  <a href="/tags#lowerbound">lowerbound</a>
- 
  <a href="/tags#research">research</a>
- 
- 
  </div>
- 
  </article>
- 
  <article class="post-preview">
  <a href="/2022-08-12-hehtlc/">
  <h2 class="post-title">He-HTLC - Revisiting Incentives in HTLC</h2>
- 
  </a>
  <p class="post-meta">
  Posted on August 12, 2022, by <b>Kartik Nayak, Sarisht Wadhwa, Jannis Stoeter, Fan Zhang</b>
  </p>
  <div class="post-entry-container">
- 
  <div class="post-entry">
  Hashed Time-locked Contracts (HTLC) find many useful applications in the L2 Layer such as the lightning network and atomic swaps. In this post, we will focus on discussing protocols for implementing HTLC when taking into consideration incentives for parties in the system. We will discuss a line of work — WHF’19, MAD-HTLC, He-HTLC — towards developing an HTLC protocol secure in the presence of rational parties.
- 
- 
  <a href="/2022-08-12-hehtlc/" class="post-read-more">[Read&nbsp;More]</a>
- 
  </div>
  </div>
- 
  <div class="blog-tags">
  Tags:
- 
- 
  <a href="/tags#blockchain">blockchain</a>
- 
  <a href="/tags#incentives">incentives</a>
- 
- 
  </div>
- 
  </article>
- 
  <article class="post-preview">
  <a href="/2022-06-28-DAG-meets-BFT/">
  <h2 class="post-title">DAG Meets BFT - The Next Generation of BFT Consensus</h2>
- 
  </a>
  <p class="post-meta">
  Posted on June 28, 2022, by <b>Alexander Spiegelman</b>
  </p>
  <div class="post-entry-container">
- 
  <div class="post-entry">
  This post explains in simple words a recent development in the theory and practice of directed acyclic graph-based (DAG-based) Byzantine Fault Tolerance (BFT) consensus, published in three prestigious peer-reviewed conferences, and currently being implemented by several Blockchain companies, e.g., Aptos, Celo, Mysten Labs, and Somelier.
- 
- 
  <a href="/2022-06-28-DAG-meets-BFT/" class="post-read-more">[Read&nbsp;More]</a>
- 
  </div>
  </div>
- 
  <div class="blog-tags">
  Tags:
- 
- 
  <a href="/tags#consensus">consensus</a>
- 
  <a href="/tags#research">research</a>
- 
- 
  </div>
- 
  </article>
- 
  <article class="post-preview">
  <a href="/2022-06-21-sandglass/">
  <h2 class="post-title">Safe Permissionless Consensus</h2>
- 
  </a>
  <p class="post-meta">
  Posted on June 21, 2022, by <b>Youer Pu, Lorenzo Alvisi, and Ittay Eyal</b>
  </p>
  <div class="post-entry-container">
- 
  <div class="post-entry">
  Nakamoto’s consensus protocol works in a permissionless model, where nodes can join and leave without notice. However, it guarantees agreement only probabilistically. Is this weaker guarantee a necessary concession to the severe demands of supporting a permissionless model?
- 
- 
  <a href="/2022-06-21-sandglass/" class="post-read-more">[Read&nbsp;More]</a>
- 
  </div>
  </div>
- 
  <div class="blog-tags">
  Tags:
- 
- 
  <a href="/tags#research">research</a>
- 
- 
  </div>
- 
  </article>
- 
  <article class="post-preview">
  <a href="/2022-06-19-crusader-braodcast/">
  <h2 class="post-title">Crusader Broadcast</h2>
- 
  </a>
  <p class="post-meta">
  Posted on June 19, 2022, by <b>Gilad Stern and Ittai Abraham</b>
  </p>
  <div class="post-entry-container">
- 
  <div class="post-entry">
  In previous posts we showed that the classic Dolev-Strong broadcast protocol takes $O(n^3)$ words and $t+1$ rounds and that Dolev Reischuk show that $\Omega(n^2)$ is needed and it is also known that $t+1$ rounds are needed. So while the number of rounds is optimal, to this day it remains an open question of obtaining $O(n^2)$ broadcast against a strongly adaptive adversary (see post for recent progress).
- 
- 
  <a href="/2022-06-19-crusader-braodcast/" class="post-read-more">[Read&nbsp;More]</a>
- 
  </div>
  </div>
- 
  <div class="blog-tags">
  Tags:
- 
- 
  <a href="/tags#consensus">consensus</a>
- 
- 
  </div>
- 
  </article>
- 
  <article class="post-preview">
  <a href="/2022-06-09-phase-king-via-gradecast/">
  <h2 class="post-title">Phase-King through the lens of Gradecast: A simple unauthenticated synchronous Byzantine Agreement protocol</h2>
- 
  </a>
  <p class="post-meta">
  Posted on June 9, 2022, by <b>Ittai Abraham and Andrew Lewis-Pye</b>
  </p>
  <div class="post-entry-container">
- 
  <div class="post-entry">
  In this post we present a simple unauthenticated synchronous Byzantine Agreement protocol that is based on the Phase-King protocol of Berman, Garay, and Perry 1989-92. We refer also to Jonathan Katz’s excellent write-up on this same protocol from 2013. We offer a modern approach that decomposes the Phase-King protocol into a Graded Consensus building block.
- 
- 
  <a href="/2022-06-09-phase-king-via-gradecast/" class="post-read-more">[Read&nbsp;More]</a>
- 
  </div>
  </div>
- 
  <div class="blog-tags">
  Tags:
- 
- 
  <a href="/tags#consensus101">consensus101</a>
- 
  <a href="/tags#consensus">consensus</a>
- 
- 
  </div>
- 
  </article>
- 
  <article class="post-preview">
  <a href="/2022-06-07-approx-agreement-one/">
  <h2 class="post-title">Approximate Agreement: definitions and the robust midpoint protocol</h2>
- 
  </a>
  <p class="post-meta">
  Posted on June 7, 2022, by <b>Ittai Abraham and Gilad Stern</b>
  </p>
  <div class="post-entry-container">
- 
  <div class="post-entry">
  This post covers the basics of Approximate Agreement. We define the problem, explain in what way its an interesting variation of classic Agreement, and describe the idea behind the robust midpoint protocol.
- 
- 
  <a href="/2022-06-07-approx-agreement-one/" class="post-read-more">[Read&nbsp;More]</a>
- 
  </div>
  </div>
- 
  <div class="blog-tags">
  Tags:
- 
- 
  <a href="/tags#consensus">consensus</a>
- 
- 
  </div>
- 
  </article>
- 
 </div>
 <ul class="pager main-pager">
- 
  <li class="previous">
  <a href="/page3">&larr; Newer Posts</a>
  </li>
- 
- 
  <li class="next">
  <a href="/page5">Older Posts &rarr;</a>
  </li>
- 
 </ul>
- 
  </div>
  </div>
 </div>
@@ -781,7 +466,6 @@
  <div class="container-md beautiful-jekyll-footer">
  <div class="row">
  <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
- 
 <ul class="list-inline text-center footer-links"><li class="list-inline-item">
  <a href="https://twitter.com/ittaia" title="X (Twitter)">
  <span class="fa-stack fa-lg" aria-hidden="true">
@@ -791,16 +475,10 @@
  <span class="sr-only">X (Twitter)</span>
  </a>
  </li></ul>
- 
  <p class="copyright text-muted">
- 
  {"name"=>"Decentralized Thinkers"}
  &nbsp;&bull;&nbsp;
- 
  2026
- 
- 
- 
  </p>
  <p class="theme-by text-muted">
  Powered by
@@ -810,25 +488,9 @@
  </div>
  </div>
 </footer>
- 
- 
- 
- 
- 
  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
- 
- 
  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
- 
- 
  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
- 
- 
- 
- 
  <script src="/assets/js/beautifuljekyll.js"></script>
- 
- 
- 
  </body>
 </html>
