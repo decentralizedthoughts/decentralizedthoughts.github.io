@@ -153,11 +153,12 @@
  
 </div>
 </header>
-<div class="container">
+<main class=" container-md ">
  <div class="row">
- <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
  
- <article role="main" class="blog-post">
+ 
+ <div class="blog-post">
  <p>We introduced definitions for consensus, Byzantine Broadcast (BB) and Byzantine Agreement (BA), in an <a href="https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/">earlier post</a>. In this post, we discuss how consensus protocols are used in <strong>State Machine Replication</strong> (<a href="https://en.wikipedia.org/wiki/State_machine_replication">SMR</a>), a fundamental approach in distributed computing for building fault-tolerant systems. We compare and contrast this setting to that of traditional BB and BA. A <a href="https://decentralizedthoughts.github.io/2022-11-19-from-single-shot-to-smr/">follow-up post</a> discusses the reductions from one abstraction to the other in the omission failure model.</p>
 <p>(Note: the definitions and discussion below are updated in October 2024 to improve rigor and clarity.)</p>
 <h3 id="a-brief-history-of-consensus-and-state-machine-replication">A brief history of consensus and state machine replication</h3>
@@ -246,10 +247,10 @@ A server executes the request and sends a response to the client after the reque
 <h3 id="acknowledgments">Acknowledgments</h3>
 <p>Thanks to <a href="https://twitter.com/tensorfi">Maxwill</a> and Julian Loss for suggestions to improve the definition.</p>
 <p>Please leave comments on <a href="https://twitter.com/kartik1507/status/1185321750881538050?s=20">Twitter</a></p>
- </article>
+ </div>
  
  <div class="blog-tags">
- Tags:
+ <span>Tags:</span>
  
  
  <a href="/tags#consensus">consensus</a>
@@ -276,33 +277,31 @@ A server executes the request and sends a response to the client after the reque
  
 </section>
  
- <ul class="pager blog-pager">
+ <ul class="pagination blog-pager">
  
- <li class="previous">
- <a href="/2019-09-13-flavours-of-partial-synchrony/" data-toggle="tooltip" data-placement="top" title="Flavours of Partial Synchrony">&larr; Previous Post</a>
+ <li class="page-item previous">
+ <a class="page-link" href="/2019-09-13-flavours-of-partial-synchrony/" data-toggle="tooltip" data-placement="top" title="Flavours of Partial Synchrony">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
  </li>
  
  
- <li class="next">
- <a href="/2019-10-22-flavours-of-broadcast/" data-toggle="tooltip" data-placement="top" title="Flavours of Broadcast">Next Post &rarr;</a>
+ <li class="page-item next">
+ <a class="page-link" href="/2019-10-22-flavours-of-broadcast/" data-toggle="tooltip" data-placement="top" title="Flavours of Broadcast">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
  </li>
  
  </ul>
  
- <div class="disqus-comments">
  
- </div>
  
- <div class="staticman-comments">
- 
- </div>
- <div class="justcomments-comments">
- 
- </div>
  
  </div>
  </div>
-</div>
+</main>
  <footer>
  <div class="container-md beautiful-jekyll-footer">
  <div class="row">

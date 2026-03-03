@@ -153,11 +153,12 @@
  
 </div>
 </header>
-<div class="container">
+<main class=" container-md ">
  <div class="row">
- <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
  
- <article role="main" class="blog-post">
+ 
+ <div class="blog-post">
  <p><em>Verifiable Information Dispersal</em> (or <strong>VID</strong>) has its roots in the work of <a href="https://dl.acm.org/doi/pdf/10.1145/62044.62050">Michael Rabin, 1989</a> which introduced the notion of <em>Information Dispersal</em> (<strong>ID</strong>). Adding <em>verifiability</em> (referred to as <em>binding</em> in this post) to obtain <strong>VID</strong>s was done by <a href="https://eprint.iacr.org/1998/025">Garay, Gennaro, Jutla, and Rabin, 1998</a> (called SSRI). <a href="https://homes.cs.washington.edu/~tessaro/papers/dds.pdf">Cachin and Tessaro, 2004</a> introduced the notion of <em>Asynchronous VID</em> (or <strong>AVID</strong>). See <a href="https://eprint.iacr.org/2022/775">LDDRVXG21</a> for the state-of-the-art.</p>
 <p>VIDs are important primitives at the intersection of distributed computing and cryptography. Their centrality can be seen through four different perspectives:</p>
 <ol>
@@ -268,10 +269,10 @@ retrieval protocol.</p>
 <h3 id="acknowledgments">Acknowledgments</h3>
 <p>Many thanks to Qiang Tang for insightful comments and feedback.</p>
 <p>Your feedback on <a href="https://x.com/ittaia/status/1821587801701568626">Twitter</a>.</p>
- </article>
+ </div>
  
  <div class="blog-tags">
- Tags:
+ <span>Tags:</span>
  
  
  <a href="/tags#VID">VID</a>
@@ -296,33 +297,31 @@ retrieval protocol.</p>
  
 </section>
  
- <ul class="pager blog-pager">
+ <ul class="pagination blog-pager">
  
- <li class="previous">
- <a href="/2024-06-12-shoalpp/" data-toggle="tooltip" data-placement="top" title="Shoal++: High Throughput DAG-BFT Can Be Fast!">&larr; Previous Post</a>
+ <li class="page-item previous">
+ <a class="page-link" href="/2024-06-12-shoalpp/" data-toggle="tooltip" data-placement="top" title="Shoal++: High Throughput DAG-BFT Can Be Fast!">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
  </li>
  
  
- <li class="next">
- <a href="/2024-08-09-sap/" data-toggle="tooltip" data-placement="top" title="The SAP theorem for storing secret keys">Next Post &rarr;</a>
+ <li class="page-item next">
+ <a class="page-link" href="/2024-08-09-sap/" data-toggle="tooltip" data-placement="top" title="The SAP theorem for storing secret keys">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
  </li>
  
  </ul>
  
- <div class="disqus-comments">
  
- </div>
  
- <div class="staticman-comments">
- 
- </div>
- <div class="justcomments-comments">
- 
- </div>
  
  </div>
  </div>
-</div>
+</main>
  <footer>
  <div class="container-md beautiful-jekyll-footer">
  <div class="row">
