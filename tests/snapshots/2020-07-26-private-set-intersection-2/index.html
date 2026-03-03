@@ -153,11 +153,12 @@
  
 </div>
 </header>
-<div class="container">
+<main class=" container-md ">
  <div class="row">
- <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
  
- <article role="main" class="blog-post">
+ 
+ <div class="blog-post">
  <p>In the <a href="https://decentralizedthoughts.github.io/2020-03-29-private-set-intersection-a-soft-introduction/">first post on Private Set Intersection</a>, I presented the problem of Private Set Intersection, its applications and the simple protocol of <a href="https://fc14.ifca.ai/papers/fc14_submission_52.pdf">[KMRS14]</a>, that allows Alice and Bob to learn the intersection of their sets with the aid of an untrusted third party Steve who is assumed to not collude with Alice or with Bob.</p>
 <p>The main challenge in that protocol was to make sure that the 3rd party, Steve, does not cheat.
 In this post, I will present another, more recent protocol, proposed by Phi Hung Le, Samuel Ranellucci, and Dov Gordon <a href="https://eprint.iacr.org/2019/1338.pdf">[LRG19]</a>. They tackle the challenge from a different angle, which is somewhat more elegant, but could be quite expensive in some cases.</p>
@@ -228,16 +229,15 @@ The two proofs described above would be computationally expensive when the sizes
 <p>If there are $n/\log n$ bins then we expect each bin to have $O(\log n)$ items and so the communication of the proofs becomes $O(n \log\log^2 n)$. However, such a protocol would reveal much more information than required. Specifically, it would reveal the cardinality of the intersection of many subsets of items rather than a single cardinality of the intersection of all items. Therefore, that type of optimization is not allowed in this protocol.</p>
 <h2 id="concluding">Concluding</h2>
 <p>This was the second post on <em>PSI with the aid of a 3rd untrusted party</em>. In the next posts, I will cover more settings: How can Alice and Bob obtain the intersection (or the intersection cardinality) without the aid of any 3rd party? How can a set of more than 2 parties obtain the intersection of their sets?</p>
- </article>
+ </div>
  
  <div class="blog-tags">
- Tags:
- 
+ <span>Tags:</span>
  
  <a href="/tags#cryptography">cryptography</a>
  
- 
  </div>
+ 
  
  
  
@@ -256,33 +256,34 @@ The two proofs described above would be computationally expensive when the sizes
  
 </section>
  
- <ul class="pager blog-pager">
+ <ul class="pagination blog-pager">
  
- <li class="previous">
- <a href="/2020-07-17-polynomial-secret-sharing-and-the-lagrange-basis/" data-toggle="tooltip" data-placement="top" title="Polynomial Secret Sharing and the Lagrange Basis">&larr; Previous Post</a>
+ <li class="page-item previous">
+ <a class="page-link" href="/2020-07-17-polynomial-secret-sharing-and-the-lagrange-basis/" data-toggle="tooltip" data-placement="top" title="Polynomial Secret Sharing and the Lagrange Basis">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
  </li>
  
  
- <li class="next">
- <a href="/2020-08-28-what-is-a-cryptographic-hash-function/" data-toggle="tooltip" data-placement="top" title="What is a Cryptographic Hash Function?">Next Post &rarr;</a>
+ <li class="page-item next">
+ <a class="page-link" href="/2020-08-28-what-is-a-cryptographic-hash-function/" data-toggle="tooltip" data-placement="top" title="What is a Cryptographic Hash Function?">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
  </li>
  
  </ul>
  
- <div class="disqus-comments">
  
- </div>
  
- <div class="staticman-comments">
  
- </div>
- <div class="justcomments-comments">
  
- </div>
+ 
  
  </div>
  </div>
-</div>
+</main>
  <footer>
  <div class="container-md beautiful-jekyll-footer">
  <div class="row">

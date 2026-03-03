@@ -153,11 +153,12 @@
  
 </div>
 </header>
-<div class="container">
+<main class=" container-md ">
  <div class="row">
- <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
  
- <article role="main" class="blog-post">
+ 
+ <div class="blog-post">
  <p>This post is the first of two on <a href="https://arxiv.org/abs/2009.12828">Information Theoretic HotStuff (IT-HS)</a>. Information Theoretic HotStuff is a <a href="https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/">Byzantine Consensus</a> protocol in the <a href="https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/">partially synchronous</a> model. It replaces all of <a href="https://arxiv.org/abs/1803.05069">HotStuff’s</a> cryptographic signatures with simple information theoretic message passing techniques over <a href="https://decentralizedthoughts.github.io/2019-07-19-setup-assumptions/">authenticated channels</a>. Information theoretic protocols are often easy to reason about, form a great introduction for learning the basics of consensus, have less of an attack surface, and highlight useful core distributed computing techniques.</p>
 <details>
  <summary>Click this line for a short refresher on Byzantine consensus and Partial Synchrony.</summary>
@@ -263,16 +264,15 @@ It is essential that this property always holds, even when the network is still 
 <h2 id="final-notes">Final notes</h2>
 <p>Taking a step back, let’s reflect on some key aspects of IT-HS: The locking mechanism makes sure that if an honest party commits, there are $f+1$ honest parties that won’t ever send <code class="language-plaintext highlighter-rouge">echo</code> messages about any other value in any later view. This prevents any other value from having more than $f$ <code class="language-plaintext highlighter-rouge">accept</code> messages sent about it in any later view. In that sense, the $n-f$ <code class="language-plaintext highlighter-rouge">accept</code> messages required for setting a lock are essentially a proof that no other commitment took place in an earlier view. This also means that any party that sees a lock from a view $v$ and receives the required <code class="language-plaintext highlighter-rouge">accept</code> messages can disregard any lock it has from older views because it is not actually required for safeguarding any committed value. Another key property of these proofs comes from the Boosting protocol: if one honest party receives such a proof and believes it, it knows that every other honest party will believe this proof as well. The downside of the approach in this post is that it requires to constantly keep track of messages from previous views, thus requiring storage that is proportional in the worse case to the number of views (that can grow arbitrarily large before $GST$). In our next post we will look into ways to require just a (small) finite amount of storage.</p>
 <p>Let us know your thoughts on <a href="https://twitter.com/ittaia/status/1439932202477932550?s=20">Twitter</a>.</p>
- </article>
+ </div>
  
  <div class="blog-tags">
- Tags:
- 
+ <span>Tags:</span>
  
  <a href="/tags#research">research</a>
  
- 
  </div>
+ 
  
  
  
@@ -291,33 +291,34 @@ It is essential that this property always holds, even when the network is still 
  
 </section>
  
- <ul class="pager blog-pager">
+ <ul class="pagination blog-pager">
  
- <li class="previous">
- <a href="/2021-08-29-the-private-set-intersection-psi-protocol-of-the-apple-csam-detection-system/" data-toggle="tooltip" data-placement="top" title="The Private Set Intersection (PSI) Protocol of the Apple CSAM Detection System">&larr; Previous Post</a>
+ <li class="page-item previous">
+ <a class="page-link" href="/2021-08-29-the-private-set-intersection-psi-protocol-of-the-apple-csam-detection-system/" data-toggle="tooltip" data-placement="top" title="The Private Set Intersection (PSI) Protocol of the Apple CSAM Detection System">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
  </li>
  
  
- <li class="next">
- <a href="/2021-09-20-optimal-communication-complexity-of-authenticated-byzantine-agreement/" data-toggle="tooltip" data-placement="top" title="Optimal Communication Complexity of Authenticated Byzantine Agreement">Next Post &rarr;</a>
+ <li class="page-item next">
+ <a class="page-link" href="/2021-09-20-optimal-communication-complexity-of-authenticated-byzantine-agreement/" data-toggle="tooltip" data-placement="top" title="Optimal Communication Complexity of Authenticated Byzantine Agreement">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
  </li>
  
  </ul>
  
- <div class="disqus-comments">
  
- </div>
  
- <div class="staticman-comments">
  
- </div>
- <div class="justcomments-comments">
  
- </div>
+ 
  
  </div>
  </div>
-</div>
+</main>
  <footer>
  <div class="container-md beautiful-jekyll-footer">
  <div class="row">

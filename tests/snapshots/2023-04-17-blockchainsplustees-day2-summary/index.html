@@ -153,11 +153,12 @@
  
 </div>
 </header>
-<div class="container">
+<main class=" container-md ">
  <div class="row">
- <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
  
- <article role="main" class="blog-post">
+ 
+ <div class="blog-post">
  <p>This is the second of the two part post on the <a href="https://blockchainsplusx.github.io">workshop on Blockchains + TEEs</a> that concluded last week. Here are the key ideas from Day 2. You can find the post summarizing Day 1 <a href="https://decentralizedthoughts.github.io/2023-04-09-blockchainsplustees-day1-summary/">here</a>.</p>
 <h4 id="nick-hynes-practical-secure-decentralized-computing">Nick Hynes: Practical Secure Decentralized Computing</h4>
 <p>Nick discussed the use of TEEs by Oasis. At a high level, Oasis network creates a scalable network for TEE-enabled blockchain layer 1. Oasis Sapphire provides a confidential EVM by putting the EVM in a TEE; it has lower fees, support for general purpose smart contract, full composability and a developer experience identical to that of Ethereum. And with Oasis Privacy Layer, smart contracts have access to a TEE. In essence, one can augment any home network from an L1 with a contract with public data to also support private logic and secrets.</p>
@@ -184,16 +185,15 @@
 <p>Finally, he discussed applications on Secret Network, such as NFTs and private messaging networks. Finally, he ended the talk by discussing some challenges faced by Secret Network.</p>
 <p>Listen to the talk <a href="https://youtu.be/zIU3gFTb2PM?t=9020">here</a>. His slides are available <a href="">here</a>.</p>
 <p>Please add your thoughts on <a href="https://twitter.com/kartik1507/status/1649041738810507264?s=20">Twitter</a>.</p>
- </article>
+ </div>
  
  <div class="blog-tags">
- Tags:
- 
+ <span>Tags:</span>
  
  <a href="/tags#blockchain">blockchain</a>
  
- 
  </div>
+ 
  
  
  
@@ -212,33 +212,34 @@
  
 </section>
  
- <ul class="pager blog-pager">
+ <ul class="pagination blog-pager">
  
- <li class="previous">
- <a href="/2023-04-09-blockchainsplustees-day1-summary/" data-toggle="tooltip" data-placement="top" title="Blockchains + TEEs Day 1 Summary">&larr; Previous Post</a>
+ <li class="page-item previous">
+ <a class="page-link" href="/2023-04-09-blockchainsplustees-day1-summary/" data-toggle="tooltip" data-placement="top" title="Blockchains + TEEs Day 1 Summary">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
  </li>
  
  
- <li class="next">
- <a href="/2023-06-26-dls-meets-rollback/" data-toggle="tooltip" data-placement="top" title="$3f+1$ is needed in Partial Synchrony even against a Rollback adversary">Next Post &rarr;</a>
+ <li class="page-item next">
+ <a class="page-link" href="/2023-06-26-dls-meets-rollback/" data-toggle="tooltip" data-placement="top" title="$3f+1$ is needed in Partial Synchrony even against a Rollback adversary">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
  </li>
  
  </ul>
  
- <div class="disqus-comments">
  
- </div>
  
- <div class="staticman-comments">
  
- </div>
- <div class="justcomments-comments">
  
- </div>
+ 
  
  </div>
  </div>
-</div>
+</main>
  <footer>
  <div class="container-md beautiful-jekyll-footer">
  <div class="row">

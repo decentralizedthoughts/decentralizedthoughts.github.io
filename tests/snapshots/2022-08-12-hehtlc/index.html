@@ -153,11 +153,12 @@
  
 </div>
 </header>
-<div class="container">
+<main class=" container-md ">
  <div class="row">
- <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
  
- <article role="main" class="blog-post">
+ 
+ <div class="blog-post">
  <p>Hashed Time-locked Contracts (HTLC) find many useful applications in the L2 Layer such as the <a href="https://lightning.network/lightning-network-paper.pdf">lightning network</a> and <a href="https://arxiv.org/abs/1801.09515#:~:text=An%20atomic%20cross%2Dchain%20swap,example%2C%20trading%20bitcoin%20for%20ether">atomic swaps</a>. In this post, we will focus on discussing protocols for implementing HTLC when taking into consideration incentives for parties in the system. We will discuss a line of work — <a href="https://eprint.iacr.org/2019/748.pdf">WHF’19</a>, <a href="https://arxiv.org/pdf/2006.12031.pdf">MAD-HTLC</a>, <a href="https://eprint.iacr.org/2022/546.pdf">He-HTLC</a> — towards developing an HTLC protocol secure in the presence of rational parties.</p>
 <h2 id="tldr">TL;DR</h2>
 <p>Hashed Time-locked Contracts, as is, are not secure under the presence of rational miners. Its successor, <a href="https://arxiv.org/pdf/2006.12031.pdf">MAD-HTLC</a>, solves this concern under the assumption that miners are passive and only maximize their utility in terms of the number of tokens based on transactions available in the mempool. If we consider <em>active miners</em>, i.e., miners who may engage in external protocols and actively seek out opportunities in the system, our recent work, <a href="https://eprint.iacr.org/2022/546.pdf">He-HTLC</a>, shows that MAD-HTLC is not secure. We present a new protocol, He-HTLC, that is secure even in the presence of actively rational miners.</p>
@@ -240,18 +241,17 @@
 <ul>
  <li>Our protocol is called He-HTLC or Helium HTLC since it is a lightweight solution that is inert to any incentive manipulation.</li>
 </ul>
- </article>
+ </div>
  
  <div class="blog-tags">
- Tags:
- 
+ <span>Tags:</span>
  
  <a href="/tags#blockchain">blockchain</a>
  
  <a href="/tags#incentives">incentives</a>
  
- 
  </div>
+ 
  
  
  
@@ -270,33 +270,34 @@
  
 </section>
  
- <ul class="pager blog-pager">
+ <ul class="pagination blog-pager">
  
- <li class="previous">
- <a href="/2022-06-28-DAG-meets-BFT/" data-toggle="tooltip" data-placement="top" title="DAG Meets BFT - The Next Generation of BFT Consensus">&larr; Previous Post</a>
+ <li class="page-item previous">
+ <a class="page-link" href="/2022-06-28-DAG-meets-BFT/" data-toggle="tooltip" data-placement="top" title="DAG Meets BFT - The Next Generation of BFT Consensus">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
  </li>
  
  
- <li class="next">
- <a href="/2022-08-14-new-DR-LB/" data-toggle="tooltip" data-placement="top" title="A new Dolev-Reischuk style Lower Bound">Next Post &rarr;</a>
+ <li class="page-item next">
+ <a class="page-link" href="/2022-08-14-new-DR-LB/" data-toggle="tooltip" data-placement="top" title="A new Dolev-Reischuk style Lower Bound">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
  </li>
  
  </ul>
  
- <div class="disqus-comments">
  
- </div>
  
- <div class="staticman-comments">
  
- </div>
- <div class="justcomments-comments">
  
- </div>
+ 
  
  </div>
  </div>
-</div>
+</main>
  <footer>
  <div class="container-md beautiful-jekyll-footer">
  <div class="row">

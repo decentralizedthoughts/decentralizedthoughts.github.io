@@ -153,11 +153,12 @@
  
 </div>
 </header>
-<div class="container">
+<main class=" container-md ">
  <div class="row">
- <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
  
- <article role="main" class="blog-post">
+ 
+ <div class="blog-post">
  <p>Consensus protocols for $n=3f+1$ can tolerate $f$ Byzantine faults under partial synchrony. However, they also require a latency of <a href="https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/">3 rounds in the good-case</a> when the leader is non-faulty, and the system is synchronous. <em>Can we get a protocol with better latency, or tolerate more faults, if we assume $n=3f+2p+1$?</em></p>
 <ol>
  <li>
@@ -246,7 +247,8 @@
 <p>We note that a similar change under the same granular synchrony assumption allows Hydrangea to operate under $n = 3f+2p+1$. Specifically, if there is a fast commit for $x$ with $n-p$ votes in a view, a subsequent leader will obtain a fast certificate for $x$ since, $n-p-f$ of these votes are honest, and by the granular synchrony assumption, the leader receives $\geq n-p-2f = f+p+1$ of these votes. A similar change applies to Alpenglow as well.</p>
 <h2 id="acknowledgments">Acknowledgments</h2>
 <p>We would like to thank our co-authors Yuval Efron and Ling Ren. We also thank Lefteris Kokoris-Kogias, Quentin Kniep, Kobi Sliwinski, and Roger Wattenhofer for discussions and insights on this topic.</p>
- </article>
+ </div>
+ 
  
  
  
@@ -265,33 +267,34 @@
  
 </section>
  
- <ul class="pager blog-pager">
+ <ul class="pagination blog-pager">
  
- <li class="previous">
- <a href="/2026-01-21-simple-payment/" data-toggle="tooltip" data-placement="top" title="Simple Payment Systems with Unlinkability">&larr; Previous Post</a>
+ <li class="page-item previous">
+ <a class="page-link" href="/2026-01-21-simple-payment/" data-toggle="tooltip" data-placement="top" title="Simple Payment Systems with Unlinkability">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
  </li>
  
  
- <li class="next">
- <a href="/2026-02-02-ps-cheat-sheet/" data-toggle="tooltip" data-placement="top" title="Partial Synchrony Progress Cheat Sheet">Next Post &rarr;</a>
+ <li class="page-item next">
+ <a class="page-link" href="/2026-02-02-ps-cheat-sheet/" data-toggle="tooltip" data-placement="top" title="Partial Synchrony Progress Cheat Sheet">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
  </li>
  
  </ul>
  
- <div class="disqus-comments">
  
- </div>
  
- <div class="staticman-comments">
  
- </div>
- <div class="justcomments-comments">
  
- </div>
+ 
  
  </div>
  </div>
-</div>
+</main>
  <footer>
  <div class="container-md beautiful-jekyll-footer">
  <div class="row">
