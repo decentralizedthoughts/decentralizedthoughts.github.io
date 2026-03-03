@@ -24,5 +24,6 @@ jobs:
         env:
           JEKYLL_ENV: production
           PAGES_REPO_NWO: decentralizedthoughts/decentralizedthoughts.github.io
+          JEKYLL_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           bundle exec jekyll build --trace
