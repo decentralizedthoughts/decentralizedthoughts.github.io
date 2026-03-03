@@ -27,3 +27,8 @@ jobs:
           JEKYLL_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           bundle exec jekyll build --trace
+
+      - name: Check internal links and assets
+        run: |
+          python3 tools/check_site.py
+
