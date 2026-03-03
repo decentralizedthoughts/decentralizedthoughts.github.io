@@ -23,6 +23,8 @@ def url_to_snapshot_path(url: str) -> Path:
 
 def normalize_html(s: str) -> str:
     s = s.replace("\r\n","\n")
+    # normalize baseurl prefix
+    s = s.replace("/pages/decentralizedthoughts/", "/")
     # strip multiple whitespace
     s = re.sub(r"[ \t]+", " ", s)
     s = re.sub(r"\n+", "\n", s)
