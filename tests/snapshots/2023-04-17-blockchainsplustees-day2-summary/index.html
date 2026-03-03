@@ -2,17 +2,24 @@
 <html lang="en">
  
  <head>
- <meta charset="utf-8" />
- <meta http-equiv="X-UA-Compatible" content="IE=edge">
- <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
- <title>Blockchains + TEEs Day 2 Summary</title>
- <meta name="author" content="Decentralized Thinkers" />
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
  
- <link rel="alternate" type="application/rss+xml" title="Decentralized Thoughts - Decentralized thoughts about decentralization" href="/feed.xml" />
+ 
+ 
+ <title>Blockchains + TEEs Day 2 Summary</title>
+ 
+ 
+ <meta name="author" content="Kartik Nayak, Ittai Abraham, Aniket Kate">
+ 
+ <meta name="description" content="This is the second of the two part post on the workshop on Blockchains + TEEs that concluded last week. Here are the key ideas from Day 2. You can find the post summarizing Day 1 here. Nick Hynes: Practical Secure Decentralized Computing Nick discussed the use of TEEs by Oasis. At a high level, Oasis network creates a scalable network for TEE-enabled blockchain layer 1. Oasis Sapphire provides a...">
+ 
+ 
+ 
  
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
- <script>
+<script>
  window.dataLayer = window.dataLayer || [];
  function gtag(){dataLayer.push(arguments);}
  gtag('js', new Date());
@@ -23,23 +30,18 @@
  
  
  
- <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css" />
+ 
+ 
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css">
  
  
  
  
- <link rel="stylesheet" href="/css/bootstrap.min.css" />
+ <link rel="stylesheet" href="/css/bootstrap.min.css">
  
- <link rel="stylesheet" href="/css/bootstrap-social.css" />
+ <link rel="stylesheet" href="/css/bootstrap-social.css">
  
- <link rel="stylesheet" href="/css/main.css" />
- 
- 
- 
- 
- <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
- 
- <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+ <link rel="stylesheet" href="/css/main.css">
  
  
  
@@ -48,166 +50,106 @@
  
  
  
- <meta property="og:title" content="Blockchains + TEEs Day 2 Summary" />
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Blockchains + TEEs Day 2 Summary">
+ <meta property="og:description" content="This is the second of the two part post on the workshop on Blockchains + TEEs that concluded last week. Here are the key ideas from Day 2. You can find the post summarizing Day 1 here. Nick Hynes: Practical Secure Decentralized Computing Nick discussed the use of TEEs by Oasis. At a high level, Oasis network creates a scalable network for TEE-enabled blockchain layer 1. Oasis Sapphire provides a...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
  
  
- <meta property="og:description" content="This is the second of the two part post on the workshop on Blockchains + TEEs that concluded last week. Here are the key ideas from Day 2. You can find the post summarizing Day 1 here. Nick Hynes: Practical Secure Decentralized Computing Nick discussed the use of TEEs by...">
+ <meta property="og:type" content="article">
  
- <meta property="og:type" content="website" />
+ <meta property="og:article:author" content="Kartik Nayak, Ittai Abraham, Aniket Kate">
  
- <meta property="og:url" content="https://decentralizedthoughts.github.io/2023-04-17-blockchainsplustees-day2-summary/" />
- <link rel="canonical" href="https://decentralizedthoughts.github.io/2023-04-17-blockchainsplustees-day2-summary/" />
- 
- 
- <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png" />
+ <meta property="og:article:published_time" content="2023-04-17T01:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2023-04-17-blockchainsplustees-day2-summary/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2023-04-17-blockchainsplustees-day2-summary/">
  
  
- <meta name="twitter:card" content="summary" />
- <meta name="twitter:site" content="@" />
- <meta name="twitter:creator" content="@" />
+ <meta name="twitter:card" content="summary">
  
- <meta name="twitter:title" content="Blockchains + TEEs Day 2 Summary" />
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Blockchains + TEEs Day 2 Summary">
+ <meta property="twitter:description" content="This is the second of the two part post on the workshop on Blockchains + TEEs that concluded last week. Here are the key ideas from Day 2. You can find the post summarizing Day 1 here. Nick Hynes: Practical Secure Decentralized Computing Nick discussed the use of TEEs by Oasis. At a high level, Oasis network creates a scalable network for TEE-enabled blockchain layer 1. Oasis Sapphire provides a...">
  
- 
- <meta name="twitter:description" content="This is the second of the two part post on the workshop on Blockchains + TEEs that concluded last week. Here are the key ideas from Day 2. You can find the post summarizing Day 1 here. Nick Hynes: Practical Secure Decentralized Computing Nick discussed the use of TEEs by...">
- 
- 
- <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png" />
- 
- 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
  
  
  
- <script type="text/x-mathjax-config">
- MathJax.Hub.Config({
- tex2jax: {
- skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
- inlineMath: [['$','$']]
- },
- TeX: { equationNumbers: { autoNumber: "all" } }
- });
- </script>
- <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script> 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
 </head>
  <body>
  
  
- <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
- <div class="container-fluid">
- <div class="navbar-header">
- <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
- <span class="sr-only">Toggle navigation</span>
- <span class="icon-bar"></span>
- <span class="icon-bar"></span>
- <span class="icon-bar"></span>
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
  </button>
- 
- <a class="navbar-brand" href="https://decentralizedthoughts.github.io">Decentralized Thoughts</a>
- 
- </div>
  <div class="collapse navbar-collapse" id="main-navbar">
- <ul class="nav navbar-nav navbar-right">
- 
- 
- <li class="navlinks-container">
- <a class="navlinks-parent" href="javascript:void(0)">Authors</a>
- <div class="navlinks-children">
- 
- 
- 
-<a href="/about-ittai">Ittai Abraham</a>
- 
- 
- 
- 
-<a href="/about-ittay">Ittay Eyal</a>
- 
- 
- 
- 
-<a href="/about-heidi">Heidi Howard</a>
- 
- 
- 
- 
-<a href="/about-kartik">Kartik Nayak</a>
- 
- 
- 
- 
-<a href="/about-ling">Ling Ren</a>
- 
- 
- 
- 
-<a href="/about-alin">Alin Tomescu</a>
- 
- 
- 
- 
-<a href="/about-avishay">Avishay Yanai</a>
- 
- 
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
  </div>
  </li>
  
- 
- 
- <li>
- 
-<a href="/videos">Videos</a>
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
  </li>
- 
- 
- 
- <li>
- 
-<a href="/start-here">Start Here</a>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
  </li>
- 
- 
- 
- <li>
- 
-<a href="/course">Course</a>
- </li>
- 
- 
- </ul>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
  </div>
+ 
  
  <div class="avatar-container">
  <div class="avatar-img-border">
- <a href="https://decentralizedthoughts.github.io">
- <img class="avatar-img" src="/img/DTblog.png" />
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
  </a>
  </div>
  </div>
  
- </div>
 </nav>
  
 <header class="header-section ">
-<div class="intro-header no-img">
- <div class="container">
+<div class="intro-header ">
+ 
+ <div class="container-md">
  <div class="row">
- <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
  <div class="post-heading">
  <h1>Blockchains + TEEs Day 2 Summary</h1>
  
  
  
  
- <span class="post-meta">Written by Kartik Nayak, Ittai Abraham, Aniket Kate</span>
- 
- <br/>
+ By <strong>Kartik Nayak, Ittai Abraham, Aniket Kate</strong><br>
  
  <span class="post-meta">Posted on April 17, 2023</span>
  
+ 
+ 
  </div>
  </div>
  </div>
  </div>
+ 
+ 
 </div>
 </header>
 <div class="container">
@@ -257,12 +199,12 @@
 <section id = "social-share-section">
  <span class="sr-only">Share: </span>
  
- 
- <a href="https://twitter.com/intent/tweet?text=Blockchains+%2B+TEEs+Day+2+Summary+https://decentralizedthoughts.github.io/2023-04-17-blockchainsplustees-day2-summary/"
- class="btn btn-social-icon btn-twitter" title="Leave a comment on Twitter">
- <span class="fa fa-fw fa-twitter" aria-hidden="true"></span>
- <span class="sr-only">Twitter</span>
+ <a href="https://twitter.com/intent/tweet?text=Blockchains+%2B+TEEs+Day+2+Summary&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2Fpages%2Fdecentralizedthoughts%2F2023-04-17-blockchainsplustees-day2-summary%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
  </a>
+ 
  
  
  
@@ -297,27 +239,33 @@
  </div>
 </div>
  <footer>
- <div class="container beautiful-jekyll-footer">
+ <div class="container-md beautiful-jekyll-footer">
  <div class="row">
- <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
- <ul class="list-inline text-center footer-links"><li><a href="https://twitter.com/ittaia" title="Twitter"><span class="fa-stack fa-lg" aria-hidden="true">
- <i class="fa fa-circle fa-stack-2x"></i>
- <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
  </span>
- <span class="sr-only">Twitter</span>
+ <span class="sr-only">X (Twitter)</span>
  </a>
  </li></ul>
+ 
  <p class="copyright text-muted">
- Decentralized Thinkers
+ 
+ {"name"=>"Decentralized Thinkers"}
  &nbsp;&bull;&nbsp;
+ 
  2026
  
  
- </p>
  
+ </p>
  <p class="theme-by text-muted">
- Theme by
- <a href="https://deanattali.com/beautiful-jekyll/">beautiful-jekyll</a>
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
  </p>
  </div>
  </div>
