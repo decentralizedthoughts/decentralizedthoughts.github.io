@@ -1,0 +1,34 @@
+name: Beautiful Jekyll CI
+on: [push, pull_request]
+jobs:
+  build:
+    name: Build Jekyll
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1'
+          bundler: 2.5.23
+          bundler-cache: true
+      - name: Setup Pages
+        id: configure-pages
+        uses: actions/configure-pages@v5
+      - name: Setup CI config
+        run: |
+          echo "---" > _config_ci.yml
+          echo "baseurl: ${{ steps.configure-pages.outputs.base_path }}" >> _config_ci.yml
+      - name: Build site
+        env:
+          JEKYLL_ENV: production
+          PAGES_REPO_NWO: decentralizedthoughts/decentralizedthoughts.github.io
+          JEKYLL_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bundle exec jekyll build --future --config _config_ci.yml,_config.yml --trace
+      - name: Check internal links and assets
+        run: python3 tools/check_site.py
+      - name: Check HTML snapshots
+        run: |
+          cat tests/baseline_urls.txt | python3 tools/snapshot_html.py
+          git diff --exit-code -- tests/snapshots
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
