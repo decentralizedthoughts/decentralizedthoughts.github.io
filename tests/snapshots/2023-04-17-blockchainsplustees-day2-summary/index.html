@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+ <head>
+ <meta charset="utf-8" />
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+ <title>Blockchains + TEEs Day 2 Summary</title>
+ <meta name="author" content="Decentralized Thinkers" />
+ 
+ <link rel="alternate" type="application/rss+xml" title="Decentralized Thoughts - Decentralized thoughts about decentralization" href="/pages/decentralizedthoughts/feed.xml" />
+ 
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+ <script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css" />
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/pages/decentralizedthoughts/css/bootstrap.min.css" />
+ 
+ <link rel="stylesheet" href="/pages/decentralizedthoughts/css/bootstrap-social.css" />
+ 
+ <link rel="stylesheet" href="/pages/decentralizedthoughts/css/main.css" />
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+ 
+ <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:title" content="Blockchains + TEEs Day 2 Summary" />
+ 
+ 
+ <meta property="og:description" content="This is the second of the two part post on the workshop on Blockchains + TEEs that concluded last week. Here are the key ideas from Day 2. You can find the post summarizing Day 1 here. Nick Hynes: Practical Secure Decentralized Computing Nick discussed the use of TEEs by...">
+ 
+ <meta property="og:type" content="website" />
+ 
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2023-04-17-blockchainsplustees-day2-summary/" />
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2023-04-17-blockchainsplustees-day2-summary/" />
+ 
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png" />
+ 
+ 
+ <meta name="twitter:card" content="summary" />
+ <meta name="twitter:site" content="@" />
+ <meta name="twitter:creator" content="@" />
+ 
+ <meta name="twitter:title" content="Blockchains + TEEs Day 2 Summary" />
+ 
+ 
+ <meta name="twitter:description" content="This is the second of the two part post on the workshop on Blockchains + TEEs that concluded last week. Here are the key ideas from Day 2. You can find the post summarizing Day 1 here. Nick Hynes: Practical Secure Decentralized Computing Nick discussed the use of TEEs by...">
+ 
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png" />
+ 
+ 
+ 
+ 
+ 
+ <script type="text/x-mathjax-config">
+ MathJax.Hub.Config({
+ tex2jax: {
+ skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+ inlineMath: [['$','$']]
+ },
+ TeX: { equationNumbers: { autoNumber: "all" } }
+ });
+ </script>
+ <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script> 
+</head>
+ <body>
+ 
+ 
+ <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+ <div class="container-fluid">
+ <div class="navbar-header">
+ <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+ <span class="sr-only">Toggle navigation</span>
+ <span class="icon-bar"></span>
+ <span class="icon-bar"></span>
+ <span class="icon-bar"></span>
+ </button>
+ 
+ <a class="navbar-brand" href="https://decentralizedthoughts.github.io">Decentralized Thoughts</a>
+ 
+ </div>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="nav navbar-nav navbar-right">
+ 
+ 
+ <li class="navlinks-container">
+ <a class="navlinks-parent" href="javascript:void(0)">Authors</a>
+ <div class="navlinks-children">
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-ittai">Ittai Abraham</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-ittay">Ittay Eyal</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-heidi">Heidi Howard</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-kartik">Kartik Nayak</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-ling">Ling Ren</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-alin">Alin Tomescu</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-avishay">Avishay Yanai</a>
+ 
+ 
+ </div>
+ </li>
+ 
+ 
+ 
+ <li>
+ 
+<a href="/pages/decentralizedthoughts/videos">Videos</a>
+ </li>
+ 
+ 
+ 
+ <li>
+ 
+<a href="/pages/decentralizedthoughts/start-here">Start Here</a>
+ </li>
+ 
+ 
+ 
+ <li>
+ 
+<a href="/pages/decentralizedthoughts/course">Course</a>
+ </li>
+ 
+ 
+ </ul>
+ </div>
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io">
+ <img class="avatar-img" src="/pages/decentralizedthoughts/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+ </div>
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header no-img">
+ <div class="container">
+ <div class="row">
+ <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+ <div class="post-heading">
+ <h1>Blockchains + TEEs Day 2 Summary</h1>
+ 
+ 
+ 
+ 
+ <span class="post-meta">Written by Kartik Nayak, Ittai Abraham, Aniket Kate</span>
+ 
+ <br/>
+ 
+ <span class="post-meta">Posted on April 17, 2023</span>
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+</div>
+</header>
+<div class="container">
+ <div class="row">
+ <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+ 
+ <article role="main" class="blog-post">
+ <p>This is the second of the two part post on the <a href="https://blockchainsplusx.github.io">workshop on Blockchains + TEEs</a> that concluded last week. Here are the key ideas from Day 2. You can find the post summarizing Day 1 <a href="https://decentralizedthoughts.github.io/2023-04-09-blockchainsplustees-day1-summary/">here</a>.</p>
+<h4 id="nick-hynes-practical-secure-decentralized-computing">Nick Hynes: Practical Secure Decentralized Computing</h4>
+<p>Nick discussed the use of TEEs by Oasis. At a high level, Oasis network creates a scalable network for TEE-enabled blockchain layer 1. Oasis Sapphire provides a confidential EVM by putting the EVM in a TEE; it has lower fees, support for general purpose smart contract, full composability and a developer experience identical to that of Ethereum. And with Oasis Privacy Layer, smart contracts have access to a TEE. In essence, one can augment any home network from an L1 with a contract with public data to also support private logic and secrets.</p>
+<p>The primary challenges with Oasis include UX concerns related to privacy such as security-usability trade-offs, the ability for developers to reason about side channels, and agreeing on what the privacy goals are.</p>
+<p>Nick then spoke about how Blockchains can be used as a trust layer for TEEs. It provides transparency, audibility, and a way to detect TEE misuse. He then described the key idea behind his new startup where he is building Escrin, a secure decentralized computing network.</p>
+<p>You can find more details in his talk <a href="https://youtu.be/zIU3gFTb2PM?t=402">here</a> and his slides <a href="https://docs.google.com/presentation/d/1jMwMky4m9DbP3CrpH50ldJITyOsE-u56DfmHsthdCSg/edit#slide=id.p">here</a>.</p>
+<h4 id="andrew-miller-tee-based-smart-contracts-pitfalls-and-challenges">Andrew Miller: TEE-based Smart Contracts: Pitfalls and Challenges</h4>
+<p>Andrew started with summarizing the different ways in which blockchains and TEEs interact with each other, beautifully capturing the talks in the workshop. Reproducing his slide here for reference.</p>
+<p><img src="https://i.imgur.com/bUrq2Fl.png" alt="" /></p>
+<p>Andrew then spoke about the different privacy needs for blockchains and the support we have for smart contracts today. For instance, a simple commit and reveal can be easily implemented today. For more complicated instances, one can rely on ZK proofs. Finally, for arbitrary requirements, e.g., auctions, one may use TEEs or secure multiparty computation. In that vein, Andrew spoke about his new venture on hbCL, which is a privacy-preserving credit network using TEEs, which falls in the last category.</p>
+<p>Subsequently, his talk focused on issues related to using TEEs in blockchains.</p>
+<p>For instance, where are the keys in the enclave? With solutions like SecretNetwork and Obscuro, there is a single decryption key that is replicated in all enclaves. This can be problematic in theory and in practice. Instead, in the design with Oasis and Phala, there are somewhat trusted key manager enclaves, and worker enclaves only receive contract-specific keys.</p>
+<p>He then spoke about his work on SGXonerate where the issues are not related to breaking SGX but how it is used. For instance, one can attempt to modify the code around the enclave and attempt to learn the key. Finally, he spoke about issues related to rollback attacks.</p>
+<p>He concluded the talk by discussing some open challenges and opportunities in this space.</p>
+<p>You can find the talk <a href="https://youtu.be/zIU3gFTb2PM?t=1668">here</a> and his slides <a href="">here</a>.</p>
+<h4 id="ittay-eyal-teechain-a-secure-payment-network-with-asynchronous-blockchain-access">Ittay Eyal: TEEchain: A Secure Payment Network with Asynchronous Blockchain Access</h4>
+<p>Ittay started the talk discussing what we can achieve using TEEs and blockchains individually. With blockchains, while payments are possible, they take a long time today when used naively. An alternative is to use TEEs only — but this results in a 2-Generals problem.</p>
+<p>Ittay then explained the key idea behind lightning network that works on the Bitcoin blockchain; in a nutshell, it provides a bidirectional payment channel between two parties. However, to ensure that the channel works correctly, the parties need to monitor the blockchain and take appropriate actions within a given timeframe to close the channel.</p>
+<p>Ittay’s work on TEEchain instead relies on using TEEs with blockchains to provide instant payments. With his solution, parties do not need to monitor the blockchain or use it at specified time intervals. Ittay then spoke about how to extend TEEchain to a multihop scenario.</p>
+<p>Learn more about the details in his talk <a href="https://youtu.be/zIU3gFTb2PM?t=7039">here</a>. His slides are available <a href="https://blockchainsplusx.github.io/docs/tees/IttayEyal.pdf">here</a>.</p>
+<h4 id="guy-zyskind-secrets-journey-lessons-learned-from-25-years-of-running-tees-in-production">Guy Zyskind: Secret’s Journey: Lessons Learned from 2.5 Years of Running TEEs in Production</h4>
+<p>Secret Network is the first blockchain enabling secure computation. It has been in production for 2.5 years and has run more than a million private computations. Guy described the use of TEE in Secret Network for privacy which is needed in multiple applications such as e-voting, auctions, games, identity, MEV, etc. Secret Network relies on private smart contracts or “secret contracts” to achieve these privacy goals.</p>
+<p>Guy then discussed the Secret architecture at a high level. One key aspect that he touched upon is the use of a single shared secret across all TEEs on different nodes. While there are many other alternative approaches, he discussed some tradeoff including how external/social factors can play a role in such decisions.</p>
+<p>Finally, he discussed applications on Secret Network, such as NFTs and private messaging networks. Finally, he ended the talk by discussing some challenges faced by Secret Network.</p>
+<p>Listen to the talk <a href="https://youtu.be/zIU3gFTb2PM?t=9020">here</a>. His slides are available <a href="">here</a>.</p>
+<p>Please add your thoughts on <a href="https://twitter.com/kartik1507/status/1649041738810507264?s=20">Twitter</a>.</p>
+ </article>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#blockchain">blockchain</a>
+ 
+ 
+ </div>
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ 
+ <a href="https://twitter.com/intent/tweet?text=Blockchains+%2B+TEEs+Day+2+Summary+https://decentralizedthoughts.github.io/2023-04-17-blockchainsplustees-day2-summary/"
+ class="btn btn-social-icon btn-twitter" title="Leave a comment on Twitter">
+ <span class="fa fa-fw fa-twitter" aria-hidden="true"></span>
+ <span class="sr-only">Twitter</span>
+ </a>
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pager blog-pager">
+ 
+ <li class="previous">
+ <a href="/pages/decentralizedthoughts/2023-04-09-blockchainsplustees-day1-summary/" data-toggle="tooltip" data-placement="top" title="Blockchains + TEEs Day 1 Summary">&larr; Previous Post</a>
+ </li>
+ 
+ 
+ <li class="next">
+ <a href="/pages/decentralizedthoughts/2023-06-26-dls-meets-rollback/" data-toggle="tooltip" data-placement="top" title="$3f+1$ is needed in Partial Synchrony even against a Rollback adversary">Next Post &rarr;</a>
+ </li>
+ 
+ </ul>
+ 
+ <div class="disqus-comments">
+ 
+ </div>
+ 
+ <div class="staticman-comments">
+ 
+ </div>
+ <div class="justcomments-comments">
+ 
+ </div>
+ 
+ </div>
+ </div>
+</div>
+ <footer>
+ <div class="container beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+ <ul class="list-inline text-center footer-links"><li><a href="https://twitter.com/ittaia" title="Twitter"><span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fa fa-circle fa-stack-2x"></i>
+ <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">Twitter</span>
+ </a>
+ </li></ul>
+ <p class="copyright text-muted">
+ Decentralized Thinkers
+ &nbsp;&bull;&nbsp;
+ 2026
+ 
+ 
+ </p>
+ 
+ <p class="theme-by text-muted">
+ Theme by
+ <a href="https://deanattali.com/beautiful-jekyll/">beautiful-jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ 
+ 
+ <script>
+ if (typeof jQuery == 'undefined') {
+ document.write('<script src="/pages/decentralizedthoughts/js/jquery-1.11.2.min.js"></scr' + 'ipt>');
+ }
+ </script>
+ 
+ 
+ 
+ 
+ <script src="/pages/decentralizedthoughts/js/bootstrap.min.js"></script>
+ 
+ 
+ 
+ 
+ <script src="/pages/decentralizedthoughts/js/main.js"></script>
+ 
+ 
+ 
+ </body>
+</html>

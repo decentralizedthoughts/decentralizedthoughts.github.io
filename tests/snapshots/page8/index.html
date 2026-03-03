@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+ <head>
+ <meta charset="utf-8" />
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+ <title>Decentralized Thoughts - Decentralized thoughts about decentralization</title>
+ <meta name="author" content="Decentralized Thinkers" />
+ 
+ <link rel="alternate" type="application/rss+xml" title="Decentralized Thoughts - Decentralized thoughts about decentralization" href="/pages/decentralizedthoughts/feed.xml" />
+ 
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+ <script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css" />
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/pages/decentralizedthoughts/css/bootstrap.min.css" />
+ 
+ <link rel="stylesheet" href="/pages/decentralizedthoughts/css/bootstrap-social.css" />
+ 
+ <link rel="stylesheet" href="/pages/decentralizedthoughts/css/main.css" />
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+ 
+ <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:title" content="Decentralized Thoughts" />
+ 
+ 
+ <meta property="og:description" content="Decentralized Thoughts is a group blog on decentralization, by decentralized thinkers, for decentralized thoughts, of decentralized matters. Decentralized Thoughts is a group blog on decentralization, by decentralized thinkers, for decentralized thoughts, of decentralized matters. {% for post in paginator.posts %} {{ post.title }} {% if post.subtitle %} {{ post.subtitle }}...">
+ 
+ <meta property="og:type" content="website" />
+ 
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/page8/" />
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/page8/" />
+ 
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png" />
+ 
+ 
+ <meta name="twitter:card" content="summary" />
+ <meta name="twitter:site" content="@" />
+ <meta name="twitter:creator" content="@" />
+ 
+ <meta name="twitter:title" content="Decentralized Thoughts" />
+ 
+ 
+ <meta name="twitter:description" content="Decentralized Thoughts is a group blog on decentralization, by decentralized thinkers, for decentralized thoughts, of decentralized matters. Decentralized Thoughts is a group blog on decentralization, by decentralized thinkers, for decentralized thoughts, of decentralized matters. {% for post in paginator.posts %} {{ post.title }} {% if post.subtitle %} {{ post.subtitle }}...">
+ 
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png" />
+ 
+ 
+ 
+ 
+ 
+ <script type="text/x-mathjax-config">
+ MathJax.Hub.Config({
+ tex2jax: {
+ skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+ inlineMath: [['$','$']]
+ },
+ TeX: { equationNumbers: { autoNumber: "all" } }
+ });
+ </script>
+ <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script> 
+</head>
+ <body>
+ 
+ 
+ <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+ <div class="container-fluid">
+ <div class="navbar-header">
+ <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+ <span class="sr-only">Toggle navigation</span>
+ <span class="icon-bar"></span>
+ <span class="icon-bar"></span>
+ <span class="icon-bar"></span>
+ </button>
+ 
+ <a class="navbar-brand" href="https://decentralizedthoughts.github.io">Decentralized Thoughts</a>
+ 
+ </div>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="nav navbar-nav navbar-right">
+ 
+ 
+ <li class="navlinks-container">
+ <a class="navlinks-parent" href="javascript:void(0)">Authors</a>
+ <div class="navlinks-children">
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-ittai">Ittai Abraham</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-ittay">Ittay Eyal</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-heidi">Heidi Howard</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-kartik">Kartik Nayak</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-ling">Ling Ren</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-alin">Alin Tomescu</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-avishay">Avishay Yanai</a>
+ 
+ 
+ </div>
+ </li>
+ 
+ 
+ 
+ <li>
+ 
+<a href="/pages/decentralizedthoughts/videos">Videos</a>
+ </li>
+ 
+ 
+ 
+ <li>
+ 
+<a href="/pages/decentralizedthoughts/start-here">Start Here</a>
+ </li>
+ 
+ 
+ 
+ <li>
+ 
+<a href="/pages/decentralizedthoughts/course">Course</a>
+ </li>
+ 
+ 
+ </ul>
+ </div>
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io">
+ <img class="avatar-img" src="/pages/decentralizedthoughts/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+ </div>
+</nav>
+ 
+<div class="intro-header"></div>
+<div class="container" role="main">
+ <div class="row">
+ <div class="col-lg-10 col-lg-offset-2 col-md-10 col-md-offset-1">
+ <title>Decentralized Thoughts is a group blog on decentralization, by decentralized thinkers, for decentralized thoughts, of decentralized matters. Decentralized Thoughts is a group blog on decentralization, by decentralized thinkers, for decentralized thoughts, of decentralized matters. </title>
+<div class="posts-list">
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2019-11-01-primary-backup/">
+ <h2 class="post-title">Primary-Backup State Machine Replication for Crash Failures</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on November 1, 2019, by <b>Ittai Abraham, Kartik Nayak</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ We continue our series of posts on State Machine Replication (SMR). In this post we discuss the most simple form of SMR: Primary-Backup for crash failures. We will assume synchronous communication. For simplicity, we will consider the case with two replicas, out of which one can crash. Recall that when a party crashes, it irrevocably terminates.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2019-11-01-primary-backup/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#SMR">SMR</a>
+ 
+ <a href="/pages/decentralizedthoughts/tags#crash">crash</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2019-10-25-payment-channels-are-just-a-two-person-bfs-smr-systems/">
+ <h2 class="post-title">A Payment Channel is a two person BFS-SMR system</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on October 25, 2019, by <b>Ittai Abraham</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ This posts views payment channels as essentially a two person BFS-SMR system along with a carefully implemented mechanism for safe termination (channel closing) under assumptions of synchrony.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2019-10-25-payment-channels-are-just-a-two-person-bfs-smr-systems/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#SMR">SMR</a>
+ 
+ <a href="/pages/decentralizedthoughts/tags#blockchain101">blockchain101</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2019-10-25-flavours-of-state-machine-replication/">
+ <h2 class="post-title">Flavours of State Machine Replication</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on October 25, 2019, by <b>Ittai Abraham</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ State Machine Replication is a fundamental approach in distributed computing for building fault tolerant systems. This post is a followup to our basic post on Fault Tolerant State Machine Replication.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2019-10-25-flavours-of-state-machine-replication/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#SMR">SMR</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2019-10-22-flavours-of-broadcast/">
+ <h2 class="post-title">Flavours of Broadcast</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on October 22, 2019, by <b>Ittai Abraham</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ What is the difference between broadcast, crusader broadcast, gradecast, weak broadcast, detectable broadcast, and broadcast with abort? This post is a follow up to our basic post on: What is Broadcast?
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2019-10-22-flavours-of-broadcast/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2019-10-15-consensus-for-state-machine-replication/">
+ <h2 class="post-title">Consensus for State Machine Replication</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on October 15, 2019, by <b>Kartik Nayak, Ittai Abraham, Ling Ren</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ We introduced definitions for consensus, Byzantine Broadcast (BB) and Byzantine Agreement (BA), in an earlier post. In this post, we discuss how consensus protocols are used in State Machine Replication (SMR), a fundamental approach in distributed computing for building fault-tolerant systems. We compare and contrast this setting to that of traditional BB and BA. A follow-up post discusses the reductions from one abstraction to the other in the omission failure...
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2019-10-15-consensus-for-state-machine-replication/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#consensus">consensus</a>
+ 
+ <a href="/pages/decentralizedthoughts/tags#SMR">SMR</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2019-09-13-flavours-of-partial-synchrony/">
+ <h2 class="post-title">Flavours of Partial Synchrony</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on September 13, 2019, by <b>Ittai Abraham</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ This is a follow-up post to the post on Synchrony, Asynchrony and Partial synchrony. The partial synchrony model of DLS88 comes in two flavors: GST and Unknown Latency. In this post we discuss:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2019-09-13-flavours-of-partial-synchrony/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#dist101">dist101</a>
+ 
+ <a href="/pages/decentralizedthoughts/tags#models">models</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2019-09-13-dont-trust-checkpoint/">
+ <h2 class="post-title">Dont Trust. Verify. and Checkpoint?</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on September 13, 2019, by <b>Ittai Abraham</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Imagine that that Aliens land on earth with a new superfast SHA256 machine. Imagine this machine always gives them more than 51% of the current world Bitcoin hash power (but not enough hash power to completely break SHA256). Suppose they decide to build a chain from the Bitcoin Genesis block that is longer than any other chain on earth and put only empty blocks on it. Could they erase all...
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2019-09-13-dont-trust-checkpoint/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#blockchain">blockchain</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2019-08-16-byzantine-agreement-needs-quadratic-messages/">
+ <h2 class="post-title">The Dolev and Reischuk Lower Bound: Does Agreement need Quadratic Messages?</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on August 16, 2019, by <b>Kartik Nayak, Ittai Abraham</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ How scalable is Byzantine agreement? Does solving agreement require non-faulty parties to send a quadratic number of messages in the number of potential faults? In this post, we highlight the Dolev and Reischuk lower bound from 1982 that addresses this fundamental question.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2019-08-16-byzantine-agreement-needs-quadratic-messages/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#lowerbound">lowerbound</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2019-08-02-byzantine-agreement-is-impossible-for-$n-slash-leq-3-f$-is-the-adversary-can-easily-simulate/">
+ <h2 class="post-title">Byzantine Agreement is Impossible for $n \leq 3 f$ if the Adversary can Simulate</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on August 2, 2019, by <b>Kartik Nayak, Ittai Abraham</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ The Fischer, Lynch, and Merritt, 1985 lower bound states that synchronous Byzantine agreement is impossible if the adversary controls $f&amp;gt;n/3$ parties. It is well known that this lower bound holds in the unauthenticated setting and does not hold in a setting with a PKI setup. Naively, one might think that the lower bound always holds if there is no PKI setup, but Nakamoto consensus shows that this is not the...
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2019-08-02-byzantine-agreement-is-impossible-for-$n-slash-leq-3-f$-is-the-adversary-can-easily-simulate/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#lowerbound">lowerbound</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2019-07-19-setup-assumptions/">
+ <h2 class="post-title">The Trusted Setup Phase</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on July 19, 2019, by <b></b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ 
+ co-authored with Avishay Yanai
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2019-07-19-setup-assumptions/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#models">models</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2019-07-18-do-bitcoin-and-ethereum-have-any-trusted-setup-assumptions/">
+ <h2 class="post-title">Do Bitcoin and Ethereum have any trusted setup assumptions?</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on July 18, 2019, by <b>Ittai Abraham, Alin Tomescu, Avishay Yanai</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ 
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2019-07-18-do-bitcoin-and-ethereum-have-any-trusted-setup-assumptions/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#blockchain101">blockchain101</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2019-06-27-defining-consensus/">
+ <h2 class="post-title">What is Consensus?</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on June 27, 2019, by <b>Kartik Nayak, Ittai Abraham</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Consensus broadly means different parties reaching agreement. In distributed computing, Consensus is a core functionality. In this post, we define the consensus problem and its variants.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2019-06-27-defining-consensus/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#consensus101">consensus101</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/">
+ <h2 class="post-title">Byzantine Agreement is impossible for $n \leq 3 f$ under partial synchrony</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on June 25, 2019, by <b>Kartik Nayak, Ittai Abraham</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Lower bounds in distributed computing are very helpful. They prevent us from wasting time on impossible tasks :-). More importantly, they help us focus on what is optimally possible or how to circumvent them by altering assumptions or problem formulation.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#consensus101">consensus101</a>
+ 
+ <a href="/pages/decentralizedthoughts/tags#lowerbound">lowerbound</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2019-06-23-what-is-the-difference-between/">
+ <h2 class="post-title">What is the difference between PBFT, Tendermint, SBFT and HotStuff ?</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on June 23, 2019, by <b>Ittai Abraham</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In this post I will try to compare four of my favorite protocols for Byzantine Fault Tolerant (BFT) State Machine Replication (SMR):
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2019-06-23-what-is-the-difference-between/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#research">research</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2019-06-17-the-threshold-adversary/">
+ <h2 class="post-title">The threshold adversary</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on June 17, 2019, by <b>Ittai Abraham</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In addition to limiting the adversary via a communication model synchrony, asynchrony, or partial synchrony, we need a way to limit the adversary’s power to corrupt parties.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2019-06-17-the-threshold-adversary/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#dist101">dist101</a>
+ 
+ <a href="/pages/decentralizedthoughts/tags#models">models</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2019-06-07-modeling-the-adversary/">
+ <h2 class="post-title">The power of the adversary</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on June 7, 2019, by <b>Ittai Abraham</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ After we fix the communication model, synchrony, asynchrony, or partial synchrony, and a threshold adversary there are still five important modeling decisions regarding the adversary’s power:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2019-06-07-modeling-the-adversary/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#dist101">dist101</a>
+ 
+ <a href="/pages/decentralizedthoughts/tags#models">models</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2019-06-01-2019-5-31-models/">
+ <h2 class="post-title">Synchrony, Asynchrony and Partial synchrony</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on June 1, 2019, by <b>Ittai Abraham</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In the standard distributed computing model, communication uncertainty is modeled by an adversary that controls message delays. The communication model defines the limits to the power of the adversary to delay messages.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2019-06-01-2019-5-31-models/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#dist101">dist101</a>
+ 
+ <a href="/pages/decentralizedthoughts/tags#models">models</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2019-05-31-start/">
+ <h2 class="post-title">Where do I even start?</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on May 31, 2019, by <b>Ittai Abraham</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-image">
+ <a href="/pages/decentralizedthoughts/2019-05-31-start/">
+ <img src="/img/hello_world.jpeg">
+ </a>
+ </div>
+ 
+ <div class="post-entry">
+ I have been wanting to start a blog for a long time. Here we go!
+ 
+ 
+ </div>
+ </div>
+ 
+ </article>
+ 
+</div>
+<ul class="pager main-pager">
+ 
+ <li class="previous">
+ <a href="/pages/decentralizedthoughts/page7">&larr; Newer Posts</a>
+ </li>
+ 
+ 
+</ul>
+ 
+ </div>
+ </div>
+</div>
+ <footer>
+ <div class="container beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+ <ul class="list-inline text-center footer-links"><li><a href="https://twitter.com/ittaia" title="Twitter"><span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fa fa-circle fa-stack-2x"></i>
+ <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">Twitter</span>
+ </a>
+ </li></ul>
+ <p class="copyright text-muted">
+ Decentralized Thinkers
+ &nbsp;&bull;&nbsp;
+ 2026
+ 
+ 
+ </p>
+ 
+ <p class="theme-by text-muted">
+ Theme by
+ <a href="https://deanattali.com/beautiful-jekyll/">beautiful-jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ 
+ 
+ <script>
+ if (typeof jQuery == 'undefined') {
+ document.write('<script src="/pages/decentralizedthoughts/js/jquery-1.11.2.min.js"></scr' + 'ipt>');
+ }
+ </script>
+ 
+ 
+ 
+ 
+ <script src="/pages/decentralizedthoughts/js/bootstrap.min.js"></script>
+ 
+ 
+ 
+ 
+ <script src="/pages/decentralizedthoughts/js/main.js"></script>
+ 
+ 
+ 
+ </body>
+</html>

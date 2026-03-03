@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+ <head>
+ <meta charset="utf-8" />
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+ <title>Consensus for State Machine Replication</title>
+ <meta name="author" content="Decentralized Thinkers" />
+ 
+ <link rel="alternate" type="application/rss+xml" title="Decentralized Thoughts - Decentralized thoughts about decentralization" href="/pages/decentralizedthoughts/feed.xml" />
+ 
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+ <script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css" />
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/pages/decentralizedthoughts/css/bootstrap.min.css" />
+ 
+ <link rel="stylesheet" href="/pages/decentralizedthoughts/css/bootstrap-social.css" />
+ 
+ <link rel="stylesheet" href="/pages/decentralizedthoughts/css/main.css" />
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+ 
+ <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:title" content="Consensus for State Machine Replication" />
+ 
+ 
+ <meta property="og:description" content="We introduced definitions for consensus, Byzantine Broadcast (BB) and Byzantine Agreement (BA), in an earlier post. In this post, we discuss how consensus protocols are used in State Machine Replication (SMR), a fundamental approach in distributed computing for building fault-tolerant systems. We compare and contrast this setting to that of...">
+ 
+ <meta property="og:type" content="website" />
+ 
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/" />
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/" />
+ 
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png" />
+ 
+ 
+ <meta name="twitter:card" content="summary" />
+ <meta name="twitter:site" content="@" />
+ <meta name="twitter:creator" content="@" />
+ 
+ <meta name="twitter:title" content="Consensus for State Machine Replication" />
+ 
+ 
+ <meta name="twitter:description" content="We introduced definitions for consensus, Byzantine Broadcast (BB) and Byzantine Agreement (BA), in an earlier post. In this post, we discuss how consensus protocols are used in State Machine Replication (SMR), a fundamental approach in distributed computing for building fault-tolerant systems. We compare and contrast this setting to that of...">
+ 
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png" />
+ 
+ 
+ 
+ 
+ 
+ <script type="text/x-mathjax-config">
+ MathJax.Hub.Config({
+ tex2jax: {
+ skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+ inlineMath: [['$','$']]
+ },
+ TeX: { equationNumbers: { autoNumber: "all" } }
+ });
+ </script>
+ <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script> 
+</head>
+ <body>
+ 
+ 
+ <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+ <div class="container-fluid">
+ <div class="navbar-header">
+ <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+ <span class="sr-only">Toggle navigation</span>
+ <span class="icon-bar"></span>
+ <span class="icon-bar"></span>
+ <span class="icon-bar"></span>
+ </button>
+ 
+ <a class="navbar-brand" href="https://decentralizedthoughts.github.io">Decentralized Thoughts</a>
+ 
+ </div>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="nav navbar-nav navbar-right">
+ 
+ 
+ <li class="navlinks-container">
+ <a class="navlinks-parent" href="javascript:void(0)">Authors</a>
+ <div class="navlinks-children">
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-ittai">Ittai Abraham</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-ittay">Ittay Eyal</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-heidi">Heidi Howard</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-kartik">Kartik Nayak</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-ling">Ling Ren</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-alin">Alin Tomescu</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-avishay">Avishay Yanai</a>
+ 
+ 
+ </div>
+ </li>
+ 
+ 
+ 
+ <li>
+ 
+<a href="/pages/decentralizedthoughts/videos">Videos</a>
+ </li>
+ 
+ 
+ 
+ <li>
+ 
+<a href="/pages/decentralizedthoughts/start-here">Start Here</a>
+ </li>
+ 
+ 
+ 
+ <li>
+ 
+<a href="/pages/decentralizedthoughts/course">Course</a>
+ </li>
+ 
+ 
+ </ul>
+ </div>
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io">
+ <img class="avatar-img" src="/pages/decentralizedthoughts/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+ </div>
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header no-img">
+ <div class="container">
+ <div class="row">
+ <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+ <div class="post-heading">
+ <h1>Consensus for State Machine Replication</h1>
+ 
+ 
+ 
+ 
+ <span class="post-meta">Written by Kartik Nayak, Ittai Abraham, Ling Ren</span>
+ 
+ <br/>
+ 
+ <span class="post-meta">Posted on October 15, 2019</span>
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+</div>
+</header>
+<div class="container">
+ <div class="row">
+ <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+ 
+ <article role="main" class="blog-post">
+ <p>We introduced definitions for consensus, Byzantine Broadcast (BB) and Byzantine Agreement (BA), in an <a href="https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/">earlier post</a>. In this post, we discuss how consensus protocols are used in <strong>State Machine Replication</strong> (<a href="https://en.wikipedia.org/wiki/State_machine_replication">SMR</a>), a fundamental approach in distributed computing for building fault-tolerant systems. We compare and contrast this setting to that of traditional BB and BA. A <a href="https://decentralizedthoughts.github.io/2022-11-19-from-single-shot-to-smr/">follow-up post</a> discusses the reductions from one abstraction to the other in the omission failure model.</p>
+<p>(Note: the definitions and discussion below are updated in October 2024 to improve rigor and clarity.)</p>
+<h3 id="a-brief-history-of-consensus-and-state-machine-replication">A brief history of consensus and state machine replication</h3>
+<p>The understanding that a total ordering of events can be used to implement any state machine goes back to the foundational work of <a href="https://lamport.azurewebsites.net/pubs/time-clocks.pdf">Lamport 1978</a>. Work in the early 80s extended this to handle fault tolerance (see <a href="https://www.andrew.cmu.edu/course/15-440/assets/READINGS/borg-1983.pdf">Borg et al. 1983</a>).
+This approach is articulated in the tutorial of <a href="https://www.cs.cornell.edu/fbs/publications/SMSurvey.pdf">Schneider 1990</a>.
+Here is a concise description from <a href="https://lamport.azurewebsites.net/pubs/paxos-simple.pdf">Lamport’s Paxos made simple</a>:</p>
+<blockquote>
+ <p>A simple way to implement a distributed system is as a collection of clients
+that issue commands to a central server. The server can be described as
+a deterministic state machine that performs client commands in some sequence. The state machine has a current state; it performs a step by taking
+as input a command and producing an output and a new state. 
+An implementation that uses a single central server fails if that server
+fails. We therefore instead use a collection of servers, each one independently
+implementing the state machine. Because the state machine is deterministic,
+all the servers will produce the same sequences of states and outputs if they
+all execute the same sequence of commands. A client issuing a command
+can then use the output generated for it by any server.
+To guarantee that all servers execute the same sequence of state machine
+commands, we implement a sequence of separate instances of the Paxos
+consensus algorithm, the value chosen by the $i$th instance being the $i$th state
+machine command in the sequence.</p>
+</blockquote>
+<h3 id="state-machine">State machine</h3>
+<p>Let’s start with the definition of a state machine. A state machine, at any point, stores a <em>state</em> of the system. It receives <em>inputs</em> (also referred to as <em>commands</em>). The state machine applies these inputs in a <em>sequential order</em> using a deterministic <em>transition function</em> to generate an <em>output</em> and an <em>updated</em> state. A succinct description of the state machine is as follows:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>state = init
+log = []
+while true:
+ on receiving cmd:
+ log.append(cmd)
+ state, output = apply(cmd, state)
+</code></pre></div></div>
+<p>Here, the state machine is initialized to an initial state <code class="language-plaintext highlighter-rouge">init</code>. When it receives an input <code class="language-plaintext highlighter-rouge">cmd</code>, it first adds the input to a <code class="language-plaintext highlighter-rouge">log</code>. It then <em>executes</em> the <code class="language-plaintext highlighter-rouge">cmd</code> by applying the transition function <code class="language-plaintext highlighter-rouge">apply</code> to the state. As a result, it obtains an updated state and an output <code class="language-plaintext highlighter-rouge">output</code>.</p>
+<p>In a client-server setting, the server maintains the state machine, and clients send commands to the server. The output is then sent back to the client.</p>
+<p>An example state machine is the Bitcoin ledger. The state consists of the set of public keys along with the associated Bitcoins (see <a href="https://www.mycryptopedia.com/bitcoin-utxo-unspent-transaction-output-set-explained/">UTXO</a>). Each input (or cmd) to the state machine is a transaction (see <a href="https://bitcoin.org/en/developer-reference#bitcoin-core-apis">Bitcoin core api</a>). The log corresponds to the Bitcoin ledger. The transition function <code class="language-plaintext highlighter-rouge">apply</code> is the function that determines whether a transaction is valid, and if it is, performs the desired bitcoin script operation (see <a href="https://en.bitcoin.it/wiki/Script">script</a>).</p>
+<h3 id="multi-shot-consensus---a-server-centric-definition">Multi-shot consensus - a server centric definition</h3>
+<p>The central building block of state machine replication is <em>multi-shot consensus</em>. In this variant of the consensus problem, a set of servers (also called replicas) agree on a dynamically growing log of commands. These commands arrive as input to the servers over time (presumably from clients but we abstract that away).</p>
+<p>Let $\log_i[s]$ be the $s$-th entry in the log of replica $i$. Initially, $\log_i[s]=\bot$ for all $s$ and $i$. Replica $i$ writes each $\log_i[s]$ <em>only once</em> to a value that is not $\bot$.</p>
+<p><strong>Safety:</strong> Non-faulty replicas agree on each log entry, i.e., if two non-faulty replicas $i$ and $j$ have $\log_i[s] \neq \bot$ and $\log_j[s] \neq \bot$, then $\log_i[s] = \log_j[s]$.</p>
+<p><strong>Liveness:</strong> Every input $x$ that arrives at a non-faulty replica is eventually recorded in the log, i.e., eventually $\exists s$ and non-faulty replica $i$ such that $\log_i[s] = x$.</p>
+<p><strong>Validity:</strong> There exists an injective mapping from non-$\bot$ log entries to inputs, meaning that each log entry originates from a valid input, and no input appears more than once. Many systems have additional <em>external validity</em> requirements (discussed soon).</p>
+<p><strong>Prefix completeness:</strong> If a non-faulty replica $i$ has $log_i[s] \neq \bot$, then for all non-faulty replica $j$ and all indices $s’ \le s$, eventually $log_j[s’] \neq \bot$.</p>
+<h4 id="comparison-to-single-shot-consensus-broadcast-and-other-notes">Comparison to single-shot consensus, broadcast, and other notes</h4>
+<p>The requirements are similar in multi-shot consensus and single-shot consensus. However, there are some differences:</p>
+<ol>
+ <li>
+ <p><strong>Consensus on a sequence of values.</strong> Conceptually, one can sequentially compose single-shot consensus instances to obtain multi-shot consensus. In practice, there are better designs than sequential composition, such as the popular steady-state + view-change paradigm.</p>
+ </li>
+ <li>
+ <p><strong>External validity.</strong> Besides the above injective mapping validity, multi-shot consensus typically satisfies <em>external validity</em>, i.e., additional validity requirements imposed by the application. For example, a system may require that any command that makes it into the log must have the right format and be generated by the right client (e.g., signed by the client who owns the bitcoin). Other systems may be more “liberal” when adding commands to the log and choose to weed out invalid commands at the execution stage.</p>
+ </li>
+ <li>
+ <p><strong>Fairness.</strong> The liveness requirement above only guarantees that each input is <em>eventually</em> committed but does not say how two different inputs need to be ordered relative to each other. Many protocols desire some stronger degree of fairness on the ordering of commands. We plan to expand on this issue in future posts as it is deeply connected to challenges in MEV.</p>
+ </li>
+</ol>
+<p>We now move to a client centric view of the world for state machine replication and show how multi-shot consensus can be used to implement state machine replication.</p>
+<h3 id="state-machine-replication---a-client-centric-definition">State machine replication - a client centric definition</h3>
+<p>Here, we assume that in addition to servers (some of which may be faulty), there are also clients. Any number of clients can be fault – crash, omission, or Byzantine in the respective model.</p>
+<p>Let $L$ be a log of consecutive commands and $SM(L)$ be the state machine after applying this sequence of commands. Each $SM(L)$ also includes an output, denoted $out$, as part of the resulting state, and $out$ is sent back to the client as a response.</p>
+<p>The requirements for state machine replication are:</p>
+<p><strong>SMR Liveness</strong>: If a non-faulty client issues a <em>request</em>, then it eventually gets a <em>response</em>.</p>
+<p><strong>SMR Safety</strong>: If two requests return outputs $out_1$ and $out_2$, then there are two logs $L_1$ and $L_2$ such that: one is a prefix of the other, $out_1$ is the output of $SM(L_1)$, and $out_2$ is the output of $SM(L_2)$.</p>
+<p><strong>SMR Validity</strong>: Any response returned to a non-faulty client is the output of some $SM(L)$ where each value in $L$ can be mapped uniquely to a client request.</p>
+<p><strong>SMR Correctness</strong>: For a request $cmd$, its response, and any response to a request that started after the response for $cmd$ arrives, returns the output of some $SM(L)$ such that $L$ includes $cmd$.</p>
+<ul>
+ <li>The first three requirements are analogous to the <em>Liveness, Safety, and Validity</em> of multi-shot consensus. The SMR Correctness property has no analog as it is a consistency property between the client, not the servers. There may be variants of this property that provide weaker consistency between clients, or slightly stronger properties that aim to simulate an ideal functionality (see <a href="https://decentralizedthoughts.github.io/2021-10-16-the-ideal-state-machine-model-multiple-clients-and-linearizability/">this post</a>).</li>
+</ul>
+<p>The client centric nature of SMR has a direct consequence on fault tolerance. Multi-shot consensus in synchrony can be based on the Dolev-Strong broadcast protocol and tolerate $f &lt; n-1$ Byzantine faults among $n$ parties. A client centric SMR protocol can tolerate at most minority Byzantine faults.</p>
+<h3 id="from-multi-shot-consensus-to-state-machine-replication">From multi-shot consensus to state machine replication</h3>
+<p>To obtain client centric state machine replication from a multi-shot consensus, all we need is a client protocol that ensures the SMR Correctness property. Here is a natural client protocol.</p>
+<p>The servers run a multi-shot consensus protocol. The clients send requests to the servers. Once a server sees a request, it uses the request as an input to the multi-shot consensus. 
+A server executes the request and sends a response to the client after the request is added to the log <em>and</em> all the previous entries in the log are non-$\bot$ and have been executed.</p>
+<h4 id="proof-sketch">Proof sketch</h4>
+<p><strong>SMR Liveness</strong>: A client then sends a request to the servers then due to <em>Liveness</em> of MSC this request will be eventually added to the log. Due to <em>Prefix completeness</em> of MSC all previous log entries will also eventually become non $\bot$. Hence, eventually the client will receive a response.</p>
+<p><strong>SMR Safety</strong>: This follows directly from <em>Safety</em> of MSC.</p>
+<p><strong>SMR Validity</strong>: This follows directly from Validity of MSC.</p>
+<p><strong>SMR Correctness</strong>: consider a $cmd$ that is uniquely placed in $\log_i[k]$ (from the Validity and Safety of MS). When the client receives a response, due to the protocol above, all log entries from 1 to $k$ are filled and executed. So clearly any request that starts after this response arrives must be committed to a slot $&gt;k$ in the log. Hence, from SMR Safety, this new response will see $\log[k]=cmd$ as required.</p>
+<p>Note that we can use the point in time that the first party sends a (valid) response to define the <strong>linearization point</strong> of the client request. Clearly this point is after the request and before the response (because it’s the first). Also note that this linearization order is exactly the log order, this can be shown via induction.</p>
+<h3 id="separation-into-sub-systems">Separation into sub-systems</h3>
+<p>The process of adding a new command to a state machine replication protocol can be decomposed into three tasks:</p>
+<ol>
+ <li>Disseminating the command</li>
+ <li>Committing the command in multi-shot consensus</li>
+ <li>Executing the command</li>
+</ol>
+<p>Many modern state machine replication systems have separate sub-systems for each task. This allows us to optimize and tune each sub-system separately. See <a href="https://decentralizedthoughts.github.io/2019-12-06-dce-the-three-scalability-bottlenecks-of-state-machine-replication/">this post</a> for the basics of SMR task separation and <a href="https://decentralizedthoughts.github.io/2022-06-28-DAG-meets-BFT/">this post</a> for the modern separation of the data dissemination stage.</p>
+<h3 id="acknowledgments">Acknowledgments</h3>
+<p>Thanks to <a href="https://twitter.com/tensorfi">Maxwill</a> and Julian Loss for suggestions to improve the definition.</p>
+<p>Please leave comments on <a href="https://twitter.com/kartik1507/status/1185321750881538050?s=20">Twitter</a></p>
+ </article>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#consensus">consensus</a>
+ 
+ <a href="/pages/decentralizedthoughts/tags#SMR">SMR</a>
+ 
+ 
+ </div>
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ 
+ <a href="https://twitter.com/intent/tweet?text=Consensus+for+State+Machine+Replication+https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/"
+ class="btn btn-social-icon btn-twitter" title="Leave a comment on Twitter">
+ <span class="fa fa-fw fa-twitter" aria-hidden="true"></span>
+ <span class="sr-only">Twitter</span>
+ </a>
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pager blog-pager">
+ 
+ <li class="previous">
+ <a href="/pages/decentralizedthoughts/2019-09-13-flavours-of-partial-synchrony/" data-toggle="tooltip" data-placement="top" title="Flavours of Partial Synchrony">&larr; Previous Post</a>
+ </li>
+ 
+ 
+ <li class="next">
+ <a href="/pages/decentralizedthoughts/2019-10-22-flavours-of-broadcast/" data-toggle="tooltip" data-placement="top" title="Flavours of Broadcast">Next Post &rarr;</a>
+ </li>
+ 
+ </ul>
+ 
+ <div class="disqus-comments">
+ 
+ </div>
+ 
+ <div class="staticman-comments">
+ 
+ </div>
+ <div class="justcomments-comments">
+ 
+ </div>
+ 
+ </div>
+ </div>
+</div>
+ <footer>
+ <div class="container beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+ <ul class="list-inline text-center footer-links"><li><a href="https://twitter.com/ittaia" title="Twitter"><span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fa fa-circle fa-stack-2x"></i>
+ <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">Twitter</span>
+ </a>
+ </li></ul>
+ <p class="copyright text-muted">
+ Decentralized Thinkers
+ &nbsp;&bull;&nbsp;
+ 2026
+ 
+ 
+ </p>
+ 
+ <p class="theme-by text-muted">
+ Theme by
+ <a href="https://deanattali.com/beautiful-jekyll/">beautiful-jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ 
+ 
+ <script>
+ if (typeof jQuery == 'undefined') {
+ document.write('<script src="/pages/decentralizedthoughts/js/jquery-1.11.2.min.js"></scr' + 'ipt>');
+ }
+ </script>
+ 
+ 
+ 
+ 
+ <script src="/pages/decentralizedthoughts/js/bootstrap.min.js"></script>
+ 
+ 
+ 
+ 
+ <script src="/pages/decentralizedthoughts/js/main.js"></script>
+ 
+ 
+ 
+ </body>
+</html>

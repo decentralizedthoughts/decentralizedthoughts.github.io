@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+ <head>
+ <meta charset="utf-8" />
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+ <title>Start Here</title>
+ <meta name="author" content="Decentralized Thinkers" />
+ 
+ <link rel="alternate" type="application/rss+xml" title="Decentralized Thoughts - Decentralized thoughts about decentralization" href="/pages/decentralizedthoughts/feed.xml" />
+ 
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+ <script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css" />
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/pages/decentralizedthoughts/css/bootstrap.min.css" />
+ 
+ <link rel="stylesheet" href="/pages/decentralizedthoughts/css/bootstrap-social.css" />
+ 
+ <link rel="stylesheet" href="/pages/decentralizedthoughts/css/main.css" />
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+ 
+ <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:title" content="Start Here" />
+ 
+ 
+ <meta property="og:description" content="{: .box-note} This page contains material for a graduate course on Blockchains, Distributed Computing, and Cryptography. We would love to get your feedback. If you find a post helpful, have a suggestion to improve, or any other comment: [drop us a comment](https://twitter.com/ittaia/status/1421066572207169544?s=20) or send us an email - your feedback...">
+ 
+ <meta property="og:type" content="website" />
+ 
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/start-here/" />
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/start-here/" />
+ 
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png" />
+ 
+ 
+ <meta name="twitter:card" content="summary" />
+ <meta name="twitter:site" content="@" />
+ <meta name="twitter:creator" content="@" />
+ 
+ <meta name="twitter:title" content="Start Here" />
+ 
+ 
+ <meta name="twitter:description" content="{: .box-note} This page contains material for a graduate course on Blockchains, Distributed Computing, and Cryptography. We would love to get your feedback. If you find a post helpful, have a suggestion to improve, or any other comment: [drop us a comment](https://twitter.com/ittaia/status/1421066572207169544?s=20) or send us an email - your feedback...">
+ 
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png" />
+ 
+ 
+ 
+ 
+ 
+ <script type="text/x-mathjax-config">
+ MathJax.Hub.Config({
+ tex2jax: {
+ skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+ inlineMath: [['$','$']]
+ },
+ TeX: { equationNumbers: { autoNumber: "all" } }
+ });
+ </script>
+ <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script> 
+</head>
+ <body>
+ 
+ 
+ <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+ <div class="container-fluid">
+ <div class="navbar-header">
+ <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+ <span class="sr-only">Toggle navigation</span>
+ <span class="icon-bar"></span>
+ <span class="icon-bar"></span>
+ <span class="icon-bar"></span>
+ </button>
+ 
+ <a class="navbar-brand" href="https://decentralizedthoughts.github.io">Decentralized Thoughts</a>
+ 
+ </div>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="nav navbar-nav navbar-right">
+ 
+ 
+ <li class="navlinks-container">
+ <a class="navlinks-parent" href="javascript:void(0)">Authors</a>
+ <div class="navlinks-children">
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-ittai">Ittai Abraham</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-ittay">Ittay Eyal</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-heidi">Heidi Howard</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-kartik">Kartik Nayak</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-ling">Ling Ren</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-alin">Alin Tomescu</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-avishay">Avishay Yanai</a>
+ 
+ 
+ </div>
+ </li>
+ 
+ 
+ 
+ <li>
+ 
+<a href="/pages/decentralizedthoughts/videos">Videos</a>
+ </li>
+ 
+ 
+ 
+ <li>
+ 
+<a href="/pages/decentralizedthoughts/start-here">Start Here</a>
+ </li>
+ 
+ 
+ 
+ <li>
+ 
+<a href="/pages/decentralizedthoughts/course">Course</a>
+ </li>
+ 
+ 
+ </ul>
+ </div>
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io">
+ <img class="avatar-img" src="/pages/decentralizedthoughts/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+ </div>
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header no-img">
+ <div class="container">
+ <div class="row">
+ <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+ <div class="page-heading">
+ <h1>Start Here</h1>
+ 
+ 
+ <br/>
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+</div>
+</header>
+<div class="container" role="main">
+ <div class="row">
+ <div class="col-lg-10 col-lg-offset-2 col-md-10 col-md-offset-1">
+ <p class="box-note">This page contains material for a graduate course on Blockchains, Distributed Computing, and Cryptography.</p>
+<p>We would love to get your feedback. If you find a post helpful, have a suggestion to improve, or any other comment: <a href="https://twitter.com/ittaia/status/1421066572207169544?s=20">drop us a comment</a> or send us an email - your feedback is very valuable.</p>
+<h2 id="basics-foundations-and-classics">Basics, foundations, and classics</h2>
+<ol>
+ <li>Definition of <a href="/2019-06-27-defining-consensus/">Consensus, Agreement, and Broadcast</a>.</li>
+ <li>The <a href="/2019-06-01-2019-5-31-models/">network model</a>: Synchrony, Asynchrony and Partial synchrony.</li>
+ <li>The <a href="/2019-06-17-the-threshold-adversary/">threshold adversary</a> model.</li>
+ <li>The <a href="/2019-06-07-modeling-the-adversary/">power of the adversary</a>: Type (passive, crash, omission, or Byzantine), Power (unbounded, computational, or fine-grained), Adaptivity (static, delayed adaptive, weak adaptive, adaptive, or strongly adaptive), Visibility (full information or private channel), Mobility (fixed or mobile).</li>
+ <li>Many protocols need a <a href="/2019-07-19-setup-assumptions/">trusted setup phase</a>.</li>
+</ol>
+<h2 id="consensus-cheat-sheet">Consensus cheat sheet</h2>
+<p>The <a href="https://decentralizedthoughts.github.io/2021-10-29-consensus-cheat-sheet/">consensus cheat sheet</a> gives a quick overview of what is possible and impossible. You can build half a course just from the upper bounds and lower bounds linked from it.</p>
+<h2 id="basic-protocols">Basic protocols</h2>
+<ul>
+ <li>The Synchronous model is a good place to start because protocols are simpler.
+ <ul>
+ <li>Classic Byzantine agreement protocol: the <a href="https://decentralizedthoughts.github.io/2022-06-09-phase-king-via-gradecast/">Phase-King</a>.</li>
+ <li>Classic Byzantine Broadcast protocol (with a PKI) for $f &lt; n$: the <a href="/2019-12-22-dolev-strong/">Dolev-Strong Authenticated Broadcast protocol</a>.</li>
+ </ul>
+ </li>
+ <li><a href="/2019-09-13-flavours-of-partial-synchrony/">Partial synchrony</a> is one of the most used models in real-world systems today.
+ <ul>
+ <li>Single-shot <a href="https://decentralizedthoughts.github.io/2022-11-04-paxos-via-recoverable-broadcast/">Paxos</a>.</li>
+ <li>Single shot <a href="https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/">PBFT</a>.</li>
+ </ul>
+ </li>
+</ul>
+<h2 id="more-variants-of-consensus-and-broadcast">More variants of consensus and broadcast</h2>
+<ul>
+ <li><a href="https://decentralizedthoughts.github.io/2022-06-07-approx-agreement-one/">Approximate agreement</a> is a variation that considers rational input values.</li>
+ <li>Several <a href="/2019-10-22-flavours-of-broadcast/">relaxations of Broadcast</a>.</li>
+</ul>
+<h2 id="more-synchronous-protocols">More synchronous protocols</h2>
+<ul>
+ <li><a href="/2019-11-12-Sync-HotStuff/">Sync HotStuff</a>.</li>
+ <li>An <a href="/2020-06-12-optimal-optimistic-responsiveness/">optimal optimistically responsive synchronous protocol</a>.</li>
+ <li>A simple, streamlined synchronous protocol called <a href="/2020-05-14-streamlet/">Streamlet</a>.</li>
+ <li>Survey of <a href="/2019-11-11-authenticated-synchronous-bft/">authenticated protocols under the synchrony assumption</a>.</li>
+ <li>How <a href="https://decentralizedthoughts.github.io/2024-09-15-divide-and-conquer/">recursion helps solve consensus</a> with <a href="https://decentralizedthoughts.github.io/2021-09-20-optimal-communication-complexity-of-authenticated-byzantine-agreement/">optimal $O(n^2)$ communication</a>.</li>
+ <li>A non-equivocation protocol (with a PKI) for $f &lt; n$: <a href="https://decentralizedthoughts.github.io/2022-06-19-crusader-braodcast/">Crusader Broadcast</a>.</li>
+ <li>Use of randomization in synchronous agreement protocols for <a href="https://decentralizedthoughts.github.io/2023-02-18-rand-and-consensus-1/">crash failures</a> and <a href="https://decentralizedthoughts.github.io/2023-02-19-rand-and-consensus-2/">omission failures</a>.</li>
+</ul>
+<h2 id="more-partially-synchronous-protocols">More partially synchronous protocols</h2>
+<p>Taking ideas from the Byzantine setting and applying them to the benign setting:</p>
+<ul>
+ <li><a href="https://decentralizedthoughts.github.io/2021-04-02-benign-hotstuff/">Benign Hotstuff</a>.</li>
+ <li><a href="https://decentralizedthoughts.github.io/2021-07-17-simplifying-raft-with-chaining/">Simplifying Raft with Chaining</a>.</li>
+ <li><a href="https://decentralizedthoughts.github.io/2021-09-30-distributed-consensus-made-simple-for-real-this-time/">Log Paxos</a> is a modern take on multi-Paxos.</li>
+</ul>
+<p>The Byzantine setting:</p>
+<ul>
+ <li>An important building block: <a href="https://decentralizedthoughts.github.io/2022-09-10-provable-broadcast/">provable broadcast</a>.</li>
+ <li>Some <a href="https://decentralizedthoughts.github.io/2025-02-14-partial-synchrony-protocols/">design principles</a></li>
+ <li>Single shot <a href="https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/">PBFT</a>.</li>
+ <li><a href="https://decentralizedthoughts.github.io/2022-11-24-two-round-HS/">Two Round HotStuff</a> with SMR and accountability.</li>
+ <li><a href="https://decentralizedthoughts.github.io/2021-09-20-information-theoretic-hotstuff-it-hs-part-one/">Information Theoretic HotStuff</a>.</li>
+</ul>
+<h2 id="asynchronous-protocols">Asynchronous protocols</h2>
+<p>Fundamental lower bound in asynchrony: The <a href="/2019-12-15-consensus-model-for-FLP/">FLP lower bound</a> showing the impossibility of consensus under even one crash fault.</p>
+<p>Important building blocks in asynchrony:</p>
+<ol>
+ <li>The <a href="https://decentralizedthoughts.github.io/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/">Reliable Broadcast</a> protocol.</li>
+ <li>The <a href="https://decentralizedthoughts.github.io/2021-03-26-living-with-asynchrony-the-gather-protocol/">Reliable Gather</a> is a multi-leader generalization of reliable broadcast.</li>
+ <li>We discuss how to measure <a href="https://decentralizedthoughts.github.io/2021-09-29-the-round-complexity-of-reliable-broadcast/">round complexity in asynchrony</a> and also improved round complexity for reliable broadcast.</li>
+</ol>
+<h3 id="asynchronous-agreement">Asynchronous Agreement</h3>
+<p><a href="https://decentralizedthoughts.github.io/2024-12-10-bind-and-rand/">Living with asynchrony and eventually reaching agreement by combining binding and randomness</a>.</p>
+<p><a href="https://decentralizedthoughts.github.io/2024-12-10-multi-world-vaba/">Multi-world Validated Asynchronous Byzantine Agreement</a></p>
+<p>Series on Binary Asynchronous Agreement:</p>
+<ol>
+ <li><a href="https://decentralizedthoughts.github.io/2022-03-30-asynchronous-agreement-part-one-defining-the-problem/">Define the problem</a>;</li>
+ <li>present <a href="https://decentralizedthoughts.github.io/2022-03-30-asynchronous-agreement-part-two-ben-ors-protocol/">Ben-Or’s protocol</a>;</li>
+ <li>provide a <a href="https://decentralizedthoughts.github.io/2022-03-30-asynchronous-agreement-part-three-a-modern-version-of-ben-ors-protocol/">modern version</a>;</li>
+ <li>Introduce <a href="https://decentralizedthoughts.github.io/2022-04-05-aa-part-four-CA-and-BCA/">Crusader Agreement and Binding Crusader Agreement</a>;</li>
+ <li>Use BCA to efficiently solve <a href="https://decentralizedthoughts.github.io/2022-04-05-aa-part-five-ABBA/">Binary Byzantine Agreement from a strong common coin</a>.</li>
+</ol>
+<p>Reaching <a href="https://decentralizedthoughts.github.io/2023-07-22-agreeemnt-on-a-core-set/">Asynchronous Agreement on a Core Set</a>.</p>
+<p><a href="https://decentralizedthoughts.github.io/2024-08-08-vid/">Verifiable Information Dispersal</a>.</p>
+<h2 id="state-machine-replication">State Machine Replication</h2>
+<ul>
+ <li>Define <a href="/2019-10-15-consensus-for-state-machine-replication/">state machine replication</a> (SMR).</li>
+ <li>Levels of <a href="/2019-10-25-flavours-of-state-machine-replication/">SMR fault tolerance</a>.</li>
+ <li>The <a href="https://decentralizedthoughts.github.io/2021-10-16-the-ideal-state-machine-model-multiple-clients-and-linearizability/">ideal state machine model and Linearizability</a>.</li>
+ <li>[From single-shot consensus to SMR] (https://decentralizedthoughts.github.io/2022-11-19-from-single-shot-to-smr/).</li>
+ <li>To learn about SMR protocols, start with a <a href="/2019-11-01-primary-backup/">simple SMR for crash failures</a>. Then extend SMR to omission failures: <a href="/2020-09-13-synchronous-consensus-omission-faults/">First via single shot</a> and then via the <a href="https://decentralizedthoughts.github.io/2020-11-30-the-lock-commit-paradigm-multi-shot-and-mixed-faults/">lock-commit</a> paradigm to <a href="https://decentralizedthoughts.github.io/2020-11-30-the-lock-commit-paradigm-multi-shot-and-mixed-faults/">multi-shot consensus</a>.</li>
+ <li>The scalability and performance of a State Machine Replication system are not just about consensus, <a href="/2019-12-06-dce-the-three-scalability-bottlenecks-of-state-machine-replication/">but also about data and execution</a>.</li>
+</ul>
+<h2 id="nakamoto-consensus">Nakamoto Consensus</h2>
+<p>The Bitcoin revolution brought many breakthroughs in distributed computing, economics, and cryptography. One of the striking breakthroughs in distributed computing was a new form of Byzantine Agreement now called <strong>Nakamoto Consensus</strong>.</p>
+<ul>
+ <li>What is <a href="https://decentralizedthoughts.github.io/2021-10-15-Nakamoto-Consensus/">Nakamoto consensus</a>?</li>
+ <li>Bitcoin’s <a href="https://decentralizedthoughts.github.io/2019-07-18-do-bitcoin-and-ethereum-have-any-trusted-setup-assumptions/">setup assumption</a>.</li>
+ <li>Security proof of <a href="https://decentralizedthoughts.github.io/2023-10-30-Analysis-Nakamoto/">Nakamoto consensus</a> and an <a href="https://decentralizedthoughts.github.io/2019-11-29-Analysis-Nakamoto/">older post</a>.</li>
+ <li>What is the problem of <a href="/2020-02-26-selfish-mining/">selfish mining</a>?</li>
+</ul>
+<h2 id="lower-bounds">Lower Bounds</h2>
+<p>Lower bounds give us powerful tools to understand the fundamental limitations and model assumptions.</p>
+<h3 id="lower-bounds-on-the-size-of-the-adversary">Lower bounds on the size of the adversary:</h3>
+<ul>
+ <li>State Machine replication can work only for minority failures:
+ <ul>
+ <li>The <a href="https://decentralizedthoughts.github.io/2023-07-09-CAP-two-servers-in-psynch/">CAP theorem for partial synchrony</a>: Any system, in the face of a perceived 50-50 split, can either maintain safety or liveness, but not both.</li>
+ <li>The CAP theorem for synchrony and omission: <a href="/2019-11-02-primary-backup-for-2-servers-and-omission-failures-is-impossible/">Consensus with Omission failures even in lock step</a> requires $f&lt;n/2$.</li>
+ <li>Strengthening the lower bound: $f&lt;n/2$ is required in lock step <a href="https://decentralizedthoughts.github.io/2024-01-30-between-crash-and-omission/">even if the adversary can choose either send omission or receive omission</a> (but not both).</li>
+ <li><a href="https://decentralizedthoughts.github.io/2022-03-03-blockchain-resource-pools-and-a-cap-esque-impossibility-result/">CAP type theorems in the permissionless setting</a></li>
+ </ul>
+ </li>
+ <li>Split brain lower bounds:
+ <ul>
+ <li>Dwork, Lynch, Stockmeyer (<a href="https://groups.csail.mit.edu/tds/papers/Lynch/jacm88.pdf">DLS 1988</a>) lower bound: <a href="/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/">Byzantine Consensus in Partial Synchrony</a> requires $f&lt;n/3$.</li>
+ <li>CJKR lower bound: Neither Non-equivocation nor Transferability alone is enough for <a href="https://decentralizedthoughts.github.io/2021-06-14-neither-non-equivocation-nor-transferability-alone-is-enough-for-tolerating-minority-corruptions-in-asynchrony/">tolerating minority corruptions in asynchrony</a>.</li>
+ <li>TEEs without state need $3f+1$ in Partial Synchrony because of the <a href="https://decentralizedthoughts.github.io/2023-06-26-dls-meets-rollback/">rollback adversary</a>.</li>
+ </ul>
+ </li>
+ <li>Fischer, Lynch, Merritt (<a href="https://groups.csail.mit.edu/tds/papers/Lynch/FischerLynchMerritt-dc.pdf">FLM</a>) lower bound: <a href="/2019-08-02-byzantine-agreement-is-impossible-for-$n-slash-leq-3-f$-is-the-adversary-can-easily-simulate/">Byzantine Consensus with no PKI</a> (or more generally when the adversary can simulate) requires $f&lt;n/3$.</li>
+ <li>Strengthening the FLM lower bound with randomization and a weaker problem: <a href="https://decentralizedthoughts.github.io/2021-10-04-crusader-agreement-with-dollars-slash-leq-1-slash-3$-error-is-impossible-for-$n-slash-leq-3f$-if-the-adversary-can-simulate/">Crusader Agreement with $\leq 1/3$ error is impossible for $n\leq 3f$ if the adversary can simulate</a>.</li>
+</ul>
+<h3 id="lower-bounds-on-the-number-of-messages">Lower bounds on the number of messages</h3>
+<ul>
+ <li>Dolev and Reischuk 1982 (<a href="https://www.cs.huji.ac.il/~dolev/pubs/p132-dolev.pdf">DR</a>) lower bound: <a href="/2019-08-16-byzantine-agreement-needs-quadratic-messages/">Consensus (even with omission failures) needs a quadratic number of messages</a>.</li>
+ <li>Extending Dolev and Reischuk to <a href="https://decentralizedthoughts.github.io/2022-08-14-new-DR-LB/">Byzantine crusader broadcast</a>.</li>
+ <li>Extending Dolev and Reischuk to <a href="https://decentralizedthoughts.github.io/2024-12-16-strong-adaptive-lower-bound/">randomized protocols against a strongly adaptive adversary</a>.</li>
+</ul>
+<h3 id="lower-bounds-on-the-round-complexity-and-existence-of-infinite-executions">Lower bounds on the round complexity and existence of infinite executions</h3>
+<ul>
+ <li>The simplest proof that <a href="https://decentralizedthoughts.github.io/2024-03-07-mobile-is-FLP/">any consensus protocol in asynchrony must have an infinite execution</a> even against a single crash failure.</li>
+ <li>The same proof also shows that <a href="https://decentralizedthoughts.github.io/2024-03-07-mobile-is-FLP/">any consensus protocol in synchrony must have an infinite execution</a> against a single <strong>mobile</strong> crash failure.</li>
+ <li><a href="https://decentralizedthoughts.github.io/2024-01-28-early-stopping-lower-bounds/">Early stopping lower bounds</a> provide a bound on the number of rounds in execution where there are $0\leq f\leq t$ faults. In particular, in the best case executions where there are no faults at all ($f=0$).
+ <ul>
+ <li>$\min\{f+2,t+1\}$ round lower bound for Early Stopping for consensus with crashes and Early Deciding for uniform consensus with omission (crashes with fixed first)</li>
+ </ul>
+ </li>
+ <li>Fischer, Lynch, Paterson 1985 (<a href="https://groups.csail.mit.edu/tds/papers/Lynch/jacm85.pdf">FLP</a>) lower bound, three-part series using bi-valency (uncommitted configuration) arguments:
+ <ul>
+ <li>Consensus must have some initial state that is <a href="/2019-12-15-consensus-model-for-FLP/">uncommitted</a>:</li>
+ <li>This implies <a href="/2019-12-15-synchrony-uncommitted-lower-bound/">executions with at least $f+1$ rounds in Synchrony</a>.</li>
+ <li>The FLP result: <a href="/2019-12-15-asynchrony-uncommitted-lower-bound/">non-terminating executions in Asynchrony</a>.</li>
+ </ul>
+ </li>
+ <li>Lower bounds on the <em>good case latency</em> - the number of rounds when the broadcaster is non-faulty and the network is synchronous: <a href="https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/">a complete categorization</a></li>
+ <li>The <a href="https://decentralizedthoughts.github.io/2021-12-07-good-case-latency-of-rotating-leader-synchronous-bft/">good case latency of optimistically responsive rotating leader protocols</a> requires $2\Delta$.</li>
+</ul>
+<h3 id="lower-bounds-due-to-privacy-requirements">Lower bounds due to privacy requirements</h3>
+<ul>
+ <li>Ben-Or, Kelmer, Rabin 1994 (<a href="https://dl.acm.org/doi/10.1145/197917.198088">BKR</a>) lower bound: Asynchronous Verifiable Secret Sharing must have a <a href="https://decentralizedthoughts.github.io/2020-07-15-asynchronous-fault-tolerant-computation-with-optimal-resilience/">non-zero probability of not terminating</a> when $n/4 \leq f &lt; n/3$. So Asynchronous Verifiable Secret sharing (and Asynchronous MPC) with perfect security needs $f&lt;n/4$.</li>
+ <li><a href="https://decentralizedthoughts.github.io/2024-08-09-sap/">The SAP theorem for storing secret keys</a> the analog of the CAP theorem for storing private keys.</li>
+</ul>
+<h3 id="liveness-attacks">Liveness attacks</h3>
+<ul>
+ <li>Raft does not guarantee liveness under <a href="https://decentralizedthoughts.github.io/2020-12-12-raft-liveness-full-omission/">omission faults</a>.</li>
+</ul>
+<h3 id="lower-bounds-on-stronger-notions-of-validity">Lower bounds on stronger notions of validity</h3>
+<ul>
+ <li><a href="https://decentralizedthoughts.github.io/2022-12-12-what-about-validity/">Lower bounds for strong validity</a></li>
+</ul>
+<h2 id="blockchains">Blockchains</h2>
+<ul>
+ <li>What is a <a href="https://decentralizedthoughts.github.io/2022-09-05-what-is-a-blockchain/">blockchain?</a></li>
+ <li>What was the <a href="/2020-07-05-the-first-blockchain-or-how-to-time-stamp-a-digital-document/">first blockchain (or how to timestamp a digital document)</a>?</li>
+ <li>What are <a href="https://decentralizedthoughts.github.io/2023-01-12-what-are-blockchains-useful-for-really/">blockchains useful for, really</a>?</li>
+ <li>What does <a href="/2019-09-13-dont-trust-checkpoint/">checkpointing a blockchain</a> mean?</li>
+ <li>The simplest L2 solution is a <a href="/2019-10-25-payment-channels-are-just-a-two-person-bfs-smr-systems/">payment channel</a>.</li>
+</ul>
+<p>What is player replaceability? A series:</p>
+<ul>
+ <li><a href="https://decentralizedthoughts.github.io/2023-01-05-player-replaceability-I/">Defining the problem and achieving a committee-based sub-quadratic communication protocol</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2023-01-05-player-replaceability-II/">Achieving adaptive security for the committee-based protocol</a></li>
+</ul>
+<h2 id="cryptography">Cryptography</h2>
+<ul>
+ <li><a href="/2020-08-28-what-is-a-cryptographic-hash-function/">Cryptographic hash functions</a>.</li>
+ <li><a href="https://decentralizedthoughts.github.io/2020-12-22-what-is-a-merkle-tree/">Merkle trees</a>.</li>
+ <li>A glimpse at <a href="https://decentralizedthoughts.github.io/2020-12-08-a-simple-and-succinct-zero-knowledge-proof/">Zero knowledge proofs</a></li>
+ <li><a href="/2020-04-02-bilinear-accumulators-for-cryptocurrency/">Bilinear accumulators</a> from polynomial commitments.</li>
+ <li><a href="/2020-03-03-range-proofs-from-polynomial-commitments-reexplained/">Range proofs</a> from polynomial commitments.</li>
+ <li>Private set intersection: <a href="/2020-03-29-private-set-intersection-a-soft-introduction/">part 1</a> and <a href="/2020-07-26-private-set-intersection-2/">part 2</a>. Apple is using PSI for <a href="https://decentralizedthoughts.github.io/2021-08-29-the-private-set-intersection-psi-protocol-of-the-apple-csam-detection-system/">CSAM detection</a>.</li>
+</ul>
+<h3 id="polynomials">Polynomials</h3>
+<ul>
+ <li>A lightweight intro to <a href="/2020-07-17-the-marvels-of-polynomials-over-a-field/">Polynomials over a finite field</a>.</li>
+ <li>The basics of <a href="/2020-07-17-polynomial-secret-sharing-and-the-lagrange-basis/">Polynomial secret sharing</a>.</li>
+ <li><a href="https://decentralizedthoughts.github.io/2023-09-01-FFT/">The Fast Fourier Transform over finite fields</a>.</li>
+ <li>What is <a href="https://decentralizedthoughts.github.io/2024-08-08-vid/">Verifiable Information Dispersal</a>.</li>
+</ul>
+<h3 id="secret-sharing-and-mpc">Secret Sharing and MPC</h3>
+<p>Polynomial secret sharing is a base for deep connections between cryptography and distributed computing.</p>
+<ul>
+ <li>Polynomial secret sharing against a <a href="https://decentralizedthoughts.github.io/2020-07-17-polynomial-secret-sharing-and-the-lagrange-basis/">passive adversary</a></li>
+ <li>Against a <a href="https://decentralizedthoughts.github.io/2022-08-17-secret-sharing-with-crash/">crash adversary</a>.</li>
+ <li>The <a href="https://inst.eecs.berkeley.edu/~cs276/fa20/notes/BGW88.pdf">BGW88</a> protocol for <a href="https://decentralizedthoughts.github.io/2022-08-24-BGW-secret-sharing/">Verifiable Secret Sharing</a>.</li>
+ <li>Chaum’s <a href="https://users.ece.cmu.edu/~adrian/731-sp04/readings/dcnets.html">Dining Cryptographers</a> and <a href="https://decentralizedthoughts.github.io/2022-08-25-dining-cryptographers-additive/">the additivity of polynomial secret sharing</a>.</li>
+</ul>
+<h1 id="research-oriented-posts">Research Oriented Posts</h1>
+<ul>
+ <li><a href="/2019-06-23-what-is-the-difference-between/">What is the difference between PBFT, Tendermint, SBFT, and HotStuff ?</a> and <a href="/2023-04-01-hotstuff-2/">How does HotStuff-2 relate to these protocols?</a></li>
+ <li><a href="/2019-11-11-authenticated-synchronous-bft/">Survey of modern Authenticated Synchronous BFT protocols</a> (updated in March 2021).</li>
+ <li><a href="/2019-11-12-Sync-HotStuff/">Sync HotStuff</a>.</li>
+ <li><a href="/2020-06-12-optimal-optimistic-responsiveness/">Optimal Optimistic Responsiveness</a>.</li>
+ <li>Encrypted Blockchain Databases <a href="/2020-07-10-encrypted-blockchain-databases-part-i/">part 1</a> and <a href="/2020-07-10-encrypted-blockchain-databases-part-ii/">part 2</a>.</li>
+ <li><a href="/2020-07-15-asynchronous-fault-tolerant-computation-with-optimal-resilience/">Asynchronous Fault-Tolerant Computation with Optimal Resilience</a>.</li>
+ <li><a href="/2020-11-01-ebb-and-flow-protocols-a-resolution-of-the-availability-finality-dilemma/">Resolving the Availability-Finality Dilemma</a>.</li>
+ <li><a href="/2020-11-19-bft-protocol-forensics/">BFT Protocol Forensics</a>.</li>
+ <li><a href="https://decentralizedthoughts.github.io/2023-01-30-player-replaceability-forensic-support/">Can we Obtain Player Replaceability and Forensic Support Simultaneously?</a></li>
+ <li>Good-case Latency of Byzantine Broadcast: <a href="https://decentralizedthoughts.github.io/2021-03-09-good-case-latency-of-byzantine-broadcast-the-synchronous-case/">the Synchronous Case</a> and <a href="https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/">a Complete Categorization</a>.</li>
+ <li><a href="https://decentralizedthoughts.github.io/2021-03-03-2-round-bft-smr-with-n-equals-4-f-equals-1/">2-round BFT SMR with n=4, f=1</a>.</li>
+ <li><a href="https://decentralizedthoughts.github.io/2021-09-20-optimal-communication-complexity-of-authenticated-byzantine-agreement/">Optimal Communication Complexity of Authenticated Byzantine Agreement</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2021-12-07-good-case-latency-of-rotating-leader-synchronous-bft/">Good-case Latency of Rotating Leader Synchronous BFT</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2022-03-10-eip1559/">EIP-1559 in Retrospect</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2022-03-07-colordag-from-always-almost-to-almost-always-50-percent-selfish-mining-resilience/">Colordag: From always-almost to almost-always 50% selfish mining resilience</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2022-03-12-dfinity-synchrony/">Consensus by Dfinity: in synchrony</a> and <a href="https://decentralizedthoughts.github.io/2022-03-12-dfinity-partial-synchrony/">Consensus by Dfinity - Part II (Internet Computer Consensus): in partial synchrony</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2022-06-21-sandglass/">Sandglass: Safe Permissionless Consensus</a>.</li>
+ <li><a href="https://decentralizedthoughts.github.io/2022-06-28-DAG-meets-BFT/">DAG Meets BFT - The Next Generation of BFT Consensus</a>.</li>
+ <li><a href="https://decentralizedthoughts.github.io/2022-08-12-hehtlc/">He-HTLC - Revisiting Incentives in HTLC</a>.</li>
+ <li><a href="https://decentralizedthoughts.github.io/2024-05-07-decentralization-ethereum/">Decentralization of Ethereum Builder Market</a>.</li>
+ <li><a href="https://decentralizedthoughts.github.io/2024-05-23-sailfish/">Sailfish: Improving the Latency of DAG-based BFT</a>.</li>
+ <li><a href="https://decentralizedthoughts.github.io/2024-06-12-shoalpp/">Shoal++: High Throughput DAG-BFT Can Be Fast!</a>.</li>
+ <li><a href="https://decentralizedthoughts.github.io/2024-08-24-hotstuff1/">HotStuff-1 and the Prefix Speculation Dilemma in BFT Consensus</a>.</li>
+ <li><a href="https://decentralizedthoughts.github.io/2025-05-23-smart-casual-verification/">Reasoning about Distributed Protocols with Smart Casual Verification</a>.</li>
+</ul>
+ 
+ </div>
+ </div>
+</div>
+ <footer>
+ <div class="container beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+ <ul class="list-inline text-center footer-links"><li><a href="https://twitter.com/ittaia" title="Twitter"><span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fa fa-circle fa-stack-2x"></i>
+ <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">Twitter</span>
+ </a>
+ </li></ul>
+ <p class="copyright text-muted">
+ Decentralized Thinkers
+ &nbsp;&bull;&nbsp;
+ 2026
+ 
+ 
+ </p>
+ 
+ <p class="theme-by text-muted">
+ Theme by
+ <a href="https://deanattali.com/beautiful-jekyll/">beautiful-jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ 
+ 
+ <script>
+ if (typeof jQuery == 'undefined') {
+ document.write('<script src="/pages/decentralizedthoughts/js/jquery-1.11.2.min.js"></scr' + 'ipt>');
+ }
+ </script>
+ 
+ 
+ 
+ 
+ <script src="/pages/decentralizedthoughts/js/bootstrap.min.js"></script>
+ 
+ 
+ 
+ 
+ <script src="/pages/decentralizedthoughts/js/main.js"></script>
+ 
+ 
+ 
+ </body>
+</html>

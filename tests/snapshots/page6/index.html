@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+ <head>
+ <meta charset="utf-8" />
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+ <title>Decentralized Thoughts - Decentralized thoughts about decentralization</title>
+ <meta name="author" content="Decentralized Thinkers" />
+ 
+ <link rel="alternate" type="application/rss+xml" title="Decentralized Thoughts - Decentralized thoughts about decentralization" href="/pages/decentralizedthoughts/feed.xml" />
+ 
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+ <script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css" />
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/pages/decentralizedthoughts/css/bootstrap.min.css" />
+ 
+ <link rel="stylesheet" href="/pages/decentralizedthoughts/css/bootstrap-social.css" />
+ 
+ <link rel="stylesheet" href="/pages/decentralizedthoughts/css/main.css" />
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+ 
+ <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:title" content="Decentralized Thoughts" />
+ 
+ 
+ <meta property="og:description" content="Decentralized Thoughts is a group blog on decentralization, by decentralized thinkers, for decentralized thoughts, of decentralized matters. Decentralized Thoughts is a group blog on decentralization, by decentralized thinkers, for decentralized thoughts, of decentralized matters. {% for post in paginator.posts %} {{ post.title }} {% if post.subtitle %} {{ post.subtitle }}...">
+ 
+ <meta property="og:type" content="website" />
+ 
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/page6/" />
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/page6/" />
+ 
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png" />
+ 
+ 
+ <meta name="twitter:card" content="summary" />
+ <meta name="twitter:site" content="@" />
+ <meta name="twitter:creator" content="@" />
+ 
+ <meta name="twitter:title" content="Decentralized Thoughts" />
+ 
+ 
+ <meta name="twitter:description" content="Decentralized Thoughts is a group blog on decentralization, by decentralized thinkers, for decentralized thoughts, of decentralized matters. Decentralized Thoughts is a group blog on decentralization, by decentralized thinkers, for decentralized thoughts, of decentralized matters. {% for post in paginator.posts %} {{ post.title }} {% if post.subtitle %} {{ post.subtitle }}...">
+ 
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png" />
+ 
+ 
+ 
+ 
+ 
+ <script type="text/x-mathjax-config">
+ MathJax.Hub.Config({
+ tex2jax: {
+ skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+ inlineMath: [['$','$']]
+ },
+ TeX: { equationNumbers: { autoNumber: "all" } }
+ });
+ </script>
+ <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script> 
+</head>
+ <body>
+ 
+ 
+ <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+ <div class="container-fluid">
+ <div class="navbar-header">
+ <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+ <span class="sr-only">Toggle navigation</span>
+ <span class="icon-bar"></span>
+ <span class="icon-bar"></span>
+ <span class="icon-bar"></span>
+ </button>
+ 
+ <a class="navbar-brand" href="https://decentralizedthoughts.github.io">Decentralized Thoughts</a>
+ 
+ </div>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="nav navbar-nav navbar-right">
+ 
+ 
+ <li class="navlinks-container">
+ <a class="navlinks-parent" href="javascript:void(0)">Authors</a>
+ <div class="navlinks-children">
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-ittai">Ittai Abraham</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-ittay">Ittay Eyal</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-heidi">Heidi Howard</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-kartik">Kartik Nayak</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-ling">Ling Ren</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-alin">Alin Tomescu</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-avishay">Avishay Yanai</a>
+ 
+ 
+ </div>
+ </li>
+ 
+ 
+ 
+ <li>
+ 
+<a href="/pages/decentralizedthoughts/videos">Videos</a>
+ </li>
+ 
+ 
+ 
+ <li>
+ 
+<a href="/pages/decentralizedthoughts/start-here">Start Here</a>
+ </li>
+ 
+ 
+ 
+ <li>
+ 
+<a href="/pages/decentralizedthoughts/course">Course</a>
+ </li>
+ 
+ 
+ </ul>
+ </div>
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io">
+ <img class="avatar-img" src="/pages/decentralizedthoughts/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+ </div>
+</nav>
+ 
+<div class="intro-header"></div>
+<div class="container" role="main">
+ <div class="row">
+ <div class="col-lg-10 col-lg-offset-2 col-md-10 col-md-offset-1">
+ <title>Decentralized Thoughts is a group blog on decentralization, by decentralized thinkers, for decentralized thoughts, of decentralized matters. Decentralized Thoughts is a group blog on decentralization, by decentralized thinkers, for decentralized thoughts, of decentralized matters. </title>
+<div class="posts-list">
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2021-07-17-simplifying-raft-with-chaining/">
+ <h2 class="post-title">Simplifying Raft with Chaining</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on July 17, 2021, by <b>Heidi Howard, Natacha Crooks, Ittai Abraham</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Raft is a consensus algorithm for deciding a sequence of commands to execute on a replicated state machine. Raft is famed for its understandability (relative to other consensus algorithms such as Paxos) yet some aspects of the protocol still require careful treatment. For instance, determining when it is safe for a leader to commit commands from previous leaders or when it is safe for servers to delete or overwrite commands...
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2021-07-17-simplifying-raft-with-chaining/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#SMR">SMR</a>
+ 
+ <a href="/pages/decentralizedthoughts/tags#crash">crash</a>
+ 
+ <a href="/pages/decentralizedthoughts/tags#omission">omission</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2021-06-14-neither-non-equivocation-nor-transferability-alone-is-enough-for-tolerating-minority-corruptions-in-asynchrony/">
+ <h2 class="post-title">Neither Non-equivocation nor Transferability alone is enough for tolerating minority corruptions in asynchrony</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on June 14, 2021, by <b>Sravya Yandamuri, Naama Ben David</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In this post, we explore a theorem of Clement, Junqueira, Kate, and Rodrigues from PODC 2012 regarding the limits of non-equivocation. Informally, this theorem says that neither Non-equivocation nor Transferability alone is enough for tolerating minority corruptions in asynchrony.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2021-06-14-neither-non-equivocation-nor-transferability-alone-is-enough-for-tolerating-minority-corruptions-in-asynchrony/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#lowerbound">lowerbound</a>
+ 
+ <a href="/pages/decentralizedthoughts/tags#research">research</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2021-04-02-benign-hotstuff/">
+ <h2 class="post-title">Benign Hotstuff</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on April 2, 2021, by <b>Ittai Abraham, Heidi Howard, and Kartik Nayak</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In this post we describe a variant of Paxos (or Raft or Lock-Commit) that is inspired by looking through the lens of HotStuff and Blockchain protocols. The most noticeable difference is that while Paxos and Raft aim to maintain a stable Primary/Leader (and change views infrequently), in Benign Hotstuff (as in HotStuff), the Primary is rotated every round! A more subtle difference is that in Paxos and Raft each block...
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2021-04-02-benign-hotstuff/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#blockchain">blockchain</a>
+ 
+ <a href="/pages/decentralizedthoughts/tags#SMR">SMR</a>
+ 
+ <a href="/pages/decentralizedthoughts/tags#crash">crash</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2021-03-26-living-with-asynchrony-the-gather-protocol/">
+ <h2 class="post-title">Living with Asynchrony: the Gather protocol</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on March 26, 2021, by <b>Gilad Stern and Ittai Abraham</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ A very useful tool in Asynchronus distributed computing is Reliable Broadcast, or simply called Broadcast. It allows a leader to send a message, knowing that all parties will eventually receive the same message, even if a malicious adversary control $f$ parties and $f&amp;lt;n/3$. Broadcast is deterministic and takes just a constant number of rounds.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2021-03-26-living-with-asynchrony-the-gather-protocol/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#asynchrony">asynchrony</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2021-03-09-good-case-latency-of-byzantine-broadcast-the-synchronous-case/">
+ <h2 class="post-title">Good-case Latency of Byzantine Broadcast: the Synchronous Case</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on March 9, 2021, by <b>Zhuolun Xiang</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In our first post, we presented a summary of our good-case latency results for Byzantine broadcast (BB) and state machine replication (SMR), where the good case measures the latency to commit given that the broadcaster or leader is honest. In our second post, we discussed our results for partial synchrony, and described a new BFT SMR protocol named (5f-1)-SMR that can commit a decision within $2$ rounds in the good...
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2021-03-09-good-case-latency-of-byzantine-broadcast-the-synchronous-case/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#lowerbound">lowerbound</a>
+ 
+ <a href="/pages/decentralizedthoughts/tags#research">research</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2021-03-03-2-round-bft-smr-with-n-equals-4-f-equals-1/">
+ <h2 class="post-title">2-round BFT SMR with n=4, f=1</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on March 3, 2021, by <b>Zhuolun Xiang</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Guest post by Zhuolun Xiang 
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2021-03-03-2-round-bft-smr-with-n-equals-4-f-equals-1/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#research">research</a>
+ 
+ <a href="/pages/decentralizedthoughts/tags#SMR">SMR</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/">
+ <h2 class="post-title">Good-case Latency of Byzantine Broadcast: a Complete Categorization</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on February 28, 2021, by <b>Zhuolun Xiang</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Guest post by Zhuolun Xiang 
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#research">research</a>
+ 
+ <a href="/pages/decentralizedthoughts/tags#lowerbound">lowerbound</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2020-12-22-what-is-a-merkle-tree/">
+ <h2 class="post-title">What is a Merkle Tree?</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on December 22, 2020, by <b>Alin Tomescu</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In this post, we will demystify Merkle trees using three examples of problems they solve:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2020-12-22-what-is-a-merkle-tree/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#cryptography101">cryptography101</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2020-12-12-raft-liveness-full-omission/">
+ <h2 class="post-title">Raft does not Guarantee Liveness in the face of Network Faults</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on December 12, 2020, by <b>Heidi Howard, Ittai Abraham</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Last month, Cloudflare published a postmortem of a recent 6-hour outage caused by a partial switch failure which left etcd unavailable as it was unable to establish a stable leader. This outage has understandably led to discussion online about exactly what liveness guarantees are provided by the Raft consensus algorithm in the face of network failures.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2020-12-12-raft-liveness-full-omission/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#omission">omission</a>
+ 
+ <a href="/pages/decentralizedthoughts/tags#consensus">consensus</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2020-12-08-a-simple-and-succinct-zero-knowledge-proof/">
+ <h2 class="post-title">A Simple and Succinct Zero Knowledge Proof</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on December 8, 2020, by <b>Ittai Abraham, Alin Tomescu</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ There is a popular belief that succinct proofs and zero-knowledge proofs are a type of moon math. In this post, our goal is to present a simple proof system that can provide an introduction and intuition to this space. Perhaps surprisingly, the only tool we will use is the Theorem that non-trivial degree-at-most-$d$ polynomials over a field have at most $d$ roots.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2020-12-08-a-simple-and-succinct-zero-knowledge-proof/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#cryptography">cryptography</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2020-11-30-the-lock-commit-paradigm-multi-shot-and-mixed-faults/">
+ <h2 class="post-title">The Lock-Commit Paradigm: Multi-shot and Mixed Faults</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on November 30, 2020, by <b>Ittai Abraham, Kartik Nayak</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In this follow to our Lock-Commit post, we show two important extensions. The first is how to extend from single-shot to multi-shot. Multi-shot is the bases of State Machine Replication. The second is how to tolerate mix faluts: both $f$ omission failures and $k$ crash failures given k+2f &amp;lt; n.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2020-11-30-the-lock-commit-paradigm-multi-shot-and-mixed-faults/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#consensus">consensus</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2020-11-29-the-lock-commit-paradigm/">
+ <h2 class="post-title">The Lock-Commit Paradigm</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on November 29, 2020, by <b>Ittai Abraham, Kartik Nayak</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In this post, we explore one of the most celebrated and widely used techniques for reaching consensus: the Lock-Commit paradigm. This approach is a key technique of DLS88, Lamport’s Paxos, and many subsequent protocols. Protocols like Raft, PBFT, Tendermint, SBFT, Casper FFG, HotStuff, etc., are all based on this paradigm.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2020-11-29-the-lock-commit-paradigm/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#consensus101">consensus101</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2020-11-19-bft-protocol-forensics/">
+ <h2 class="post-title">BFT Protocol Forensics</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on November 19, 2020, by <b>Peiyao Sheng, Gerui Wang, Kartik Nayak, Sreeram Kannan, Pramod Viswanath</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ An important property satisfied by any Byzantine fault tolerant consensus protocol is agreement, which requires non-faulty replicas to not decide on conflicting values. Depending on the network model, typical consensus protocols tolerate only a fraction of Byzantine replicas. In particular, under partial synchrony or asynchrony, no consensus protocol with $n$ replicas can tolerate more than $n/3$ Byzantine faults. If the number of Byzantine replicas exceed this number, the protocols do...
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2020-11-19-bft-protocol-forensics/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#research">research</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2020-11-01-ebb-and-flow-protocols-a-resolution-of-the-availability-finality-dilemma/">
+ <h2 class="post-title">Resolving the Availability-Finality Dilemma</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on November 1, 2020, by <b></b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ 
+Guest post by Joachim Neu, Ertem Nusret Tas, and David Tse
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2020-11-01-ebb-and-flow-protocols-a-resolution-of-the-availability-finality-dilemma/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#SMR">SMR</a>
+ 
+ <a href="/pages/decentralizedthoughts/tags#research">research</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/">
+ <h2 class="post-title">Living with Asynchrony: Bracha's Reliable Broadcast</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on September 19, 2020, by <b>Ittai Abraham and Kartik Nayak</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In this series of posts, we explore what can be done in the Asynchronous model. This model seems challenging because the adversary can delay messages by any bounded time. By the end of this series, you will see that almost everything that can be done in synchrony can be obtained in asynchrony. The next posts in this series are about gather, round complexity, and finally our series on Asynchronous Agreement....
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#asynchrony">asynchrony</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2020-09-14-broadcast-from-agreement-and-agreement-from-broadcast/">
+ <h2 class="post-title">Broadcast from Agreement and Agreement from Broadcast</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on September 14, 2020, by <b>Ittai Abraham, Kartik Nayak</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In this post, we highlight the connection between Broadcast and Agreement in the synchronous model.
+ Broadcast and Agreement: How can you implement one from the other?
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2020-09-14-broadcast-from-agreement-and-agreement-from-broadcast/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#consensus101">consensus101</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2020-09-13-synchronous-consensus-omission-faults/">
+ <h2 class="post-title">Commit-Notify Paradigm for Synchronous Consensus with Omission Faults</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on September 13, 2020, by <b>Kartik Nayak, Ittai Abraham</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ We continue our series of posts on State Machine Replication (SMR). In this post, we move from consensus under crash failures to consensus under omission failures. We still keep the synchrony assumption.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2020-09-13-synchronous-consensus-omission-faults/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#consensus">consensus</a>
+ 
+ <a href="/pages/decentralizedthoughts/tags#SMR">SMR</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2020-08-28-what-is-a-cryptographic-hash-function/">
+ <h2 class="post-title">What is a Cryptographic Hash Function?</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on August 28, 2020, by <b>Alin Tomescu</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ If you ever tried to understand Bitcoin, you’ve probably banged your head against the wall trying to understand what is a cryptographic hash function?
+The goal of this post is to:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2020-08-28-what-is-a-cryptographic-hash-function/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#cryptography101">cryptography101</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2020-07-26-private-set-intersection-2/">
+ <h2 class="post-title">Private Set Intersection #2</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on July 26, 2020, by <b>Avishay Yanai</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In the first post on Private Set Intersection, I presented the problem of Private Set Intersection, its applications and the simple protocol of [KMRS14], that allows Alice and Bob to learn the intersection of their sets with the aid of an untrusted third party Steve who is assumed to not collude with Alice or with Bob.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2020-07-26-private-set-intersection-2/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#cryptography">cryptography</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2020-07-17-polynomial-secret-sharing-and-the-lagrange-basis/">
+ <h2 class="post-title">Polynomial Secret Sharing and the Lagrange Basis</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on July 17, 2020, by <b>Ittai Abraham, Alin Tomescu</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In this post, we highlight an amazing result: Shamir’s secret sharing scheme. This is one of the most powerful uses of polynomials over a finite field in distributed computing. Intuitively, this scheme allows a $Dealer$ to commit to a secret $s$ by splitting it into shares distributed to $n$ parties. The secret is hidden and requires a threshold of $f+1$ parties in order to be reconstructed, where $f &amp;lt; n$....
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2020-07-17-polynomial-secret-sharing-and-the-lagrange-basis/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#cryptography101">cryptography101</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+</div>
+<ul class="pager main-pager">
+ 
+ <li class="previous">
+ <a href="/pages/decentralizedthoughts/page5">&larr; Newer Posts</a>
+ </li>
+ 
+ 
+ <li class="next">
+ <a href="/pages/decentralizedthoughts/page7">Older Posts &rarr;</a>
+ </li>
+ 
+</ul>
+ 
+ </div>
+ </div>
+</div>
+ <footer>
+ <div class="container beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+ <ul class="list-inline text-center footer-links"><li><a href="https://twitter.com/ittaia" title="Twitter"><span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fa fa-circle fa-stack-2x"></i>
+ <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">Twitter</span>
+ </a>
+ </li></ul>
+ <p class="copyright text-muted">
+ Decentralized Thinkers
+ &nbsp;&bull;&nbsp;
+ 2026
+ 
+ 
+ </p>
+ 
+ <p class="theme-by text-muted">
+ Theme by
+ <a href="https://deanattali.com/beautiful-jekyll/">beautiful-jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ 
+ 
+ <script>
+ if (typeof jQuery == 'undefined') {
+ document.write('<script src="/pages/decentralizedthoughts/js/jquery-1.11.2.min.js"></scr' + 'ipt>');
+ }
+ </script>
+ 
+ 
+ 
+ 
+ <script src="/pages/decentralizedthoughts/js/bootstrap.min.js"></script>
+ 
+ 
+ 
+ 
+ <script src="/pages/decentralizedthoughts/js/main.js"></script>
+ 
+ 
+ 
+ </body>
+</html>

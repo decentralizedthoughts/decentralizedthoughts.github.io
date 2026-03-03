@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+ <head>
+ <meta charset="utf-8" />
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+ <title>Decentralized Thoughts - Decentralized thoughts about decentralization</title>
+ <meta name="author" content="Decentralized Thinkers" />
+ 
+ <link rel="alternate" type="application/rss+xml" title="Decentralized Thoughts - Decentralized thoughts about decentralization" href="/pages/decentralizedthoughts/feed.xml" />
+ 
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+ <script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css" />
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/pages/decentralizedthoughts/css/bootstrap.min.css" />
+ 
+ <link rel="stylesheet" href="/pages/decentralizedthoughts/css/bootstrap-social.css" />
+ 
+ <link rel="stylesheet" href="/pages/decentralizedthoughts/css/main.css" />
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+ 
+ <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:title" content="Decentralized Thoughts" />
+ 
+ 
+ <meta property="og:description" content="Decentralized Thoughts is a group blog on decentralization, by decentralized thinkers, for decentralized thoughts, of decentralized matters. Decentralized Thoughts is a group blog on decentralization, by decentralized thinkers, for decentralized thoughts, of decentralized matters. {% for post in paginator.posts %} {{ post.title }} {% if post.subtitle %} {{ post.subtitle }}...">
+ 
+ <meta property="og:type" content="website" />
+ 
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/page7/" />
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/page7/" />
+ 
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png" />
+ 
+ 
+ <meta name="twitter:card" content="summary" />
+ <meta name="twitter:site" content="@" />
+ <meta name="twitter:creator" content="@" />
+ 
+ <meta name="twitter:title" content="Decentralized Thoughts" />
+ 
+ 
+ <meta name="twitter:description" content="Decentralized Thoughts is a group blog on decentralization, by decentralized thinkers, for decentralized thoughts, of decentralized matters. Decentralized Thoughts is a group blog on decentralization, by decentralized thinkers, for decentralized thoughts, of decentralized matters. {% for post in paginator.posts %} {{ post.title }} {% if post.subtitle %} {{ post.subtitle }}...">
+ 
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png" />
+ 
+ 
+ 
+ 
+ 
+ <script type="text/x-mathjax-config">
+ MathJax.Hub.Config({
+ tex2jax: {
+ skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+ inlineMath: [['$','$']]
+ },
+ TeX: { equationNumbers: { autoNumber: "all" } }
+ });
+ </script>
+ <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script> 
+</head>
+ <body>
+ 
+ 
+ <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+ <div class="container-fluid">
+ <div class="navbar-header">
+ <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+ <span class="sr-only">Toggle navigation</span>
+ <span class="icon-bar"></span>
+ <span class="icon-bar"></span>
+ <span class="icon-bar"></span>
+ </button>
+ 
+ <a class="navbar-brand" href="https://decentralizedthoughts.github.io">Decentralized Thoughts</a>
+ 
+ </div>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="nav navbar-nav navbar-right">
+ 
+ 
+ <li class="navlinks-container">
+ <a class="navlinks-parent" href="javascript:void(0)">Authors</a>
+ <div class="navlinks-children">
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-ittai">Ittai Abraham</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-ittay">Ittay Eyal</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-heidi">Heidi Howard</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-kartik">Kartik Nayak</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-ling">Ling Ren</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-alin">Alin Tomescu</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-avishay">Avishay Yanai</a>
+ 
+ 
+ </div>
+ </li>
+ 
+ 
+ 
+ <li>
+ 
+<a href="/pages/decentralizedthoughts/videos">Videos</a>
+ </li>
+ 
+ 
+ 
+ <li>
+ 
+<a href="/pages/decentralizedthoughts/start-here">Start Here</a>
+ </li>
+ 
+ 
+ 
+ <li>
+ 
+<a href="/pages/decentralizedthoughts/course">Course</a>
+ </li>
+ 
+ 
+ </ul>
+ </div>
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io">
+ <img class="avatar-img" src="/pages/decentralizedthoughts/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+ </div>
+</nav>
+ 
+<div class="intro-header"></div>
+<div class="container" role="main">
+ <div class="row">
+ <div class="col-lg-10 col-lg-offset-2 col-md-10 col-md-offset-1">
+ <title>Decentralized Thoughts is a group blog on decentralization, by decentralized thinkers, for decentralized thoughts, of decentralized matters. Decentralized Thoughts is a group blog on decentralization, by decentralized thinkers, for decentralized thoughts, of decentralized matters. </title>
+<div class="posts-list">
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2020-07-17-the-marvels-of-polynomials-over-a-field/">
+ <h2 class="post-title">The Marvels of Polynomials over a Field</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on July 17, 2020, by <b>Ittai Abraham</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In this series of posts, we explore the mathematical foundations of polynomials over a field. These objects are at the heart of several results in computer science: secret sharing, Multi Party Computation, Complexity, and Zero Knowledge protocols (and see this post).
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2020-07-17-the-marvels-of-polynomials-over-a-field/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#math">math</a>
+ 
+ <a href="/pages/decentralizedthoughts/tags#cryptography">cryptography</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2020-07-15-asynchronous-fault-tolerant-computation-with-optimal-resilience/">
+ <h2 class="post-title">Asynchronous Fault Tolerant Computation with Optimal Resilience</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on July 15, 2020, by <b>Ittai Abraham, Danny Dolev, Gilad Stern</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ A basic question of distributed computing:
+Is there a fundamental limit to fault tolerant computation in the Asynchronous model?
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2020-07-15-asynchronous-fault-tolerant-computation-with-optimal-resilience/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#lowerbound">lowerbound</a>
+ 
+ <a href="/pages/decentralizedthoughts/tags#asynchrony">asynchrony</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2020-07-10-encrypted-blockchain-databases-part-ii/">
+ <h2 class="post-title">Encrypted Blockchain Databases (Part II)</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on July 10, 2020, by <b>Daniel Adkins, Archita Agarwal, Seny Kamara, Tarik Moataz</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In this second part of the series on Encrypted Blockchain Databases, we are going to describe three schemes to store dynamic encrypted multi-maps (EMMs) on blockchains, each of which achieves different tradeoffs between query, add and delete efficiency.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2020-07-10-encrypted-blockchain-databases-part-ii/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#research">research</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2020-07-10-encrypted-blockchain-databases-part-i/">
+ <h2 class="post-title">Encrypted Blockchain Databases (Part I)</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on July 10, 2020, by <b>Daniel Adkins, Archita Agarwal, Seny Kamara, Tarik Moataz</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ 
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2020-07-10-encrypted-blockchain-databases-part-i/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#research">research</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2020-07-05-the-first-blockchain-or-how-to-time-stamp-a-digital-document/">
+ <h2 class="post-title">The First Blockchain or How to Time-Stamp a Digital Document</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on July 5, 2020, by <b>Ittai Abraham</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ This post is about the work of Stuart Haber and W. Scott Stornetta from 1991 on How to Time-Stamp a Digital Document and their followup paper Improving the Efficiency and Reliability of Digital Time-Stamping. In many ways, this work introduced the idea of a chain of hashes to create a total order of commitments to a dynamically growing set of documents. It’s no wonder these two papers are cited by...
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2020-07-05-the-first-blockchain-or-how-to-time-stamp-a-digital-document/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#blockchain101">blockchain101</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2020-06-12-optimal-optimistic-responsiveness/">
+ <h2 class="post-title">On the Optimality of Optimistic Responsiveness</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on June 12, 2020, by <b>Nibesh Shrestha, Kartik Nayak</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Synchronous consensus protocols tolerating Byzantine failures depend on the maximum network delay $\Delta$ for their safety and progress. The delay, $\Delta$ is usually much larger than actual network delay $\delta$ since $\Delta$ is a pessimistic value. While synchronous protocols tolerating more than one-third will have executions with at least a $\Delta$ latency, recent synchronous protocols such as Sync HotStuff have been trying to reduce the reliance on $\Delta$ as much...
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2020-06-12-optimal-optimistic-responsiveness/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#research">research</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2020-05-14-streamlet/">
+ <h2 class="post-title">Streamlet: A Simple Textbook Blockchain Protocol</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on May 14, 2020, by <b></b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ 
+Guest post by Benjamin Chan and Elaine Shi
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2020-05-14-streamlet/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#blockchain">blockchain</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2020-04-02-bilinear-accumulators-for-cryptocurrency/">
+ <h2 class="post-title">Bilinear Accumulators for Cryptocurrency Enthusiasts</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on April 2, 2020, by <b>Alin Tomescu</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Accumulator schemes are an alternative to Merkle Hash Trees (MHTs) for committing to sets of elements.
+Their main advantages are:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2020-04-02-bilinear-accumulators-for-cryptocurrency/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#cryptography">cryptography</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2020-03-29-private-set-intersection-a-soft-introduction/">
+ <h2 class="post-title">Private Set Intersection</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on March 29, 2020, by <b>Avishay Yanai</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Private Set Intersection (PSI) is a problem within the broader field of secure computation.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2020-03-29-private-set-intersection-a-soft-introduction/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#cryptography">cryptography</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2020-03-03-range-proofs-from-polynomial-commitments-reexplained/">
+ <h2 class="post-title">Range Proofs from Polynomial Commitments, Re-explained</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on March 3, 2020, by <b>Alin Tomescu</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ This is a re-exposition of a post here by Dan Boneh, Ben Fisch, Ariel Gabizon, and Zac Williamson, with a few more details on why the polynomial relations hold.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2020-03-03-range-proofs-from-polynomial-commitments-reexplained/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#cryptography">cryptography</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2020-02-26-selfish-mining/">
+ <h2 class="post-title">Blockchain Selfish Mining</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on February 26, 2020, by <b>Ittay Eyal</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Proof of Work (PoW) Blockchains implement a form of State Machine Replication (SMR). Unlike classical SMR protocols, they are open, i.e., anyone can join the system, and the system incentivizes participants, called miners, to follow the protocol. Therefore, unlike classical SMR protocols, reasoning about blockchain security relies not only on bounding the number of malicious participants. One should crucially ask whether miners are indeed incentivized to follow the prescribed protocol....
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2020-02-26-selfish-mining/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#blockchain">blockchain</a>
+ 
+ <a href="/pages/decentralizedthoughts/tags#incentives">incentives</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2019-12-22-dolev-strong/">
+ <h2 class="post-title">Dolev-Strong Authenticated Broadcast</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on December 22, 2019, by <b>Ittai Abraham, Kartik Nayak</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ This post is about the classic result from 1983 on authenticated broadcast against a Byzantine adversary:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2019-12-22-dolev-strong/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#consensus">consensus</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2019-12-15-asynchrony-uncommitted-lower-bound/">
+ <h2 class="post-title">The FLP Impossibility, Asynchronous Consensus Lower Bound via Uncommitted Configurations</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on December 15, 2019, by <b>Ittai Abraham</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In this third post, we conclude with the celebrated Fischer, Lynch, and Paterson impossibility result from 1985. It is the fundamental lower bound for consensus in the asynchronous model.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2019-12-15-asynchrony-uncommitted-lower-bound/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#asynchrony">asynchrony</a>
+ 
+ <a href="/pages/decentralizedthoughts/tags#lowerbound">lowerbound</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2019-12-15-synchrony-uncommitted-lower-bound/">
+ <h2 class="post-title">Synchronous Consensus Lower Bound via Uncommitted Configurations</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on December 15, 2019, by <b>Ittai Abraham</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In this second post, we show the fundamental lower bound on the number of rounds for consensus protocols in the synchronous model.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2019-12-15-synchrony-uncommitted-lower-bound/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#lowerbound">lowerbound</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2019-12-15-consensus-model-for-FLP/">
+ <h2 class="post-title">Consensus Lower Bounds via Uncommitted Configurations</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on December 15, 2019, by <b>Ittai Abraham</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In this series of three posts, we discuss two of the most important consensus lower bounds: Lamport, Fischer [1982]: any protocol solving consensus in the synchronous model that is resilient to $t$ crash failures must have an execution with at least $t+1$ rounds. Fischer, Lynch, and Patterson [1983, 1985]: any protocol solving consensus in the asynchronous model that is resilient to even one crash failure must have an infinite execution....
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2019-12-15-consensus-model-for-FLP/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#asynchrony">asynchrony</a>
+ 
+ <a href="/pages/decentralizedthoughts/tags#lowerbound">lowerbound</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2019-12-06-dce-the-three-scalability-bottlenecks-of-state-machine-replication/">
+ <h2 class="post-title">Data, Consensus, Execution: Three Scalability Bottlenecks for State Machine Replication</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on December 6, 2019, by <b>Ittai Abraham</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ If anyone asks you: how can I scale my State Machine Replication (Blockchain) system?
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2019-12-06-dce-the-three-scalability-bottlenecks-of-state-machine-replication/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#blockchain">blockchain</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2019-11-29-Analysis-Nakamoto/">
+ <h2 class="post-title">Security proof for Nakamoto Consensus</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on November 29, 2019, by <b>Ling Ren</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Bitcoin’s underlying consensus protocol, now known as Nakamoto consensus, is an extremely simple and elegant solution to the Byzantine consensus problem. One may expect this simple protocol to come with a simple security proof. But that turns out not to be the case. The Bitcoin white paper did not provide a proof. Several academic papers (e.g. Garay, Kiayias, Leonardos, and Pass, Seeman, shelat and Kiffer, Rajaraman, shelat) later presented rigorous...
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2019-11-29-Analysis-Nakamoto/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#blockchain">blockchain</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2019-11-12-Sync-HotStuff/">
+ <h2 class="post-title">Sync HotStuff, A Simple and Practical State Machine Replication</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on November 12, 2019, by <b>Kartik Nayak, Ling Ren</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In the previous post, we discussed progress in authenticated synchronous consensus protocols. In this post, we will discuss one of the recent protocols Sync HotStuff, which is a simple and practical Byzantine Fault Tolerant SMR protocol to tolerate $f &amp;lt; n/2$ faults.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2019-11-12-Sync-HotStuff/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#consensus101">consensus101</a>
+ 
+ <a href="/pages/decentralizedthoughts/tags#SMR">SMR</a>
+ 
+ <a href="/pages/decentralizedthoughts/tags#research">research</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2019-11-11-authenticated-synchronous-bft/">
+ <h2 class="post-title">Authenticated Synchronous BFT</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on November 11, 2019, by <b>Kartik Nayak, Ittai Abraham, Ling Ren</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Post updated in March 2021
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2019-11-11-authenticated-synchronous-bft/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#research">research</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2019-11-02-primary-backup-for-2-servers-and-omission-failures-is-impossible/">
+ <h2 class="post-title">State Machine Replication for Two Servers and One Omission Failure is Impossible even in a lock-step model</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on November 2, 2019, by <b>Ittai Abraham</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In a previous post, we show that State Machine Replication for any $f&amp;lt;n$ failures is possible in the synchronous model when the adversary can only cause parties to crash. In this post, we show that omission failures are more challenging. Implementing SMR requires at most $f&amp;lt;n/2$ omission failures, even in synchrony.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2019-11-02-primary-backup-for-2-servers-and-omission-failures-is-impossible/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#lowerbound">lowerbound</a>
+ 
+ <a href="/pages/decentralizedthoughts/tags#SMR">SMR</a>
+ 
+ <a href="/pages/decentralizedthoughts/tags#omission">omission</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+</div>
+<ul class="pager main-pager">
+ 
+ <li class="previous">
+ <a href="/pages/decentralizedthoughts/page6">&larr; Newer Posts</a>
+ </li>
+ 
+ 
+ <li class="next">
+ <a href="/pages/decentralizedthoughts/page8">Older Posts &rarr;</a>
+ </li>
+ 
+</ul>
+ 
+ </div>
+ </div>
+</div>
+ <footer>
+ <div class="container beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+ <ul class="list-inline text-center footer-links"><li><a href="https://twitter.com/ittaia" title="Twitter"><span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fa fa-circle fa-stack-2x"></i>
+ <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">Twitter</span>
+ </a>
+ </li></ul>
+ <p class="copyright text-muted">
+ Decentralized Thinkers
+ &nbsp;&bull;&nbsp;
+ 2026
+ 
+ 
+ </p>
+ 
+ <p class="theme-by text-muted">
+ Theme by
+ <a href="https://deanattali.com/beautiful-jekyll/">beautiful-jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ 
+ 
+ <script>
+ if (typeof jQuery == 'undefined') {
+ document.write('<script src="/pages/decentralizedthoughts/js/jquery-1.11.2.min.js"></scr' + 'ipt>');
+ }
+ </script>
+ 
+ 
+ 
+ 
+ <script src="/pages/decentralizedthoughts/js/bootstrap.min.js"></script>
+ 
+ 
+ 
+ 
+ <script src="/pages/decentralizedthoughts/js/main.js"></script>
+ 
+ 
+ 
+ </body>
+</html>

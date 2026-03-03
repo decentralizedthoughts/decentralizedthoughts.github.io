@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+ <channel>
+ <title>Decentralized Thoughts</title>
+ <description>Decentralized thoughts about decentralization</description>
+ <link>https://decentralizedthoughts.github.io</link>
+ <atom:link href="https://decentralizedthoughts.github.io/feed.xml" rel="self" type="application/rss+xml" />
+ 
+ <item>
+ <title>Beyond Latency and Communication Complexity - A Tutorial on the Pipes Model</title>
+ <description>
+ 
+ Traditionally, protocol performance is summarized using two metrics: latency (measured in rounds), and communication complexity (measured asymptotically, e.g., $O(n^2)$). If both are small, we might expect the protocol to perform well in practice. But this intuition is incomplete. When Low Latency and Low Communication Aren’t Enough Consider two protocols: Protocol...
+ </description>
+ <pubDate>Fri, 13 Feb 2026 00:00:00 -0500</pubDate>
+ <link>https://decentralizedthoughts.github.io/2026-02-13-pipes/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-02-13-pipes/</guid>
+ </item>
+ 
+ <item>
+ <title>Partial Synchrony Progress Cheat Sheet</title>
+ <description>
+ 
+ A walkthrough of this progress is available on the TheCoordinate podcast. A downloadable PDF is available here. The PBFT line of work A: Comparing PBFT, SBFT, Tendermint, HotStuff, and HotStuff-2: post1, post2 B: Explaining the core ideas behind PBFT: principles, PBFT C: Comparing the protocols Tendermint and Simplex, a lecture...
+ </description>
+ <pubDate>Mon, 02 Feb 2026 09:06:00 -0500</pubDate>
+ <link>https://decentralizedthoughts.github.io/2026-02-02-ps-cheat-sheet/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-02-02-ps-cheat-sheet/</guid>
+ </item>
+ 
+ <item>
+ <title>Concurrent 2-round and 3-round BFT protocols under granular synchrony</title>
+ <description>
+ 
+ Consensus protocols for $n=3f+1$ can tolerate $f$ Byzantine faults under partial synchrony. However, they also require a latency of 3 rounds in the good-case when the leader is non-faulty, and the system is synchronous. Can we get a protocol with better latency, or tolerate more faults, if we assume $n=3f+2p+1$?...
+ </description>
+ <pubDate>Sat, 24 Jan 2026 01:00:00 -0500</pubDate>
+ <link>https://decentralizedthoughts.github.io/2026-01-24-two-round-ps/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-01-24-two-round-ps/</guid>
+ </item>
+ 
+ <item>
+ <title>Simple Payment Systems with Unlinkability</title>
+ <description>
+ 
+ In this post, we discuss payment systems. There is a set of users who wish to pay each other. We start with perhaps the simplest form, which is based just on digital signatures and a single bank. We then show how the bank can be implemented as a fault tolerant...
+ </description>
+ <pubDate>Wed, 21 Jan 2026 02:00:00 -0500</pubDate>
+ <link>https://decentralizedthoughts.github.io/2026-01-21-simple-payment/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-01-21-simple-payment/</guid>
+ </item>
+ 
+ <item>
+ <title>Blind and Threshold Blind Signatures</title>
+ <description>
+ 
+ A blind signature scheme allows a user to obtain a valid signature on a message while ensuring that the signer learns nothing about the message. The user blinds the message, the signer signs the blinded value, and the user unblinds the response to obtain a valid signature on the original...
+ </description>
+ <pubDate>Wed, 21 Jan 2026 01:00:00 -0500</pubDate>
+ <link>https://decentralizedthoughts.github.io/2026-01-21-blind-and-threshold/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-01-21-blind-and-threshold/</guid>
+ </item>
+ 
+ <item>
+ <title>Partial Synchrony variants</title>
+ <description>
+ 
+ In this post we observe three variants of Partial Synchrony (PS) and how they affect (or not) popular BFT protocols like PBFT, Tendermint, and especially the recent Simplex protocol. Many modern systems use the following definition of Partial Synchrony: Bounded Partial Synchrony (BPS): A message sent at time $t$ arrives...
+ </description>
+ <pubDate>Fri, 19 Dec 2025 23:00:00 -0500</pubDate>
+ <link>https://decentralizedthoughts.github.io/2025-12-19-cc-under-harsh-ps/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2025-12-19-cc-under-harsh-ps/</guid>
+ </item>
+ 
+ <item>
+ <title>DPaaS - Improving Decentralization by Removing Relays in Ethereum PBS</title>
+ <description>
+ 
+ In this blog post, we will explain the core ideas of Decentralized Proposer-as-a-Service (DPaaS), a side-car protocol that removes centralized and unconditionally trusted relays in current Ethereum Proposer-Builder Separation (PBS). The full paper is on the eprint. PBS and MEV-Boost Proposer-Builder Separation (PBS) was proposed to mitigate the validator centralization...
+ </description>
+ <pubDate>Fri, 12 Dec 2025 07:00:00 -0500</pubDate>
+ <link>https://decentralizedthoughts.github.io/2025-12-12-dpaas/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2025-12-12-dpaas/</guid>
+ </item>
+ 
+ <item>
+ <title>Scalable Agreement - Near Linear Communication and Constant Expected Time</title>
+ <description>
+ 
+ Agreement needs quadratic communication and linear time in the worst case. Scalable Agreement aims for near linear communication and constant time in expectation. In this post, we show scalable agreement against a weak adaptive adversary that can cause omission failures. This will be the basis for the Byzantine case that...
+ </description>
+ <pubDate>Fri, 12 Dec 2025 06:00:00 -0500</pubDate>
+ <link>https://decentralizedthoughts.github.io/2025-12-12-scalable-agreement/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2025-12-12-scalable-agreement/</guid>
+ </item>
+ 
+ <item>
+ <title>Finality Is in the Eye of the Behodler</title>
+ <description>
+ 
+ Finality is a belief that some things will not change in the future (are final). Finality in blockchains matters because it gives us confidence that transactions or protocol decisions, will remain permanent and immutable. This ability to commit is what makes Blockchains so powerful as a coordination mechanism. Consider the...
+ </description>
+ <pubDate>Sun, 23 Nov 2025 03:00:00 -0500</pubDate>
+ <link>https://decentralizedthoughts.github.io/2025-11-23-finality/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2025-11-23-finality/</guid>
+ </item>
+ 
+ <item>
+ <title>Why BFT Needs Three Rounds</title>
+ <description>
+ 
+ Many modern BFT protocols share a common structural pattern. PBFT uses preprepare and prepare. Tendermint uses prevote and precommit. CasperFFG and Simplex use notarization and finalization. HotStuff uses a QC on top of another QC. Notice the pattern? Each of these protocols begins with a proposal followed by two voting...
+ </description>
+ <pubDate>Sat, 22 Nov 2025 09:00:00 -0500</pubDate>
+ <link>https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/</guid>
+ </item>
+ 
+ <item>
+ <title>From Benign Simplex to Byzantine Simplex</title>
+ <description>
+ 
+ In this post we present a Simplex protocol that solves single shot consensus and is resilient to $f &amp;lt; n/3$ Byzantine failures, under partial synchrony. In a previous post we showed how to move from Tendermint to Simplex. In this post we show how to move from Benign Simplex to...
+ </description>
+ <pubDate>Sat, 15 Nov 2025 04:30:00 -0500</pubDate>
+ <link>https://decentralizedthoughts.github.io/2025-11-15-simplex-from-benign/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2025-11-15-simplex-from-benign/</guid>
+ </item>
+ 
+ <item>
+ <title>Benign Simplex</title>
+ <description>
+ 
+ The goal of this post is to describe a single-shot consensus protocol that is resilient to f &amp;lt; n/2 omission failures, under partial synchrony. This protocol is inspired by the multi-shot Simplex for crash faults protocol and our earlier posts on Chained Raft, Benign HotStuff, and Log Paxos. Single-Shot Consensus...
+ </description>
+ <pubDate>Sat, 08 Nov 2025 04:30:00 -0500</pubDate>
+ <link>https://decentralizedthoughts.github.io/2025-11-08-benign-simplex/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2025-11-08-benign-simplex/</guid>
+ </item>
+ 
+ <item>
+ <title>Test your understanding of the basics of fault tolerant distributed computing</title>
+ <description>
+ 
+ The goal of this post is to motivate you to learn the basics of distributed computing by providing a set of simple questions that test your understanding of the basic definitions. In 2025, LLM-based chatbots score 100 on this test, so that’s what you should aim for. The questions cover...
+ </description>
+ <pubDate>Wed, 22 Oct 2025 05:30:00 -0400</pubDate>
+ <link>https://decentralizedthoughts.github.io/2025-10-22-quiz-basics/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2025-10-22-quiz-basics/</guid>
+ </item>
+ 
+ <item>
+ <title>Carry: HotStuff Linearity with Tail-Forking-Resilience</title>
+ <description>
+ 
+ The recently identified tail-forking attack shows how malicious leaders can degrade throughput by skipping over honest proposals in streamlined BFT protocols like HotStuff. To address this challenge, we introduce Carry, a lightweight mechanism that preserves HotStuff’s linearity while protecting against tail-forking. Carry also supports commits by honest-but-sluggish leaders whose messages...
+ </description>
+ <pubDate>Sat, 27 Sep 2025 21:30:00 -0400</pubDate>
+ <link>https://decentralizedthoughts.github.io/2025-09-27-carry-the-tail/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2025-09-27-carry-the-tail/</guid>
+ </item>
+ 
+ <item>
+ <title>Variants of Simplex with Reduced Bad-case Latency: C-Simplex and Kuplex</title>
+ <description>
+ 
+ Consensus protocols often need to balance simplicity with performance. Simplex is a beautiful example of minimalistic design. In this post, we explore two variations of Simplex, one that improves view latency in silent views and another that improves view latency in the worst-case when the actual network delay $\delta$ is...
+ </description>
+ <pubDate>Wed, 24 Sep 2025 10:30:00 -0400</pubDate>
+ <link>https://decentralizedthoughts.github.io/2025-09-24-Kuplex/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2025-09-24-Kuplex/</guid>
+ </item>
+ 
+ <item>
+ <title>Agreement under omission failures: non-uniformity and weak validity</title>
+ <description>
+ 
+ In this post, we study non-uniform agreement and weak validity under synchronous networks with general omission failures, where faulty parties may lose some or all incoming and outgoing messages. In this model, agreement, concerns only non-faulty parties. Omission-faulty parties may disagree, and validity is weak: the output must equal some...
+ </description>
+ <pubDate>Tue, 12 Aug 2025 00:05:00 -0400</pubDate>
+ <link>https://decentralizedthoughts.github.io/2025-08-12-non-uniform-weak-validity/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2025-08-12-non-uniform-weak-validity/</guid>
+ </item>
+ 
+ <item>
+ <title>What’s DAG got to do with it?</title>
+ <description>
+ 
+ Since 2018, blockchain research has seen a surge in DAG-based BFT protocols aimed at achieving higher throughput. These protocols trace back to Hashgraph, 2018, Aleph, 2019, the theoretical work of All You Need is DAG, 2021, and systems papers like Narwhal and Bullshark. In this post, we highlight six key...
+ </description>
+ <pubDate>Fri, 08 Aug 2025 00:00:00 -0400</pubDate>
+ <link>https://decentralizedthoughts.github.io/2025-08-08-DAGs/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2025-08-08-DAGs/</guid>
+ </item>
+ 
+ <item>
+ <title>2-round BFT in Simplex style for n=5f-1</title>
+ <description>
+ 
+ In our previous post, we described a 2-round partially synchronous BFT protocol for $n = 5f+1$. In this follow-up post, we push the bound to $n = 5f-1$, achieving optimal 2-round commit in the Simplex style. We then extend the result to $n=3f+2p-1$ for $0&amp;lt;p\leq f$ that obtains liveness for...
+ </description>
+ <pubDate>Wed, 06 Aug 2025 00:00:00 -0400</pubDate>
+ <link>https://decentralizedthoughts.github.io/2025-08-06-5fminus1-simplex/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2025-08-06-5fminus1-simplex/</guid>
+ </item>
+ 
+ <item>
+ <title>Graded dispersal with perfect security</title>
+ <description>
+ 
+ In a previous post we covered the basics of Asynchronous Verifiable Information Dispersal (AVID) and the classic AVID of Cachin and Tessaro, 2004. That protocol allows a sender to disperse a message of $O(n\log n)$ bits at a cost of just $O(n^2 \log^2 n)$ bits. However, It incurs a $O(\log...
+ </description>
+ <pubDate>Fri, 01 Aug 2025 07:00:00 -0400</pubDate>
+ <link>https://decentralizedthoughts.github.io/2025-08-01-graded-dispersal/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2025-08-01-graded-dispersal/</guid>
+ </item>
+ 
+ <item>
+ <title>Concurrent 2-round and 3-round Simplex-style BFT</title>
+ <description>
+ 
+ In the last two posts, we presented two partially synchronous BFT protocols in the Simplex-style: a 3-round protocol with $n\geq3f+1$ and a 2-round protocol with $n\geq 5f+1$. In this post, we describe a protocol that runs a 2-round commit rule and a 3-round commit rule concurrently. A new parameter $p$...
+ </description>
+ <pubDate>Tue, 29 Jul 2025 00:00:00 -0400</pubDate>
+ <link>https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/</guid>
+ </item>
+ 
+ </channel>
+</rss>

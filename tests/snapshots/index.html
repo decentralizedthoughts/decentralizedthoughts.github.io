@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+ <head>
+ <meta charset="utf-8" />
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+ <title>Decentralized Thoughts - Decentralized thoughts about decentralization</title>
+ <meta name="author" content="Decentralized Thinkers" />
+ 
+ <link rel="alternate" type="application/rss+xml" title="Decentralized Thoughts - Decentralized thoughts about decentralization" href="/pages/decentralizedthoughts/feed.xml" />
+ 
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+ <script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css" />
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/pages/decentralizedthoughts/css/bootstrap.min.css" />
+ 
+ <link rel="stylesheet" href="/pages/decentralizedthoughts/css/bootstrap-social.css" />
+ 
+ <link rel="stylesheet" href="/pages/decentralizedthoughts/css/main.css" />
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+ 
+ <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:title" content="Decentralized Thoughts" />
+ 
+ 
+ <meta property="og:description" content="Decentralized Thoughts is a group blog on decentralization, by decentralized thinkers, for decentralized thoughts, of decentralized matters. Decentralized Thoughts is a group blog on decentralization, by decentralized thinkers, for decentralized thoughts, of decentralized matters. {% for post in paginator.posts %} {{ post.title }} {% if post.subtitle %} {{ post.subtitle }}...">
+ 
+ <meta property="og:type" content="website" />
+ 
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/" />
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/" />
+ 
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png" />
+ 
+ 
+ <meta name="twitter:card" content="summary" />
+ <meta name="twitter:site" content="@" />
+ <meta name="twitter:creator" content="@" />
+ 
+ <meta name="twitter:title" content="Decentralized Thoughts" />
+ 
+ 
+ <meta name="twitter:description" content="Decentralized Thoughts is a group blog on decentralization, by decentralized thinkers, for decentralized thoughts, of decentralized matters. Decentralized Thoughts is a group blog on decentralization, by decentralized thinkers, for decentralized thoughts, of decentralized matters. {% for post in paginator.posts %} {{ post.title }} {% if post.subtitle %} {{ post.subtitle }}...">
+ 
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png" />
+ 
+ 
+ 
+ 
+ 
+ <script type="text/x-mathjax-config">
+ MathJax.Hub.Config({
+ tex2jax: {
+ skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+ inlineMath: [['$','$']]
+ },
+ TeX: { equationNumbers: { autoNumber: "all" } }
+ });
+ </script>
+ <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script> 
+</head>
+ <body>
+ 
+ 
+ <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+ <div class="container-fluid">
+ <div class="navbar-header">
+ <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+ <span class="sr-only">Toggle navigation</span>
+ <span class="icon-bar"></span>
+ <span class="icon-bar"></span>
+ <span class="icon-bar"></span>
+ </button>
+ 
+ <a class="navbar-brand" href="https://decentralizedthoughts.github.io">Decentralized Thoughts</a>
+ 
+ </div>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="nav navbar-nav navbar-right">
+ 
+ 
+ <li class="navlinks-container">
+ <a class="navlinks-parent" href="javascript:void(0)">Authors</a>
+ <div class="navlinks-children">
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-ittai">Ittai Abraham</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-ittay">Ittay Eyal</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-heidi">Heidi Howard</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-kartik">Kartik Nayak</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-ling">Ling Ren</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-alin">Alin Tomescu</a>
+ 
+ 
+ 
+ 
+<a href="/pages/decentralizedthoughts/about-avishay">Avishay Yanai</a>
+ 
+ 
+ </div>
+ </li>
+ 
+ 
+ 
+ <li>
+ 
+<a href="/pages/decentralizedthoughts/videos">Videos</a>
+ </li>
+ 
+ 
+ 
+ <li>
+ 
+<a href="/pages/decentralizedthoughts/start-here">Start Here</a>
+ </li>
+ 
+ 
+ 
+ <li>
+ 
+<a href="/pages/decentralizedthoughts/course">Course</a>
+ </li>
+ 
+ 
+ </ul>
+ </div>
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io">
+ <img class="avatar-img" src="/pages/decentralizedthoughts/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+ </div>
+</nav>
+ 
+<div class="intro-header"></div>
+<div class="container" role="main">
+ <div class="row">
+ <div class="col-lg-10 col-lg-offset-2 col-md-10 col-md-offset-1">
+ <title>Decentralized Thoughts is a group blog on decentralization, by decentralized thinkers, for decentralized thoughts, of decentralized matters. Decentralized Thoughts is a group blog on decentralization, by decentralized thinkers, for decentralized thoughts, of decentralized matters. </title>
+<div class="posts-list">
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2026-02-13-pipes/">
+ <h2 class="post-title">Beyond Latency and Communication Complexity - A Tutorial on the Pipes Model</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on February 13, 2026, by <b>Andrew Lewis-Pye, Kartik Nayak, Nibesh Shrestha</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Traditionally, protocol performance is summarized using two metrics:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2026-02-13-pipes/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2026-02-02-ps-cheat-sheet/">
+ <h2 class="post-title">Partial Synchrony Progress Cheat Sheet</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on February 2, 2026, by <b>Kartik Nayak</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ A walkthrough of this progress is available on the TheCoordinate podcast. A downloadable PDF is available here.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2026-02-02-ps-cheat-sheet/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2026-01-24-two-round-ps/">
+ <h2 class="post-title">Concurrent 2-round and 3-round BFT protocols under granular synchrony</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on January 24, 2026, by <b>Ittai Abraham, Kartik Nayak, and Alejandro Ranchal-pedrosa</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Consensus protocols for $n=3f+1$ can tolerate $f$ Byzantine faults under partial synchrony. However, they also require a latency of 3 rounds in the good-case when the leader is non-faulty, and the system is synchronous. Can we get a protocol with better latency, or tolerate more faults, if we assume $n=3f+2p+1$?
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2026-01-24-two-round-ps/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2026-01-21-simple-payment/">
+ <h2 class="post-title">Simple Payment Systems with Unlinkability</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on January 21, 2026, by <b>Ittai Abraham, Gilad Stern, and Alin Tomescu</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In this post, we discuss payment systems. There is a set of users who wish to pay each other.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2026-01-21-simple-payment/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2026-01-21-blind-and-threshold/">
+ <h2 class="post-title">Blind and Threshold Blind Signatures</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on January 21, 2026, by <b>Ittai Abraham, Gilad Stern, and Alin Tomescu</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ A blind signature scheme allows a user to obtain a valid signature on a message while ensuring that the signer learns nothing about the message. The user blinds the message, the signer signs the blinded value, and the user unblinds the response to obtain a valid signature on the original message. Importantly, the signer still retains full control over whether to participate in the protocol, it only gives up visibility...
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2026-01-21-blind-and-threshold/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2025-12-19-cc-under-harsh-ps/">
+ <h2 class="post-title">Partial Synchrony variants</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on December 19, 2025, by <b>Ittai Abraham, Yuval Efron, Kartik Nayak, and Ling Ren</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In this post we observe three variants of Partial Synchrony (PS) and how they affect (or not) popular BFT protocols like PBFT, Tendermint, and especially the recent Simplex protocol.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2025-12-19-cc-under-harsh-ps/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#models">models</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2025-12-12-dpaas/">
+ <h2 class="post-title">DPaaS - Improving Decentralization by Removing Relays in Ethereum PBS</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on December 12, 2025, by <b>Chenyang Liu, Ittai Abraham, Matthew Lentz, Kartik Nayak</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In this blog post, we will explain the core ideas of Decentralized Proposer-as-a-Service (DPaaS), a side-car protocol that removes centralized and unconditionally trusted relays in current Ethereum Proposer-Builder Separation (PBS). The full paper is on the eprint.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2025-12-12-dpaas/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#PBS">PBS</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2025-12-12-scalable-agreement/">
+ <h2 class="post-title">Scalable Agreement - Near Linear Communication and Constant Expected Time</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on December 12, 2025, by <b>Ittai Abraham</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Agreement needs quadratic communication and linear time in the worst case. Scalable Agreement aims for near linear communication and constant time in expectation. In this post, we show scalable agreement against a weak adaptive adversary that can cause omission failures. This will be the basis for the Byzantine case that we will explore in future posts.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2025-12-12-scalable-agreement/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#randomness">randomness</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2025-11-23-finality/">
+ <h2 class="post-title">Finality Is in the Eye of the Behodler</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on November 23, 2025, by <b>Ittai Abraham, Vitalik Buterin, and Luca Zanolini</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Finality is a belief that some things will not change in the future (are final). Finality in blockchains matters because it gives us confidence that transactions or protocol decisions, will remain permanent and immutable. This ability to commit is what makes Blockchains so powerful as a coordination mechanism.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2025-11-23-finality/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#blockchain">blockchain</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2025-11-22-three-round-BFT/">
+ <h2 class="post-title">Why BFT Needs Three Rounds</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on November 22, 2025, by <b>Ittai Abraham and Kartik Nayak</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Many modern BFT protocols share a common structural pattern. PBFT uses preprepare and prepare. Tendermint uses prevote and precommit. CasperFFG and Simplex use notarization and finalization. HotStuff uses a QC on top of another QC.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2025-11-22-three-round-BFT/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#lowerbound">lowerbound</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2025-11-15-simplex-from-benign/">
+ <h2 class="post-title">From Benign Simplex to Byzantine Simplex</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on November 15, 2025, by <b>Ittai Abraham</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In this post we present a Simplex protocol that solves single shot consensus and is resilient to $f &amp;lt; n/3$ Byzantine failures, under partial synchrony. In a previous post we showed how to move from Tendermint to Simplex.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2025-11-15-simplex-from-benign/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#dist101">dist101</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2025-11-08-benign-simplex/">
+ <h2 class="post-title">Benign Simplex</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on November 8, 2025, by <b>Ittai Abraham</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ The goal of this post is to describe a single-shot consensus protocol that is resilient to f &amp;lt; n/2 omission failures, under partial synchrony.
+This protocol is inspired by the multi-shot Simplex for crash faults protocol and our earlier posts on Chained Raft, Benign HotStuff, and Log Paxos.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2025-11-08-benign-simplex/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#dist101">dist101</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2025-10-22-quiz-basics/">
+ <h2 class="post-title">Test your understanding of the basics of fault tolerant distributed computing</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on October 22, 2025, by <b>Ittai Abraham</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ The goal of this post is to motivate you to learn the basics of distributed computing by providing a set of simple questions that test your understanding of the basic definitions. In 2025, LLM-based chatbots score 100 on this test, so that’s what you should aim for. The questions cover the standard models and fault assumptions you encounter in the first lectures of any distributed computing course.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2025-10-22-quiz-basics/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#dist101">dist101</a>
+ 
+ <a href="/pages/decentralizedthoughts/tags#models">models</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2025-09-27-carry-the-tail/">
+ <h2 class="post-title">Carry: HotStuff Linearity with Tail-Forking-Resilience</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on September 27, 2025, by <b>Dakai Kang, Suyash Gupta, Dahlia Malkhi, Mohammad Sadoghi</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ The recently identified tail-forking attack shows how malicious leaders can degrade throughput by skipping over honest proposals in streamlined BFT protocols like HotStuff. To address this challenge, we introduce Carry, a lightweight mechanism that preserves HotStuff’s linearity while protecting against tail-forking. Carry also supports commits by honest-but-sluggish leaders whose messages are benignly delayed.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2025-09-27-carry-the-tail/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#BFT">BFT</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2025-09-24-Kuplex/">
+ <h2 class="post-title">Variants of Simplex with Reduced Bad-case Latency: C-Simplex and Kuplex</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on September 24, 2025, by <b>Ittai Abraham, Ling Ren</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Consensus protocols often need to balance simplicity with performance. Simplex is a beautiful example of minimalistic design. In this post, we explore two variations of Simplex, one that improves view latency in silent views and another that improves view latency in the worst-case when the actual network delay $\delta$ is smaller than $\Delta$, the maximal delay after GST.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2025-09-24-Kuplex/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#BFT">BFT</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2025-08-12-non-uniform-weak-validity/">
+ <h2 class="post-title">Agreement under omission failures: non-uniformity and weak validity</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on August 12, 2025, by <b>Ittai Abraham and Gilad Stern</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In this post, we study non-uniform agreement and weak validity under synchronous networks with general omission failures, where faulty parties may lose some or all incoming and outgoing messages.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2025-08-12-non-uniform-weak-validity/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#omission">omission</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2025-08-08-DAGs/">
+ <h2 class="post-title">What’s DAG got to do with it?</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on August 8, 2025, by <b>Ittai Abraham, Neil Giridharan, and Kartik Nayak</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Since 2018, blockchain research has seen a surge in DAG-based BFT protocols aimed at achieving higher throughput. These protocols trace back to Hashgraph, 2018, Aleph, 2019, the theoretical work of All You Need is DAG, 2021, and systems papers like Narwhal and Bullshark.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2025-08-08-DAGs/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#consensus">consensus</a>
+ 
+ <a href="/pages/decentralizedthoughts/tags#BFT">BFT</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2025-08-06-5fminus1-simplex/">
+ <h2 class="post-title">2-round BFT in Simplex style for n=5f-1</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on August 6, 2025, by <b>Ittai Abraham and Ling Ren</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In our previous post, we described a 2-round partially synchronous BFT protocol for $n = 5f+1$. In this follow-up post, we push the bound to $n = 5f-1$, achieving optimal 2-round commit in the Simplex style.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2025-08-06-5fminus1-simplex/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#consensus">consensus</a>
+ 
+ <a href="/pages/decentralizedthoughts/tags#BFT">BFT</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2025-08-01-graded-dispersal/">
+ <h2 class="post-title">Graded dispersal with perfect security</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on August 1, 2025, by <b>Ittai Abraham, Gilad Asharov, Anirudh Chandramouli</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In a previous post we covered the basics of Asynchronous Verifiable Information Dispersal (AVID) and the classic AVID of Cachin and Tessaro, 2004.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2025-08-01-graded-dispersal/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#VID">VID</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/pages/decentralizedthoughts/2025-07-29-2-round-3-round-simplex/">
+ <h2 class="post-title">Concurrent 2-round and 3-round Simplex-style BFT</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on July 29, 2025, by <b>Ittai Abraham, Yuval Efron, Kartik Nayak, and Ling Ren</b>
+ </p>
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In the last two posts, we presented two partially synchronous BFT protocols in the Simplex-style: a 3-round protocol with $n\geq3f+1$ and a 2-round protocol with $n\geq 5f+1$. In this post, we describe a protocol that runs a 2-round commit rule and a 3-round commit rule concurrently.
+ 
+ 
+ <a href="/pages/decentralizedthoughts/2025-07-29-2-round-3-round-simplex/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ 
+ <a href="/pages/decentralizedthoughts/tags#consensus">consensus</a>
+ 
+ <a href="/pages/decentralizedthoughts/tags#research">research</a>
+ 
+ 
+ </div>
+ 
+ </article>
+ 
+</div>
+<ul class="pager main-pager">
+ 
+ 
+ <li class="next">
+ <a href="/pages/decentralizedthoughts/page2">Older Posts &rarr;</a>
+ </li>
+ 
+</ul>
+ 
+ </div>
+ </div>
+</div>
+ <footer>
+ <div class="container beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+ <ul class="list-inline text-center footer-links"><li><a href="https://twitter.com/ittaia" title="Twitter"><span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fa fa-circle fa-stack-2x"></i>
+ <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">Twitter</span>
+ </a>
+ </li></ul>
+ <p class="copyright text-muted">
+ Decentralized Thinkers
+ &nbsp;&bull;&nbsp;
+ 2026
+ 
+ 
+ </p>
+ 
+ <p class="theme-by text-muted">
+ Theme by
+ <a href="https://deanattali.com/beautiful-jekyll/">beautiful-jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ 
+ 
+ <script>
+ if (typeof jQuery == 'undefined') {
+ document.write('<script src="/pages/decentralizedthoughts/js/jquery-1.11.2.min.js"></scr' + 'ipt>');
+ }
+ </script>
+ 
+ 
+ 
+ 
+ <script src="/pages/decentralizedthoughts/js/bootstrap.min.js"></script>
+ 
+ 
+ 
+ 
+ <script src="/pages/decentralizedthoughts/js/main.js"></script>
+ 
+ 
+ 
+ </body>
+</html>
