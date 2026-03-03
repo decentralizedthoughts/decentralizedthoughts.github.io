@@ -26,6 +26,7 @@ defaults:
     show-avatar: true
 url: https://decentralizedthoughts.github.io
 baseurl: 
+repository: decentralizedthoughts/decentralizedthoughts.github.io
 description: Decentralized thoughts about decentralization
 navbar-links:
   Authors:
@@ -84,6 +85,11 @@ exclude:
 - LICENSE
 - README.md
 - Vagrantfile
+- vendor
+- vendor/bundle
+- node_modules
+- .jekyll-cache
+- _site
 prose:
   rooturl: _posts
   media: img
