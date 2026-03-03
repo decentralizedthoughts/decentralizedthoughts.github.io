@@ -9,6 +9,10 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.3'
+      - name: Install Bundler
+        run: |
+          gem install bundler -v "~> 2.5"
+          bundle --version
       - name: Install dependencies
         run: bundle install && bundle exec appraisal install
       - name: Setup Pages
