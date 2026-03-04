@@ -98,7 +98,7 @@ exclude:
 - vendor
 - vendor/bundle
 - node_modules
-- .jekyll-cache
+- ".jekyll-cache"
 - _site
 - tests
 - tools
