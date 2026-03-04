@@ -9,6 +9,8 @@
  <title>Responsiveness under omission failures</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham and Kartik Nayak">
  
  <meta name="description" content="In this post, we discuss log replication responsiveness in the context of omission failures. We show how to transform the protocol in our previous post to a multi-shot version of Paxos for omission faults. The Byzantine failure case uses similar ideas and is covered in the next post of this series. Obtaining responsiveness in log replication with a stable leader In the previous post we replaced leaders every $10 \Delta$...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -287,7 +302,8 @@ while (true)
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

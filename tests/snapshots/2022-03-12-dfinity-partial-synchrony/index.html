@@ -9,6 +9,8 @@
  <title>Consensus by Dfinity - Part II (Internet Computer Consensus)</title>
  
  
+ 
+ 
  <meta name="author" content="Kartik Nayak">
  
  <meta name="description" content="This post is part two of a two-part post on consensus protocols published by the Dfinity Foundation; you can find part one here. This post will intuitively explain the Internet Computer Consensus. The differences between DSC and ICC are primarily due to the underlying network model that they assume — while DSC works under synchrony and tolerates $t &amp;lt; n/2$ Byzantine faults, ICC works under partial synchrony and tolerates $t...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -265,7 +280,8 @@ Observe that if $\geq t+1$ honest replicas observe $B_k$ being uniquely certifie
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

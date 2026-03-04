@@ -9,6 +9,8 @@
  <title>2-round BFT SMR with n=4, f=1</title>
  
  
+ 
+ 
  <meta name="author" content="Zhuolun Xiang">
  
  <meta name="description" content="Guest post by Zhuolun Xiang In the previous post, we presented a summary of our good-case latency results for Byzantine broadcast and Byzantine fault tolerant state machine replication (BFT SMR), where the good case measures the latency to commit given that the leader/broadcaster is honest. In this post, we describe a new Byzantine Fault Tolerant (BFT) State Machine Replication (SMR) protocol for partial synchrony, where the network becomes synchronous after...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -291,7 +306,8 @@ In this way, we are able to construct a BFT SMR protocol that commits in 2 round
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

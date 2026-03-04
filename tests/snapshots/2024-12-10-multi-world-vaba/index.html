@@ -9,6 +9,8 @@
  <title>Multi-world Validated Asynchronous Byzantine Agreement</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham, Alexander Spiegelman">
  
  <meta name="description" content="In this post, we show how to solve Validated Asynchronous Byzantine Agreement using the multi-world VABA approach from Abraham, Malkhi, and Spiegelman 2018. What is Validated Asynchronous Byzantine Agreement? Given $n$ parties, with at most $f &amp;lt; n/3$ malicious (the optimal ratio for consensus with asynchronous communication), parties share an agreed-upon external validity function $EV(val)$ that defines the set of valid values. Each party holds a valid input value (the...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -302,7 +317,8 @@
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

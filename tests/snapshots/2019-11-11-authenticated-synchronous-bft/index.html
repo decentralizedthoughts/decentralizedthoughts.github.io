@@ -9,6 +9,8 @@
  <title>Authenticated Synchronous BFT</title>
  
  
+ 
+ 
  <meta name="author" content="Kartik Nayak, Ittai Abraham, Ling Ren">
  
  <meta name="description" content="Post updated in March 2021 Different modeling assumptions under which we construct BFT protocols often make it hard to compare two protocols and understand their relative contributions. In this post we discuss synchronous protocols in the authenticated model (assuming a PKI). A protocol runs in the synchronous model if it assumes a bounded message delay, i.e., all messages will arrive within a bounded delay of $\Delta$. A common strengthening of...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -386,7 +401,8 @@ However, state-of-art non-lock-step protocols can achieve lower latency by avoid
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

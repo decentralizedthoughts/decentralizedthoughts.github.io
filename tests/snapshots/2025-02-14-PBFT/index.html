@@ -9,6 +9,8 @@
  <title>Practical Byzantine Fault Tolerant Consensus (PBFT)</title>
  
  
+ 
+ 
  <meta name="author" content="Kartik Nayak, Ittai Abraham">
  
  <meta name="description" content="In this post, we will present (a variant of) PBFT, which is the first practical solution to Byzantine fault tolerant state machine replication under partial synchrony. The protocol follows the key ideas presented in the previous post on partial synchrony. Setting There are $n$ parties, at most $t&amp;lt;n/3$ of them can have Byzantine failures. The network is partially synchronous, so messages after GST arrive after at most $\Delta$ delay. We...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -319,7 +334,8 @@
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

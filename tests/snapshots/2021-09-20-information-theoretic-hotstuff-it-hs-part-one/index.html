@@ -9,6 +9,8 @@
  <title>Information Theoretic HotStuff (IT-HS): Part One</title>
  
  
+ 
+ 
  <meta name="author" content="Gilad Stern, Ittai Abraham">
  
  <meta name="description" content="This post is the first of two on Information Theoretic HotStuff (IT-HS). Information Theoretic HotStuff is a Byzantine Consensus protocol in the partially synchronous model. It replaces all of HotStuff’s cryptographic signatures with simple information theoretic message passing techniques over authenticated channels. Information theoretic protocols are often easy to reason about, form a great introduction for learning the basics of consensus, have less of an attack surface, and highlight useful...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -339,7 +354,8 @@ It is essential that this property always holds, even when the network is still 
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

@@ -9,6 +9,8 @@
  <title>From Single-Shot Agreement to State Machine Replication</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham and Kartik Nayak">
  
  <meta name="description" content="In this post we explore the path from Single-Shot Agreement, via Write-Once Registers, to Log Replication, and finally to State Machine Replication. We begin by defining all four problems assuming minority omission failures and partial synchrony. This post continues our previous posts on Paxos from Recoverable Broadcast and on State Machine Replication. (Single-Shot) Agreement In Agreement (interchangeably called Consensus) there are $n$ parties. A minority of the servers may have...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -290,7 +305,8 @@
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

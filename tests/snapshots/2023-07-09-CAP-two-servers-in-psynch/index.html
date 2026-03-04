@@ -9,6 +9,8 @@
  <title>The CAP Theorem and why State Machine Replication for Two Servers and One Crash Failure is Impossible in Partial Synchrony</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham">
  
  <meta name="description" content="In 1999, Fox and Brewer published a paper on the CAP principle, where they wrote: Strong CAP Principle. Strong Consistency, High Availability, Partition-resilience: Pick at most 2. At PODC 2000, Brewer gave an invited talk where he popularized the CAP theorem (an unproven conjecture at the time), which was later formalized into a lower bound by Gilbert and Lynch, 2002. In this post we will state and prove a slightly...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -320,7 +335,8 @@
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

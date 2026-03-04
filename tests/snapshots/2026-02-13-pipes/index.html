@@ -9,6 +9,8 @@
  <title>Beyond Latency and Communication Complexity - A Tutorial on the Pipes Model</title>
  
  
+ 
+ 
  <meta name="author" content="Andrew Lewis-Pye, Kartik Nayak, Nibesh Shrestha">
  
  <meta name="description" content="Traditionally, protocol performance is summarized using two metrics: latency (measured in rounds), and communication complexity (measured asymptotically, e.g., $O(n^2)$). If both are small, we might expect the protocol to perform well in practice. But this intuition is incomplete. When Low Latency and Low Communication Aren’t Enough Consider two protocols: Protocol A: 3-round good-case latency and $O(n^4)$ communication. Protocol B: 5-round good-case latency and $O(n^3)$ communication. These are the asymptotics for...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -325,7 +340,8 @@
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

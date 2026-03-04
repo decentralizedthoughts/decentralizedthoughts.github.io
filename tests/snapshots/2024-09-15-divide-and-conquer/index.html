@@ -9,6 +9,8 @@
  <title>Divide and Conquer in Distributed Computing - synchronous BFT with quadratic communication via recursive phase king</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham, Renas Bacho, and Gilad Stern">
  
  <meta name="description" content="The idea of decomposing a hard problem into easier problems is a fundamental algorithm design pattern in Computer Science. Divide and Conquer is used in so many domains: sorting, multiplication, and FFT, to mention a few. But what about distributed computing? In this post we will highlight how divide and conquer can help unauthenticated synchronous Byzantine agreement obtain quadratic communication, which is asymptotically optimal due to Dolev and Reischuk’s lower...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -289,7 +304,8 @@ Decide v[2]
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

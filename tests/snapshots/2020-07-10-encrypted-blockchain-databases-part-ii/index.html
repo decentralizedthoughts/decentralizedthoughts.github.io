@@ -9,6 +9,8 @@
  <title>Encrypted Blockchain Databases (Part II)</title>
  
  
+ 
+ 
  <meta name="author" content="Daniel Adkins, Archita Agarwal, Seny Kamara, Tarik Moataz">
  
  <meta name="description" content="In this second part of the series on Encrypted Blockchain Databases, we are going to describe three schemes to store dynamic encrypted multi-maps (EMMs) on blockchains, each of which achieves different tradeoffs between query, add and delete efficiency. A List-Based Scheme (LSX) Recall that a multi-map is a collection of multiple label/value tuples. In this construction, we store the values associated with each label into separate logical linked-lists on the...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -315,7 +330,8 @@ lead to large performance improvements. Unfortunately, our PAX construction does
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

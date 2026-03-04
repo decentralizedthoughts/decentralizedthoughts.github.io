@@ -9,6 +9,8 @@
  <title>The round complexity of Reliable Broadcast</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham, Zhuolun Xiang, Ling Ren">
  
  <meta name="description" content="Reliable Broadcast is an important building block of many Asynchronous protocols. There is a broadcaster that has some input value, $v$, and a non-faulty party that terminates needs to output a value. Reliable Broadcast is defined via two properties: Validity: If the broadcaster is non-faulty then eventually all non-faulty parties will output the broadcaster’s input. Agreement: If some non-faulty party outputs a value then eventually all non-faulty parties will output...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -364,7 +379,8 @@ This works because for a bad $j$, if an honest sees $n-f-1$ votes then all hones
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

@@ -9,6 +9,8 @@
  <title>A Payment Channel is a two person BFS-SMR system</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham">
  
  <meta name="description" content="This posts views payment channels as essentially a two person BFS-SMR system along with a carefully implemented mechanism for safe termination (channel closing) under assumptions of synchrony. Suppose Alice wants to Pay Bob 10,000 times. The obvious solution is to do 10,000 transactions on a main State Machine Replication System. Let’s call this system the Layer 1 system and assume Layer 1 is a large Byzantine Fault Tolerant State Machine...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -262,7 +277,8 @@
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

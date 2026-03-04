@@ -9,6 +9,8 @@
  <title>Polynomial Secret Sharing with Crash Failures</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham">
  
  <meta name="description" content="We continue our series on polynomial secret sharing. In the previous post of this series we discussed secret sharing against a passive adversary. In this post we assume crash failures and in later posts we extend to malicious failures. As before, we assume parties have private channels: the adversary cannot observe messages exchanged between non-faulty parties. What is a Secret Sharing scheme? A secret sharing scheme is composed of two...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -281,7 +296,8 @@ Each party receives at least $n-f$ shares. Let $I$ be the subset of $f+1$ partie
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

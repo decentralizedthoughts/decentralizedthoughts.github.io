@@ -1,6 +1,7 @@
 ---
 title: Course
 layout: page
+mathjax: true
 ---
 
 ## Course

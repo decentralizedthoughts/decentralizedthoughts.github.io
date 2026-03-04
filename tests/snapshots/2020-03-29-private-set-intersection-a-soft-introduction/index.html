@@ -9,6 +9,8 @@
  <title>Private Set Intersection</title>
  
  
+ 
+ 
  <meta name="author" content="Avishay Yanai">
  
  <meta name="description" content="Private Set Intersection (PSI) is a problem within the broader field of secure computation. The PSI problem There are two friends Alice and Bob such that Alice has a set of items $A=(a_1,\ldots,a_n)$ and Bob has the set $B=(b_1,\ldots,b_n)$. The goal is to design a protocol by which Alice and Bob obtain the intersection $A\cap B$, under the following privacy restriction: The protocol must not reveal anything about items that...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -315,7 +330,8 @@ Bob will do the same, for every $i=1,\ldots, n$ he sends $\hat b^1_i, \hat b^2_i
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

@@ -9,6 +9,8 @@
  <title>Byzantine Agreement is impossible for $n \leq 3 f$ under partial synchrony</title>
  
  
+ 
+ 
  <meta name="author" content="Kartik Nayak, Ittai Abraham">
  
  <meta name="description" content="Lower bounds in distributed computing are very helpful. They prevent us from wasting time on impossible tasks :-). More importantly, they help us focus on what is optimally possible or how to circumvent them by altering assumptions or problem formulation. It’s either easy or impossible – Salvador Dali In this post we discuss a classic impossibility result: DLS88 - Theorem 4.4: It is impossible to solve Agreement under partial synchrony...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -286,7 +301,8 @@ On the other hand, under synchrony, in synchrony parties typically communicate w
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

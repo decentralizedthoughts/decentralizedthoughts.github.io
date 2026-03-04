@@ -9,6 +9,8 @@
  <title>Randomization and Consensus - synchronous binary agreement for minority omission failures</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham">
  
  <meta name="description" content="Continuing the series on simple ways where randomization can help solve consensus. The model is lock-step (synchrony) with $f&amp;lt;n/2$ omission failures. We know that in the worst case reaching agreement takes at least $f+1$ rounds. Can randomization help reduce the expected number of rounds? In the post, we show a simple randomized consensus algorithm including a simple weak coin protocol that works against a weak adaptive adversary. Theorem: there exists...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -300,7 +315,8 @@ round 3f:
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

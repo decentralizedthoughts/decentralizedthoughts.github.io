@@ -9,6 +9,8 @@
  <title>Lagrange's Theorem through the algorithmic lens</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham">
  
  <meta name="description" content="Groups lie at the heart of many cryptographic constructions. In this post, we revisit the classic Lagrange’s theorem through a more algorithmic lens. Largange’s theorem is a simple structure theorem that will be useful for many more advanced results. Recall that a group is a non-empty set $G$ and a function $f: G \times G \to G$ (often denoted as a binary operator $\cdot$) such that: Associativity: $\forall a,b,c \in...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -286,7 +301,8 @@ If $G$ is a finite group and $H$ is a subgroup of $G$, then:</p>
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

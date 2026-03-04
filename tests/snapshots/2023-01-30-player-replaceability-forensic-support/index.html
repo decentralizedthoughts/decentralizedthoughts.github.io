@@ -9,6 +9,8 @@
  <title>Can we Obtain Player Replaceability and Forensic Support Simultaneously?</title>
  
  
+ 
+ 
  <meta name="author" content="Peiyao Sheng, Gerui Wang, Kartik Nayak, Sreeram Kannan, Pramod Viswanath">
  
  <meta name="description" content="Forensic support is an important property of BFT protocols that addresses the other side of security: what happens when the number of malicious parties exceeds the allowable threshold? In a previous post, we systematically studied different BFT protocols to assess their ability to detect and prove malicious behavior when safety is violated. We learned that protocols such as PBFT and HotStuff with ${\sf poly}(n)$ communication have strong forensic support, meaning...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -266,7 +281,8 @@
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

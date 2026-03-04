@@ -9,6 +9,8 @@
  <title>Blockchain Resource Pools and a CAP-esque Impossibility Result</title>
  
  
+ 
+ 
  <meta name="author" content="Andrew Lewis-Pye, Tim Roughgarden">
  
  <meta name="description" content="The consensus layers of different blockchain protocols can look very different from one another. For example, to achieve sybil-resistance, some protocols use proof-of-work (selecting each block producer randomly, with probability proportional to its computational power), while some use proof-of-stake (with probabilities proportional to the amount of locked-up stake). To achieve consensus, some blockchain protocols use a longest-chain rule to resolve forks in-protocol, while others use BFT-style consensus to (with high...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -367,7 +382,8 @@ possible.</p>
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

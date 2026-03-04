@@ -9,6 +9,8 @@
  <title>BFT Protocol Forensics</title>
  
  
+ 
+ 
  <meta name="author" content="Peiyao Sheng, Gerui Wang, Kartik Nayak, Sreeram Kannan, Pramod Viswanath">
  
  <meta name="description" content="An important property satisfied by any Byzantine fault tolerant consensus protocol is agreement, which requires non-faulty replicas to not decide on conflicting values. Depending on the network model, typical consensus protocols tolerate only a fraction of Byzantine replicas. In particular, under partial synchrony or asynchrony, no consensus protocol with $n$ replicas can tolerate more than $n/3$ Byzantine faults. If the number of Byzantine replicas exceed this number, the protocols do...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -287,7 +302,8 @@
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

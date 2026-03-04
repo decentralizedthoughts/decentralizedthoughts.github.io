@@ -9,6 +9,8 @@
  <title>The BGW Verifiable Secret Sharing Protocol</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham and Gilad Asharov">
  
  <meta name="description" content="In this post, we present the classic Ben-or, Goldwasser, and Wigderson, 1988 (BGW) Verifiable Secret Sharing protocol (VSS) with the simplifications of Feldman, 1988. The analysis and notation in this post are based on the full proof of the BGW MPC protocol of Asharov and Lindell. This post is a continuation of our previous posts on secret sharing for passive and crash failures. Consider a malicious adversary controlling at most...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -333,7 +348,8 @@ Similarly, $p’(x,k)$ is the zero polynomial.</p>
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

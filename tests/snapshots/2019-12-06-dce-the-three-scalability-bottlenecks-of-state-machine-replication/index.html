@@ -9,6 +9,8 @@
  <title>Data, Consensus, Execution: Three Scalability Bottlenecks for State Machine Replication</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham">
  
  <meta name="description" content="If anyone asks you: how can I scale my State Machine Replication (Blockchain) system? You should answer back with a question: what is your bottleneck? Is it Data, Consensus or Execution? Data: Shipping the commands to all the replicas. For example, if a block contains 1MB of commands, then you need all these bits to arrive to all the validating replicas. The obvious bottleneck is your system’s channel capacity. Consensus:...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -303,7 +318,8 @@ New cryptographic techniques allow for ever more efficient <strong>stateless val
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

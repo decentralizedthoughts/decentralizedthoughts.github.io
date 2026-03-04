@@ -9,6 +9,8 @@
  <title>Byzantine Agreement is Impossible for $n \leq 3 f$ if the Adversary can Simulate</title>
  
  
+ 
+ 
  <meta name="author" content="Kartik Nayak, Ittai Abraham">
  
  <meta name="description" content="The Fischer, Lynch, and Merritt, 1985 lower bound states that synchronous Byzantine agreement is impossible if the adversary controls $f&amp;gt;n/3$ parties. It is well known that this lower bound holds in the unauthenticated setting and does not hold in a setting with a PKI setup. Naively, one might think that the lower bound always holds if there is no PKI setup, but Nakamoto consensus shows that this is not the...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -292,7 +307,8 @@
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

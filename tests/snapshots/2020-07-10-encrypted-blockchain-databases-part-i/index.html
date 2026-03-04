@@ -9,6 +9,8 @@
  <title>Encrypted Blockchain Databases (Part I)</title>
  
  
+ 
+ 
  <meta name="author" content="Daniel Adkins, Archita Agarwal, Seny Kamara, Tarik Moataz">
  
  <meta name="description" content="Blockchain databases are storage systems that combine properties of both blockchains and databases like decentralization, tamper-resistance, low query latency, and support for complex queries. As they gain wider adoption, concerns over the confidentiality of the data they manage will increase. Already, several projects use blockchains to store sensitive data like electronic healthcare and financial records, legal documents and customer data. In this post, we discuss our new paper Encrytped Blockchain...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -292,7 +307,8 @@ is to design a new blockchain with dedicated support for EMMs. This approach has
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

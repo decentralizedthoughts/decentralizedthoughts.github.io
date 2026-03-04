@@ -9,6 +9,8 @@
  <title>2-round BFT in Simplex style for n=5f-1</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham and Ling Ren">
  
  <meta name="description" content="In our previous post, we described a 2-round partially synchronous BFT protocol for $n = 5f+1$. In this follow-up post, we push the bound to $n = 5f-1$, achieving optimal 2-round commit in the Simplex style. We then extend the result to $n=3f+2p-1$ for $0&amp;lt;p\leq f$ that obtains liveness for $p$ Byzantine. This can be used to obtain a concurrent 2 round and 3 round protocol with the optimal fault...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -322,7 +337,8 @@ If the leader of some view $k$ is honest and GST has occurred, all honest partie
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

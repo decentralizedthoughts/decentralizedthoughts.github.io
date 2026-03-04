@@ -9,6 +9,8 @@
  <title>Asynchronous Agreement on a Core Set</title>
  
  
+ 
+ 
  <meta name="author" content="Gilad Stern, Ittai Abraham">
  
  <meta name="description" content="A challenging step in many asynchronous protocols is agreeing on a set of parties that completed some task. For example, an asynchronous protocol might start off with parties reliably broadcasting a value. Due to asynchrony and having $\leq f$ corruptions, honest parties can only wait for $n-f$ parties to complete the task. Parties may need to agree on a core set of $n-f$ such broadcasts and use them in the...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -303,7 +318,8 @@ We note that this proof can be extended even to the case that the termination co
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

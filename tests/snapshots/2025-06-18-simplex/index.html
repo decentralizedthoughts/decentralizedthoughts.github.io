@@ -9,6 +9,8 @@
  <title>From Tendermint to Simplex</title>
  
  
+ 
+ 
  <meta name="author" content="Ling Ren">
  
  <meta name="description" content="Simplex is a partially synchronous Byzantine Fault Tolerant (BFT) protocol designed by Ben Chan and Rafael Pass in 2023. It is being incorporated by Commonware library and (with modifications) by Solana. It is a simple and clean protocol, especially for beginners, and Ben did a great job explaining it from scratch. But if you are already familiar with other BFT protocols such as PBFT or Tendermint, you may be wondering...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -302,7 +317,8 @@ In fact, the version of Simplex presented in this post is arguably more natural.
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

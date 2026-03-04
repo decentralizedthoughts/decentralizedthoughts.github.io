@@ -9,6 +9,8 @@
  <title>Provable Broadcast</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham, Alexander Spiegelman">
  
  <meta name="description" content="We explore a family of broadcast protocols in the authenticated setting in which a designated sender wants to create a delivery-certificate of its input value. After describing the base protocol we call Provable Broadcast ($PB$), we explore the surprising power of simply running $PB$ two times in a row, then three times, and finally four times in a row. These protocols are secure against a malicious adversary controlling $f&amp;lt;n/3$ parties...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -394,7 +409,8 @@ Cert_4(v), "robust-certificate for v":
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

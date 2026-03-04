@@ -9,6 +9,8 @@
  <title>Crusader Broadcast</title>
  
  
+ 
+ 
  <meta name="author" content="Gilad Stern and Ittai Abraham">
  
  <meta name="description" content="In previous posts we showed that the classic Dolev-Strong broadcast protocol takes $O(n^3)$ words and $t+1$ rounds and that Dolev Reischuk show that $\Omega(n^2)$ is needed and it is also known that $t+1$ rounds are needed. So while the number of rounds is optimal, to this day it remains an open question of obtaining $O(n^2)$ broadcast against a strongly adaptive adversary (see post for recent progress). In this post we...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -271,7 +286,8 @@
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

@@ -9,6 +9,8 @@
  <title>Phase-King through the lens of Gradecast: A simple unauthenticated synchronous Byzantine Agreement protocol</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham and Andrew Lewis-Pye">
  
  <meta name="description" content="In this post we present a simple unauthenticated synchronous Byzantine Agreement protocol that is based on the Phase-King protocol of Berman, Garay, and Perry 1989-92. We refer also to Jonathan Katz’s excellent write-up on this same protocol from 2013. We offer a modern approach that decomposes the Phase-King protocol into a Graded Consensus building block. Phase-King has optimal resilience of $n=3t+1$, runs in asymptotically optimal $3(t+1)$ rounds (recall that $t+1$...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -286,7 +301,8 @@ End of round 3(t+1):
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

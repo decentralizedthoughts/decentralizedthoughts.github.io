@@ -9,6 +9,8 @@
  <title>The Private Set Intersection (PSI) Protocol of the Apple CSAM Detection System</title>
  
  
+ 
+ 
  <meta name="author" content="Benny Pinkas">
  
  <meta name="description" content="In this post, we will discuss the cryptographic construction used in Apple’s new system for detecting CSAM - Child Sexual Abuse Material. This cryptographic construction implements a new variant of PSI - Private Set Intersection. While a lot of attention has been paid to the broad implications of this system, the technical details of the PSI construction have not been highlighted, even though Apple published a detailed technical description of...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -348,7 +363,8 @@ This concern raises the requirement that the PSI protocol must ensure <strong>in
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

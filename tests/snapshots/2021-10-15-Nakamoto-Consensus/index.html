@@ -9,6 +9,8 @@
  <title>Nakamoto's Longest-Chain Wins Protocol</title>
  
  
+ 
+ 
  <meta name="author" content="Kartik Nayak">
  
  <meta name="description" content="In this post, we will cover Nakamoto’s Consensus protocol presented in the Bitcoin whitepaper. There are a lot of posts and videos that explain this seminal and simple protocol. Our goal in this post will be to intuitively piece out the need for different aspects of the protocol, such as proof-of-work and how network synchrony plays a role in the protocol. The proof-of-work chain is a solution to the Byzantine...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -329,7 +344,8 @@ Commit rule: if the longest chain has length x, commit the first x-k blocks.
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

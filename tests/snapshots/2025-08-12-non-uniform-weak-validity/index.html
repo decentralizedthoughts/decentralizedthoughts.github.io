@@ -9,6 +9,8 @@
  <title>Agreement under omission failures: non-uniformity and weak validity</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham and Gilad Stern">
  
  <meta name="description" content="In this post, we study non-uniform agreement and weak validity under synchronous networks with general omission failures, where faulty parties may lose some or all incoming and outgoing messages. In this model, agreement, concerns only non-faulty parties. Omission-faulty parties may disagree, and validity is weak: the output must equal some party’s input. We present a protocol for $f &amp;lt; n$ omission faults that runs in $\min{f+1,n-1}$ rounds. We then show...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -308,7 +323,8 @@ From $B$’s perspective, worlds B and C are indistinguishable, so $B$ must deci
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

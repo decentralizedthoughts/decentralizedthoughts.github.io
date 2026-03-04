@@ -9,6 +9,8 @@
  <title>Consensus Lower Bounds via Uncommitted Configurations</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham">
  
  <meta name="description" content="In this series of three posts, we discuss two of the most important consensus lower bounds: Lamport, Fischer [1982]: any protocol solving consensus in the synchronous model that is resilient to $t$ crash failures must have an execution with at least $t+1$ rounds. Fischer, Lynch, and Patterson [1983, 1985]: any protocol solving consensus in the asynchronous model that is resilient to even one crash failure must have an infinite execution....">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -336,7 +351,8 @@ For $n=3$ parties consider the 4 initial configurations $(1,1,1), (0,1,1),(0,0,1
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

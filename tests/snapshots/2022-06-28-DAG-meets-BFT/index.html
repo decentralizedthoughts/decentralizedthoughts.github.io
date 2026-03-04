@@ -9,6 +9,8 @@
  <title>DAG Meets BFT - The Next Generation of BFT Consensus</title>
  
  
+ 
+ 
  <meta name="author" content="Alexander Spiegelman">
  
  <meta name="description" content="This post explains in simple words a recent development in the theory and practice of directed acyclic graph-based (DAG-based) Byzantine Fault Tolerance (BFT) consensus, published in three prestigious peer-reviewed conferences, and currently being implemented by several Blockchain companies, e.g., Aptos, Celo, Mysten Labs, and Somelier. DAG-Rider: All You Need Is DAG (PODC 2021). [I. Keidar, E. Kokoris-Kogias, O. Naor, A. Spiegelman] Narwhal&amp;amp;Tusk (EuroSys 2022 Best paper award) [G. Danezis, E....">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -409,7 +424,8 @@
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

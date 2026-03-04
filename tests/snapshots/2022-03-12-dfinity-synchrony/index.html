@@ -9,6 +9,8 @@
  <title>Consensus by Dfinity - Part I</title>
  
  
+ 
+ 
  <meta name="author" content="Jannis Stoeter, Kartik Nayak">
  
  <meta name="description" content="This is part one of a two-part post on consensus protocols published by the Dfinity Foundation. Dfinity published two protocols: The first, published in 2018, is a BFT protocol under synchrony by Hanke, Movahedi, and Williams. We will call this protocol Dfinity’s Synchronous Consensus (DSC). An independent report called Dfinity Consensus Explored also explained the core consensus aspects of this protocol. The second, published in 2021, is a BFT protocol...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -361,7 +376,8 @@ b) or $p$ receives a certificate $C(B_{k})$ for some block $B_k.$
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

@@ -9,6 +9,8 @@
  <title>Graded dispersal with perfect security</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham, Gilad Asharov, Anirudh Chandramouli">
  
  <meta name="description" content="In a previous post we covered the basics of Asynchronous Verifiable Information Dispersal (AVID) and the classic AVID of Cachin and Tessaro, 2004. That protocol allows a sender to disperse a message of $O(n\log n)$ bits at a cost of just $O(n^2 \log^2 n)$ bits. However, It incurs a $O(\log n)$ storage overhead. It uses a cryptographic hash function, and obtains computational security. It’s natural to ask: Do VID protocols...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -360,7 +375,8 @@ End of round 2
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

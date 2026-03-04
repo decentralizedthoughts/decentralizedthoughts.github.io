@@ -9,6 +9,8 @@
  <title>Simplifying Raft with Chaining</title>
  
  
+ 
+ 
  <meta name="author" content="Heidi Howard, Natacha Crooks, Ittai Abraham">
  
  <meta name="description" content="Raft is a consensus algorithm for deciding a sequence of commands to execute on a replicated state machine. Raft is famed for its understandability (relative to other consensus algorithms such as Paxos) yet some aspects of the protocol still require careful treatment. For instance, determining when it is safe for a leader to commit commands from previous leaders or when it is safe for servers to delete or overwrite commands...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -322,7 +337,8 @@ Therefore, if term $t+1$ had a leader then $b$ will be present in the path from 
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

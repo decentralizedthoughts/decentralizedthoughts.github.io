@@ -9,6 +9,8 @@
  <title>Key Principles Underlying Partial Synchrony BFT</title>
  
  
+ 
+ 
  <meta name="author" content="Kartik Nayak, Ittai Abraham">
  
  <meta name="description" content="Many blockchain protocols work under partial synchrony. Examples include PBFT, SBFT, Cosmos (Tendermint), Diem (DiemBFT), Jolteon, Espresso Systems (HotStuff), Dfinity (Internet Computer Consensus) and Ethereum (Casper). In this post, we discuss key principles behind the design of partially synchronous blockchain protocols. These principles, in some form, apply to all of these protocols (even though the exact protocol specification may be different, and protocols may use slight variants of these ideas)....">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -287,7 +302,8 @@ on receiving &lt;vote2, b&gt;_* signed by n-t distinct parties:
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

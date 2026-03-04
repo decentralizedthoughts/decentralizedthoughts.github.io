@@ -9,6 +9,8 @@
  <title>Flavours of State Machine Replication</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham">
  
  <meta name="description" content="State Machine Replication is a fundamental approach in distributed computing for building fault tolerant systems. This post is a followup to our basic post on Fault Tolerant State Machine Replication. After defining what a state machine is and the transition function apply we then defined a Fault Tolerant State Machine Replication system as having two properties: (Safety) Any two honest replicas store the same sequence of commands in their logs....">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -266,7 +281,8 @@ The main idea is to use a chain of $2f+1$ replicas instead of $f+1$. So in <a hr
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

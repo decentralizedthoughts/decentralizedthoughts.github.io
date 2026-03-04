@@ -9,6 +9,8 @@
  <title>Approximate Agreement: definitions and the robust midpoint protocol</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham and Gilad Stern">
  
  <meta name="description" content="This post covers the basics of Approximate Agreement. We define the problem, explain in what way its an interesting variation of classic Agreement, and describe the idea behind the robust midpoint protocol. In classic consensus, the space of possible decision values is just a set and the goal is to agree on a decision value that must be the input value if all non-faulty have the same input value. Approximate...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -306,7 +321,8 @@ From Claim 1 we have</p>
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

@@ -9,6 +9,8 @@
  <title>Neither Non-equivocation nor Transferability alone is enough for tolerating minority corruptions in asynchrony</title>
  
  
+ 
+ 
  <meta name="author" content="Sravya Yandamuri, Naama Ben David">
  
  <meta name="description" content="In this post, we explore a theorem of Clement, Junqueira, Kate, and Rodrigues from PODC 2012 regarding the limits of non-equivocation. Informally, this theorem says that neither Non-equivocation nor Transferability alone is enough for tolerating minority corruptions in asynchrony. Theorem CJKR12: Neither non-equivocation nor transferability is individually sufficient to solve asynchronous Reliable Broadcast given $n \leq 3f$ and a malicious adversary that can control $f$ parties. Let’s define the notions...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -275,7 +290,8 @@ B and C are correct, and A is Byzantine. A sends $m’$ to B and $m$ to C. C can
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

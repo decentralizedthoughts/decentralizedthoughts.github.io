@@ -9,6 +9,8 @@
  <title>The Lock-Commit Paradigm</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham, Kartik Nayak">
  
  <meta name="description" content="In this post, we explore one of the most celebrated and widely used techniques for reaching consensus: the Lock-Commit paradigm. This approach is a key technique of DLS88, Lamport’s Paxos, and many subsequent protocols. Protocols like Raft, PBFT, Tendermint, SBFT, Casper FFG, HotStuff, etc., are all based on this paradigm. We exemplify the Lock-Commit paradigm with a simple single-shot synchronous protocol (with message delay at most $\Delta$) for uniform consensus...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -374,7 +389,8 @@ Then, all non-faulty replicas will commit by the end of view $v$.</p>
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

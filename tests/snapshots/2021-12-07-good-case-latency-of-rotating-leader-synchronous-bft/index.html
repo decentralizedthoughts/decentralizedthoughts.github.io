@@ -9,6 +9,8 @@
  <title>Good-case Latency of Rotating Leader Synchronous BFT</title>
  
  
+ 
+ 
  <meta name="author" content="Nibesh Shrestha, Ittai Abraha, Kartik Nayak">
  
  <meta name="description" content="Synchronous consensus protocols can tolerate $f &amp;lt; n/2$ Byzantine failures but for $n/3 &amp;lt;f &amp;lt;n/2$ must depend on the maximum network delay $\Delta$ for their safety and progress. So these protocols must set $\Delta$ to be much larger than the actual network delay $\delta \ll \Delta$. The good news is in the multi-shot (blockchain) scenarios, modern synchronous protocols such as Sync HotStuff can essentially pipeline the $\Delta$-dependent delay: Under an...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -282,7 +297,8 @@ Replicas multicast the certificate and wait for *$2\Delta$*. If no bad events ar
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

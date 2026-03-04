@@ -9,6 +9,8 @@
  <title>Asynchronous Agreement Part 5: Binary Byzantine Agreement from a strong common coin</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham, Naama Ben-David, Sravya Yandamuri ">
  
  <meta name="description" content="In this post we show how to use Binding Crusader Agreement from the previous post, along with a strong common coin to get a simple and efficient Binary Byzantine Agreement with only an expected $O(n^2)$ message complexity. This is a simplified version from our paper. In the four previous posts we: (1) defined the problem and discussed the FLP theorem; (2) Ben-Or’s protocol for crash failures; (3) a modern version...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -318,7 +333,8 @@ If receive n-f &lt;decide u&gt;, then
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

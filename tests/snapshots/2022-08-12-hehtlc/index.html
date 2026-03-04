@@ -9,6 +9,8 @@
  <title>He-HTLC - Revisiting Incentives in HTLC</title>
  
  
+ 
+ 
  <meta name="author" content="Kartik Nayak, Sarisht Wadhwa, Jannis Stoeter, Fan Zhang">
  
  <meta name="description" content="Hashed Time-locked Contracts (HTLC) find many useful applications in the L2 Layer such as the lightning network and atomic swaps. In this post, we will focus on discussing protocols for implementing HTLC when taking into consideration incentives for parties in the system. We will discuss a line of work — WHF’19, MAD-HTLC, He-HTLC — towards developing an HTLC protocol secure in the presence of rational parties. TL;DR Hashed Time-locked Contracts,...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -318,7 +333,8 @@
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

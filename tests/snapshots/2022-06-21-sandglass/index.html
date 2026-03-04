@@ -9,6 +9,8 @@
  <title>Safe Permissionless Consensus</title>
  
  
+ 
+ 
  <meta name="author" content="Youer Pu, Lorenzo Alvisi, and Ittay Eyal">
  
  <meta name="description" content="Nakamoto’s consensus protocol works in a permissionless model, where nodes can join and leave without notice. However, it guarantees agreement only probabilistically. Is this weaker guarantee a necessary concession to the severe demands of supporting a permissionless model? We show that, at least in a benign failure model, it is not. We present Sandglass, the first permissionless consensus algorithm that guarantees deterministic agreement and termination with probability 1 under general...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -261,7 +276,8 @@ This approach is clearly no longer feasible in a permissionless setting, where <
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

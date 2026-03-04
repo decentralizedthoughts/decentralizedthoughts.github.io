@@ -9,6 +9,8 @@
  <title>The Lock-Commit Paradigm: Multi-shot and Mixed Faults</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham, Kartik Nayak">
  
  <meta name="description" content="In this follow to our Lock-Commit post, we show two important extensions. The first is how to extend from single-shot to multi-shot. Multi-shot is the bases of State Machine Replication. The second is how to tolerate mix faluts: both $f$ omission failures and $k$ crash failures given k+2f &amp;lt; n. Multi-shot Lock-Commit We show a natural and simple transformation of a single-shot protocol to a multi-shot one. Unlike the single-shot...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -372,7 +387,8 @@ Then, all non-faulty parties will commit to the log position $j$ by the end of v
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

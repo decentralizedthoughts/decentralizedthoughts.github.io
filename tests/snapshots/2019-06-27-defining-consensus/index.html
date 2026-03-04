@@ -9,6 +9,8 @@
  <title>What is Consensus?</title>
  
  
+ 
+ 
  <meta name="author" content="Kartik Nayak, Ittai Abraham">
  
  <meta name="description" content="Consensus broadly means different parties reaching agreement. In distributed computing, Consensus is a core functionality. In this post, we define the consensus problem and its variants. In modern parliaments, the passing of decrees is hindered by disagreement among legislators – Leslie Lamport, Part-Time Parliament Let us begin with the simplest consensus problem: agreement. The Agreement Problem In this problem, we assume a set of $n$ parties where each party $i$...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -263,7 +278,8 @@ This is called <em>uniform agreement</em> and assumes an omission or a crash adv
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

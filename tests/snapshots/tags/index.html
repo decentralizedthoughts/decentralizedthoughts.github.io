@@ -9,7 +9,9 @@
  <title>Tag Index</title>
  
  
- <meta name="author" content="{"name"=>"Decentralized Thinkers"}">
+ 
+ 
+ <meta name="author" content="Decentralized Thinkers">
  
  <meta name="description" content="{%- capture site_tags -%} {%- for tag in site.tags -%} {{- tag | first -}}{%- unless forloop.last -%},{%- endunless -%} {%- endfor -%} {%- endcapture -%} {%- assign tags_list = site_tags | split:',' | sort -%} {%- for tag in tags_list -%} &amp;nbsp;{{- tag -}}&amp;nbsp;({{site.tags[tag].size}}) {%- endfor -%} {%- for tag in tags_list -%} &amp;nbsp;{{- tag -}}&amp;nbsp;({{site.tags[tag].size}}) {%- for post in site.tags[tag] -%} {{- post.title | strip_html -}} {{- post.date...">
  
@@ -1471,7 +1473,8 @@
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

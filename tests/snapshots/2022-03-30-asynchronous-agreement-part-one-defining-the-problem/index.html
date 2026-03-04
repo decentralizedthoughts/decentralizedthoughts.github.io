@@ -9,6 +9,8 @@
  <title>Asynchronous Agreement Part One: Defining the problem</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham, Naama Ben-David, Sravya Yandamuri ">
  
  <meta name="description" content="In this series of posts, we explore the marvelous world of consensus in the Asynchronous model. In this post, we start by simply defining the problem. Recall the FLP theorem: FLP theorem 1985: Any protocol where no two non-faulty parties decide different values in the asynchronous model that is resilient to even just one crash failure must have an infinite execution. A naive interpretation would be that consensus is impossible,...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -272,7 +287,8 @@
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

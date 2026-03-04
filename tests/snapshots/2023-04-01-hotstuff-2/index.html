@@ -9,6 +9,8 @@
  <title>What is the difference between PBFT, Tendermint, HotStuff, and HotStuff-2?</title>
  
  
+ 
+ 
  <meta name="author" content="Kartik Nayak, Dahlia Malkhi">
  
  <meta name="description" content="We recently published our work HotStuff-2 on eprint, introducing a two-phase HotStuff variant which simultaneously achieves $O(n^2)$ worst-case communication, optimistically linear communication, a two-phase commit regime within a view, and optimistic responsiveness in partially-synchronous BFT. The main takeaway is that two phases are enough for BFT after all. In this post, we will elaborate on the key observation made in the work, and compare and contrast it to relevant prior...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -348,7 +363,8 @@
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

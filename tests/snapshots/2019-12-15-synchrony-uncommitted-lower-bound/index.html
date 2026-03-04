@@ -9,6 +9,8 @@
  <title>Synchronous Consensus Lower Bound via Uncommitted Configurations</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham">
  
  <meta name="description" content="In this second post, we show the fundamental lower bound on the number of rounds for consensus protocols in the synchronous model. Theorem: Any protocol solving consensus in the synchronous model for $n$ parties that is resilient to $n-2 \geq t \geq 1$ crash failures must have an execution with at least $t+1$ rounds. Bad news: Deterministic synchronous consensus is slow. Even for crash failures, it requires $\Omega(n)$ rounds when...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -286,7 +301,8 @@
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

@@ -9,6 +9,8 @@
  <title>Simple Payment Systems with Unlinkability</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham, Gilad Stern, and Alin Tomescu">
  
  <meta name="description" content="In this post, we discuss payment systems. There is a set of users who wish to pay each other. We start with perhaps the simplest form, which is based just on digital signatures and a single bank. We then show how the bank can be implemented as a fault tolerant distributed system with $n$ servers. Finally, we show a modern version of ecash, where blind signatures are used to obtain...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -354,7 +369,8 @@
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

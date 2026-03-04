@@ -9,6 +9,8 @@
  <title>Benign Hotstuff</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham, Heidi Howard, and Kartik Nayak">
  
  <meta name="description" content="In this post we describe a variant of Paxos (or Raft or Lock-Commit) that is inspired by looking through the lens of HotStuff and Blockchain protocols. The most noticeable difference is that while Paxos and Raft aim to maintain a stable Primary/Leader (and change views infrequently), in Benign Hotstuff (as in HotStuff), the Primary is rotated every round! A more subtle difference is that in Paxos and Raft each block...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -347,7 +362,8 @@
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

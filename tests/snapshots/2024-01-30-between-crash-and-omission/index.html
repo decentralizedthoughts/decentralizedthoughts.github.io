@@ -9,6 +9,8 @@
  <title>In between Crash and Omission failures</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham">
  
  <meta name="description" content="In this post we explore adversary failure models that lie between crash and omission failures: Send Omissions (SO): the adversary can corrupt a party and block any message that the party attempts to send. The corrupted party is not aware that it is corrupted or that the message it wanted to send was blocked. Receive Omissions (RO): the adversary can corrupt a party and decide to block any message that...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -280,7 +295,8 @@ Client 1 and Server 1 on the other hand only see command 1 and log it because th
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

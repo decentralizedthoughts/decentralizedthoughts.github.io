@@ -9,6 +9,8 @@
  <title>Living with asynchrony and eventually reaching agreement by combining binding and randomness</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham, Gilad Stern">
  
  <meta name="description" content="The prevailing view on fault-tolerant agreement is that it is impossible in asynchrony for deterministic protocols, but adding randomization solves the problem. This statement is confusing in two aspects: The FLP result says that any protocol, even a randomized protocol, must have a non-terminating execution where every configuration is bivalent (or uncommitted or is a pivot configuration). The difference is that in a randomized protocol, the probability of non-terminating executions...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -274,7 +289,8 @@
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

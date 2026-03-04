@@ -9,6 +9,8 @@
  <title>Polynomial Secret Sharing and the Lagrange Basis</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham, Alin Tomescu">
  
  <meta name="description" content="In this post, we highlight an amazing result: Shamir’s secret sharing scheme. This is one of the most powerful uses of polynomials over a finite field in distributed computing. Intuitively, this scheme allows a $Dealer$ to commit to a secret $s$ by splitting it into shares distributed to $n$ parties. The secret is hidden and requires a threshold of $f+1$ parties in order to be reconstructed, where $f &amp;lt; n$....">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -344,7 +359,8 @@ It therefore follows that Equation $\ref{eq:claim}$ holds.</p>
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

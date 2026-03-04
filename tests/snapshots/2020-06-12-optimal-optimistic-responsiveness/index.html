@@ -9,6 +9,8 @@
  <title>On the Optimality of Optimistic Responsiveness</title>
  
  
+ 
+ 
  <meta name="author" content="Nibesh Shrestha, Kartik Nayak">
  
  <meta name="description" content="Synchronous consensus protocols tolerating Byzantine failures depend on the maximum network delay $\Delta$ for their safety and progress. The delay, $\Delta$ is usually much larger than actual network delay $\delta$ since $\Delta$ is a pessimistic value. While synchronous protocols tolerating more than one-third will have executions with at least a $\Delta$ latency, recent synchronous protocols such as Sync HotStuff have been trying to reduce the reliance on $\Delta$ as much...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -298,7 +313,8 @@ In the paper, we present two additional protocols:</p>
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

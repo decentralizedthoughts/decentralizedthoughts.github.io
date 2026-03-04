@@ -9,6 +9,8 @@
  <title>Primary-Backup State Machine Replication for Crash Failures</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham, Kartik Nayak">
  
  <meta name="description" content="We continue our series of posts on State Machine Replication (SMR). In this post we discuss the most simple form of SMR: Primary-Backup for crash failures. We will assume synchronous communication. For simplicity, we will consider the case with two replicas, out of which one can crash. Recall that when a party crashes, it irrevocably terminates. The Primary-Backup Protocol The goal is to give the clients exactly the same experience...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -354,7 +369,8 @@ while true:
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

@@ -9,6 +9,8 @@
  <title>Asynchronous Fault Tolerant Computation with Optimal Resilience</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham, Danny Dolev, Gilad Stern">
  
  <meta name="description" content="A basic question of distributed computing: Is there a fundamental limit to fault tolerant computation in the Asynchronous model? The celebrated FLP theorem says that any protocol that solves Agreement in the asynchronous model that is resilient to at least one crash failure must have a non-terminating execution. This means that deterministic asynchronous consensus is impossible, but with randomization, asynchronous consensus is possible in constant expected time. Randomization does not...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -306,7 +321,8 @@ Let’s see where this proof would fail if we allowed even a small probability o
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

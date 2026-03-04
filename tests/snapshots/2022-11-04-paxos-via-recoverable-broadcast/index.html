@@ -9,6 +9,8 @@
  <title>On Paxos from Recoverable Broadcast</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham">
  
  <meta name="description" content="There are many ways to learn about the Paxos protocol (see Lampson, Cachin, Howard, Howard 2, Guerraoui, Kladov, Krzyzanowski, Lamport, Wikipedia and many more). The emphasis of this post is on a decomposition of Paxos for omission failures that will later help when we do a similar decomposition for Byzantine failures (for PBFT and HotStuff). The model is partial synchrony with $f&amp;lt;n/2$ omission failures and the goal is consensus (see...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -439,7 +454,8 @@ Upon receiving n-f &lt;decide, Z&gt;
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

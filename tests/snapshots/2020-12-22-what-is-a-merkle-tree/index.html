@@ -9,6 +9,8 @@
  <title>What is a Merkle Tree?</title>
  
  
+ 
+ 
  <meta name="author" content="Alin Tomescu">
  
  <meta name="description" content="In this post, we will demystify Merkle trees using three examples of problems they solve: Maintaining integrity of files stored on Dropbox.com, or file outsourcing, Proving a transaction between Alice and Bob occurred, or set membership, Transmitting files over unreliable channels, or anti-entropy. $$ \def\mht{\mathsf{MHT}} \def\mrh{h_{\mathsf{root}}} \def\vect#1{\boldsymbol{\vec{#1}}} $$ By the end of the post, you’ll be able to understand key concepts that, at this point, might intimidate you: A Merkle...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -708,7 +723,8 @@ No matter what, there will always be a collision!</p>
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

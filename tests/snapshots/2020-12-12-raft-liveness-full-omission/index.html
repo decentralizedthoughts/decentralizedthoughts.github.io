@@ -9,6 +9,8 @@
  <title>Raft does not Guarantee Liveness in the face of Network Faults</title>
  
  
+ 
+ 
  <meta name="author" content="Heidi Howard, Ittai Abraham">
  
  <meta name="description" content="Last month, Cloudflare published a postmortem of a recent 6-hour outage caused by a partial switch failure which left etcd unavailable as it was unable to establish a stable leader. This outage has understandably led to discussion online about exactly what liveness guarantees are provided by the Raft consensus algorithm in the face of network failures. The original Raft paper makes the following claim: [Consensus algorithms] are fully functional (available)...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -265,7 +280,8 @@ In this post, we will consider whether Raft can guarantee liveness, and specific
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

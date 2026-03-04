@@ -9,6 +9,8 @@
  <title>$3f+1$ is needed in Partial Synchrony even against a Rollback adversary</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham">
  
  <meta name="description" content="In this post we show that trusted execution environments (TEEs) don’t help against the classic $3f$ lower bound for partial synchrony, when these TEEs have no persistent storage, against a rollback adversary. We covered the classic DLS88 split brain impossibility result against a Byzantine adversary in a previous post: DLS88: (Theorem 4.4) It is impossible to solve Agreement under partial synchrony against a Byzantine adversary if $f \geq n/3$. In...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -298,7 +313,8 @@ A <strong>Rollback adversary</strong> has slightly more power than an omission a
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

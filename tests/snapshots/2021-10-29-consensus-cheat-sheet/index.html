@@ -9,6 +9,8 @@
  <title>Consensus cheat sheet</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham">
  
  <meta name="description" content="  Crash Omission Byzantine Synchrony $f&amp;lt;n$ is possible $f+1$ round executions must exist $f \geq n/2$ is impossible $f&amp;lt;n/2$ possible with PKI / possible with PoW FLM: $f \geq n/3$ impossible without PKI/PoW Partial Synchrony CAP: $f\geq n/2$ is impossible Paxos: $f&amp;lt;n/2$ is possible $f&amp;lt;n/3$ is possible DLS: $f \geq n/3$ is impossible Asynchrony FLP: non-terminating executions must exist $f&amp;lt;n/2$ possible in $O(1)$ expected rounds $f&amp;lt;n/3$ possible in $O(1)$ expected...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -273,7 +288,8 @@
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

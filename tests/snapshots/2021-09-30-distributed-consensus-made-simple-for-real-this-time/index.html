@@ -9,6 +9,8 @@
  <title>Distributed consensus made simple (for real this time!)</title>
  
  
+ 
+ 
  <meta name="author" content="Chris Jensen, Heidi Howard">
  
  <meta name="description" content="Multi-Paxos is the de facto solution for deciding a log of commands to execute on a replicated state machine, yet it’s famously difficult to understand, motivating the switch to ‘simpler’ consensus protocols such as Raft. The conventional wisdom is that the best way to use Paxos (aka Synod, or single-shot Paxos), to decide a log of commands is to run many instances of it, where the $i^{th}$ instance decides the...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -616,7 +631,8 @@ We also amend the protocol as follows:</p>
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

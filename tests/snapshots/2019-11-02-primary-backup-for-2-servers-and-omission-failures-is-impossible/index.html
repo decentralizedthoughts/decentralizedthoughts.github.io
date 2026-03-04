@@ -9,6 +9,8 @@
  <title>State Machine Replication for Two Servers and One Omission Failure is Impossible even in a lock-step model</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham">
  
  <meta name="description" content="In a previous post, we show that State Machine Replication for any $f&amp;lt;n$ failures is possible in the synchronous model when the adversary can only cause parties to crash. In this post, we show that omission failures are more challenging. Implementing SMR requires at most $f&amp;lt;n/2$ omission failures, even in synchrony. Theorem: It is impossible to implement State Machine Replication with two replicas for two clients and an adversary that...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -269,7 +284,8 @@
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

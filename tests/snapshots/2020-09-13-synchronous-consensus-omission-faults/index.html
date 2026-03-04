@@ -9,6 +9,8 @@
  <title>Commit-Notify Paradigm for Synchronous Consensus with Omission Faults</title>
  
  
+ 
+ 
  <meta name="author" content="Kartik Nayak, Ittai Abraham">
  
  <meta name="description" content="We continue our series of posts on State Machine Replication (SMR). In this post, we move from consensus under crash failures to consensus under omission failures. We still keep the synchrony assumption. Let’s begin with a quick overview of what we covered in previous posts: Upper bound: We can tolerate up to $n-1$ crash failures. Lower bound: The best we can hope for is to tolerate less than $n/2$ omission...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -367,7 +382,8 @@ while true:
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

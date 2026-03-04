@@ -9,6 +9,8 @@
  <title>Asynchronous Agreement Part Two: Ben-Or's protocol</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham, Namma Ben-David, Sravya Yandamuri">
  
  <meta name="description" content="We continue to explore the marvelous world of consensus in the Asynchronous model. In this post, we present Ben-Or’s classic protocol from 1983. In the next post, we will present a more modern version that is a simplified version from our paper. In the previous post we defined the problem of Asynchronous Agreement, so without further ado, here is Ben-Or’s protocol for Binary Asynchronous Agreement with $n=2f+1$ parties assuming the...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -274,7 +289,8 @@ If decide(u), then
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

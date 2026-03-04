@@ -9,6 +9,8 @@
  <title>EIP-1559 In Retrospect</title>
  
  
+ 
+ 
  <meta name="author" content="Yinhong (William) Zhao, Kartik Nayak">
  
  <meta name="description" content="On August 5, 2021, Ethereum implemented Ethereum Improvement Proposal 1559 (EIP-1559) on its mainnet as part of the London Hardfork, which modified the transaction fee mechanism on Ethereum from a first price auction to one that involves blocks of varying sizes, separating transaction fees as history-dependent base fees and tips, and burning of the base fees. How does such a mechanism fare in practice? In a recent work together with...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -316,7 +331,8 @@
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

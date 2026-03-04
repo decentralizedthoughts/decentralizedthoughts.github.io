@@ -9,6 +9,8 @@
  <title>Two Round HotStuff</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham">
  
  <meta name="description" content="In the first part of this post, we describe a single-shot variation of Two Round HotStuff (see HotStuff v1 paper, March 2018 and this March 2018 post) using Locked-Broadcast that follows a similar path as our previous posts on Paxos and Linear PBFT. In the second part, we describe a fully pipelined multi-shot State Machine Replication version of Two Round HotStuff that is similar to Casper FFG and Streamlet. For...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -476,7 +491,8 @@ B' = Lock cert on (c5,5)
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

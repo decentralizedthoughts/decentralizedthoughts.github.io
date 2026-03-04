@@ -9,6 +9,8 @@
  <title>What is a Cryptographic Hash Function?</title>
  
  
+ 
+ 
  <meta name="author" content="Alin Tomescu">
  
  <meta name="description" content="If you ever tried to understand Bitcoin, you’ve probably banged your head against the wall trying to understand what is a cryptographic hash function? The goal of this post is to: Give you a very simple mental model for how hash functions work, called the random oracle model Give you three key applications of hash functions: Downloading files over the internet The proof-of-work at the core of Bitcoin Commitments and...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -487,7 +502,8 @@ Next, we hope to give you a formal model of hash functions, introduce you to Mer
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

@@ -9,6 +9,8 @@
  <title>Randomization and Consensus - synchronous binary agreement for crash failures with a perfect common coin</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham">
  
  <meta name="description" content="What is the simplest setting where randomization can help solve consensus? Assume lock-step (synchrony) with $f&amp;lt;n$ crash failures. We know that in the worst case reaching agreement takes at least $f+1$ rounds. This lower bound holds even if the protocol is randomized so the natural question is: Can randomization help reduce the expected number of rounds? This post can be used as a prequel for our posts on how to...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -279,7 +294,8 @@ Once you see &lt;decide value&gt;,
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

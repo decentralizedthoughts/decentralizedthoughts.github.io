@@ -9,6 +9,8 @@
  <title>Agreement against strongly adaptive adversaries needs quadratic communication</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham, Kartik Nayak, Ling Ren">
  
  <meta name="description" content="In this post, we prove a result of Abraham, Hubert Chan, Dolev, Nayak, Pass, Ren, Shi, 2019 showing that: Theorem: Any broadcast protocol in synchrony that is resilient to $f$ strongly adaptive omission failures and has less than $1/8$ probability of error must have an expected communication of at least $f^2/64$ messages. The classic Dolev and Reischuk 1982 lower bound for deterministic protocols is covered in this post. Here we...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -299,7 +314,8 @@
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

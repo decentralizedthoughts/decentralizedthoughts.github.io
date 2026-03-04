@@ -9,6 +9,8 @@
  <title>A new Dolev-Reischuk style Lower Bound</title>
  
  
+ 
+ 
  <meta name="author" content="Gilad Stein, Ittai Abraham">
  
  <meta name="description" content="In a previous post we discussed Crusader Broadcast and showed a $O(n^2)$ words, $O(1)$ time solution for $f&amp;lt;n$ and assuming a PKI. In this post, we overview a new Dolev-Reischuk style bower bound (see our full paper): Theorem AS22: In any deterministic protocol solving Crusader Broadcast with $f&amp;lt;n$ Byzantine failures there exists at least one run in which the nonfaulty parties send at least $\Omega(nf)$ messages, if the adversary can...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -306,7 +321,8 @@
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

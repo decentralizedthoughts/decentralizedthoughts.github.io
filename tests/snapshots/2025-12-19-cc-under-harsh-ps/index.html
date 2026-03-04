@@ -9,6 +9,8 @@
  <title>Partial Synchrony variants</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham, Yuval Efron, Kartik Nayak, and Ling Ren">
  
  <meta name="description" content="In this post we observe three variants of Partial Synchrony (PS) and how they affect (or not) popular BFT protocols like PBFT, Tendermint, and especially the recent Simplex protocol. Many modern systems use the following definition of Partial Synchrony: Bounded Partial Synchrony (BPS): A message sent at time $t$ arrives by time at most $\max{t, GST}+\Delta$ This definition implicitly assumes that messages sent before $GST$ are delayed but not lost,...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -287,7 +302,8 @@ Take <strong>Tendermint</strong> for example. Its communication complexity remai
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

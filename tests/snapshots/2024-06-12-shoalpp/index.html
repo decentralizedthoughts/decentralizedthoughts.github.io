@@ -9,6 +9,8 @@
  <title>Shoal++: High Throughput DAG-BFT Can Be Fast!</title>
  
  
+ 
+ 
  <meta name="author" content="Balaji Arun, Zekun Li, Florian Suri-Payer, Sourav Das, Alexander Spiegelman">
  
  <meta name="description" content="TL;DR: Shoal++ is a novel DAG-BFT system that supercharges Shoal to achieve near-optimal theoretical latency while preserving the high throughput and robustness of state-of-the-art certified DAG BFT protocols. We evaluated Shoal++ against state-of-the-art DAG BFT protocols, such as Bullshark and Shoal — as well as a concurrent DAG effort, Mysticeti (similar to Cordial Miners). Our results show that Shoal++ outperforms all of them, even in failure-free scenarios, reducing state-of-the-art latency...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -319,7 +334,8 @@ The graph below compares the protocol performance under the no-failure case. Mor
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

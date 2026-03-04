@@ -9,6 +9,8 @@
  <title>Consensus with One Mobile Crash in Synchrony or One Crash in Asynchrony Has Infinite Executions</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham and Gilad Stern">
  
  <meta name="description" content="TL;DR: We give a simple, unified proof that consensus with one mobile crash in synchrony, or one crash in asynchrony, inevitably admits infinite executions. The proof uses a single reduction to a mobile delay adversary, a weaker but expressive fault model and then shows that every consensus protocol resilient to it must fail to terminate. This approach streamlines the classic FLP83 and SW89 results and highlights the close connection between...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -312,7 +327,8 @@
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

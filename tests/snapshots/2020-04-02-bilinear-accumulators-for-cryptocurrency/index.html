@@ -9,6 +9,8 @@
  <title>Bilinear Accumulators for Cryptocurrency Enthusiasts</title>
  
  
+ 
+ 
  <meta name="author" content="Alin Tomescu">
  
  <meta name="description" content="Accumulator schemes are an alternative to Merkle Hash Trees (MHTs) for committing to sets of elements. Their main advantages are: Constant-sized membership and non-membership proofs, an improvement over logarithmic-sized proofs in MHTs, Algebraic structure that enables more efficient proofs about committed elements1 (e.g., ZeroCoin2 uses RSA accumulators for anonymity), Constant-sized proofs for set relations such as subset, disjointness and difference (e.g., append-only authenticated dictionaries3 can be built using subset and...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -543,7 +558,8 @@ This is typically not possible to do efficiently with MHTs, which must be “org
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

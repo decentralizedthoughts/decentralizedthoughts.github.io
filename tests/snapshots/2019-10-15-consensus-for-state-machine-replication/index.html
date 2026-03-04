@@ -9,6 +9,8 @@
  <title>Consensus for State Machine Replication</title>
  
  
+ 
+ 
  <meta name="author" content="Kartik Nayak, Ittai Abraham, Ling Ren">
  
  <meta name="description" content="We introduced definitions for consensus, Byzantine Broadcast (BB) and Byzantine Agreement (BA), in an earlier post. In this post, we discuss how consensus protocols are used in State Machine Replication (SMR), a fundamental approach in distributed computing for building fault-tolerant systems. We compare and contrast this setting to that of traditional BB and BA. A follow-up post discusses the reductions from one abstraction to the other in the omission failure...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -324,7 +339,8 @@ A server executes the request and sends a response to the client after the reque
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

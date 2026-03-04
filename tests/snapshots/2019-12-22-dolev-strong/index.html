@@ -9,6 +9,8 @@
  <title>Dolev-Strong Authenticated Broadcast</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham, Kartik Nayak">
  
  <meta name="description" content="This post is about the classic result from 1983 on authenticated broadcast against a Byzantine adversary: Theorem (Dolev-Strong [1983]): there exists an authenticated protocol for solving broadcast, against any adversary controlling $t&amp;lt;n$ out of $n$ parties, in $t+1$ rounds, using $O(n^2t)$ words Recall the Broadcast properties: (1) Termination - all honest parties decide and terminate; (2) Validity - if the leader is honest, its value is the decision value; and...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -321,7 +336,8 @@ In Dolev–Strong, a party must accept a length-$k$ chain only in round $k$, but
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

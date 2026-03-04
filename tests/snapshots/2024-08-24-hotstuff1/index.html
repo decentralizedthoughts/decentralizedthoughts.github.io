@@ -9,6 +9,8 @@
  <title>HotStuff-1 and the Prefix Speculation Dilemma in BFT Consensus</title>
  
  
+ 
+ 
  <meta name="author" content="Dakai Kang, Suyash Gupta, Dahlia Malkhi, Mohammad Sadoghi">
  
  <meta name="description" content="Several approaches aim to reduce the number of network hops to reach finality in BFT Consensus protocols through speculation. They differ in their methods and in their guarantees, yet they all face a common phenomenon referred to as the prefix speculation dilemma. This post explains three principal speculation approaches and underscores their differences: Speculation in HotStuff-1, Speculation in PBFT, and Speculation in Zyzzyva. It describes how the prefix speculation dilemma...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -373,7 +388,8 @@
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

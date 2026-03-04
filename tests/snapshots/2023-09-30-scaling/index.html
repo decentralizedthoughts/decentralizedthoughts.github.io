@@ -9,6 +9,8 @@
  <title>Scaling Blockchains: the Power of Batching</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham">
  
  <meta name="description" content="A few years ago if you asked “Can blockchains scale?” most people would give three reasons why, fundamentally, the answer is “No!” Data: every transaction needs to be replicated by every miner (validator). So increasing security by adding more validators inherently causes more replication. Having $n$ validators implies that your transaction is replicated a total of $n$ times. Execution: every transaction needs to be executed (and validated) by every miner...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -263,7 +278,8 @@
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

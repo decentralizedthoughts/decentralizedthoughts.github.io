@@ -9,6 +9,8 @@
  <title>Can we Obtain Privacy in a Private Proof-of-Stake Blockchain? Part-I</title>
  
  
+ 
+ 
  <meta name="author" content="Chenghong Wang, Kartik Nayak">
  
  <meta name="description" content="In this two-part post, we focus on the challenges and subtleties involved in obtaining privacy in private proof-of-stake (PoS) blockchains. For instance, designs that attempt to obtain privacy for transaction details while still relying on PoS, such as Ouroboros Crypsinous. The first part explains attacks on existing approaches, and the second part focuses on potential workarounds using differential privacy. These posts explain the intuitive ideas behind the works of Madathil...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -276,7 +291,8 @@
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

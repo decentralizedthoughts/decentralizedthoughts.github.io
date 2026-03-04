@@ -9,6 +9,8 @@
  <title>DPaaS - Improving Decentralization by Removing Relays in Ethereum PBS</title>
  
  
+ 
+ 
  <meta name="author" content="Chenyang Liu, Ittai Abraham, Matthew Lentz, Kartik Nayak">
  
  <meta name="description" content="In this blog post, we will explain the core ideas of Decentralized Proposer-as-a-Service (DPaaS), a side-car protocol that removes centralized and unconditionally trusted relays in current Ethereum Proposer-Builder Separation (PBS). The full paper is on the eprint. PBS and MEV-Boost Proposer-Builder Separation (PBS) was proposed to mitigate the validator centralization brought by the inequality of mining MEV. PBS is inherently a trade between the proposer and builder, requiring fair exchange...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -318,7 +333,8 @@ proposal times for DPaaS versus Relays.</em></figcaption>
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

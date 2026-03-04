@@ -9,6 +9,8 @@
  <title>Sync HotStuff, A Simple and Practical State Machine Replication</title>
  
  
+ 
+ 
  <meta name="author" content="Kartik Nayak, Ling Ren">
  
  <meta name="description" content="In the previous post, we discussed progress in authenticated synchronous consensus protocols. In this post, we will discuss one of the recent protocols Sync HotStuff, which is a simple and practical Byzantine Fault Tolerant SMR protocol to tolerate $f &amp;lt; n/2$ faults. We first present one of the key ideas of Sync HotStuff. Later, we briefly discuss some of the other results in the paper. In order to be practical,...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -269,7 +284,8 @@ Moreover, Sync HotStuff is <a href="https://eprint.iacr.org/2017/913">optimistic
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

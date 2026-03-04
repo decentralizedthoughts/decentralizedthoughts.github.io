@@ -9,6 +9,8 @@
  <title>Range Proofs from Polynomial Commitments, Re-explained</title>
  
  
+ 
+ 
  <meta name="author" content="Alin Tomescu">
  
  <meta name="description" content="This is a re-exposition of a post here by Dan Boneh, Ben Fisch, Ariel Gabizon, and Zac Williamson, with a few more details on why the polynomial relations hold. They construct a simple zero knowledge range proof from a hiding polynomial commitment scheme (PCS), such as KZG1. $$ \def\Fp{\mathbb{F}_p} \def\FF{\Fp^{\scriptscriptstyle{(&amp;lt;n)}}[X]} \def\polycommit{\mathbf{PolyCommit}} \def\range#1{[{#1}]} $$ Specifically, the prover has $z\in \Fp$ and wants to efficiently convince a verifier who only has a...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -461,7 +476,8 @@ However, verifying a commitment to $w_3$ seems difficult.</p>
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

@@ -9,6 +9,8 @@
  <title>A Simple and Succinct Zero Knowledge Proof</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham, Alin Tomescu">
  
  <meta name="description" content="There is a popular belief that succinct proofs and zero-knowledge proofs are a type of moon math. In this post, our goal is to present a simple proof system that can provide an introduction and intuition to this space. Perhaps surprisingly, the only tool we will use is the Theorem that non-trivial degree-at-most-$d$ polynomials over a field have at most $d$ roots. Start with Succinctness, add Zero Knowledge later Traditional...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -295,7 +310,8 @@ Since for any $s_0$ and $s_1$, and for any $r&gt;2$, the distribution of $g’(r
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

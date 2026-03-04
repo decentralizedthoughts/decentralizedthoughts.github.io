@@ -9,6 +9,8 @@
  <title>What is the difference between PBFT, Tendermint, SBFT and HotStuff ?</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham">
  
  <meta name="description" content="In this post I will try to compare four of my favorite protocols for Byzantine Fault Tolerant (BFT) State Machine Replication (SMR): PBFT. The gold standard for BFT SMR. Highly recommend to see this video of Barbara Liskov from 2001. Here is the PBFT project page. Aptos’s BFT is based on Jolteon which is based on PBFT. See this post for more on PBFT. Tendermint. A modern BFT algorithm that...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -342,7 +357,8 @@ A protocol is <em>responsive</em> if it makes progress at the speed of the netwo
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

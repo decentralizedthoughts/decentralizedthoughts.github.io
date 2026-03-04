@@ -19,6 +19,7 @@ defaults:
     layout: post
     comments: true
     social-share: true
+    mathjax: true
 - scope:
     path: ''
   values:

@@ -9,6 +9,8 @@
  <title>Good-case Latency of Byzantine Broadcast: the Synchronous Case</title>
  
  
+ 
+ 
  <meta name="author" content="Zhuolun Xiang">
  
  <meta name="description" content="In our first post, we presented a summary of our good-case latency results for Byzantine broadcast (BB) and state machine replication (SMR), where the good case measures the latency to commit given that the broadcaster or leader is honest. In our second post, we discussed our results for partial synchrony, and described a new BFT SMR protocol named (5f-1)-SMR that can commit a decision within $2$ rounds in the good...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -315,7 +330,8 @@
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026

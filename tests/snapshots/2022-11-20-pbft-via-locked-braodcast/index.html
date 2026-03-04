@@ -9,6 +9,8 @@
  <title>Linear PBFT: a gentle introduction to Practical Byzantine Fault Tolerance</title>
  
  
+ 
+ 
  <meta name="author" content="Ittai Abraham">
  
  <meta name="description" content="PBFT is a foundational multi-year project led by Barbara Liskov and her students, obtaining major advances in both the theory and practice of Byzantine Fault Tolerance. The PBFT conference version, journal version, Castro’s thesis, Liskov’s talk, and follow-up work on BASE are all required reading for anyone who wants to deeply understand BFT systems. In this post we describe a variation of the authenticated version of PBFT using Locked Broadcast...">
@@ -27,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -368,7 +383,8 @@ Upon receiving a valid &lt;decide, x, dc&gt;
  
  <p class="copyright text-muted">
  
- {"name"=>"Decentralized Thinkers"}
+ 
+ Decentralized Thinkers
  &nbsp;&bull;&nbsp;
  
  2026
