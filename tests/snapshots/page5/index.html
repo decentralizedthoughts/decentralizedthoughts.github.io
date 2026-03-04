@@ -521,7 +521,7 @@
  <div class="post-entry-container">
  
  <div class="post-entry">
- Synchronous consensus protocols can tolerate $f &amp;lt; n/2$ Byzantine failures but for $n/3 &amp;lt;f &amp;lt;n/2$ must depend on the maximum network delay $\Delta$ for their safety and progress. So these protocols must set $\Delta$ to be much larger than the actual network delay $\delta \ll \Delta$. The good news is in the multi-shot (blockchain) scenarios, modern synchronous protocols such as Sync HotStuff can essentially pipeline the $\Delta$-dependent delay:
+ Synchronous consensus protocols can tolerate $f < n/2$ Byzantine failures but for $n/3 <f <n/2$ must depend on the maximum network delay $\Delta$ for their safety and progress. So these protocols must set $\Delta$ to be much larger than the actual network delay $\delta \ll \Delta$. The good news is in the multi-shot (blockchain) scenarios, modern synchronous protocols such as Sync HotStuff can essentially pipeline the $\Delta$-dependent delay:
  
  
  <a href="/2021-12-07-good-case-latency-of-rotating-leader-synchronous-bft/" class="post-read-more">[Read&nbsp;More]</a>
@@ -551,7 +551,7 @@
  <div class="post-entry-container">
  
  <div class="post-entry">
-   Crash Omission Byzantine Synchrony $f&amp;lt;n$ is possible $f+1$ round executions must exist $f \geq n/2$ is impossible $f&amp;lt;n/2$ possible with PKI / possible with PoW FLM: $f \geq n/3$ impossible without PKI/PoW Partial Synchrony CAP: $f\geq n/2$ is impossible Paxos: $f&amp;lt;n/2$ is possible $f&amp;lt;n/3$ is possible DLS: $f \geq n/3$ is impossible Asynchrony FLP: non-terminating executions must exist $f&amp;lt;n/2$ possible in $O(1)$ expected rounds $f&amp;lt;n/3$ possible in $O(1)$ expected...
+   Crash Omission Byzantine Synchrony $f<n$ is possible $f+1$ round executions must exist $f \geq n/2$ is impossible $f<n/2$ possible with PKI / possible with PoW FLM: $f \geq n/3$ impossible without PKI/PoW Partial Synchrony CAP: $f\geq n/2$ is impossible Paxos: $f<n/2$ is possible $f<n/3$ is possible DLS: $f \geq n/3$ is impossible Asynchrony FLP: non-terminating executions must exist $f<n/2$ possible in $O(1)$ expected rounds $f<n/3$ possible in $O(1)$ expected...
  
  
  <a href="/2021-10-29-consensus-cheat-sheet/" class="post-read-more">[Read&nbsp;More]</a>
@@ -737,7 +737,7 @@
  <div class="post-entry-container">
  
  <div class="post-entry">
- Communication complexity of Byzantine Agreement (BA) has been studied for decades. Dolev and Reischuk showed that quadratic communication is necessary for BA with perfect security, i.e., without error. Berman, Garay, and Perry showed that this lower bound is tight for the unauthenticated setting (without signatures) with $f &amp;lt; n/3$. However, for $f \ge n/3$, the best solution so far is still the Dolev-Strong protocol with cubic communication, so a linear...
+ Communication complexity of Byzantine Agreement (BA) has been studied for decades. Dolev and Reischuk showed that quadratic communication is necessary for BA with perfect security, i.e., without error. Berman, Garay, and Perry showed that this lower bound is tight for the unauthenticated setting (without signatures) with $f < n/3$. However, for $f \ge n/3$, the best solution so far is still the Dolev-Strong protocol with cubic communication, so a linear...
  
  
  <a href="/2021-09-20-optimal-communication-complexity-of-authenticated-byzantine-agreement/" class="post-read-more">[Read&nbsp;More]</a>
