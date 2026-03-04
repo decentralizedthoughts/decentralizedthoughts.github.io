@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "17 6 * * *"
+    - cron: "17 18 * * *"
 
 permissions:
   contents: write
@@ -47,6 +48,8 @@ jobs:
         env:
           GA4_PROPERTY_ID: ${{ secrets.GA4_PROPERTY_ID }}
           GA4_ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+          GA4_START_DATE: 14daysAgo
+          GA4_END_DATE: yesterday
         run: ruby tools/fetch_ga_top_pages.rb
       - name: Commit updated top pages
         if: steps.ga-config.outputs.configured == 'true'

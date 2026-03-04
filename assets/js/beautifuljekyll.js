@@ -206,6 +206,14 @@ let BeautifulJekyllJS = {
     return BeautifulJekyllJS.topPagesPromise;
   },
 
+  normalizePath : function(path) {
+    if (!path) {
+      return "";
+    }
+    const trimmed = path.replace(/index\.html$/, "").replace(/\/+$/, "");
+    return trimmed === "" ? "/" : trimmed;
+  },
+
   setSearchStatus : function(message) {
     const statusEl = document.getElementById("nav-search-status");
     if (!statusEl) {
@@ -302,13 +310,26 @@ let BeautifulJekyllJS = {
     const source = topPages.length > 0 ? "ga4" : "fallback";
     const entries = source === "ga4" ?
       topPages.map(function(item) {
+        const normalizedPath = BeautifulJekyllJS.normalizePath(item.path);
         const match = BeautifulJekyllJS.searchData.find(function(entry) {
-          return entry.url === item.path || entry.url === item.path.replace(/\/$/, "");
+          return BeautifulJekyllJS.normalizePath(entry.url) === normalizedPath;
         });
+        const fallbackTitle = normalizedPath
+          .replace(/^\//, "")
+          .split("/")
+          .filter(Boolean)
+          .map(function(part) {
+            return part
+              .replace(/^\d{4}-\d{2}-\d{2}-/, "")
+              .replace(/-/g, " ")
+              .replace(/\b\w/g, function(ch) { return ch.toUpperCase(); });
+          })
+          .join(" / ");
         return {
-          url: item.path,
+          url: match ? match.url : item.path,
           views: item.views,
-          title: match ? match.title : item.path,
+          title: match ? match.title : fallbackTitle,
+          desc: match ? match.desc : "",
           author: match ? match.author : "",
           date: match ? match.date : ""
         };
@@ -332,7 +353,7 @@ let BeautifulJekyllJS = {
       const meta = document.createElement("span");
       meta.className = "search-recent-meta";
       meta.textContent = source === "ga4" ?
-        [entry.views ? entry.views + " views" : "", entry.date].filter(Boolean).join(" · ") :
+        [entry.views ? entry.views + " views" : "", entry.date, entry.author].filter(Boolean).join(" · ") :
         [entry.date, entry.author].filter(Boolean).join(" · ");
       link.appendChild(meta);
 

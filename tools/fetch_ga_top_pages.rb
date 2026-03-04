@@ -14,6 +14,22 @@ SCOPE = "https://www.googleapis.com/auth/analytics.readonly"
 TOKEN_URI = URI("https://oauth2.googleapis.com/token")
 REPORT_URI_TEMPLATE = "https://analyticsdata.googleapis.com/v1beta/properties/%<property>s:runReport"
 OUTPUT_PATH = Pathname.new(__dir__).join("..", "assets", "data", "top-pages.json").expand_path
+EXCLUDED_PREFIXES = %w[
+  /about-
+  /authors/
+  /assets/
+  /feed.xml
+  /favicon.ico
+  /page
+  /tag/
+  /tags
+].freeze
+
+EXCLUDED_EXACT_PATHS = %w[
+  /
+  /404.html
+  /contents/
+].freeze
 
 def b64url(value)
   Base64.urlsafe_encode64(value).delete("=")
@@ -105,10 +121,14 @@ def normalize_items(rows)
   rows.filter_map do |row|
     path = row.fetch("dimensionValues", []).dig(0, "value").to_s.strip
     views = row.fetch("metricValues", []).dig(0, "value").to_i
-    next if path.empty? || path == "/" || path.start_with?("/tag/") || path.start_with?("/assets/")
+    next if path.empty?
+
+    canonical_path = path.end_with?("/") ? path : "#{path}/"
+    next if EXCLUDED_EXACT_PATHS.include?(path) || EXCLUDED_EXACT_PATHS.include?(canonical_path)
+    next if EXCLUDED_PREFIXES.any? { |prefix| path.start_with?(prefix) || canonical_path.start_with?(prefix) }
 
     {
-      "path" => path,
+      "path" => canonical_path,
       "views" => views
     }
   end
