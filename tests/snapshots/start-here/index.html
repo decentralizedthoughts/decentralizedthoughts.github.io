@@ -207,8 +207,11 @@
  <li>The <a href="/2019-06-07-modeling-the-adversary/">power of the adversary</a>: Type (passive, crash, omission, or Byzantine), Power (unbounded, computational, or fine-grained), Adaptivity (static, delayed adaptive, weak adaptive, adaptive, or strongly adaptive), Visibility (full information or private channel), Mobility (fixed or mobile).</li>
  <li>Many protocols need a <a href="/2019-07-19-setup-assumptions/">trusted setup phase</a>.</li>
 </ol>
-<h2 id="consensus-cheat-sheet">Consensus cheat sheet</h2>
-<p>The <a href="https://decentralizedthoughts.github.io/2021-10-29-consensus-cheat-sheet/">consensus cheat sheet</a> gives a quick overview of what is possible and impossible. You can build half a course just from the upper bounds and lower bounds linked from it.</p>
+<h2 id="cheat-sheet">Cheat sheet</h2>
+<ul>
+ <li>The <a href="https://decentralizedthoughts.github.io/2021-10-29-consensus-cheat-sheet/">consensus cheat sheet</a> gives a quick overview of what is possible and impossible. You can build half a course just from the upper bounds and lower bounds linked from it.</li>
+ <li>The <a href="https://decentralizedthoughts.github.io/2026-02-02-ps-cheat-sheet/">partial synchrony progress cheat sheet</a> summarizes how progress arguments and leader changes fit together in partially synchronous protocols.</li>
+</ul>
 <h2 id="basic-protocols">Basic protocols</h2>
 <ul>
  <li>The Synchronous model is a good place to start because protocols are simpler.
@@ -220,7 +223,7 @@
  <li><a href="/2019-09-13-flavours-of-partial-synchrony/">Partial synchrony</a> is one of the most used models in real-world systems today.
  <ul>
  <li>Single-shot <a href="https://decentralizedthoughts.github.io/2022-11-04-paxos-via-recoverable-broadcast/">Paxos</a>.</li>
- <li>Single shot <a href="https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/">PBFT</a>.</li>
+ <li>Single-shot <a href="https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/">PBFT</a>.</li>
  </ul>
  </li>
 </ul>
@@ -242,17 +245,31 @@
 <h2 id="more-partially-synchronous-protocols">More partially synchronous protocols</h2>
 <p>Taking ideas from the Byzantine setting and applying them to the benign setting:</p>
 <ul>
- <li><a href="https://decentralizedthoughts.github.io/2021-04-02-benign-hotstuff/">Benign Hotstuff</a>.</li>
+ <li><a href="https://decentralizedthoughts.github.io/2021-04-02-benign-hotstuff/">Benign HotStuff</a>.</li>
  <li><a href="https://decentralizedthoughts.github.io/2021-07-17-simplifying-raft-with-chaining/">Simplifying Raft with Chaining</a>.</li>
  <li><a href="https://decentralizedthoughts.github.io/2021-09-30-distributed-consensus-made-simple-for-real-this-time/">Log Paxos</a> is a modern take on multi-Paxos.</li>
 </ul>
 <p>The Byzantine setting:</p>
 <ul>
  <li>An important building block: <a href="https://decentralizedthoughts.github.io/2022-09-10-provable-broadcast/">provable broadcast</a>.</li>
+ <li><a href="https://decentralizedthoughts.github.io/2022-12-18-what-is-responsiveness/">What is responsiveness?</a></li>
  <li>Some <a href="https://decentralizedthoughts.github.io/2025-02-14-partial-synchrony-protocols/">design principles</a></li>
- <li>Single shot <a href="https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/">PBFT</a>.</li>
+ <li>Single-shot <a href="https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/">PBFT</a>.</li>
  <li><a href="https://decentralizedthoughts.github.io/2022-11-24-two-round-HS/">Two Round HotStuff</a> with SMR and accountability.</li>
  <li><a href="https://decentralizedthoughts.github.io/2021-09-20-information-theoretic-hotstuff-it-hs-part-one/">Information Theoretic HotStuff</a>.</li>
+ <li><a href="https://decentralizedthoughts.github.io/2025-12-19-cc-under-harsh-ps/">Partial Synchrony variants</a>.</li>
+</ul>
+<h2 id="simplex-and-variants">Simplex and variants</h2>
+<ul>
+ <li><a href="https://decentralizedthoughts.github.io/2025-06-18-simplex/">From Tendermint to Simplex</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2025-11-08-benign-simplex/">Benign Simplex</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2025-11-15-simplex-from-benign/">From Benign Simplex to Byzantine Simplex</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2025-07-18-two-round-Simplex/">2-round BFT in Simplex style</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2025-08-06-5fminus1-simplex/">2-round BFT in Simplex style for n=5f-1</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/">Concurrent 2-round and 3-round Simplex-style BFT</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2025-09-24-Kuplex/">Variants of Simplex with Reduced Bad-case Latency: C-Simplex and Kuplex</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/">Why BFT Needs Three Rounds</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2025-11-23-finality/">Finality Is in the Eye of the Behodler</a></li>
 </ul>
 <h2 id="asynchronous-protocols">Asynchronous protocols</h2>
 <p>Fundamental lower bound in asynchrony: The <a href="/2019-12-15-consensus-model-for-FLP/">FLP lower bound</a> showing the impossibility of consensus under even one crash fault.</p>
