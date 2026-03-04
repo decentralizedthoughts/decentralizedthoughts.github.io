@@ -1,7 +1,8 @@
 <footer class="footer-min">
   <div class="text-muted">
-    {% if site.author %}
-      {{ site.author }}
+    {% assign site_author_name = site.author.name | default: site.author %}
+    {% if site_author_name %}
+      {{ site_author_name }}
       &nbsp;&nbsp;&bull;&nbsp;&nbsp;
     {% endif %}
     {% if page.date %}

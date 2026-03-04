@@ -33,11 +33,13 @@
 
   <title>{{ title }}</title>
 
+  {% assign page_author_name = page.author.name | default: page.author %}
+  {% assign site_author_name = site.author.name | default: site.author %}
   {% capture author %}
-    {%- if page.author -%}
-      {{  page.author | strip_html }}
-    {%- elsif site.author -%}
-      {{ site.author }}
+    {%- if page_author_name -%}
+      {{ page_author_name | strip_html }}
+    {%- elsif site_author_name -%}
+      {{ site_author_name | strip_html }}
     {%- endif -%}
   {% endcapture %}
   {% if author != "" %}

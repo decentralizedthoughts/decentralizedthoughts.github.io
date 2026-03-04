@@ -11,8 +11,9 @@
         </div>
       {% endif %}
       <p class="copyright text-muted">
-      {% if site.author %}
-        {{ site.author }}
+      {% assign site_author_name = site.author.name | default: site.author %}
+      {% if site_author_name %}
+        {{ site_author_name }}
         &nbsp;&bull;&nbsp;
       {% endif %}
       {{ site.time | date: '%Y' }}
