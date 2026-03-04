@@ -29,6 +29,19 @@
  
  
  
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
  
  
  
@@ -151,6 +164,13 @@
  <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
  
  
+<section class="home-search-panel">
+ <label class="home-search-label" for="home-search-input">Search the blog</label>
+ <div class="home-search-controls">
+ <input id="home-search-input" type="text" placeholder="Search posts and pages" autocomplete="off">
+ <button id="home-search-button" type="button">Search</button>
+ </div>
+</section>
 <div class="posts-list">
  
  <article class="post-preview">
