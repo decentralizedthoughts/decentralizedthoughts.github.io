@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Distributed consensus made simple (for real this time!)</title>
+ 
+ 
+ <meta name="author" content="Chris Jensen, Heidi Howard">
+ 
+ <meta name="description" content="Multi-Paxos is the de facto solution for deciding a log of commands to execute on a replicated state machine, yet it’s famously difficult to understand, motivating the switch to ‘simpler’ consensus protocols such as Raft. The conventional wisdom is that the best way to use Paxos (aka Synod, or single-shot Paxos), to decide a log of commands is to run many instances of it, where the $i^{th}$ instance decides the...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Distributed consensus made simple (for real this time!)">
+ <meta property="og:description" content="Multi-Paxos is the de facto solution for deciding a log of commands to execute on a replicated state machine, yet it’s famously difficult to understand, motivating the switch to ‘simpler’ consensus protocols such as Raft. The conventional wisdom is that the best way to use Paxos (aka Synod, or single-shot Paxos), to decide a log of commands is to run many instances of it, where the $i^{th}$ instance decides the...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Chris Jensen, Heidi Howard">
+ 
+ <meta property="og:article:published_time" content="2021-09-30T03:39:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2021-09-30-distributed-consensus-made-simple-for-real-this-time/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2021-09-30-distributed-consensus-made-simple-for-real-this-time/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Distributed consensus made simple (for real this time!)">
+ <meta property="twitter:description" content="Multi-Paxos is the de facto solution for deciding a log of commands to execute on a replicated state machine, yet it’s famously difficult to understand, motivating the switch to ‘simpler’ consensus protocols such as Raft. The conventional wisdom is that the best way to use Paxos (aka Synod, or single-shot Paxos), to decide a log of commands is to run many instances of it, where the $i^{th}$ instance decides the...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Distributed consensus made simple (for real this time!)</h1>
+ 
+ 
+ 
+ 
+ By <strong>Chris Jensen, Heidi Howard</strong><br>
+ 
+ <span class="post-meta">Posted on September 30, 2021</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p><a href="https://lamport.azurewebsites.net/pubs/paxos-simple.pdf">Multi-Paxos</a> is the <em>de facto</em> solution for deciding a log of commands to execute on a <a href="https://www.cs.cornell.edu/fbs/publications/ibmFault.sm.pdf">replicated state machine</a>, yet it’s famously difficult to understand, motivating the switch to ‘simpler’ consensus protocols such as <a href="https://raft.github.io/raft.pdf">Raft</a>. The conventional wisdom is that the best way to use <a href="https://www.microsoft.com/en-us/research/uploads/prod/2016/12/The-Part-Time-Parliament.pdf">Paxos</a> (aka Synod, or single-shot Paxos), to decide a log of commands is to run many instances of it, where the $i^{th}$ instance decides the $i^{th}$ command in the log. This approach, known as Multi-Paxos, can decide a command in one round trip since the first of Paxos’s two phases can be shared between instances, effectively electing a <em>leader</em>.</p>
+<p>In today’s post, we outline a simpler way to use Paxos to decide a log of commands. Our approach, which we have creatively named <em>Log Paxos</em>, is inspired by the new breed of chain-based consensus protocols such as <a href="https://decentralizedthoughts.github.io/2021-04-02-benign-hotstuff/">Benign HotStuff</a> and <a href="https://decentralizedthoughts.github.io/2021-07-17-simplifying-raft-with-chaining/">Chained Raft</a>. We believe that <strong>the simplest way to use Paxos to decide a log of values is not to use many instances of Paxos but to use one modified instance of Paxos</strong>, generalized to decide an append-only log of values instead of a single value.</p>
+<h2 id="tldr">TL;DR</h2>
+<p>In Paxos, a value is <em>decided</em> when a majority of <em>acceptors</em> have <em>accepted</em> the same <em>ballot</em>, consisting of a <em>ballot number</em> (aka a view, term, or proposal number) and a value. Paxos ensures that once a value is decided, no different value can be proposed with any greater ballot number. It achieves this by requiring <em>proposers</em> in phase 1 of Paxos to learn the greatest accepted ballot from a majority of acceptors and to propose the value with the greatest ballot number in phase 2.</p>
+<p>To instead decide an extendable log of values, we modify Paxos such that a ballot consists of a ballot number and the current log. We then allow acceptors to accept a proposed ballot if either the proposed ballot’s number is greater than their stored ballot’s, or when they are equal, if the proposed log extends the stored one. With this change, <strong>a log is decided when a majority of acceptors have accepted ballots with the same ballot number and logs which extend it</strong>. We ensure that <strong>once a log is decided all logs which are decided after it (causally) or in a greater ballot will extend it</strong>, by requiring proposers at the end of phase 1 to choose the longest log from the greatest ballot. This approach means that unlike Paxos, a proposer may concurrently propose multiple logs with the same ballot number, provided the logs extend those it has previously proposed.</p>
+<p>This post first recaps Paxos and then presents our new take on Paxos in the form of <em>Log Paxos</em>. We examine the safety and liveness of the two protocols, highlighting the extensive similarities between the protocols and their proofs. We conclude by discussing how to optimize the performance of Log Paxos and how Log Paxos compares to other consensus protocols such as Multi-Paxos and Raft. As an added bonus, we also discuss <a href="https://lamport.azurewebsites.net/pubs/paxos-simple.pdf">how to model check the protocols in TLA+</a>.</p>
+<h2 id="recap-paxos">Recap: Paxos</h2>
+<p>Paxos takes place over a series of rounds, where for each round a <em>designated proposer</em> aims to decide a value. Rounds are assigned to proposers by round-robin and are denoted by a ballot number. Within each round, there are two phases, <em>phase 1</em> (learning of previously decided values) and <em>phase 2</em> (deciding the value). Every acceptor only participates in the greatest (by ballot number) round it has heard of.</p>
+<p>For ballot number $b$, the phases of Paxos would proceed as follows.</p>
+<p>In <em>phase 1</em>, a designated proposer for ballot $b$ broadcasts $\textit{phase1a}(b)$ to the acceptors. Each acceptor, $a$, upon receiving this $\textit{phase1a}$ message, replies with its greatest accepted ballot $(b_{max}, v_{max})$ by sending $\textit{phase1b}(b, a, (b_{max}, v_{max}))$.</p>
+<p>Once the proposer has received 1b responses from a majority of acceptors, it selects the value of the ballot with the greatest $b_{max}$. If no such value exists, the proposer selects its own value.</p>
+<p>In <em>phase 2</em>, the proposer replicates the selected value, $v$, by broadcasting $\textit{phase2a}(b, v)$ to the acceptors. When an acceptor, $a$, receives $\textit{phase2a}(b, v)$, it updates its greatest accepted ballot, and responds with $\textit{phase2b}(b, a, v)$.</p>
+<p>Once a proposer has received responses from a majority quorum of acceptors, then it can commit $v$.</p>
+<p>If at any point the proposer cannot make progress (because it did not receive sufficient <em>1b</em> or <em>2b</em> responses) it can retry with a greater ballot number.</p>
+<p>The following diagram gives an example of the messages required to commit a value using Paxos.</p>
+<p><img src="https://i.imgur.com/xXafisk.png" alt="Paxos commit protocol" /></p>
+<p>Paxos is safe if, once a value is decided, then subsequent proposers must also decide the same value. The intuition for Paxos’ safety is that if a value is decided, then since majority quorums intersect, all subsequent <em>phase 1</em>s will include and select that value. Once that value is re-selected by the new proposer, it will then be re-proposed. Hence if that proposer decides a value it must re-decide the previous one.</p>
+<h2 id="log-paxos">Log Paxos</h2>
+<p>So far we have recapped how Paxos decides a single value, now we will extend Paxos to instead decide an append-only log of values.</p>
+<p>Our key observation is that we can replace the value in Paxos with a log of values and the value equality from Paxos with an <em>extends</em> relation: every entry in the shorter log is in the same place in the longer one.</p>
+<p><img src="https://i.imgur.com/hUSKNFg.png" alt="The extends relation" /></p>
+<p>Log Paxos thus decides a <em>log</em> of values, and the safety property is that <strong>if a log is decided, then all subsequently decided logs (within the current ballot, as well as within greater ballots) <em>extend</em> it</strong>. Interestingly, the proposer can propose multiple logs within the same round, provided each log extends the previously proposed logs.</p>
+<p>The Log Paxos protocol is as follows. As before it progresses over a series of rounds denoted by ballot numbers, each split into two phases. Every acceptor only participates in the greatest (by ballot number) round it has heard of.</p>
+<p>In <em>phase 1</em>, a designated proposer for ballot $b$ broadcasts $\textit{phase1a}(b)$. Each acceptor, $a$, upon receiving this $\textit{phase1a}$ message, replies with its greatest accepted ballot, $\textit{phase1b}(b, a, (b_{max}, l_{max}))$. Every acceptor is initialised with a default accepted ballot (containing an empty log), so there will always be a greatest ballot.</p>
+<p>Once the proposer has received 1b responses from a majority of acceptors, it finds the greatest accepted ballot number, and within ballots with that ballot number selects the longest log.</p>
+<p>In <em>phase 2</em>, the proposer initially proposes the chosen log $l’$ from phase 1. It replicates this log to the acceptors by broadcasting $\textit{phase2a}(b, l’)$. When an acceptor, $a$, receives $\textit{phase2a}(b, l’)$, it updates its greatest (and longest) accepted ballot, and responds $\textit{phase2b}(b, a, l’)$. Once a proposer has received responses from a majority quorum of acceptors then it can commit $l’$.</p>
+<p>The proposer can now safely repeat <em>phase 2</em>, this time using the most recently proposed log, provided it always extends previously proposed logs. It replicates this log, appending any new values, to the acceptors by broadcasting $\textit{phase2a}(b, l’)$. As before, when an acceptor, $a$, receives $\textit{phase2a}(b, l’)$, it updates its greatest (and longest) accepted ballot, and responds $\textit{phase2b}(b, a, l’)$. This <em>phase 2</em> can be performed many times by a proposer for the same ballot number.</p>
+<p>Once a proposer has received responses, from a majority quorum of acceptors, which all extend a log, then it can commit the log.</p>
+<p>As in Paxos, if a proposer cannot make progress (due to insufficient <em>1b</em> or <em>2b</em> responses), it can retry in a higher round.</p>
+<p>The following diagram outlines how Log Paxos can commit a log and then repeatedly append new values, without requiring another phase 1.</p>
+<p><img src="https://i.imgur.com/HKx0vCF.png" alt="Log Paxos commit protocol" /></p>
+<p>Similar to Paxos (with its equality relation), <strong>Log Paxos is safe if, after deciding a log, any subsequently decided logs (within that round, or in greater ones) will <em>extend</em> it</strong>. This is intuitively safe when separately considering decisions within a round and between rounds.</p>
+<p>Since only one proposer can propose and decide logs for a given round, it can ensure safety within it.</p>
+<p>As in Paxos, we use the intersecting of the <em>phase 1</em> and <em>phase 2</em> quorums to show safety between rounds. A log is committed when the proposer has <em>phase2b</em> responses from a majority of servers, with logs that extend it. When the next proposer performs phase 1, it will receive a response from one of those acceptors, whose log will extend the previous one. Since the proposer chooses the longest log, the selected log will extend this acceptor’s log.</p>
+<h2 id="safety">Safety</h2>
+<p>So far we have made only an informal argument for why Log Paxos is safe. In this section, we take a more formal look at the safety of Paxos and Log Paxos.</p>
+<h3 id="paxos">Paxos</h3>
+<p>In order to show Paxos’ safety we use the invariant that if value, $v$, is decided in round $i$, then if any values are proposed in greater rounds, then they equal $v$.</p>
+<p>This invariant would mean that for any value decided in a round greater than $i$, it would have to be proposed first and hence be equal to $v$.</p>
+<p><strong>Base case:</strong> round $i$.</p>
+<p>We have assumed that in round $i$, that $v$ has been decided. Since the proposer only proposes a single value, for any broadcast $\textit{phase2a}(i,v’)$, $v’ = v$.</p>
+<p><strong>Inductive case:</strong> round $j$.</p>
+<p>First, we assume the inductive hypothesis, that for all rounds $k \in [i \dots j - 1]$ only $v$ was proposed. Additionally, we assume that in round $j$, the proposer sends a <em>phase 2a</em> message, and hence has completed <em>phase 1</em> collecting a quorum of <em>phase 1</em> messages.</p>
+<p>We now examine the constraints on the ballot number, $b_{max}$, of the selected ballot from the <em>phase 1b</em> responses for round $j$.</p>
+<p>Since any two majorities of acceptors will have an acceptor, $a$, in common then there exists $\textit{phase2b}(i, a, _)$ in the <em>2b</em> responses which decided $v$ and $\textit{phase1b}(j, a, (b_{A1b}, _))$ in the <em>1b</em> responses.</p>
+<p>Because acceptors only ever increase their stored ballot number, $b_{A1b} \geq i$. Additionally since $b_{max}$ is the maximum <em>1b</em> ballot number, then $b_{max} \geq b_{A1b}$. Hence by transitivity:</p>
+\[j \geq b_{max} \geq b_{A1b} \geq i \implies b_{max} \in [i \dots j - 1]\]
+<p>Since, by our inductive hypothesis, in rounds $i$ to $j-1$ only $v$ can have been proposed, and that selected ballot $(b_{max}, v_{max})$ must have been sent a <em>phase 2a</em> message in one of these rounds. Hence $v_{max} = v$. Since if a maximum ballot (by ballot number) exists in the <em>1b</em> responses the proposer re-proposes its value, then, if the proposer sends any $\textit{phase2a}(j, v’)$, $v’ = v_{max} = v$.</p>
+<h3 id="log-paxos-1">Log Paxos</h3>
+<p>Similar to Paxos, to show safety we use the invariant that if a log $l$ is decided in round $i$, then all logs which are proposed after the message which proposed $l$, or in subsequent rounds, extend $l$. Since to decide a log, the proposer first must propose it, this invariant ensures safety on those decided logs.</p>
+<p><strong>Base case:</strong> round $i$.</p>
+<p>We have assumed that in round $i$, that $l$ has been decided. Since the proposer only proposes logs which extend previously proposed logs, then for any $\textit{phase2a}(i,l’)$ sent after the one which proposed $l$, $l’\ \textit{extends}\ l$.</p>
+<p><strong>Inductive case:</strong> round $j$.</p>
+<p>First we assume the inductive hypothesis, that for all rounds $k \in [i + 1 \dots j - 1]$ any proposed logs extend $l$, and for round $i$, any logs proposed after $l$ also extend $l$. Additionally, we assume that the proposer sends at least one <em>phase 2a</em> message in round $j$, and hence has completed <em>phase 1</em> collecting a quorum of <em>phase 1</em> messages.</p>
+<p>We now examine what constraints there are on the selected $bal_{max} = (b_{max}, l_{max})$ from the <em>phase 1b</em> responses for round $j$.</p>
+<p>When acceptors compute their maximum ballot, they the same partial order as proposers use to select a maximum ballot. We can use this partial order to establish a constraint on $bal_{max}$. The partial order is defined as follows:</p>
+\[(b_{1}, l_{1}) \succeq (b_{2}, l_{2}) \iff b_{1} &gt; b_{2} \lor (b_{1} = b_{2} \land l_{1}\ \textit{extends}\ l_{2}))\]
+<p>Since any two majority quorums of acceptors will have an acceptor, $a$, in common, then there exists a $\textit{phase1b}(j, a, bal_{A1b})$ in the <em>1b</em> responses for round $j$ and a $\textit{phase2b}(i, a, l_{A2b})$ in the <em>2b</em> responses which decided $l$.</p>
+<p>Following these messages back we have the following individual constraints on their ballots:</p>
+<ul>
+ <li>$bal_{max} \succeq bal_{A1b}$, since $bal_{max}$ is the maximum <em>1b</em> ballot.</li>
+ <li>$bal_{A1b} \succeq bal_{A2b}$, since acceptors only increase their stored ballot, and the <em>1b</em> message must have been sent after the <em>2b</em> message.</li>
+ <li>$bal_{A2b} = (i, l_{A2b}) \succeq (i, l)$, since $l_{A2b}\ \textit{extends}\ l$.</li>
+</ul>
+<p>Taken together and by transitivity on ($\succeq$) we have this final constraint:</p>
+\[bal_{max} \succeq bal_{A1b} \succeq bal_{A2b} \succeq (i, l) \implies bal_{max} = (b_{max}, l_{max}) \succeq (i, l)\]
+<p>Unpacking this constraint either $b_{max} &gt; i$, or $b_{max} = i \land l_{max}\ \textit{extends}\ l$. In the first case $bal_{max}$ must have been set by a <em>phase 2a</em> message sent in a round greater than $i$ (and less than $j$ since no <em>phase 2a</em> messages would have been sent yet). Hence by the inductive hypothesis in this case $l_{max}\ \textit{extends}\ l$.</p>
+<p>Since any log proposed by the proposer will extend $l_{max}$ and in both of these cases $l_{max}\ \textit{extends}\ l$, then the proposed log must also extend $l$.</p>
+<h2 id="liveness">Liveness</h2>
+<h3 id="paxos-1">Paxos</h3>
+<p>This version of Paxos, although it is safe, it is not live, given asynchronous communications. For example, if you have two proposers, one proposer completes phase 1 for round $i$, but before it can complete phase 2, the second proposer completes phase 1 for round $i+1$, blocking it. Since this is symmetrical to the initial state, it can repeat indefinitely, with each proposer being blocked by the next one. This is called the <em>Duelling Leaders</em> problem.</p>
+<p>The way to avoid this is to first assume that rather than asynchronous communications, that there exists some <a href="https://groups.csail.mit.edu/tds/papers/Lynch/jacm88.pdf">Global Synchronisation Time (GST)</a> where every message is received within some known bound $\Delta$ after it is sent.</p>
+<p>Then we need to amend the protocol to take advantage of this. We define a total order on the proposers, and every proposer sends keep-alive messages to the other proposers every $\Delta$. Hence, after GST, each proposer can determine with certainty whether any other proposer is live or stopped (if a proposer hasn’t received a keep-alive within the past $2\Delta$, it must have stopped).</p>
+<p>We then use the total order on proposers to create the rule that proposers only start <em>phase 1</em>, if they believe that all greater proposers are stopped.</p>
+<p>Thus after GST if there is at least one proposer still alive, and a majority of acceptors, the maximum proposer can commit a value without being blocked by any lower proposers.</p>
+<h3 id="log-paxos-2">Log Paxos</h3>
+<p>The liveness assumptions, amendments, and proof from Paxos are identical.</p>
+<p>To summarise, we assume that there exists a Global Synchronisation Time (GST) where after which all message delays are bounded by some known $\Delta$.
+We also amend the protocol as follows:</p>
+<ul>
+ <li>Define a total order on proposers (for example by <code class="language-plaintext highlighter-rouge">uuid</code>).</li>
+ <li>Proposers send keep-alive messages to each other every $\Delta$.</li>
+ <li>Proposers do not attempt <em>phase 1</em>, if they believe a ‘higher’ proposer is still live (received a keep-alive within the last $2\Delta$).</li>
+</ul>
+<p>This ensures liveness after GST so long as at least one proposer is live, as well as at least a majority of acceptors, since the ‘maximum’ proposer can perform the protocol without being blocked by another proposer.</p>
+<h2 id="optimization">Optimization</h2>
+<p>The most notable inefficiency in Log Paxos is that the entire log is re-transmitted every time a proposer appends a new value to the log. This section deals with how to avoid this by only sending the relevant portions of the log.</p>
+<p>During <em>phase 2</em>, the log stored on the proposer will only be extended. Thus rather than sending the entire log, it can keep track of what log entries are already on each acceptor, and only send incremental updates.</p>
+<p>One simple approach (inspired by <a href="https://raft.github.io/raft.pdf">Raft</a>) is for the proposer to keep track of a <em>MatchIndex</em> (the highest index where all lower indices are known to be replicated on an acceptor) and a <em>NextIndex</em> (the index of the next unsent entry in the log). When the proposer sends a $\textit{phase2a}$ message, it only sends the postfix from <em>NextIndex</em>. Presuming that no messages are lost or re-ordered, every new postfix will only extend the acceptor’s log, and the acceptor can send back an acknowledge (ack). If a message is lost or re-ordered, this will be seen as missing entries in the reconstructed log. In this case, the acceptor will negatively acknowledge the message and attach the index of the first missing entry. When the proposer receives an ack it updates its <em>MatchIndex</em>. If the proposer receives a nack, in addition to the <em>MatchIndex</em>, it must also update the NextIndex so that the next update contains the missing entries.</p>
+<p>Since we have focused on simplicity over performance, there are many other opportunities to optimize the performance of Log Paxos. Let us know on <a href="https://twitter.com/heidiann360/status/1443491633752850434?s=20">twitter</a> if you’d like to see another post discussing these.</p>
+<h2 id="comparison-to-other-consensus-protocols">Comparison to other consensus protocols</h2>
+<h3 id="multi-paxos">Multi-Paxos</h3>
+<p>Log Paxos achieves the same goals and has similar message flow and commitment properties as <a href="https://lamport.azurewebsites.net/pubs/paxos-simple.pdf">Multi-Paxos</a>. The key theoretical difference is that Multi-Paxos uses an array of Paxos instances, while Log Paxos uses just a single modified instance.</p>
+<p>In comparison to Multi-Paxos where each Paxos instance can commit their values out-of-order, Log Paxos commits values in-order (but they can still be proposed/processed concurrently). Additionally from an implementation perspective, since in Multi-Paxos each Paxos instance maintains its own term, the designated proposer upon completing <em>phase 1</em> must find the correct entry for each index. However in Log Paxos, since there is only one Paxos instance, the proposer simply chooses the longest log from the highest ballot number.</p>
+<h3 id="multi-shot-lock-commit">Multi-shot Lock-Commit</h3>
+<p>As discussed in the <a href="https://decentralizedthoughts.github.io/2020-11-30-the-lock-commit-paradigm-multi-shot-and-mixed-faults/">Multi-shot Lock-Commit</a> post, Paxos is an example of the Lock-Commit paradigm, although the generalized protocol discussed there merges the proposer and acceptor roles.</p>
+<p>The one major difference is that, as presented in the post, Multi-shot Lock-Commit cannot concurrently process multiple requests. Specifically whenever it sends out the equivalent of a <em>phase2a</em> message it is blocked from submitting subsequent ones until it commits that request.</p>
+<p>Concurrent request processing could be added, potentially by explicitly tracking each request, however, we believe that having proposers commit the ‘longest’ log that has a quorum of responses that extend it, is a simpler solution.</p>
+<h3 id="raft">Raft</h3>
+<p><a href="https://raft.github.io/raft.pdf">Raft</a> is a re-imagining of Multi-Paxos which seeks to optimize it for easy understanding. This results in <a href="https://arxiv.org/pdf/2004.05074.pdf">several major changes to Classic Multi-Paxos</a>. Firstly it explicitly decides values in order. This makes tracking state and the commit index location much easier. Secondly, Raft optimizes leader elections to reduce data transfer. Since the proposer shares a log with the acceptor, then during <em>phase 1</em> the acceptors can only vote for the proposer if the proposer’s log is more up to date than the acceptor’s (larger ballot number or within that longer log). Although this restricts which nodes can be elected, it removes any state transfer during leader elections and thus may improve the time taken to complete the election. Finally, it codifies the approach to reconfiguration and snapshotting.</p>
+<p>Log Paxos similarly makes use of in-order decisions to simplify the protocol, however, we believe the explicit derivation from Paxos should make our protocol simpler to understand.</p>
+<h3 id="caspaxos">CASPaxos</h3>
+<p><a href="https://arxiv.org/pdf/1802.07000.pdf">CASPaxos</a> takes an alternative approach to <a href="https://www.cs.cornell.edu/fbs/publications/ibmFault.sm.pdf">State Machine Replication</a>. Rather than replicating a log of commands and applying them to an initial state, it replicates the result of the commands. Specifically, clients propose a function to the proposer, who learns of the current state in <em>phase 1</em> and then applies the function before replicating the new state in <em>phase 2</em>.</p>
+<p>This optimization is compatible with Log Paxos and when applied to a restricted version of this protocol which only proposes a single log in each ballot, the restricted version is equivalent to CASPaxos.</p>
+<p>A major difference between CASPaxos and using Log Paxos to decide the result of a log of commands is that our protocol allows for multiple values to be decided concurrently within the same ballot number (so long as the logs producing them extend previous ones).</p>
+<h3 id="zookeeper-atomic-broadcast-zab">Zookeeper Atomic Broadcast (ZAB)</h3>
+<p><a href="https://marcoserafini.github.io/papers/zab.pdf">ZAB</a> is the atomic broadcast protocol at the heart of <a href="https://zookeeper.apache.org">Apache Zookeeper</a>, a widely used strongly-consistent datastore.</p>
+<p>In many ways LogPaxos is an almost identical protocol to ZAB, primarily differing in the framing (LogPaxos replicates a log rather than providing ZAB’s atomic broadcast) and the proof of safety. The main practical difference is that ZAB has an explicit synchronisation phase where it commits the value chosen in <em>phase 1</em>. This ensures that all transactions proposed by the previous leader are committed strictly before any new ones, which is a useful property in the context of Atomic Broadcast. The synchronisation phase is almost equivalent to the first log which is committed after the leader is elected in Log Paxos, however this log can also include new commands.</p>
+<h2 id="summary">Summary</h2>
+<p>We believe that by extending a single instance of Paxos instead of using many instances of Paxos, Log Paxos is simpler to understand (and hence to implement, verify, and optimize correctly) than Multi-Paxos, the classic approach to distributed consensus over a log. Do you agree? <strong>Let us know what you think on <a href="https://twitter.com/heidiann360/status/1443491633752850434?s=20">Twitter</a></strong>.</p>
+<p>We’d like to thank Ittai Abraham for his comments which greatly helped to refine this post and Denis Rystsov for let us know about to a formatting issue.</p>
+<p><strong>EDIT:</strong> After posting this we learned of a similar algorithm, known as <a href="https://arxiv.org/abs/2008.13456">Sequence Paxos</a>, which has been used in the teaching of distributed systems. You can learn more about Sequence Paxos <a href="https://youtu.be/_4FVBBjVsPA">here</a>.</p>
+<hr />
+<h2 id="bonus-log-paxos-in-tla">Bonus: Log Paxos in TLA+</h2>
+<p><a href="https://lamport.azurewebsites.net/tla/tla.html">TLA+</a> is a formal specification language where a specification for a protocol can be model checked, in a subset of the state space. At each point where there is a non-deterministic choice (for example which node is taking what action, or which message an unreliable network delivers), the model checker simply explores all possible choices.</p>
+<p><strong>Both Paxos and LogPaxos have specifications in TLA+ on <a href="https://github.com/Cjen1/consensus-tlaplus">Github</a></strong>, if you would like to play with them and model check the result!</p>
+<p>In each specification we’ve highlighted the lines which change between them.</p>
+<h3 id="paxos-2">Paxos</h3>
+<p>The Paxos spec below has been adapted from a <a href="https://github.com/tlaplus/Examples/blob/master/specifications/Paxos/Paxos.tla">TLA+ Paxos example</a> and is accessible on <a href="https://github.com/Cjen1/consensus-tlaplus/tree/main/Paxos">Github</a>.</p>
+<p>In the current form, this spec has several quirks. First, it only assigns a single ballot number to each proposer since they need to clear their state if they increase their ballot number. Additionally, message loss (also out-of-order delivery and duplication) is simulated by having nodes receive a subset of the sent messages, thus if a message is not within that subset it is delayed or lost.</p>
+<p>The key parts of the spec below are the <code class="language-plaintext highlighter-rouge">Spec</code> and various <code class="language-plaintext highlighter-rouge">Consistency</code>properties.</p>
+<p>The <code class="language-plaintext highlighter-rouge">Spec</code> property defines what transitions between states are valid. In this case there is an initial state, satisfying <code class="language-plaintext highlighter-rouge">Init</code>, followed by the <code class="language-plaintext highlighter-rouge">Next</code> relation on all sequential pairs of states ($v$ for the current variable’s value, $v’$ for its new value). Each option in the <code class="language-plaintext highlighter-rouge">Next</code> relation specifies a node performing some action.</p>
+<p>One slight difference from the protocol above is that <code class="language-plaintext highlighter-rouge">ValueSelect</code> is explicitly separated from <em>phase1</em> and as well as <code class="language-plaintext highlighter-rouge">Commit</code> from <em>phase 2</em>.</p>
+<p>The <code class="language-plaintext highlighter-rouge">Consistency</code> and <code class="language-plaintext highlighter-rouge">ProposerConsistency</code> properties are invariants that are checked when a state transition occurs. If a sequence of states violates these, the model checker returns that sequence with an error.</p>
+<p>The <code class="language-plaintext highlighter-rouge">Consistency</code> property is the key invariant that we want this spec to satisfy. It states that if any two proposers commit values, then those values must be the same.</p>
+<p>The <code class="language-plaintext highlighter-rouge">ProposerConsistency</code> property simply ensures that a proposer can only commit a single value within a round.</p>
+<p>Both of these invariants have been exhaustively checked for: $\textit{BallotNumbers} \in {1,2}$, $\textit{Acceptors} \in {a1,a2,a3}$ and $\textit{Values} \in {v1,v2}$.</p>
+<pre><code class="language-diff=">------------------------------ MODULE Paxos -----------------------------
+ 
+ EXTENDS Integers, Sequences, FiniteSets
+ 
+ CONSTANTS BallotNumbers, Acceptors, Values, Quorums
+ 
+ VARIABLES msgs,
+ acc,
+ prop
+ 
+ Range(s) == {s[i] : i \in DOMAIN s}
+ 
+ Max(Leq(_,_), s) == CHOOSE v \in s: \A v1 \in s: Leq(v1, v)
+ Min(Leq(_,_), s) == CHOOSE v \in s: \A v1 \in s: Leq(v, v1)
+ 
+-None == CHOOSE v : v \notin Values
+ 
+-PossibleValues == Values \cup {None}
+ 
+ BallotLeq(a, b) ==
+ \/ a.bal &lt; b.bal
+- \/ a.bal = b.bal /\ a.val = b.val
+ 
+ PossibleBallots == [bal : BallotNumbers \cup {-1}, val : PossibleValues]
+ 
+ Messages == [type : {"1a"}, balNum : BallotNumbers]
+ \cup [type : {"1b"}, acc : Acceptors, balNum : BallotNumbers, maxBal : PossibleBallots]
+ \cup [type : {"2a"}, bal : PossibleBallots]
+ \cup [type : {"2b"}, acc : Acceptors, bal : PossibleBallots]
+ 
+ ProposerState == [val : PossibleValues,
+ valSelect : {TRUE, FALSE},
+ committed : PossibleValues,
+ hasCommitted : {TRUE,FALSE}]
+ 
+ AcceptorState == [maxBalNum : BallotNumbers \cup {-1}, maxBal : PossibleBallots]
+ 
+ TypeInvariant == /\ msgs \in SUBSET Messages
+ /\ acc \in [Acceptors -&gt; AcceptorState]
+ /\ prop \in [BallotNumbers -&gt; ProposerState]
+ 
+ vars == &lt;&lt;msgs, acc, prop&gt;&gt;
+ 
+ -----------------------------------------------------------------------------
+ 
+ Init == /\ msgs = {}
+- /\ acc = [a \in Acceptors |-&gt; [maxBalNum |-&gt; -1, maxBal |-&gt; [bal |-&gt; -1, val |-&gt; None]]]
+- /\ prop = [b \in BallotNumbers |-&gt; [val |-&gt; None, valSelect |-&gt; FALSE, committed |-&gt; None, hasCommitted |-&gt; FALSE]]
+ 
+ Send(m) == msgs' = msgs \cup {m}
+ 
+ Phase1a(b) == 
+ /\ ~\E m \in msgs: m.type = "1a" /\ m.balNum = b
+ /\ Send ([type |-&gt; "1a", balNum |-&gt; b])
+ /\ UNCHANGED &lt;&lt; acc, prop &gt;&gt;
+ 
+ Phase1b(a) ==
+ \E m \in msgs :
+ /\ m.type = "1a"
+ /\ m.balNum &gt; acc[a].maxBalNum
+ /\ acc' = [acc EXCEPT ![a] = [acc[a] EXCEPT !.maxBalNum = m.balNum]]
+ /\ Send([type |-&gt; "1b", balNum |-&gt; m.balNum, acc |-&gt; a, maxBal |-&gt; acc[a].maxBal])
+ /\ UNCHANGED &lt;&lt; prop &gt;&gt;
+ 
+ ValueSelect(b) ==
+ /\ ~ prop[b].valSelect
+ /\ \E Q \in Quorums, S \in SUBSET {m \in msgs: (m.type = "1b") /\ (m.balNum = b)}:
+ /\ \A a \in Q: \E m \in S: m.acc = a
+ /\ LET maxBal == Max(BallotLeq, {m.maxBal: m \in S})
+ IN /\ prop' = [prop EXCEPT ![b] = 
+ [prop[b] EXCEPT !.val = maxBal.val, !.valSelect = TRUE]]
+ /\ UNCHANGED &lt;&lt; acc, msgs &gt;&gt;
+ 
+ Phase2a(b) ==
+ /\ prop[b].valSelect
+- /\ \E v \in IF prop[b].val = None THEN Values ELSE {prop[b].val}:
+- LET bal == [bal |-&gt; b, val |-&gt; v]
+ IN /\ Send([type |-&gt; "2a", bal |-&gt; bal])
+ /\ prop' = [prop EXCEPT ![b] = [prop[b] EXCEPT !.val = bal.val]]
+ /\ UNCHANGED &lt;&lt; acc &gt;&gt;
+ 
+ Phase2b(a) ==
+ /\ \E m \in msgs :
+ /\ m.type = "2a"
+ /\ m.bal.bal &gt;= acc[a].maxBalNum
+ /\ BallotLeq(acc[a].maxBal, m.bal)
+ /\ Send([type |-&gt; "2b", acc |-&gt; a, bal |-&gt; m.bal])
+ /\ acc' = [acc EXCEPT ![a] = [maxBalNum |-&gt; m.bal.bal, maxBal |-&gt; m.bal]]
+ /\ UNCHANGED &lt;&lt; prop &gt;&gt;
+ 
+ Commit(b) ==
+ \E Q \in Quorums: 
+ \E S \in SUBSET {m \in msgs: /\ m.type = "2b" 
+ /\ m.bal.bal = b 
+ /\ m.acc \in Q}:
+ /\ \A a \in Q: \E m \in S: m.acc = a
+ /\ LET val == (Min(BallotLeq, {m.bal: m \in S})).val
+- IN /\ \A m \in S: \A m1 \in S \ {m}: m.acc /= m1.acc
+ /\ prop' = [prop EXCEPT ![b] = [prop[b] EXCEPT !.committed = val, !.hasCommitted = TRUE]]
+ /\ UNCHANGED &lt;&lt; msgs, acc &gt;&gt;
+ 
+ Next == \/ \E p \in BallotNumbers : Phase1a(p) \/ ValueSelect(p) \/ Phase2a(p) \/ Commit(p)
+ \/ \E a \in Acceptors : Phase1b(a) \/ Phase2b(a)
+ 
+ Spec == Init /\ [][Next]_vars
+ 
+ -----------------------------------------------------------------------------
+ Consistency ==
+ \A b1, b2 \in BallotNumbers: 
+ LET v1 == prop[b1].committed
+ v2 == prop[b2].committed
+- IN (b1 &lt; b2 /\ prop[b1].hasCommitted /\ prop[b2].hasCommitted) =&gt; v1 = v2
+ 
+ ProposerConsistency ==
+ \A b \in BallotNumbers: 
+ prop[b].hasCommitted =&gt; /\ prop'[b].hasCommitted
+- /\ prop[b].committed = prop'[b].committed 
+ =============================================================================
+</code></pre>
+<h3 id="log-paxos-3">Log Paxos</h3>
+<p>Below is the code TLA+ code for Log Paxos. Compared to the Paxos specification, it replaces only 11 lines with 26 new ones, of which 10 deal with defining the Prefix relation. It is also available on <a href="https://github.com/cjen1/tlaplus-testing/tree/main/LogPaxos">GitHub</a> if you’d like to play around with it yourself.</p>
+<p>Like, the Paxos spec, it has been model checked with $\textit{BallotNumbers} \in {1,2}$, $\textit{Values} \in {v1, v2}$ and $\textit{Acceptors} \in {a1, a2, a3}$.</p>
+<pre><code class="language-diff=">+----------------------------- MODULE LogPaxos -----------------------------
+ 
+ EXTENDS Integers, Sequences, FiniteSets
+ 
+ CONSTANTS BallotNumbers, Acceptors, Values, Quorums
+ 
+ VARIABLES msgs,
+ acc,
+ prop
+ 
++\* a =&lt; b
++Prefix(a,b) ==
++ /\ Len(a) =&lt; Len(b)
++ /\ \A i \in DOMAIN a: a[i] = b[i]
++
+ Range(s) == {s[i] : i \in DOMAIN s}
+ 
+ Max(Leq(_,_), s) == CHOOSE v \in s: \A v1 \in s: Leq(v1, v)
+ Min(Leq(_,_), s) == CHOOSE v \in s: \A v1 \in s: Leq(v, v1)
+ 
++AllSeqFromSet(S) ==
++ LET unique(f) == \A i,j \in DOMAIN f: i /= j =&gt; f[i] /= f[j]
++ subseq(c) == {seq \in [1..c -&gt; S]: unique(seq)}
++ IN
++ UNION {subseq(c): c \in 0..Cardinality(S)}
+ 
++PossibleValues == AllSeqFromSet(Values)
+ 
+ BallotLeq(a, b) ==
+ \/ a.bal &lt; b.bal
++ \/ a.bal = b.bal /\ Prefix(a.val, b.val)
+ 
+ PossibleBallots == [bal : BallotNumbers \cup {-1}, val : PossibleValues]
+ 
+ Messages == [type : {"1a"}, balNum : BallotNumbers]
+ \cup [type : {"1b"}, acc : Acceptors, balNum : BallotNumbers, maxBal : PossibleBallots]
+ \cup [type : {"2a"}, bal : PossibleBallots]
+ \cup [type : {"2b"}, acc : Acceptors, bal : PossibleBallots]
+ 
+ ProposerState == [val : PossibleValues,
+ valSelect : {TRUE, FALSE},
+ committed : PossibleValues,
+ hasCommitted : {TRUE,FALSE}]
+ 
+ AcceptorState == [maxBalNum : BallotNumbers \cup {-1}, maxBal : PossibleBallots]
+ 
+ TypeInvariant == /\ msgs \in SUBSET Messages
+ /\ acc \in [Acceptors -&gt; AcceptorState]
+ /\ prop \in [BallotNumbers -&gt; ProposerState]
+ 
+ vars == &lt;&lt;msgs, acc, prop&gt;&gt;
+ 
+ -----------------------------------------------------------------------------
+ 
+ Init == /\ msgs = {}
++ /\ acc = [a \in Acceptors |-&gt; [maxBalNum |-&gt; -1, maxBal |-&gt; [bal |-&gt; -1, val |-&gt; &lt;&lt;&gt;&gt;]]]
++ /\ prop = [b \in BallotNumbers |-&gt; [val |-&gt; &lt;&lt; &gt;&gt;, valSelect |-&gt; FALSE, committed |-&gt; &lt;&lt;&gt;&gt;, hasCommitted |-&gt; FALSE]]
+ 
+ Send(m) == msgs' = msgs \cup {m}
+ 
+ Phase1a(b) == 
+ /\ ~\E m \in msgs: m.type = "1a" /\ m.balNum = b
+ /\ Send ([type |-&gt; "1a", balNum |-&gt; b])
+ /\ UNCHANGED &lt;&lt; acc, prop &gt;&gt;
+ 
+ Phase1b(a) ==
+ \E m \in msgs :
+ /\ m.type = "1a"
+ /\ m.balNum &gt; acc[a].maxBalNum
+ /\ acc' = [acc EXCEPT ![a] = [acc[a] EXCEPT !.maxBalNum = m.balNum]]
+ /\ Send([type |-&gt; "1b", balNum |-&gt; m.balNum, acc |-&gt; a, maxBal |-&gt; acc[a].maxBal])
+ /\ UNCHANGED &lt;&lt; prop &gt;&gt;
+ 
+ ValueSelect(b) ==
+ /\ ~ prop[b].valSelect
+ /\ \E Q \in Quorums, S \in SUBSET {m \in msgs: (m.type = "1b") /\ (m.balNum = b)}:
+ /\ \A a \in Q: \E m \in S: m.acc = a
+ /\ LET maxBal == Max(BallotLeq, {m.maxBal: m \in S})
+ IN /\ prop' = [prop EXCEPT ![b] = 
+ [prop[b] EXCEPT !.val = maxBal.val, !.valSelect = TRUE]]
+ /\ UNCHANGED &lt;&lt; acc, msgs &gt;&gt;
+ 
+ Phase2a(b) ==
+ /\ prop[b].valSelect
++ /\ \E v \in {&lt;&lt;&gt;&gt;} \cup {&lt;&lt;v&gt;&gt; : v \in Values \ Range(prop[b].val)}:
++ LET bal == 
++ [bal |-&gt; b, 
++ val |-&gt; prop[b].val \o v]
+ IN /\ Send([type |-&gt; "2a", bal |-&gt; bal])
+ /\ prop' = [prop EXCEPT ![b] = [prop[b] EXCEPT !.val = bal.val]]
+ /\ UNCHANGED &lt;&lt; acc &gt;&gt;
+ 
+ Phase2b(a) ==
+ /\ \E m \in msgs :
+ /\ m.type = "2a"
+ /\ m.bal.bal &gt;= acc[a].maxBalNum
+ /\ BallotLeq(acc[a].maxBal, m.bal)
+ /\ Send([type |-&gt; "2b", acc |-&gt; a, bal |-&gt; m.bal])
+ /\ acc' = [acc EXCEPT ![a] = [maxBalNum |-&gt; m.bal.bal, maxBal |-&gt; m.bal]]
+ /\ UNCHANGED &lt;&lt; prop &gt;&gt;
+ 
+ Commit(b) ==
+ \E Q \in Quorums: 
+ \E S \in SUBSET {m \in msgs: /\ m.type = "2b" 
+ /\ m.bal.bal = b 
+ /\ m.acc \in Q}:
+ /\ \A a \in Q: \E m \in S: m.acc = a
+ /\ LET val == (Min(BallotLeq, {m.bal: m \in S})).val
++ IN /\ Prefix(prop[b].committed, val)
++ /\ \A m \in S: \A m1 \in S \ {m}: m.acc /= m1.acc
+ /\ prop' = [prop EXCEPT ![b] = [prop[b] EXCEPT !.committed = val, !.hasCommitted = TRUE]]
+ /\ UNCHANGED &lt;&lt; msgs, acc &gt;&gt;
+ 
+ Next == \/ \E p \in BallotNumbers : Phase1a(p) \/ ValueSelect(p) \/ Phase2a(p) \/ Commit(p)
+ \/ \E a \in Acceptors : Phase1b(a) \/ Phase2b(a)
+ 
+ Spec == Init /\ [][Next]_vars
+ 
+ -----------------------------------------------------------------------------
+ Consistency ==
+ \A b1, b2 \in BallotNumbers: 
+ LET v1 == prop[b1].committed
+ v2 == prop[b2].committed
++ IN (b1 &lt; b2 /\ prop[b1].hasCommitted /\ prop[b2].hasCommitted) =&gt; Prefix(v1, v2)
+ 
+ ProposerConsistency ==
+ \A b \in BallotNumbers: 
+ prop[b].hasCommitted =&gt; /\ prop'[b].hasCommitted
++ /\ Prefix(prop[b].committed, prop'[b].committed)
+ =============================================================================
+</code></pre>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ <a href="/tags#consensus101">consensus101</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Distributed+consensus+made+simple+%28for+real+this+time%21%29&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2021-09-30-distributed-consensus-made-simple-for-real-this-time%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2021-09-29-the-round-complexity-of-reliable-broadcast/" data-toggle="tooltip" data-placement="top" title="The round complexity of Reliable Broadcast">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2021-10-04-crusader-agreement-with-dollars-slash-leq-1-slash-3$-error-is-impossible-for-$n-slash-leq-3f$-if-the-adversary-can-simulate/" data-toggle="tooltip" data-placement="top" title="Crusader Agreement with $\leq 1/3$ Error is Impossible for $n\leq 3f$ if the Adversary can Simulate">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

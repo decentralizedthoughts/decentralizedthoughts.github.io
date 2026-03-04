@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Simplifying Raft with Chaining</title>
+ 
+ 
+ <meta name="author" content="Heidi Howard, Natacha Crooks, Ittai Abraham">
+ 
+ <meta name="description" content="Raft is a consensus algorithm for deciding a sequence of commands to execute on a replicated state machine. Raft is famed for its understandability (relative to other consensus algorithms such as Paxos) yet some aspects of the protocol still require careful treatment. For instance, determining when it is safe for a leader to commit commands from previous leaders or when it is safe for servers to delete or overwrite commands...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Simplifying Raft with Chaining">
+ <meta property="og:description" content="Raft is a consensus algorithm for deciding a sequence of commands to execute on a replicated state machine. Raft is famed for its understandability (relative to other consensus algorithms such as Paxos) yet some aspects of the protocol still require careful treatment. For instance, determining when it is safe for a leader to commit commands from previous leaders or when it is safe for servers to delete or overwrite commands...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Heidi Howard, Natacha Crooks, Ittai Abraham">
+ 
+ <meta property="og:article:published_time" content="2021-07-17T11:25:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2021-07-17-simplifying-raft-with-chaining/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2021-07-17-simplifying-raft-with-chaining/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Simplifying Raft with Chaining">
+ <meta property="twitter:description" content="Raft is a consensus algorithm for deciding a sequence of commands to execute on a replicated state machine. Raft is famed for its understandability (relative to other consensus algorithms such as Paxos) yet some aspects of the protocol still require careful treatment. For instance, determining when it is safe for a leader to commit commands from previous leaders or when it is safe for servers to delete or overwrite commands...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Simplifying Raft with Chaining</h1>
+ 
+ 
+ 
+ 
+ By <strong>Heidi Howard, Natacha Crooks, Ittai Abraham</strong><br>
+ 
+ <span class="post-meta">Posted on July 17, 2021</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p><a href="https://raft.github.io/raft.pdf">Raft</a> is a consensus algorithm for deciding a sequence of commands to execute on a <a href="https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/">replicated state machine</a>. Raft is famed for its understandability (relative to other consensus algorithms such as <a href="https://www.microsoft.com/en-us/research/uploads/prod/2016/12/The-Part-Time-Parliament.pdf">Paxos</a>) yet some aspects of the protocol still require careful treatment. For instance, determining when it is safe for a leader to commit commands from previous leaders or when it is safe for servers to delete or overwrite commands in their logs.</p>
+<p>Recently, byzantine agreement protocols, such as <a href="https://arxiv.org/abs/1807.04938">Tendermint</a>, <a href="https://arxiv.org/abs/1710.09437">Casper FFG</a>, and <a href="https://research.vmware.com/files/attachments/0/0/0/0/0/7/7/podc.pdf">HotStuff</a>, have utilized the abstraction of chains to decide a sequence of commands. This is instead of the usual approach of a mutable replicated log, as used by protocols such as <a href="https://lamport.azurewebsites.net/pubs/paxos-simple.pdf">Multi-Paxos</a>, Raft &amp; <a href="http://pmg.csail.mit.edu/papers/osdi99.pdf">PBFT</a>. Previously, we described a simple rotating leader consensus algorithm, <a href="https://decentralizedthoughts.github.io/2021-04-02-benign-hotstuff/">Benign HotStuff</a>, using this chain-based approach.</p>
+<p>In today’s post, we continue to examine chain-based approaches to consensus by describing the Raft protocol using chaining. We call the resulting protocol <strong>Chained Raft</strong> and it gives us a new (and arguably simpler) lens through which to view Raft and the problem of consensus more generally. Importantly, the switch from mutable to immutable state can make Raft easier to reason about. Reads within the protocol never become stale and we avoid the tricky question of when it is safe to overwrite state. <a href="https://queue.acm.org/detail.cfm?id=2884038">We are by no means the first to use immutability to reduce the complexity of distributed systems</a>.</p>
+<h3 id="background">Background</h3>
+<p>The aim of Raft and Chained Raft is to implement <a href="https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/">state machine replication</a>. Specifically, a set of servers each maintain a copy of a state machine and the consensus protocol must ensure that each state machine receives the same sequence of commands.</p>
+<p>Both algorithms take the same high-level approach of electing one server to be the <em>leader</em>. Clients send commands to the leader and the leader copies them onto a majority of servers using the AppendEntries RPC before committing them to its state machine and replying to the clients. When the leader fails, another server is elected to be the leader using the RequestVotes RPC. This process involves a majority of servers to ensure that the new leader has a copy of all commands executed by the previous leader.</p>
+<h3 id="state">State</h3>
+<p>Just like Raft, Chained Raft takes place over a series of <em>terms</em>, each with at most one leader. Each server stores its current term, which is initially 0 and increases over time.</p>
+<p>A <em>block</em> contains a command (in practice, a batch of commands) and a pointer to a previous block. A block in Chained Raft is analogous to a log entry in Raft. Note that unlike log entries in Raft, blocks in Chained Raft do not contain indexes or terms.</p>
+<p>Each server starts with an empty <em>genesis block</em> and adds blocks over time to form a <em>chain</em>. This chain is analogous to a log in Raft. Below is an example chain, it begins with the genesis block (shown in grey) which is followed by three blocks containing the commands A, B &amp; C (shown in blue).</p>
+<p><img src="https://i.imgur.com/h7zPoOi.png" alt="" /></p>
+<p>New blocks are created by the current leader, which then appends these blocks to the chains of its <em>followers</em> using the AppendEntries RPC. A leader can commit a command to its state machine only once it has ensured that all future leaders will do the same.</p>
+<p>Unlike Raft’s logs, these chains are immutable thus servers never delete or overwrite blocks. The chains may fork into multiple branches (and even sub-branches) when recovering from a leader failure, however, only one branch will ever be committed. The chain below has forked into two branches so only one of D or E &amp; F could be committed.</p>
+<p><img src="https://i.imgur.com/ghWvdSg.png" alt="" /></p>
+<p>The <em>head</em> of a chain is the most recently added block (aka the <em>tip</em>). This block will not be pointed to by any other block in the chain. In other words, the head is always one of the leaves of the “tree”. Initially, the head of each chain is the genesis block and the head is updated each time a block (or sequence of blocks) is added. The head is used by servers to track which of the chain branches is most up to date.</p>
+<p>Each server maintains a <em>commit marker</em>. The commit marker points to the highest block (furthest from the genesis block) in the chain which can safely be committed to a state machine. This is analogous to the commit index in Raft. The commit marker is initially set to the genesis block and progresses along the chain over time.</p>
+<p>All blocks on the path from the genesis block to the commit marker can be safely committed. In the example below, only command A can be committed.
+<img src="https://i.imgur.com/TpGPcOh.png" alt="" /></p>
+<p>However, in the following example commands A, B and C can be safely committed. 
+<img src="https://i.imgur.com/Hky5LdI.png" alt="" /></p>
+<p>If there is a path from a block $b$ to a block $b’$ then we say that block $b$ <em>extends</em> block $b’$. All blocks therefore extend the genesis block.</p>
+<p>As well as the current term, each server also stores the <em>last appended term</em>, which is the term the server was in when it last appended a block to its chain. To put it another way, this was the term when the current head was appended. The last appended term is initially 0 and increases over time. The last appended term is always equal to or less than the current term. The last appended term in Chained Raft serves the same function as the last log term in Raft.</p>
+<h3 id="adding-new-blocks">Adding new blocks</h3>
+<p>A leader commits a command by first creating a new block containing the command and a pointer to its current head, the newly created block is added to the leader’s chain and the head is updated to the new block. The leader then replicates this block to its followers using the <em>AppendEntries</em> RPC (as in Raft). Note that the log entries in Raft’s AppendEntries RPC are replaced by blocks. The previous log index and previous log term in Raft’s AppendEntries RPC can be omitted as block pointers now serve the same purpose.</p>
+<p>After checking the term of the AppendEntries RPC, a follower will add the received blocks to its chain provided it already has the block which is pointed to by the first new block. Otherwise, the follower will reply with false and the leader will retry the AppendEntries RPC, this time with the previous block too. This process will continue until the follower successfully adds the new blocks.</p>
+<p>Whenever a follower adds new blocks to a chain, its head is updated accordingly. If this is the first time this follower has appended blocks in this term then it will also update the last appended term. The next index and match index used by leaders in Raft to track the state of the follower’s logs is replaced with the analogous <em>next markers</em> and <em>match markers</em>. Once the leader learns that the majority of servers have appended a block, the commit marker can be updated. The updated commit marker is included in subsequent AppendEntries RPCs.</p>
+<p>The example below shows the chains of three servers. The first server is a leader which has added a new block (command C) but has not yet sent the AppendEntries RPC to its followers.
+<img src="https://i.imgur.com/9M1cNfn.png" alt="" /></p>
+<p>Below shows the same example after the leader has completed the AppendEntries RPC with the followers. Both followers now have a copy of command C and the leader has updated its commit marker as a result. The followers have also learned that the previous block (command B) can be committed as the leader included its commit marker in the AppendEntries RPC.
+<img src="https://i.imgur.com/MPqjfnU.png" alt="" /></p>
+<h3 id="recovering-from-leader-failure">Recovering from leader failure</h3>
+<p>Leader election in Chained Raft works much the same as it does in Raft. When a follower becomes a <em>candidate</em>, it votes for itself and sends a <em>RequestVote</em> RPC to all servers. Instead of including the last log term and last log index, the RequestVote RPC includes the candidate’s head and last appended term.</p>
+<p>Like Raft, a follower votes for a candidate only if the follower has not already voted for another candidate in this term and the candidate’s chain (or log) is at least as up to date as the follower’s. A candidate’s chain is at least as up to date, provided either:</p>
+<ul>
+ <li>the candidate’s last appended term is greater than the follower’s last appended term or</li>
+ <li>the candidate’s last appended term is equal to the follower’s last appended term and either:
+ <ul>
+ <li>the candidate’s and follower’s heads are the same or</li>
+ <li>the candidate’s head extends the follower’s head.</li>
+ </ul>
+ </li>
+</ul>
+<p>Once a candidate receives votes from a majority of followers then it becomes a leader.</p>
+<p>The example below shows the state of three servers. Only the first and second servers could become leaders. The first server could receive votes from any server. The second server could receive a vote from the third server as it has a greater last appended term but it will not receive a vote from the first server. Neither the first or second server will vote for the third server.
+<img src="https://i.imgur.com/61aimNe.png" alt="" /></p>
+<p>Consider what might happen next if the second server becomes the leader. The new leader will add the next block (command D) to its head (command B) and replicate it using the AppendEntries RPC. As shown below this would create a fork on the first server.
+<img src="https://i.imgur.com/E4oB6h3.png" alt="" /></p>
+<p>A newly elected leader may have uncommitted blocks from the previous leaders. In this case, it replicates them to the followers using the AppendEntries RPC when it adds the first new block in the current term. As per usual in Raft, once this new block has been replicated onto a majority of servers, the leader can update its commit marker and thus commits the blocks from previous leaders as well. Notice that a leader will therefore always send AppendEntries RPCs containing at least one new block from its current term.</p>
+<h3 id="garbage-collecting-forks">Garbage collecting forks</h3>
+<p>The chain on each server grows over time. In practice, once a commit marker passes a fork in the chain, the other branches can be safely garbage collected. These branches, which should be very rare, represent the “roads not taken” by Chained Raft. These forks only occur when a leader fails and the new leader’s chain does not contain all of the blocks added by the failed leader. It is important to note that these “missed blocks” cannot have been committed by a previous leader before it failed.</p>
+<p>Consider the example below. Before the commit marker passes the fork, the chain includes two branches, command D and commands E/F. Later, once the commit marker has been updated to command E then the branch containing command D can be safely deleted.</p>
+<p><img src="https://i.imgur.com/XEwlRpB.png" alt="" /></p>
+<h3 id="safety">Safety</h3>
+<p>The <a href="https://raft.github.io/raft.pdf">Raft paper</a> (Figure 3) identifies five properties which are useful for proving the safety of Raft. The analogous properties for Chained Raft are below:</p>
+<p><strong>Election Safety: at most one leader can be elected in a given term.</strong></p>
+<p>This property is exactly the same in Raft and Chained Raft.</p>
+<p><strong>Leader Append-Only: A leader only adds blocks which extend its head.</strong></p>
+<p>In other words, leaders only move their heads forwards along a chain. Note that this is slightly different from Raft’s leader append-only which states that “a leader never overwrites or deletes entries in its log; it only appends new entries.”. In Chained Raft, all servers only append new blocks.</p>
+<p><strong>Log Matching property: If two chains contain the same block then the path from the genesis block to the block on both chains will be the same.</strong></p>
+<p>This is achieved by the requirement that servers only append a new block if they already have the block pointed to by the new block.</p>
+<p><strong>Leader Completeness: If a block is committed in a given term then the heads of the leaders for all greater terms will either be the block or will extend the block.</strong></p>
+<p>Consider a block $b$ that was first committed by the leader in term $t$. At least a majority of servers will at some point have had last appended terms of $t$ and heads which were $b$ or which extended $b$.</p>
+<p>We will use a proof by induction over the terms after $t$ to show leader completeness.</p>
+<p><strong>Base case</strong> Consider what happens in the next term, $t+1$. If there is a leader in term $t+1$ then it received votes from a majority of servers. At least one server with a last appended term of $t$ and a head which is also either $b$ or extends $b$ must have voted for the leader. 
+Since the leader cannot have a last appended term greater than $t$, the leader must have had the same last appended term ($t$) and a head which is equal to the server’s head or extends it. 
+Therefore, if term $t+1$ had a leader then $b$ will be present in the path from the genesis block to the leader’s head.</p>
+<p><strong>Inductive case</strong> Consider what happens in some term $t+k$. We assume that leader completeness holds up to term $t+k-1$. If there is a leader in term $t+k$ then it received votes from a majority of servers. At least one server which once had a last appended term $t$ and a head which is also either $b$ or extends $b$ must vote for the leader. Any leaders since will have added blocks that extend $b$. Therefore if the term $t+k$ has a leader then the leader’s head will be $b$ or extend it.</p>
+<p><strong>State Machine Safety: Each copy of the replicated state machine receives the same commands in the same order.</strong></p>
+<p>Combining the previous properties and the fact that servers only commit commands when they are instructed to do so by the leader, gives us state machine safety.</p>
+<h3 id="liveness">Liveness</h3>
+<p>Like Raft, Chained Raft guarantees liveness <a href="https://decentralizedthoughts.github.io/2019-09-13-flavours-of-partial-synchrony/">after synchrony</a> provided at least a majority of servers are up and communicating reliably <a href="https://decentralizedthoughts.github.io/2020-12-12-raft-liveness-full-omission/">(caveats apply)</a>.</p>
+<p>The proof of liveness which we will skip for now is much the same for Raft and Chained Raft, however, the following idea is useful to note. From the leader append-only property we know that if two servers have the same last appended term then their heads are either the same or one head extends the other. This means that for any pair of servers at least one server could vote for the other and thus at least one server in any majority could be elected leader.</p>
+<h3 id="comparison-to-benign-hotstuff">Comparison to Benign Hotstuff</h3>
+<p>In an <a href="https://decentralizedthoughts.github.io/2021-04-02-benign-hotstuff/">earlier post</a>, we described another non-byzantine chain-based consensus algorithm called Benign HotStuff.</p>
+<p>Benign HotStuff is a rotating leader protocol, where each leader (aka a <em>primary</em> in Benign HotStuff) adds one block before handing over leadership to the next server. In contrast, Chained Raft is a stable leader protocol, where a leader adds blocks until it fails (or at least until another server believes it has failed).</p>
+<p>In benign HotStuff, the role of leader is rotated between servers in a round-robin fashion, whereas in Raft and Chained Raft, servers must gain votes from a majority of servers before becoming a leader.</p>
+<p>Benign Hotstuff takes the <a href="https://dl.acm.org/doi/abs/10.1145/3380787.3393681">“Raft-style” approach to consensus</a> of assigning terms to blocks for their lifetime and thus blocks are not “promoted” to greater terms by subsequent leaders, as is the case with “Paxos-style” consensus. Chained Raft avoids the question of what term to assign to blocks from previous terms by storing only the term of the head (using the last appended term).</p>
+<p>Like Benign HotStuff, Chained Raft requires the leader to copy uncommitted blocks (called <em>state transfer</em> in Benign Hotstuff) to its followers alongside adding a new block in the current term. This restriction helps to simplify both algorithms as it means that the most recently added block, the head, is always from the latest leader.</p>
+<p>Note that the propose message in Benign HotStuff is analogous to the AppendEntries RPC request in Chained Raft and the vote message in Benign HotStuff is analogous to a combined AppendEntries RPC response and RequestVote RPC response.</p>
+<p>Benign HotStuff stores a term with every block whereas Chained Raft only tracks the term of the current head (using the last appended term).</p>
+<h3 id="conclusion">Conclusion</h3>
+<p>We have described Raft using append-only chains instead of mutable logs. Interestingly, Chained Raft and Raft are very similar protocols. Raft can be expressed naturally using chains as it already decides commands strictly in-order (unlike some other consensus protocols such as <a href="https://lamport.azurewebsites.net/pubs/paxos-simple.pdf">Multi-Paxos</a>).</p>
+<p>So, what do you think? Is Chained Raft simpler than the original Raft protocol? Would you be interested in seeing other log-based consensus algorithms such as <a href="https://lamport.azurewebsites.net/pubs/paxos-simple.pdf">Multi-Paxos</a> or <a href="https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/tr-2005-112.pdf">Fast Paxos</a> described using chains? Let us know your thoughts on <a href="https://twitter.com/heidiann360/status/1417516761180786698?s=20">twitter</a>.</p>
+<p><strong>Acknowledgment.</strong> We would like to thank Kartik Nayak for his feedback on this blog post.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#SMR">SMR</a>
+ 
+ <a href="/tags#crash">crash</a>
+ 
+ <a href="/tags#omission">omission</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Simplifying+Raft+with+Chaining&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2021-07-17-simplifying-raft-with-chaining%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2021-06-14-neither-non-equivocation-nor-transferability-alone-is-enough-for-tolerating-minority-corruptions-in-asynchrony/" data-toggle="tooltip" data-placement="top" title="Neither Non-equivocation nor Transferability alone is enough for tolerating minority corruptions in asynchrony">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2021-08-29-the-private-set-intersection-psi-protocol-of-the-apple-csam-detection-system/" data-toggle="tooltip" data-placement="top" title="The Private Set Intersection (PSI) Protocol of the Apple CSAM Detection System">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

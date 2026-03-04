@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>A Simple and Succinct Zero Knowledge Proof</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham, Alin Tomescu">
+ 
+ <meta name="description" content="There is a popular belief that succinct proofs and zero-knowledge proofs are a type of moon math. In this post, our goal is to present a simple proof system that can provide an introduction and intuition to this space. Perhaps surprisingly, the only tool we will use is the Theorem that non-trivial degree-at-most-$d$ polynomials over a field have at most $d$ roots. Start with Succinctness, add Zero Knowledge later Traditional...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="A Simple and Succinct Zero Knowledge Proof">
+ <meta property="og:description" content="There is a popular belief that succinct proofs and zero-knowledge proofs are a type of moon math. In this post, our goal is to present a simple proof system that can provide an introduction and intuition to this space. Perhaps surprisingly, the only tool we will use is the Theorem that non-trivial degree-at-most-$d$ polynomials over a field have at most $d$ roots. Start with Succinctness, add Zero Knowledge later Traditional...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham, Alin Tomescu">
+ 
+ <meta property="og:article:published_time" content="2020-12-08T13:37:00-05:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2020-12-08-a-simple-and-succinct-zero-knowledge-proof/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2020-12-08-a-simple-and-succinct-zero-knowledge-proof/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="A Simple and Succinct Zero Knowledge Proof">
+ <meta property="twitter:description" content="There is a popular belief that succinct proofs and zero-knowledge proofs are a type of moon math. In this post, our goal is to present a simple proof system that can provide an introduction and intuition to this space. Perhaps surprisingly, the only tool we will use is the Theorem that non-trivial degree-at-most-$d$ polynomials over a field have at most $d$ roots. Start with Succinctness, add Zero Knowledge later Traditional...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>A Simple and Succinct Zero Knowledge Proof</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham, Alin Tomescu</strong><br>
+ 
+ <span class="post-meta">Posted on December 8, 2020</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>There is a popular belief that <strong>succinct proofs</strong> and <strong>zero-knowledge proofs</strong> are a type of <a href="https://medium.com/@VitalikButerin/quadratic-arithmetic-programs-from-zero-to-hero-f6d558cea649">moon math</a>. In this post, our goal is to present a simple proof system that can provide an introduction and intuition to this space. Perhaps surprisingly, the only tool we will use is the <a href="/2020-07-17-the-marvels-of-polynomials-over-a-field">Theorem</a> that non-trivial degree-at-most-$d$ polynomials over a field have at most $d$ roots.</p>
+<h3 id="start-with-succinctness-add-zero-knowledge-later">Start with Succinctness, add Zero Knowledge later</h3>
+<p>Traditional Computer Science Curriculum typically starts with a zero knowledge scheme based on proving <a href="https://crypto.stanford.edu/cs355/18sp/lec3.pdf">3-colorability of a graph</a> (<a href="http://web.mit.edu/~ezyang/Public/graph/svg.html">MIT demo</a> or <a href="https://www.cs.cmu.edu/~goyal/s18/15503/scribe_notes/lecture23.pdf">Vipul Goyal</a>), or on proving the existence of a Hamiltonian cycle (see <a href="https://www.boazbarak.org/cs127spring16/chap14_zero_knowledge.html">Boaz Barak</a>, or <a href="https://people.eecs.berkeley.edu/~sanjamg/classes/cs294-spring16/scribes/7.pdf">Sanjam Garg</a>). The wonderful <a href="https://cyber.biu.ac.il/event/the-9th-biu-winter-school-on-cryptography/">9th BIU Winter School on Cryptography and Zero Knowledge</a> also takes a similar approach.</p>
+<p>The advantage of this approach is that it immediately gives very general Zero Knowledge results via <a href="https://en.wikipedia.org/wiki/Polynomial-time_reduction">Karp-based reductions</a> to any problem in NP. 
+This is because Colorability, Hamiltonicity and Satisfiability are all <a href="https://en.wikipedia.org/wiki/NP-completeness">NP-complete</a> problems.</p>
+<p>Succinct proofs (and <em>arguments</em>, but will ignore the distinction here) are often taught at a <a href="https://crypto.stanford.edu/cs355/19sp/lec17.pdf">later phase</a> and in connection to the <a href="https://en.wikipedia.org/wiki/PCP_theorem">PCP</a> theorem. Alessandro Chiesa’s course on <a href="https://people.eecs.berkeley.edu/~alexch/classes/CS294-F2020.html">Foundations of Probabilistic Proofs</a> is a great resource.</p>
+<p>In this post, we take a different approach whose goal is to provide a simple and self-contained construction that can provide intuition for many of the constructions that are used in practice.
+We start with a seemingly useless problem, one that is not NP-complete (in fact, solvable in polynomial time). We provide a solution in a non-standard <em>virtual cloud</em> communication model. Perhaps surprisingly, we will show in later posts that this simple problem is the basis of more general results in this area.</p>
+<h3 id="the-setting">The setting</h3>
+<p>We will assume two parties: a <em>Prover</em>, and a <em>Verifier</em>.</p>
+<p>The Prover has an input $S=\langle s_0,\dots,s_{d-1}\rangle$ which is a vector of say $d=10^{10}$ field elements (for each $i$, $s_i \in \mathbb{F}_p$). It will be important to assume that $p$ is large relative to $d$ (say $p \approx 2^{256}$). All the Prover wants to do is prove to the Verifier this simple <em>boolean</em> fact:</p>
+<blockquote>
+ <p>Is $S$ the all-zero vector or not?</p>
+</blockquote>
+<p>We will assume the only way the Prover and Verifier can interact is via a special communication channel we will call the <em>virtual cloud</em>:</p>
+<ol>
+ <li>The Prover has to <em>commit</em> to its input $S$ by uploading a polynomial $g(x)$ such that
+ <ul>
+ <li>$g(x)$ is of degree at most $d-1$.</li>
+ <li>for all $0\leq i \leq d-1$ we have $g(i) = s_i$.</li>
+ <li>The prover creates $g$ via <a href="https://decentralizedthoughts.github.io/2020-07-17-polynomial-secret-sharing-and-the-lagrange-basis/">Lagrange interpolation</a> of $S$:
+$g(x) = \sum_{i\in[0,d-1]} s_i \prod_{j\in[0, d-1], j\ne i} \frac{x - j}{i - j}$</li>
+ </ul>
+ </li>
+ <li>The Verifier is allowed to <em>query</em> the virtual cloud by sending it an element $r$ and the virtual cloud responds back with $g(r)$, the evaluation of $r$ on $g$.</li>
+</ol>
+<h3 id="a-non-succinct-solution-with-no-error">A non-succinct solution, with no error</h3>
+<p>How can the Verifier be <em>sure</em> that $S$ is all-zero and hence $g$ is the zero (trivial) polynomial?</p>
+<p>When $S$ is all-zero then $g$ is the (trivial) zero polynomial. But if $S$ is not all-zero then the <a href="https://decentralizedthoughts.github.io/2020-07-17-the-marvels-of-polynomials-over-a-field/">fundamental theorem of arithmetic adapted to finite field polynomials</a> says that $g$ has at most $d-1$ roots. So the verifier has a way to distinguish: it can query $d=10^{10}$ distinct points and check if they are all zero.</p>
+<p>This solution is not succinct as it requires the Verifier to send $d$ queries. Can the Verifier use fewer queries? Can the Verifier query just one point?</p>
+<h3 id="a-succinct-solution-with-small-error">A succinct solution, with small error</h3>
+<p>We will now use the fact that we are working over the field $\mathbb{F}_p$ where $p\gg d$. By now, it should be quite clear how the Verifier can get a succinct proof that $S$ is all-zero or not.</p>
+<blockquote>
+ <p>The Verifier chooses a uniformly random element $r \in_R \mathbb{F}_p$ and queries the virtual cloud just once with $r$:</p>
+</blockquote>
+<ol>
+ <li>If $g(r) \neq 0$, then $g$ is not the trivial polynomial, so $S$ is not all-zeros.</li>
+ <li>What if $g(r)=0$? Then, we use the <a href="/2020-07-17-the-marvels-of-polynomials-over-a-field">Theorem</a> that, if $g$ is non-zero, then it has at most $d-1$ roots to say: If $r\in_R \mathbb{F_p}$ and $g(r)=0$, then the probability that $g$ is non-zero is at most $(d-1)/p$ (where $p$ is the size of the field).</li>
+</ol>
+<p>We can choose $p\gg d$, so the error probability is as low as we want. If $g(r)=0$, then the Verifier declares that $S$ is all-zero.</p>
+<p>That’s it! This is a very succinct proof: instead of querying $d=10^{10}$ points, the Verifier can succinctly query just one (local) point and learn about a (global) property $S$ (with a small error probability).</p>
+<p>At the core of this succinct proof is the power of randomization: by accepting a small probability of error, it is possible to prove $g(r) \neq 0$ using one query instead of $d$ queries. Quite remarkably, this mathematical fact can be boosted to much more general succinct proofs (with small error).</p>
+<h3 id="adding-zero-knowledge">Adding Zero Knowledge</h3>
+<p>The Prover managed to prove that $S$ is not zero using a succinct proof. Clearly, if $g=0$ then we know everything about $S$. However, when $g\neq 0$, what if we would also want the Verifier to learn nothing about $S$ other than that it’s not all-zero?</p>
+<p>The Verifier can query for some $0 \leq i \leq d-1$, receive back $g(i)=s_i$, and hence learn some $s_i \in S$, so the first thing we need to do is restrict the Verifier to query a random element $r$ that is outside of $\{0,\dots,d-1\}$.</p>
+<p>Even that may leak information, for example, for $d=2$, the vector $S$ is of size $2$ and $g$ is a degree one polynomial (such that $g(0)=s_0$ and $g(1)=s_1)$. If the Verifier queries, say $r=10$, it learns the value of $g(10)$. Since $g$ has degree 1, the Verifier has learned some linear relation between $s_0$ and $s_1$! As a concrete example, if $g(10)=1$ then the Verifier has learned that it cannot be the case that $s_0=1$ and $s_1 \neq 1$.</p>
+<p>To make sure the adversary can learn nothing about $S$, the Prover extends its vector $S$ with one more field element $t$. Given $S$, let $S’=\langle s_0,\dots,s_{d-1}, t\rangle $ be the extended vector. If $S$ is the all-zero vector, then the Prover sets $t=0$. Otherwise, the Prover chooses $t$ uniformly at random. So instead of the polynomial $g$ of degree $d-1$, the Prover now commits to a polynomial $g’$ of degree $d$ such that for all $0\leq i \leq d-1$, $g’(i)=s_i$ and $g’(d)=t$. Using an argument that is similar to the one in <a href="/2020-07-17-polynomial-secret-sharing-and-the-lagrange-basis">our secret sharing post</a>, it can be seen that for any non-zero vector $S$, given a uniformly distributed $t$ in $\mathbb{F}_p$, the Verifier’s view, $g’(r)$, for any $r&gt;d$, is uniformly distributed in $\mathbb{F}_p$. Hence the only information the Verifier gains from the protocol, the Verifier could have simulated locally without any interaction. So the Verifier gains no information at all.</p>
+<p>In our example above, for $|S|=2$, $g’$ will now be a degree two polynomial, such that $g’(0)=s_0, g’(1)=s_1, g’(2)=t$ where $t$ is uniform.
+Since for any $s_0$ and $s_1$, and for any $r&gt;2$, the distribution of $g’(r)$ is uniform, the Verifier learns nothing about $S$.</p>
+<p>The Verifier queries a random point $r$ uniformly in $[d+1,p-1]$. If $g(r) \neq 0$ then the Verifier has a proof that $S$ is not the all-zero vector. If $g(r)=0$ then the Verifier has a proof that $S$ is most likely the all-zero vector. The probability of error is at most $d/(p-(d+1))$ (if $S$ is not the all zero-vector, then $g’$ has at most $d$ roots and the Verifier samples $r$ uniformly from $p-(d+1)$ elements).</p>
+<p>We have shown how the Verifier obtains a succinct zero-knowledge proof!</p>
+<h3 id="removing-the-strange-virtual-cloud-communication-channel">Removing the strange virtual cloud communication channel</h3>
+<p>A major complaint against this scheme is the strange communication mechanism.</p>
+<ol>
+ <li>First, it required the Prover to upload the polynomial $g$. This naively seems to be a non-succinct operation and requires some trusted cloud to store a lot of information. Luckily, we will show in a later post how cryptographic tools can implement this succinctly over a standard communication channel.</li>
+ <li>Secondly, it required the virtual cloud to respond to a query $r$ with the value $g(r)$. This may seem to require a trusted computing cloud. Luckily, again, we will show in a later post how cryptographic tools can implement this functionality over a standard communication channel.</li>
+ <li>Finally, recall that we needed $d\ll p$. There is sometimes a challenge in forcing the Prover to use a degree-at-most-$d$ polynomial and not one of higher degree. Again we will see techniques in later posts to force the Prover to use a low degree polynomial.</li>
+</ol>
+<h3 id="acknowledgments">Acknowledgments</h3>
+<p>We thank <a href="http://rgrig.appspot.com/">Radu Grigore</a> for pointing out typos and helping improve this post.</p>
+<p>Please answer/discuss/comment/ask on <a href="https://twitter.com/ittaia/status/1336363509492424704?s=20">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#cryptography">cryptography</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=A+Simple+and+Succinct+Zero+Knowledge+Proof&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2020-12-08-a-simple-and-succinct-zero-knowledge-proof%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2020-11-30-the-lock-commit-paradigm-multi-shot-and-mixed-faults/" data-toggle="tooltip" data-placement="top" title="The Lock-Commit Paradigm: Multi-shot and Mixed Faults">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2020-12-12-raft-liveness-full-omission/" data-toggle="tooltip" data-placement="top" title="Raft does not Guarantee Liveness in the face of Network Faults">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

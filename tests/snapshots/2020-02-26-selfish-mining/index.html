@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Blockchain Selfish Mining</title>
+ 
+ 
+ <meta name="author" content="Ittay Eyal">
+ 
+ <meta name="description" content="Proof of Work (PoW) Blockchains implement a form of State Machine Replication (SMR). Unlike classical SMR protocols, they are open, i.e., anyone can join the system, and the system incentivizes participants, called miners, to follow the protocol. Therefore, unlike classical SMR protocols, reasoning about blockchain security relies not only on bounding the number of malicious participants. One should crucially ask whether miners are indeed incentivized to follow the prescribed protocol....">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Blockchain Selfish Mining">
+ <meta property="og:description" content="Proof of Work (PoW) Blockchains implement a form of State Machine Replication (SMR). Unlike classical SMR protocols, they are open, i.e., anyone can join the system, and the system incentivizes participants, called miners, to follow the protocol. Therefore, unlike classical SMR protocols, reasoning about blockchain security relies not only on bounding the number of malicious participants. One should crucially ask whether miners are indeed incentivized to follow the prescribed protocol....">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittay Eyal">
+ 
+ <meta property="og:article:published_time" content="2020-02-26T10:00:00-05:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2020-02-26-selfish-mining/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2020-02-26-selfish-mining/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Blockchain Selfish Mining">
+ <meta property="twitter:description" content="Proof of Work (PoW) Blockchains implement a form of State Machine Replication (SMR). Unlike classical SMR protocols, they are open, i.e., anyone can join the system, and the system incentivizes participants, called miners, to follow the protocol. Therefore, unlike classical SMR protocols, reasoning about blockchain security relies not only on bounding the number of malicious participants. One should crucially ask whether miners are indeed incentivized to follow the prescribed protocol....">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Blockchain Selfish Mining</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittay Eyal</strong><br>
+ 
+ <span class="post-meta">Posted on February 26, 2020</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>Proof of Work (PoW) Blockchains implement a form of State Machine Replication (SMR). Unlike classical SMR protocols, they are <strong>open</strong>, i.e., anyone can join the system, and the system incentivizes participants, called <strong>miners</strong>, to follow the protocol. Therefore, unlike classical SMR protocols, reasoning about blockchain security relies not only on bounding the number of malicious participants. One should crucially ask whether miners are indeed <em>incentivized</em> to follow the prescribed protocol. This is the topic of this post.</p>
+<p>To make things concrete, we’ll consider Nakamoto’s Bitcoin protocol.
+<a href="https://decentralizedthoughts.github.io/about-ling/">Ling</a> already provided <a href="https://decentralizedthoughts.github.io/2019-11-29-Analysis-Nakamoto/">background</a> and an analysis of security against malicious adversaries. For our analysis, we’ll describe the system as a <em>game</em> played among miners.</p>
+<h2 id="the-game">The Game</h2>
+<p>The players are the miners who generate blocks. The game proceeds in rounds, where in each round one miner generates a block and any miner can publish blocks it has generated. Publication is done with synchronous broadcast, so all miners receive messages published in the previous round.</p>
+<p>This is of course a simplification, e.g., it ignores the slow variation in the total mining power in the system and forks that happen accidentally, which are rare but still occur. Nevertheless, this model is sufficient as a first order approximation of the system.</p>
+<p>The prescribed protocol is for each miner to extend the longest chain, or the one it heard of first, in case of a fork where two branches have the same length.</p>
+<p>Each player in the game strives to maximize her revenue – this is her <strong>utility function</strong>. Specifically, we consider an infinite-horizon game, that is, the revenue of a miner is her average ratio of blocks in the main chain as the game length tends to infinity. This represents the reward in terms of cryptocurrency granted to miners for each block they generate. Note that blocks that end up outside the main chain (pruned) do not count towards the miner’s revenue.</p>
+<h2 id="important-observation">Important observation</h2>
+<p>The ratio of blocks on the main chain is indeed an approximation of the revenue in real terms.</p>
+<p>Suppose the total mining power in the system is static with blocks generated in 10 minute intervals and the attack starts right after a difficulty adjustment. Consider a strategy that results in a consistent rate of blocks that are pruned, say 20% of the blocks generated by all miners. So blocks are still generated every 10 minutes in the system, but only 80% are in the main chain, making its block interval 12.5 minutes instead of 10. The Bitcoin blockchain updates its difficulty once every 2016 blocks, which is going to take longer than usual ($12.5 \times 2016$ minutes instead of $10 \times 2016$ minutes).</p>
+<p>Once the difficulty adjustment occurs, the difficulty is reduced such that <strong>the main chain block interval becomes 10 minutes again</strong>. This means the total block generation rate in the system is now higher, with an interval of only 8 minutes.</p>
+<p>So a miner with a ratio $\alpha$ of the total mining power and a ratio $\alpha’ &gt; \alpha$ of the blocks on the main chain is going to get a revenue proportional to $\alpha’$ per hour (instead of proportional to $\alpha$ per hour).</p>
+<h2 id="selfish-mining-algorithm">Selfish Mining Algorithm</h2>
+<p><em>Selfish Mining</em> (SM) is a strategic mining algorithm that demonstrates that the prescribed protocol is <strong>not</strong> an equilibrium for minority miners in general. Let’s see the mechanics of Selfish Mining, and then discuss when and why it works.</p>
+<p>Initially, the selfish miner tries to extend the longest chain, as she’s supposed to. However, once she generated a block, she keeps it secret rather than publishing it, and then tries to extend it further, forming a <strong>secret branch</strong>.</p>
+<p align="center">
+<img src="/uploads/sm-create-secret-branch.png" width="512" title="Create secret branch" />
+</p>
+<p>Meanwhile, the other miners extend the public chain, which will eventually become longer (with probability 1) since they are the majority. The selfish miner continues to extend her secret branch until the public chain is one step behind. Then she publishes her secret chain.</p>
+<p align="center">
+<img src="/uploads/sm-publish-in-time.png" width="512" title="Publish in time" />
+</p>
+<p>Since the secret chain is longer, the other parties consider it the main chain, so now everyone is following the selfish miner’s blocks. The blocks generated by the other miners are thus pruned - ignored and confer no reward to their creators.</p>
+<p>But there is a caveat to this strategy - when first forming her secret chain, the selfish miner takes a risk. If she generated the first secret block and then another miner generated a block, she cannot publish her secret block and have the longest chain; instead, it will be a race between two branches of length one.</p>
+<p align="center">
+<img src="/uploads/sm-race.png" width="512" title="Race" />
+</p>
+<p>The selfish miner will try to extend her own branch, and for simplicity let us assume that all other miners will try to extend the other branch. If she wins she publishes her block, which is the longest chain, and the attack restarts at the end of this longest chain. If the other miners win, the selfish miner is at a disadvantage (shorter branch). In this case she gives up the attack attempt and starts again. She gains no revenue from her pruned formerly-secret block.</p>
+<h2 id="selfish-mining-analysis">Selfish Mining Analysis</h2>
+<p>At first glance it might seem that the attack would not work - the minority miner is going to lose more races that she wins. However, a careful analysis shows this is not the case in general. The game can be naturally described as a Markov Chain. By accounting for each block from the selfish miner and from the other miners, we can calculate the ratio of the selfish miner’s blocks and her revenue out of all blocks as a function of her size.</p>
+<p align="center">
+<img src="/uploads/sm-revenue.png" width="512" title="Selfish Mining revenue" />
+</p>
+<p>We see that a selfish miner larger than 1/3 of the mining power would increase her revenue by deviating from the prescribed protocol and performing Selfish Mining.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>The analysis has demonstrated that Selfish Mining outperforms honest mining when the selfish miner is larger than 1/3, but this is an optimistic bound.
+For a deeper dive that includes weaker models and a patch to strengthen the protocol, take a look at the Selfish Mining paper in <a href="https://webee.technion.ac.il/people/ittay/publications/btcProcFC.pdf">Financial Crypto, 2013</a> and in the <a href="https://dl.acm.org/doi/10.1145/3212998">Communications of the ACM, 2018</a>.</p>
+<p><a href="https://link.springer.com/chapter/10.1007/978-3-662-54970-4_30">Subsequent</a> 
+<a href="https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=7467362">work</a>, 
+including <a href="https://arxiv.org/pdf/1912.01798.pdf">recent results</a>, use Markov Decision Processes to provide thresholds for miners under which there is no better strategy than honest mining.</p>
+<hr />
+<p><strong>Acknowledgment.</strong> Thanks to Ittai Abraham for helpful feedback on this post.</p>
+<p>Please leave comments on <a href="https://twitter.com/ittayeyal/status/1232652755921260544">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ <a href="/tags#incentives">incentives</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Blockchain+Selfish+Mining&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2020-02-26-selfish-mining%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2019-12-22-dolev-strong/" data-toggle="tooltip" data-placement="top" title="Dolev-Strong Authenticated Broadcast">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2020-03-03-range-proofs-from-polynomial-commitments-reexplained/" data-toggle="tooltip" data-placement="top" title="Range Proofs from Polynomial Commitments, Re-explained">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

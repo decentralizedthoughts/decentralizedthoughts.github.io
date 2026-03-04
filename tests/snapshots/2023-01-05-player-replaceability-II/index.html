@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Player Replaceability - Towards Adaptive Security and Sub-quadratic Communication Simultaneously (Part II)</title>
+ 
+ 
+ <meta name="author" content="Kartik Nayak">
+ 
+ <meta name="description" content="This is part II of a two-part post on player-replaceability. Part I can be found here. Towards Adaptive Security for a Committee-based Protocol The protocol described in the previous post achieved sub-quadratic communication. At a high-level, the key idea is to randomly sample an appropriate number parties in a committee, run consensus among the committee members, and disseminate the result to all other parties. It works well so far as...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Player Replaceability - Towards Adaptive Security and Sub-quadratic Communication Simultaneously (Part II)">
+ <meta property="og:description" content="This is part II of a two-part post on player-replaceability. Part I can be found here. Towards Adaptive Security for a Committee-based Protocol The protocol described in the previous post achieved sub-quadratic communication. At a high-level, the key idea is to randomly sample an appropriate number parties in a committee, run consensus among the committee members, and disseminate the result to all other parties. It works well so far as...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Kartik Nayak">
+ 
+ <meta property="og:article:published_time" content="2023-01-05T00:00:00-05:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2023-01-05-player-replaceability-II/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2023-01-05-player-replaceability-II/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Player Replaceability - Towards Adaptive Security and Sub-quadratic Communication Simultaneously (Part II)">
+ <meta property="twitter:description" content="This is part II of a two-part post on player-replaceability. Part I can be found here. Towards Adaptive Security for a Committee-based Protocol The protocol described in the previous post achieved sub-quadratic communication. At a high-level, the key idea is to randomly sample an appropriate number parties in a committee, run consensus among the committee members, and disseminate the result to all other parties. It works well so far as...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Player Replaceability - Towards Adaptive Security and Sub-quadratic Communication Simultaneously (Part II)</h1>
+ 
+ 
+ 
+ 
+ By <strong>Kartik Nayak</strong><br>
+ 
+ <span class="post-meta">Posted on January 5, 2023</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>This is part II of a two-part post on player-replaceability. Part I can be found <a href="https://decentralizedthoughts.github.io/2023-01-05-player-replaceability-I/">here</a>.</p>
+<h3 id="towards-adaptive-security-for-a-committee-based-protocol">Towards Adaptive Security for a Committee-based Protocol</h3>
+<p>The protocol described in the previous post achieved sub-quadratic communication. At a high-level, the key idea is to randomly sample an appropriate number parties in a committee, run consensus among the committee members, and disseminate the result to all other parties. It works well so far as the adversary is <a href="https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/">static</a>. However, since the committee size $\kappa$ is typically much smaller than $n$, an adaptive adversary can easily corrupt the entire committee after it is elected and consequently we lose all security properties. In fact, this would be a real concern in practice since an adversary can simply resort to bribing a small number of committee members, which is much easier than bribing up to $n/3$ parties.</p>
+<p>Observe that if we can secretly generate a new committee for every round of the protocol uniformly at random, then we can also achieve the <em>ephemerality</em> property described earlier. Here, by <em>secretly</em>, we mean that before a committee member sends a message, only the member knows that it is in the committee. We must also stress that the committee should change after <em>every round</em>; thus, once a party is elected, it is only required to send a <em>single</em> message. Consequently, even if an adversary corrupts this party after it has sent the message, it may not be helpful since subsequent round elections are independent of previous rounds (some subtleties discussed later).</p>
+<p>Thus, the key challenge is to secretly and verifiably elect this committee uniformly at random. <a href="https://dash.harvard.edu/bitstream/handle/1/5028196/Vadhan_VerifRandomFunction.pdf">Verifiable random functions</a> (or VRFs) help us achieve this property. At a high-level, a VRF is a public key primitive with key-pair $(pk_i, sk_i)$. A VRF evaluation $VRF_{sk_i}(x)$, given the secret key $sk_i$ and an input $x$ produces a string $\rho_{i,x}$ and a proof $\pi_{i,x}$. The output of the evaluation has the following properties:</p>
+<ul>
+ <li><strong>Verifiable:</strong> Given the parties public key $pk_i$ and proof $\pi_{i,x}$, any party can indeed verify that $\rho_{i,x}$ was correctly computed by party $i$ on input $x$.</li>
+ <li><strong>Random:</strong> To any party that does not have $sk_i$, the output $\rho_{i,x}$ is computationally indistinguishable from a uniform random string.</li>
+ <li><strong>Unique:</strong> There does not exist $(\rho_{i,x}’, \pi_{i,x}’) \neq (\rho_{i,x}, \pi_{i,x})$ such that the verification process succeeds with public key $pk_i$ and input $x$.</li>
+</ul>
+<p>Given VRFs, secret committee election can be achieved using the following simple rule given an input seed $x$. For round $j$, each party $i$ computes $\rho_{i,j} := VRF_{sk_i}(j, x)$. If this value is $&lt; \kappa/n$ (when scaled to a number between 0 and 1), then the party is elected in the committee. This would ensure that we have a committee with expected size $\kappa$. If we need to elect a single leader in a round instead (for instance, to play the role of a leader in HotStuff), then each of the committee members would effectively send a message playing the role of the leader, and the party with the smallest value of $\rho_{i,j}$ can be selected as the leader.</p>
+<figure>
+<p align="center">
+<img align="center" height="250" src="https://i.imgur.com/hnQXrcA.png" />
+ </p>
+</figure>
+<p>Thus, the protocol execution looks like the above picture. In each round $j$, a committee of expected size $\kappa$ is elected. They send round $j$ messages to all parties. The committee in round $j+1$ receive these messages and carry on the baton to send the next round message, effectively replacing the players in the previous round. Observe that every party receives messages from all the committee members in a round and it can thus, play the role of any committee member when called upon. Effectively, the committee as described in the static protocol is replaced by a virtual committee where the role of a committee member is played by a new party each time. The total communication complexity of the protocol is $O(\text{poly}(\kappa)\cdot n)$ so far as the number of rounds of execution and message sizes are bounded by $\text{poly}(k)$.</p>
+<p>A final subtlety is related to the integrity of the messages sent by a committee member in the presence of an adaptive adversary. The adversary can perhaps not take back a message sent by a committee member — however, it can make the committee member send signed equivocating messages potentially leading to safety (and liveness) violations. This can be dealt with using <em>ephemeral keys</em> or forward secure signature schemes. Informally, in a forward secure signing scheme, in the beginning, a party has a key that can sign any messages from any round; after signing a message for round $t$, the party updates its key to one that can henceforth sign only messages for round $t + 1$ or higher, and the round-$t$ secret key should be immediately erased at this point. This way, even if the attacker instantly corrupts a party, it cannot send an equivocating message in the same round.</p>
+<p>To summarize, we can obtain all of the desirable adaptivity properties described earlier. We obtain unpredictability and verifiability due to the use of VRFs to elect committees. We obtain integrity of messages using forward secure signature schemes. Finally, we obtain ephemerality by changing the committee in each round, requiring a committee member to send no more than a single message once it is elected.</p>
+<p>Some additional pointers:</p>
+<ul>
+ <li><strong>Extending to proof-of-stake:</strong> All of the above discussion is relevant when considering player replaceability for a protocol with a fixed number of parties. When considering a proof-of-stake system, there are other aspects to consider. For instance, newer parties can join the system when they obtain some stake for the first time for. In the process, they would setup a new public key pair that may increase their chances of being on a committee for a given input $x$ used in the election. We will discuss these considerations in a future post.</li>
+ <li><strong>Leader election challenges:</strong> In the above protocol, parties, including the leader, may not be sure of who the leader is. In practice, it may be beneficial if there is a single secret leader who can prove to the world that it is indeed the leader. This primitive is called <a href="https://eprint.iacr.org/2020/025.pdf">Single Secret Leader Election (or SSLE)</a>.</li>
+ <li>We used HotStuff as an example in this post to achieve sub-quadratic communication. In general, if we replace this by any protocol where the number of rounds and message sizes are (sub-)linear (or even polynomial) in the number of parties, we can potentially convert it into its player-replaceable counterpart.</li>
+</ul>
+<p><strong>Acknowledgment.</strong> Thanks to Ittai Abraham and Dahlia Malkhi for insightful comments on this post.</p>
+<p>Please add your thoughts and comments on <a href="https://twitter.com/kartik1507/status/1611756421561057281?s=20">Twitter</a>!</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ <a href="/tags#research">research</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Player+Replaceability+-+Towards+Adaptive+Security+and+Sub-quadratic+Communication+Simultaneously+%28Part+II%29&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2023-01-05-player-replaceability-II%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2023-01-05-player-replaceability-I/" data-toggle="tooltip" data-placement="top" title="Player Replaceability - Towards Adaptive Security and Sub-quadratic Communication Simultaneously (Part I)">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2023-01-08-re-rand-cred/" data-toggle="tooltip" data-placement="top" title="Pairing-based Anonymous Credentials and the Power of Re-randomization">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Neither Non-equivocation nor Transferability alone is enough for tolerating minority corruptions in asynchrony</title>
+ 
+ 
+ <meta name="author" content="Sravya Yandamuri, Naama Ben David">
+ 
+ <meta name="description" content="In this post, we explore a theorem of Clement, Junqueira, Kate, and Rodrigues from PODC 2012 regarding the limits of non-equivocation. Informally, this theorem says that neither Non-equivocation nor Transferability alone is enough for tolerating minority corruptions in asynchrony. Theorem CJKR12: Neither non-equivocation nor transferability is individually sufficient to solve asynchronous Reliable Broadcast given $n \leq 3f$ and a malicious adversary that can control $f$ parties. Let’s define the notions...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Neither Non-equivocation nor Transferability alone is enough for tolerating minority corruptions in asynchrony">
+ <meta property="og:description" content="In this post, we explore a theorem of Clement, Junqueira, Kate, and Rodrigues from PODC 2012 regarding the limits of non-equivocation. Informally, this theorem says that neither Non-equivocation nor Transferability alone is enough for tolerating minority corruptions in asynchrony. Theorem CJKR12: Neither non-equivocation nor transferability is individually sufficient to solve asynchronous Reliable Broadcast given $n \leq 3f$ and a malicious adversary that can control $f$ parties. Let’s define the notions...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Sravya Yandamuri, Naama Ben David">
+ 
+ <meta property="og:article:published_time" content="2021-06-14T12:04:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2021-06-14-neither-non-equivocation-nor-transferability-alone-is-enough-for-tolerating-minority-corruptions-in-asynchrony/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2021-06-14-neither-non-equivocation-nor-transferability-alone-is-enough-for-tolerating-minority-corruptions-in-asynchrony/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Neither Non-equivocation nor Transferability alone is enough for tolerating minority corruptions in asynchrony">
+ <meta property="twitter:description" content="In this post, we explore a theorem of Clement, Junqueira, Kate, and Rodrigues from PODC 2012 regarding the limits of non-equivocation. Informally, this theorem says that neither Non-equivocation nor Transferability alone is enough for tolerating minority corruptions in asynchrony. Theorem CJKR12: Neither non-equivocation nor transferability is individually sufficient to solve asynchronous Reliable Broadcast given $n \leq 3f$ and a malicious adversary that can control $f$ parties. Let’s define the notions...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Neither Non-equivocation nor Transferability alone is enough for tolerating minority corruptions in asynchrony</h1>
+ 
+ 
+ 
+ 
+ By <strong>Sravya Yandamuri, Naama Ben David</strong><br>
+ 
+ <span class="post-meta">Posted on June 14, 2021</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>In this post, we explore a theorem of <a href="https://www.cs.purdue.edu/homes/akate/publications/Non-equivocation.pdf">Clement, Junqueira, Kate, and Rodrigues</a> from PODC 2012 regarding the limits of non-equivocation. Informally, this theorem says that neither <em>Non-equivocation</em> nor <em>Transferability</em> alone is enough for tolerating minority corruptions in asynchrony.</p>
+<p><strong>Theorem <a href="https://www.cs.purdue.edu/homes/akate/publications/Non-equivocation.pdf">CJKR12</a>:</strong> <em>Neither non-equivocation nor transferability is individually sufficient to solve asynchronous Reliable Broadcast given $n \leq 3f$ and a malicious adversary that can control $f$ parties.</em></p>
+<p>Let’s define the notions of <em>transferable authentication</em> and <em>non-equivocation</em>:</p>
+<p><strong>Transferable Authentication</strong>
+Transferability captures the notion of a party being able to transfer a proof of a statement to another party, such that if $p_i$ is able to evaluate the validity of statement $s$ using proof $q$, then $p_j$, who receives the same $s$ and $q$ from $p_i$, can also evaluate $s$ and obtain the same result. For the purposes of this post, we use a more specific definition for transferable authentication. A message $m$ is said to be authenticated if it is accompanied by a proof, $\sigma_i$, that it was sent by party $p_i$. Any party that receives $m$ and $\sigma_i$ can verify that $m$ was sent by $p_i$ using the function $verify(m, \sigma_{i})$. Note that authentication should be unforgeable, meaning that if $verify(m,\sigma_{i})=true$, and $p_i$ is non-faulty, $m$ must have been sent by $p_i$. We then define transferable authentication as when correct parties $p_j$ and $p_k$ always obtain the same result from $verify(m,\sigma_{i})$ when $p_k$ receives $m$ and $\sigma_i$ from $p_j$.</p>
+<p><strong>Non-Equivocation</strong>
+<a href="https://dl.acm.org/doi/pdf/10.1145/1323293.1294280?casa_token=ntow64zqPTIAAAAA:R1ogvwWbiSeQHRR3LTrXt1xzEz3u__dOe_c8pb6JcKiij8xHvgV3bNFt5r-bW_1PKcvNt7EqsdSD">Chun et al.</a> first defined equivocation as the ability of a Byzantine party to lie in different ways to different parties (or clients). In order to distinguish between equivocation and transferable authentication, we present the following picture. Consider a network in which each party has a trusted hardware module that all of their messages must pass through. The trusted hardware module only allows a message to be sent if the sender is not equivocating. So, if the sender $p_i$ sends $m$ to a party, they cannot send $m’!=m$ to any party. Note that this definition of equivocation does not imply transferability. A party knows that $m$ was sent by $p_i$ only because they received $m$ on an authenticated channel from $p_i$. If they send $m$ to another party, they cannot prove that it was sent from $p_i$.
+<img src="https://i.imgur.com/bJE1Iaa.png" alt="" />
+In the image, there are 3 parties, each of which has a trusted hardware module. Each message sent by a party is passed through its trusted hardware module, enforcing that it does not equivocate.</p>
+<p><strong>The proof</strong></p>
+<p>See <a href="https://decentralizedthoughts.github.io/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/">this post</a> for an explanation on why Byzantine agreement in the partial synchrony setting (and asynchrony) requires $n\geq{3t+1}$.</p>
+<p>We will prove the theorem for <em>Reliable Broadcast</em>, which is strictly weaker than consensus, as it does not guarantee termination in the case of a faulty leader. For a more in-depth description of Reliable Broadcast, see <a href="https://decentralizedthoughts.github.io/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/">this post</a>. To recap, the properties guaranteed by Reliable Broadcast can be summarized as follows:</p>
+<p><strong>(validity)</strong>: If the leader is non-faulty then eventually all non-faulty parties will output the leader’s input.</p>
+<p><strong>(agreement)</strong>: If some non-faulty party outputs a value then eventually all non-faulty parties will output the same value.</p>
+<p>The proof of the theorem follows from the two claims below:</p>
+<p><strong>Claim 1:</strong> <em>Transferability without Non-Equivocation is not enough.</em></p>
+<p>Roughly speaking, for $n=3$, if the leader can equivocate it can break agreement. Transferability does not help because asynchrony can delay the messages between the two honest parties.</p>
+<p>We use an <strong>indistinguishability proof</strong>. See <a href="https://decentralizedthoughts.github.io/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/">this post</a> for a brief introduction to this proof technique. Imagine a network with three parties: A, B, and C. Party A is always the leader.</p>
+<p><strong>World 1:</strong> 
+<img src="https://i.imgur.com/KaaCemV.png" alt="" />
+A and C are correct. A sends $m$ to B and C. B crashes before sending anything to C. Since A is a correct party, C decides $m$ by validity.</p>
+<p><strong>World 2:</strong> 
+<img src="https://i.imgur.com/H5laWbd.png" alt="" />
+A and B are correct. A sends $m’$ to B and C. C crashes before sending anything to B. By validity, B decides $m’$.</p>
+<p><strong>World 3:</strong> 
+<img src="https://i.imgur.com/gjfRiyw.png" alt="" />
+B and C are correct, and A is Byzantine. A sends $m’$ to B and $m$ to C. C cannot distinguish between World 3 and World 1 and delivers $m$. Messages between B and C are delayed. B cannot distinguish between World 3 and World 2 and delivers $m’$. This scenario violates agreement, as two honest parties B and C deliver different values.</p>
+<p><strong>Claim 2:</strong> <em>Non-Equivocation without Transferability is not enough.</em></p>
+<p>Roughly speaking, for $n=3$, if the leader is delayed then an honest party must rely on the third party. But if there is no transferability then this party can send a conflicting message and break validity.</p>
+<p>Again, imagine a network with three parties: A, B, and C such that A is always the leader.</p>
+<p><strong>World 1:</strong> A, B, and C are all correct parties. A sends $m’$ to B and C, however its message to C is delayed until sometime $t’$. C receives $m’$ from B before $t’$. By validity, B delivers $m’$ before $t’$. By agreement (since B is deciding m’), C decides $m’$ before time $t’$ .
+<img src="https://i.imgur.com/Ob5gClu.png" alt="" /></p>
+<p><strong>World 2:</strong> A and C are correct, and B is Byzantine. A sends $m$ to B and C; however, A’s message to C is delayed. C receives $m’$ from B prior to receiving a message from A. Since C cannot distinguish World 2 from World 1, it decides $m’$. By the property of validity, A decides $m$.
+<img src="https://i.imgur.com/WNYZMbQ.png" alt="" /></p>
+<p>This scenario violates agreement, as two correct parties A and C decided different values. Note that in none of the worlds did any party equivocate by sending different messages to different parties.</p>
+<p>This concludes the proof of the theorem. Note that the proof that non-equivocation alone is insufficient for Reliable Broadcast does not take into account the fact that A could have waited to hear from C that it heard the value $m’$. Although A and C delivering a value other than $m$ violates validity, they could still satisfy agreement. Perhaps a weaker primitive than Reliable Broadcast is possible with non-equivocation alone and $n\geq{2t+1}$.</p>
+<p>On the positive side, <a href="https://www.cs.purdue.edu/homes/akate/publications/Non-equivocation.pdf">Clement, Junqueira, Kate, and Rodrigues</a> prove that given both non-equivocation <strong>and</strong> transferability, Reliable Broadcast for any $n &gt; 2f$ is possible.</p>
+<p><strong>Acknowledgments</strong> We would like to thank <a href="https://scholar.google.com/citations?user=48qKfREAAAAJ&amp;hl=en">Flavio Junqueira</a> for his insightful feedback and Ittai Abraham for his help with this post!</p>
+<p>Please comment on <a href="https://twitter.com/ittaia/status/1405923076211097602?s=20">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#lowerbound">lowerbound</a>
+ 
+ <a href="/tags#research">research</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Neither+Non-equivocation+nor+Transferability+alone+is+enough+for+tolerating+minority+corruptions+in+asynchrony&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2021-06-14-neither-non-equivocation-nor-transferability-alone-is-enough-for-tolerating-minority-corruptions-in-asynchrony%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2021-04-02-benign-hotstuff/" data-toggle="tooltip" data-placement="top" title="Benign Hotstuff">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2021-07-17-simplifying-raft-with-chaining/" data-toggle="tooltip" data-placement="top" title="Simplifying Raft with Chaining">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

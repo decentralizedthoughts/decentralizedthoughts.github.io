@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Crusader Broadcast</title>
+ 
+ 
+ <meta name="author" content="Gilad Stern and Ittai Abraham">
+ 
+ <meta name="description" content="In previous posts we showed that the classic Dolev-Strong broadcast protocol takes $O(n^3)$ words and $t+1$ rounds and that Dolev Reischuk show that $\Omega(n^2)$ is needed and it is also known that $t+1$ rounds are needed. So while the number of rounds is optimal, to this day it remains an open question of obtaining $O(n^2)$ broadcast against a strongly adaptive adversary (see post for recent progress). In this post we...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Crusader Broadcast">
+ <meta property="og:description" content="In previous posts we showed that the classic Dolev-Strong broadcast protocol takes $O(n^3)$ words and $t+1$ rounds and that Dolev Reischuk show that $\Omega(n^2)$ is needed and it is also known that $t+1$ rounds are needed. So while the number of rounds is optimal, to this day it remains an open question of obtaining $O(n^2)$ broadcast against a strongly adaptive adversary (see post for recent progress). In this post we...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Gilad Stern and Ittai Abraham">
+ 
+ <meta property="og:article:published_time" content="2022-06-19T03:11:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2022-06-19-crusader-braodcast/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2022-06-19-crusader-braodcast/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Crusader Broadcast">
+ <meta property="twitter:description" content="In previous posts we showed that the classic Dolev-Strong broadcast protocol takes $O(n^3)$ words and $t+1$ rounds and that Dolev Reischuk show that $\Omega(n^2)$ is needed and it is also known that $t+1$ rounds are needed. So while the number of rounds is optimal, to this day it remains an open question of obtaining $O(n^2)$ broadcast against a strongly adaptive adversary (see post for recent progress). In this post we...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Crusader Broadcast</h1>
+ 
+ 
+ 
+ 
+ By <strong>Gilad Stern and Ittai Abraham</strong><br>
+ 
+ <span class="post-meta">Posted on June 19, 2022</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>In previous posts we showed that the classic <a href="https://decentralizedthoughts.github.io/2019-12-22-dolev-strong/">Dolev-Strong</a> broadcast protocol takes $O(n^3)$ words and $t+1$ rounds and that <a href="https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/">Dolev Reischuk</a> show that $\Omega(n^2)$ is needed and <a href="https://decentralizedthoughts.github.io/2019-12-15-synchrony-uncommitted-lower-bound/">it is also known that</a> $t+1$ rounds are needed. So while the number of rounds is optimal, to this day it remains an open question of obtaining $O(n^2)$ broadcast against a strongly adaptive adversary (see <a href="https://decentralizedthoughts.github.io/2021-09-20-optimal-communication-complexity-of-authenticated-byzantine-agreement/">post</a> for recent progress).</p>
+<p>In this post we will show that for a problem that is easier than broadcast, called <strong>Crusader Broadcast</strong>, $O(n^2)$ words and $O(1)$ rounds is doable for any $f&lt;n$ given a PKI. In later posts we will ask if $\Omega(n^2)$ words are needed for Crusader Broadcast and tie this result to known <a href="https://eprint.iacr.org/2022/730.pdf">Eclipse style attacks in the world of blockchain, and to new Dolev Reischuk type lower bounds</a>.</p>
+<h2 id="crusader-broadcast-from-byzantine-to-omission">Crusader Broadcast: from Byzantine to Omission</h2>
+<p>A basic tool in the distributed algorithm toolbox is a <em>non equivocation round</em>. In such a round, we have a sender $s$ that wants to send a single message $m$ to all parties. Without faults this is extremely straightforward to do: just send the message. With faults however, this can be more complicated. For example, if the sender is Byzantine, it might send different messages to different parties. If our protocol assumes that all parties receive the same message, this might break things.</p>
+<p>In order to solve this issue, we use the notion of a non-equivocation round in which two nonfaulty parties may not output different messages $m\neq m’$. One way to model such a round is <a href="https://decentralizedthoughts.github.io/2019-10-22-flavours-of-broadcast/">Crusader Broadcast</a>, which is closely related to the notion of <a href="https://decentralizedthoughts.github.io/2021-10-04-crusader-agreement-with-dollars-slash-leq-1-slash-3$-error-is-impossible-for-$n-slash-leq-3f$-if-the-adversary-can-simulate/">Crusader Agreement</a>, which we discussed before.</p>
+<p>For a formal definition, consider a network of $n$ parties with up to $f$ Byzantine faults. Let $s$ be a designated sender with some input $m$. Every party outputs either a message $m’$ from the protocol, or a special non-message value, $\bot$. This value is used to signify that either no message was received from the sender, or that conflicting messages were received.</p>
+<p>A Crusader Broadcast protocol has the following properties:</p>
+<ul>
+ <li><strong>Validity</strong>: If $s$ is nonfaulty, then all nonfaulty parties output $m$.</li>
+ <li><strong>Weak Agreement</strong>: If two nonfaulty parties output $m,m’$ such that $m\neq \bot$ and $m’\neq \bot$, then $m=m’$.</li>
+</ul>
+<p>Observing the agreement property closely, we can see that if the sender is faulty, parties are always allowed to output $\bot$. However, if some nonfaulty party outputs $m$, then any other party must either output $m$ or $\bot$.</p>
+<p>As done previously, we can also relax the requirements of the protocol to define $p$-correct Crusader Broadcast in which the properties must hold with probability $p$ or greater (for $0\leq p \leq 1$).</p>
+<h2 id="crusader-broadcast-protocol">Crusader Broadcast Protocol</h2>
+<p>Here is a simple Crusader Broadcast protocol, in a synchronous network, resilient to any number of faults $f$, assuming that $n&gt;f$. The protocol assumes a public key infrastructure (PKI) which we model using a perfect signature scheme. What does that actually mean?</p>
+<p>By a PKI setup, we mean that every party $i$ has a signing key $sk_i$ and a public key $pk_i$ associated with it. All parties know every public key, but only $i$ knows its signing key $sk_i$. Using these keys, parties can sign messages using the $Sign$ function. That is, $i$ can compute a signature $\sigma=Sign(sk_i,m)$ for the message $m$. Every party can then verify that signature by using the $Verify$ function. More specifically, $Verify(pk_i,m,\sigma)$ returns $1$ if $\sigma$ looks like a correct signature by party $i$ on the message $m$, and $0$ otherwise. For simplicity, we will assume that the signature scheme is perfect in the sense that only $i$ can produce a signature $\sigma$ for $m$ such that $Verify(pk_i,m,\sigma)=1$.</p>
+<p>Let $\Delta$ be the maximal message delay in the system. The protocol works as follows:</p>
+<ul>
+ <li>Round 0: The sender $s$ computes $\sigma=Sign(sk_s,m)$ and sends $\langle \text{value}, m, \sigma\rangle$ to all parties.</li>
+ <li>Round 1: Every party initializes $val=\bot$ and waits for $\Delta$ time. After waiting, if a party received a single message $\langle \text{value}, m, \sigma\rangle$ from $s$ such that $Verify(pk_s,m,\sigma)=1$, they update $val$ to $m$ and forward the message by sending a $\langle \text{forward}, m, \sigma\rangle$ message to all parties.</li>
+ <li>Round 2: Every party now waits for $\Delta$ time more time. If while it waits, a party receives a $\langle \text{forward}, m, \sigma\rangle$ message such that $Verify(pk_s,m,\sigma)=1$ and $m\neq val$, it updates $val$ to $\bot$. Finally, after the $\Delta$ time has passed, output $val$.</li>
+</ul>
+<p>This protocol in words: The sender sends its signed message, parties wait for $\Delta$ time, and forward the first message they receive. They then wait for $\Delta$ more time, if they hear of any equivocation by the sender, they output $\bot$ and otherwise they output the value they heard from the sender (if they’ve heard any value). This protocol is also widely used as a building block in many consensus protocols and distributed algorithms.</p>
+<h2 id="correctness">Correctness</h2>
+<p>As usual, the validity property is almost obviously true, while the true insight comes in the agreement property.</p>
+<p><strong><em>Claim 1</em></strong>: The protocol achieves Validity for any $n&gt;f$.</p>
+<p>Assume the sender $s$ is nonfaulty. In that case, it starts by computing $\sigma=Sign(sk_s,m)$ and sending $\langle \text{value}, m, \sigma\rangle$ to all parties. Every nonfaulty party receives that message by time $\Delta$, sees that the signature verifies, and updates $val$ to $m$. The sender only sent a signature $\sigma$ on the message $m$, so no party receives a $\langle \text{forward}, m’, \sigma’\rangle$ message such that $m’\neq m$, and the signature verifies. Therefore, no nonfaulty party reverts $val$ back to $\bot$, which means that they output $m$ after $\Delta$ more time has passed.</p>
+<p><strong><em>Claim 2</em></strong>: The protocol achieves Weak Agreement for any $n&gt;f$.</p>
+<p>In order to prove that, we need to show that no two nonfaulty parties output $m$ and $m’$ such that $m\neq \bot$ and $m’\neq \bot$, and yet $m\neq m’$. We will show that by assuming some nonfaulty party output a value $m\neq \bot$ and then show that every other nonfaulty party either outputs $m$ or $\bot$.</p>
+<p>Assume some nonfaulty party $i$ outputs $m\neq \bot$ at the end of the protocol, and observe some other nonfaulty party $j$. If $i$ output $m$, then it received a message $\langle \text{value}, m, \sigma\rangle$ from $s$ with a verifying signature, and sent a $\langle \text{forward}, m, \sigma\rangle$ message to every party at time $\Delta$. Every nonfaulty party receives that message before time $2\Delta$ and sees that the signature verifies. Then, every nonfaulty party that has $val\neq m$ at that time updates $val$ to $\bot$ by time $2\Delta$. In other words, at time $2\Delta$, every nonfaulty party either has $val=m$ or $val=\bot$. Nonfaulty parties output $val$ after $2\Delta$ time, meaning that they all output $m$ or $\bot$, as required.</p>
+<h2 id="efficiency">Efficiency</h2>
+<p>The protocol described above has two main sending rounds. In the beginning $s$ sends $n$ messages. Parties then inform each other of the messages they received, in a quadratic all-to-all round. Overall, this protocol requires $\Theta(n^2)$ messages and words to be sent.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Do we actually need $O(n^2)$ messages for such a weak notion of agreement? In the next post we will show that for a pretty strong adversary, this message complexity is actually required, and tie this result to known Eclipse style attacks in the world of blockchain, and to new Dolev Reischuk type lower bounds.</p>
+<h3 id="scratch-your-brains">Scratch your brains</h3>
+<p>Can you turn this protocol to <em>linear</em>? under what conditions?</p>
+<p>Your thoughts/comments on <a href="https://twitter.com/ittaia/status/1538486701575782400?s=20&amp;t=tPd5SjTv4rWnFb78CbqJ7Q">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Crusader+Broadcast&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2022-06-19-crusader-braodcast%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2022-06-09-phase-king-via-gradecast/" data-toggle="tooltip" data-placement="top" title="Phase-King through the lens of Gradecast: A simple unauthenticated synchronous Byzantine Agreement protocol">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2022-06-21-sandglass/" data-toggle="tooltip" data-placement="top" title="Safe Permissionless Consensus">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

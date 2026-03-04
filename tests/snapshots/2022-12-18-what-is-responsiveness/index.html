@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>What is Responsiveness?</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham and Kartik Nayak">
+ 
+ <meta name="description" content="In asynchronous protocols, latency to commit is a function of the actual maximum network delay $\delta$. In synchronous protocols, message delay is bounded by $\Delta$, and for $n/3 \leq f &amp;lt; n/2$, the $\Delta$ bound is used to obtain both safety and liveness. In partial synchrony, message delay is bounded by $\Delta$ after GST, and the $\Delta$ bound is used to obtain liveness. What if the actual network delay $\delta$...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="What is Responsiveness?">
+ <meta property="og:description" content="In asynchronous protocols, latency to commit is a function of the actual maximum network delay $\delta$. In synchronous protocols, message delay is bounded by $\Delta$, and for $n/3 \leq f &amp;lt; n/2$, the $\Delta$ bound is used to obtain both safety and liveness. In partial synchrony, message delay is bounded by $\Delta$ after GST, and the $\Delta$ bound is used to obtain liveness. What if the actual network delay $\delta$...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham and Kartik Nayak">
+ 
+ <meta property="og:article:published_time" content="2022-12-18T04:00:00-05:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2022-12-18-what-is-responsiveness/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2022-12-18-what-is-responsiveness/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="What is Responsiveness?">
+ <meta property="twitter:description" content="In asynchronous protocols, latency to commit is a function of the actual maximum network delay $\delta$. In synchronous protocols, message delay is bounded by $\Delta$, and for $n/3 \leq f &amp;lt; n/2$, the $\Delta$ bound is used to obtain both safety and liveness. In partial synchrony, message delay is bounded by $\Delta$ after GST, and the $\Delta$ bound is used to obtain liveness. What if the actual network delay $\delta$...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>What is Responsiveness?</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham and Kartik Nayak</strong><br>
+ 
+ <span class="post-meta">Posted on December 18, 2022</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>In asynchronous protocols, latency to commit is a function of the actual maximum network delay $\delta$. In synchronous protocols, message delay is bounded by $\Delta$, and for $n/3 \leq f &lt; n/2$, the $\Delta$ bound is used to obtain both safety and liveness. In partial synchrony, message delay is bounded by $\Delta$ after GST, and the $\Delta$ bound is used to obtain liveness.</p>
+<p>What if the <em>actual</em> network delay $\delta$ in an execution is much smaller than the maximum delay $\Delta$? Can a protocol provide bounds that are a function of $O(\delta)$ instead of $O(\Delta)$? This type of performance is called “responsiveness” and sometimes “network speed” because it guarantees progress as fast as the actual network delays allow.</p>
+<p>Here is a definition of a responsive execution:</p>
+<blockquote>
+ <p><strong>Responsive execution</strong> [<a href="https://groups.csail.mit.edu/tds/papers/Lynch/stoc91.pdf">Attiya, Dwork, Lynch, Stockmeyer 1991</a>], [<a href="https://www.researchgate.net/publication/220618470_Early_Detection_of_Message_Forwarding_Faults">Hertzberg, Kutten, 2000</a>], [<a href="https://eprint.iacr.org/2016/917.pdf">Pass, Shi, 2016</a>]: an execution is <em>responsive</em> if the total latency is only a function of the actual network delays, i.e., if the actual network delays are at most $\delta$, the total latency is $O(\delta)$.</p>
+</blockquote>
+<p>For partial synchrony it is natural to define an eventually responsive execution:</p>
+<blockquote>
+ <p><strong>Eventual responsive execution</strong>: an execution is eventually responsive if for any time $T$, such that from time $T$ and onward the network delays are at most $\delta$, then the completion time is at most $T+O(\delta)$.</p>
+</blockquote>
+<p>Can we obtain responsiveness for every execution of consensus in the synchronous and partially synchronous models? In general, no! As we have <a href="https://decentralizedthoughts.github.io/2019-12-15-synchrony-uncommitted-lower-bound/">seen</a>, in the worst case, even one single-shot consensus can take $O(f \Delta)$ time even if the actual network delays are $\delta \ll \Delta$. Pass and Shi ask the following natural question:</p>
+<blockquote>
+ <p>Under what conditions can a consensus protocol be responsive?
+– <a href="https://eprint.iacr.org/2017/913.pdf">Pass and Shi, 2017</a></p>
+</blockquote>
+<h4 id="intuition-for-deriving-conditions-for-responsiveness-in-broadcast-protocols">Intuition for deriving conditions for responsiveness in broadcast protocols</h4>
+<p><em>First condition</em>: when considering a broadcast protocol, the sender/leader in the broadcast needs to be non-faulty; otherwise, trivially, a faulty party would not send the message within the bounded delay $\Delta$ causing the latency to be $&gt; \Delta$.</p>
+<p><em>Second condition</em>: The bane of responsiveness in the Byzantine model is the <em>split brain attack</em> where one party commits to $v$ and another party commits to $v’ \neq v$.</p>
+<p>To avoid this attack, a responsive commit strategy needs to hear from a majority of honest parties. So at least $&gt;f+ (n-f)/2 = (n+f)/2$ parties, where $f$ denotes the number of Byzantine parties.</p>
+<p>This quorum size ensures that the condition cannot be satisfied for two non-faulty parties: while the $f$ Byzantine parties may potentially equivocate with the two non-faulty parties, only one of the two honest parties would have the honest majority $&gt; (n+f)/2$. Consequently, in an execution with responsiveness, the number of non-faulty parties in the system $n-t$ needs to be at least $&gt; (n+f)/2$ where $t\le f$ is the actual number of failures in the execution.</p>
+<h4 id="responsive-broadcast-protocols-worst-case-resilience-and-conditions-for-responsiveness">Responsive broadcast protocols: worst case resilience and conditions for responsiveness</h4>
+<p>It turns out that these two conditions are sufficient! There exist responsive protocols requiring only these two conditions to be met. Here are some examples:</p>
+<table>
+ <thead>
+ <tr>
+ <th>Worst Case Resilience</th>
+ <th>Responsiveness Condition</th>
+ <th>Protocol</th>
+ </tr>
+ </thead>
+ <tbody>
+ <tr>
+ <td>$f&lt;n/2$ Omission faults</td>
+ <td>non-faulty leader</td>
+ <td>Paxos</td>
+ </tr>
+ <tr>
+ <td>$f&lt;n/3$ Byzantine faults</td>
+ <td>non-faulty leader</td>
+ <td><a href="https://pmg.csail.mit.edu/papers/osdi99.pdf">PBFT</a>, <a href="https://arxiv.org/abs/1804.01626">SBFT</a>, <a href="https://arxiv.org/pdf/1803.05069.pdf">HotStuff</a>, etc</td>
+ </tr>
+ <tr>
+ <td>$f&lt;n/2$ Byzantine faults under synchrony</td>
+ <td>non-faulty leader and $t &lt; n/4$</td>
+ <td><a href="https://eprint.iacr.org/2017/913.pdf">PS’17</a>, <a href="https://eprint.iacr.org/2020/458.pdf">ANRS’21</a>, <a href="https://eprint.iacr.org/2021/1138.pdf">ANS’22</a></td>
+ </tr>
+ </tbody>
+</table>
+<p>In words, omission failure resilient protocols can be responsive in executions where the leader is non-faulty. Byzantine failure resilient protocols, in addition, require $n-t &gt; (n+f)/2$ where $f$ is the maximum number of faults and $t \le f$ is the actual number of faults in the execution. This condition is always true for $f&lt;n/3$ protocols, but for $n=2f+1$ this only holds when $t&lt;n/4$.</p>
+<p>These protocols have the maximal resilience and in addition provide responsiveness is some subset of optimistic executions.</p>
+<h4 id="responsiveness-in-the-multi-shot-case">Responsiveness in the multi-shot case</h4>
+<p>When designing protocols for multi-shot consensus, the conditions for responsiveness are a function of exactly how the protocol is designed. For a view-based protocol that performs one consensus per view and switches views, every say $10\Delta$ timeout, then to do $k$ decisions, even if all parties are non-faulty, would take $O(\Delta k)$ time even if the actual network delays are $« \Delta$. The question naturally extends to whether we can achieve responsive <a href="https://decentralizedthoughts.github.io/2022-11-19-from-single-shot-to-smr/">log replication</a>.</p>
+<p><strong>Responsiveness for log replication</strong>: an execution is responsive if the actual network delays are at most $\delta$ then to drive $k$ decisions the total latency is $O(k \delta)$.</p>
+<p>We can again ask the natural question:</p>
+<blockquote>
+ <p>Under what conditions can a log replication protocol obtain responsiveness?</p>
+</blockquote>
+<p>For <em>leader based</em> protocols, a responsive log replication protocol for $k$ decisions terminates in $O(k \delta)$ latency when the leader is non-faulty. When considering a <em>stable leader</em> protocol, the leader needs to be non-faulty. When considering a <em>rotating leader</em> protocol, we need each of the rotating leaders for the $k$ decisions to be non-faulty. In fact, the examples described in the table earlier are all multi-shot instances. While PBFT, SBFT, PS’17, and ANRS’21 assume a stable leader, HotStuff and ANS’22 allow for rotating leaders.</p>
+<h3 id="does-responsiveness-matter">Does responsiveness matter?</h3>
+<p>Does it matter if we get $(k \Delta)$ or $O(k \delta)$? If the gap between $\delta$ and $\Delta$ is not large, then it does not matter much. In some systems, there is no need to move faster than one decision per $O(\Delta)$ time. However, in some settings obtaining better good-case performance is critical for higher performance when the system is not under active attack.</p>
+<p>In the worst case, even one decision may take $O(\Delta f)$ time, so being responsiveness only improves in some good conditions but not in the worst case.</p>
+<p>For $f&lt;n/3$ a counterargument against responsiveness is that by using randomization, it is possible to <em>always</em> obtain expected latency of $O(\delta)$ in asynchrony for agreement. However, these randomized approaches seem to inherently require $\Omega(n^2)$ messages, even in executions where all parties are non-faulty.</p>
+<p>In contrast, responsive protocol can obtain eventual responsiveness in partial synchrony and require just a linear message complexity (after GST) under the condition that the leader is non-faulty.</p>
+<p>Your thoughts on <a href="https://twitter.com/kartik1507/status/1604498852006211584?s=61&amp;t=65S2XC6f0QGX_9FlxpLbyg">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#models">models</a>
+ 
+ <a href="/tags#research">research</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=What+is+Responsiveness%3F&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2022-12-18-what-is-responsiveness%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2022-12-12-what-about-validity/" data-toggle="tooltip" data-placement="top" title="What about Validity?">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2022-12-27-set-replication/" data-toggle="tooltip" data-placement="top" title="Set Replication - fault tolerance without total ordering">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

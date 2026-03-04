@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Good-case Latency of Rotating Leader Synchronous BFT</title>
+ 
+ 
+ <meta name="author" content="Nibesh Shrestha, Ittai Abraha, Kartik Nayak">
+ 
+ <meta name="description" content="Synchronous consensus protocols can tolerate $f &amp;lt; n/2$ Byzantine failures but for $n/3 &amp;lt;f &amp;lt;n/2$ must depend on the maximum network delay $\Delta$ for their safety and progress. So these protocols must set $\Delta$ to be much larger than the actual network delay $\delta \ll \Delta$. The good news is in the multi-shot (blockchain) scenarios, modern synchronous protocols such as Sync HotStuff can essentially pipeline the $\Delta$-dependent delay: Under an...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Good-case Latency of Rotating Leader Synchronous BFT">
+ <meta property="og:description" content="Synchronous consensus protocols can tolerate $f &amp;lt; n/2$ Byzantine failures but for $n/3 &amp;lt;f &amp;lt;n/2$ must depend on the maximum network delay $\Delta$ for their safety and progress. So these protocols must set $\Delta$ to be much larger than the actual network delay $\delta \ll \Delta$. The good news is in the multi-shot (blockchain) scenarios, modern synchronous protocols such as Sync HotStuff can essentially pipeline the $\Delta$-dependent delay: Under an...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Nibesh Shrestha, Ittai Abraha, Kartik Nayak">
+ 
+ <meta property="og:article:published_time" content="2021-12-07T04:39:00-05:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2021-12-07-good-case-latency-of-rotating-leader-synchronous-bft/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2021-12-07-good-case-latency-of-rotating-leader-synchronous-bft/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Good-case Latency of Rotating Leader Synchronous BFT">
+ <meta property="twitter:description" content="Synchronous consensus protocols can tolerate $f &amp;lt; n/2$ Byzantine failures but for $n/3 &amp;lt;f &amp;lt;n/2$ must depend on the maximum network delay $\Delta$ for their safety and progress. So these protocols must set $\Delta$ to be much larger than the actual network delay $\delta \ll \Delta$. The good news is in the multi-shot (blockchain) scenarios, modern synchronous protocols such as Sync HotStuff can essentially pipeline the $\Delta$-dependent delay: Under an...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Good-case Latency of Rotating Leader Synchronous BFT</h1>
+ 
+ 
+ 
+ 
+ By <strong>Nibesh Shrestha, Ittai Abraha, Kartik Nayak</strong><br>
+ 
+ <span class="post-meta">Posted on December 7, 2021</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p><a href="https://decentralizedthoughts.github.io/2019-11-11-authenticated-synchronous-bft/">Synchronous consensus protocols</a> can tolerate $f &lt; n/2$ Byzantine failures but for $n/3 &lt;f &lt;n/2$ must depend on the <em>maximum network delay</em> $\Delta$ for their safety and progress. So these protocols must <em>set</em> $\Delta$ to be much larger than the <em>actual network delay</em> $\delta \ll \Delta$. The good news is in the multi-shot (blockchain) scenarios, modern synchronous protocols such as <a href="https://decentralizedthoughts.github.io/2019-11-12-Sync-HotStuff/">Sync HotStuff</a> can essentially <strong><em>pipeline</em></strong> the $\Delta$-dependent delay:</p>
+<ul>
+ <li>Under an honest leader Sync HotStuff can commit $k$ blocks in $2\Delta+O(k\delta)$ time.</li>
+</ul>
+<p>Protocols such as Sync HotStuff fall under the <em>stable-leader</em> paradigm where a single leader coordinates multiple blocks until a <em>view-change</em> is executed to replace the faulty leader. In this post, we focus on the <a href="https://decentralizedthoughts.github.io/2019-06-23-what-is-the-difference-between/"><em>rotating-leader</em> paradigm</a> where the leader is rotated after every proposal. The stable-leader approach typically provides better performance metrics. The rotating-leader approach provides better <em>fairness and censorship resistance</em> and overall more uniform distribution of work. Our main result shows that:</p>
+<ul>
+ <li>Under a sequence of $k$ consecutive honest leaders our protocol can commit $k$ blocks in $2\Delta+O(k\delta)$ time.</li>
+</ul>
+<p>In our <a href="https://eprint.iacr.org/2021/1138.pdf">paper</a>, we provide tight upper and lower bounds:</p>
+<ol>
+ <li>A lower bound showing that an optimistically responsive rotating-leader protocol tolerating $f &lt; n/2$ Byzantine faults must have a commit latency for a single slot of at least $2\Delta$ time.</li>
+ <li>An optimistically responsive synchronous BFT protocol tolerating $f &lt; n/2$ Byzantine faults in the rotating-leader paradigm with a commit latency of $2\Delta + O(\delta)$.</li>
+</ol>
+<p>Combing these two results shows that committing $k$ blocks in $2\Delta+O(k\delta)$ time under a sequence of $k$ consecutive honest leaders is asymptotically optimal (when $\delta$ is negligible).</p>
+<p><img src="https://i.imgur.com/xqg7ZRJ.png" alt="" /></p>
+<!---
+This [previous post](https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/) discusses the notion of *good-case latency*, to capture latency to *commit a decision* when the designated sender or leader is *honest*. The [Sync hotstuff paper](https://eprint.iacr.org/2019/270.pdf) observes that the DLS lower bound implies that any synchronous consensus protocol tolerating $f < n/2$ Byzantine failures must incur at least $\Delta$ time to commit a decision. This [follow-up post](https://decentralizedthoughts.github.io/2021-03-09-good-case-latency-of-byzantine-broadcast-the-synchronous-case/) discusses a Byzantine fault tolerant state machine replication (BFT SMR) protocol with a good-case latency of $\Delta + O(\delta)$ latency which is optimal. Such protocols fall under a *stable-leader* paradigm where a *single leader* coordinates the participating replicas into reaching consensus. In general, stable-leader protocols are generally favored for their high throughput and better latency as they avoid a complicated and expensive *view-change* phase as long as the current leader is honest.
+-->
+<h2 id="background-and-related-work">Background and Related Work</h2>
+<p>An <a href="https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/">earlier post</a> discusses the notion of <em>good-case</em> latency to capture commit latency in the stable-leader paradigm. A <a href="https://decentralizedthoughts.github.io/2021-03-09-good-case-latency-of-byzantine-broadcast-the-synchronous-case/">follow-up post</a> discusses a Byzantine fault tolerant state machine replication (BFT SMR) protocol with a good-case latency of $\Delta + O(\delta)$ latency which is optimal.
+</p>
+<p>Several recent BFT SMR protocols (<a href="https://arxiv.org/pdf/1805.04548.pdf">Dfinity</a>, <a href="https://eprint.iacr.org/2018/980.pdf">PiLi</a>, <a href="https://decentralizedthoughts.github.io/2020-05-14-streamlet/">Streamlet</a>, and <a href="https://dl.acm.org/doi/10.1145/3293611.3331591">HotStuff</a>) have been designed in the rotating leader paradigm. However, Synchronous BFT protocols such as PiLi and Streamlet incur large latency ($65\Delta$ and $12\Delta$ respectively) to commit a single decision. Moreover, naively using Sync HotStuff and <a href="https://decentralizedthoughts.github.io/2021-03-09-good-case-latency-of-byzantine-broadcast-the-synchronous-case/">optimal good-case latency BFT protocols</a> in rotating-leader paradigm would incur at least $3\Delta$ time to commit and change leaders as they incur $\Delta$ and $2\Delta$ time respectively in the view-change phase. In <a href="https://eprint.iacr.org/2021/1138.pdf">our work</a>, we study the <a href="https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/">good-case latency</a> in the context of rotating-leader protocols. In a rotating-leader paradigm, the leaders keep changing through a view-change process after each block proposal. Thus, the overall latency of a rotating-leader protocol depends on the combination of good-case latency and the latency of the view-change. In our work, we explore protocols that change leaders and have the new leader propose responsively in $O(\delta)$ time compared to waiting for $\Omega(\Delta)$ delay during view-change. We call such protocols <em>optimistically responsive</em> rotating-leader protocols.</p>
+<h2 id="a-lower-bound-on-the-good-case-latency-of-optimistically-responsive-rotating-leader-protocols">A Lower Bound on the Good-Case Latency of Optimistically Responsive Rotating-leader Protocols</h2>
+<p>Our lower bound studies the good-case latency of rotating leader protocols where the next leaders propose responsively without waiting for $\Omega(\Delta)$ time after receiving proposals from previous leaders. In particular, the lower bound captures the relationship between the latency of the view-change and the good-case latency to commit a decision. Essentially, it says that if a consensus protocol tolerating $f &lt; n/2$ Byzantine faults allows a new leader to propose responsively in $O(\delta)$ time, the commit latency for a single slot cannot be less than $2\Delta-O(\delta)$. Thus, the sum of latencies has to be at least $2\Delta$.</p>
+<p>Informally, our lower bound result says the following:
+There exists an execution in an optimistically responsive rotating-leader consensus protocol that can tolerate $n/3 \le f &lt; n/2$ Byzantine faults and when all messages between non-faulty replicas arrive instantaneously, where the following two conditions do not hold simultaneously:</p>
+<ul>
+ <li>the good-case commit latency is less than $2\Delta-O(\delta)$, and</li>
+ <li>honest leaders propose responsively in at most $O(\delta)$ time after receiving a proposal from the previous honest leader.</li>
+</ul>
+<h2 id="rotating-leader-synchronous-bft-protocol-with-optimal-good-case-latency">Rotating Leader Synchronous BFT protocol with Optimal Good-case latency</h2>
+<p>We give a complete picture and provide a rotating-leader synchronous BFT protocol with optimal good-case commit latency of $2\Delta$ time. Our protocol follows “block-chaining” paradigm where a block extends a previously proposed block called its <em>parent</em>. Our protocol allows a new leader to propose a block responsively as soon as it receives a certificate (i.e., $f+1$ votes assuming $n=2f+1$) for a block proposed by a previous leader. Replicas then commit a decision within $2\Delta$ time of receiving a certificate for the proposed block.</p>
+<ol>
+ <li><strong>Enter view.</strong> Upon receiving a certificate for a block proposed by previous leader, enter view $v$ and set <em>view-timer</em> to $7\Delta$ and start counting down.</li>
+ <li><strong>Propose.</strong> Upon entering the view, the current leader proposes its current block proposal $B_k$.</li>
+ <li><strong>Vote.</strong> On receiving the first valid block proposal from the leader, echo the proposal and multicast a <em>vote</em> for proposed block $B_k$.</li>
+ <li><strong>Commit.</strong> Upon receiving $f+1$ votes for block $B_k$, echo the certificate. If certificate for $B_k$ received such that <em>view-timer</em> $\ge 2\Delta$ then commit $B_k$ within $2\Delta$ if nothing bad happens.</li>
+</ol>
+<p>BFT protocols usually include a <em>certificate ranking</em> rule to rank the certificate. In our protocol, we rank the certificates by their view i.e., certificates in higher view are ranked higher. In general, BFT protocols ensure that a certificate for a block to be committed is unique and sufficient honest replicas have received the highest ranked certificate before they vote in a higher view. Honest replicas do not vote on blocks that do not extend the highest ranked certificate known to them. This ensures safety of committed blocks.</p>
+<p>In our protocol, replicas wait for a certificate for proposed block $B_k$, echo the certificate and wait for $2\Delta$ time to check for any “bad events” from the leader before committing $B_k$. This ensures two properties (i) a conflicting block proposal certificate does not exist (the argument is similar to the one presented in <a href="https://decentralizedthoughts.github.io/2019-11-12-Sync-HotStuff/">Sync HotStuff</a>), and (ii) all honest replicas receive the highest ranked block certificate. In our protocol, each leader proposes a single block in a view. Thus, the certificate for $B_k$ is already the highest ranked. In addition, all honest replicas enter a view within $\Delta$ time of each other. This is due to the synchrony assumption. Since an honest replica commits only when it receives the certificate for $B_k$ such that there is sufficient time in the view (i.e., <em>view-timer</em> $\ge 2\Delta$), all honest replicas will receive a certificate for $B_k$ before they enter a higher view. This ensures no honest replica will vote blocks that do not extend $B_k$.</p>
+<!---
+In general, BFT protocols include a *certificate ranking rule* to rank certificates. For simplicity, we rank certificates by their view such that certificates from higher views are ranked higher. Consensus protocols generally require that all honest replicas receive and lock on a certificate for a block $B_h$ to be committed to ensure no honest replicas vote for blocks that do not extend $B_h$ to ensure safety of a commit. In prior protocols such as [Sync HotStuff](https://decentralizedthoughts.github.io/2019-11-12-Sync-HotStuff/), this was achieved by waiting for $\Omega(\Delta)$ time during the view-change phase and inherently make the protocol non-responsive. To make the protocol responsive, we perform a responsive view-change as soon as a certificate for the proposed block $B_k$ is received. Replicas can responsively receive the vote messages and hence the certificate. In addition, a single block is proposed in a view. Thus, if the next leader receives the certificate for the current proposed value, it can propose immediately as it is already the highest ranked certificate and all honest replicas will vote for the block extending this certificate.
+(Work in Progress)
+before starting a *commit-timer* to commit the proposal and forwards the received certificate.
+As mentioned before, we need to ensure that all honest replicas receive a certificate for the proposed block to be committed. This is ensured by starting the *commit-timer* only after receiving the $f+1$ vote messages for the proposed block i.e., the certificate.
+Replicas multicast the certificate and wait for *$2\Delta$*. If no bad events are detected during that time, replicas commit the proposed block. Waiting for $2\Delta$ time after multicasting the certificate ensures (i) no honest replicas vote for a conflicting proposal in the view; thus a conflicting block certificate cannot exist in the view, and (ii) all honest replicas receive the certificate. Thus, honest replicas will not vote for blocks that do not extend the certificate of the committed block.
+-->
+<p>Read more about it <a href="https://eprint.iacr.org/2021/1138.pdf">here</a>, and your thoughts on <a href="https://twitter.com/ittaia/status/1468159598112788485?s=20&amp;t=0uPOdnjhqf0lEekSPZ2QMA">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#research">research</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Good-case+Latency+of+Rotating+Leader+Synchronous+BFT&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2021-12-07-good-case-latency-of-rotating-leader-synchronous-bft%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2021-10-29-consensus-cheat-sheet/" data-toggle="tooltip" data-placement="top" title="Consensus cheat sheet">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2022-03-03-blockchain-resource-pools-and-a-cap-esque-impossibility-result/" data-toggle="tooltip" data-placement="top" title="Blockchain Resource Pools and a CAP-esque Impossibility Result">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

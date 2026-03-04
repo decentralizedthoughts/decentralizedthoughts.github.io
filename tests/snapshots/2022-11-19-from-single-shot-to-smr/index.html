@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>From Single-Shot Agreement to State Machine Replication</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham and Kartik Nayak">
+ 
+ <meta name="description" content="In this post we explore the path from Single-Shot Agreement, via Write-Once Registers, to Log Replication, and finally to State Machine Replication. We begin by defining all four problems assuming minority omission failures and partial synchrony. This post continues our previous posts on Paxos from Recoverable Broadcast and on State Machine Replication. (Single-Shot) Agreement In Agreement (interchangeably called Consensus) there are $n$ parties. A minority of the servers may have...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="From Single-Shot Agreement to State Machine Replication">
+ <meta property="og:description" content="In this post we explore the path from Single-Shot Agreement, via Write-Once Registers, to Log Replication, and finally to State Machine Replication. We begin by defining all four problems assuming minority omission failures and partial synchrony. This post continues our previous posts on Paxos from Recoverable Broadcast and on State Machine Replication. (Single-Shot) Agreement In Agreement (interchangeably called Consensus) there are $n$ parties. A minority of the servers may have...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham and Kartik Nayak">
+ 
+ <meta property="og:article:published_time" content="2022-11-19T04:00:00-05:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2022-11-19-from-single-shot-to-smr/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2022-11-19-from-single-shot-to-smr/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="From Single-Shot Agreement to State Machine Replication">
+ <meta property="twitter:description" content="In this post we explore the path from Single-Shot Agreement, via Write-Once Registers, to Log Replication, and finally to State Machine Replication. We begin by defining all four problems assuming minority omission failures and partial synchrony. This post continues our previous posts on Paxos from Recoverable Broadcast and on State Machine Replication. (Single-Shot) Agreement In Agreement (interchangeably called Consensus) there are $n$ parties. A minority of the servers may have...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>From Single-Shot Agreement to State Machine Replication</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham and Kartik Nayak</strong><br>
+ 
+ <span class="post-meta">Posted on November 19, 2022</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>In this post we explore the path from <em>Single-Shot Agreement</em>, via <em>Write-Once Registers</em>, to <em>Log Replication</em>, and finally to <em>State Machine Replication</em>. We begin by defining all four problems assuming <em>minority omission failures</em> and <em>partial synchrony</em>. This post continues our previous posts on <a href="https://decentralizedthoughts.github.io/2022-11-04-paxos-via-recoverable-broadcast/">Paxos from Recoverable Broadcast</a> and on <a href="https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/">State Machine Replication</a>.</p>
+<h3 id="single-shot-agreement">(Single-Shot) Agreement</h3>
+<p>In <em>Agreement</em> (interchangeably called <em>Consensus</em>) there are $n$ parties. A minority of the servers may have omission failures. Each party has an input value, and its goal is to output a value such that:</p>
+<p><strong>Uniform Agreement</strong>: Any two parties that output values, these values are equal. 
+(*) In the Byzantine case <strong>Agreement</strong>: Any two non-faulty parties output the same value.</p>
+<p><strong>Termination</strong>: All non-faulty parties eventually output a value and terminate.</p>
+<p><strong>Validity</strong>: The output is an input of one of the parties.
+(*) In the authenticated Byzantine case <strong>External Validity</strong>: The output is externally valid (for example signed by the client).</p>
+<p>Note that <a href="https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/">Agreement and Broadcast</a> are <a href="https://decentralizedthoughts.github.io/2020-09-14-broadcast-from-agreement-and-agreement-from-broadcast/">deeply connected</a> in this setting.</p>
+<h3 id="write-once-register-state-machine-replication">Write-Once Register State Machine Replication</h3>
+<p>Instead of just $n$ parties, there are two types of entities: some <em>clients</em> and $n$ <em>servers</em> (sometimes also called <em>replicas</em>). A minority of the servers and <em>any</em> number of clients may have omission failures.</p>
+<p>Each client has a <em>local</em> component called a <strong>client library</strong>. The client interacts with the client library and the library interacts with the servers. Essentially, the client library provides the client with the illusion of talking to a single (ideal) entity.</p>
+<p>The clients have inputs and they can send <em>requests</em> to their client library. Clients are sequential and will send a new request only after the client library sends back a <em>response</em> to the existing request.</p>
+<p>For a Write-Once Register there are two types of requests: <code class="language-plaintext highlighter-rouge">write(v)</code> which gets an input value and returns a value; and <code class="language-plaintext highlighter-rouge">read</code> which returns a response with either an output value or a special value $\bot$, with the following properties:</p>
+<p><strong>Termination</strong>: If a non-faulty client issues a <em>request</em> then it eventually receives a <em>response</em>.</p>
+<p><strong>Write-Once Agreement</strong>: If two requests return $x$ and $x’$ and $x$ and $x’$ are both not $\bot$ then $x=x’$. Equivalently, $|x \cup x’ \setminus {\bot }| \leq 1$.</p>
+<p><strong>Write-Once Validity</strong>: If a request returns a non-$\bot$ value then there was some client write request with this value.</p>
+<p>We also require the system to return a non-$\bot$ value after any write.</p>
+<p><strong>Write-Once Correctness</strong>: Any write response, or any response from a request that started after a write response must return a non-$\bot$ value.</p>
+<p>Note that if there is just one write request with value $v$, then from correctness and validity the response must be $v$.</p>
+<p><em>Exercise 1: Show how to implement a fault-tolerant Write-Once Register given an agreement protocol. You will need to implement the client library.</em></p>
+<p>An alternative way to define a Write-Once Register is that it abstracts an <em>ideal functionality</em> that writes down the first value it hears (literally a register that only writes once).</p>
+<h3 id="log-replication">Log Replication</h3>
+<p>The setting is the same as above: some clients and $n$ servers and same fault model. Clients can make two types of requests: <code class="language-plaintext highlighter-rouge">read</code> which now returns a <strong>log of values</strong> (or $\bot$ for the empty log) as a response; and <code class="language-plaintext highlighter-rouge">write(v)</code> which gets an input value and also returns a response that is a log of values.</p>
+<p>Clients can have multiple input values at different times.</p>
+<p><strong>Termination</strong>: If a non-faulty client issues a <em>request</em> then it eventually receives a <em>response</em>.</p>
+<p><strong>Log Agreement</strong>: Any two requests return logs then one is a prefix of the other.</p>
+<p><strong>Log Validity</strong>: Each value in the log can be uniquely mapped to a write request.</p>
+<p><strong>Log Correctness</strong>: For a write request with value $v$, its response, and any response from a request that started after this write response arrives, returns a log of values that includes $v$.</p>
+<p>The <code class="language-plaintext highlighter-rouge">read</code> request may not scale well because the log may have an unbounded size. A more refined read request can ask for parts of the log. We choose this generic interface for simplicity.</p>
+<p>An alternative way to define Log Replication is that it abstracts an <em>ideal functionality</em> that adds write commands to a log.</p>
+<h3 id="state-machine-replication">State Machine Replication</h3>
+<p>There is a state machine which is a function that takes input $cmd$ and current state $S$ and returns the output $out$ and the next state $S’$:</p>
+\[SM(cmd, S)=(out,S')\]
+<p>The state machine has some <em>genesis state</em> $S_0$. Note that this is a very general definition. Clients can submit requests <code class="language-plaintext highlighter-rouge">cmd</code> (can define <code class="language-plaintext highlighter-rouge">read</code> and <code class="language-plaintext highlighter-rouge">write</code> commands via the state machine). Given a log $L=c_1,\dots,c_k$, naturally define $SM(L)=(out,S)$ as the sequential application of the log of commands $L$ on $SM$ starting with $S_0$.</p>
+<p>The core difference (in terms of what the client sees) between Log replication and SMR replication is that instead of returning a log of values $L$, the client library returns the output of $SM(L)$. So the servers (or the client library) need to execute state machine transactions based on the command log.</p>
+<p>The properties of Termination, Agreement, Validity, and Correctness are all as in Log Replication but on the induced log:</p>
+<p><strong>Termination</strong>: If a non-faulty client issues a <em>request</em> then it eventually gets a <em>response</em>.</p>
+<p><strong>SMR Agreement</strong>: If two requests return outputs $out_1$ and $out_2$ then there are two logs $L_1$ and $L_2$ such that: one is a prefix of the other, $out_1$ is the output of $SM(L_1)$, and $out_2$ is the output of $SM(L_2)$.</p>
+<p><strong>SMR Validity</strong>: The request returns $out$ which is the output of some $SM(L)$ and each value in $L$ can be mapped uniquely to a client request.</p>
+<p><strong>SMR Correctness</strong>: For a request with value $cmd$, its response, and any response from a request that started after this response for $cmd$ arrives, returns the output of some $SM(L)$ such that $L$ includes $cmd$.</p>
+<p>Note that SMR replication can implement <em>any</em> state machine. In particular, it can also (trivially) implement Log Replication. See this <a href="https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/">post</a> and <a href="https://www.cs.cornell.edu/fbs/publications/ibmFault.sm.pdf">Schneider’s classic</a> for more.</p>
+<p><em>Exercise 2: Show how to implement SMR Replication given Log replication. In particular, using a bounded amount of space at the client library.</em></p>
+<h2 id="from-write-once-registers-to-log-replication">From Write-Once Registers to Log Replication</h2>
+<p>There are two main ways to obtain Log Replication from Write-Once Registers:</p>
+<ul>
+ <li>
+ <p><strong>Array</strong>: servers maintain an array consisting of separate write-once register instances for each position in the array. While each instance is independent, the view number of each instance is global and common to all instances. Once the write-once register instance at position $j$ in the array reaches agreement, the servers start the write-once register instance in the array at position $j+1$. This approach can be extended to use a sliding window of $c \geq 1$ pending write-once register instances. If all write-once register instances for positions 1 up to $x$ in the array are all committed, parties participate (in parallel) in write-once register instances for positions $x+1,\dots,x+c$ of the array. This allows running multiple write-once register instances in parallel. It also makes the reduction to SMR more delicate: must use the largest <em>consecutive</em> sequence in the array that is committed to define the actual committed log. As an example, this is the path PBFT takes.</p>
+ </li>
+ <li>
+ <p><strong>Linked list</strong>: servers participate in a perpetual single instance of a write-once register. Each server stores its currently committed log as a linked list $L = c_j \rightarrow … \rightarrow c_{1}$. Each server then sets its input (proposal) to be a new linked whose head is an uncommitted client command $cmd$ that points to the committed log: $L’ = cmd \rightarrow c_j \rightarrow … \rightarrow c_{1}$. Agreement is reached on the whole log and each time a new log is committed the servers continue to propose a larger log. While this does not allow parallel agreement instances, it does allow to <em>pipeline</em> consecutive agreement instances and also allows for optimistic execution in the SMR setting. For some underlying agreement protocols, pipelining and optimism can provide performance benefits. As an example, this is the path HotStuff takes.</p>
+ </li>
+</ul>
+<p>Your comments on <a href="https://twitter.com/ittaia/status/1599895548416270338?s=20&amp;t=RUTyrxNgaIvudyiV5O5IAA">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#SMR">SMR</a>
+ 
+ <a href="/tags#omission">omission</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=From+Single-Shot+Agreement+to+State+Machine+Replication&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2022-11-19-from-single-shot-to-smr%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2022-11-04-paxos-via-recoverable-broadcast/" data-toggle="tooltip" data-placement="top" title="On Paxos from Recoverable Broadcast">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2022-11-20-pbft-via-locked-braodcast/" data-toggle="tooltip" data-placement="top" title="Linear PBFT: a gentle introduction to Practical Byzantine Fault Tolerance">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

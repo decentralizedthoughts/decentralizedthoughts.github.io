@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Early Stopping, Same but Different: Two Rounds Are Needed Even in Failure Free Executions</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham and Gilad Stern">
+ 
+ <meta name="description" content="TL;DR: Even in failure-free executions, consensus protocols resilient to crash failures often require at least two rounds. This follows from the early stopping lower bound: executions with $f$ actual crashes require at least $\min {f+2, t+1}$ rounds when tolerating $t$ possible failures. Thus, the possibility of a failure forces extra rounds, even when no failures occur. Many systems aim to optimize executions that are failure-free. If we knew with certainty...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Early Stopping, Same but Different: Two Rounds Are Needed Even in Failure Free Executions">
+ <meta property="og:description" content="TL;DR: Even in failure-free executions, consensus protocols resilient to crash failures often require at least two rounds. This follows from the early stopping lower bound: executions with $f$ actual crashes require at least $\min {f+2, t+1}$ rounds when tolerating $t$ possible failures. Thus, the possibility of a failure forces extra rounds, even when no failures occur. Many systems aim to optimize executions that are failure-free. If we knew with certainty...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham and Gilad Stern">
+ 
+ <meta property="og:article:published_time" content="2024-01-28T12:05:00-05:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2024-01-28-early-stopping-lower-bounds/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2024-01-28-early-stopping-lower-bounds/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Early Stopping, Same but Different: Two Rounds Are Needed Even in Failure Free Executions">
+ <meta property="twitter:description" content="TL;DR: Even in failure-free executions, consensus protocols resilient to crash failures often require at least two rounds. This follows from the early stopping lower bound: executions with $f$ actual crashes require at least $\min {f+2, t+1}$ rounds when tolerating $t$ possible failures. Thus, the possibility of a failure forces extra rounds, even when no failures occur. Many systems aim to optimize executions that are failure-free. If we knew with certainty...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Early Stopping, Same but Different: Two Rounds Are Needed Even in Failure Free Executions</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham and Gilad Stern</strong><br>
+ 
+ <span class="post-meta">Posted on January 28, 2024</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p><strong>TL;DR:</strong> Even in <em>failure-free</em> executions, consensus protocols resilient to crash failures often require at least two rounds. This follows from the early stopping lower bound: executions with $f$ actual crashes require at least $\min {f+2, t+1}$ rounds when tolerating $t$ possible failures. Thus, the possibility of a failure forces extra rounds, even when no failures occur.</p>
+<p>Many systems aim to optimize executions that are <em>failure-free</em>. If we knew with certainty that there would be no failures, parties could simply exchange their inputs and reach consensus by outputting, for example, the majority value. The protocol would then complete in just one round. What happens if there may be a crash failure? Say you have 100 servers and at most one can crash, can you devise a consensus protocol that stops in just one round <em>in executions where there are no failures</em>?</p>
+<blockquote>
+ <p>The answer is <strong>No</strong>: one round is not always enough. Sometimes you need 2 rounds even in <em>failure-free</em> executions.</p>
+</blockquote>
+<p>The <em>threat</em> of a potential failure forces the protocol to run longer, even if no failure actually occurs.</p>
+<p>This result follows from the fundamental lower bound on <strong>early stopping</strong>: the number of rounds for consensus protocols in the synchronous model that can tolerate at most $t$ crash failures in executions where there at most $f \le t$ failures is at least $\min {f+2,t+1}$.</p>
+<p>Just to repeat this subtle point, we <a href="https://decentralizedthoughts.github.io/2019-12-15-consensus-model-for-FLP/">already know</a> that if we want to design a protocol to be resilient to $t$ faults, in the worst case we might need $t+1$ rounds. However, even in executions of this protocol with a few actual failures $f&lt;t$, we need at least $f+2$ rounds.</p>
+<p>This post is based on the beautiful 2001 tutorial by Idit Keidar and Sergio Rajsbaum: <a href="https://iditkeidar.com/wp-content/uploads/files/ftp/consensus-bounds.pdf">On the Cost of Fault-Tolerant Consensus When There are No Faults - A Tutorial</a>.</p>
+<p>We start with two definitions, mention 3 models, then the $f=0$ case, followed by the general case.</p>
+<h2 id="definitions">Definitions</h2>
+<p><strong><em>Definition 1:</em></strong> <em>Two configurations are <strong>Almost Same (AS)</strong> if the state of all parties except for a single party $i$ are the same.</em></p>
+<p><strong><em>Definition 2:</em></strong> <em>Two Almost Same (AS) configurations are <strong>Failure Free Different (FFD)</strong> if the failure free continuation of one configuration leads to a different decision value than the failure free continuation of the other configuration.</em></p>
+<p>In other words, two configurations are <em>AS but FFD</em> if the state of all parties except for one are the same, and continuing one without faults leads to a different decision value than doing so with the other.</p>
+<h2 id="models">Models</h2>
+<p>There are slightly different lower bounds for 3 different adversary models and problems:</p>
+<p><strong><em>Early Stopping for Consensus under Crashes with Fixed First ($ES{-}C{-}Cfix$)</em></strong> : Early stopping for consensus in protocols where the first message sent in the round a party is crashed is fixed. Note this models includes omission failures and also deterministic protocols that always follow the same sending order.</p>
+<p><strong><em>Early Deciding for Uniform Consensus under Crashes with Fixed First ($ED{-}UC{-}Cfix$)</em></strong> : Early deciding for <a href="https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/">uniform consensus</a> in the same fault model above where the first message sent in the round a party is crashed is fixed.</p>
+<p><strong><em>Early Stopping for Consensus under Crashes ($ES{-}C{-}C$)</em></strong> : The standard crash model where parties can decide the order of messages sent in each round (potentially as a function of its state).</p>
+<h2 id="the-f0-case">The $f=0$ case</h2>
+<p><strong><em>Theorem for $f=0$</em></strong>: <em>Let there be a protocol in the synchronous model for $n$ parties that is resilient to $n-2 \geq t \geq 1$ failures. Then in failure-free executions:</em></p>
+<ol>
+ <li>$ES{-}C{-}Cfix$ : <em>the protocol must have an execution with at least 2 rounds.</em></li>
+ <li>$ED{-}UC{-}Cfix$ : <em>for $t&gt;1$, the protocol must have an execution where a decision is made after at least 2 rounds.</em></li>
+ <li>$ES{-}C{-}C$ : <em>for $t&gt;1$, the protocol must have an execution with at least 2 rounds.</em></li>
+</ol>
+<p>The theorem follows from Lemma 1 and Lemma 2.</p>
+<p><strong><em>Lemma 1</em></strong>: <em>Any consensus protocol that is resilient to at least 1 crash failure must have two initial configurations that are Almost Same but Failure Free Different (AS but FFD).</em></p>
+<p><em>Proof</em>: For any $0 \leq i \le n$ consider the initial configuration $C_i$ where parties 1 to $i$ have input 1 (empty set for $i=0$) and the rest have input 0. Let $val(i)$ be the decision in the failure free execution that starts with configuration $C_i$. By validity, $val(0)=0$ and $val(n)=1$. The (trivial) <a href="https://en.wikipedia.org/wiki/Sperner%27s_lemma#One-dimensional_case">one dimensional Sperner’s Lemma</a> then implies that there exists $1 \le i \le n$ and two configurations $C_{i-1},C_{i}$ such that:</p>
+<ul>
+ <li>$val(i-1) = 0$ while $val(i) = 1$</li>
+ <li>The only difference between configurations $C_{i-1}$ and $C_i$ is the state of party $i$.</li>
+</ul>
+<p>Hence, $C_{i-1},C_{i}$ are two AS but FFD configurations.</p>
+<p>This might not sound like much, but the next lemma shows that if there are two AS but FFD configurations, it is not possible to terminate (or decide) in one round starting in either one of them. Intuitively, seeking a contradiction, any party hearing all parties must decide and stop in one round in both configurations. But the configurations are so similar with just one party that has a different state. This causes problems because this party may crash after sending its message to just one party, who then decides and stops, but others don’t know what value to choose.</p>
+<p><strong><em>Lemma 2</em></strong>: <em>If $C,C’$ are two AS but FFD configurations at the beginning of a round, and in both configurations the adversary has at least $c \in{1,2}$ more crash failures (so has previously crashed at most $t-c$ parties) then:</em></p>
+<ol>
+ <li>$ES{-}C{-}Cfix$ : <em>any protocol must have an execution with at least 2 more rounds.</em></li>
+ <li>$ED{-}UC{-}Cfix$ : <em>for $c=2$, must have an execution where a decision is done after at least 2 more rounds.</em></li>
+ <li>$ES{-}C{-}C$ : <em>for $c=2$, must have an execution with at least 2 more rounds.</em></li>
+</ol>
+<p><em>Proof</em>: For contradiction, assume a binary consensus protocol where all parties stop in one more round in any failure free execution (or for case 2 above, all parties decide in one more round in failure free executions).</p>
+<p>Let party $i$ be the difference between $C$ and $C’$. We will start by proving this lemma with the simplifying assumption that $i$ sends its messages in the same order starting in either configuration $C$ or $C’$ (model $ES{-}C{-}Cfix$).</p>
+<p>World $A$: from configuration $C$, party $i$ sends to one party $j$ and then crashes. For party $j$, this looks exactly like the configuration where party $i$, and all other parties are non-faulty in this round, hence by our assumptions party $j$ must decide and stop at the end of the round.</p>
+<p>World $A’$: from configuration $C’$, party $i$ sends to the same party $j$ as above and then crashes. For party $j$, this looks exactly like the configuration where party $i$, and all other parties are non-faulty in this round, hence by our assumptions party $j$ must decide and stop at the end of the round.</p>
+<p>The executions in worlds $A$ and $A’$ look like continuations of configuration $C$ and $C’$ without failures, so $j$ must terminate by the end of the round. Since we chose $C$ and $C’$ to be FFDs, this means that $j$ must output different values in these executions. However, for all other parties, what they see is that $i$ (that crashed) and $j$ (that stopped) stop responding but cannot distinguish between worlds $A$ and $A’$, and thus must disagree with $j$ in at least one of these worlds.</p>
+<p>This completes the proof when parties have a fixed sending order because in both worlds $A$ and $A’$ it is party $j$ that stops. In model $ES{-}C{-}Cfix$ we can force this to be the case by simply choosing some specific party $j$ to be the first to receive messages from $i$.</p>
+<p>For model $ED{-}UC{-}Cfix$, uniform consensus, the adversary also crashes party $j$ and this proves that party $j$ cannot decide early. This requires $c = 2$ because the adversary crashes both $i$ and $j$.</p>
+<p>For model $ES{-}C{-}C$, for crash failures where parties can control the order of messages, party $i$ may send its first message to party $j_1$ in world $A$ and send its first message to another party $j_2$ in world $A’$. This will prevent our previous attack from working because $j$ stops responding in both worlds, so other parties cannot tell the difference.</p>
+<p>In order to fix this, in world $A$, $j_1$ terminates after receiving $i$’s message and the adversary crashes $j_2$. This means that neither $j_1$ nor $j_2$ continue participating in the next round. Similarly, in world $A’$, the adversary crashes $j_1$ and $j_2$ terminates so both $j_1,j_2$ stop responding. Hence, the remaining parties cannot distinguish between worlds $A$ and $A’$. Note that $c = 2$ because the adversary crashes both $i$ and one of the $j$’s in each world.</p>
+<h2 id="the-general-case">The general case</h2>
+<p><strong><em>Theorem</em></strong>: <em>Any protocol in the synchronous model for $n$ parties that is resilient to $n-2 \geq t \geq 1$ failures, then in executions with $f$ failures:</em></p>
+<ol>
+ <li>$ES{-}C{-}Cfix$ : <em>for $f\le t-1$ any protocol must have an execution with at least $f+2$ rounds.</em></li>
+ <li>$ED{-}UC{-}Cfix$ : <em>for $f \le t-2$, must have an execution where a decision is done after at least $f+2$ rounds.</em></li>
+ <li>$ES{-}C{-}C$ : <em>for $f \le t-2$, must have an execution with at least $f+2$ rounds.</em></li>
+</ol>
+<p>Looking at the proof for $f=0$, it has two steps:</p>
+<ol>
+ <li>Show that there are configurations in the beginning of round $1$ that are AS but FFD.</li>
+ <li>Show that we need at least two more rounds when starting from such a pair of configurations (if we have enough of a corruption budget).</li>
+</ol>
+<p>Following this logic, we now only need to show that for the values of $f \le t-1$ or $\le t-2$, it is possible to find two AS and FFD configurations in the beginning of round $f+1$ by only using $f$ faults. We will do so by showing in <strong><em>Lemma 3</em></strong> that each time we start with such a pair of configurations in round $k$, we can find another pair in round $k+1$ using only one more fault. We then just do that for $f$ rounds. More precisely:</p>
+<p><em>Proof of Theorem for $0&lt;f$</em>: Start with Lemma 1, then apply Lemma 3 $f$ times, to reach two AS but FFD configurations in the beginning round $f+1$. From Lemma 2, parties cannot complete (terminate or decide) the protocol in this round and thus must do so in round $f+2$ or greater.</p>
+<p><strong><em>Lemma 3</em></strong>: <em>If $C,C’$ are two AS but FFD configurations at the beginning of round $k$, then there are two configurations $D, D’$ that are AS but FFD that each extend $C,C’$ by one round in which the adversary crashed at most one party in round $k$.</em></p>
+<p><em>Proof of Lemma 3</em>: Let party $i$ be the only difference between $C$ and $C’$ and wlog assume that if party $i$ crashes in the beginning of the round then the failure free execution has a <em>different</em> value than the failure free extension of $C$ (otherwise use $C’$).</p>
+<p>Now consider the $n+1$ configurations $C_0,C_1,\dots,C_n=C$ where $C_j$ is the configuration in which the adversary crashes party $i$ after it sends to $j$ parties. Clearly any two consecutive configurations are AS because they differ in one party $j$ that either received or did not receive $i$’s message.</p>
+<p>Note that $C_0$ is the execution in which $i$ crashes in the beginning of the round. This means that from our above assumption we know that if we continue from $C_0$ without faults the decision value is going to be different from the decision value in a failure-free extension of configuration $C$. Using the (trivial) <a href="https://en.wikipedia.org/wiki/Sperner%27s_lemma#One-dimensional_case">one dimension Sperner’s Lemma</a>, we know that there must exist two consecutive configurations that are AS but FFD.</p>
+<p>This completes the proof of Lemma 3.</p>
+<h2 id="notes">Notes</h2>
+<ul>
+ <li>Comparing the technique of <a href="https://decentralizedthoughts.github.io/2019-12-15-consensus-model-for-FLP/">uncommitted configurations</a> (bi-valency) to the technique of a pair of AS FFD configurations: The latter is strictly stronger:
+ <ol>
+ <li>If $C,C’$ are two AS but FFD configurations then both are uncommitted (bi-valent).</li>
+ <li>Moreover, their uncommitted-ness is structured: for each configuration, one side is from a failure free execution.</li>
+ </ol>
+ </li>
+ <li>
+ <p>Lemma 3 can be applied $t$ times (after Lemma 1) to prove that protocols resilient to $t$ crashes cannot always terminate after $t$ rounds. This is an alternative proof for the $t+1$ round lower bound to the <a href="https://decentralizedthoughts.github.io/2019-12-15-synchrony-uncommitted-lower-bound/">proof that uses uncommitted configurations</a>.</p>
+ </li>
+ <li>
+ <p>To apply Lemma 3 in the crash model, we looked at the failure free decision if $i$ crashes. In the <strong>mobile adversary model</strong>, we look at the failure free decision if $i$ crashes for one round (and then heals) in both $C$ and $C’$. If its not the same value, then Lemma 3 holds by applying this crash to both $C$ and $C’$. Otherwise, the failure free decision if $i$ crashes for one round is fixed (wlog to the value opposite of $C$) so Lemma 3 holds by looking at the hybrid worlds where $i$ crashes for just one round after sending to $j$ parties (and then heals). This argument implies that <a href="https://link.springer.com/chapter/10.1007/BFb0028994">infinite executions must exist</a> with even just <strong>one</strong> mobile crash. Hence, deterministic solutions are impossible and randomization is needed in the mobile adversary model.</p>
+ </li>
+ <li>Note that the bound $\min \{ f+2,t+1 \}$ does not hold for $ES{-}C{-}C$ or $ED{-}UC{-}Cfix$, in those models the bound is:</li>
+</ul>
+\[\begin{align}
+ &amp; 
+ \begin{cases}
+ f+2\hphantom{-\sqrt{-}} &amp; \text{if } f \le t-2,\\
+ f+1 &amp; \text{otherwise}
+ \end{cases}
+ \end{align}\]
+<ul>
+ <li><em>Exercise</em>: devise a protocol that stops early in one round for $t=1$ and the crash model $ES{-}C{-}C$ where parties can choose the order they send messages in each round. That is, show that if there are no faults and parties can choose to send messages in different orders depending on their state, they can complete the protocol after one round in all failure free executions. Note that your protocol has to deal with the case that some party terminated early because it did not see faults, but others might continue running because they did.</li>
+</ul>
+<p>Please leave comments on <a href="https://x.com/ittaia/status/1751743296219529283?s=20">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#lowerbound">lowerbound</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Early+Stopping%2C+Same+but+Different%3A+Two+Rounds+Are+Needed+Even+in+Failure+Free+Executions&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2024-01-28-early-stopping-lower-bounds%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2024-01-09-gather-with-binding-and-verifiability/" data-toggle="tooltip" data-placement="top" title="Gather with Binding and Verifiability">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2024-01-30-between-crash-and-omission/" data-toggle="tooltip" data-placement="top" title="In between Crash and Omission failures">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

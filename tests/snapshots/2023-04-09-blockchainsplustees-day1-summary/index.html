@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Blockchains + TEEs Day 1 Summary</title>
+ 
+ 
+ <meta name="author" content="Kartik Nayak, Ittai Abraham, Aniket Kate">
+ 
+ <meta name="description" content="Our workshop on Blockchains + TEEs concluded last week. We had a fantastic series of talks and discussions on both days of the workshop. In this two part post, we highlight some key takeaways from each of the days. Natacha Crooks: In Trusted BFT Components, we (Mostly?) Trust In her talk, Natacha discussed the potential areas where TEEs can be beneficial or not in the context of consensus protocols. In...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Blockchains + TEEs Day 1 Summary">
+ <meta property="og:description" content="Our workshop on Blockchains + TEEs concluded last week. We had a fantastic series of talks and discussions on both days of the workshop. In this two part post, we highlight some key takeaways from each of the days. Natacha Crooks: In Trusted BFT Components, we (Mostly?) Trust In her talk, Natacha discussed the potential areas where TEEs can be beneficial or not in the context of consensus protocols. In...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Kartik Nayak, Ittai Abraham, Aniket Kate">
+ 
+ <meta property="og:article:published_time" content="2023-04-09T01:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2023-04-09-blockchainsplustees-day1-summary/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2023-04-09-blockchainsplustees-day1-summary/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Blockchains + TEEs Day 1 Summary">
+ <meta property="twitter:description" content="Our workshop on Blockchains + TEEs concluded last week. We had a fantastic series of talks and discussions on both days of the workshop. In this two part post, we highlight some key takeaways from each of the days. Natacha Crooks: In Trusted BFT Components, we (Mostly?) Trust In her talk, Natacha discussed the potential areas where TEEs can be beneficial or not in the context of consensus protocols. In...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Blockchains + TEEs Day 1 Summary</h1>
+ 
+ 
+ 
+ 
+ By <strong>Kartik Nayak, Ittai Abraham, Aniket Kate</strong><br>
+ 
+ <span class="post-meta">Posted on April 9, 2023</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>Our <a href="https://blockchainsplusx.github.io">workshop on Blockchains + TEEs</a> concluded last week. We had a fantastic series of talks and discussions on both days of the workshop. In this two part post, we highlight some key takeaways from each of the days.</p>
+<h4 id="natacha-crooks-in-trusted-bft-components-we-mostly-trust">Natacha Crooks: In Trusted BFT Components, we (Mostly?) Trust</h4>
+<p>In her talk, Natacha discussed the potential areas where TEEs can be beneficial or not in the context of consensus protocols.</p>
+<p>In consensus, it is <a href="http://news.cs.nyu.edu/~jinyang/fa08/papers/a2m.pdf">known</a> that trusted hardware can be used as a non-equivocation mechanism and thus, can help towards reducing the replication factor for BFT protocols from 3f+1 to 2f+1. In the talk, she mentions that while this reduction holds, it is not efficient. In particular, there are three key limitations with using a BFT protocol with trusted hardware and only 2f+1 replicas:</p>
+<ul>
+ <li><em>Limited responsiveness:</em> if there are fewer replicas, then opportunities for responsiveness in the protocol is limited since Byzantine replicas can easily delay some parts of the protocol.</li>
+ <li><em>Lack of parallelism:</em> tying messages to a <em>sequence number</em> implies only sequential processing of transactions, reducing throughput</li>
+ <li><em>Inefficiency of counters for defending against rollbacks:</em> existing BFT protocols require attestations for every message</li>
+</ul>
+<p>She then presents a FlexiTrust protocol that can achieve a high throughput per replica participating in the system. In fact, while still relying on 3f+1 replicas, they address the three issues discussed earlier and (i) reduce the number of phases of communication, and (ii) the communication cost in the protocol.</p>
+<p>To learn more, you can find her talk <a href="https://youtu.be/9-nhNQO5_Js?t=207">here</a> and the slides <a href="https://blockchainsplusx.github.io/docs/tees/NatachaCrooks.pptx">here</a>.</p>
+<h4 id="heidi-howard-confidential-consortium-framework-building-secure-multiparty-services-in-the-cloud">Heidi Howard: Confidential Consortium Framework: Building Secure Multiparty Services in the Cloud</h4>
+<p>Heidi discussed some properties of the Confidential Consortium Framework (CCF) in her talk. At a high level, CCF aims to build a general-purpose foundation for trustworthy multiparty services on untrusted infrastructure. The key properties obtained by CCF include:</p>
+<ul>
+ <li>Confidentiality and integrity: confidentiality and executional integrity is provided by TEEs whereas for data integrity, CCF leverages an immutable ledger and the use of Merkle trees outside the trust boundary</li>
+ <li>Availability: leverages the existence of an immutable ledger</li>
+ <li>Address rollback attacks: by treating nodes as ephemeral but do not allow a restart from a persistent state</li>
+ <li>Allows for reconfiguration and disaster recovery to a valid state</li>
+</ul>
+<p>In all, CCF tightly couple TEEs and blockchains. First, it leverage TEEs to build better blockchains by fundamentally decoupling operators and consortium members. Second, it leverages blockchains to build better TEEs by enabling confidentiality, integrity and availability on untrusted infrastructure.</p>
+<p>Learn more about CCF <a href="https://youtu.be/9-nhNQO5_Js?t=2290">here</a>. Slides can be found <a href="https://blockchainsplusx.github.io/docs/tees/HeidiHoward.pdf">here</a>.</p>
+<h4 id="mic-bowman-building-decentralized-trust-with-a-trusted-execution-environment">Mic Bowman: Building Decentralized Trust with a Trusted Execution Environment</h4>
+<p>The key takeaway from Mic’s talk is that <em>there are no perfect security technologies, but we should consider using TEEs because it is worth the risk.</em></p>
+<p>Well, all protocols/systems make assumptions. For instance, Blockchains assume the existence of less than an f bad actors (or 49% bad actors). Similarly, with trusted hardware, there is a chance that assumptions may break down. In that sense, there are no perfect solutions, and we should think about the use of TEEs as managing risk instead of a bullet-proof solution.</p>
+<p>While most users are looking for confidentiality when using TEEs, in decentralized computing we care more about verifiable integrity. In effect, when leveraging TEEs in decentralized computation, we aim to get the same properties as what we would get with a “community vote” system, but the hope is that we can make this process more efficient. For instance, TEEs can help increase resilience, or help build private data objects through smart contracts executed within TEEs.</p>
+<p>Should you trust TEE as a sole arbiter of truth? There are two extreme schools of thought:
+(i) It works and should be used everywhere
+(ii) It doesn’t work and shouldn’t be used anywhere</p>
+<p>Mic suggests that should aim for a middle ground. In that sense, the way to think about TEEs is that it:</p>
+<ul>
+ <li>Works unless explicitly broken</li>
+ <li>It is expensive to break</li>
+ <li>One piece of a security solution, and not <em>the</em> solution</li>
+</ul>
+<p>Mic’s talk can be found <a href="https://youtu.be/9-nhNQO5_Js?t=4415">here</a>. Here are the <a href="https://blockchainsplusx.github.io/docs/tees/MicBowman.pdf">slides</a>.</p>
+<h4 id="matt-green-ask-not-what-secure-hardware-can-do-for-ledgers-but-what-ledgers-can-do-for-secure-hardware">Matt Green: Ask not what secure hardware can do for ledgers, but what ledgers can do for secure hardware</h4>
+<p>The key question Matt asks is <em>how blockchains can be used as a first-class cryptographic objects to secure TEEs and other systems?</em></p>
+<p>To answer this question, he focuses on <em>what can’t TEEs do?</em> There are two key aspects. First, to communicate with the world, TEEs are almost always dependent on an untrusted host. The host can be malicious and can censor. Second, the cannot store state reliably. Storage is typically handled by the host machine, and TEEs are always susceptible to rollback attacks.</p>
+<p>The key takeaway from his talk is that, blockchains can help solve both of these problems, i.e., statekeeping and providing a verifiable input to a TEE. A key property that enables the solution is a <em>proof of publication</em>, e.g., with Bitcoin, one can provide an economic guarantee that some x number of blocks have been produced.</p>
+<p>Learn more about the use of blockchains to secure TEEs from Matt <a href="https://youtu.be/9-nhNQO5_Js?t=8942">here</a>. Here are the <a href="">slides</a> from the talk.</p>
+<h4 id="jonathan-passerat-palmbach-privacy-x-mev-mitigation-collaboration-decentralisation">Jonathan Passerat-Palmbach: Privacy x MEV: Mitigation, Collaboration, Decentralisation</h4>
+<p>Jonathan explained the concept of maximal extractable value (MEV) as the profit a party can earn by inserting, removing or reordering transactions. At a high level, the goal is to reduce MEV as much as possible, and where it cannot be reduced (or for the “good” MEV), it should be redistributed.</p>
+<p>How does Flashbots attempt to solve this problem? At a high-level, a new classes of parties called searchers and builders that compete with each other in creating and ordering transactions and engage in a sealed-bid auction. The goal is thus to have decentralization of validators (since validators only tend to follow a simple protocol to pick the highest bid) while searchers and builders can perform the sophisticated job of extracting MEV.</p>
+<p>Ensuring this process currently is riddled with a problem: if validators learn the contents of the block produced by searchers and builders, then they can steal all of the profits from these entities. On the other hand, if they do not learn all the content, then they are essentially relying on these entities to reveal the blocks; if they do not, then validators would get slashed. Thus, the current ecosystem uses <em>trusted relays</em> such as a Flashbots to achieve this guarantee.</p>
+<p>Some of the key challenges they face include: 
+(i) Centralization of builders, (ii) Trusted relays, and (iii) Users do not benefit from MEV</p>
+<p>Given this background, Jonathan discussed the following key research questions:</p>
+<ul>
+ <li>How can SGX be used to address these concerns?</li>
+ <li>Taking into account commercially available TEEs’ known design flaws, how could we strengthen them further?</li>
+ <li>How could we design a network made of heterogeneous TEEs considering they currently have different threat models?</li>
+ <li>Exploring how encrypted mempools can help solve some of these challenges.</li>
+</ul>
+<p>Learn more details about the challenges and research questions from Jonathan’s talk <a href="https://youtu.be/9-nhNQO5_Js?t=10870">here</a>. Here are the <a href="">slides</a> from the talk.</p>
+<p>Please add your thoughts on <a href="https://twitter.com/kartik1507/status/1649041738810507264?s=20">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Blockchains+%2B+TEEs+Day+1+Summary&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2023-04-09-blockchainsplustees-day1-summary%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2023-04-01-hotstuff-2/" data-toggle="tooltip" data-placement="top" title="What is the difference between PBFT, Tendermint, HotStuff, and HotStuff-2?">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2023-04-17-blockchainsplustees-day2-summary/" data-toggle="tooltip" data-placement="top" title="Blockchains + TEEs Day 2 Summary">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

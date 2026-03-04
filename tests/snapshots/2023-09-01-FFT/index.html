@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>The Fast Fourier Transform over finite fields</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham">
+ 
+ <meta name="description" content="The Fast Fourier Transform (FFT) developed by Cooley and Tukey in 1965 has its origins in the work of Gauss. The FFT, its variants and extensions to finite fields, are a fundamental algorithmic tool and a beautiful example of interplay between algebra and combinatorics. There are many great resources on FFT, see ingopedia’s curated list. Given a field $F$, a polynomial of degree at most $d-1$ is defined as $P(X)=a_0+a_1...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="The Fast Fourier Transform over finite fields">
+ <meta property="og:description" content="The Fast Fourier Transform (FFT) developed by Cooley and Tukey in 1965 has its origins in the work of Gauss. The FFT, its variants and extensions to finite fields, are a fundamental algorithmic tool and a beautiful example of interplay between algebra and combinatorics. There are many great resources on FFT, see ingopedia’s curated list. Given a field $F$, a polynomial of degree at most $d-1$ is defined as $P(X)=a_0+a_1...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham">
+ 
+ <meta property="og:article:published_time" content="2023-09-01T08:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2023-09-01-FFT/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2023-09-01-FFT/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="The Fast Fourier Transform over finite fields">
+ <meta property="twitter:description" content="The Fast Fourier Transform (FFT) developed by Cooley and Tukey in 1965 has its origins in the work of Gauss. The FFT, its variants and extensions to finite fields, are a fundamental algorithmic tool and a beautiful example of interplay between algebra and combinatorics. There are many great resources on FFT, see ingopedia’s curated list. Given a field $F$, a polynomial of degree at most $d-1$ is defined as $P(X)=a_0+a_1...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>The Fast Fourier Transform over finite fields</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham</strong><br>
+ 
+ <span class="post-meta">Posted on September 1, 2023</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>The Fast Fourier Transform (<a href="https://en.wikipedia.org/wiki/Fast_Fourier_transform">FFT</a>) developed by <a href="https://www.ams.org/journals/mcom/1965-19-090/S0025-5718-1965-0178586-1/S0025-5718-1965-0178586-1.pdf">Cooley and Tukey</a> in 1965 has its origins in the work of <a href="https://www.cis.rit.edu/class/simg716/Gauss_History_FFT.pdf">Gauss</a>. The FFT, its variants and extensions to finite fields, are a fundamental algorithmic tool and a beautiful example of interplay between algebra and combinatorics. There are many great resources on FFT, see <a href="https://ingonyama-zk.github.io/ingopedia/fft.html">ingopedia’s curated list</a>.</p>
+<p>Given a field $F$, a <em>polynomial of degree at most $d-1$</em> is defined as $P(X)=a_0+a_1 X+ \dots + a_{d-1} X^{d-1}$, where each $a_i \in F$. $P(X)$ can be viewed as a vector $\vec{a}=\langle a_0,\dots,a_{d-1} \rangle$ of $d$ elements in $F$.</p>
+<p>Polynomials can also be <em>evaluated</em>. Given $d$ unique points $x_1,\dots,x_d$ in $F$, we can represent $P(X)$ as the vector $\vec{y}=\langle y_1,\dots,y_d \rangle$, where $y_i=P(x_i)$ is the evaluation of $P(X)$ on $x_i$.</p>
+<p>In a <a href="https://decentralizedthoughts.github.io/2020-07-17-polynomial-secret-sharing-and-the-lagrange-basis/">previous post</a> we showed the isomorphism $\vec{a} \leftrightarrow \vec{y}$ between degree at most $d-1$ polynomials and their evaluations at $d$ unique points. Here we focus on the <em>computational</em> cost of this mapping: the number of field operations.</p>
+<p>Given $\vec{a}$ for a polynomial of degree at most $d-1$, one can compute each $y_i=P(x_i)$ using <a href="https://en.wikipedia.org/wiki/Horner%27s_method">Horner’s method</a> via $O(d)$ field operations (observing that $P(X)=a_0+x(a_1+(x(a_2 + \dots + )))$ ). For a total of $O(d^2)$ operations to compute $\vec{y}$. Can we compute the <em>evaluation</em> $\vec{a} \to \vec{y}$ in better than quadratic?</p>
+<p>Similarly, for $d$ unique points $\vec{x}$, it is possible to compute the $i$-th <a href="https://en.wikipedia.org/wiki/Lagrange_polynomial">Lagrange base</a> polynomial $L_i(X)$ which equals 1 on $x_i$ and 0 for all $x_j, j \neq i$ using $O(d)$ operations as $L_i(X)= \prod_{j \neq i} (X-x_j)/ \prod_{j \neq i} (x_i-x_j)$. So given evaluations $\vec{y}$, computing $P(X)= \sum_{i=1}^d y_i L_i(X)$ can be done in $O(d^2)$ operations. Can we compute the <em>interpolation</em> $\vec{y} \to \vec{a}$ in better than quadratic?</p>
+<p>The <em>Fast Fourier Transform</em> allows interpolating and evaluating a polynomial on special points, <a href="https://www.quantamagazine.org/the-simple-math-behind-the-mighty-roots-of-unity-20210923/">roots of unity</a>, with $O( d \log d)$ operations.</p>
+<p><strong>FFT Theorem</strong>:</p>
+<ul>
+ <li>Given $d=2^D$ and a field $F$ of characteristic $p=qd+1$, let $\omega$ be a primitive $d$-th root of unity. There exists as algorithm that in $O(d \log d )$ operations:</li>
+ <li>Computes $P(\omega^0),\dots,P(\omega^{d-1})$ given the coefficients of a degree at most $d-1$ polynomial $P(X)$.</li>
+ <li>Computes the coefficients of the degree at most $d-1$ polynomial $P(X)$ given $d$ evaluations $P(\omega^0),\dots,P(\omega^{d-1})$.</li>
+</ul>
+<p>This result uses <strong>two powerful ingredients</strong>: <em>divide-and-conquer</em>, and <em>roots of unity</em>. We start with the first direction: computing the evaluations given the coefficients.</p>
+<h2 id="the-first-ingredient-decompose-a-polynomial-into-its-odd-and-even-coefficients-each-with-half-the-degree">The first ingredient: decompose a polynomial into its odd and even coefficients each with half the degree</h2>
+<p>Assume that $P(X)$ has degree at most $d-1$ and that $d=2^D$ is a power of two. A classic divide-and-conquer algorithm design principle when applied to polynomials is to “split” a degree at most $d-1$ polynomial into two degree at most $d/2-1$ polynomials by dividing the polynomial to its <em>even</em> and <em>odd</em> coefficients:</p>
+\[P(X)= P_e(X^2) + XP_o(X^2) 
+\label{\star} \tag{*}\]
+<p>Where $P_e(X),P_o(X)$ are polynomials induced by the <em>even</em> and <em>odd</em> coefficients of $P(X)$ as follows:</p>
+\[P_e(X)=a_0 + a_2 X+ a_4 X^2 + \dots+ a_{d-2}X^{d/2 -1}\]
+\[P_o(X)=a_1 + a_3 X+ a_5 X^2 + \dots+ a_{d-1}X^{d/2 -1}\]
+<p>Here is a pictorial representation of the odd and even indexes:</p>
+<p><img src="/uploads/FFToddandeven.jpeg" alt="" /></p>
+<p>Why is this such a powerful divide-and-conquer decomposition?</p>
+<ul>
+ <li>Given $d$ evaluations $P_e(a_1^2),\dots,P_e(a_{d}^2)$ and $d$ evaluations $P_o(a_1^2),\dots,P_o(a_{d}^2)$, one can compute the desired $d$ evaluations $P(a_1),\dots,P(a_d)$ in $2d$ operations, simply because $P(a_i)=P_e(a_i^2) + a_i P_o(a_i^2)$ via $(\ref{\star})$.</li>
+ <li>The degree of $P_e(X)$ and $P_o(X)$ is at most $d/2-1$. So if we manage to repeat this recursion we can get $O(\log d)$ depth!</li>
+ <li>However, to continue recursively there seems to be a <em>challenge</em>:
+ <ul>
+ <li>$P_e(X)$ and $P_o(X)$ are of degree less than $d/2$, so from the recursion, we are given only $d/2$ (not $d$) evaluations $P_e(b_1),\dots,P_e(b_{d/2})$ and similarly $d/2$ (not $d$) evaluations for $P_o(X)$.</li>
+ <li>However, to compute all $d$ evaluations of $P(X)$ via $(\ref{\star})$ we need the $d$ evaluations $P_e(a_0^2),\dots,P_e(a_{d}^2)$ and similarly the $d$ evaluations of squares for $P_o(X)$.</li>
+ </ul>
+ </li>
+ <li>How can we generate $d$ evaluations of squares from just $d/2$ evaluations using $O(d)$ operations?</li>
+</ul>
+<h2 id="the-second-ingredient-use-roots-of-unity">The second ingredient: use roots of unity</h2>
+<p>For $g \in F$, if $g^d=1$ then we call $g$ a <em>$d$-th root of unity</em>. Moreover, if $g^1,\dots,g^d$ generates $d$ distinct elements then we call $g$ a <em>primitive $d$-th root of unity</em>.</p>
+<p>Suppose $g$ is such <em>a primitive $d$-th root of unity</em>. So $g,g^2,\dots, g^{d-1}, g^d=1$ forms a cyclic group of order $d$ with $d=2^D$.</p>
+<p>Now, if we start squaring these roots of unity, we can see a pretty cool pattern. Starting at the first elements, we get:</p>
+\[(g^1)^2=g^2,(g^2)^2=g^4,...,(g^{d/2-1})^2=g^{d-2},(g^{d/2})^2=g^{d}=1\]
+<p>Since we got to the value $1$ at the $d/2$-th power, elements now start repeating!</p>
+\[(g^{d/2+1})^2=g^{d+2}=g^d\cdot g^2=g^2,(g^{d/2+2})^2=g^4,...,(g^{d})^2=g^{d}=1\]
+<p>So we can solve the <em>challenge</em> above:</p>
+<ul>
+ <li>Evaluate $P_e(X)$ and $P_o(X)$ at the $d/2$ points $g^2,g^4, \dots, g^{d}=1$ that form the cyclic group of order $d/2$ of the $d/2$-th roots of unity. Repeating this sequence twice gives us $d$ evaluations at the squares of the cyclic group of order $d$. Each member of $d/2$ appears twice in the squares of $d$:</li>
+</ul>
+\[(g)^2,(g^2)^2,\dots,(g^{d/2})^2=1,(g^{d/2 +1})^2=g^2,(g^{d/2 +2})^2=g^4,\dots,(g^d)^2=1\]
+<p><strong>The $d/2$ evaluations of the $d/2$-th roots, repeated twice, give all the $d$ evaluations of squares of the $d$-th roots.</strong> This was the missing piece to complete the divide-and-conquer!</p>
+<p>As a visual example, fix $d=8$, every square of a power of $\omega_8$, say $(\omega_8^i)^2$ equals a power of $\omega_4$ (in particular $\omega_4^{i \bmod 4}$). For a specific example consider the squares of $\omega_8^3$ and $\omega_8^7$. Observe that $(\omega_8^3)^2 = \omega_8^6 = \omega_4^3$ and similarly $(\omega_8^7)^2 = \omega_8^{14} = \omega_8^{6} = \omega_4^3$:</p>
+<p><img src="/uploads/FFTexample.jpeg" alt="" /></p>
+<h4 id="finding-a-primitive-root-of-unity">Finding a primitive root of unity</h4>
+<p>If $F$ is a prime Field of characteristic $p=dq+1$ then we are guaranteed that for any $x$, $g=x^q$ is a $d$-th root of unity because $g^d = x^{qd}=x^{p-1}=1$ (using <a href="https://en.wikipedia.org/wiki/Fermat%27s_little_theorem">Fermat’s little theorem</a>). It is easy to check that the $d$-th roots of unity form a multiplicative group, and hence a <a href="https://mathoverflow.net/questions/54735/collecting-proofs-that-finite-multiplicative-subgroups-of-fields-are-cyclic">cyclic group</a>.</p>
+<p>Choosing $x$ uniformly at random from $F\setminus {0}$ we get that $x^q$ is a uniformly random $d$-th roots of unity.</p>
+<p>To see why this is true, denote $f(x)=x^q$ and see that $|x \text{ s.t. } f(x)=y|=q$ for all $y$. Indeed $f(x)$ maps a set of size $dq$ to a set of size at most $d$ (since $f(x)^d=1$ is a root of $x^d -1$ which can have at most $d$ roots). Finally, for any $y$ there can be at most $q$ values such that $x^q=y$. So $f(x)$ must map exactly $q$ elements to each of the $d$ options. Here we used twice the fundamental fact that <a href="https://decentralizedthoughts.github.io/2020-07-17-the-marvels-of-polynomials-over-a-field/">nontrivial polynomials cannot have more roots than their degree</a>.</p>
+<p>Since $d=2^D$, the cyclic group of order $d$ has $d/2$ primitive roots (all the odd powers are generators). Moreover, if $g=x^q$ is not a primitive root, then it’s an even power, so $g^{d/2} = 1$.</p>
+<p>That implies a simple <a href="https://en.wikipedia.org/wiki/Las_Vegas_algorithm">Las Vegas algorithm</a>: Randomly choose a nonzero $x \in F$, set $g=x^q$, and if $g^{d/2} \neq 1$ then output $g$, otherwise repeat. Since the probability of success is $1/2$, the expected number of rounds is 2.</p>
+<h3 id="computational-cost-of-the-fft">Computational cost of the FFT</h3>
+<p>Each time the degree is cut by half, the depth is $\log_2 d = D$. In each layer, there are $O(d)$ operations: at layer $i$ there are $2^i$ polynomials of degree $2^{d-i}$, each pair of polynomials requires $2^{d-i+2}$ operations to compute the degree $2^{d-i+1}$ polynomial. For a total of $2^{i-1} \times 2^{d-i+2}= 2d$ operations.</p>
+<p>So overall $2 d \log_2 d$ field operations.</p>
+<h2 id="interpolation-inverse-fft">Interpolation: inverse FFT</h2>
+<p>Given $d$ evaluations $P(\omega^1),\dots,P(\omega^d)$ can we interpolate and compute the coefficients $\vec{a}$ of $P(X)$ in $O(d \log d)$ operations? Yes, using the same two ingredients!</p>
+<p>Let’s look again at</p>
+\[P(X)= P_e(X^2) + XP_o(X^2)\]
+<p>If we had $d/2$ evaluations, $P_e(\omega^2),P_e(\omega^4),\dots,P_e(\omega^d)$ and $d/2$ evaluations, $P_o(\omega^2),P_o(\omega^4),\dots,P_o(\omega^d)$ then we could recursively obtain the coefficients $\vec{b},\vec{c}$ of $P_e(X)$ and $P_o(X)$ respectively.</p>
+<p>Now via $(\ref{\star})$ get that $a_{2i}=b_i$ and $a_{2i-1}=c_i$ directly.</p>
+<p>So the only challenge is to compute $\vec{e}=P_e(\omega^2),P_e(\omega^4),\dots,P_e(\omega^d)$ and $\vec{o}=P_o(\omega^2),P_o(\omega^4),\dots,P_o(\omega^d)$ from $\vec{y}=P(\omega^1),\dots,P(\omega^d)$.</p>
+<p>As expected we will use the properties of roots of unity.</p>
+<p>For any $1 \le j \le d/2$ to compute $o_j$ and $e_j$ we start with two equations by evaluating $(\ref{\star})$ at $\omega^j$ and $\omega^{d/2+j}$:</p>
+\[P(\omega^j) = P_e(\omega^{2j}) + \omega^j P_o(\omega^{2j})\]
+<p>and</p>
+\[P(\omega^{d/2+j}) = P_e(\omega^{2j}) - \omega^j P_o(\omega^{2j})\]
+<p>Where in the second equation we use $\omega^{d+x}=\omega^x$ and $\omega^{d/2+x}= -\omega^x$. The latter follows from $\omega^{d/2}=-1$ which can be derived from $(\omega^{d/2})^2 -1 =0 = (\omega^{d/2}-1)(\omega^{d/2}+1)$. Now note that $\omega^{d/2} -1 \neq 0$ because $\omega$ is a primitive $d$-th root of unity, so it must be that $\omega^{d/2} + 1 = 0$.</p>
+<p>Using the notation $y,e,o$ we get:</p>
+\[y_j = e_j + \omega^j o_j\]
+<p>and</p>
+\[y_{d/2+j} = e_j - \omega^j o_j\]
+<p>Adding $(9)$ to $(10)$ and then dividing by 2 we get:</p>
+\[e_j=(y_j+y_{d/2+j})/2\]
+<p>While subtracting $(10)$ from $(9)$ and then dividing by $2\omega^j$ we get:</p>
+\[o_j=(y_j-y_{d/2+j})/2\omega^j\]
+<p>So we can compute $e_j,o_j$ using a constant number of field operations on $y_j,y_{d/2+j}, \omega^j$, hence compute all of them in $O(d)$ operations.</p>
+<p>Again we have $\log_2 d$ layers of recursion and each layer requires $O(d)$ operations for a total of $O(d \log d)$ operations.</p>
+<h3 id="inverse-fft-via-inversion">Inverse FFT via Inversion</h3>
+<p>The FFT is a linear transformation of the <a href="https://en.wikipedia.org/wiki/Vandermonde_matrix">Vandermonde matrix</a> where $V_{i,j}=\omega^{ij}$. The <em>inverse matrix</em> is $U_{i,j}= \omega^{-ij}/d$. This can be seen as the $i,j$ value of the product $VU$ is $(VU)_{i,j} = \frac{1}{d} \sum_k \omega^{k(i-j)}$ which equals 1 for $i=j$ and 0 otherwise (because $(\omega -1 )(1+\omega+\dots+\omega^{d-1}) = \omega^d -1 = 0$). Hence, running the regular FFT with $\omega^{-1}$ and dividing by $d$ is the same as multiplying by the inverse $U$. This obtains inverse FFT as well.</p>
+<h3 id="do-we-need-fields-of-characteristic-q-2d1">Do we need fields of characteristic $q 2^D+1$?</h3>
+<p>The requirement to have a field of characteristic $q 2^D+1$ is limiting. What if we are using a field that does not have a large power of two as a root of unity, but we still want to work with large, degree at most $d-1$ polynomials? Recent work of <a href="https://arxiv.org/abs/2107.08473">Ben-Sasson, Carmon, Kopparty, and Levit</a> shows how to do FFT for any field in $O(d \log d)$ operations!</p>
+<h2 id="acknowledgments">Acknowledgments</h2>
+<p>Many thanks to Gilad Stern, Valeria Nikolaenko, and Dan Boneh for insightful discussions and comments.</p>
+<p>Your comments and thoughts on <a href="https://twitter.com/ittaia/status/1697630778144801071?s=20">x</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#math">math</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=The+Fast+Fourier+Transform+over+finite+fields&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2023-09-01-FFT%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2023-07-22-agreeemnt-on-a-core-set/" data-toggle="tooltip" data-placement="top" title="Asynchronous Agreement on a Core Set">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2023-09-30-scaling/" data-toggle="tooltip" data-placement="top" title="Scaling Blockchains: the Power of Batching">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

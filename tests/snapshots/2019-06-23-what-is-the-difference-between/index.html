@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>What is the difference between PBFT, Tendermint, SBFT and HotStuff ?</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham">
+ 
+ <meta name="description" content="In this post I will try to compare four of my favorite protocols for Byzantine Fault Tolerant (BFT) State Machine Replication (SMR): PBFT. The gold standard for BFT SMR. Highly recommend to see this video of Barbara Liskov from 2001. Here is the PBFT project page. Aptos’s BFT is based on Jolteon which is based on PBFT. See this post for more on PBFT. Tendermint. A modern BFT algorithm that...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="What is the difference between PBFT, Tendermint, SBFT and HotStuff ?">
+ <meta property="og:description" content="In this post I will try to compare four of my favorite protocols for Byzantine Fault Tolerant (BFT) State Machine Replication (SMR): PBFT. The gold standard for BFT SMR. Highly recommend to see this video of Barbara Liskov from 2001. Here is the PBFT project page. Aptos’s BFT is based on Jolteon which is based on PBFT. See this post for more on PBFT. Tendermint. A modern BFT algorithm that...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham">
+ 
+ <meta property="og:article:published_time" content="2019-06-23T03:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2019-06-23-what-is-the-difference-between/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2019-06-23-what-is-the-difference-between/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="What is the difference between PBFT, Tendermint, SBFT and HotStuff ?">
+ <meta property="twitter:description" content="In this post I will try to compare four of my favorite protocols for Byzantine Fault Tolerant (BFT) State Machine Replication (SMR): PBFT. The gold standard for BFT SMR. Highly recommend to see this video of Barbara Liskov from 2001. Here is the PBFT project page. Aptos’s BFT is based on Jolteon which is based on PBFT. See this post for more on PBFT. Tendermint. A modern BFT algorithm that...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>What is the difference between PBFT, Tendermint, SBFT and HotStuff ?</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham</strong><br>
+ 
+ <span class="post-meta">Posted on June 23, 2019</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>In this post I will try to compare four of my favorite protocols for Byzantine Fault Tolerant (<a href="https://en.wikipedia.org/wiki/Byzantine_fault">BFT</a>) State Machine Replication (<a href="https://en.wikipedia.org/wiki/State_machine_replication">SMR</a>):</p>
+<ol>
+ <li>
+ <p><a href="http://pmg.csail.mit.edu/papers/osdi99.pdf">PBFT</a>. The gold standard for BFT SMR. Highly recommend to see <a href="https://ttv.mit.edu/videos/16444-practical-byzantine-fault-tolerance">this video</a> of Barbara Liskov from 2001. Here is the PBFT <a href="http://www.pmg.csail.mit.edu/bft/">project page</a>. Aptos’s BFT is based on <a href="https://arxiv.org/pdf/2504.18649">Jolteon</a> which is based on PBFT. See <a href="https://decentralizedthoughts.github.io/2025-02-14-PBFT/">this post</a> for more on PBFT.</p>
+ </li>
+ <li>
+ <p><a href="https://arxiv.org/abs/1807.04938">Tendermint</a>. A modern BFT algorithm that also uses peer-to-peer gossip protocol among nodes. Tendermint has evolved to <a href="https://github.com/cometbft/cometbft">CometBFT</a>. In some ways <a href="https://eprint.iacr.org/2023/397.pdf">HotStuff-2</a> can be viewed as a modern protocol that borrows from both Tendermint and HotStuff.</p>
+ </li>
+ <li>
+ <p><a href="https://research.vmware.com/files/attachments/0/0/0/0/0/7/2/sbft_scaling_up_byzantine_fault_tolerance_5_.pdf">SBFT</a>. A BFT system that builds on PBFT for better scalability and better best-case latency. <a href="https://arxiv.org/abs/2505.08771">KudzuBFT</a> and Solana’s <a href="https://www.anza.xyz/blog/alpenglow-a-new-consensus-for-solana">AlpenGlow</a> represent modern improvements over SBFT.</p>
+ </li>
+ <li>
+ <p><a href="https://research.vmware.com/files/attachments/0/0/0/0/0/7/7/podc.pdf">HotStuff</a>. A new BFT protocol that provides both linearity and responsiveness. LibraBFT and some of the early versions of <a href="https://developers.diem.com/papers/diem-consensus-state-machine-replication-in-the-diem-blockchain/2021-08-17.pdf">DiemBFT</a> were based on HotStuff. <a href="https://eprint.iacr.org/2023/397.pdf">HotStuff-2</a>, <a href="https://arxiv.org/abs/2205.11652">Beegees</a>, <a href="https://hyperliquid.gitbook.io/hyperliquid-docs/hypercore/overview">HyperBFT</a>, <a href="https://arxiv.org/abs/2502.20692">MonadBFT</a>, <a href="https://decentralizedthoughts.github.io/2025-09-27-carry-the-tail/">Carry</a> represent modern implementations and improvements over HotStuff (also see <a href="https://decentralizedthoughts.github.io/2022-11-24-two-round-HS/">this post</a>).</p>
+ </li>
+</ol>
+<p>This post provides a comparison at the protocol level from the lens of the theory of distributed computing. In particular, this is not a comparison of the system or the software. It’s a comparison of the <em>fundamental measures</em> by which one should look at these different protocols. Much of the comparison can be summarized in this table, which essentially shows that no one protocol Pareto dominates all the others.</p>
+<table>
+ <thead>
+ <tr>
+ <th> </th>
+ <th>Best-case Latency</th>
+ <th>Normal-case Communication</th>
+ <th>View-Change Communication</th>
+ <th>View-Change Responsive</th>
+ </tr>
+ </thead>
+ <tbody>
+ <tr>
+ <td>PBFT</td>
+ <td>3</td>
+ <td>O(n<sup>2</sup>)</td>
+ <td>O(n<sup>2</sup>)</td>
+ <td>Yes</td>
+ </tr>
+ <tr>
+ <td>Tendermint</td>
+ <td>3</td>
+ <td>O(n) (*)</td>
+ <td>O(n)</td>
+ <td>No</td>
+ </tr>
+ <tr>
+ <td>SBFT</td>
+ <td>2</td>
+ <td>O(n)</td>
+ <td>O(n<sup>2</sup>)</td>
+ <td>Yes</td>
+ </tr>
+ <tr>
+ <td>HotStuff</td>
+ <td>4</td>
+ <td>O(n)</td>
+ <td>O(n)</td>
+ <td>Yes</td>
+ </tr>
+ </tbody>
+</table>
+<p>Before saying how these protocols are different it is important to say how similar they are:</p>
+<ol>
+ <li>They are all protocols for state machine replication (SMR) against a Byzantine adversary.</li>
+ <li>All work in the Partial synchrony model (see <a href="/2019-06-01-2019-5-31-models/">here</a>) and obtain safety (always) and liveness (after GST) in the face of an adversary that controls $f$ replicas out of a total of $n=3f+1$ replicas (see <a href="/2019-06-07-modeling-the-adversary/">here</a> for threshold adversary).</li>
+ <li>All these protocols are based on the classic leader-based <a href="http://pmg.csail.mit.edu/papers/vr.pdf">Primary-Backup</a> approach where leaders are replaced in a <em>view-change</em> protocol.</li>
+</ol>
+<h2 id="the-conceptual-difference-rotating-leaders-vs-stable-leaders">The conceptual difference: rotating leaders vs stable leaders</h2>
+<p>As mentioned above, all these protocols have the ability to replace leaders via a <em>view-change</em> protocol. 
+One key conceptual difference between {PBFT,SBFT} and {Tendermint, HotStuff} is that {PBFT,SBFT} are based on the <em>stable leaders</em> paradigm where a leader is changed only when a problem is detected, so a leader may stay for many commands/blocks. {Tendermint, HotStuff} are based on the <em>rotating leader</em> paradigm. A leader is rotated after a single attempt to commit a command/block. In this paradigm, leader rotation (view-change) is part of the normal operation of the system.</p>
+<p>Note that {PBFT,SBFT} could be rather easily modified to run in the <em>rotating leader</em> paradigm and similarly {Tendermint, HotStuff} could be rather easily modified to run in the <em>stable leaders</em> paradigm. Indeed modern versions of {PBFT,SBFT} like {Jolteon, KudzuBFT} do exactly that.</p>
+<p>As in many cases, this is a <strong>trade-off</strong>. On the one hand, maintaining a stable leader means less overhead and better performance due to stability when the leader is honest and trusted. On the other hand, a stable malicious leader can cause undetectable malicious actions. As an example, one such hard-to-detect malicious action is setting the internal order of commands in a block in a biased manner. Constantly rotating the leader provides a stronger <em>fairness</em> guarantee.</p>
+<h2 id="technical-differences-in-the-normal-case-leader-commit-phase">Technical differences in the normal-case leader commit phase</h2>
+<p>PBFT uses all-to-all messages that create $O(n^2)$ communication complexity during the normal-case leader commit phase. It has been <a href="https://www.cs.unc.edu/~reiter/papers/1994/CCS.pdf">long observed</a> that this phase can be transformed to a linear communication pattern that creates $O(n)$ communication complexity. Both SBFT and HotStuff use this approach to get a linear cost for the leader commit phase. Tendermint uses a gossip all-to-all mechanism, so $O(n \log n)$ messages and $O(n^2)$ words. Since this is not essential for the protocol, in the table above I consider a variant of Tendermint that does $O(n)$ communication in the normal-case leader commit phase as well.</p>
+<h2 id="technical-differences-in-the-view-change-phase">Technical differences in the view-change phase</h2>
+<p>The view-change mechanism in PBFT is not optimized to be on the critical path. Algorithmically, it requires at least $O(n^2)$ words to be sent (and some PBFT variants that do not use public key signatures use more). SBFT also has a similar $O(n^2)$ word view-change complexity.</p>
+<p>In Tendermint and HotStuff, leader rotation (view-change) is part of the critical path. A leader rotation is done essentially every 3 rounds, so much more effort is put to optimize this part. Algorithmically, the major innovation of Tendermint is a view-change protocol that requires just $O(n)$ messages (and words). HotStuff has a similar $O(n)$ word view-change complexity.</p>
+<p>One may ask if the Tendermint view-change improvement makes it strictly better than PBFT. The answer is that Tendermint does not dominate PBFT in all aspects. It’s (not surprisingly) a subtle <strong>trade-off</strong> with responsiveness and latency.</p>
+<h2 id="technical-differences-in-latency-and-responsiveness">Technical differences in Latency and Responsiveness</h2>
+<p>Latency is measured as the number of round trips it takes to commit a transaction given an honest leader and after GST. To be precise we will measure this from the time the transaction gets to the leader till the first time any participant (leader/replica/client) learns that the transaction is committed. Note that there may be additional latency from the client perspective and/or potentially due to the learning and checkpointing requirements. These additional latencies are perpendicular to the consensus protocol.</p>
+<p>PBFT has a $3\delta$ good-case latency and so does Tendermint (the good-case is when we are after GST and the leader is honest). However, the Tendermint view-change is not <em>responsive</em> in the P2P model, while the PBFT view-change is responsive. We note that Tendermint in a model where gossip is assumed to not fail is responsive.
+A protocol is <em>responsive</em> if it makes progress at the speed of the network without needing to wait for a predefined time-out that is associated with the Partial synchrony model. Both PBFT and SBFT are responsive, while Tendermint is not.</p>
+<p>In particular, it can be shown that even after GST, if the Tendermint protocol that only uses explicit point-to-point communication does not have a wait period (time-out) in its view-change phase, then a malicious attacker can cause it to lose all liveness and make no progress (via a hidden lock). With a time-out, Tendermint has no liveness problems (after GST) but this means that it incurs a time-out that happens on the critical path. So it cannot progress faster even if the network delays are significantly smaller than the fixed time-out.</p>
+<p>It’s important to note that in many applications, not being responsive may be a reasonable design choice. The importance of responsiveness depends on the use case, on the importance of throughput and the variability of the network delays during stable periods.</p>
+<p>Nevertheless one may ask: can we get a linear view-change that is also responsive?</p>
+<p>This is exactly where HotStuff comes into the picture. HotStuff extends the Tendermint view-change approach and provides a protocol that is both linear in complexity and responsive! So does HotStuff strictly dominate Tendermint on all dimensions? No, it’s a <strong>trade-off</strong>. The HotStuff commit path induces a latency of 3 round-trips instead of 2 round-trips for PBFT and Tendermint.</p>
+<p>It is natural to ask, is the difference between latency of 2 round-trips and 3 round-trips important? Again the answer is that the importance of latency depends on the use case. Many applications may not care if the latency is even, say, 10 round-trips while others may want to minimize latency as much as possible.</p>
+<h2 id="minimizing-latency">Minimizing Latency</h2>
+<p>In fact, if you do care about minimizing latency, then in the best-case even $2\delta$ latency is possible (the best-case is after GST and $3t+p+1$ out of $3t+2p+1$ of the validators are honest for some fixed $0\le p\le t$). This is exactly what SBFT achieves. This is not as easy as it <a href="https://arxiv.org/abs/1712.01367">looks</a>.</p>
+<p>SBFT gets a best-case $2\delta$ latency and a good-case latency of $3\delta$. So is it optimal? In terms of latency the answer is yes (see https://arxiv.org/abs/2102.07240), but in a wider view it’s a <strong>trade-off</strong>. While SBFT has the better best-case latency, it has a view-change protocol that has $O(n^2)$ complexity in the worst case.</p>
+<h2 id="on-throughput-pipelining-and-concurrency">On Throughput: Pipelining and Concurrency</h2>
+<p>There is yet another important difference between the PBFT implementation and the <em>Chained</em> HotStuff variant which is related to the different approaches to improve throughput.</p>
+<p>In PBFT, the leader maintains a <em>window</em> of open slots and is allowed to concurrently work on committing all open slots in his active window. Conceptually, this is like TCP where a sender does not have to wait for the ACK of packet $i$ before sending message $i+1$. Experiments that modify the window size have validated empirically that this window can significantly increase throughput by allowing the leader to concurrently coordinate several actions of slot commitments. SBFT uses a similar mechanism.</p>
+<p>The basic HotStuff protocol works sequentially to commit each block. So throughput is limited to one block per 3 rounds. The <em>Chained HotStuff</em> protocol significantly improves this to an amortized <em>1 block per round</em> by using <em>pipelining</em>. Basically, each message sent is the first round message for some slot $i$, the second round message for slot $i-1$ and the third round message for slot $i-2$. So while still working sequentially, Chained HotStuff provides the amortized throughput of one block per round. The idea of chaining follows from reducing the number of message types. A similar approach for message type reduction was suggested in <a href="https://ethresear.ch/t/casper-ffg-with-one-message-type-and-simpler-fork-choice-rule/103">Casper</a>. Reducing the types of messages and chaining also induces a simpler protocol. This allows simpler and cleaner software implementations. Viewed from the protocol foundations, <a href="https://arxiv.org/abs/1710.09437">Casper FFG</a> is essentially <em>Chained Tendermint</em>.</p>
+<p>From a theoretical perspective, the concurrent approach can also obtain the optimal amortized 1 block per round that the pipelined approach obtains. However, the pipelining approach also reduces the number of bits sent (by aggregating several messages into one), this is something that the concurrent approach does not currently do.</p>
+<p>Note that Pipelining and Concurrency are BFT SMR throughput boosting techniques. They are not strongly tied to any particular BFT protocol. For example, one could come up with a <em>Chained PBFT</em> (or SBFT) variant that uses pipelining, or a <em>Windowed HotStuff</em> variant that can switch to a stable leader mode that allows to concurrently make progress on a window of outstanding slots.</p>
+<p>In the standard BFT SMR architecture, <a href="https://www.cs.rochester.edu/meetings/sosp2003/papers/p195-yin.pdf">committing a block can be separated from executing it</a>. Typically the execution must be sequential, and often after optimizing the commit throughput (via pipeline or concurrency) the sequential execution becomes the performance bottleneck for throughput. If the execution is indeed the bottleneck, then this is what needs to be optimized. More on this in later posts.</p>
+<h2 id="on-randomness">On Randomness</h2>
+<p>From a theoretical perspective, obtaining both a linear view-change and a linear normal-case leader commit phase is important. These properties together imply that, after GST, a good leader will be found after at most $O(f)$ rounds for a total of $O(n^2)$ messages (and words). HotStuff is the first protocol that obtains these bounds.</p>
+<p>Randomization is a central tool in the design of protocols for distributed computing and cryptography. All the protocols mentioned above are deterministic. One can use a random leader election to gain better bounds and against more adaptive adversaries and models. There are two recent protocols that extend HotStuff and use randomization in powerful ways:</p>
+<ol>
+ <li>
+ <p><a href="https://research.vmware.com/files/attachments/0/0/0/0/0/7/8/practical_aba_2_.pdf">VABA</a> gets $O(1)$ expected rounds even in the asynchronous model and with a strong adaptive adversary.</p>
+ </li>
+ <li>
+ <p><a href="https://developers.libra.org/docs/assets/papers/libra-consensus-state-machine-replication-in-the-libra-blockchain.pdf">LibraBFT</a> can get $O(1)$ expected rounds in the partial synchronous model and a somewhat-adaptive adversary.</p>
+ </li>
+</ol>
+<p>More on randomness and these two protocols in later posts.</p>
+<h2 id="acknowledgments">Acknowledgments</h2>
+<p>Special thanks to <a href="https://dahliamalkhi.wordpress.com/cv/">Dahlia Malkhi</a>, <a href="http://www.pinkas.net/">Benny Pinkas</a>, <a href="http://twitter.com/alinush407">Alin Tomescu</a> and <a href="https://x.com/samlafer">Sam Laferriere</a> for reviewing a draft and sending insightful comments.</p>
+<p>Please leave comments on <a href="https://twitter.com/ittaia/status/1142845764164554754?s=20">Twitter</a>!!</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#research">research</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=What+is+the+difference+between+PBFT%2C+Tendermint%2C+SBFT+and+HotStuff+%3F&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2019-06-23-what-is-the-difference-between%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2019-06-17-the-threshold-adversary/" data-toggle="tooltip" data-placement="top" title="The threshold adversary">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/" data-toggle="tooltip" data-placement="top" title="Byzantine Agreement is impossible for $n \leq 3 f$ under partial synchrony">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

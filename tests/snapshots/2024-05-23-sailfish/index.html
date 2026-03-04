@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Sailfish: Improving the Latency of DAG-based BFT</title>
+ 
+ 
+ <meta name="author" content="Nibesh Shrestha, Kartik Nayak">
+ 
+ <meta name="description" content="In this blog post, we will explain the core ideas behind Sailfish, a latency-efficient DAG-based protocol. In essence, Sailfish is a reliable-broadcast (RBC) based DAG protocol that supports leaders in every RBC round. It commits leader vertices within 1RBC + $\delta$ time and non-leader vertices within 2RBC + $\delta$ time, outperforming the state-of-the-art in terms of these latencies (where $\delta$ represents the actual network delay). What are the key characteristics...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Sailfish: Improving the Latency of DAG-based BFT">
+ <meta property="og:description" content="In this blog post, we will explain the core ideas behind Sailfish, a latency-efficient DAG-based protocol. In essence, Sailfish is a reliable-broadcast (RBC) based DAG protocol that supports leaders in every RBC round. It commits leader vertices within 1RBC + $\delta$ time and non-leader vertices within 2RBC + $\delta$ time, outperforming the state-of-the-art in terms of these latencies (where $\delta$ represents the actual network delay). What are the key characteristics...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Nibesh Shrestha, Kartik Nayak">
+ 
+ <meta property="og:article:published_time" content="2024-05-23T13:05:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2024-05-23-sailfish/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2024-05-23-sailfish/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Sailfish: Improving the Latency of DAG-based BFT">
+ <meta property="twitter:description" content="In this blog post, we will explain the core ideas behind Sailfish, a latency-efficient DAG-based protocol. In essence, Sailfish is a reliable-broadcast (RBC) based DAG protocol that supports leaders in every RBC round. It commits leader vertices within 1RBC + $\delta$ time and non-leader vertices within 2RBC + $\delta$ time, outperforming the state-of-the-art in terms of these latencies (where $\delta$ represents the actual network delay). What are the key characteristics...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Sailfish: Improving the Latency of DAG-based BFT</h1>
+ 
+ 
+ 
+ 
+ By <strong>Nibesh Shrestha, Kartik Nayak</strong><br>
+ 
+ <span class="post-meta">Posted on May 23, 2024</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>In this blog post, we will explain the core ideas behind <a href="https://eprint.iacr.org/2024/472.pdf">Sailfish</a>, a latency-efficient DAG-based protocol. In essence, Sailfish is a reliable-broadcast (RBC) based DAG protocol that supports leaders in every RBC round. It commits leader vertices within 1RBC + $\delta$ time and non-leader vertices within 2RBC + $\delta$ time, outperforming the state-of-the-art in terms of these latencies (where $\delta$ represents the actual network delay).</p>
+<h3 id="what-are-the-key-characteristics-of-dag-based-protocols">What are the key characteristics of DAG-based protocols?</h3>
+<p>Before we dive into the details, let’s pause and ask a more basic question: <em>Why do we need DAG-based protocols when there are leader-based protocols?</em> or, <em>What are the key characteristics of DAG-based protocols compared to leader-based protocols?</em></p>
+<p><strong>Leader-based protocols.</strong> The literature on BFT protocols has progressed significantly over the past four decades. Many of these protocols, especially those designed for partially synchronous networks, use the <a href="https://decentralizedthoughts.github.io/2022-06-09-phase-king-via-gradecast/">Phase-King paradigm</a>. These protocols are often referred to as <em>leader-based protocols</em>. In this paradigm, the protocols operate in iterations, and in each iteration, there is a designated party known as the leader. The protocol ensures that a Byzantine leader cannot cause a consistency violation. On the other hand, an honest leader sends a proposal to all other parties, and when the network is synchronous, this proposal enables all honest parties to reach a decision within a few rounds.</p>
+<p>Several protocols, including <a href="https://decentralizedthoughts.github.io/2019-06-23-what-is-the-difference-between/">PBFT, Tendermint, HotStuff</a>, <a href="https://decentralizedthoughts.github.io/2020-05-14-streamlet/">Streamlet</a>, <a href="https://eprint.iacr.org/2023/463.pdf">Simplex</a>, and <a href="https://decentralizedthoughts.github.io/2023-04-01-hotstuff-2/">HotStuff-2</a> use this approach. These protocols aim to optimize two key properties: <strong>latency</strong> and <strong>communication complexity</strong>. Notably, they have achieved optimality in these metrics. For instance, PBFT, Tendermint and Simplex can achieve the <a href="https://arxiv.org/pdf/2102.07240">optimal latency</a> of $3\delta$ when the leader is honest. HotStuff and HotStuff-2 achieve optimal communication complexity of $O(n^2)$ words for consensus on a single value and $O(n)$ words when the leader is honest.</p>
+<p><em>Given that these protocols already obtain optimality, haven’t we achieved all that we need?</em></p>
+<p>In practice, throughput, i.e., the number of transactions decided in a given span of time, is a crucial metric. While we intuitively link communication efficiency to throughput–assuming that low communication complexity implies high throughput–there are additional factors to consider. Specifically, in a <em>vanilla</em> leader-based protocol, the leader can become a bottleneck in two ways:</p>
+<p>(1) <strong>Unequal scheduling of work.</strong> While the leader is sending a proposal, the other parties’ processors and their networks are underutilized, leading to uneven resource usage across parties. For instance, if the leader is sending a 1MB block to a thousand parties, it is transmitting about 1GB of data while each other party is only receiving 1MB. This issue is also discussed in this <a href="https://medium.com/aptoslabs/quorum-store-how-consensus-horizontally-scales-on-the-aptos-blockchain-988866f6d5b0">post</a>.</p>
+<p>(2) <strong>Lack of progress when the leader fails.</strong> In leader-based protocols, progress halts if the leader fails until it is replaced. Consequently, there is a reduction in throughput during the leader replacement period.</p>
+<p>These concerns are well-known, and several approaches have been discussed to address them. There is a long line of work on extension protocols (<a href="https://dl.acm.org/doi/abs/10.1007/s00446-020-00384-1">GP’16</a>, <a href="https://arxiv.org/abs/2002.11321">NRSVX’20</a>, <a href="https://eprint.iacr.org/2021/1403.pdf">BLLN’22</a>, <a href="https://eprint.iacr.org/2023/1916">S’23</a>) which extend 1-bit consensus protocols to an arbitrary $\ell$-bit consensus protocols efficiently using erasure coding techniques. Similarly, data availability oracles such as <a href="https://a16zcrypto.com/posts/article/an-overview-of-danksharding-and-a-proposal-for-improvement-of-das/">Danksharding</a>, <a href="https://hackmd.io/@EspressoSystems/HotShot-and-Tiramisu">Tiramisu</a>, <a href="https://www.blog.eigenlayer.xyz/intro-to-eigenda-hyperscale-data-availability-for-rollups/">EigenDA</a>, and others also rely on erasure coding techniques. Finally, <a href="https://arxiv.org/pdf/2105.11827">Narwhal</a> is a systems-level optimization that separates transaction dissemination (using a separate worker node) from consensus. These approaches somewhat mitigate the first concern but not the second.</p>
+<p><strong>DAG-based protocols.</strong> DAG-based protocols address both of these concerns in a more natural manner. These protocols require every party to disseminate transactions independently without relying on a leader. The resulting data structure maintained by each party forms a DAG, giving rise to the term “DAG-based protocols”. With respect to scheduling, each party performs a similar amount of work at all times, effectively solving the problem of uneven resource usage. Additionally, because each party is responsible for disseminating its own transactions, the protocol continues to progress in constructing the DAG even if a party fails during a round. Although these protocols typically have higher communication complexity compared to leader-based counterparts, they often achieve better throughput in practice for a moderate number of parties (e.g., <a href="https://arxiv.org/pdf/2201.05677">Bullshark</a>).</p>
+<p><strong>A note on the terminology.</strong> We should note that while these sets of protocols are generally termed “leader-based” or “DAG-based”, these terminologies can be somewhat misleading. Many leader-based protocols construct chains, which are technically also DAGs (and can potentially be misclassified as DAG-based). At the same time, most DAG-based protocols rely on a leader to drive consensus (and thus, perhaps could be called leader-based).</p>
+<p>Finally, while DAG-based protocols would naturally provide the two properties described earlier, that does not imply that non-DAG-based protocols may not be able to achieve these properties and correspondingly achieve better throughput. For instance, asynchronous protocols (e.g., <a href="https://eprint.iacr.org/2016/199.pdf">HoneyBadger BFT</a>) also exhibit both of these properties.</p>
+<h3 id="sailfish-towards-improving-the-latency-of-dag-based-protocols">Sailfish: Towards Improving the Latency of DAG-based Protocols</h3>
+<p>We will now introduce <a href="https://eprint.iacr.org/2024/472.pdf">Sailfish</a>, a partially synchronous DAG-based protocol designed to tolerate $t &lt; n/3$ faults while prioritizing low latency.</p>
+<p><strong>Sailfish data structure.</strong> The protocol progresses through a series of <em>rounds</em>. In each round $r$, each party makes a proposal, represented as a DAG vertex. The vertex includes references to at least $2t+1$ vertices proposed in round $r-1$ (where $t$ is the maximum number of Byzantine faults). These references form the edges of the DAG. The edges and paths formed from these edges are used for committing vertices in the DAG. Sailfish relies on a <a href="https://decentralizedthoughts.github.io/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/">reliable broadcast</a> protocol (RBC) to disseminate the vertices; RBC ensures <strong>non-equivocation</strong> (two honest parties do not disagree on the output) and <strong>totality</strong> (if some honest party delivers, all honest parties will deliver).</p>
+<p>Each party $P_i$ maintains a local copy of the DAG, indexed by round number. When a round $r$ vertex is delivered (via RBC) it is added to the $DAG_i[r]$. Although different honest parties may observe different views of the DAG initially, the reliable broadcast of the vertices ensures that each party will eventually converge on the same view of the DAG.</p>
+<p><img src="https://hackmd.io/_uploads/ry_9_gY7A.png" width="600" /></p>
+<p><strong>DAG construction.</strong> In each round $r$, each party $P_i$ proposes one vertex. In order to propose a vertex in a round $r$, party $P_i$ waits to receive at least $2t+1$ round $r-1$ vertices along with the round $r-1$ leader vertex until a timeout occurs in round $r-1$. In the event that the party receives $2t+1$ round $r-1$ vertices along with the round $r-1$ leader vertex, the party can immediately enter round $r$ and propose a round $r$ vertex. Including a reference to the round $r-1$ leader vertex serves as a <em>vote</em> towards the round $r-1$ leader vertex and is used to commit the leader vertex.</p>
+<p>On the other hand, if the party does not receive the round $r-1$ leader vertex before the timeout, it sends a no-vote message in round $r-1$ to round-$r$ leader indicating that the party did not vote for the round $r-1$ leader vertex.</p>
+<p>In Sailfish, there is a specific constraint on the leader vertex. A round $r$ leader vertex needs to either have a path to the round $r-1$ leader vertex or a round $r-1$ no-vote certificate, which is a quorum of round $r-1$ no-vote messages. The no-vote certificate serves as a proof that a quorum of parties did not vote for the round $r-1$ leader vertex. Hence, the round $r-1$ leader vertex cannot be committed and it is safe to lack a path to the round $r-1$ leader vertex. This requirement for the round $r$ leader vertex to either have a path to the round $r-1$ leader vertex or contain the no-vote certificate is the key idea enabling Sailfish to support a leader vertex in each round.</p>
+<p><strong>Committing and ordering the DAG.</strong> In Sailfish, only leader vertices are committed, while non-leader vertices are ordered as part of the causal history of the leader vertices in some deterministic order.</p>
+<p>To commit the leader vertex with a latency of 1 RBC+ $\delta$, Sailfish leverages the observation that when the sender (of the RBC) is honest, the first value received from the sender is the value that is eventually delivered. However, if the sender is Byzantine, the final delivered value can differ from the first value received. To account for this potential Byzantine behavior, an honest party $P_i$ directly commits the round $r$ leader vertex only when it observes $2t+1$ “first messages” (of the RBC) for round $r+1$ vertices that have paths to the round $r$ leader vertex. Additionally, at least $t+1$ of those messages are from honest parties who do not send no-vote messages. This is sufficient to ensure a no-vote certificate does not exist in round $r$ implying that the leader vertex of round $r’&gt;r$ must have a path to the round $r$ leader vertex.</p>
+<p>Upon directly committing a leader vertex $v_k$ in round $r$, $P_i$ first indirectly commits leader vertices $v_{m}$ in smaller rounds such that there exists a path from $v_k$ to $v_m$ (based on its local copy of the DAG) until it reaches a round $r’ &lt; r$ in which it previously directly committed a leader vertex. This protocol guarantees that when a round $r$ leader vertex $v_k$ is directly committed by an honest party, leader vertices for any subsequent round $r’ &gt; r$ possess a path to $v_k$, ensuring $v_k$ will be committed by all honest parties, either directly or indirectly.</p>
+<p><img src="https://hackmd.io/_uploads/SkCmc4cmR.png" width="450" /></p>
+<h4 id="key-argument-for-consistency">Key Argument for Consistency</h4>
+<p>Since honest parties will eventually have the same DAG structure, the crux of the consistency analysis is to ensure that no two honest parties disagree on the set of leader vertices that have been committed for each of the rounds. Observe that leader vertices can be <em>directly</em> committed using the commit rule described earlier, or <em>indirectly</em> as a consequence of directly committing a leader vertex in a higher round. Once the set of leader vertices are agreed upon, ordering of non-leader vertices will follow.</p>
+<p><strong>Claim:</strong> If an honest party commits round $r$ leader vertex $v$, then there is a path from round $r’$ leader vertex to $v$ for $r’ &gt; r$.</p>
+<p>Suppose $P_i$ directly committed $v$ in round $r$, then there exists a set $Q$ of $2t+1$ round-$(r+1)$ vertices with path to $v$. Let $H \subset Q$ be the set of vertices proposed by honest parties in $Q$. Let $v_{\ell}$ be the round $r’$ leader vertex. The above claim can be shown in two parts: First, showing that this holds for $r’ = r+1$. Then showing that this holds for any $r’ &gt; r+1$.</p>
+<p>Part (i): $r’ = r+1$
+If $v_{\ell} \in H$, we are trivially done. Otherwise, the vertices in $H$ are from round $r+1$ honest non-leader parties. When a round $r+1$ honest non-leader party includes a reference to leader vertex $v$, it does not send a round $r$ no-vote message. Since $|H| \ge t+1$, by standard quorum intersection argument, a round $r$ no-vote certificate does not exist. Moreover, parties in $H$ have delivered $v$. By totality property, the round $r+1$ leader will eventually deliver $v$. Thus, if the round $r+1$ leader vertex exists, it must include a reference to $v$ and there exists a path from $v_\ell$ to $v$.</p>
+<p>Part (ii): $r’ &gt; r+1$
+Note that all vertices in $H$ will eventually be delivered by all honest parties and included in $DAG[r+1]$. Additionally, a round $r+2$ vertex has a path to $2t+1$ round $r+1$ vertices. By standard quorum intersection, this includes at least $1$ vertex in $H$ which has a path to $v$. Thus, all round $r+2$ vertices (including round $r+2$ leader vertex) have a path to $v$. Moreover, each round $r’’&gt; r+2$ vertex has paths to at least $2t+1$ vertices in round $r’‘-1$. By transitivity, each vertex at round $r’’$ has path to at least $2t+1$ vertices in round $r+2$. This implies $v_{\ell}$ must have a path to $v$.</p>
+<p><strong>Commit latency.</strong> A round-$r$ leader vertex gets committed when $2t+1$ round-$(r+1)$ vertices have paths to it. Our protocol enables parties to commit a leader vertex as soon as they receive the first messages of the RBC from $2t+1$ parties, without waiting for the delivery through an RBC. As a result, the latency to commit a leader vertex is 1 RBC latency + $1\delta$. A non-leader vertex needs to wait for another RBC before it is committed.</p>
+<p>For completeness, here is how Sailfish’s latency compares with the state-of-the-art:</p>
+<p><img src="https://hackmd.io/_uploads/BkOsQPa7C.png" width="450" /></p>
+<p><strong>Almost signature-free and post-quantum safety.</strong> When a signature-free RBC is utilized, Sailfish requires signatures solely for forming no-vote certificates, which is necessary for liveness. In typical executions without failures, it does not require signatures and provides post-quantum safety.</p>
+<p><strong>Evaluation.</strong> We compared the performance of Sailfish with state-of-the-art DAG-based protocols across 5 GCP regions spanning the US, Finland, Australia, and Japan. As shown in the figure below, Sailfish achieves a significant improvement in latency over prior art, consistent with our theoretical analysis. In the figure below, LV represents the average latency to commit the leader vertices, NLV represents the average latency to commit the non-leader vertices a round before the leader vertex and Avg represents the average latency for all vertices (including those from prior rounds that were ordered when the leader vertex was committed).</p>
+<p><img align="center" src="https://hackmd.io/_uploads/B1ekivTm0.png" width="450" /></p>
+<h3 id="extension-to-multi-leader-sailfish">Extension to Multi-leader Sailfish</h3>
+<p>In Sailfish, the latency to commit the leader vertex is shorter compared to the non-leader vertices. To improve the latency for multiple vertices, we extend Sailfish to support multiple leaders within a single round. In the best-case scenario, when all of these leaders are honest, the respective leader vertices can be committed with a latency of 1 RBC+ $1\delta$ and improves the average commit latency as more vertices are committed with reduced latency (i.e., 1 RBC+ $1\delta$).</p>
+<p>For further insights into Sailfish and Multi-leader Sailfish, please refer to the <a href="https://eprint.iacr.org/2024/472.pdf">paper</a>. Please leave comments on <a href="https://x.com/kartik1507/status/1794008910182965402">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ <a href="/tags#research">research</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Sailfish%3A+Improving+the+Latency+of+DAG-based+BFT&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2024-05-23-sailfish%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2024-05-07-decentralization-ethereum/" data-toggle="tooltip" data-placement="top" title="Decentralization of Ethereum Builder Market">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2024-06-12-shoalpp/" data-toggle="tooltip" data-placement="top" title="Shoal++: High Throughput DAG-BFT Can Be Fast!">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

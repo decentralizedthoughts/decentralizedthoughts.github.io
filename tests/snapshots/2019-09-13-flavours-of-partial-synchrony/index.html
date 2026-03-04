@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Flavours of Partial Synchrony</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham">
+ 
+ <meta name="description" content="This is a follow-up post to the post on Synchrony, Asynchrony and Partial synchrony. The partial synchrony model of DLS88 comes in two flavors: GST and Unknown Latency. In this post we discuss: Why, in practice, the GST flavor seems to be a better model of the real world. Why, in theory, a solution for the Unknown Latency flavor implies a solution for the GST flavors - but the opposite...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Flavours of Partial Synchrony">
+ <meta property="og:description" content="This is a follow-up post to the post on Synchrony, Asynchrony and Partial synchrony. The partial synchrony model of DLS88 comes in two flavors: GST and Unknown Latency. In this post we discuss: Why, in practice, the GST flavor seems to be a better model of the real world. Why, in theory, a solution for the Unknown Latency flavor implies a solution for the GST flavors - but the opposite...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham">
+ 
+ <meta property="og:article:published_time" content="2019-09-13T18:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2019-09-13-flavours-of-partial-synchrony/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2019-09-13-flavours-of-partial-synchrony/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Flavours of Partial Synchrony">
+ <meta property="twitter:description" content="This is a follow-up post to the post on Synchrony, Asynchrony and Partial synchrony. The partial synchrony model of DLS88 comes in two flavors: GST and Unknown Latency. In this post we discuss: Why, in practice, the GST flavor seems to be a better model of the real world. Why, in theory, a solution for the Unknown Latency flavor implies a solution for the GST flavors - but the opposite...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Flavours of Partial Synchrony</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham</strong><br>
+ 
+ <span class="post-meta">Posted on September 13, 2019</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>This is a follow-up post to the post on <a href="https://ittaiab.github.io/2019-06-01-2019-5-31-models/">Synchrony, Asynchrony and Partial synchrony</a>. The partial synchrony model of <a href="https://groups.csail.mit.edu/tds/papers/Lynch/jacm88.pdf">DLS88</a> comes in two flavors: <strong>GST</strong> and <strong>Unknown Latency</strong>. In this post we discuss:</p>
+<ol>
+ <li>Why, <em>in practice</em>, the GST flavor seems to be a better model of the real world.</li>
+ <li>Why, <em>in theory</em>, a solution for the Unknown Latency flavor implies a solution for the GST flavors - but the opposite is not clear.</li>
+</ol>
+<p class="box-note"><strong>Note:</strong> this post was updated in September 2024 based on the work of <a href="https://arxiv.org/abs/2405.10249">Constantinescu, Ghinea, Sliwinski, and Wattenhofer</a>.</p>
+<h3 id="the-gst-flavor-of-partial-synchrony">The GST flavor of Partial Synchrony</h3>
+<p>The <strong>Global Stabilization Time</strong> (GST) model for Partial Synchrony assumes that:</p>
+<ol>
+ <li>There is an event called <em>GST</em> that occurs after some finite time.</li>
+ <li>There is no bound on message delays before <em>GST</em>, but after <em>GST</em> all message must arrive within some known bound $\Delta$.</li>
+</ol>
+<p>Note that in this model, there is no signal that GST happened and no party knows when GST will happen.</p>
+<p>The real world definitely does not behave like this, so why is this model so popular? It’s because it abstracts away a much more plausible model of how networks behave:</p>
+<ol>
+ <li>Say 99% of the time the network is stable, and message delays are bounded. For example, it’s probably true that internet latencies are less than a second 99% of the time (more formally, the 99% percentile of latency is less than a second).</li>
+ <li>During times of crisis (for example, when under a Denial-of-Service attack) there is no good way to bound latency.</li>
+</ol>
+<p>The <em>GST</em> flavor allows building systems that perform well in the <em>best case</em> but maintain safety even if the conservative assumptions on latency fail in <em>rare cases</em>. This allows protocol designers to fix the parameter $\Delta$ based on reasonably conservative values.</p>
+<h3 id="the-unknown-latency-flavor-of-partial-synchrony">The Unknown Latency flavor of Partial Synchrony</h3>
+<p>In the <em>UL</em> flavor, the system is always <em>synchronous</em>, but the bound of the maximum delay is <em>unknown</em> to the protocol designer.</p>
+<p>There are several advantages of this flavor in terms of simplicity. First, it requires fewer parameters (no GST, just $\Delta)$. Second, it avoids defining asynchronous communication.</p>
+<p>The way the <em>Unknown Latency</em> models the real world is somewhat problematic, it essentially strives to set the latency of the protocol to be as large as the <em>worst case</em> latency that will ever occur.</p>
+<p>Unlike the GST flavor where $\Delta$ can be set conservatively, in the UL flavor the estimation of latency needs to grow based on the worst case behavior of the system.</p>
+<p>For example, many early academic BFT systems had mechanisms that <strong>double</strong> the protocol’s estimation of $\Delta$ each time there was a timeout. <a href="http://www.dsn.jhu.edu/pub/papers/Prime_tdsc_accepted.pdf">Prime</a> showed that this may cause a serious denial of service attack.</p>
+<h3 id="theoretical-relationship-between-the-flavors-of-partial-synchrony">Theoretical relationship between the flavors of Partial Synchrony</h3>
+<p>We start with the easy observation that a protocol that solves agreement in the UL flavor also solves agreement in the GST model.</p>
+<p>We then discuss the challenges of a reduction in the other direction.</p>
+<h3 id="from-unknown-latency-to-global-stabilization-time">From Unknown Latency to Global Stabilization Time</h3>
+<p>Assume a protocol $Q$ that obtains safety and liveness in the Unknown Latency flavor. Does $Q$ also obtain safety and liveness in the GST flavor?</p>
+<p>Yes! Consider an execution in the GST flavor and let $\Gamma$ be the maximum of $\Delta$ and the time until $GST$ starts. Observe that by definition, $Q$ has safety and liveness assuming that the unknown latency is $\Gamma$, because its true for any finite latency.</p>
+<p>Note that this reduction is extremely wasteful: the value of $\Gamma$ may be huge. Many systems may strive to adjust their estimate of $\Delta$ both up and down.</p>
+<h3 id="from-global-stabilization-time-to-unknown-latency">From Global Stabilization Time to Unknown Latency</h3>
+<p>Assume a protocol $P$ that obtains safety and liveness in the GST flavor (with a known parameter $\Lambda$ after GST). Does $P$ also obtain safety and liveness in the Unknown Latency flavor?</p>
+<h4 id="first-approach-and-its-problems">First approach (and its problems)</h4>
+<p>The idea was to start with some estimation $\Lambda$ of the actual UL parameter $\Delta$. Each time a protocol timeout expires, increment $\Lambda$.</p>
+<p>For safety, we need to argue that incrementing $\Lambda$ does not break safety, one trivial way to do that to assume this is a property of $P$, indeed this is the case with many protocols. however, it is not clear that a generic protocol has this property. For example, as currently stated, $P$ may do very different things for different values of $\Lambda$.</p>
+<p>For liveness, the idea was to say that at some point $\Lambda$ will grow to be larger than $\Delta$. At that point and onwards, we need to argue that the protocol obtains liveness.</p>
+<h4 id="second-approach-of-constantinescu--ghinea--sliwinski-and-wattenhofer">Second approach of <a href="https://arxiv.org/abs/2405.10249">Constantinescu, Ghinea, Sliwinski, and Wattenhofer</a>.</h4>
+<p>Instead of incrementing $\Lambda$, simply slow down the clock. This means we assume that we can control the internal clock. In many ways, slowing down the clock, or increasing the timer is rather similar. But this slow down allows the protocol to continue running with the same parameters and the only thing that changes is the external rate of the clock.</p>
+<p>For safety, observe that slowing down the clock does not break safety. This is true because we could simulate this delay via additional message delay and our assumption that $P$ is safe no matter the message delay (safe in asynchrony).</p>
+<p>For liveness, observe that at some point $T$ the amount of clock slow down is such that $\Lambda$ time in the slowed down clock is more than $\Delta$ in the real time. Any message sent will arrive in time at most $\Delta$ and from the properties of $P$ we know that once messages arrive in less than $\Lambda$ time then it obtains liveness. So indeed we can show that from $T$ onwards the protocol $P$ behaves as if it is after GST.</p>
+<h4 id="notes">Notes</h4>
+<p>The idea of dynamically incrementing the estimation of the maximum latency (or dynamically slowing down the node) has efficiency challenges:</p>
+<ol>
+ <li>Incrementing $\Lambda$ too slowly means that it may take a lot of time to reach consensus. This is a type of denial-of-service that slows down the system.</li>
+ <li>Incrementing $\Lambda$ too aggressively (say by doubling) means that while we may reach $\Lambda&gt;\Delta$ quickly, it may still happen that there are at least $f$ more timeouts due to malicious primaries. So $\Lambda$ may grow exponentially. This again may cause a denial-of-service that slows down the system.</li>
+</ol>
+<p>In practice systems often adjust their estimate of $\Delta$ both up and down (sometimes using an explore-exploit type online learning algorithm).</p>
+<p><strong>Acknowledgment.</strong> We would like to thank <a href="https://twitter.com/3zambile">L. Astefanoaei</a> for helpful feedback on this post.</p>
+<p>We would like to thank Ling Ren and Tim Roughgarden for pointing out the incorrect proof in the previous version.</p>
+<p>Please leave comments on <a href="https://twitter.com/ittaia/status/1181013611491184640?s=20">Twitter</a></p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#dist101">dist101</a>
+ 
+ <a href="/tags#models">models</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Flavours+of+Partial+Synchrony&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2019-09-13-flavours-of-partial-synchrony%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2019-09-13-dont-trust-checkpoint/" data-toggle="tooltip" data-placement="top" title="Dont Trust. Verify. and Checkpoint?">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2019-10-15-consensus-for-state-machine-replication/" data-toggle="tooltip" data-placement="top" title="Consensus for State Machine Replication">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

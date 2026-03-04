@@ -7,7 +7,7 @@ tags:
 author: Ittai Abraham and Ling Ren
 ---
 
-In our [previous post](https://decentralizedthoughts.github.io/2025-07-18-simplex-2round/), we described a 2-round [partially synchronous](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/) BFT protocol for $n = 5f+1$. In this follow-up post, we **push the bound to $n = 5f-1$**, achieving [optimal 2-round commit](https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/) in the [Simplex style](https://decentralizedthoughts.github.io/2025-06-18-simplex/). 
+In our [previous post](https://decentralizedthoughts.github.io/2025-07-18-two-round-Simplex/), we described a 2-round [partially synchronous](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/) BFT protocol for $n = 5f+1$. In this follow-up post, we **push the bound to $n = 5f-1$**, achieving [optimal 2-round commit](https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/) in the [Simplex style](https://decentralizedthoughts.github.io/2025-06-18-simplex/). 
 
 
 We then extend the result to $n=3f+2p-1$ for $0<p\leq f$ that obtains liveness for $p$ Byzantine. This can be used to obtain a [concurrent 2 round and 3 round protocol](https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/) with the optimal fault tolerance.
@@ -44,7 +44,7 @@ Let `Cert(k, x)` denote a collection of votes for $x  \neq \bot$ in view $k$ suf
 
 Let `Cert(k, bot)` denote a collection of $2f+1$ votes for $\bot$ in view $k$.
 
-Once we define the certs above (with modified thresholds and the special cert), the protocol is actually unchanged from the [previous post](https://decentralizedthoughts.github.io/2025-07-18-simplex-2round/). 
+Once we define the certs above (with modified thresholds and the special cert), the protocol is actually unchanged from the [previous post](https://decentralizedthoughts.github.io/2025-07-18-two-round-Simplex/). 
 
 ```
 1. Upon entering view k:

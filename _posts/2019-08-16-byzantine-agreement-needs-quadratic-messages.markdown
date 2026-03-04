@@ -84,7 +84,7 @@ The lower bound uses the fact that the protocol is deterministic. There have bee
 
 ## Broadcast vs Agreement
 
-The lower bound is presented for Broadcast (not Agreement). In terms of feasibility, the two problems are [equivalent](https://decentralizedthoughts.github.io/2020-06-02-broadcast-vs-agreement/). In particular, if Agreement can be solved with communication complexity $\leq Y$ then broadcast can be solved in communication complexity $\leq Y+n$; the leader can send the value to all parties, and then they can run the Agreement protocol. Thus, if $(f/2)^2$ messages are required for Broadcast then at least $(f/2)^2 - n$ messages are required for Agreement.
+The lower bound is presented for Broadcast (not Agreement). In terms of feasibility, the two problems are [equivalent](https://decentralizedthoughts.github.io/2020-09-14-broadcast-from-agreement-and-agreement-from-broadcast/). In particular, if Agreement can be solved with communication complexity $\leq Y$ then broadcast can be solved in communication complexity $\leq Y+n$; the leader can send the value to all parties, and then they can run the Agreement protocol. Thus, if $(f/2)^2$ messages are required for Broadcast then at least $(f/2)^2 - n$ messages are required for Agreement.
 
 This post was updated in November 2021 to reflect that the lower bound holds for omission failures.
 

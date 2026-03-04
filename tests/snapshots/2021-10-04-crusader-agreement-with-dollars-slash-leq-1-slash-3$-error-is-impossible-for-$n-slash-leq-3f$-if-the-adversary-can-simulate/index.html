@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Crusader Agreement with $\leq 1/3$ Error is Impossible for $n\leq 3f$ if the Adversary can Simulate</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham and Kartik Nayak">
+ 
+ <meta name="description" content="The classic FLM lower bound says that in Synchrony, Byzantine Agreement is impossible when $n \leq 3f$. We discussed this important bound in a previous post. In this post we strengthen the FLM lower bound in two important ways: Maybe randomization allows circumventing the FLM lower bound? No! Even allowing $\leq 1/3$ error, this bound still holds (based on unpublished work of Yao and Karlin, see the work of Graham...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Crusader Agreement with $\leq 1/3$ Error is Impossible for $n\leq 3f$ if the Adversary can Simulate">
+ <meta property="og:description" content="The classic FLM lower bound says that in Synchrony, Byzantine Agreement is impossible when $n \leq 3f$. We discussed this important bound in a previous post. In this post we strengthen the FLM lower bound in two important ways: Maybe randomization allows circumventing the FLM lower bound? No! Even allowing $\leq 1/3$ error, this bound still holds (based on unpublished work of Yao and Karlin, see the work of Graham...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham and Kartik Nayak">
+ 
+ <meta property="og:article:published_time" content="2021-10-04T10:46:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2021-10-04-crusader-agreement-with-dollars-slash-leq-1-slash-3$-error-is-impossible-for-$n-slash-leq-3f$-if-the-adversary-can-simulate/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2021-10-04-crusader-agreement-with-dollars-slash-leq-1-slash-3$-error-is-impossible-for-$n-slash-leq-3f$-if-the-adversary-can-simulate/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Crusader Agreement with $\leq 1/3$ Error is Impossible for $n\leq 3f$ if the Adversary can Simulate">
+ <meta property="twitter:description" content="The classic FLM lower bound says that in Synchrony, Byzantine Agreement is impossible when $n \leq 3f$. We discussed this important bound in a previous post. In this post we strengthen the FLM lower bound in two important ways: Maybe randomization allows circumventing the FLM lower bound? No! Even allowing $\leq 1/3$ error, this bound still holds (based on unpublished work of Yao and Karlin, see the work of Graham...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Crusader Agreement with $\leq 1/3$ Error is Impossible for $n\leq 3f$ if the Adversary can Simulate</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham and Kartik Nayak</strong><br>
+ 
+ <span class="post-meta">Posted on October 4, 2021</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>The classic <a href="https://groups.csail.mit.edu/tds/papers/Lynch/FischerLynchMerritt-dc.pdf">FLM lower bound</a> says that in Synchrony, Byzantine Agreement is impossible when $n \leq 3f$. We discussed this important bound in a <a href="https://decentralizedthoughts.github.io/2019-08-02-byzantine-agreement-is-impossible-for-$n-slash-leq-3-f$-is-the-adversary-can-easily-simulate/">previous post</a>. In this post we strengthen the FLM lower bound in two important ways:</p>
+<ol>
+ <li>Maybe randomization allows circumventing the FLM lower bound? No! Even allowing $\leq 1/3$ error, this bound still holds (based on unpublished work of Yao and Karlin, see the work of <a href="http://www.math.ucsd.edu/~ronspubs/89_08_byzantine.pdf">Graham and Yao, 1989</a>).</li>
+ <li>Maybe primitives that are weaker than Byzantine Agreement can circumvent this lower bound? No! Even when we weaken the agreement property this bound still holds (based on <a href="https://www.cs.huji.ac.il/~dolev/pubs/byz-strike-again.pdf">Dolev’s</a> work on Crusader Agreement).</li>
+</ol>
+<h3 id="crusader-agreement">Crusader Agreement</h3>
+<p>Consider $n$ parties in the synchronous model, where at most $f$ of them are Byzantine: each party $i$ has an input $b_i \in {0,1}$ and must output a value in ${0,1,\bot}$.</p>
+<ol>
+ <li><strong>(Validity)</strong>: If all honest parties have the same input then this must be the output of all honest parties.</li>
+ <li><strong>(Weak Agreement)</strong>: It is never the case that one honest outputs 1 and another honest outputs 0.</li>
+</ol>
+<p><strong><em>Exercise</em></strong>: show a constant round protocol that solves Crusader agreement for any $n&gt;3f$ (first correct answer on <a href="https://twitter.com/kartik1507/status/1445048662430683138?s=20">twitter</a> gets $(n-f)$ DT coins).</p>
+<h3 id="crusader-agreement-with-epsilon-error">Crusader Agreement with $\epsilon$-error</h3>
+<p>This is an even easier problem where you are allowed some probability $\epsilon$ of error:</p>
+<ol>
+ <li><strong>(Validity with $\epsilon$-error)</strong>: If all honest parties have the same input then, for any adversary strategy, with probability at least $1-\epsilon$, this input value must be the output of all honest parties.</li>
+ <li><strong>(Weak Agreement with $\epsilon$-error)</strong>: For any adversary strategy, with probability at least $1-\epsilon$, it is not the case that one honest outputs 1 and another honest outputs 0.</li>
+</ol>
+<p>For example, a protocol that solves Crusader Agreement with $1/10$-error only needs to maintain Validity and Agreement, in expectation, in 9 out of 10 executions. Note that the probability distribution is on the coins of the honest parties.</p>
+<h3 id="strengthened-lower-bound">Strengthened Lower Bound:</h3>
+<p><strong><em>Theorem (FLM, KY, D)</em></strong>: It is impossible to solve <em>Crusader Agreement with $\epsilon$-error</em> for any $\epsilon &lt;1/3$ for $n \leq 3f$ if the adversary can simulate.</p>
+<p>Before going into the proof, let us unpack this statement. It says that even if you allow considerable error (at most $1/3$) for both Validity and Agreement and <strong>also</strong> weaken the Agreement property to Weak Agreement it is still impossible when $n \leq 3f$.</p>
+<p>Side note: one may wonder if <em>Crusader Ageement</em> is substantially weaker than Agreement? Indeed there is a significant round complexity separation: We can solve Crusader agreement using a worst case constant number of rounds (for any $f&lt;n/3$). But for Agreement there is $f+1$ round <a href="https://decentralizedthoughts.github.io/2019-12-15-synchrony-uncommitted-lower-bound/">lower bound</a> on the worst case number of rounds (for any $f&lt;n/3$).</p>
+<h3 id="the-proof">The Proof</h3>
+<p>As an indication of the strength of the FLM covering technique, the proof is quite similar. Here we show the $n=3$ case.</p>
+<p>Six parties are connected in a cycle $A,B,C,A’,B’,C’$. Parties $A,B,C$ have input of 1 (shown in the blue color) and parties $A’,B’,C’$ have an input of 0 (shown in the red color). This is a great time to stop and ask: why is this setup well-formed? Why is it okay to take a protocol for three parties and wire it with six parties?</p>
+<p>The beauty of the FLM proof is that this six node configuration is a valid, well-formed execution. Consider any two consecutive parties and examine the world where these two parties are honest and the adversary strategy is to simulate all the four remaining parties.</p>
+<p><img src="https://i.imgur.com/Dx9ioKx.jpg" alt="World 1" /></p>
+<p>In World 1, parties $B$ and $C$ have an input of 1. Since $B$ and $C$ are honest, from the Validity property, with $epsilon$-error, $C$ must decide 1 with probability of at least $2/3$. The adversary (depicted in red) simulates the parties $A,C’,B’,A’$ with inputs $1,0,0,0$ and relays messages between $B$ and $A$ and between $C$ and $A’$.</p>
+<p><img src="https://i.imgur.com/0X5HUio.jpg" alt="World 2" /></p>
+<p>In World 2, parties $A’$ and $B’$ have input of 0. From Validity, with $\epsilon$-error, $A’$ must decide 0 with probability at least $2/3$. The adversary (depicted in red) simulates the parties $A,C’,B’,A’$ with inputs $1,0,0,0$ and relays messages between $B$ and $A$ and between $C$ and $A’$.</p>
+<p><img src="https://i.imgur.com/rtfI6zp.jpg" alt="World 3" /></p>
+<p>Finally, consider World 3, where $C$ and $A’$ are honest. Note that $C$’s view is indistinguishable from World 1, so it will decide 1 with probability $&gt;2/3$. Similarly, $A’$’s view is indistinguishable from World 2, so it will decide 0 with probability $&gt;2/3$. Hence with probability, $&gt;1/3$ $C$ and $A’$ will disagree on a non-$\bot$ value. This is a contradiction to the Agreement with $1/3$-error property.</p>
+<p><img src="https://imgur.com/xMuacm3.png" alt="Indistinguishability for C" /></p>
+<h3 id="discussion">Discussion</h3>
+<p>We have shown that the FLM lower bound holds for Agreement, and even for Crusader Agreement, even if you are allowed a constant error probability.</p>
+<p>Lower bounds in distributed computing are protocols for the adversary. The FLM lower bound is a striking example of a non-trivial adversary strategy: The adversary uses the protocol against itself.</p>
+<p>What if we weaken the Validity property instead of the Agreement property: <strong>(Weak Validity)</strong>: if all parties are non-faulty and have the same input then this is the output value. Can you solve this problem for $n=3$? What about solving this problem with probability $0.99$?</p>
+<p>Your decentralized thoughts on <a href="https://twitter.com/kartik1507/status/1445048662430683138?s=20">twitter</a></p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#lowerbound">lowerbound</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Crusader+Agreement+with+%24%5Cleq+1%2F3%24+Error+is+Impossible+for+%24n%5Cleq+3f%24+if+the+Adversary+can+Simulate&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2021-10-04-crusader-agreement-with-dollars-slash-leq-1-slash-3%24-error-is-impossible-for-%24n-slash-leq-3f%24-if-the-adversary-can-simulate%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2021-09-30-distributed-consensus-made-simple-for-real-this-time/" data-toggle="tooltip" data-placement="top" title="Distributed consensus made simple (for real this time!)">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2021-10-15-Nakamoto-Consensus/" data-toggle="tooltip" data-placement="top" title="Nakamoto's Longest-Chain Wins Protocol">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

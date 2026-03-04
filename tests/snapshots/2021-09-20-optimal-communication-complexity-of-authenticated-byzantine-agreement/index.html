@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Optimal Communication Complexity of Authenticated Byzantine Agreement</title>
+ 
+ 
+ <meta name="author" content="Atsuki Momose, Ling Ren">
+ 
+ <meta name="description" content="Communication complexity of Byzantine Agreement (BA) has been studied for decades. Dolev and Reischuk showed that quadratic communication is necessary for BA with perfect security, i.e., without error. Berman, Garay, and Perry showed that this lower bound is tight for the unauthenticated setting (without signatures) with $f &amp;lt; n/3$. However, for $f \ge n/3$, the best solution so far is still the Dolev-Strong protocol with cubic communication, so a linear...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Optimal Communication Complexity of Authenticated Byzantine Agreement">
+ <meta property="og:description" content="Communication complexity of Byzantine Agreement (BA) has been studied for decades. Dolev and Reischuk showed that quadratic communication is necessary for BA with perfect security, i.e., without error. Berman, Garay, and Perry showed that this lower bound is tight for the unauthenticated setting (without signatures) with $f &amp;lt; n/3$. However, for $f \ge n/3$, the best solution so far is still the Dolev-Strong protocol with cubic communication, so a linear...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Atsuki Momose, Ling Ren">
+ 
+ <meta property="og:article:published_time" content="2021-09-20T15:28:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2021-09-20-optimal-communication-complexity-of-authenticated-byzantine-agreement/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2021-09-20-optimal-communication-complexity-of-authenticated-byzantine-agreement/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Optimal Communication Complexity of Authenticated Byzantine Agreement">
+ <meta property="twitter:description" content="Communication complexity of Byzantine Agreement (BA) has been studied for decades. Dolev and Reischuk showed that quadratic communication is necessary for BA with perfect security, i.e., without error. Berman, Garay, and Perry showed that this lower bound is tight for the unauthenticated setting (without signatures) with $f &amp;lt; n/3$. However, for $f \ge n/3$, the best solution so far is still the Dolev-Strong protocol with cubic communication, so a linear...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Optimal Communication Complexity of Authenticated Byzantine Agreement</h1>
+ 
+ 
+ 
+ 
+ By <strong>Atsuki Momose, Ling Ren</strong><br>
+ 
+ <span class="post-meta">Posted on September 20, 2021</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>Communication complexity of <a href="https://decentralizedthoughts.github.io/2020-09-14-broadcast-from-agreement-and-agreement-from-broadcast/">Byzantine Agreement (BA)</a> has been studied for decades. <a href="https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/">Dolev and Reischuk</a> showed that quadratic communication is necessary for BA with perfect security, i.e., without error. <a href="https://dl.acm.org/doi/10.5555/166961.167018">Berman, Garay, and Perry</a> showed that this lower bound is tight for the <a href="https://decentralizedthoughts.github.io/2019-08-02-byzantine-agreement-is-impossible-for-$n-slash-leq-3-f$-is-the-adversary-can-easily-simulate/">unauthenticated setting</a> (without signatures) with $f &lt; n/3$. However, for $f \ge n/3$, the best solution so far is still the <a href="https://decentralizedthoughts.github.io/2019-12-22-dolev-strong/">Dolev-Strong protocol</a> with cubic communication, so a linear gap remains.</p>
+<p><a href="https://arxiv.org/abs/2007.13175">Our recent paper</a> gives two new protocols (see the table below) towards closing this gap.</p>
+<table>
+ <thead>
+ <tr>
+ <th>model</th>
+ <th>fault tolerance</th>
+ <th>communication</th>
+ <th>reference</th>
+ </tr>
+ </thead>
+ <tbody>
+ <tr>
+ <td>unauthenticated</td>
+ <td>$f &lt; n/3$</td>
+ <td>$O(n^2)$</td>
+ <td>Berman et al.</td>
+ </tr>
+ <tr>
+ <td>PKI</td>
+ <td>$f &lt; n/2$</td>
+ <td>$O(\kappa n^2 + n^3)$</td>
+ <td>Dolev-Strong</td>
+ </tr>
+ <tr>
+ <td>threshold signature</td>
+ <td>$f &lt; n/2$</td>
+ <td>$O(\kappa n^2)$</td>
+ <td><strong>our work</strong></td>
+ </tr>
+ <tr>
+ <td>PKI</td>
+ <td>$f \le (1/2 - \varepsilon)n$</td>
+ <td>$O(\kappa n^2)$</td>
+ <td><strong>our work</strong></td>
+ </tr>
+ </tbody>
+</table>
+<p>For ease of explanation, we will consider a simpler problem in this post: detecting equivocation. Equivocation, i.e., saying different things to different nodes, is arguably the most common attack in Byzantine consensus. The key technical contribution of our paper is a new method to detect equivocation based on expander graphs.</p>
+<h2 id="existing-techniques-to-detect-equivocation">Existing techniques to detect equivocation</h2>
+<p>Let’s consider the following simple and perhaps easiest agreement problem. Each node has its own input binary value, and</p>
+<ul>
+ <li><strong>Safety</strong>: If two honest nodes decide $b$ and $b’$, then $b = b’$.</li>
+ <li><strong>Liveness</strong>: If all honest nodes have the same input $b$, all honest nodes decide on $b$.</li>
+</ul>
+<p>Note that it’s allowed that someone decides but others do not if honest nodes input different values. As one can easily expect, the challenge is mostly on how to achieve safety despite equivocation by faulty nodes.</p>
+<p>With $f &lt; n/3$ faults, this is very easy:</p>
+<ul>
+ <li>In round 1. Each node sends a vote for $b$ for its own input value $b$.</li>
+ <li>In round 2. If a node receives $n-f$ votes for $b$ for a value $b$, decide on $b$.</li>
+</ul>
+<p>If any node decides on a value $b$ upon collecting votes on $b$ from a quorum of $n-f &gt; 2f$ nodes, then $n-f$ votes on $b’$ cannot exists, because that would require at least $2(n-f) - n = n-2f &gt; f$ nodes to vote for both $b$ and $b’$ — this is what is called the <em>quorum-intersection argument.</em> The communication complexity is quadratic in this simple protocol as all nodes just send their own votes.</p>
+<p>With $f \ge n/3$ faults, the above approach does not work, because faulty nodes can launch the so-called <a href="https://decentralizedthoughts.github.io/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/">“split-brain” attack</a>. Suppose the network consists of three partitions $P_0, P_1, P_f$ of $n/3$ nodes each, and $P_f$ is faulty. $P_0$ and $P_1$ honestly send “vote for 0” and “vote for 1”, respectively. On the other hand, $P_f$ send “vote on 0” to $P_0$ and “vote on 1” to $P_1$, i.e., perform equivocation. Then, $P_0$ will collect “vote on 0” from $2n/3 = n-f$ nodes, and $P_1$ will collect “vote on 1” from $n-f$ nodes, and hence $P_0$ and $P_1$ decide differently.</p>
+<p>A simple and natural solution is to have each node forward the received votes to other nodes. This will detect $P_f$’s equivocation. In fact, it is the most common approach to handle equivocation with $f &lt; n/2$ faults, e.g., in <a href="https://eprint.iacr.org/2018/1028.pdf">Abraham, Devadas, Dolev, Nayak, and Ren</a>. However, each node forwarding linear votes would require cubic communication. One can rely on threshold signatures to compress a set of votes into a single vote. But threshold signatures require a trusted dealer to generate public and private keys for all nodes, which is a strong assumption. Can we detect equivocation with quadratic communication and $f \ge n/3$ faults without such a strong setup?</p>
+<h2 id="using-an-expander-to-efficiently-detect-equivocation">Using an expander to efficiently detect equivocation</h2>
+<p>To solve this challenge, we utilize an expander. Intuitively, an expander is a graph with sparse edges but good overall connectivity, as defined as follows.</p>
+<p><strong>Expander</strong>: For any $0 &lt; \alpha &lt; \beta &lt; 1$, an $(n,\alpha,\beta)$-expander is a graph of $n$ nodes such that any subset of $\alpha n$ nodes have neighbors of more than $\beta n$ nodes.</p>
+<p>It is well known that for any $n$ and $0 &lt; \alpha &lt; \beta &lt; 1$, a constant-degree $(n,\alpha,\beta)$-expander exists. We use $(n,2\varepsilon,1-2\varepsilon)$-expander, denoted $G_{n,\varepsilon}$, to detect equivocation with $f \le (1/2-\varepsilon)n$ faults for any positive constant $\varepsilon$.</p>
+<p>Our key idea is to forward votes along the expander edges. We observe that the good connectivity of expander is enough to detect equivocation and prevent inconsistent decisions between honest nodes. The protocol for $f \le (1/2-\varepsilon)n$ faults is shown below. The key step is marked in <strong>bold</strong>: each node forwards the $n-f$ received votes to their neighbors in the expander, as opposed to all nodes.</p>
+<ul>
+ <li>In round 1. Each node sends a vote on $b$ for its own input value $b$.</li>
+ <li>In round 2. If a node receives $n-f$ votes for $b$, forward them to <strong>the neighbors in the expander $G_{n,\varepsilon}$</strong>.</li>
+ <li>In round 3. If a node forwarded $n-f$ votes on $b$ in round 2, and does not receive $n-f$ votes on $b’$, it sends “decide on $b$”</li>
+ <li>In round 4. If a node receives “decide on $b$” from $n-f$ nodes, it decides on $b$.</li>
+</ul>
+<p>Suppose $n-f$ “decide on $b$” are sent. Then at least $n-2f \ge 2\varepsilon n$ honest nodes must have forwarded $n-f$ votes on $b$ in round 2. Due to the expansion property of $G_{n,\varepsilon}$, more than $(1-2\varepsilon)n = 2f$ nodes must have received $n-f$ votes on $b$. Out of these, more than $f$ are honest nodes, and they would not send “decide on $b’$”. Therefore, $n-f$ “decide on $b’$” cannot exist, and honest nodes will not decide on $b’$. Since the expander $G_{n,\varepsilon}$ has a constant degree, the total communication is quadratic.</p>
+<h2 id="from-equivocation-detection-to-graded-agreement-and-byzantine-agreement">From equivocation detection to graded agreement and Byzantine agreement</h2>
+<p>We utilize the above equivocation detection technique to improve a primitive called <em>Graded Agreement (GA)</em> to have quadratic communication and tolerate minority Byzantine faults. 
+We also observe that the Berman et al. paper can be viewed as a recursive method to build a quadratic Byzantine Agreement (BA) from quadratic GA. 
+We refer interested readers to <a href="https://arxiv.org/abs/2007.13175">our paper</a> and a <a href="https://decentralizedthoughts.github.io/2024-09-15-divide-and-conquer/">future post</a> for more details on the GA constructions and the recursive method.</p>
+<p><a href="https://twitter.com/AtsukiMomose">Atsuki Momose</a> and <a href="https://sites.google.com/view/renling">Ling Ren</a></p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#research">research</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Optimal+Communication+Complexity+of+Authenticated+Byzantine+Agreement&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2021-09-20-optimal-communication-complexity-of-authenticated-byzantine-agreement%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2021-09-20-information-theoretic-hotstuff-it-hs-part-one/" data-toggle="tooltip" data-placement="top" title="Information Theoretic HotStuff (IT-HS): Part One">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2021-09-29-the-round-complexity-of-reliable-broadcast/" data-toggle="tooltip" data-placement="top" title="The round complexity of Reliable Broadcast">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

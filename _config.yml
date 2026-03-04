@@ -100,6 +100,13 @@ exclude:
 - node_modules
 - .jekyll-cache
 - _site
+- tests
+- tools
+- grep.sh
+- print-logs.sh
+- setup-docker.sh
+- start-server.sh
+- stop-server.sh
 prose:
   rooturl: _posts
   media: img

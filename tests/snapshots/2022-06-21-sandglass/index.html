@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Safe Permissionless Consensus</title>
+ 
+ 
+ <meta name="author" content="Youer Pu, Lorenzo Alvisi, and Ittay Eyal">
+ 
+ <meta name="description" content="Nakamoto’s consensus protocol works in a permissionless model, where nodes can join and leave without notice. However, it guarantees agreement only probabilistically. Is this weaker guarantee a necessary concession to the severe demands of supporting a permissionless model? We show that, at least in a benign failure model, it is not. We present Sandglass, the first permissionless consensus algorithm that guarantees deterministic agreement and termination with probability 1 under general...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Safe Permissionless Consensus">
+ <meta property="og:description" content="Nakamoto’s consensus protocol works in a permissionless model, where nodes can join and leave without notice. However, it guarantees agreement only probabilistically. Is this weaker guarantee a necessary concession to the severe demands of supporting a permissionless model? We show that, at least in a benign failure model, it is not. We present Sandglass, the first permissionless consensus algorithm that guarantees deterministic agreement and termination with probability 1 under general...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Youer Pu, Lorenzo Alvisi, and Ittay Eyal">
+ 
+ <meta property="og:article:published_time" content="2022-06-21T08:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2022-06-21-sandglass/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2022-06-21-sandglass/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Safe Permissionless Consensus">
+ <meta property="twitter:description" content="Nakamoto’s consensus protocol works in a permissionless model, where nodes can join and leave without notice. However, it guarantees agreement only probabilistically. Is this weaker guarantee a necessary concession to the severe demands of supporting a permissionless model? We show that, at least in a benign failure model, it is not. We present Sandglass, the first permissionless consensus algorithm that guarantees deterministic agreement and termination with probability 1 under general...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Safe Permissionless Consensus</h1>
+ 
+ 
+ 
+ 
+ By <strong>Youer Pu, Lorenzo Alvisi, and Ittay Eyal</strong><br>
+ 
+ <span class="post-meta">Posted on June 21, 2022</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>Nakamoto’s consensus protocol works in a permissionless model, where nodes can join and leave without notice. However, it guarantees agreement only probabilistically. Is this weaker guarantee a necessary concession to the severe demands of supporting a permissionless model?</p>
+<p>We show that, at least in a benign failure model, it is not. We present <em>Sandglass</em>, the first permissionless consensus algorithm that guarantees deterministic agreement and termination with probability 1 under general omission failures. Like Nakamoto, Sandglass adopts a <em>hybrid synchronous</em> communication model, where, at all times, a majority of nodes (though their number is unknown) are correct and synchronously connected, and allows nodes to join and leave at any time.</p>
+<h2 id="permissionless-blockchains-with-deterministic-consistency">Permissionless Blockchains with Deterministic Consistency?</h2>
+<p>The publication of Bitcoin’s white paper, besides jumpstarting an industry whose market is expected to reach <a href="https://www.researchandmarkets.com">over $67B by 2026</a>, presented the distributed computing community with a fundamental question: how should the agreement protocol at the core of Nakamoto’s blockchain construction be understood in light of the combination of consensus and state machine replication that the community has studied for over 30 years? The similarities are striking: in both cases, the goal is to create an append-only distributed ledger that everyone agrees upon, which Nakamoto calls a blockchain. But so are the differences. Unlike traditional consensus algorithms, where the set of participants <em>n</em> is known and can only be changed by running an explicit reconfiguration protocol, Nakamoto’s consensus is permissionless: it does not enforce access control and allows the number and identity of participants to change without notice. To operate under these much weaker assumptions, Nakamoto adopts a new mechanism for reaching agreement: since the precise value of <em>n</em> is unknown, Nakamoto forsakes explicit majority voting and relies instead on a Proof of Work (PoW) lottery mechanism [19], designed to drive agreement towards the blockchain whose construction required the majority of the computational power of all participants. Finally, whereas traditional consensus protocols guarantee agreement deterministically, NC can do so only probabilistically; furthermore, that probability approaches 1 only as termination time approaches infinity.</p>
+<blockquote>
+ <p><strong>Is settling for these weaker guarantees the inevitable price of running consensus in a permissionless setting?</strong></p>
+</blockquote>
+<p>Defying <a href="https://en.wikipedia.org/wiki/Betteridge%27s_law_of_headlines">Betteridge</a>, the answer is yes – we show that one can do much better.</p>
+<p>In a <a href="https://eprint.iacr.org/2022/796">technical report</a> we publish today, we show that these weaker probabilistic guarantees do not arise from permissionlessness, but rather from the choice of a probabilistic PoW mechanism: In Bitcoin (and all PoW blockchains), the miners provide only statistical proof they have calculated a certain number of hash functions. The safety of these protocols relies on the majority of computational power generating the majority of blocks; however, with some probability, even a small miner might get lucky and generate the majority of blocks.</p>
+<p align="center">
+ <img width="350" src="https://images.unsplash.com/photo-1633265486501-0cf524a07213?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1170&amp;q=80" />
+</p>
+<h2 id="sandglass">Sandglass</h2>
+<p>We show that if instead we can send <em>all work</em>, achieving a full (rather than statistical) PoW, it is possible to achieve <em>deterministic safety in a permssionless model</em>.</p>
+<p>We present <em>Sandglass</em>, a permissionless consensus algorithm that guarantees deterministic agreement and terminates with probability 1. It operates in a model based on Nakamoto’s. Our model allows an arbitrary number of participants to join and leave the system at any time and stipulates that at no time the number of participants exceeds an upper bound N (though the actual number <em>n</em> of participants at any given time is unknown). Further, like Nakamoto’s, it is hybrid synchronous, in that, at all times, a majority of participants are correct and able to communicate synchronously with one another. We call these participants good; our protocol’s safety and liveness guarantees apply to them. Participants that are not good (whether because they crash, perform omission failures, and/or experience asynchronous network connections) we call <em>defective</em>.</p>
+<p>Sandglass proceeds in virtual rounds. Nodes propose a value by broadcasting it; in the first round, each node proposes its initial value; in subsequent rounds, nodes propose a value chosen among those received in the previous round. Values come with an associated priority, initialized to 0. The priority of <em>v</em> depends on the number of consecutive rounds during which <em>v</em> was the only value received by the node proposing <em>v</em> – whenever a node receives a value other than <em>v</em>, it resets <em>v</em>’s priority back to 0. 
+When proposing a value in a given round, node <em>p</em> selects the highest priority value received in the previous round; if multiple values have the same priority, then it selects randomly among them. 
+A node can safely decide a value <em>v</em> after sufficiently many consecutive rounds in which the proposals it receives unanimously endorse <em>v</em> (i.e., when <em>v</em>’s priority is sufficiently high); and termination follows from the non-zero probability that the necessary sequence of unanimous, consecutive rounds will actually eventually occur.</p>
+<p>The keen eye might notice that Sandglass is surprisingly reminiscent of <a href="https://decentralizedthoughts.github.io/2022-03-30-asynchronous-agreement-part-two-ben-ors-protocol/">Ben-Or’s classic consensus protocol</a>. However, Ben-Or establishes that it is safe for a node to decide <em>v</em> after having observed two consecutive, unanimous endorsements of <em>v</em>. This is because any two majority sets of its fixed set of <em>n</em> nodes will intersect in at least one correct node. 
+This approach is clearly no longer feasible in a permissionless setting, where <em>n</em> is unknown and the set of nodes can change at any time. Instead, Sandglass’s approach to establish safety is inspired by one of the key properties of Nakamoto’s PoW: whatever the value of <em>n</em>, whatever the identity of the nodes participating in the protocol at any time, the synchronously connected majority of good nodes will be faster in proceeding to new rounds than the defective nodes that do not communicate with good nodes. So much faster, that eventually defective nodes either propose the same value as the good nodes, or their round is so far behind that they cannot affect the good nodes.</p>
+<p align="center">
+ <img width="350" src="https://i.pinimg.com/564x/5d/ea/d0/5dead0a5403ba51c7988315cc795e91a.jpg" />
+</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>The discovery that deterministic safety is possible in a permissionless setting leads to the question of whether there exists a protocol that also achieves deterministic termination in a hybrid synchronous model. Another natural question is whether there exists a deterministically-safe solution to consensus in a hybrid-synchronous model with Byzantine failures (<a href="https://arxiv.org/pdf/2101.07095.pdf">Lewis-Pye and Roughgarden</a> have shown that a deterministic-consesus protocol does not exist). Answering these questions might pave the way to a qualitative improvement of permissionless systems that would provide deterministic guarantees; or, at the very least, give us more insight about the nature of consensus.</p>
+<p>Read more in our <a href="https://eprint.iacr.org/2022/796">technical report</a>.</p>
+<p><a href="https://twitter.com/IttayEyal" class="twitter-follow-button" data-show-count="false">Follow @IttayEyal</a><script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#research">research</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Safe+Permissionless+Consensus&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2022-06-21-sandglass%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2022-06-19-crusader-braodcast/" data-toggle="tooltip" data-placement="top" title="Crusader Broadcast">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2022-06-28-DAG-meets-BFT/" data-toggle="tooltip" data-placement="top" title="DAG Meets BFT - The Next Generation of BFT Consensus">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

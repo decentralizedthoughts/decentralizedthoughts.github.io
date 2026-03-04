@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Linear PBFT: a gentle introduction to Practical Byzantine Fault Tolerance</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham">
+ 
+ <meta name="description" content="PBFT is a foundational multi-year project led by Barbara Liskov and her students, obtaining major advances in both the theory and practice of Byzantine Fault Tolerance. The PBFT conference version, journal version, Castro’s thesis, Liskov’s talk, and follow-up work on BASE are all required reading for anyone who wants to deeply understand BFT systems. In this post we describe a variation of the authenticated version of PBFT using Locked Broadcast...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Linear PBFT: a gentle introduction to Practical Byzantine Fault Tolerance">
+ <meta property="og:description" content="PBFT is a foundational multi-year project led by Barbara Liskov and her students, obtaining major advances in both the theory and practice of Byzantine Fault Tolerance. The PBFT conference version, journal version, Castro’s thesis, Liskov’s talk, and follow-up work on BASE are all required reading for anyone who wants to deeply understand BFT systems. In this post we describe a variation of the authenticated version of PBFT using Locked Broadcast...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham">
+ 
+ <meta property="og:article:published_time" content="2022-11-20T04:00:00-05:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Linear PBFT: a gentle introduction to Practical Byzantine Fault Tolerance">
+ <meta property="twitter:description" content="PBFT is a foundational multi-year project led by Barbara Liskov and her students, obtaining major advances in both the theory and practice of Byzantine Fault Tolerance. The PBFT conference version, journal version, Castro’s thesis, Liskov’s talk, and follow-up work on BASE are all required reading for anyone who wants to deeply understand BFT systems. In this post we describe a variation of the authenticated version of PBFT using Locked Broadcast...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Linear PBFT: a gentle introduction to Practical Byzantine Fault Tolerance</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham</strong><br>
+ 
+ <span class="post-meta">Posted on November 20, 2022</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p><a href="https://pmg.csail.mit.edu/bft/">PBFT</a> is a foundational multi-year project led by <a href="https://pmg.csail.mit.edu/~liskov/">Barbara Liskov</a> and her students, obtaining major advances in both the theory and practice of Byzantine Fault Tolerance. The PBFT <a href="https://pmg.csail.mit.edu/papers/osdi99.pdf">conference version</a>, <a href="https://pmg.csail.mit.edu/papers/bft-tocs.pdf">journal version</a>, Castro’s <a href="https://pmg.csail.mit.edu/~castro/thesis.pdf">thesis</a>, Liskov’s <a href="https://www.youtube.com/watch?v=Uj638eFIWg8">talk</a>, and follow-up work on <a href="http://www.sosp.org/2001/papers/rodrigues.pdf">BASE</a> are all required reading for anyone who wants to deeply understand BFT systems.</p>
+<p>In this post we describe a variation of the authenticated version of <a href="https://pmg.csail.mit.edu/papers/osdi99.pdf">PBFT</a> using <a href="https://decentralizedthoughts.github.io/2022-09-10-provable-broadcast/">Locked Broadcast</a> that follows a similar path as our previous post on <a href="https://decentralizedthoughts.github.io/2022-11-04-paxos-via-recoverable-broadcast/">Paxos using Recoverable Broadcast</a>. I call this protocol <strong>linear PBFT</strong> because the number of messages per view is linear. However, the size of the view change message in the worst case is large. We discuss improving this in a <a href="https://decentralizedthoughts.github.io/2022-11-24-two-round-HS/">later post</a> on <a href="https://arxiv.org/pdf/1803.05069v1.pdf">Two Round HotStuff</a> using <a href="https://decentralizedthoughts.github.io/2022-09-10-provable-broadcast/">Locked Broadcast</a>. Other ways of reducing the view change message size are to use <a href="https://arxiv.org/pdf/1803.05069.pdf">Three Round HotStuff</a> via <a href="https://decentralizedthoughts.github.io/2022-09-10-provable-broadcast/">Keyed Broadcast</a>, or to use SNARKs.</p>
+<p>Variants of the linear PBFT protocol are used by <a href="https://arxiv.org/pdf/1804.01626.pdf">SBFT</a>, <a href="https://arxiv.org/pdf/2105.11827.pdf">Tusk</a>, <a href="https://arxiv.org/pdf/2106.10362.pdf">Jolteon</a>, <a href="https://developers.diem.com/papers/diem-consensus-state-machine-replication-in-the-diem-blockchain/2021-08-17.pdf">DiemBFTv4</a>, and <a href="https://github.com/aptos-labs/aptos-core/blob/main/developer-docs-site/static/papers/whitepaper.pdf">Aptos</a>.</p>
+<p>The model is <a href="https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/">partial synchrony</a> with $f&lt;n/3$ <a href="https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/">Byzantine failures</a> and the goal is <em>consensus with external validity</em> (see below for exact details).</p>
+<p>As with Paxos, we present PBFT with two major simplifications:</p>
+<ol>
+ <li>Use a <em>simple revolving primary</em> strategy assuming perfectly synchronized clocks. This approach follows Section 6 of <a href="https://arxiv.org/pdf/1803.05069v1.pdf">Two Round HotStuff</a>.</li>
+ <li>Focus on a <em>single-shot</em> consensus while PBFT is designed as a full State Machine Replication system. See <a href="https://decentralizedthoughts.github.io/2022-11-19-from-single-shot-to-smr/">here</a> for the next steps.</li>
+</ol>
+<h2 id="view-based-protocol-with-simple-rotating-primary">View-based protocol with simple rotating primary</h2>
+<p>Just as in <a href="https://decentralizedthoughts.github.io/2022-11-04-paxos-via-recoverable-broadcast/">Paxos</a>, the protocol progresses in <strong>views</strong>, each view has a designated <strong>primary</strong> party. For simplicity, the primary of view $v$ is party $v \bmod n$.</p>
+<p>Clocks are synchronized, and $\Delta$ (the delay after GST) is known, so set view $v$ to be the time interval $[v(10 \Delta),(v+1)(10 \Delta))$. In other words, every $10\Delta$ ticks, each party triggers a <strong>view change</strong> and increments the view by one. Since clocks are assumed to be perfectly synchronized, all parties move in and out of each view in complete synchrony.</p>
+<h2 id="single-shot-consensus-with-external-validity">Single-shot Consensus with External Validity</h2>
+<p>There is some <em>External Validity</em> Boolean function ($EV_{\text{consensus}}$) that is provided to each party. $EV_{\text{consensus}}$ takes as input a value $v$ and a proof $proof$. If $EV_{\text{consensus}}(v, proof)=1$ we say that $v$ is <em>externally valid</em>. A simple example of external validity is a check that the value is signed by the client that controls the asset. External validity is based on the framework of <a href="https://www.iacr.org/archive/crypto2001/21390524.pdf">Cachin, Kursawe, Petzold, and Shoup, 2001</a>.</p>
+<p>In this setting, each party has some externally valid <em>input values</em> (one or more) and the goal is to <em>output a single externally valid value</em>, which is a (value, proof) pair with the following three properties:</p>
+<p><strong>Agreement</strong>: all non-faulty parties output the same (value, proof) pair.</p>
+<p><strong>Termination</strong>: all non-faulty parties eventually output a (value, proof) pair and terminate.</p>
+<p><strong>External Validity</strong>: the output is externally valid, $EV_{\text{consensus}}(value,proof)=1$.</p>
+<p>Linear PBFT is decomposed to use two building blocks: <em>Locked-Broadcast</em> and <em>Recover-Max-Lock</em>. Let’s start with the outer shell of the linear PBFT that calls them.</p>
+<h1 id="linear-pbft-via-locked-broadcast-and-recover-max-lock">Linear PBFT via Locked-Broadcast and Recover-Max-Lock</h1>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>For view 1, the primary of view 1 with input (val, val-proof): 
+ Locked-Broadcast (1, val, val-proof)
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>For view v&gt;1, the primary of view v with input (val, val-proof):
+ (p, R) := Recover-Max-Lock(v)
+ if p = bot then 
+ Locked-Broadcast (v, val, val-proof, R)
+ otherwise 
+ Locked-Broadcast (v, p, R)
+</code></pre></div></div>
+<p>Termination protocol:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>If a Locked-Broadcast outputs a valid delivery-certificate dc for x
+ Send &lt;decide, x, dc&gt; to all
+ Terminate
+ 
+Upon receiving a valid &lt;decide, x, dc&gt; 
+ Send &lt;decide, x, dc&gt; to all
+ Terminate
+</code></pre></div></div>
+<p>In words, the primary first tries to recover the lock-certificate with the maximal view. If no lock-certificate is seen, the primary is free to choose its own externally valid input $val$, but even in that case, it adds the proof $R$ from the Recover-Max-Lock protocol. Otherwise, it proposes the output value $p$ from the Recover-Max-Lock along with its proof $R$. Note the similarity to the Paxos protocol variant of the <a href="https://decentralizedthoughts.github.io/2022-11-04-paxos-via-recoverable-broadcast/">previous post</a>.</p>
+<p>All that remains is to define <em>Locked-Broadcast</em> and <em>Recover-Max-Lock</em>.</p>
+<h2 id="locked-broadcast">Locked-Broadcast</h2>
+<p><a href="https://decentralizedthoughts.github.io/2022-09-10-provable-broadcast/">Locked-Broadcast</a> is the application of two provable broadcasts with an <em>external validity function</em>, $EV_{\text{LB}}$, which obtains the following properties:</p>
+<ul>
+ <li><strong>Termination</strong>: If the sender is honest and has an <em>externally valid</em> input $x$, then after a constant number of rounds the sender will obtain a <em>delivery-certificate</em> of $x$. Note that the Termination property guarantees that only the sender holds the certificate (so we will need to propagate it via another round).</li>
+ <li><strong>Uniqueness</strong>: If a <em>delivery-certificate</em> exists for $x$ then there cannot exist a <em>delivery-certificate</em> for $x’ \neq x$.</li>
+ <li><strong>External Validity</strong>: If there is a <em>delivery-certificate</em> on $x=(value, proof)$ then $x$ is <em>externally valid</em>. So $EV_{\text{LB}}(value, proof)=1$.</li>
+ <li><strong>Unique-Lock-Availability</strong>: If a <em>delivery-certificate</em> exists for $x$ then: (1) there cannot exist a <em>lock-certificate</em> for $x’ \neq x$; and (2) there are at least $n-2f\geq f+1$ honest parties that hold a <em>lock-certificate</em> for $x$.</li>
+</ul>
+<p>Note that Locked-Broadcast needs to define an external validity function $EV_{\text{LB}}$, which controls what outputs are allowed. $EV_{\text{LB}}$ is different from $EV_{\text{consensus}}$ (the external validity function of the underlying consensus protocol).</p>
+<p>Before we define $EV_{\text{LB-PBFT}}$ for the Locked-Broadcast protocol in PBFT, we detail the Recover-Max-Lock protocol. Similar to <a href="https://decentralizedthoughts.github.io/2022-11-04-paxos-via-recoverable-broadcast/">Recover-Max of this Paxos</a>, the Recover-Max-Lock protocol returns the highest lock-certificate it sees. Unlike Paxos, it also returns a <code class="language-plaintext highlighter-rouge">proof</code> that the primary chose the highest lock-certificate it saw out of a set of $n{-}f$ distinct lock-certificates it received. The external validity $EV_{\text{LB-PBFT}}$ of the locked-broadcast will check the validity of this proof.</p>
+<h3 id="recover-max-lock-for-pbft-based-protocols">Recover-Max-Lock for PBFT-based protocols</h3>
+<p>Recover-Max-Lock for view $v$ finds the <em>highest</em> lock-certificate and returns not only the associated value but also the $n{-}f$ responses that allows one to verify that indeed the highest lock-certificate among some set of $n{-}f$ <em>valid responses</em> was used. A valid response is a response which includes a valid lock-certificate, and a valid lock-certificate includes $n{-}f$ distinct signatures.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Recover-Max-Lock(v):
+Party i upon start of view v
+ If it does not have any lock-certificate 
+ send &lt;echoed-max(v, bot)&gt;_i to primary 
+ Otherwise let v' be the highest view with a lock-certificate
+ let LC(v',p') be this lock certificate for value p'
+ send &lt;echoed-max(v, v', p', LC(v',p') )&gt; to primary
+Primary waits for n-f valid &lt;echoed-max(v,*)&gt;
+ Let R be this set
+ If all values in R are bot then output (bot, R)
+ otherwise, output (p, R) 
+ where p is the value associated with the highest view in R
+</code></pre></div></div>
+<p>With the Recover-Max-Lock defined, the definition of $EV_{\text{LB-PBFT}}$ for Locked-Broadcast should be natural. The Primary will input $(p,R)$ to Locked-Broadcast and the parties will check that $p$ is indeed the value associated with the highest view in R (or an externally valid value and all values in R are for $\bot$).</p>
+<h3 id="external-validity-for-the-locked-broadcast-of-linear-pbft">External Validity for the Locked-Broadcast of Linear PBFT</h3>
+<p>To define Locked-Broadcast for PBFT let’s define $EV_{\text{LB-PBFT}}$ which controls what messages to accept. The $EV_{\text{LB-PBFT}}$ function checks the validity of the primary’s messages. In view 1 and in the case the message is $(val,val{-}proof,R)$ we also use the external $EV_{\text{consensus}}$ as a subroutine to verify $val$ relative to $val{-}proof$.</p>
+<p>Informally, $EV_{\text{LB-PBFT}}$ for view $v&gt;1$, either checks that $n{-}f$ parties say they saw no lock-certificate and the new value is externally valid for consensus; or that the primary proposes the value that is associated with a lock-certificate and the view of this lock-certificate is the highest one among a set of $n{-}f$ valid <code class="language-plaintext highlighter-rouge">&lt;echoed-max(v, * )&gt;</code> messages.</p>
+<p>Define $EV_{\text{LB-PBFT}}$ for view $v$:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>For view 1 set EV-LB-PBFT (1, val, val-proof) = EV-consensus(val, val-proof)
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>For view v&gt;1 there are two cases for EV-LB-PBFT(v, *):
+Given * is a 3-tuple (val, val-proof, R):
+ 1. Check R consists of n-f distinct valid &lt;echoed-max(v, bot)&gt; messages
+ 2. Check EV-consensus(val, val-proof) = 1
+Given * is a 2-tuple (p, R):
+ 1. Check R consists of n-f distinct valid &lt;echoed-max(v, * )&gt; messages
+ 2. Check each &lt;echoed-max(v, v', p', LC(v',p') )&gt; in R:
+ has a valid lock-certificate LC(v') for view v' and value p'
+ 3. Let w, q, LC(w,q) be the valid &lt;echoed-max(v, * )&gt; response with the highest view w in R
+ Check p = q (p is from the lock-certificate with highest view in R).
+</code></pre></div></div>
+<p>Observe that a valid proof <code class="language-plaintext highlighter-rouge">R</code> may contain up to $n{-}f$ distinct lock-certificates (from different views) and each valid lock-certificate contains $n{-}f$ distinct signatures (from different parties) so without compressing, <code class="language-plaintext highlighter-rouge">R</code> contains $O(n^2)$ words.</p>
+<p>This completes the description of the consensus protocol. The protocol is detailed in 4 places: the linear PBFT consensus protocol, the recover-max lock protocol, the locked-broadcast protocol, and finally the external validity of the locked-broadcast. Let’s prove that the three properties of consensus hold:</p>
+<h3 id="agreement-safety">Agreement (Safety)</h3>
+<p><strong>Safety Lemma</strong>: Let $v^{\star}$ be the first view with a commit-certificate on $(v^\star, x)$, then for any view $v \geq v^\star$, if a lock-certificate forms for view $v$, it must be with value $x$.</p>
+<p><em>Exercise: Prove the Agreement property follows from the Safety Lemma above.</em></p>
+<p>Let’s prove the safety lemma, which is the essence of PBFT.</p>
+<p><em>Proof of Safety Lemma</em>: Let $S$ (for Sentinels) be the set of <strong>non-faulty</strong> parties among the $n{-}f$ parties that sent a lock-certificate in the second round of locked broadcast of view $v^\star$. Note that $|S| \geq n{-}2f \geq f{+}1$.</p>
+<p>Induction statement: for any view $v\geq v^\star$:</p>
+<ol>
+ <li>If there is a lock-certificate for view $v$, then it has value $x$.</li>
+ <li>For each party in $S$, in view $v$, its lock-certificate with the highest view $v’$ is such that:
+ <ol>
+ <li>$v’ \geq v^\star$; and</li>
+ <li>The value of this lock-certificate is $x$.</li>
+ </ol>
+ </li>
+</ol>
+<p>For the base case, $v=v^\star$: (1.) follows from the <em>Uniqueness</em> property of locked broadcast of view $v^\star$ and (2.) follows from the <em>Unique-Lock-Availability</em> property of locked broadcast.</p>
+<p>Now suppose the induction statement holds for all views $v^\star \leq v$ and consider view $v+1$:</p>
+<p>Use the <em>External Validity</em> property of locked broadcast and the definition of $EV_{\text{LB-PBFT}}$ above: to form a lock-certificate, the primary needs at least $n{-}2f$ non-faulty parties to view its proposal as valid.</p>
+<p>Observe that by definition of $EV_{\text{LB-PBFT}}$ for view $v+1$: any valid <code class="language-plaintext highlighter-rouge">R</code> must include a lock-certificate sent by some member of $S$ for view $v+1$. This is true because <code class="language-plaintext highlighter-rouge">R</code> must include $n{-}f$ distinct and valid <code class="language-plaintext highlighter-rouge">&lt;echoed-max v, *&gt;</code> responses and the set $S$ is of size at least $f+1$.</p>
+<p>Use the induction hypothesis on views $v^\star \leq v$: from (2.) and the above argument, <code class="language-plaintext highlighter-rouge">R</code> must contain a lock-certificate of view at least $v^\star $ and value $x$. From (1.) any lock-certificate in <code class="language-plaintext highlighter-rouge">R</code> is either of view $&lt; v^\star$ or of value $x$. Hence, the value associated with the maximal view lock-certificate in <code class="language-plaintext highlighter-rouge">R</code> must be $x$. This concludes the proof of (1.) for view $v+1$.</p>
+<p>Given (1.) for view $v+1$, (2.) follows, because the only thing that may happen is that some members in $S$ see a lock-certificate for view $v+1$ and update their highest lock-certificate. The value will remain $x$. This concludes the proof of the Safety Lemma.</p>
+<h3 id="liveness">Liveness</h3>
+<p>Consider the view $v^+$ with the <em>first</em> non-faulty Primary that started after GST. Denote this start time as time $T$. Due to clock synchronization and being after GST, then on or before time $T+ \Delta$ the primary will receive <code class="language-plaintext highlighter-rouge">&lt;echoed-max(v+,*)&gt;</code> from all non-faulty parties (at least $n{-}f$ parties). So the primary will send a value $LB(v^+, *)$ that (1) will arrive at all non-faulty parties on or before time $T+2\Delta$ and (2) will have a $proof$ that is valid. Hence, all non-faulty parties will pass the $EV_{\text{LB-PBFT}}$ condition for view $v^+ $ (they are still in view $v^+$). So the primary will obtain a delivery-certificate on or before time $T+5\Delta$ (locked broadcast takes at most $4 \Delta$) and all non-faulty will decide on or before time $T+6\Delta$.</p>
+<p>This concludes the proof of Liveness.</p>
+<h3 id="termination">Termination</h3>
+<p>Add the following validated <em>termination gadget</em>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>If the consensus protocol outputs x and valid delivery-certificate dc for x
+ Send &lt;decide, x, dc&gt; to all
+ Terminate
+ 
+Upon receiving a valid &lt;decide, x, dc&gt; 
+ Send &lt;decide, x, dc&gt; to all
+ Terminate
+</code></pre></div></div>
+<p><em>Exercise: Prove that if a non-faulty party terminates, then eventually all non-faulty parties terminate.</em></p>
+<h3 id="external-validity">External Validity</h3>
+<p>External validity is proven by induction on the chain of lock-certificates. For a lock-certificate that is formed with an $EV_{\text{LB-PBFT}}$ check that has no prior lock certificate, external validity is part of the $EV_{\text{LB-PBFT}}$ function check. For a lock-certificate that is formed with an $EV_{\text{LB-PBFT}}$ check that checks a previous lock-certificate, then this new lock-certificate must use the same value as the previous lock-certificate. An induction argument shows that any lock-certificate must have an externally valid value.</p>
+<h3 id="time-and-message-complexity">Time and Message Complexity</h3>
+<p>The time and number of messages before GST can be both unbounded, so we measure the time and message complexity after GST.</p>
+<p><strong>Time complexity</strong>: since the liveness proof requires waiting for the first non-faulty primary after GST, this may take: an interrupted view of an honest primary, then in the worst case, another $f$ views of faulty primaries, then finally a good view. So all parties will output a value in at most $(f+2)10 \Delta = O(f \Delta)$ time after GST. This is asymptotically optimal but not optimized.</p>
+<p><strong>Message Complexity</strong>: since each view has a linear message exchange, the total number of messages sent after GST is $O(f \times n) = O(n^2)$. This is asymptotically optimal.</p>
+<p>However, the number of bits in each message is large and not optimal. The size of a lock-certificate or a delivery-certificate is $O(n)$ signatures. More worrisome, the size of <code class="language-plaintext highlighter-rouge">R</code> that is sent in the locked broadcast can be $O(n^2)$ signatures because it may contain $O(n)$ lock-certificates (for different views).</p>
+<p>Lock-certificates can be reduced to a single signature by using threshold signatures. Reducing the size of <code class="language-plaintext highlighter-rouge">R</code> below $O(n)$ signatures requires either more powerful succinct proofs (for example, a SNARK) or a slightly different protocol. We will explore both in future posts.</p>
+<h2 id="notes">Notes</h2>
+<p>In later posts, we will show other view synchronization solutions, and HotStuff also provides responsiveness.</p>
+<h2 id="acknowledgments">Acknowledgments</h2>
+<p>Many thanks to Kartik Nayak for insightful comments.</p>
+<p>Your comments on <a href="https://twitter.com/ittaia/status/1599893500866088961?s=20&amp;t=RUTyrxNgaIvudyiV5O5IAA">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Linear+PBFT%3A+a+gentle+introduction+to+Practical+Byzantine+Fault+Tolerance&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2022-11-20-pbft-via-locked-braodcast%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2022-11-19-from-single-shot-to-smr/" data-toggle="tooltip" data-placement="top" title="From Single-Shot Agreement to State Machine Replication">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2022-11-24-two-round-HS/" data-toggle="tooltip" data-placement="top" title="Two Round HotStuff">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

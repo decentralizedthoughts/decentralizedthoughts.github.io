@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Responsiveness under omission failures</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham and Kartik Nayak">
+ 
+ <meta name="description" content="In this post, we discuss log replication responsiveness in the context of omission failures. We show how to transform the protocol in our previous post to a multi-shot version of Paxos for omission faults. The Byzantine failure case uses similar ideas and is covered in the next post of this series. Obtaining responsiveness in log replication with a stable leader In the previous post we replaced leaders every $10 \Delta$...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Responsiveness under omission failures">
+ <meta property="og:description" content="In this post, we discuss log replication responsiveness in the context of omission failures. We show how to transform the protocol in our previous post to a multi-shot version of Paxos for omission faults. The Byzantine failure case uses similar ideas and is covered in the next post of this series. Obtaining responsiveness in log replication with a stable leader In the previous post we replaced leaders every $10 \Delta$...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham and Kartik Nayak">
+ 
+ <meta property="og:article:published_time" content="2022-12-27T08:00:00-05:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2022-12-27-responsiveness-omission/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2022-12-27-responsiveness-omission/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Responsiveness under omission failures">
+ <meta property="twitter:description" content="In this post, we discuss log replication responsiveness in the context of omission failures. We show how to transform the protocol in our previous post to a multi-shot version of Paxos for omission faults. The Byzantine failure case uses similar ideas and is covered in the next post of this series. Obtaining responsiveness in log replication with a stable leader In the previous post we replaced leaders every $10 \Delta$...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Responsiveness under omission failures</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham and Kartik Nayak</strong><br>
+ 
+ <span class="post-meta">Posted on December 27, 2022</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>In this post, we discuss log replication <a href="https://decentralizedthoughts.github.io/2022-12-18-what-is-responsiveness/">responsiveness</a> in the context of omission failures. We show how to transform the protocol in our <a href="https://decentralizedthoughts.github.io/2022-11-04-paxos-via-recoverable-broadcast/">previous post</a> to a multi-shot version of Paxos for omission faults. The Byzantine failure case uses similar ideas and is covered in the next post of this series.</p>
+<h3 id="obtaining-responsiveness-in-log-replication-with-a-stable-leader">Obtaining responsiveness in log replication with a stable leader</h3>
+<p>In the <a href="https://decentralizedthoughts.github.io/2022-11-04-paxos-via-recoverable-broadcast/">previous post</a> we replaced leaders every $10 \Delta$ time (the constant 10 was chosen for simplicity). What if instead of replacing leaders, we keep the same leader and replace it only when it fails. This is called the <strong>stable leader</strong> approach. The same <em>stable leader</em> consecutively commits commands using <a href="https://decentralizedthoughts.github.io/2022-11-04-paxos-via-recoverable-broadcast/">recoverable broadcast</a> without any additional waiting and without calling <a href="https://decentralizedthoughts.github.io/2022-11-04-paxos-via-recoverable-broadcast/">recover-max</a> in between each new decision.</p>
+<p>Assume the primary has a function <code class="language-plaintext highlighter-rouge">getNextVal</code> that returns the next uncommitted client command. Here is the protocol for the stable primary:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>c := Recover-Max(v)
+while (true)
+ newCommand := getNextVal()
+ c := c &lt;- newCommand 
+ send &lt;propose(v,c)&gt; to all
+ wait for n-f echoes for &lt;v,c&gt;
+ mark newCommand as committed 
+</code></pre></div></div>
+<p>Note the first iteration uses <code class="language-plaintext highlighter-rouge">Recover-Max</code> and appends the new command to it, all the later iterations use the previous committed log and appends the new command to it.</p>
+<p>This protocol obtains multi-shot responsiveness. When the stable leader is non-faulty, there are no timeouts between proposals.</p>
+<p>There is no safety concern: each consensus instance has its independent safety properties maintained. The primary must wait for $n-f$ echeos before moving forward. Moreover, just as before, echoes are only sent by parties that are in view $v$.</p>
+<p>But what about liveness? There is a new challenge: we cannot use a fixed timer to change views because we want the leader to continue driving decisions. A mechanism to decide when to move to a new view is needed. New problems emerge: how do we decide when to change views, and how do we make sure this move is synchronized between all parties? Here is a common state machine approach:</p>
+<p>For a view $v$, a party can be in one of three states:</p>
+<ol>
+ <li><code class="language-plaintext highlighter-rouge">start-view-v</code> this is the state in which the party listens to the view $v$ primary;</li>
+ <li><code class="language-plaintext highlighter-rouge">blame-v</code> this is the state where the party sees something wrong in view $v$;</li>
+ <li><code class="language-plaintext highlighter-rouge">stop-view-v</code> this is the state where the party stops listening to the view $v$ primary.</li>
+</ol>
+<p>Let’s go over each transition:</p>
+<ul>
+ <li>From <code class="language-plaintext highlighter-rouge">start-view-v</code> to <code class="language-plaintext highlighter-rouge">blame-v</code>: this is when a party is not seeing progress in the current view (or more generally, anything wrong in this view). A reason to blame is if a heartbeat or message from the current primary does not arrive in $2 \Delta$ from the previous one. A second reason to blame is if a client request arrives but the primary does not reach a decision on it in the required time. In either case, when moving to <code class="language-plaintext highlighter-rouge">blame-v</code>, the party sends a <code class="language-plaintext highlighter-rouge">&lt;blame, v&gt;</code> message to all parties.</li>
+ <li>From <code class="language-plaintext highlighter-rouge">blame-v</code> to <code class="language-plaintext highlighter-rouge">stop-v</code>: should a party in <code class="language-plaintext highlighter-rouge">blame-v</code> stop processing messages in view $v$? Not so fast. Maybe the blaming party is omission faulty and the primary is actually non-faulty. To overcome this ambiguity, a party waits for $f+1$ distinct <code class="language-plaintext highlighter-rouge">&lt;blame, v&gt;</code> messages before moving to <code class="language-plaintext highlighter-rouge">stop-view-v</code>. When moving to <code class="language-plaintext highlighter-rouge">stop-view-v</code> the party sends a <code class="language-plaintext highlighter-rouge">&lt;stop-view, v&gt;</code> message to all parties. At this point, the party stops responding to view $v$ messages (in particular it does not echo messages for view $v$).</li>
+ <li>From <code class="language-plaintext highlighter-rouge">stop-v</code> to <code class="language-plaintext highlighter-rouge">start-v+1</code>: should the party move to view $v+1$ when it reaches <code class="language-plaintext highlighter-rouge">stop-v</code>? Not so fast, maybe the party is the only non-faulty party that reached <code class="language-plaintext highlighter-rouge">stop-v</code>. To synchronize, we make <code class="language-plaintext highlighter-rouge">stop-v</code> contagious! If a party hears a <code class="language-plaintext highlighter-rouge">&lt;stop-view v&gt;</code> message and it did not send it yet then it sends <code class="language-plaintext highlighter-rouge">&lt;stop-view, v&gt;</code> to all parties.</li>
+ <li>Parties <code class="language-plaintext highlighter-rouge">start-view-v+1</code> (start recover-max for view $v+1$) when they hear $f+1$ <code class="language-plaintext highlighter-rouge">stop-view-v</code> messages.</li>
+</ul>
+<p><strong>Lemma</strong>: After GST, if a party starts view $v+1$ at time $t$, then all non-faulty parties will start view $v+1$ at time at most $t+2\Delta$.</p>
+<p><em>Proof</em>: A party starts view $v+1$ at time $T$ if it hears $f+1$ <code class="language-plaintext highlighter-rouge">&lt;stop-view, v&gt;</code> messages. At least one of them is from a non-faulty party. So all non-faulty parties will receive at least one <code class="language-plaintext highlighter-rouge">&lt;stop-view, v&gt;</code> by time $T+\Delta$, and hence all non-faulty parties will send <code class="language-plaintext highlighter-rouge">&lt;stop-view, v&gt;</code> by time $T+\Delta$. So all non-faulty parties will receive at least $f+1$ <code class="language-plaintext highlighter-rouge">&lt;stop-view v&gt;</code> by time $T+2\Delta$.</p>
+<p>With this three-state technique, parties make sure that a non-faulty primary after GST will not be removed (incorrectly blamed), while in any case of a view change, all parties will be moving in sync (up to $2\Delta$). The first property is critical for achieving responsiveness with a stable leader and the second property is critical for liveness.</p>
+<p>For multi-shot responsiveness, do we have to use a stable leader? Can we do the same for a sequence of non-faulty rotating leaders?</p>
+<h3 id="obtaining-responsiveness-in-log-replication-with-rotating-leaders">Obtaining responsiveness in log replication with rotating leaders</h3>
+<p>With a stable leader, we could keep the same view and same leader for multiple consecutive commands. For rotating leaders, we need to change views each time we change primaries. The idea is to use the $n-f$ <code class="language-plaintext highlighter-rouge">&lt;echo&gt;</code> messages for view $v$ as both a commit message for view $v$ and also an implicit <code class="language-plaintext highlighter-rouge">&lt;echoed-max&gt;</code> message for view $v+1$. So once the primary for view $v+1$ sees $n-f$ echo messages for view $v$ it can immediately propose the next value for view $v+1$.</p>
+<p>Here is the protocol for the optimistic path:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>If you see n-f echos for &lt;v,c&gt; 
+ and you are the leader of view v+1
+ then
+ newCommand := getNextVal
+ c := c &lt;- newCommand 
+ send &lt;propose(v+1,c)&gt; to all
+</code></pre></div></div>
+<p>For safety, why is recoverability okay even though we did not explicitly send <code class="language-plaintext highlighter-rouge">&lt;echoed-max&gt;</code> between views? Recover max for view $v+1$ only needs the echo from the highest view, and we have an echo in view $v$ which is the highest possible (at the beginning of view $v+1$). So safety is maintained. Moreover, we obtain the required multi-shot responsiveness. What about liveness?</p>
+<p>We again use the three states: (1) <code class="language-plaintext highlighter-rouge">start-view-v</code>; (2) <code class="language-plaintext highlighter-rouge">blame-v</code>; (3) <code class="language-plaintext highlighter-rouge">stop-view-v</code>. We will use two paths to progress to <code class="language-plaintext highlighter-rouge">start-view-v+1</code>:</p>
+<ol>
+ <li>Optimistic path: the primary of view $v+1$ hears $n-f$ echos from view $v$ and uses this as an implicit <code class="language-plaintext highlighter-rouge">start-view-v+1</code> and recover max for view $v+1$. Any party that hears a proposal for view $v+1$ uses this to trigger <code class="language-plaintext highlighter-rouge">start-view-v+1</code>.</li>
+ <li>Pessimistic path: Use a $10 \Delta$ timer for moving into <code class="language-plaintext highlighter-rouge">blame-v</code>; or cancel the timer if you hear $n-f$ echos for view $v$.</li>
+</ol>
+<p>For liveness, the pessimistic path is similar to the stable leader case. For the optimistic case, the decision is driven by a primary that synchronizes all parties. Note that a primary can only make progress if the previous primary’s echo reached $n-f$ parties.</p>
+<p>Your thoughts on <a href="https://twitter.com/kartik1507/status/1607756048575909890?s=61&amp;t=m3prllqHF_JFxgGe6bfMnw">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#research">research</a>
+ 
+ <a href="/tags#omission">omission</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Responsiveness+under+omission+failures&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2022-12-27-responsiveness-omission%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2022-12-27-set-replication/" data-toggle="tooltip" data-placement="top" title="Set Replication - fault tolerance without total ordering">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2023-01-05-player-replaceability-I/" data-toggle="tooltip" data-placement="top" title="Player Replaceability - Towards Adaptive Security and Sub-quadratic Communication Simultaneously (Part I)">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

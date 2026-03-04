@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Polynomial Secret Sharing and the Lagrange Basis</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham, Alin Tomescu">
+ 
+ <meta name="description" content="In this post, we highlight an amazing result: Shamir’s secret sharing scheme. This is one of the most powerful uses of polynomials over a finite field in distributed computing. Intuitively, this scheme allows a $Dealer$ to commit to a secret $s$ by splitting it into shares distributed to $n$ parties. The secret is hidden and requires a threshold of $f+1$ parties in order to be reconstructed, where $f &amp;lt; n$....">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Polynomial Secret Sharing and the Lagrange Basis">
+ <meta property="og:description" content="In this post, we highlight an amazing result: Shamir’s secret sharing scheme. This is one of the most powerful uses of polynomials over a finite field in distributed computing. Intuitively, this scheme allows a $Dealer$ to commit to a secret $s$ by splitting it into shares distributed to $n$ parties. The secret is hidden and requires a threshold of $f+1$ parties in order to be reconstructed, where $f &amp;lt; n$....">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham, Alin Tomescu">
+ 
+ <meta property="og:article:published_time" content="2020-07-17T14:23:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2020-07-17-polynomial-secret-sharing-and-the-lagrange-basis/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2020-07-17-polynomial-secret-sharing-and-the-lagrange-basis/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Polynomial Secret Sharing and the Lagrange Basis">
+ <meta property="twitter:description" content="In this post, we highlight an amazing result: Shamir’s secret sharing scheme. This is one of the most powerful uses of polynomials over a finite field in distributed computing. Intuitively, this scheme allows a $Dealer$ to commit to a secret $s$ by splitting it into shares distributed to $n$ parties. The secret is hidden and requires a threshold of $f+1$ parties in order to be reconstructed, where $f &amp;lt; n$....">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Polynomial Secret Sharing and the Lagrange Basis</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham, Alin Tomescu</strong><br>
+ 
+ <span class="post-meta">Posted on July 17, 2020</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>In this post, we highlight an amazing result: Shamir’s <a href="https://cs.jhu.edu/~sdoshi/crypto/papers/shamirturing.pdf">secret sharing scheme</a>. This is one of the most powerful uses of <a href="/2020-07-17-the-marvels-of-polynomials-over-a-field">polynomials over a finite field</a> in distributed computing.
+Intuitively, this scheme allows a $Dealer$ to <em>commit</em> to a <em>secret</em> $s$ by splitting it into <em>shares</em> distributed to $n$ parties. The secret is hidden and requires a threshold of $f+1$ parties in order to be reconstructed, where $f &lt; n$.</p>
+<p>In the basic scheme, we will assume a <a href="https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/">passive adversary</a> that controls <a href="https://decentralizedthoughts.github.io/2019-06-17-the-threshold-adversary/">any $f$ out of the $n$ parties</a>.
+A passive adversary (sometimes called <a href="https://eprint.iacr.org/2011/136.pdf">Honest-But-Curious</a> or <a href="http://www.wisdom.weizmann.ac.il/~oded/foc-vol2.html">Semi-Honest</a>) does not deviate from the protocol but can learn all possible information from its <em>view</em>: i.e., the messages received by parties it controls. In the follow up posts, we extend the secret sharing scheme to <a href="https://decentralizedthoughts.github.io/2022-08-17-secret-sharing-with-crash/">crash adversaries</a>, the BGW VSS with <a href="https://decentralizedthoughts.github.io/2022-08-24-BGW-secret-sharing/">malicious adversaries</a>, and highlight the <a href="https://decentralizedthoughts.github.io/2022-08-25-dining-cryptographers-additive/">additivity</a> of polynomial secret sharing.</p>
+<p>A <em>secret sharing scheme</em> is composed of two protocols: <em>Share</em> and <em>Reconstruct</em>.
+These protocols are distributed: they are run by the $n$ parties, jointly.
+The Dealer has a <em>secret</em> $s$, which is given as <em>input</em> to the Share protocol.
+Intuitively, if the Share protocol “succeeds”, then the Reconstruct protocol will <em>output</em> that same secret $s$.</p>
+<p>These properties of a secret sharing scheme can be described more formally as:</p>
+<p><strong>Binding</strong>: Once the first non-faulty party completes the Share protocol, there exists some value $r$ such that $r$ is the output value of all non-faulty parties that complete the Reconstruct protocol.</p>
+<p><strong>Validity</strong>: If the Dealer is non-faulty, then the output of the Reconstruct protocol is the Dealer’s input value $s$.</p>
+<p><strong>Hiding</strong>: If the dealer is non-faulty, and no honest party has begun the Reconstruct protocol, then the adversary can gain no information about $s$.</p>
+<p>The first two properties seem well defined, but what about the hiding property? What does it mean that the adversary “gains no information about $s$”? We will be more formal about this later but, informally, this means that anything the adversary can output by interacting with this protocol, the adversary could have output the same without any interaction at all.</p>
+<h3 id="shamirs-scheme">Shamir’s scheme</h3>
+<p>We enumerate the parties via the integers $\{1,2,3,\dots,n\}$. We also assume there is a commonly known finite field $\mathbb{F}_p$ with $p&gt;n$.</p>
+<p><strong>Share protocol</strong>: Given a secret $s$ as input, the Dealer <em>randomly</em> chooses $f$ values $p_1,\dots,p_f \in_R \mathbb{F}_p$ and defines a degree $\le f$ polynomial</p>
+\[p(X)=s+p_1 X + \dots + p_f X^f\]
+<p>The Dealer then sends $p(i)$ to each party $i$.
+We refer to $p(i)$ as party $i$’s <em>share</em> of the secret $s$.</p>
+<p class="box-note"><strong>Important:</strong> The Dealer’s secret $s$ is “stored” in the polynomial as $p(0) = s$.</p>
+<p><strong>Reconstruct protocol</strong>: 
+Each party $i$ sends its share $p(i)$ to all other parties. 
+Each party receives all the shares $p(1),\dots,p(n)$ and outputs the Dealer’s original secret $s$ as follows:</p>
+\[s=p(0)=\sum_{i \in I} \lambda_i p(i)\]
+<p>Here, $I$ is the subset of parties whose shares are used to reconstruct $s$.
+Specifically, $I$ can be any $(f+1)$-sized subset of $\{1,2,\dots,n\}$ but, for simplicity, let us stick to $I = \{ 1,\dots,f+1 \}$.
+Furthermore:</p>
+\[\lambda_i = \frac{\prod_{j \in I \setminus \{i\}} j}{\prod_{j \in I \setminus \{i\}} (j-i)}\]
+<p>This looks like magic, no?
+No worries.
+We explain how this reconstruction of the secret $s$ from the parties’ shares works next.</p>
+<h3 id="lagrange-basis">Lagrange Basis</h3>
+<p>Lets dig deeper into how and why the values $\lambda_1,\dots,\lambda_{f+1}$ are defined. 
+As mentioned before, we could have used <em>any</em> set of $f+1$ shares to reconstruct the secret.</p>
+<p>For any set $Z=\{z_1,\dots,z_{f+1}\}$ of size $f+1$ we can define the <em>Lagrange basis</em> for degree-at-most-$f$ polynomials as follows:</p>
+<p>For every $z \in Z$, let $\mathcal{L}_z:Z \mapsto \{0,1\}$ be the <a href="https://en.wikipedia.org/wiki/Indicator_function">indicator function</a> such that:</p>
+\[\mathcal{L}_z(x) = \begin{cases} 1,\ \text{if}\ x=z\\0,\ \text{if}\ x \neq z\end{cases}\]
+<p>We can then <em>extend</em> this function $\mathcal{L}_z(x)$ to a function $L_z : \mathbb{F}_p \mapsto \mathbb{F}_p$, such that for all $x\in Z:\ \mathcal{L}_z(X)=L_z(X)$ by defining $L_z(X)$ as a degree $f$ polynomial!</p>
+\[L_z(X)= \frac{\prod_{j \in Z \setminus \{z\}} (X-j)}{\prod_{j \in Z \setminus \{z\}} (z-j)}\]
+<p>Take a moment to verify the equality on all $x\in Z$. This seemingly simple idea of <a href="http://people.cs.georgetown.edu/jthaler/IPsandextensions.pdf">extending</a> a function from $Z \mapsto \{0,1\}$ to a low degree polynomial is a very powerful tool! It and its generalization to multivariate polynomials form the basis of <a href="https://pdfs.semanticscholar.org/a87d/3febd2e02c41a9b0a4e423089b6677eaef3b.pdf">many</a> <a href="https://eccc.weizmann.ac.il/report/2017/108/download/">results</a> in computer science.</p>
+<p>We can now claim that, for <em>any</em> degree $f$ polynomial $p$, we have:</p>
+\[p(X)=\sum_{z \in Z} L_z(X) p(z)\]
+<p>Why does this equality hold?
+It’s because both $p(X)$ and $\sum_{z \in Z} L_z(X) p(z)$ are degree-at-most-$f$ polynomials so their difference is also of degree-at-most-$f$ and has $f+1$ zeros, since $|Z|=f+1$.
+From the <a href="/2020-07-17-the-marvels-of-polynomials-over-a-field">main theorem in our previous post on polynomials</a>, this means that $p(X)-\sum_{z\in Z} L_z(X) p(z)$ must be the zero polynomial.
+Thus, $p(X)=\sum_{z \in Z} L_z(X) p(z)$ follows from the fact that non-trivial degree-at-most-$f$ polynomials have at most $d$ roots!</p>
+<p>This argument shows that there is a <em>unique representation</em> of $p=(p_0,\dots,p_f)$ for the Lagrange basis induced by $Z=\{z_1,\dots,z_{f+1}\}$.
+Specifically, this representation is $\left(p(z_1),\dots,p(z_{f+1})\right)$.</p>
+<p>Let $\phi(p_0,\dots,p_f) = \left(p(z_1),\dots,p(z_{f+1})\right)$ for $Z=\{ z_1,\dots,z_{f+1}\}$.</p>
+<p><strong>Claim:</strong> $\phi$ is a bijective map from the set of degree-at-most-$f$ polynomials to their evaluations at the points in $Z$, where $|Z|=f+1$.</p>
+<p><strong>Proof.</strong> To show that $\phi : \mathbb{F}_p^{f+1} \mapsto \mathbb{F}_p^{f+1}$ is <a href="https://en.wikipedia.org/wiki/Bijection">bijective</a>, it is enough to show that $\phi$’s domain and <a href="https://en.wikipedia.org/wiki/Image_(mathematics)">image</a> are of the same size and that $\phi$ is <a href="https://en.wikipedia.org/wiki/Injective_function">injective</a>.</p>
+<p>Since $\phi$ takes as input degree-at-most-$f$ polynomials with coefficients over $\mathbb{F}_p$, there are exactly $|\mathbb{F_p}|^{f+1} = p^{f+1}$ such polynomials.
+In other words, $\phi$’s domain is $\mathbb{F}_p^{f+1}$.
+Also, since its image is the set of all possible $f+1$ evaluations $(p(z_1),\dots,p(z_{f+1}))$, with each evaluation being an element of $\mathbb{F}_p$, it follows that $\phi$’s image is exactly $\mathbb{F}_p^{f+1}$.
+Thus, $\phi$’s domain is of the same size as its image.</p>
+<p>To show that $\phi$ is injective, assume the opposite.
+This means there exist two polynomials $p=(p_0,\dots,p_f)$ and $p’=(p’_0, \dots, p’_f)$ such that $p\ne p’$, but $\phi(p_0, \dots, p_f) = \phi(p’_0, \dots, p’_f)$ which means $p(z)=p’(z),\forall z \in Z$.
+Since $|Z|=f+1$, this implies that $p-p’$ is a degree-at-most-$f$ polynomial that has at least $f+1$ zeros.
+From the <a href="/2020-07-17-the-marvels-of-polynomials-over-a-field">main theorem of our previous post</a>, this means that $p-p’=0$ and hence $p=p’$.
+This is a contradiction.
+Therefore, $\phi$ is injective.</p>
+<p>We conclude that $\phi$ is bijective. In fact $\phi$ is a <a href="https://en.wikipedia.org/wiki/Linear_map">linear isomorphism</a> and so $L_{z_1},\dots,L_{z_{f+1}}$ is a <a href="https://en.wikipedia.org/wiki/Basis_(linear_algebra)">basis</a> for the set of degree-at-most-$f$ polynomials (for any set $Z=\{z_1, \dots,z_{f+1}\}$).</p>
+<p>We can now use our new insights to prove the secret sharing properties.</p>
+<h3 id="proof-of-the-secret-sharing-properties">Proof of the Secret Sharing properties</h3>
+<p><strong>Proof for Binding and Validity</strong>:</p>
+<p>Since the adversary is passive, all we need to do is show that indeed all parties will output $s$. Recall that the Reconstruct protocol outputs:</p>
+\[p(0)=\sum_{1\leq i \leq f+1} \lambda_i p(i)\]
+<p>where</p>
+\[\lambda_i = \frac{\prod_{j \in \{1,\dots,f+1\} \setminus \{i\}} j}{\prod_{j \in \{1,\dots,f+1\} \setminus \{i\}} (j-i)}\]
+<p class="box-warning">Here, we are restricting ourselves to reconstructing from parties $1,2,\dots, f+1$, but this works for any set of parties $Z\subseteq \{1,2,\dots,n\}$ with $|Z|=f+1$.</p>
+<p>The proof follows directly from the fact that $p(X)=\sum_{1\leq i \leq f+1} L_i(X) p(i)$ and so $p(0)= \sum_{1\leq i \leq f+1} L_i(0) p(i) = \sum_{1\leq i \leq f+1} \lambda_i p(i) = s$, where $p(i)$ is the share of party $i$.</p>
+<p class="box-warning">Recall that the Lagrange polynomial $L_i(X)$ is defined w.r.t. the set of parties $Z$ as $L_i(X)=\prod_{j\in Z\setminus\{i\}} \frac{X-j}{i-j}$ and that $\lambda_i = L_i(0)$.</p>
+<p><strong>Proof of Hiding</strong>:</p>
+<p>Let’s define the <em>view</em> of an adversary that controls the parties $B=\{b_1,\dots,b_f\}$ as the messages that the adversary sees during the Share protocol.
+In our case, this is just $\{ p(b_1),\dots,p(b_{f}) \}$, which are the shares that the parties in $B$ receive from the Dealer during the Share protocol.</p>
+<p>To prove the hiding property, we will show that, no matter what the secret $s$ is, the distribution of the view of the adversary is a <a href="https://en.wikipedia.org/wiki/Discrete_uniform_distribution">uniform distribution</a>.</p>
+<p>We have shown above that $\phi$ is a bijective mapping from $p_0,\dots,p_{f}$ to $p(z_1),\dots,p(z_{f+1})$ for any set $Z=\{z_1,\dots,z_{f+1}\}$.</p>
+<p><strong>Claim:</strong> For any $Z=\{z_0, z_1, z_2,\dots,z_f\}$, $\phi$ maps the uniform distribution $\mathcal{D}$ on $p=(p_0,p_1,\dots,p_{f})$ to the uniform distribution on $p(z_0),p(z_1),\dots, p(z_{f})$.</p>
+<p><strong>Proof:</strong> For <em>any</em> $w_0,\dots,w_{f} \in \mathbb{F}_{p}^{f+1}$, by definition of the uniform distribution we have:</p>
+<p>\begin{align}
+\label{eq:uniform}
+\Pr_{ \mathcal{p \sim D} } \big[(p_0,p_1,\dots,p_f)=(w_0,w_1,\dots,w_f)\big] = 1/|\mathbb{F}_{p}|^{f+1}
+\end{align}</p>
+<p>We want to show that, $\forall y_0,\dots, y_{f} \in \mathbb{F}_{p}^{f+1}$:</p>
+<p>\begin{align}
+\label{eq:claim}
+\Pr_{\mathcal{p \sim D}}\big[(p(z_0),p(z_1),\dots,p(z_f))=(y_0,y_1,\dots,y_f)\big] = 1/|\mathbb{F}_{p}|^{f+1}
+\end{align}</p>
+<p>We can apply the isomorphism $\phi^{-1}$ inside this probability and get:</p>
+<p>\begin{align}
+ &amp; \Pr_{\mathcal{p \sim D}}\big[(p(z_0),p(z_1),\dots,p(z_f))=(y_0,y_1,\dots,y_f)\big] =\\\ 
+ = &amp; \Pr_{\mathcal{p \sim D}}\big[\phi^{-1}(p(z_0),p(z_1),\dots,p(z_f))=\phi^{-1}(y_0,y_1,\dots,y_f)\big] =\\<br />
+ = &amp;\Pr_{\mathcal{p \sim D}}\big[(p_0,p_1\dots,p_f)=(a_0,a_1,\dots,a_f)\big]
+\end{align}</p>
+<p>Here, $(a_0,a_1,\dots,a_f) = \phi^{-1}(y_0,y_1,\dots,y_f)$.</p>
+<p>Fortunately, we know from Equation $\ref{eq:uniform}$ that, for any $a_0,a_1,\dots,a_f \in \mathbb{F}_p$, $\Pr_{\mathcal{p \sim D}}\big[(p_0,p_1\dots,p_f)=(a_0,a_1,\dots,a_f)\big] = 1/|\mathbb{F}|_p^{f+1}$.
+It therefore follows that Equation $\ref{eq:claim}$ holds.</p>
+<p>Now, consider the set $Z=\{0\} \cup B$, where $B=\{b_1,\dots,b_f\}$ is the set of parties controlled by the passive adversary.
+(Here, we use the assumption that party identities start from 1.)</p>
+<p>Observe that, since $0 \in Z$, the first output of $\phi$ is $p(0)=p_0$, which matches the first input of $\phi$, which is $p_0$.</p>
+<p>From the above observation, we immediately get that for any <em>fixed</em> $s=p_0$, $\phi$ must map the uniform distribution on $p_1,\dots,p_{f}$ to the uniform distribution on $p(b_1),\dots,p(b_{f})$.</p>
+<p>Since, for any input $s=p_0$, the Dealer uses the uniform distribution to pick the coefficients $p_1,\dots,p_{f}$, then for any input $s$ the <em>view</em> of the adversary $p(b_1),\dots,p(b_f)$ is also uniformly distributed!</p>
+<p>In what sense does this mean that the adversary learns nothing about the secret $s=p(0)=p_0$? In the sense that, no matter what the secret is, the <em>distribution of the view</em> of the adversary is the same and is independent of the actual secret.</p>
+<p>In other words, anything the adversary could learn by observing the distribution of its views, it could learn by just sampling from this distribution without any interaction.</p>
+<h3 id="notes">Notes</h3>
+<ul>
+ <li>The adversary in this post is <em>passive</em>, so the main challenge is in the hiding property. The binding propoerty will be less trivial in future posts about stronger adversaries. See our <a href="https://decentralizedthoughts.github.io/2022-08-24-BGW-secret-sharing/">follow-up post on the Byzantine case</a>.</li>
+ <li>In the share protocol we rather arbitrarily used the integers from 1 to $n$ as the shares sent to parties 1 to $n$. In fact one can use any fixed set $w_1,\dots,w_n$ of field elements. Since in many cases we want to use <a href="https://decentralizedthoughts.github.io/2023-09-01-FFT/">FFT</a> it is often beneficial to <strong>use roots of unity</strong> and set $w_i \omega^i$, so party $i$ gets the share $P(\omega^i)$.</li>
+</ul>
+<p>Please leave comments on <a href="https://twitter.com/ittaia/status/1284267077587677184?s=20">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#cryptography101">cryptography101</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Polynomial+Secret+Sharing+and+the+Lagrange+Basis&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2020-07-17-polynomial-secret-sharing-and-the-lagrange-basis%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2020-07-17-the-marvels-of-polynomials-over-a-field/" data-toggle="tooltip" data-placement="top" title="The Marvels of Polynomials over a Field">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2020-07-26-private-set-intersection-2/" data-toggle="tooltip" data-placement="top" title="Private Set Intersection #2">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>
