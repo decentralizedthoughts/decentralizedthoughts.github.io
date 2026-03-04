@@ -6,6 +6,7 @@ let BeautifulJekyllJS = {
   numImgs : null,
   searchData : null,
   searchPromise : null,
+  searchSuggestions : [],
 
   init : function() {
     setTimeout(BeautifulJekyllJS.initNavbar, 10);
@@ -140,6 +141,7 @@ let BeautifulJekyllJS = {
           const normalized = {
             title: entry.title || "",
             desc: entry.desc || "",
+            author: entry.author || "",
             category: entry.category || "",
             url: entry.url || "",
             date: entry.date || ""
@@ -147,11 +149,13 @@ let BeautifulJekyllJS = {
           normalized.searchText = [
             normalized.title,
             normalized.desc,
+            normalized.author,
             normalized.category,
             normalized.date
           ].join(" ").toLowerCase();
           return normalized;
         });
+        BeautifulJekyllJS.searchSuggestions = BeautifulJekyllJS.buildSearchSuggestions(BeautifulJekyllJS.searchData);
         return BeautifulJekyllJS.searchData;
       })
       .catch(function(error) {
@@ -168,6 +172,55 @@ let BeautifulJekyllJS = {
       return;
     }
     statusEl.textContent = message;
+  },
+
+  buildSearchSuggestions : function(entries) {
+    const fallback = ["Simplex", "HotStuff", "Partial synchrony", "Asynchrony", "Consensus"];
+    const counts = new Map();
+
+    entries.forEach(function(entry) {
+      (entry.category || "")
+        .split(",")
+        .map(function(token) { return token.trim(); })
+        .filter(function(token) { return token && token !== "post" && token !== "page"; })
+        .forEach(function(token) {
+          const key = token.toLowerCase();
+          const current = counts.get(key) || { label: token, count: 0 };
+          current.count += 1;
+          counts.set(key, current);
+        });
+    });
+
+    const dynamic = Array.from(counts.values())
+      .sort(function(a, b) { return b.count - a.count; })
+      .slice(0, 7)
+      .map(function(item) { return item.label; });
+
+    return Array.from(new Set(dynamic.concat(fallback))).slice(0, 8);
+  },
+
+  renderSearchSuggestions : function() {
+    const suggestionsEl = document.getElementById("search-suggestions");
+    if (!suggestionsEl) {
+      return;
+    }
+    suggestionsEl.innerHTML = "";
+    BeautifulJekyllJS.searchSuggestions.forEach(function(label) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "search-suggestion";
+      button.textContent = label;
+      button.addEventListener("click", function() {
+        const input = document.getElementById("nav-search-input");
+        if (!input) {
+          return;
+        }
+        input.value = label;
+        BeautifulJekyllJS.renderSearchResults(label);
+        input.focus();
+      });
+      suggestionsEl.appendChild(button);
+    });
   },
 
   highlightFirstSearchResult : function() {
@@ -191,13 +244,19 @@ let BeautifulJekyllJS = {
     resultsEl.innerHTML = "";
 
     if (normalizedQuery.length < 2) {
-      BeautifulJekyllJS.setSearchStatus("Type at least 2 characters to search.");
+      BeautifulJekyllJS.setSearchStatus("Start typing or pick a topic below.");
+      BeautifulJekyllJS.renderSearchSuggestions();
       return;
     }
 
     if (!BeautifulJekyllJS.searchData) {
       BeautifulJekyllJS.setSearchStatus("Loading search index...");
       return;
+    }
+
+    const suggestionsEl = document.getElementById("search-suggestions");
+    if (suggestionsEl) {
+      suggestionsEl.innerHTML = "";
     }
 
     const tokens = normalizedQuery.split(/\s+/).filter(Boolean);
@@ -255,7 +314,7 @@ let BeautifulJekyllJS = {
         link.appendChild(desc);
       }
 
-      const metaParts = [result.entry.date, result.entry.category].filter(Boolean);
+      const metaParts = [result.entry.author, result.entry.date, result.entry.category].filter(Boolean);
       if (metaParts.length > 0) {
         const meta = document.createElement("span");
         meta.className = "search-result-meta";
@@ -330,6 +389,17 @@ let BeautifulJekyllJS = {
         openSearch();
       });
     }
+    BeautifulJekyllJS.loadSearchIndex().catch(function() {});
+    document.addEventListener("keydown", function(e) {
+      if (e.key === "/" && !overlay.contains(document.activeElement)) {
+        const tag = document.activeElement && document.activeElement.tagName;
+        if (tag === "INPUT" || tag === "TEXTAREA") {
+          return;
+        }
+        e.preventDefault();
+        openSearch();
+      }
+    });
     $(document).on('keyup', function(e) {
       if (e.key == "Escape") {
         closeSearch();

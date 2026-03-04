@@ -1018,24 +1018,57 @@ pre {
 
 .home-search-panel {
   margin: 0 0 2rem;
+  padding: 1rem 1.1rem;
+  border-top: 0.0625rem solid rgba(0, 0, 0, 0.08);
+  border-bottom: 0.0625rem solid rgba(0, 0, 0, 0.08);
+}
+
+.home-search-copy {
   display: flex;
-  justify-content: center;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.home-search-eyebrow {
+  margin: 0;
+  color: #6e7c80;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+  font-weight: 700;
 }
 
 .home-search-trigger {
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.9rem 1.35rem;
-  border: 0.0625rem solid rgba(0, 0, 0, 0.08);
+  gap: 0.65rem;
+  padding: 0.55rem 0.95rem;
+  border: 0.0625rem solid rgba(0, 0, 0, 0.12);
   border-radius: 999px;
-  background: linear-gradient(135deg, rgba(0, 138, 255, 0.08), rgba(0, 133, 161, 0.12));
+  background: #fff;
   color: var(--text-col);
-  font-weight: 700;
+  font-weight: 600;
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.home-search-trigger:hover,
+.home-search-trigger:focus {
+  border-color: rgba(0, 138, 255, 0.35);
+  box-shadow: 0 0.25rem 1rem rgba(0, 138, 255, 0.08);
+  transform: translateY(-0.0625rem);
 }
 
 .home-search-trigger .fa-search {
-  font-size: 1rem;
+  font-size: 0.95rem;
+  color: var(--link-col);
+}
+
+@media (max-width: 767px) {
+  .home-search-copy {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
 .center {
@@ -1126,6 +1159,27 @@ pre {
   margin-top: 0.75rem;
   margin-bottom: 0;
   min-height: 1.5rem;
+}
+#search-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  margin: 1rem auto 0;
+  max-width: 50rem;
+}
+.search-suggestion {
+  border: 0.0625rem solid rgba(255,255,255,0.16);
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+  color: #e6eef1;
+  padding: 0.45rem 0.8rem;
+  font-size: 0.95rem;
+}
+.search-suggestion:hover,
+.search-suggestion:focus {
+  border-color: rgba(255,255,255,0.34);
+  background: rgba(255,255,255,0.1);
 }
 #search-results-container a {
   color: #fff;
