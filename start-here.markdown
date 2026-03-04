@@ -85,7 +85,7 @@ Reaching [Asynchronous Agreement on a Core Set](https://decentralizedthoughts.gi
 - Define [state machine replication](/2019-10-15-consensus-for-state-machine-replication/) (SMR). 
 - Levels of [SMR fault tolerance](/2019-10-25-flavours-of-state-machine-replication/). 
 - The [ideal state machine model and Linearizability](https://decentralizedthoughts.github.io/2021-10-16-the-ideal-state-machine-model-multiple-clients-and-linearizability/). 
-- [From single-shot consensus to SMR] (https://decentralizedthoughts.github.io/2022-11-19-from-single-shot-to-smr/).
+- [From single-shot consensus to SMR](https://decentralizedthoughts.github.io/2022-11-19-from-single-shot-to-smr/).
 - To learn about SMR protocols, start with a [simple SMR for crash failures](/2019-11-01-primary-backup/). Then extend SMR to omission failures: [First via single shot](/2020-09-13-synchronous-consensus-omission-faults/) and then via the [lock-commit](https://decentralizedthoughts.github.io/2020-11-30-the-lock-commit-paradigm-multi-shot-and-mixed-faults/) paradigm to [multi-shot consensus](https://decentralizedthoughts.github.io/2020-11-30-the-lock-commit-paradigm-multi-shot-and-mixed-faults/).
 - The scalability and performance of a State Machine Replication system are not just about consensus, [but also about data and execution](/2019-12-06-dce-the-three-scalability-bottlenecks-of-state-machine-replication/).
 
@@ -182,7 +182,7 @@ Polynomial secret sharing is a base for deep connections between cryptography an
 - [Optimal Optimistic Responsiveness](/2020-06-12-optimal-optimistic-responsiveness/).
 - Encrypted Blockchain Databases [part 1](/2020-07-10-encrypted-blockchain-databases-part-i/) and [part 2](/2020-07-10-encrypted-blockchain-databases-part-ii/).
 - [Asynchronous Fault-Tolerant Computation with Optimal Resilience](/2020-07-15-asynchronous-fault-tolerant-computation-with-optimal-resilience/).
-- [Resolving the Availability-Finality Dilemma](/2020-10-31-ebb-and-flow-protocols-a-resolution-of-the-availability-finality-dilemma/).
+- [Resolving the Availability-Finality Dilemma](/2020-11-01-ebb-and-flow-protocols-a-resolution-of-the-availability-finality-dilemma/).
 - [BFT Protocol Forensics](/2020-11-19-bft-protocol-forensics/).
 - [Can we Obtain Player Replaceability and Forensic Support Simultaneously?](https://decentralizedthoughts.github.io/2023-01-30-player-replaceability-forensic-support/)
 - Good-case Latency of Byzantine Broadcast: [the Synchronous Case](https://decentralizedthoughts.github.io/2021-03-09-good-case-latency-of-byzantine-broadcast-the-synchronous-case/) and [a Complete Categorization](https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/).

@@ -83,7 +83,7 @@ Let $\delta=\delta_1+\delta_2$, and note that $\delta=n^{-O(\log n)}$. From now 
 
 ### Weak adaptive adversaries
 
-As in the [previous post](https://decentralizedthoughts.github.io/2023-02-18-rand-and-consensus-2/), we need to make sure that the randomness is *unpredictable* and that the adversary can only *adapt* to the randomness when it's too late for it to matter.
+As in the [previous post](https://decentralizedthoughts.github.io/2023-02-19-rand-and-consensus-2/), we need to make sure that the randomness is *unpredictable* and that the adversary can only *adapt* to the randomness when it's too late for it to matter.
 
 Recall the weak adaptive adversary in the lock-step model: If the adversary decides to corrupt a party after seeing the content of its round $j$ message then it can only corrupt it after the party sends all its round $j$ messages to all parties.
 

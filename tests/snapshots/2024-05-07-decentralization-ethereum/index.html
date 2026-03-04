@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Decentralization of Ethereum Builder Market</title>
+ 
+ 
+ <meta name="author" content="Sen Yang, Kartik Nayak, and Fan Zhang">
+ 
+ <meta name="description" content="Decentralization is a core underpinning of blockchains. Is today’s blockchain really decentralized? In a recent work, we explore this question in the context of the builder market in Ethereum. The market was introduced to avoid centralization caused by Maximal Extractable Value (MEV). After two years in operation, however, the builder market has evolved to a highly centralized one with three builders producing most of the blocks. As can be seen...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Decentralization of Ethereum Builder Market">
+ <meta property="og:description" content="Decentralization is a core underpinning of blockchains. Is today’s blockchain really decentralized? In a recent work, we explore this question in the context of the builder market in Ethereum. The market was introduced to avoid centralization caused by Maximal Extractable Value (MEV). After two years in operation, however, the builder market has evolved to a highly centralized one with three builders producing most of the blocks. As can be seen...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Sen Yang, Kartik Nayak, and Fan Zhang">
+ 
+ <meta property="og:article:published_time" content="2024-05-07T13:05:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2024-05-07-decentralization-ethereum/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2024-05-07-decentralization-ethereum/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Decentralization of Ethereum Builder Market">
+ <meta property="twitter:description" content="Decentralization is a core underpinning of blockchains. Is today’s blockchain really decentralized? In a recent work, we explore this question in the context of the builder market in Ethereum. The market was introduced to avoid centralization caused by Maximal Extractable Value (MEV). After two years in operation, however, the builder market has evolved to a highly centralized one with three builders producing most of the blocks. As can be seen...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Decentralization of Ethereum Builder Market</h1>
+ 
+ 
+ 
+ 
+ By <strong>Sen Yang, Kartik Nayak, and Fan Zhang</strong><br>
+ 
+ <span class="post-meta">Posted on May 7, 2024</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>Decentralization is a core underpinning of blockchains. Is today’s blockchain really decentralized?</p>
+<p>In a <a href="https://arxiv.org/pdf/2405.01329">recent work</a>, we explore this question in the context of the <em>builder market</em> in Ethereum. The market was introduced to avoid centralization caused by Maximal Extractable Value (MEV). After two years in operation, however, the builder market has evolved to a highly centralized one with three builders producing most of the blocks. As can be seen in the following figure, Beaver, Rsync and Blocknative produce more than 90% of the blocks</p>
+<table>
+ <thead>
+ <tr>
+ <th style="text-align: center"><img src="https://hackmd.io/_uploads/HJgkDOMMC.png" alt="Market share of builders. The builder market is arguably one of the least decentralized parts of Ethereum!" /></th>
+ </tr>
+ </thead>
+ <tbody>
+ <tr>
+ <td style="text-align: center"><strong>Market share of builders. The builder market is arguably one of the least decentralized parts of Ethereum!</strong></td>
+ </tr>
+ </tbody>
+</table>
+<p>This leads to two natural questions:</p>
+<p><strong><em>1. Why does the builder market centralize, given that it is permissionless and anyone can join?</em></strong></p>
+<p><strong><em>2. What are the security implications of a centralized builder market to MEV-Boost auctions?</em></strong></p>
+<p>Through a rigorous empirical study of the builder market’s core mechanism, MEV-Boost auctions, we answered these two questions using a large-scale auction dataset we curated since 2022. Our work focuses on <em>why</em> builders win auctions and we shed light on the <strong>openness</strong>, <strong>competitiveness</strong>, and <strong>efficiency</strong> of MEV-Boost auctions.</p>
+<p>This post provides a summary of our findings from the empirical study, and we encourage readers to read the full version of our <a href="https://arxiv.org/abs/2405.01329">paper</a>.</p>
+<h2 id="why-does-the-builder-market-centralize-given-that-it-is-permissionless-and-anyone-can-join">Why does the builder market centralize, given that it is permissionless and anyone can join?</h2>
+<p><strong><em>Finding 1: Private order flows contribute to 60% of the MEV in over 50% of the blocks in MEV-Boost.</em></strong></p>
+<p>The builder market is technically open to everyone, but the barrier to accessing profitable private order flows forms an implicit access barrier. We illustrate the importance of private order flow to the success of builders by plotting the fraction of builder income from private order flows. Currently, approximately 60% of the block value comes from private order flows.</p>
+<table>
+ <thead>
+ <tr>
+ <th style="text-align: center"><img src="https://hackmd.io/_uploads/BkOHPuMGA.png" alt="daily_private_order_flow" /></th>
+ </tr>
+ </thead>
+ <tbody>
+ <tr>
+ <td style="text-align: center"><strong>Fraction of builder income from private order flows.</strong></td>
+ </tr>
+ </tbody>
+</table>
+<p><strong><em>Finding 2: We identified five pivotal providers (MEV-Share, MEV Blocker, jaredfromsubway.eth, Banana Gun, Maestro) who had a sustained influence on the outcome of more than half of MEV-Boost auctions.</em></strong></p>
+<p>We define a provider $P$ as pivotal for an instance of MEV-Boost auction if removing $P$’s transactions from the winning block causes the winner to lose the auction. For each pivotal provider, we compute the fraction of auctions in which it is pivotal. We refer to this metric as <em>pivotal level</em>, a number ranging from 0 to 1, which can be used to quantify the importance of individual providers.</p>
+<p>We plot the weekly pivotal level for the top-5 pivotal providers. A positive trend towards decentralization is observed as the pivotal level of the searcher jaredfromsubway.eth decreased, while the pivotal level of MEV-Share and MEV Blocker increased. These two providers positively impact decentralization because they have relatively clear requirements for accessing their order flows. However, their reliance on upstream providers like Maestro is alarming.</p>
+<table>
+ <thead>
+ <tr>
+ <th style="text-align: center"><img src="https://hackmd.io/_uploads/SJxPMRDzR.png" alt="pivotal-level" /></th>
+ </tr>
+ </thead>
+ <tbody>
+ <tr>
+ <td style="text-align: center"><strong>The pivotal level of top-5 pivotal providers over time. A line may not start from the beginning because the provider did not exist at that point. Maestro became an independent provider around December 2023.</strong></td>
+ </tr>
+ </tbody>
+</table>
+<p><strong><em>Finding 3: To access private order flows, new builders need to pay up to 1.4 ETH to enter the market.</em></strong></p>
+<p>The private order flow providers impose reputation requirements on the builders, which are usually evaluated based on market share. These reputation requirements act as a proxy for trust, e.g., ensuring builders do not unbundle transactions. Thus, new builders face a chicken-and-egg problem as they need access to private order flows to win auctions and gain market share, but the private order flow providers only serve builders with a decent market share.</p>
+<p>Builders thus resort to subsidizing their bids, i.e., bidding higher than the true value of a block, to win auctions. We compute the minimal subsidy needed to establish a 1% market share for one week (which is the requirement of MEV Blocker) to quantify the entry barrier for new builders. Initially, this cost was nearly zero before May 2023, but it has steadily increased, surpassing 1.4 ETH by March 2024.</p>
+<table>
+ <thead>
+ <tr>
+ <th style="text-align: center"><img src="https://hackmd.io/_uploads/rkTt3dGzR.png" alt="market-share-cost" /></th>
+ </tr>
+ </thead>
+ <tbody>
+ <tr>
+ <td style="text-align: center"><strong>Subsidy required to establish a 1% market share, as required by MEV Blocker. This quantifies the cost of accessing private order flows.</strong></td>
+ </tr>
+ </tbody>
+</table>
+<h2 id="what-are-the-security-implications-of-a-centralized-builder-market-to-mev-boost-auctions">What are the security implications of a centralized builder market to MEV-Boost auctions?</h2>
+<p><strong><em>Finding 4: The inequality in block building is highest among tail builders, followed by middle and least among top builders, and it worsens when MEV increases.</em></strong></p>
+<p>We first compare the true values across different builders for the same auction to understand the variations in builders’ abilities to extract values. We used the quartile coefficient of dispersion (QCD) to quantify the inequality of true values across builders.</p>
+<p>The distribution of the QCD for MEV-Boost auction reveals two trends. First, within a given MEV tier, inequality is greatest among tail builders, followed by middle builders, and is least among top builders. Fortunately, the inequality among top builders is not significant, which supports the premise of competitiveness and efficiency. Second, the inequality worsens as the MEV tier increases.</p>
+<table>
+ <thead>
+ <tr>
+ <th style="text-align: center"><img src="https://hackmd.io/_uploads/r1FKwcMf0.png" alt="qcd-mev" /></th>
+ </tr>
+ </thead>
+ <tbody>
+ <tr>
+ <td style="text-align: center"><strong>Violin graphs for the distribution of the QCD across three MEV tiers, for top, middle, and tail builders</strong></td>
+ </tr>
+ </tbody>
+</table>
+<p><strong><em>Finding 5: 88.84% of the MEV-Boost auctions are competitive, with proposers’ losses from uncompetitive auctions amounting to 0.98% of total gains.</em></strong></p>
+<p>We further quantify whether an auction is competitive or efficient by using true values. We define an MEV-Boost auction as competitive if the winning bid is not less than the second-highest true value.</p>
+<p>Our results reveal that 88.84% of the MEV-Boost auctions we analyzed were competitive. However, we also found that the auctions tend to be less competitive as the MEV of a slot increases. We further quantify the loss for proposers, and the results show that proposers incurred total losses amounting to 221.09 ETH in 16,498 uncompetitive auctions, which represents 0.98% of the total gains.</p>
+<table>
+ <thead>
+ <tr>
+ <th style="text-align: center"><img src="https://hackmd.io/_uploads/ryiPwqzMA.png" alt="EPI_v2-min" /></th>
+ </tr>
+ </thead>
+ <tbody>
+ <tr>
+ <td style="text-align: center"><strong>The distribution of CI and EI, where each dot represents an auction. The color represents density when multiple dots overlap.</strong></td>
+ </tr>
+ </tbody>
+</table>
+<p><strong><em>Finding 6: 79.74% of the MEV-Boost auctions are efficient, and 51.4% of the inefficient auctions are caused by block subsidization.</em></strong></p>
+<p>We define an MEV-Boost auction as efficient if the winner has the highest true value. An interesting finding is that more than 20% of MEV-Boost auctions are inefficient and the auctions tend to be inefficient when the MEV in an MEV-Boost auction is low. Further analysis reveals that over half of the inefficient auctions are caused by block subsidization. Moreover, block subsidization is more common when the extractable value is small, because the cost will be relatively low.</p>
+<!-- Using the true values, we propose two metrics, *competitive index* (CI) and *efficient index* (EI), to quantify whether an auction is competitive or efficient, respectively.
+In a given slot $s$, suppose builders $p_1,\cdots,p_n$ are ordered by their true value from high to low, i.e., $TV(p_1, s) \geq \dots \geq TV(p_n, s)$, $BV_w(s)$ is the bid value of the winner and $TV_w(s)$ is the corresponding true value, the competitive index of slot $s$, $CI(s)$ is defined as:
+$$
+ CI(s) = \frac{BV_w(s)-TV(p_2, s)}{TV(p_2, s)} \times 100\%.
+$$
+The efficient index, $EI(s)$, is defined as:
+$$
+ EI(s) = \frac{TV_w(s)-TV(p_2, s)}{TV(p_2, s)} \times 100\%.
+$$
+Namely, $CI(s)$ measures the relative difference between the winning bid and the second-highest true value. $CI(s) \geq 0$ indicates that the winning bid value is not less than the second-highest true value, satisfying the definition of a competitive auction. $EI(s) > 0$ indicates that the winner has the highest true value, whereas $EI(s) \leq 0$ implies that the bidder with the highest true value lost the auction. 
+We plot the distribution of the calculated CI and EI across all MEV-Boost auctions in the ultra sound relay dataset, which 
+ that more than 88% of auctions are competitive and only 79% of auctions are efficient. Further analysis reveals that proposers incurred total losses amounting to 221.09 ETH in the uncompetitive auctions, which is 0.98% of the total gains of the proposers. Additionally, over half of the inefficient auctions are caused by block subsidization. -->
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#incentives">incentives</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Decentralization+of+Ethereum+Builder+Market&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2024-05-07-decentralization-ethereum%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2024-03-07-mobile-is-FLP/" data-toggle="tooltip" data-placement="top" title="Consensus with One Mobile Crash in Synchrony or One Crash in Asynchrony Has Infinite Executions">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2024-05-23-sailfish/" data-toggle="tooltip" data-placement="top" title="Sailfish: Improving the Latency of DAG-based BFT">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

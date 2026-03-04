@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>2-round BFT SMR with n=4, f=1</title>
+ 
+ 
+ <meta name="author" content="Zhuolun Xiang">
+ 
+ <meta name="description" content="Guest post by Zhuolun Xiang In the previous post, we presented a summary of our good-case latency results for Byzantine broadcast and Byzantine fault tolerant state machine replication (BFT SMR), where the good case measures the latency to commit given that the leader/broadcaster is honest. In this post, we describe a new Byzantine Fault Tolerant (BFT) State Machine Replication (SMR) protocol for partial synchrony, where the network becomes synchronous after...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="2-round BFT SMR with n=4, f=1">
+ <meta property="og:description" content="Guest post by Zhuolun Xiang In the previous post, we presented a summary of our good-case latency results for Byzantine broadcast and Byzantine fault tolerant state machine replication (BFT SMR), where the good case measures the latency to commit given that the leader/broadcaster is honest. In this post, we describe a new Byzantine Fault Tolerant (BFT) State Machine Replication (SMR) protocol for partial synchrony, where the network becomes synchronous after...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Zhuolun Xiang">
+ 
+ <meta property="og:article:published_time" content="2021-03-03T06:37:00-05:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2021-03-03-2-round-bft-smr-with-n-equals-4-f-equals-1/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2021-03-03-2-round-bft-smr-with-n-equals-4-f-equals-1/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="2-round BFT SMR with n=4, f=1">
+ <meta property="twitter:description" content="Guest post by Zhuolun Xiang In the previous post, we presented a summary of our good-case latency results for Byzantine broadcast and Byzantine fault tolerant state machine replication (BFT SMR), where the good case measures the latency to commit given that the leader/broadcaster is honest. In this post, we describe a new Byzantine Fault Tolerant (BFT) State Machine Replication (SMR) protocol for partial synchrony, where the network becomes synchronous after...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>2-round BFT SMR with n=4, f=1</h1>
+ 
+ 
+ 
+ 
+ By <strong>Zhuolun Xiang</strong><br>
+ 
+ <span class="post-meta">Posted on March 3, 2021</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p><span style="color:grey"> Guest post by <a href="https://sites.google.com/site/danielxiangzl/">Zhuolun Xiang</a> </span></p>
+<p>In the <a href="https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/">previous post</a>, we presented a summary of our <strong>good-case latency</strong> results for Byzantine broadcast and Byzantine fault tolerant state machine replication (BFT SMR), where the good case measures the latency to commit given that the leader/broadcaster is honest. In this post, we describe a new Byzantine Fault Tolerant (BFT) State Machine Replication (SMR) protocol for <a href="https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/">partial synchrony</a>, where the network becomes synchronous after an unknown Global Stable Time (GST). The details of the protocol can be found in our <strong><a href="https://arxiv.org/abs/2102.07932">paper</a></strong>.</p>
+<p class="box-note">Our <strong><a href="https://arxiv.org/abs/2102.07932">(5f-1)-SMR protocol</a></strong> can commit a decision within $2$ rounds after GST with an honest leader, and only requires $n\geq 5f-1$ replicas.</p>
+<p>Our protocol refutes the claim made in <a href="https://ieeexplore.ieee.org/document/1467815">Fast Byzantine Consensus (FaB)</a> saying that $n=5f+1$ is the best possible resilience for $2$-round BFT SMR protocols. Interstingly, for the canonical example with $n=4$ and $f=1$, we can have a 2-round <a href="(http://pmg.csail.mit.edu/papers/osdi99.pdf)">PBFT</a> protocol with the optimal resilience!</p>
+<h2 id="pbft-3-rounds-with-n3f1"><a href="http://pmg.csail.mit.edu/papers/osdi99.pdf">PBFT</a>: 3 rounds with $n=3f+1$</h2>
+<p>PBFT may be the most well-known BFT SMR protocol for partial synchrony. Briefly, the protocol consists of two components, a steady state protocol that aims to commit decisions when the leader is honest, and a view-change protocol that replaces the leader if not enough progress is made. PBFT achieves the optimal resilience $n\geq 3f+1$ for partial synchrony, and let’s assume $n=3f+1$ for simplicity. Now we describe a version of PBFT that has a commit latency of 3 rounds when the leader is honest and the network is synchronous. The protocol proceeds in views $k=1,2,…$ each with a leader.</p>
+<ul>
+ <li>In the steady state, PBFT has <em>1 round of proposing</em> plus <em>2 rounds of voting</em>, as follows.
+ <ul>
+ <li>(Proposing) The leader of view k proposes a value <code class="language-plaintext highlighter-rouge">v</code> with a <code class="language-plaintext highlighter-rouge">proof</code>.</li>
+ <li>(Voting 1) Upon receiving from the leader, parties multicast <code class="language-plaintext highlighter-rouge">&lt;vote1, v, k&gt;</code> for <code class="language-plaintext highlighter-rouge">v</code>, if <code class="language-plaintext highlighter-rouge">v</code> is the value of the highest <code class="language-plaintext highlighter-rouge">lock</code> in <code class="language-plaintext highlighter-rouge">proof</code>.</li>
+ <li>(Voting 2) Upon receiving $n-f=2f+1$ <code class="language-plaintext highlighter-rouge">vote1</code> for the same value <code class="language-plaintext highlighter-rouge">v</code>, the party multicasts <code class="language-plaintext highlighter-rouge">&lt;vote2, v, k&gt;</code> for <code class="language-plaintext highlighter-rouge">v</code> and sets its <code class="language-plaintext highlighter-rouge">lock</code> to be the set of <code class="language-plaintext highlighter-rouge">vote1</code> messages.</li>
+ <li>(Commit) Upon receiving $2f+1$ <code class="language-plaintext highlighter-rouge">vote2</code> for the same value <code class="language-plaintext highlighter-rouge">v</code>, the party commits <code class="language-plaintext highlighter-rouge">v</code>.</li>
+ </ul>
+ </li>
+ <li>In the view-change, parties blame the leader of the current view k by multicasting <code class="language-plaintext highlighter-rouge">&lt;timeout, k&gt;</code> messages, if it does not commit the value in view k quick enough. The next leader of view k+1, once collects $f+1$ <code class="language-plaintext highlighter-rouge">timeout</code> messages of view k, will multicast it to all parties as a proof for entering the new view. Then all parties send its <code class="language-plaintext highlighter-rouge">lock</code> to the new leader, and the new leader will propose the value of the highest <code class="language-plaintext highlighter-rouge">lock</code> (ranked by view numbers) among $2f+1$ received <code class="language-plaintext highlighter-rouge">lock</code>s. The <code class="language-plaintext highlighter-rouge">proof</code> for the proposal is the $2f+1$ <code class="language-plaintext highlighter-rouge">lock</code>s.</li>
+</ul>
+<p align="center">
+ <img width="500" src="https://i.imgur.com/2QQTcfX.png" />
+</p>
+<p><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f4a1.png?v8" alt="" /> <strong>Correctness.</strong> The safety of the protocol relies on quorum intersection – any two sets of $2f+1$ votes must contain at least $f+1$ honest parties each, and thus intersect at least $2(f+1)-(n-f)=1$ honest party. Therefore, within a view, there will not be two sets of votes for different values. For safety across views, again it is due to the quorum intersection between the set of parties that locks a value and the set of <code class="language-plaintext highlighter-rouge">lock</code>s contained in leader’s <code class="language-plaintext highlighter-rouge">proof</code>. Since any committed value <code class="language-plaintext highlighter-rouge">v</code> are locked by $2f+1$ parties (who sent <code class="language-plaintext highlighter-rouge">vote2</code>), the set of parties locked on <code class="language-plaintext highlighter-rouge">v</code> and the set of <code class="language-plaintext highlighter-rouge">lock</code>s contained in the leader’s <code class="language-plaintext highlighter-rouge">proof</code> must intersect at 1 honest party whose <code class="language-plaintext highlighter-rouge">lock</code> is for <code class="language-plaintext highlighter-rouge">v</code>. Thus the leader has to repropose <code class="language-plaintext highlighter-rouge">v</code>, if <code class="language-plaintext highlighter-rouge">v</code> has been committed.</p>
+<p align="center">
+ <img width="300" src="https://i.imgur.com/CCncNpX.png" />
+</p>
+<h2 id="fab-2-rounds-with-n5f1"><a href="https://ieeexplore.ieee.org/document/1467815">FaB</a>: 2 rounds with $n=5f+1$</h2>
+<p>Fast Byzantine Consensus (FaB) reduces 1 round of voting in PBFT, so its steady state has <em>1 round of proposing</em> and <em>1 round of voting</em>. The latency improvement does not come for free, FaB tolerates fewer faults as it requires $n\geq 5f+1$. After the leader proposes, the parties can commit if they receive $n-f=4f+1$ votes for the same value. For brevity, we will not present the whole protocol, but just the intuition.</p>
+<p align="center">
+ <img width="500" src="https://i.imgur.com/8k8OM4S.png" />
+</p>
+<p><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f4a1.png?v8" alt="" /> <strong>Intuition.</strong> Now $n=5f+1$, the quorum size becomes $n-f=4f+1$. Parties commit a value if they receive $4f+1$ votes for the value. No different values can be committed in the same view due to the quorum intersection of the votes. For safety across different views, any committed value <code class="language-plaintext highlighter-rouge">v</code> has been voted by $3f+1$ honest parties. In the <code class="language-plaintext highlighter-rouge">timeout</code> message, these parties will attach the voted value <code class="language-plaintext highlighter-rouge">v</code>. Then, the next leader, when receiving $4f+1$ <code class="language-plaintext highlighter-rouge">timeout</code> messages, can choose <code class="language-plaintext highlighter-rouge">v</code> to propose. It is because the set contains at least $(4f+1-f)+(3f+1)-(n-f)=2f+1$ honest parties that voted for <code class="language-plaintext highlighter-rouge">v</code>, and $2f+1$ is a supermajority of $4f+1$. Any other value will not be voted by the honest parties, as they also receive $4f+1$ <code class="language-plaintext highlighter-rouge">timeout</code> message and decide to only vote for <code class="language-plaintext highlighter-rouge">v</code> for ensuring safety.</p>
+<p>It seems like $n=5f+1$ is the best we can have for 2-round commit. If we let $n=5f$, then the quorum size becomes $n-f=4f$, and any committed value <code class="language-plaintext highlighter-rouge">v</code> is voted by $3f$ honest parties. For any set of $4f$ <code class="language-plaintext highlighter-rouge">timeout</code> messages, it could be that $2f$ <code class="language-plaintext highlighter-rouge">timeout</code> messages are from the $3f$ honest parties that voted for <code class="language-plaintext highlighter-rouge">v</code>, and the rest $2f$ <code class="language-plaintext highlighter-rouge">timeout</code> messages are from the remaining $f$ honest parties that voted for <code class="language-plaintext highlighter-rouge">v'</code> and $f$ Byzantine parties. In this case, the leader or any honest party cannot break the tie and safely choose the next proposal. The authors of FaB also present a <strong>lower bound saying that any 2-round consensus is impossible iff $n\leq 5f$, and claim that FaB has optimal resilience.</strong></p>
+<p align="center">
+ <img width="300" src="https://i.imgur.com/bVAbQJj.png" />
+</p>
+<h2 id="5f-1-smr-2-rounds-with-n5f-1"><a href="https://arxiv.org/abs/2102.07932">(5f-1)-SMR</a>: 2 rounds with $n=5f-1$</h2>
+<p>However, we show the resilience of FaB can be further improved to $n=5f-1$. The key observation we have is to <span style="background-color: #FFFF00">use signatures to detect the equivocation of the leader</span>
+, as the leader must sign its proposed value. Our protocol also has 1 round of proposing and 1 round of voting in the steady state. After the leader proposes, the parties can commit if they receive $n-f=4f-1$ votes for the same value.</p>
+<p align="center">
+ <img width="500" src="https://i.imgur.com/8k8OM4S.png" />
+</p>
+<p><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f4a1.png?v8" alt="" /> <strong>Intuition.</strong> Now with $n=5f-1$, the quorum size becomes $n-f=4f-1$. Parties commit a value if they receive $4f-1$ votes for the value. No different values can be committed in the same view due to the quorum intersection of the votes. For safety across different views, if any value <code class="language-plaintext highlighter-rouge">v</code> is committed, then at least $3f-1$ honest parties have voted for <code class="language-plaintext highlighter-rouge">v</code>. Consider the set of $4f-1$ <code class="language-plaintext highlighter-rouge">timeout</code> messages received by any party during the view-change. If the <code class="language-plaintext highlighter-rouge">timeout</code> messages contain no value other than <code class="language-plaintext highlighter-rouge">v</code> signed by the leader, the party knows only <code class="language-plaintext highlighter-rouge">v</code> can be re-proposed. Otherwise, if the <code class="language-plaintext highlighter-rouge">timeout</code> messages contain a different value <code class="language-plaintext highlighter-rouge">v'</code> signed by the leader, then the <em>leader must be Byzantine</em>: it signed and proposed different values. Then, the party can just wait for one more <code class="language-plaintext highlighter-rouge">timeout</code> message from any party other than the leader, which means it can receive $4f-1$ <code class="language-plaintext highlighter-rouge">timeout</code> messages from at most $f-1$ Byzantine parties and hence at least $3f$ honest parties. If <code class="language-plaintext highlighter-rouge">v</code> is committed, at least $3f-1$ honest parties have voted for <code class="language-plaintext highlighter-rouge">v</code>, hence the above set of <code class="language-plaintext highlighter-rouge">timeout</code> messages must contain $3f+(3f-1)-(n-f)=2f$ messages from the honest parties that voted for <code class="language-plaintext highlighter-rouge">v</code>. Since $2f$ is a supermajority of $4f-1$, the next leader and any honest party can uniquely choose <code class="language-plaintext highlighter-rouge">v</code> to be the next proposal.
+In this way, we are able to construct a BFT SMR protocol that commits in 2 rounds in the good case and only requires $n=5f-1$.</p>
+<p align="center">
+ <img width="300" src="https://i.imgur.com/IxDL6KN.png" />
+</p>
+<blockquote>
+ <p>Wait.. what about the <em>lower bound</em> in FaB we just mentioned? Does it mean our result contradicts the lower bound?</p>
+</blockquote>
+<p>The answer turns out to be NO. As pointed out in a <a href="https://arxiv.org/abs/2102.12825">concurrent work</a>, the lower bound proof in FaB assumes a family of consensus protocols that with seperate sets of proposers and acceptors, i.e., the set of parties that propose values and the set of parties that run the consensus are disjoint. For this family of protocols, our technique of detecting leader equivocation with signatures won’t work, since the proposal is from a different set of parties. We also note that, even for general protocols, authentication (using signatures) is crucial for our protocol construction and the lower bound proof. We believe that the right resilience bound is back to $n=5f+1$ for unauthenticated protocols.</p>
+<blockquote>
+ <p>So, how do we know if it is optimal?</p>
+</blockquote>
+<p>In our <strong><a href="https://arxiv.org/abs/2102.07240">good-case latency paper</a></strong>, we argue the optimality of the resilience $n=5f-1$ for authenticated BFT protocols under partial synchrony, by defining a new broadcast formulation called <strong>partially synchronous validated Byzantine broadcast (psync-VBB)</strong>. Any solution for psync-VBB directly solves a single shot of BFT SMR, and most of the existing Primary-Backup-based BFT SMR solutions like PBFT also solve psync-VBB. In our <strong><a href="https://arxiv.org/abs/2102.07240">good-case latency paper</a></strong>, we formally proves that $n=5f-1$ is the resilience boundary for 2-round psync-VBB, i.e., psync-VBB can have good-case latency of 2 rounds iff $n\geq 5f-1$. It would be astonishing to have a Primary-Backup-based BFT SMR protocol that is not captured by psync-VBB and has a better resilience.</p>
+<p class="box-note">At the time when writing this post, we noticed a concurrent work by Petr Kuznetsov, Andrei Tonkikh, and Yan X Zhang titled “<a href="https://arxiv.org/abs/2102.12825"><strong>Revisiting Optimal Resilience of Fast Byzantine Consensus</strong></a>” that independently obtains almost the same set of results mentioned in this post, though stated for the problem formulation of Byzantine agreement instead of broadcast. We believe the protocols and lower bound proofs in the above work and <a href="https://arxiv.org/abs/2102.07240">our work</a> (the partial synchrony part) share very similar intuition and construction, and can actually imply one another.</p>
+<p>Please answer/discuss/comment/ask on <a href="https://twitter.com/ittaia/status/1367143317687963651?s=20">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#research">research</a>
+ 
+ <a href="/tags#SMR">SMR</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=2-round+BFT+SMR+with+n%3D4%2C+f%3D1&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2021-03-03-2-round-bft-smr-with-n-equals-4-f-equals-1%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/" data-toggle="tooltip" data-placement="top" title="Good-case Latency of Byzantine Broadcast: a Complete Categorization">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2021-03-09-good-case-latency-of-byzantine-broadcast-the-synchronous-case/" data-toggle="tooltip" data-placement="top" title="Good-case Latency of Byzantine Broadcast: the Synchronous Case">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

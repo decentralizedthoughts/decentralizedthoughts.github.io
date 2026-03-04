@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>On Paxos from Recoverable Broadcast</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham">
+ 
+ <meta name="description" content="There are many ways to learn about the Paxos protocol (see Lampson, Cachin, Howard, Howard 2, Guerraoui, Kladov, Krzyzanowski, Lamport, Wikipedia and many more). The emphasis of this post is on a decomposition of Paxos for omission failures that will later help when we do a similar decomposition for Byzantine failures (for PBFT and HotStuff). The model is partial synchrony with $f&amp;lt;n/2$ omission failures and the goal is consensus (see...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="On Paxos from Recoverable Broadcast">
+ <meta property="og:description" content="There are many ways to learn about the Paxos protocol (see Lampson, Cachin, Howard, Howard 2, Guerraoui, Kladov, Krzyzanowski, Lamport, Wikipedia and many more). The emphasis of this post is on a decomposition of Paxos for omission failures that will later help when we do a similar decomposition for Byzantine failures (for PBFT and HotStuff). The model is partial synchrony with $f&amp;lt;n/2$ omission failures and the goal is consensus (see...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham">
+ 
+ <meta property="og:article:published_time" content="2022-11-04T05:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2022-11-04-paxos-via-recoverable-broadcast/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2022-11-04-paxos-via-recoverable-broadcast/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="On Paxos from Recoverable Broadcast">
+ <meta property="twitter:description" content="There are many ways to learn about the Paxos protocol (see Lampson, Cachin, Howard, Howard 2, Guerraoui, Kladov, Krzyzanowski, Lamport, Wikipedia and many more). The emphasis of this post is on a decomposition of Paxos for omission failures that will later help when we do a similar decomposition for Byzantine failures (for PBFT and HotStuff). The model is partial synchrony with $f&amp;lt;n/2$ omission failures and the goal is consensus (see...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>On Paxos from Recoverable Broadcast</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham</strong><br>
+ 
+ <span class="post-meta">Posted on November 4, 2022</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>There are many ways to learn about the <a href="https://lamport.azurewebsites.net/pubs/lamport-paxos.pdf">Paxos</a> protocol (see <a href="https://www.microsoft.com/en-us/research/publication/the-abcds-of-paxos/">Lampson</a>, <a href="https://cachin.com/cc/papers/pax.pdf">Cachin</a>, <a href="https://www.youtube.com/watch?v=0K6kt39wyH0">Howard</a>, <a href="https://www.youtube.com/watch?v=s8JqcZtvnsM">Howard 2</a>, <a href="https://www.youtube.com/watch?v=WX4gjowx45E">Guerraoui</a>, <a href="https://matklad.github.io/2020/11/01/notes-on-paxos.html">Kladov</a>, <a href="https://people.cs.rutgers.edu/~pxk/417/notes/paxos.html">Krzyzanowski</a>, <a href="https://www.youtube.com/watch?v=tw3gsBms-f8">Lamport</a>, <a href="https://en.wikipedia.org/wiki/Paxos_(computer_science)">Wikipedia</a> and many more). The emphasis of this post is on a <strong>decomposition</strong> of Paxos for <em>omission failures</em> that will later help when we do a similar decomposition for <em>Byzantine failures</em> (for <a href="https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/">PBFT</a> and <a href="https://decentralizedthoughts.github.io/2022-11-24-two-round-HS/">HotStuff</a>).</p>
+<p>The model is <a href="https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/">partial synchrony</a> with $f&lt;n/2$ <a href="https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/">omission failures</a> and the goal is <a href="https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/">consensus</a> (see below for exact details).</p>
+<blockquote>
+ <p>The Paxon parliament’s protocol provides a new way of implementing the state-machine approach to the design of distributed systems. <a href="https://lamport.azurewebsites.net/pubs/lamport-paxos.pdf">Lamport, The Part-Time Parliament</a>.</p>
+</blockquote>
+<p>We introduce Paxos with two simplifications:</p>
+<ol>
+ <li>Use a <em>simple revolving primary</em> strategy based on the assumptions of perfectly synchronized clocks. A later post shows how to extend to a <em>stable leader</em> strategy, how to rotate leaders with <em>responsiveness</em>, and how not to rely on clock synchronization.</li>
+ <li>Focus on a <em>single-shot</em> consensus. A <a href="https://decentralizedthoughts.github.io/2022-11-19-from-single-shot-to-smr/">later post</a> shows how to extend to <em>multi-shot</em> consensus and <em>state machine replication</em>.</li>
+</ol>
+<p>In essence, we focus first on <em>safety</em> and move as much of the <em>liveness</em> and <em>multi-shot</em> complications to a later post.</p>
+<h2 id="view-based-protocol-with-simple-revolving-primary">View-based protocol with simple revolving primary</h2>
+<p>The protocol progresses in <strong>views</strong>, each view has a designated <strong>primary</strong> party. The role of the primary is rotated. For simplicity, the primary of view $v$ is party $v \bmod n$.</p>
+<p>In Partial Synchrony, the parameter $\Delta$ (the maximum message delay after GST) is known. So we define <strong>view $v$</strong> to be the time interval $[v(10 \Delta),(v+1)(10 \Delta))$ (see liveness proof for how this can be optimized). In other words, every $10\Delta$ ticks, each party triggers a <strong>view change</strong> and increments the view by one. Here we assume clocks are perfectly synchronized, so all parties move in and out of each view in complete synchrony (lockstep). We will discuss relaxations in future posts.</p>
+<h2 id="single-shot-consensus">Single-shot consensus</h2>
+<p>Each party has some <em>input value</em> and the goal is to <em>output a single value</em> with the following three properties:</p>
+<p><strong>Uniform Agreement</strong>: if any two parties output $X$ and $X’$ then $X=X’$. Note that this is a strictly stronger property than <strong>Agreement</strong> which just requires that all <em>non-faulty</em> parties that output a value, output the same value.</p>
+<p><strong>Termination</strong>: all non-faulty parties eventually output a value and terminate. This is a strictly stronger property than <strong>Liveness</strong> which just requires that all non-faulty parties eventually output a value. Note that we are in partial synchrony, and our protocol is deterministic, so obtaining this property will require reasoning about events after GST.</p>
+<p><strong>Validity</strong>: the output is an input of one of the parties. Note that this is a strictly stronger property than <strong>Weak Validity</strong> which just requires that if <em>all</em> parties have the same input value then this is the output value.</p>
+<h2 id="what-is-the-core-safety-problem-of-view-based-consensus-protocols">What is the core safety problem of view-based consensus protocols?</h2>
+<p>The core safety problem that all view-based consensus protocols need to solve is the risk of an agreement violation when one primary causes some parties to commit $X$, but some later primary misses this event and causes other parties to commit to $Y \neq X$.</p>
+<p>With synchrony and crash failures, this is easy, the primary sends its decision to all the next primaries. But with asynchrony and omission corruptions, how can a primary write a message in a way that later primaries will be guaranteed to read it?</p>
+<p>The solution that all Paxos-based protocols use is a <strong>Quorum System</strong>: The primary guarantees that it writes to a <em>write-quorum</em> (typically of size $n-f$) and then each new primary first reads from a <em>read-quorum</em> (again, typically of size $n-f$). This guarantees that the new primary read-quorum will intersect with any previous write-quorum and be able to <em>recover</em> these previous values.</p>
+<p>The second challenge then emerges: a new primary that reads from a read-quorum may see many messages from many previous primaries. Which one should it use? It turns out that it is critical that each primary also includes its view number, this way the new primary can <em>use the value associated with the highest view it saw</em>. This choice is essential for the safety of all Paxos protocols (see proof below).</p>
+<p>Here we will do this by decomposing Paxos to a <em>recoverable-broadcast</em> protocol that writes to a quorum and a <em>recover-max protocol</em> that reads from a quorum and chooses the value associated with the highest view:</p>
+<ol>
+ <li>The primary runs a <strong>recoverable-broadcast</strong> protocol that guarantees that if some party commits to the primary’s value $X$ in view $v$, then there is <em>sufficient</em> evidence to <em>recover</em> the pair $(v,X)$ in a later view. Sufficient evidence here is a write-quorum set $W$ of size $n-f$ that holds $(v,X)$.</li>
+ <li>The primary of any view (except the first) tries to recover a previously committed value via a <strong>recover protocol</strong>. This guarantees that if some previous primary caused some party to commit, then the recover protocol will return this value. The primary will then <strong>adopt</strong> this recovered value, instead of using its own input value, as the value it tries to broadcast for committing. The recover protocol does this by reading from a read-quorum $R$ of size $n-f$ that will hence intersect any previous write-quorum.</li>
+ <li>The primary may recover different pairs $(v_1, X_1),\dots,(v_k, X_k)$. So it runs a <strong>recover-max protocol</strong> that returns the pair $(v^\star, X^\star)$ that has the highest view ($\forall i, v^\star \geq v_i$). By adopting the value associated with the highest view we can guarantee that the new primary will adopt a value that was committed by a previous primary.</li>
+</ol>
+<p>In this post we <em>decompose</em> Paxos into an outer <em>view-based protocol</em> and two inner protocols: <em>recoverable broadcast</em> and <em>recover-max</em>.</p>
+<h2 id="the-paxos-outer-shell-protocol">The Paxos Outer-Shell Protocol</h2>
+<p>This outer shell protocol is rather simple. The main thing to note is that if the <code class="language-plaintext highlighter-rouge">recover-max(v)</code> protocol returns a non-$\bot$ value then the primary must adopt it.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>For view 1, the primary of view 1 with input X: 
+recoverable-broadcast(1, X)
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>For view v &gt; 1, the primary of view v with input X:
+Y := recover-max(v)
+if Y = bot then 
+ // use your own input
+ recoverable-broadcast(v, X)
+else 
+ // adopt the value from recover-max
+ recoverable-broadcast(v, Y)
+</code></pre></div></div>
+<p>We’ll next define <code class="language-plaintext highlighter-rouge">recoverable-broadcast</code> and <code class="language-plaintext highlighter-rouge">recover-max</code>.</p>
+<h2 id="recoverable-broadcast-and-recover-max-for-fn2-omission-corruptions">Recoverable-broadcast and recover-max for $f&lt;n/2$ Omission Corruptions</h2>
+<h3 id="recoverable-broadcast-protocol">Recoverable-broadcast protocol</h3>
+<p>The <code class="language-plaintext highlighter-rouge">recoverable-broadcast</code> protocol has a designated <em>primary</em> party with <em>input value</em> <code class="language-plaintext highlighter-rouge">Z</code> and a view number <code class="language-plaintext highlighter-rouge">v</code>.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Upon start of view v,
+ Primary sends &lt;v, Z&gt; to all
+Upon receiving n-f &lt;"echo", v, Z&gt;, 
+ output Z
+</code></pre></div></div>
+<p>All parties run the following while in view <code class="language-plaintext highlighter-rouge">v</code>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Upon receiving &lt;v, Z&gt; from primary, 
+ send &lt;"echo", v, Z&gt; to all
+</code></pre></div></div>
+<p>Observe that for simplicity, the primary also acts as a regular party. So it also sends <code class="language-plaintext highlighter-rouge">&lt;v, Z&gt;</code> to itself and upon seeing its own message, it sends an <code class="language-plaintext highlighter-rouge">&lt;"echo", v, Z&gt;</code> message to all parties (again including sending it to itself).</p>
+<h3 id="recoverable-broadcast-properties">Recoverable-broadcast properties</h3>
+<p><strong>Validity</strong>: If a party echos or outputs a value in Broadcast then it’s the input value of the primary of that view.</p>
+<p><strong>Weak Termination</strong>: If the primary of view <code class="language-plaintext highlighter-rouge">v</code> is non-faulty and all non-faulty are in view <code class="language-plaintext highlighter-rouge">v</code> then all non-faulty parties output a value and terminate.</p>
+<p><strong>Recoverability</strong>: If some party outputs <code class="language-plaintext highlighter-rouge">Z</code> in view <code class="language-plaintext highlighter-rouge">v</code> then at least $n-f$ parties sent <code class="language-plaintext highlighter-rouge">&lt;"echo", v, Z&gt;</code>. Note this is the write-quorum.</p>
+<h4 id="proof-of-recoverable-broadcast-properties">Proof of recoverable-broadcast properties</h4>
+<p><strong>Validity</strong>:</p>
+<ol>
+ <li>For a party to output a value, it needs to receive $n-f$ <code class="language-plaintext highlighter-rouge">&lt;"echo", v, Z&gt;</code> messages.</li>
+ <li>An <code class="language-plaintext highlighter-rouge">&lt;"echo", v, Z&gt;</code> message is only generated upon receiving a <code class="language-plaintext highlighter-rouge">&lt;v, Z&gt;</code> from the primary.</li>
+ <li>The primary of view <code class="language-plaintext highlighter-rouge">v</code> with input <code class="language-plaintext highlighter-rouge">Z</code> sends its input value <code class="language-plaintext highlighter-rouge">&lt;v, Z&gt;</code>.</li>
+</ol>
+<p><strong>Weak Termination</strong>:</p>
+<ol>
+ <li>Since the primary is non-faulty, it sends the <code class="language-plaintext highlighter-rouge">&lt;v, Z&gt;</code> message to all parties, including itself.</li>
+ <li>Upon receiving <code class="language-plaintext highlighter-rouge">&lt;v, Z&gt;</code> from the primary, each non-faulty party sends <code class="language-plaintext highlighter-rouge">&lt;"echo", v, Z&gt;</code> to all.</li>
+ <li>Since there are at most $f$ omission failures, there are at least $n-f$ non-faulty parties.</li>
+ <li>Each non-faulty party will therefore receive at least $n-f$ <code class="language-plaintext highlighter-rouge">&lt;"echo", v, Z&gt;</code> messages and output the value <code class="language-plaintext highlighter-rouge">Z</code>.</li>
+</ol>
+<p><strong>Recoverability</strong>:</p>
+<ol>
+ <li>For a party to output a value <code class="language-plaintext highlighter-rouge">Z</code>, it must receive $n-f$ <code class="language-plaintext highlighter-rouge">&lt;"echo", v, Z&gt;</code> messages.</li>
+ <li>If a party receives $n-f$ such messages, it implies that at least $n-f$ parties have sent the <code class="language-plaintext highlighter-rouge">&lt;"echo", v, Z&gt;</code> message.</li>
+ <li>Note we did not say that all these $n-f$ are non-faulty. This weaker property is sufficient for recover-max as we show below.</li>
+</ol>
+<h3 id="recover-max-protocol">Recover-max protocol</h3>
+<p>The <code class="language-plaintext highlighter-rouge">recover-max</code> protocol has a view number <code class="language-plaintext highlighter-rouge">u</code> as input and outputs either a broadcast value or a special $\bot$ value (which we write as <code class="language-plaintext highlighter-rouge">bot</code> in pseudocode). Each replica sends <code class="language-plaintext highlighter-rouge">&lt;"recover", u, w, Z&gt;</code> associated with the <em>highest</em> view echo <code class="language-plaintext highlighter-rouge">&lt;"echo", w, Z&gt;</code> it ever sent. The primary waits for $n-f$ <code class="language-plaintext highlighter-rouge">&lt;"recover", u, *, *&gt;</code> messages and outputs $\bot$ if all recover messages are $\bot$, and otherwise outputs the value associated with the <em>highest</em> view it saw:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Upon start of view u,
+ if you never sent any &lt;"echo", *, *&gt;,
+ then send &lt;"recover", u, bot&gt; to the primary
+ otherwise,
+ let &lt;"echo", w, Z&gt; be the maximal w
+ send &lt;"recover", u, w, Z&gt; to the primary
+Upon primary receiving n-f &lt;"recover", u, *&gt;,
+ if all are &lt;"recover", u, bot&gt;
+ then output bot
+ otherwise
+ let &lt;"recover", u, y, Z&gt; be with the maximal y
+ output Z 
+</code></pre></div></div>
+<h3 id="recover-max-properties">Recover-max properties:</h3>
+<p><strong>Validity</strong>: If a party outputs a value in recover-max then it is either some primary’s input value or $\bot$.</p>
+<p><strong>Termination</strong>: If all parties start recover-max for view $u$, and the primary is non-faulty then it will output a value.</p>
+<p><strong>Recover-max after recoverable-broadcast</strong>: If $n-f$ parties send echo in view $v$ for recoverable-broadcast then for recover-max of view $u&gt;v$, the output is a value from view $y$ with $v\le y$.</p>
+<h3 id="proof-of-recover-max-properties">Proof of recover-max properties:</h3>
+<p><strong>Validity</strong>:</p>
+<ol>
+ <li>The primary outputs a value in <code class="language-plaintext highlighter-rouge">recover-max</code> upon receiving $n-f$ <code class="language-plaintext highlighter-rouge">&lt;"recover", u, *, *&gt;</code> messages.</li>
+ <li>Any <code class="language-plaintext highlighter-rouge">&lt;"recover", u, w, Z&gt;</code> follows an <code class="language-plaintext highlighter-rouge">&lt;"echo", w, Z&gt;</code>. By the recoverable-broadcast validity property this is the view $w$ primary’s input value.</li>
+ <li>Otherwise, if all received messages are <code class="language-plaintext highlighter-rouge">&lt;"recover", u, bot&gt;</code>, the primary outputs $\bot$.</li>
+</ol>
+<p><strong>Termination</strong>:</p>
+<ol>
+ <li>Every party sends a <code class="language-plaintext highlighter-rouge">&lt;"recover", u, *, *&gt;</code> message, be it <code class="language-plaintext highlighter-rouge">&lt;"recover", u, w, Z&gt;</code> or <code class="language-plaintext highlighter-rouge">&lt;"recover", u, bot&gt;</code>.</li>
+ <li>A non-faulty primary will definitely receive $n-f$ <code class="language-plaintext highlighter-rouge">&lt;"recover", u, *, *&gt;</code> messages since at most $f$ parties can omit messages.</li>
+ <li>Upon receiving $n-f$ such messages, the non-faulty primary will make an output, be it $Z$ or $\bot$.</li>
+</ol>
+<p><strong>Recover-max after recoverable-broadcast</strong>:</p>
+<ol>
+ <li>
+ <p><em>From recoverability of recoverable-broadcast</em>: At least $n-f$ parties sent <code class="language-plaintext highlighter-rouge">"&lt;echo", v, Z&gt;</code>. Let’s denote the set of these parties as $ W $ (for the write-quorum).</p>
+ </li>
+ <li>
+ <p><em>Progression of Echoes</em>: At view $u$, parties in $ W $ send echoes from views that are at least $ v $ (and possibly from higher views if they’ve encountered them).</p>
+ </li>
+ <li>
+ <p><em>Quorum intersection</em>: The primary of view $u$ waits for $n-f$ <code class="language-plaintext highlighter-rouge">recover</code> messages. Let’s denote the set of these sending parties as $R$ (for the read-quorum). Given $ f &lt; n/2 $ and the fact that both $ W $ and $ R $ have at least $ n-f $ parties, the intersection of $ W $ and $ R $ is non-empty. This is because $W \cap R$ contains at least $ 2(n-f) - n = n - 2f \geq 1 $ parties.</p>
+ </li>
+ <li>
+ <p><em>Primary chooses the highest</em>: Because of the non-empty intersection between $ W $ and $ R $ the primary receives recover messages that indicate echoes from a view of at least $ v $. Note that the view may be higher since (1) the party in the intersection may have a higher view echo, or the set $W$ contains some higher higher view echo. The primary then chooses the value associated with the highest view number.</p>
+ </li>
+</ol>
+<h2 id="the-paxos-outer-shell-protocol-repeated-from-above-for-readability">The Paxos Outer-Shell Protocol (repeated from above for readability)</h2>
+<p><strong>The main Paxos algorithmic insight is that for guaranteeing agreement the primary must:</strong></p>
+<blockquote>
+ <p><strong>Choose the recovered value associated with the most recent view you hear!</strong></p>
+</blockquote>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>For view 1, the primary of view 1 with input X: 
+recoverable-broadcast(1, X)
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>For view v &gt; 1, the primary of view v with input X:
+Y := recover-max(v)
+if Y = bot then 
+ // use your own input
+ recoverable-broadcast(v, X)
+else 
+ // adopt the value from recover-max
+ recoverable-broadcast(v, Y)
+</code></pre></div></div>
+<p>Finally, define that a party <em>decides</em> and outputs a value the first time a recoverable-broadcast subroutine outputs a value.</p>
+<h3 id="agreement-safety">Agreement (Safety)</h3>
+<p>The agreement property follows from the safety lemma:</p>
+<p><strong>Safety lemma</strong>: Let $v^{\star}$ be the first view with $n-f$ echoes of $(v^\star, W)$, then for any view $v \ge v^\star$ the proposal value of <code class="language-plaintext highlighter-rouge">recoverable-broadcast(v, W)</code> must be $W$.</p>
+<p>Before we prove the lemma, let’s see why it implies uniform agreement.</p>
+<p><em>Proof of uniform agreement property given the safety lemma</em>: consider any party that outputs a value $X’$ in view $v’$. It cannot be that $v’ &lt; v^\star$ because outputting a value requires seeing at least $n-f$ echo messages $(v’,X’)$, but by definition $v^{\star}$ is the first such view. So it must be that $v’ \geq v^\star$ and hence $X’=W$ because the only values that are sent in recoverable-broadcast for these views is with the value $W$.</p>
+<p>We now prove the lemma, which is the essence of Paxos safety.</p>
+<p><em>Proof of the safety lemma</em>:</p>
+<p>For the base case when $v=v^\star$ lemma is true by the validity of <code class="language-plaintext highlighter-rouge">recoverable-broadcast(v, W)</code>.</p>
+<p>By induction, assume the lemma is true for all views $v$ such that $v^\star \le v&lt;u$. To prove the lemma for view $u$, use the <strong>recover-max after recoverable-broadcast</strong> property: the output in view $u$ is a value from view $y$ with $v^\star \le y$.</p>
+<ol>
+ <li>From the induction hypothesis, in all views $v^\star \le v&lt;u$ the proposal value of <code class="language-plaintext highlighter-rouge">recoverable-broadcast(v, W)</code> is $W$;</li>
+ <li>During recover-max for view $u$ there are no recoverable-broadcast for view $u$ or higher views, so there are no echoes for view $u$ or higher. 
+Hence, the value of recover-max in view $u$ must be $W \neq \bot$, so the value of recoverable-broadcast in view $u$ must be $W$ as well. This concludes the induction argument with concludes the proof of the safety Lemma.</li>
+</ol>
+<h3 id="liveness">Liveness</h3>
+<p>We proved (uniform) agreement, now let’s prove that eventually, after GST, all <em>non-faulty</em> parties output a value.</p>
+<p>Consider the view $v^+$ with the <em>first</em> non-faulty primary that starts after GST. Denote this start time as $T$. Since we are after GST, then on or before time $T+ \Delta$ the primary will receive <code class="language-plaintext highlighter-rouge">&lt;"recover", v+, *)&gt;</code> from all non-faulty parties (at least $n-f$). Hence, the primary will start a <code class="language-plaintext highlighter-rouge">recoverable-broadcast(v+,Z)&gt;</code> that will arrive at all non-faulty parties on or before time $T+2\Delta$. Hence, all non-faulty parties will send <code class="language-plaintext highlighter-rouge">&lt;"echo", v+, Z&gt;</code> (because they are still in view $v^+$). So all non-faulty parties will hear $n-f$ <code class="language-plaintext highlighter-rouge">&lt;"echo", v+, Z&gt;</code> on or before time $T+3\Delta$. So all non-faulty will decide $Z$ because they are still in view $v^+$.</p>
+<p>This concludes the liveness proof.</p>
+<p>Note that all we needed here is that all non-faulty parties are in the same view for $3\Delta$ time. So we could have defined view $v$ to just be the time interval $[v(3 \Delta),(v+1)(3 \Delta))$.</p>
+<h3 id="termination">Termination</h3>
+<p>We proved that all non-faulty parties output a value, but our protocol never terminates! For that, we add the following <em>termination gadget</em>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>If the consensus protocol outputs Z,
+ then send &lt;decide, Z&gt; to all
+Upon receiving &lt;decide, Z&gt;
+ If you did not output yet,
+ Then output Z and send &lt;decide, Z&gt; to all
+Upon receiving n-f &lt;decide, Z&gt;
+ Terminate
+</code></pre></div></div>
+<p><em>Proof</em>:</p>
+<p>The tricky part of the proof is to only use the liveness property when we are sure all non-faulty parties are still running the protocol.</p>
+<p>Claim: It cannot be the case that there is an execution where no honest party receives a <code class="language-plaintext highlighter-rouge">&lt;decide, Z&gt;</code> message. Proof of claim: in that case all honest parties will continue to run the protocol and by the liveness property, consider the time the first non-faulty outputs a value - it will send a decide message to all.</p>
+<p>The remaining part of the proof is natural:</p>
+<p>So consider the first non-faulty party that receives a <code class="language-plaintext highlighter-rouge">&lt;decide, Z&gt;</code> message or outputs a value. In both cases it will send a <code class="language-plaintext highlighter-rouge">&lt;decide, Z&gt;</code> message to all parties. So eventually all non-faulty parties will receive a <code class="language-plaintext highlighter-rouge">&lt;decide, Z&gt;</code> message. So all non-faulty will eventually send a <code class="language-plaintext highlighter-rouge">&lt;decide, Z&gt;</code> message to all parties. So all non-faulty will see at least $n-f$ <code class="language-plaintext highlighter-rouge">&lt;decide, Z&gt;</code> messages and terminate.</p>
+<p>Note that here we used the safety property: all parties that decide will indeed decide the same value.</p>
+<p>Note that this argument just used the liveness and safety properties, so this gadget is generic and can be used with any consensus protocol.</p>
+<h3 id="validity">Validity</h3>
+<p>Observe that validity is rather trivial in these protocols. By induction, the only values used are the inputs of the parties.</p>
+<p>What if a party has several different values (for example it received several different values from several different clients)? This is an example of how the standard validity of consensus does not address the challenges of MEV. More on that in later posts.</p>
+<h3 id="message-complexity">Message Complexity</h3>
+<p>Note that the time and number of messages before GST can be both unbounded. So for this post, we will measure the time and message complexity after GST.</p>
+<p><strong>Time complexity</strong>: since the Liveness proof waits for the first non-faulty primary that starts after GST this may take in the worst case: almost one “interrupted” view, then $f$ views of faulty primaries, then a view of a non-faulty party. So all parties will output a value in at most $(f+2)10 \Delta$ time after GST. A more careful analysis can improve the first and the last durations. We show <a href="https://decentralizedthoughts.github.io/2019-12-15-synchrony-uncommitted-lower-bound/">here</a> that $(f+1) \Delta$ is a worst case that cannot be avoided (but can have a small probability when using randomization).</p>
+<p><strong>Message Complexity</strong>: since each round has an all-to-all message exchange, the total number of messages sent after GST is $O((f+1) \times n^2) = O(n^3)$. We show <a href="https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/">here</a> that $O(n^2)$ is the best you can hope for (for deterministic protocols or against strongly adaptive adversaries).</p>
+<p><em>Exercise: Modify the protocol above to use just $O(n)$ messages per view (so total of $O(n^2)$ after GST). Explain why the proof still works, in particular, detail the Liveness proof and the Time complexity.</em></p>
+<h2 id="canonical-examples">Canonical examples</h2>
+<p>The following 3 examples are helpful to understand Paxos.</p>
+<p>All these examples will have $n=3$ and $f=1$. Assume party 1 has input <code class="language-plaintext highlighter-rouge">A</code> and party 2 has <code class="language-plaintext highlighter-rouge">B</code>.</p>
+<ol>
+ <li><strong>Only party 1 outputs in view 1</strong>. In view 1: party 1 sends <code class="language-plaintext highlighter-rouge">A</code>, parties 1 and 2 echo and party 1 outputs <code class="language-plaintext highlighter-rouge">A</code>. In view 2: party 2 receives recover from parties 1 and 2, hence will see the echo from view 1, hence will use that echo as its value <code class="language-plaintext highlighter-rouge">recoverable-broadcast(2, A)</code>.</li>
+ <li><strong>No one outputs in view 1</strong> In view 1: party 1 sends <code class="language-plaintext highlighter-rouge">A</code>, party 1 sends echo. View 2 is <em>exactly</em> like in the above example. Party 2 receives recover from parties 1 and 2, hence uses <code class="language-plaintext highlighter-rouge">B</code>, but in fact its just because it cannot distinguish between this and the previous example.</li>
+ <li><strong>View 1 like example 2 and View 2 only party 2 outputs</strong>. In view 1: party 1 sends <code class="language-plaintext highlighter-rouge">A</code>, party 1 sends echo. In view 2: party 2 receives recover from parties 2 and 3, hence will see $\bot$ so it will use its input for <code class="language-plaintext highlighter-rouge">recoverable-broadcast(2, B)</code>. Parties 2 and 3 echo, party 2 outputs <code class="language-plaintext highlighter-rouge">B</code>. Now at view 3: party 3 receives recover from parties 1 and 3: it hears <code class="language-plaintext highlighter-rouge">A</code> from 1 and <code class="language-plaintext highlighter-rouge">B</code> from 3, what will it choose? Since <code class="language-plaintext highlighter-rouge">A</code> is associated with view 1 and <code class="language-plaintext highlighter-rouge">B</code> is associated with view 2, so <code class="language-plaintext highlighter-rouge">B</code> must be chosen.</li>
+</ol>
+<h2 id="acknowledgments">Acknowledgments</h2>
+<p>Many thanks to Kartik Nayak and Gilad Stern for insightful comments.</p>
+<p>Your comments on <a href="https://twitter.com/ittaia/status/1599150005432250368?s=20&amp;t=JiegXa5IVUUcfNM6ZietBA">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#crash">crash</a>
+ 
+ <a href="/tags#omission">omission</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=On+Paxos+from+Recoverable+Broadcast&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2022-11-04-paxos-via-recoverable-broadcast%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2022-09-10-provable-broadcast/" data-toggle="tooltip" data-placement="top" title="Provable Broadcast">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2022-11-19-from-single-shot-to-smr/" data-toggle="tooltip" data-placement="top" title="From Single-Shot Agreement to State Machine Replication">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

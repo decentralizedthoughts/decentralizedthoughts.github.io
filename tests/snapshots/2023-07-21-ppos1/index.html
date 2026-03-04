@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Can we Obtain Privacy in a Private Proof-of-Stake Blockchain? Part-I</title>
+ 
+ 
+ <meta name="author" content="Chenghong Wang, Kartik Nayak">
+ 
+ <meta name="description" content="In this two-part post, we focus on the challenges and subtleties involved in obtaining privacy in private proof-of-stake (PoS) blockchains. For instance, designs that attempt to obtain privacy for transaction details while still relying on PoS, such as Ouroboros Crypsinous. The first part explains attacks on existing approaches, and the second part focuses on potential workarounds using differential privacy. These posts explain the intuitive ideas behind the works of Madathil...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Can we Obtain Privacy in a Private Proof-of-Stake Blockchain? Part-I">
+ <meta property="og:description" content="In this two-part post, we focus on the challenges and subtleties involved in obtaining privacy in private proof-of-stake (PoS) blockchains. For instance, designs that attempt to obtain privacy for transaction details while still relying on PoS, such as Ouroboros Crypsinous. The first part explains attacks on existing approaches, and the second part focuses on potential workarounds using differential privacy. These posts explain the intuitive ideas behind the works of Madathil...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Chenghong Wang, Kartik Nayak">
+ 
+ <meta property="og:article:published_time" content="2023-07-21T01:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2023-07-21-ppos1/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2023-07-21-ppos1/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Can we Obtain Privacy in a Private Proof-of-Stake Blockchain? Part-I">
+ <meta property="twitter:description" content="In this two-part post, we focus on the challenges and subtleties involved in obtaining privacy in private proof-of-stake (PoS) blockchains. For instance, designs that attempt to obtain privacy for transaction details while still relying on PoS, such as Ouroboros Crypsinous. The first part explains attacks on existing approaches, and the second part focuses on potential workarounds using differential privacy. These posts explain the intuitive ideas behind the works of Madathil...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Can we Obtain Privacy in a Private Proof-of-Stake Blockchain? Part-I</h1>
+ 
+ 
+ 
+ 
+ By <strong>Chenghong Wang, Kartik Nayak</strong><br>
+ 
+ <span class="post-meta">Posted on July 21, 2023</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>In this two-part post, we focus on the challenges and subtleties involved in obtaining privacy in private proof-of-stake (PoS) blockchains. For instance, designs that attempt to obtain privacy for transaction details while still relying on PoS, such as <a href="https://eprint.iacr.org/2018/1132.pdf">Ouroboros Crypsinous</a>. The first part explains attacks on existing approaches, and the <a href="https://decentralizedthoughts.github.io/2023-07-21-ppos2/">second part</a> focuses on potential workarounds using <a href="https://link.springer.com/chapter/10.1007/11681878_14">differential privacy</a>. These posts explain the intuitive ideas behind the works of <a href="https://eprint.iacr.org/2021/409.pdf">Madathil et al.</a> (IEEE S&amp;P ‘21) and <a href="https://eprint.iacr.org/2023/787.pdf">Wang et al.</a> (Usenix Security ‘23).</p>
+<p>Through Bitcoin, Nakamoto first introduced a permissionless protocol where any party can join (as a block producer) the protocol without requiring any explicit permission. To tolerate a large number of adversarial parties, Bitcoin relies on the use of constrained resources, namely, computation in the form of proof-of-work, to determine parties who are allowed to contribute (“leaders”) to the blockchain. The protocol is secure assuming the amount of computing power (a type of constraint resource) invested by honest parties exceeds that by the Byzantine parties. However, there are two key concerns with the protocol used by Bitcoin.</p>
+<ol>
+ <li>First, due to the use of compute power to elect leaders in the protocol, Bitcoin burns a lot of energy in the process.</li>
+ <li>Second, in Bitcoin, all transactions are publicly available to everyone.</li>
+</ol>
+<p><strong>Addressing energy-efficiency using proof-of-stake (PoS).</strong> The use of <em>proof-of-stake</em> can help address the energy concern. PoS protocols offer an energy-efficient design that leverages constraints on stakes held by parties in the system. Typically, it is assumed that at least $\frac{2}{3}$ of the total stake is held by honest parties, which is equivalent to saying that the fraction of corrupted parties, $f$, is less than $\frac{1}{3}$. Protocol participants are chosen through private lotteries in which each party’s winning odds are proportional to the stake they possess.</p>
+<p><strong>Addressing privacy constraints using cryptography.</strong> The open setup of blockchains makes the privacy of transactions a crucial concern. As such, private blockchains have been proposed with the idea to conceal transaction details using advanced cryptographic primitives while utilizing zero-knowledge proofs to validate transactions and ensure the proper functioning of the protocol. Although there are a few private blockchain systems, such as <a href="https://z.cash/">Zcash</a>, that have been successfully implemented and are currently in use, they are built on the Proof-of-Work (PoW) architecture.</p>
+<h3 id="can-we-obtain-both-privacy-and-energy-efficiency-simultaneously-in-other-words-can-we-obtain-privacy-in-a-proof-of-stake-blockchain-system"><strong><em>Can we obtain both privacy and energy efficiency simultaneously? In other words, can we obtain privacy in a proof-of-stake blockchain system?</em></strong></h3>
+<p>A natural approach to answer this question is to adapt the approach to privacy in a PoW system to a PoS system. However, in a PoS system, the stake itself is a sensitive property. Thus, disclosing the exact stake owned by a party can inadvertently expose transaction details to potential attackers. For instance, the transaction outcomes between any two time steps can be inferred, as the stake represents the additive outcome of a sequence of transactions.</p>
+<p>A primary measure by which one can infer a party’s stake is by knowing the number of times a party is elected as a participant on the chain. Thus, privacy-preserving PoS protocols such as <a href="https://iohk.io/en/research/library/papers/ouroboros-crypsinous-privacy-preserving-proof-of-stake/">Kerber et al.</a> and <a href="https://eprint.iacr.org/2018/1105.pdf">Ganesh et al.</a> attempt to hide the participants by using <em>anonymous VRFs</em>; at a high level, these VRFs prove that a party that presents a token (VRF output) has been elected to participate but do not reveal who the party is. The works claim that so far as these messages are sent through anonymous broadcast channels, both the transaction values and stake values would be hidden.</p>
+<p><strong><em>Does the use of anonymous VRFs suffice to obtain privacy?</em></strong></p>
+<p>To answer this question, there are two key aspects of private PoS protocols that we should know about. First, despite the privacy guarantees, in any protocol, the sender of a transaction will need to know whether the transaction has been committed. This is necessary for the functioning of any blockchain protocol. This allows the adversary to obtain a mapping between a transaction it created and the block in which it was added. Second, any message sent by an honest party may take up to a $\Delta$ time to be received by all honest parties. If an adversary can delay messages within the $\Delta$ time, then perhaps it can cause different parties to have different <em>views</em> of the state of the system and then use the first observation to identify whether a party has been elected to participate.</p>
+<p>Specifically, the adversary can perform the following attack where it is trying to judge the frequency with which a party $P$ proposes a block compared to the rest of the network; this frequency is directly related to $P$’s stake. The adversary sends a transaction $tx$ (denoted by the red bag of money) to a party $P$ at time $T$ but delays sending this transaction to other parties until time $T+\Delta$. Thus, if a block containing $tx$ is produced during this $\Delta$ time duration, then it must be the case that $P$ produced it. Moreover, due to our first observation, the adversary knows that a specific block contains $tx$. Such an attack suffices for an adversary to estimate the stake of a party, something that privacy-preserving protocols attempt to hide.</p>
+<p><img src="https://hackmd.io/_uploads/B1_0vDd5n.png" alt="drawing" width="500" /></p>
+<p><strong>Can we actually achieve such an adversarial delay of messages?</strong> Yes! <a href="https://www.cs.umd.edu/projects/coinscope/coinscope.pdf">Miller et al.</a> proposed an attack technique, namely the <em>InvBlock</em> attack. At a high level, the attacker creates a transaction $tx$ and sends it to the victim node. To the victim’s peers, it immediately sends the transaction hash but withholds the transmission of the transaction body. This action prompts the peers to wait for the transaction body from the attacker until a timeout is reached. This causes a necessary difference in views between the victim and all other parties in the network.</p>
+<h2 id="detailing-privacy-attacks-on-private-pos-blockchains">Detailing Privacy Attacks on Private PoS Blockchains</h2>
+<p>In the last section, we showed that the state-of-the-art approaches that rely on anonymous Verifiable Random Functions (VRF) are insufficient in safeguarding stake privacy. Certain privacy attacks exist that enable an attacker to gain information related to the stake owned by a particular party. In this section, we will elaborate on this concept to show specific attacks. These attacks were presented by the works of <a href="https://eprint.iacr.org/2021/409.pdf">Madathil et al.</a> and <a href="https://eprint.iacr.org/2023/787.pdf">Wang et al.</a></p>
+<p><strong>Comparing an unknown stake value with a known threshold.</strong> The first attack by Madathil et al. allows the adversary to tag a specific (honest) party with unknown stake and subsequently compare this unknown stake value against an adversary-selected threshold. The attack is called <em>Reverse tagging attack (RTA)</em>, which exploits the (deterministic) liveness requirement ensured by the underlying blockchain</p>
+<blockquote>
+ <p><strong>$( z , t )$-liveness</strong>: For any transaction $\mathsf{tx}$ that is input to at least $z$ fraction of the honest parties, it must get confirmed after $t$ time steps.</p>
+ <p>In this attack, we start by splitting all participants into two groups. The first group, let’s call it G1, includes the victim and some corrupted parties chosen by the adversary. These chosen parties have a total stake equal to $f_c$ (a value chosen by the adversary). The second group, G2, contains all remaining parties.</p>
+</blockquote>
+<p>Next, the adversary aims to create a disparity in the inputs of these two groups. Specifically, the attacker generates a transaction that is received by all in G2 but is not received by anyone in G1. This can be achieved by using the <em>InvBlock</em> primitive to delay a self-created transaction, ensuring the transaction is absent from the target node and the selected corrupted nodes (as a result parties holding stakes totaling $f_c+f_v$ that do not receive this transaction).</p>
+<p>Finally, the adversary just waits for $t$ time units to see if the transaction is confirmed. If it is not confirmed, one can conclude that the stake of the victim $f_v$ must exceed $1-z-f_c$, as per the definition of liveness. The following figure shows an abstracted flow of this attack.</p>
+<p><img src="https://hackmd.io/_uploads/ryefPmQO3.png" alt="" /></p>
+<p>A limitation of this approach, though, is that RTA is only effective under deterministic protocols that satisfy stringent liveness conditions, e.g., guaranteeing the inclusion of a block within a given time window.</p>
+<p><strong>Approximating an unknown stake value.</strong> Recently, <a href="https://eprint.iacr.org/2023/787.pdf">Wang et al.</a> proposed an improved stake inference attack (SIA) that efficiently approximates an unknown stake value. Moreover, this attack also captures randomized protocols with probabilistic liveness.</p>
+<blockquote>
+ <p><strong>Probabilistic $( z , t )$-liveness</strong>: For any transaction $\mathsf{tx}$ that is input to $z$ fraction of the honest parties, the probability $\mathsf{tx}$ is NOT confirmed after $t$ time steps equals to $q(1-z,t)$, where $q(\cdot)\in(0,1)$ is a strictly increasing linear function related to the first input (i.e., $1 - z$).</p>
+</blockquote>
+<p>Based on the aforementioned liveness definition, we know that if there’s a transaction, let’s say $tx$, that is missing from the transaction pool of a victim node (with stake $f_v$) but has been received by all others, then the probability of $tx$ remaining unconfirmed after $t$ time steps equals $q(f_v, t)$. This probability is directly tied to the victim’s stake, thereby providing the attacker with an interface to exploit $f_v$. Due to the randomness involved in the protocol, it’s typically challenging to directly calculate the actual value of $q(1-z,t)$. However, it can be assessed empirically, i.e., by repeatedly launching the delay primitive. The subsequent figure presents an abstracted workflow.</p>
+<p><img src="https://hackmd.io/_uploads/BkZAVnVw3.png" alt="" /></p>
+<p>Even though it’s possible to estimate $q(f_v, t)$, computing the pre-image $f_v$ still poses a significant challenge. We examine a search approach to locate an approximated pre-image close to $f_v$. To elaborate, the adversary selects a subset of compromised nodes with a stake of $f_c$ and compares $q(f_c, t)$ with $q(f_v,t)$. Then, the adversary adaptively updates $f_c$ to to minimize the difference $|q(f_c, t) - q(f_v, t)|$ until certain termination condition is triggered. The adversary then reports the final $f_c$ as an approximation of $f_v$. Please note that various search strategies can be applied here, in the following, we propose a strategy based on a binary search tree, which offers sublinear execution time.
+<img src="https://hackmd.io/_uploads/rkvdu2NPh.png" alt="" /></p>
+<p>First, we establish a balanced search tree with $n$ leaf nodes, each labeled with a stake segment. Specifically, the root is labeled with [0,f], and every internal node represents the integral stake segment of its child. Beginning at the root node, we traverse the search tree until we hit a leaf node such that the corresponding search coins denoted by the stake segments, contains the target coin. Unlike traditional binary search, when deciding the branch, we need to compare two probabilities instead of comparing two concrete values. By hoeffding’s inequality, with $O(\log\log n)$ many coin flips, one can compare two coins with at most $\frac{1}{\log n}$ failure probability. Note that, the search has at most $\log n$ branch selection, thus by union bound, the overall failure probability is constant. And the total running time is sub-linear.</p>
+<p><strong>Acknowledgment.</strong> We would like to thank Ittai Abraham and Ashwin Machanavajjhala for their feedback on this post.</p>
+<p>Please post your comments on <a href="https://twitter.com/kartik1507/status/1683466272393101312">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ <a href="/tags#research">research</a>
+ 
+ <a href="/tags#privacy">privacy</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Can+we+Obtain+Privacy+in+a+Private+Proof-of-Stake+Blockchain%3F+Part-I&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2023-07-21-ppos1%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2023-07-09-CAP-two-servers-in-psynch/" data-toggle="tooltip" data-placement="top" title="The CAP Theorem and why State Machine Replication for Two Servers and One Crash Failure is Impossible in Partial Synchrony">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2023-07-21-ppos2/" data-toggle="tooltip" data-placement="top" title="Can we Obtain Privacy in a Private Proof-of-Stake Blockchain? Part-II">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

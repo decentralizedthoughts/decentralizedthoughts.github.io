@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Colordag: From always-almost to almost-always 50% selfish mining resilience</title>
+ 
+ 
+ <meta name="author" content="Ittay Eyal, Ittai Abraham">
+ 
+ <meta name="description" content="The Selfish mining attack against blockchain protocols was discovered and formalized in 2013 by Eyal and Sirer (also see our blog post). The Bitcoin community has mentioned similar types of attacks in 2010. This attack remains a vulnerability of all operational blockchains we are aware of. For Bitcoin’s blockchain algorithm (under reasonable network assumptions), a coalition controlling over 1/4 of the mining power can improve its revenue using this attack....">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Colordag: From always-almost to almost-always 50% selfish mining resilience">
+ <meta property="og:description" content="The Selfish mining attack against blockchain protocols was discovered and formalized in 2013 by Eyal and Sirer (also see our blog post). The Bitcoin community has mentioned similar types of attacks in 2010. This attack remains a vulnerability of all operational blockchains we are aware of. For Bitcoin’s blockchain algorithm (under reasonable network assumptions), a coalition controlling over 1/4 of the mining power can improve its revenue using this attack....">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittay Eyal, Ittai Abraham">
+ 
+ <meta property="og:article:published_time" content="2022-03-07T10:19:00-05:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2022-03-07-colordag-from-always-almost-to-almost-always-50-percent-selfish-mining-resilience/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2022-03-07-colordag-from-always-almost-to-almost-always-50-percent-selfish-mining-resilience/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Colordag: From always-almost to almost-always 50% selfish mining resilience">
+ <meta property="twitter:description" content="The Selfish mining attack against blockchain protocols was discovered and formalized in 2013 by Eyal and Sirer (also see our blog post). The Bitcoin community has mentioned similar types of attacks in 2010. This attack remains a vulnerability of all operational blockchains we are aware of. For Bitcoin’s blockchain algorithm (under reasonable network assumptions), a coalition controlling over 1/4 of the mining power can improve its revenue using this attack....">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Colordag: From always-almost to almost-always 50% selfish mining resilience</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittay Eyal, Ittai Abraham</strong><br>
+ 
+ <span class="post-meta">Posted on March 7, 2022</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>The Selfish mining attack against blockchain protocols was discovered and formalized in 2013 by <a href="https://webee.technion.ac.il/people/ittay/publications/btcProcFC.pdf">Eyal and Sirer</a> (also see our <a href="https://decentralizedthoughts.github.io/2020-02-26-selfish-mining/">blog post</a>). The Bitcoin community has mentioned similar types of <a href="https://bitcointalk.org/index.php?topic=2227.msg30083#msg30083">attacks in 2010</a>. This attack remains a vulnerability of all operational blockchains we are aware of. For Bitcoin’s blockchain algorithm (under reasonable network assumptions), a coalition controlling over 1/4 of the mining power can improve its revenue using this attack. The situation is even worse if we consider more powerful attacks (see <a href="https://arxiv.org/pdf/1507.06183.pdf">Sapirshtein, Sompolinsky, Zohar</a>, <a href="https://www.usenix.org/system/files/conference/usenixsecurity15/sec15-paper-heilman.pdf">Heilman et al.</a>, and <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.712.5613&amp;rep=rep1&amp;type=pdf">Nakak et al.</a>).</p>
+<p>Pass and Shi’s <a href="https://dl.acm.org/doi/abs/10.1145/3087801.3087809">Fruitchain</a> is the state of the art in this context. Given the Fruitchain reward mechanism, the authors suggest a strategy that even with coalitions of almost 50%, any other strategy can only increase the coalition’s utility by a negligible amount. However, we show that a simple deviation from the suggested strategy is always at least as profitable as the suggested strategy. Thus, it is <strong>strictly</strong> better for miners, of any size, not to follow the suggested strategy. Even worse, if all miners deviate in this way, the system may become unstable.</p>
+<h2 id="colordag-an-incentive-compatible-reward-scheme">Colordag: An Incentive-Compatible Reward Scheme</h2>
+<p>We present <em>Colordag</em>, a novel blockchain reward scheme that is joint work with our co-authors Danny Dolev and Joe Halpern. Given the Colordag reward structure, we provide an equilibrium strategy that is <em>almost always</em> a best response, even with coalitions of almost 50%. Unlike Fruitchain’s suggested strategy where deviation is <em>always at least as profitable as good behavior</em>, the deviation from the Colordag suggested strategy is <em>almost always strictly less profitable</em>.</p>
+<p>Colordag utilizes three techniques to achieve strong incentives for equilibrium. In this post, we briefly explain the intuition behind those techniques. Our <a href="https://eprint.iacr.org/2022/308">Technical Report</a> details all three and the formal proof and analysis.</p>
+<h3 id="architecture">Architecture</h3>
+<p>Colordag forms a directed acyclic graph (dag), where every block has multiple parents. Using dags was suggested in <a href="https://allquantor.at/blockchainbib/pdf/lewenberg2015inclusive.pdf">several</a> <a href="https://dl.acm.org/doi/pdf/10.1145/3479722.3480990">other</a> <a href="https://dl.acm.org/doi/pdf/10.1145/3319535.3363213">works</a> for increasing throughput. Here our goal is different – to incentivize playing the suggested strategy via <em>mechanism design</em>. While our protocol may generate a dag that might be wide, we use new techniques to incentivize the formation of a single longest chain with as few bifurcations as possible. This longest chain is the one that determines the order of transactions.</p>
+<h2 id="technique-1-random-coloring">Technique 1: Random Coloring</h2>
+<p>Like Bitcoin and subsequent protocols, Colordag uses the longest chain to identify the series of blocks generated with more mining power. However, occasionally forks form naturally due to network latency (hundreds of such forks happen on <a href="https://etherscan.io/chart/uncles">Ethereum each day</a>) and slow the chain extension. The first challenge is thus handling the advantage of an attacker with consolidated mining power and no natural forking. Such an attacker has an advantage in generating a long chain over honest players: she doesn’t “lose” blocks in forks.</p>
+<p>To reduce the adversary’s advantage, we introduce a novel <strong>random coloring technique</strong>: each block is assigned a color, actually a number chosen uniformly at random in some range (0, …, <em>k</em>-1). Technically, the color is calculated by hashing the block’s hash (which includes the PoW hash) and taking, e.g., the MSB. This way, a miner cannot change the color of a block once generated, and cannot bias the color of the block (except with negligible probability).</p>
+<p>To define the reward structure, we consider the <em><a href="https://en.wikipedia.org/wiki/Graph_minor">graph minors</a></em> for the full dag induced by the random coloring. A minor is derived from the dag by taking all vertices of a certain color, and placing an edge between two vertices if there is a directed path between them that does not include another block of that color (see example below). For each such minor, the probability of a fork is much smaller than in the full graph, and we can make it arbitrarily smaller by increasing the number of colors. Note that the number of colors does not affect the block generation rate.</p>
+<p><img src="https://i.imgur.com/ToR0WSY.png" alt="" /></p>
+<p>Random coloring reduces the probability of naturally occurring forks between honest miners, thus eliminating a main advantage of an attacker with consolidated mining power. In a way, it provides similar advantages as <a href="https://dl.acm.org/doi/pdf/10.1145/3319535.3363213">Prism</a> while maintaining just one chain.</p>
+<h2 id="technique-2-penalties">Technique 2: Penalties</h2>
+<p>Now that well-behaved miners produce longest chains in each minor with hardly any forks, we can easily identify when a deviation is likely to have occurred – whenever there is a fork. Unfortunately, we cannot in general tell which side of the fork was generated by the deviator and which side by honest miners. Therefore Colordag punishes both sides. Specifically, if two blocks have the same depth (distance from genesis, called height in the Blockchain literature), both receive zero rewards.</p>
+<p>Intuitively, this disincentivizes misbehavior and incentivizes the creation of a single, narrow, chain. The miner gets a reward of 0 for either not extending the longest chain or not immediately publishing her block. Of course, there is also a penalty for the honest miners, but what each miner cares about is its fraction of the total reward (due to <a href="https://en.bitcoin.it/wiki/Difficulty">difficulty</a> <a href="https://dlt-repo.net/mining-difficulty-in-ethereum/">adjustment</a>, an increase in the fraction of the total reward corresponds to a probability of mining a block that is higher than the miners’ fraction of the total mining power). Since the utility depends on the relative reward, we can show that such a deviation is strictly worse than following the suggested protocol.</p>
+<h2 id="technique-3-acceptability">Technique 3: Acceptability</h2>
+<p>But now a new problem emerges: according to the protocol so far, an attacker could cause honest blocks to be penalized by creating a sibling block. Even worse, the attacker could use this attack even on very old blocks; this would violate what we call <em>revenue consistency</em>, the requirement that a miner’s revenue for a block eventually stabilizes (which didn’t need a name previously, as it followed trivially from the blockchain data structure in previous work).</p>
+<p>To prevent this, Colordag ignores blocks unless, roughly speaking, they are on a path that is almost as long as the longest path. Blocks added much later will not have this property. Blocks that are ignored in this way do not get any reward.</p>
+<h2 id="analysis">Analysis</h2>
+<p>We analyze Colordag under the assumption that we are dealing with an extremely strong adversary, who knows when miners will generate blocks and controls the (synchronous) network. Even with such a strong adversary, following Colordag gives what we call an <strong>epsilon-sure Nash Equilibrium</strong>, resilient to coalitions that control a minority of the mining power, where an epsilon-sure Nash Equilibrium is one in which following the protocol is almost surely (i.e., with probability $1-\varepsilon$, for an arbitrarily small $\varepsilon$) the miners’ strict best response.</p>
+<p>The gritty details are in our <a href="https://eprint.iacr.org/2022/308">Technical Report</a>.</p>
+<p>Please leave comments on <a href="https://twitter.com/ittayeyal/status/1500943944384929792?s=20&amp;t=Q-QPZI9PfIXFnLAyqs3ygQ">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ <a href="/tags#incentives">incentives</a>
+ 
+ <a href="/tags#research">research</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Colordag%3A+From+always-almost+to+almost-always+50%25+selfish+mining+resilience&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2022-03-07-colordag-from-always-almost-to-almost-always-50-percent-selfish-mining-resilience%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2022-03-03-blockchain-resource-pools-and-a-cap-esque-impossibility-result/" data-toggle="tooltip" data-placement="top" title="Blockchain Resource Pools and a CAP-esque Impossibility Result">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2022-03-10-eip1559/" data-toggle="tooltip" data-placement="top" title="EIP-1559 In Retrospect">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

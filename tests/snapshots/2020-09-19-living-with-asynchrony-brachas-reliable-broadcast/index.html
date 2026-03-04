@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Living with Asynchrony: Bracha's Reliable Broadcast</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham and Kartik Nayak">
+ 
+ <meta name="description" content="In this series of posts, we explore what can be done in the Asynchronous model. This model seems challenging because the adversary can delay messages by any bounded time. By the end of this series, you will see that almost everything that can be done in synchrony can be obtained in asynchrony. The next posts in this series are about gather, round complexity, and finally our series on Asynchronous Agreement....">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Living with Asynchrony: Bracha's Reliable Broadcast">
+ <meta property="og:description" content="In this series of posts, we explore what can be done in the Asynchronous model. This model seems challenging because the adversary can delay messages by any bounded time. By the end of this series, you will see that almost everything that can be done in synchrony can be obtained in asynchrony. The next posts in this series are about gather, round complexity, and finally our series on Asynchronous Agreement....">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham and Kartik Nayak">
+ 
+ <meta property="og:article:published_time" content="2020-09-19T09:05:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Living with Asynchrony: Bracha's Reliable Broadcast">
+ <meta property="twitter:description" content="In this series of posts, we explore what can be done in the Asynchronous model. This model seems challenging because the adversary can delay messages by any bounded time. By the end of this series, you will see that almost everything that can be done in synchrony can be obtained in asynchrony. The next posts in this series are about gather, round complexity, and finally our series on Asynchronous Agreement....">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Living with Asynchrony: Bracha's Reliable Broadcast</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham and Kartik Nayak</strong><br>
+ 
+ <span class="post-meta">Posted on September 19, 2020</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>In this series of posts, we explore what can be done in the Asynchronous model. This model seems challenging because the adversary can delay messages by any bounded time. By the end of this series, you will see that <a href="https://decentralizedthoughts.github.io/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/">almost</a> everything that can be done in synchrony can be obtained in asynchrony. The next posts in this series are about <a href="https://decentralizedthoughts.github.io/2021-03-26-living-with-asynchrony-the-gather-protocol/">gather</a>, <a href="https://decentralizedthoughts.github.io/2021-09-29-the-round-complexity-of-reliable-broadcast/">round complexity</a>, and finally our series on <a href="https://decentralizedthoughts.github.io/2022-03-30-asynchronous-agreement-part-one-defining-the-problem/">Asynchronous Agreement</a>.</p>
+<p>We begin with <a href="https://core.ac.uk/download/pdf/82523202.pdf">Bracha’s Reliable Broadcast from 1987</a> (<a href="https://ecommons.cornell.edu/bitstream/handle/1813/6430/84-590.pdf?sequence=1&amp;isAllowed=y">conference version from 1984</a>). This is one of the most important build blocks for <a href="https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/">Byzantine Fault Tolerant</a> protocols in the <a href="https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/">Asynchronous model</a>. There are $n$ parties, where one of them is designated as the <em>leader</em>. The malicious <a href="https://decentralizedthoughts.github.io/2019-06-17-the-threshold-adversary/">threshold adversary</a> can corrupt at most $f&lt;n/3$ parties. The leader has some <em>input value</em> $v$ and a party that <em>terminates</em> needs to <em>output</em> a value.</p>
+<h2 id="reliable-broadcast-properties">Reliable Broadcast Properties</h2>
+<p><strong>(validity)</strong>: If the leader is non-faulty then eventually all non-faulty parties will output the leader’s input.</p>
+<p><strong>(totality)</strong>: If some non-faulty party outputs a value then eventually all non-faulty parties will output a value.</p>
+<p><strong>(agreement)</strong>: All non-faulty parties that output a value, output the same value.</p>
+<p>Since this protocol is supposed to work in the asynchronous model, these properties use the term <em>eventually</em>. This term is often used in asynchrony to indicate that no matter what the adversary does and for how long it delays messages, some event will occur after a bounded number of message processing at each party (assuming a bounded threshold adversary).</p>
+<h2 id="reliable-broadcast">Reliable Broadcast</h2>
+<p>The high level idea:</p>
+<ol>
+ <li>
+ <p>First, we force the leader to send just one value: we do this by requiring each party to <em>echo</em> just one message and wait for $n-f$ echo messages before <em>voting</em> for it. Since any two sets of $n-f$ must intersect by at least $f+1$ parties, it cannot be that two different non-faulty parties echo different values.</p>
+ </li>
+ <li>
+ <p>Second, we make sure that if a non-faulty <em>delivers</em> a value, then all non-faulty will. We do this by requiring a party to send just one vote after seeing either $n-f$ echo messages <em>or</em> after seeing $f+1$ votes. So if any party sees $n-f$ votes then all non-faulty will see $n-2f \geq f+1$ votes.</p>
+ </li>
+</ol>
+<p>The pseudo-code is simple:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> // leader with input v
+ send &lt;v&gt; to all parties
+ // Party j (including the leader)
+ echo = true
+ 
+ on receiving &lt;v&gt; from leader:
+ if echo == true:
+ send &lt;echo, v&gt; to all parties
+ echo = false
+ on receiving &lt;echo, v&gt; from n-f distinct parties:
+ send &lt;vote, v&gt; to all parties
+ on receiving &lt;vote, v&gt; from f+1 distinct parties:
+ send &lt;vote, v&gt; to all parties
+ on receiving &lt;vote, v&gt; from n-f distinct parties:
+ deliver v
+</code></pre></div></div>
+<h3 id="analysis">Analysis</h3>
+<p><strong>Claim 1 (validity)</strong>: If the leader is honest and sends <v> to all parties then all non-faulty will eventually deliver <v>.</v></v></p>
+<p><em>Proof:</em> All non-faulty will eventually send &lt;echo,v&gt;, so eventually all non-faulty will receive $n-f$ echoes for $v$ and at most $f$ echoes for other values. Hence all non-faulty will eventually send &lt;vote, v&gt;, so eventually all non-faulty will receive $n-f$ votes for $v$ and at most $f$ votes for other values.</p>
+<p><strong>Claim 2:</strong>: No two non-faulty will send conflicting votes.</p>
+<p><em>Proof:</em> Seeking a contradiction, consider the first vote for $v$ and the first vote for $v’ \neq v$ by two non-faulty parties $a$ and $b$. Since these are the first, party $a$ must have seen a set $A$ of $n-f$ echoes for $v$ and party $b$ must have seen a set $B$ of $n-f$ echoes for $v’ \neq v$ (since they are the first, they could not have voted due to seeing $f+1$ votes). Observe that since $|A|=|B|=n-f$, then $|A \cap B| \geq f+1$ (this is the famous “quorum intersection” property). This implies that there must be at least $f+1$ parties that sent an echo to both of them, which implies that at least one non-faulty party sent two echoes for different values, which contradicts the code.</p>
+<p><strong>Claim 3 (agreement and totality)</strong>: If a non-faulty delivers $v$, then all non-faulty will eventually deliver $v$.</p>
+<p><em>Proof:</em> From the previous claim, we know that all non-faulty that vote, will vote for the same value. So if a non-faulty delivers, it has seen $n-f$ distinct votes, of which at least $n-2f \geq f+1$ came from non-faulty parties. So all non-faulty parties will either vote $v$ due to seeing $n-f$ echoes or eventually due to seeing the votes from these $f+1$ non-faulty parties. Note that a non-faulty will never vote for $v’ \neq v$ because from claim 2, there will not be $n-f$ echoes for $v’$, and there will not be $f+1$ votes for $v’$.</p>
+<h3 id="notes">Notes</h3>
+<ol>
+ <li>
+ <p>The protocol only needs authenticated channels (no other cryptography).</p>
+ </li>
+ <li>
+ <p>Even in partial synchrony, the resilience threshold of $3f+1$ optimal due to the <a href="https://decentralizedthoughts.github.io/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/">DLS split brain</a> lower bounds.</p>
+ </li>
+ <li>
+ <p>Bracha used Reliable Broadcast to improve Ben-Or’s <a href="https://allquantor.at/blockchainbib/pdf/ben1983another.pdf">Asynchonrus Byzantine Agreement</a> from $n&gt;5f$ to the optimal resilience of $n&gt;3f$.</p>
+ </li>
+ <li>
+ <p>Reliable broadcast requires sending $O(n^2)$ messages that contain the value $v$. If $v$ has $\ell$ bits this is a total of $O(\ell n^2)$ bits. The post about <a href="https://decentralizedthoughts.github.io/2024-08-08-vid/">Verifiable Information dispersal</a> shows how this can be improved to $O(\ell n + n^2)$ bits.</p>
+ </li>
+ <li>
+ <p>Christian Cachin has <a href="https://dcl.epfl.ch/site/_media/education/sdc_byzconsensus.pdf">excellent course notes</a> on Byzantine Broadcasts and Randomized Consensus including Bracha’s Reliable broadcast.</p>
+ </li>
+</ol>
+<h3 id="scratch-your-brains">Scratch your Brains!</h3>
+<p>Prove correctness (or provide a counterexample) of the following optimization that simplifies Bracha’s original protocol and saves a round!</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> on receiving &lt;v&gt; from leader:
+ if echo == true:
+ send &lt;echo, v&gt; to all parties
+ echo = false
+ on receiving &lt;echo, v&gt; from f+1 distinct parties:
+ if echo == true:
+ send &lt;echo, v&gt; to all parties
+ echo = false
+ on receiving &lt;echo, v&gt; from n-f distinct parties:
+ deliver v
+</code></pre></div></div>
+<p><strong>Acknowledgment.</strong> We would like to thank <a href="https://twitter.com/VfRy8lQUeL9t4y6">hemengjie</a> for fixing an error in the exercise.</p>
+<p>Please answer/discuss/comment/ask on <a href="https://twitter.com/ittaia/status/1307772031954546697?s=20">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#asynchrony">asynchrony</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Living+with+Asynchrony%3A+Bracha%27s+Reliable+Broadcast&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2020-09-19-living-with-asynchrony-brachas-reliable-broadcast%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2020-09-14-broadcast-from-agreement-and-agreement-from-broadcast/" data-toggle="tooltip" data-placement="top" title="Broadcast from Agreement and Agreement from Broadcast">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2020-11-01-ebb-and-flow-protocols-a-resolution-of-the-availability-finality-dilemma/" data-toggle="tooltip" data-placement="top" title="Resolving the Availability-Finality Dilemma">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Two Round HotStuff</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham">
+ 
+ <meta name="description" content="In the first part of this post, we describe a single-shot variation of Two Round HotStuff (see HotStuff v1 paper, March 2018 and this March 2018 post) using Locked-Broadcast that follows a similar path as our previous posts on Paxos and Linear PBFT. In the second part, we describe a fully pipelined multi-shot State Machine Replication version of Two Round HotStuff that is similar to Casper FFG and Streamlet. For...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Two Round HotStuff">
+ <meta property="og:description" content="In the first part of this post, we describe a single-shot variation of Two Round HotStuff (see HotStuff v1 paper, March 2018 and this March 2018 post) using Locked-Broadcast that follows a similar path as our previous posts on Paxos and Linear PBFT. In the second part, we describe a fully pipelined multi-shot State Machine Replication version of Two Round HotStuff that is similar to Casper FFG and Streamlet. For...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham">
+ 
+ <meta property="og:article:published_time" content="2022-11-24T04:00:00-05:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2022-11-24-two-round-HS/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2022-11-24-two-round-HS/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Two Round HotStuff">
+ <meta property="twitter:description" content="In the first part of this post, we describe a single-shot variation of Two Round HotStuff (see HotStuff v1 paper, March 2018 and this March 2018 post) using Locked-Broadcast that follows a similar path as our previous posts on Paxos and Linear PBFT. In the second part, we describe a fully pipelined multi-shot State Machine Replication version of Two Round HotStuff that is similar to Casper FFG and Streamlet. For...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Two Round HotStuff</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham</strong><br>
+ 
+ <span class="post-meta">Posted on November 24, 2022</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>In the first part of this post, we describe a single-shot variation of Two Round HotStuff (see <a href="https://arxiv.org/pdf/1803.05069v1.pdf">HotStuff v1 paper, March 2018</a> and <a href="https://malkhi.com/posts/2018/03/bft-lens-casper/">this March 2018 post</a>) using <a href="https://decentralizedthoughts.github.io/2022-09-10-provable-broadcast/">Locked-Broadcast</a> that follows a similar path as our previous posts on <a href="https://decentralizedthoughts.github.io/2022-11-04-paxos-via-recoverable-broadcast/">Paxos</a> and <a href="https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/">Linear PBFT</a>.</p>
+<p>In the second part, we describe a fully pipelined multi-shot State Machine Replication version of Two Round HotStuff that is similar to <a href="https://arxiv.org/abs/1710.09437">Casper FFG</a> and <a href="https://decentralizedthoughts.github.io/2020-05-14-streamlet/">Streamlet</a>. For safety, we prove a stronger <strong>accountable safety</strong> statement inspired by <a href="https://arxiv.org/abs/1710.09437">Casper FFG</a>. For liveness, we present a “two option” view change inspired by <a href="https://arxiv.org/abs/2010.11454">Fast-HotStuff</a>. The responsiveness property of this “two option” view change is discussed and formally analyzed in the <a href="https://eprint.iacr.org/2023/397.pdf">HotStuff-2 manuscript</a> and the corresponding <a href="https://decentralizedthoughts.github.io/2023-04-01-hotstuff-2/">HotStuff-2 blog post</a>.</p>
+<p>The model is <a href="https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/">partial synchrony</a> with $f&lt;n/3$ <a href="https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/">Byzantine failures</a>.</p>
+<h1 id="part-one-single-shot-two-round-hotstuff-with-rotating-leaders">Part one: single-shot two-round HotStuff with rotating leaders</h1>
+<p>The simplified single-shot two-round HotStuff variation captures the essence of the <a href="https://tendermint.com/static/docs/tendermint.pdf">Tendermint</a> view change protocol (also see more recent <a href="https://arxiv.org/pdf/1807.04938.pdf">Tendermint paper</a>) which reduces the size of the view change messages relative to PBFT.</p>
+<p>We use the same view based framework as in the <a href="https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/">PBFT post</a>:</p>
+<ol>
+ <li>The goal in this part is single-shot agreement with external validity.</li>
+ <li>Using a view-based protocol where view $v$ has primary $v \bmod n$ and is the time interval $[v(10 \Delta),(v+1)(10 \Delta))$.</li>
+ <li>As in PBFT, the protocol uses <a href="https://decentralizedthoughts.github.io/2022-09-10-provable-broadcast/">Locked-Broadcast</a>.</li>
+</ol>
+<p>Here is the outer-shell pseudocode which is (almost) the same as the outer-shell pseudocode in the <a href="https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/">PBFT post</a>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Two-round HotStuff single-shot protocol
+View 1 primary:
+ TNDRMNT-LB(1, val, val-proof)
+View v&gt;1 primary:
+ (p, p-proof) := TNDRMNT-RML(v)
+ if p = bot then 
+ TNDRMNT-LB(v, val, val-proof)
+ otherwise 
+ TNDRMNT-LB(v, p, p-proof)
+ 
+Upon delivery-certificate dc for (v,x)
+ send (v, x, dc) to all
+All parties:
+Upon valid delivery-certificate dc for (v,x)
+ output x 
+</code></pre></div></div>
+<p>A minor difference is that when $p= \bot$ then $p{-}proof$ is not sent in the Locked-Broadcast.</p>
+<p>The major difference is in the Recover-Max Lock ($TNDRMNT-RML$) sub-protocol and the external validity of the Locked-Broadcast ($TNDRMNT-LB$) sub-protocol:</p>
+<ol>
+ <li><em>Recover max lock</em> protocol: In PBFT a set of $n-f$ lock-certificates is used to prove the maximum view lock certificate is used. In HS, just <strong>one</strong> lock-certificate is used to prove that it is a valid lock certificate (but not that it is the maximum). This is where Tendermint-based protocols (like Two Round HotStuff) save on message size.</li>
+ <li>The <em>external validity</em> of the <em>Locked-Broadcast</em> $EV_{\text{LB}}$ is changed from $EV_{\text{LB-PBFT}}$ to $EV_{\text{LB-TNDRMNT}}$ to work with the change above in the Recover Max Lock protocol. In PBFT, the proposed value’s lock certificate is compared relative to $n-f$ parties’ locks. In Tendermint-based protocols (like Two Round HotStuff) the proposed value’s lock certificate is compared relative to the recipient’s highest lock certificate.</li>
+</ol>
+<p>We go over these changes in more detail:</p>
+<h3 id="recover-max-lock-for-tendermint-based-protocols">Recover-Max Lock for Tendermint-based protocols</h3>
+<p>The <code class="language-plaintext highlighter-rouge">TNDRMNT-RML(v)</code> protocol for view $v$ finds the lock-certificate with the highest view and returns only the associated value and the lock-certificate (unlike PBFT which returns all $n-f$ lock certificates).</p>
+<p>The other major change in <code class="language-plaintext highlighter-rouge">TNDRMNT-RML(v)</code> is an additional wait of $\Delta$ at the primary (in addition to waiting for at least $n-f$). This additional wait is not needed if there is a lock-certificate from the previous view (because it’s clearly the highest).</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>TNDRMNT-RML(v):
+Party i upon start of view v:
+ send &lt;echoed-max(v, v', p, LC(v',p) )&gt;_i 
+ of the highest view v' it has a lock-certificate LC(v',p)
+ or send &lt;echoed-max(v, bot)&gt;_i 
+ it does not have any lock-certificate
+Primary waits for:
+ (1) at least n-f valid responses &lt;echoed-max(v,*)&gt;; and
+ (2) Delta time or one of the responses has a lock-certificate from view v-1:
+ if all are bot then output (bot, bot)
+ otherwise, output (proposal, LC(v',proposal)) 
+ where proposal is associated with the highest view in responses
+ and LC(v',proposal) is the associated lock-certificate
+</code></pre></div></div>
+<p>An <code class="language-plaintext highlighter-rouge">&lt;echoed-max(v, v', p, LC(v',p) )&gt;_i</code> is valid if it’s the first message for view $v$ signed by $i$ and the lock-certificate $LC$ is valid for view $v’$ and value $p’$ ($LC$ implies $n-f$ unique signatures from view $v’$ on $p’$).</p>
+<h3 id="external-validity-for-the-locked-broadcast-of-tendermint-based-protocols">External Validity for the Locked-Broadcast of Tendermint-based protocols</h3>
+<p>$EV_{\text{LB-TNDRMNT}}$ checks the validity relative to the <code class="language-plaintext highlighter-rouge">TNDRMNT-RML(v)</code> protocol. Unlike the $EV_{\text{LB-PBFT}}$ check, the $EV_{\text{LB-TNDRMNT}}$ verification is <em>stateful</em>, the check compares the input to the highest lock-certificate that the party has seen.</p>
+<p>To be explicit about this, each party maintains state <code class="language-plaintext highlighter-rouge">my-lock</code> that contains the lock-certificate with the highest view it saw. Denote by <code class="language-plaintext highlighter-rouge">view(my-lock)</code> the view number of this lock-certificate. Initially <code class="language-plaintext highlighter-rouge">my-lock := bot</code> and <code class="language-plaintext highlighter-rouge">view(my-lock) := 0</code>.</p>
+<p>Define $EV_{\text{LB-TNDRMNT}}$:</p>
+<p>For view 1, nothing changes, just check external validity of the consensus protocol: $EV_{\text{LB-TNDRMNT}}(1, val, val{-}proof)= EV_{\text{consensus}}(val, val{-}proof)$.</p>
+<p>For view $v&gt;1$ there are two cases:</p>
+<ol>
+ <li>Given a 3-tuple $(v, val, val{-}proof$:
+ <ol>
+ <li>Check that $view(my{-}lock) = 0$.</li>
+ <li>Check that $EV_{\text{consensus}}(val, val{-}proof)=1$.</li>
+ </ol>
+ </li>
+ <li>Otherwise, given a 3-tuple $(v, p, p{-}proof)$:
+ <ol>
+ <li>Check that $p{-}proof$ is a valid lock-certificate $LC(v’,p’)$ for view $v’$ and value $p’$.</li>
+ <li>Check that $view(my{-}lock) \leq v’$</li>
+ <li>Check that $p=p’$.</li>
+ </ol>
+ </li>
+</ol>
+<p>In words: the external validity check (inside the Locked-Broadcast) makes sure that the proposed value has a valid lock-certificate that has a view that is at least as high as the view of the lock-certificate this server currently holds.</p>
+<p>The <code class="language-plaintext highlighter-rouge">TNDRMNT-RML(v)</code> and $EV_{\text{LB-TNDRMNT}}$ are defined. This fully defines the single-shot consensus protocol. Let’s prove Agreement and Liveness (the Validity argument is the same as in PBFT).</p>
+<h3 id="agreement-accountable-safety">Agreement (accountable safety)</h3>
+<p><strong>Accountable safety lemma</strong>: Let $v^{\star}$ be the first view with a commit-certificate, say on $(v^\star, x)$, then for any view $v\geq v^\star$, if a lock-certificate forms for view $v$ with value $x’ \neq x$ then at least $f+1$ parties can be detected as malicious.</p>
+<p><em>Note: this is stronger than proving Agreement assuming at most $f$ corruptions. It also says that no matter how many corruptions the adversary can do, if it breaks Agreement then at least $f+1$ parties can be detected (and perhaps punished).</em></p>
+<p><em>Proof of accountable safety lemma</em>: Let $S_1$ be the set of $n-f$ parties that signed the lock-certificate for $v^\star$ and $S_2$ be the set of $n-f$ parties that signed the delivery-certificate for view $v^\star$. Let $v^-$ be the <em>first</em> view after view $v^\star$ for which there is a lock-certificate for a value $x’ \neq x$. Let $L$ be the set of parties that signed this lock-certificate.</p>
+<p>The first case is if $v^- = v^\star$. In this case due to quorum intersection, there are at least $n-2f \geq f+1$ parties in the intersection of $S_1 \cap L$ that must have violated the protocol by signing two different values in the same view. The two lock-certificates from $S_1$ and $L$ contain irrefutable cryptographic evidence of their misbehavior.</p>
+<p>The second case is if $v^- &gt; v^\star$, here we use the minimality assumption on $v^-$ to ensure the only non-$x$ lock-certificates must be for a view that is less than $v^\star$. In this case due to quorum intersection, there are at least $n-2f \geq f+1$ parties in the intersection of $S_2 \cap L$ that must have violated the protocol $EV_{\text{LB-TNDRMNT}}$ by accepting (and signing) on a proposal in view $v^- &gt; v^\star$ that has a lock-certificate whose view is smaller than $v^\star$, but they signed (as members of $S_2$) that they had a lock-certificate in view $v^\star$. The delivery certificate from $S_2$ and the lock certificate from $L$ contain irrefutable cryptographic evidence of their misbehavior. 
+This concludes the proof of Safety Lemma.</p>
+<h3 id="liveness">Liveness</h3>
+<p>The only difference relative to the Liveness proof for <a href="https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/">PBFT</a> is that we need to show that all honest parties will verify $EV_{\text{LB-TNDRMNT}}$ for any honest primary proposal. This is where the additional wait for $\Delta$ time in the gathering phase of <code class="language-plaintext highlighter-rouge">TNDRMNT-RML(v)</code> is required - it guarantees that after GST, by waiting for $\Delta$ time, the primary will hear from all honest parties, to choose the lock-certificate that is high enough to verify $EV_{\text{LB-TNDRMNT}}$ for all honest parties.</p>
+<p>There is no need to wait if there is a lock-certificate from the previous view because this is clearly the highest possible view so it will be accepted by all honest parties.</p>
+<p>This concludes the proof of Liveness.</p>
+<h3 id="time-and-message-complexity">Time and Message Complexity</h3>
+<p>Like PBFT, the time complexity is $O(f \Delta)$.</p>
+<p>Unlike PBFT, the size of a proposal message is just one lock-certificate instead of $n-f$ lock-certificates. With a threshold signature setup, the size of a lock-certificate can also be a constant (in the security parameter). So the total number of messages is $O(n^2)$ and the size of each message can be just $O(1)$ words - where a word contains a constant number of values and cryptographic signatures.</p>
+<h1 id="part-two-pipelined-multi-shot-state-machine-replication-two-round-hotstuff">Part two: pipelined multi-shot State Machine Replication two-round HotStuff</h1>
+<p>The protocol revolves around a data structure which is a chain of blocks and three certificates (each certificate is a set of $n-f$ signatures on the block). Let’s define:</p>
+<p>A <code class="language-plaintext highlighter-rouge">block</code> $B$ contains a triplet $B=(cmd, view, pointer)$ where <em>cmd</em> is an externally valid client command, <em>view</em> is the view this block was proposed in, and <em>pointer</em> is a link to a previous block (that has a smaller view).</p>
+<p>A <code class="language-plaintext highlighter-rouge">chain</code> is just a chain of <code class="language-plaintext highlighter-rouge">block</code>s that starts with an empty <code class="language-plaintext highlighter-rouge">genesis block</code> of view 0 and empty pointer. The views in the chain are monotonic but not necessarily sequential. Some examples:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(Genesis,0)
+(Genesis,0)&lt;-(c1,1)
+(Genesis,0)&lt;-(c1,1)&lt;-(c2,2)
+(Genesis,0)&lt;-(c1,1)&lt;-(c2,2)&lt;-(c4,4)
+</code></pre></div></div>
+<p>The last block which also has the highest view in a chain is called the <code class="language-plaintext highlighter-rouge">tip</code> of the chain.</p>
+<p>A <code class="language-plaintext highlighter-rouge">block-cert</code> for a block $B$ is a set of $n-f$ distinct signatures on $B$. We assume the <code class="language-plaintext highlighter-rouge">genesis block</code> implicitly has a block-cert.</p>
+<p>A <code class="language-plaintext highlighter-rouge">valid chain</code> is a <code class="language-plaintext highlighter-rouge">chain</code> with a <code class="language-plaintext highlighter-rouge">commit-cert</code> and a <code class="language-plaintext highlighter-rouge">lock-cert</code>. Both are defined below:</p>
+<p>A <code class="language-plaintext highlighter-rouge">commit-cert</code> for a block $B=(cmd, view, pointer)$ on a <code class="language-plaintext highlighter-rouge">valid chain</code> that is not the genesis is:</p>
+<ol>
+ <li>A <code class="language-plaintext highlighter-rouge">block-cert</code> for $B$; and</li>
+ <li>A second block $B’=(cmd, view+1, pointer{-}to{-}B)$ with a <code class="language-plaintext highlighter-rouge">block-cert</code> for $B’$.</li>
+</ol>
+<p>Importantly, $B’$ does not have to be part of the <code class="language-plaintext highlighter-rouge">valid chain</code>, but its view must be exactly one more than $B$’s view.</p>
+<p>By default, if there is no explicit pair of consecutive block-certificates that forms a commit certificate, we say that the <code class="language-plaintext highlighter-rouge">valid chain</code> has a <code class="language-plaintext highlighter-rouge">commit-cert</code> on the <code class="language-plaintext highlighter-rouge">genesis block</code>.</p>
+<p>Given a <code class="language-plaintext highlighter-rouge">commit-cert</code> for block $B$, we call the chain from $B$ to the <code class="language-plaintext highlighter-rouge">genesis block</code> the <code class="language-plaintext highlighter-rouge">committed chain</code>.</p>
+<p>A <code class="language-plaintext highlighter-rouge">lock-cert</code> is a <code class="language-plaintext highlighter-rouge">block-cert</code> for a block $B$ that is on the <code class="language-plaintext highlighter-rouge">valid chain</code> but not part of the <code class="language-plaintext highlighter-rouge">committed chain</code>.</p>
+<p>The <code class="language-plaintext highlighter-rouge">lock-cert</code> can be the <code class="language-plaintext highlighter-rouge">block-cert</code> on the second block of the <code class="language-plaintext highlighter-rouge">commit-cert</code>. In this case, this second block must be part of the <code class="language-plaintext highlighter-rouge">valid chain</code>. By default, if there is no explicit lock-cert, we say that the <code class="language-plaintext highlighter-rouge">valid chain</code> has a <code class="language-plaintext highlighter-rouge">lock-cert</code> on the <code class="language-plaintext highlighter-rouge">genesis block</code>.</p>
+<p>Some examples of valid chains:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(Genesis,0)
+(Genesis,0)&lt;-(c1,1)&lt;-(c2,2)&lt;-(c4,4)&lt;-(c5,5)
+Commit-cert on (c1,1), (c2,2). Lock-cert on (c2,2)
+(Genesis,0)&lt;-(c1,1)&lt;-(c2,2)&lt;-(c3,3)&lt;-(c4,4)&lt;-(c5,5)
+Commit-cert on (c1,1), (c2,2). Lock-cert on (c4,4)
+(Genesis,0)&lt;-(c1,1)&lt;-(c2,2)&lt;-(c4,4)&lt;-(c5,5)
+Commit-cert on (c2,2), (c3,3). Lock-cert on (c5,5)
+</code></pre></div></div>
+<ol>
+ <li>The first example is an empty chain. By default, it implicitly has a commit-cert and lock-cert on the genesis.</li>
+ <li>Second example shows a commit-cert and lock-cert that share the block-cert of a block from view 2.</li>
+ <li>Third example shows a lock-cert is on a block of view 4 and there are more blocks after the lock-cert (in this case a block from view 5).</li>
+ <li>Fourth example shows a commit-cert that uses a block-cert $(c3,3)$ that supports the block-cert on $(c2,2)$ but this supporting block $(c3,3)$ is <strong>not</strong> on the chain.</li>
+</ol>
+<h2 id="the-protocol">The protocol</h2>
+<p>Each party stores a <code class="language-plaintext highlighter-rouge">valid chain</code> in a variable called <code class="language-plaintext highlighter-rouge">my-chain</code> which stores the valid chain with the <code class="language-plaintext highlighter-rouge">lock-cert</code> of highest view.</p>
+<p>Protocol for view $v$:</p>
+<p>On the start of view $v$, each party sends its signature on its valid chain to the primary of view $v$:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Party i:
+On start view v
+ Send &lt;"start view", v, my-chain&gt;_i to view v primary
+</code></pre></div></div>
+<p>The primary of view $v$ waits for at least $n-f$ valid responses, and if they are not the same, then also waits $\Delta$ time. There are two cases:</p>
+<ol>
+ <li>If $n-f$ parties send the <em>same</em> valid chain, and its tip is from view $v-1$ then:
+ <ol>
+ <li>The primary creates a <em>new</em> block-cert for the tip and updates the lock-cert to be this new block-certificate <code class="language-plaintext highlighter-rouge">chain.updateLockCert(tip(chain))</code>.</li>
+ <li>If a new commit-cert is formed (because both the block in view $v-1$ and the block in $v-2$ now have block-certificates) then update the commit-cert to be this new pair <code class="language-plaintext highlighter-rouge">chain.updateCommitCert()</code>.</li>
+ <li>The primary appends its new block as the new tip.</li>
+ </ol>
+ </li>
+ <li>Otherwise the primary chooses the valid chain with the lock-certificate of the highest view and appends its new block to it as the new tip.</li>
+</ol>
+<p>Finally, the primary sends this as the proposal for view $v$ to all parties.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Primary of view v:
+Wait for either:
+ 1. n-f &lt;"start view", v, chain&gt; are the same and tip(chain).view = v-1; or
+ 2. n-f valid &lt;"start view", v, *&gt; and waiting Delta time
+If n-f &lt;"start view", v, chain&gt; are the same and tip(chain).view = v-1
+ chain.updateLockCert(tip(chain))
+ If a new commit-cert created
+ chain.updateCommitCert()
+ chain.addTip(cmd, v)
+ my-chain := chain
+ 
+Otherwise
+ Let h-chain be the valid chain 
+ with the lock-cert of highest view in &lt;"start view", v, *&gt; messages
+ h-chain.addTip(cmd, v)
+ my-chain := h-chain
+ 
+Send &lt;"propose", v, my-chain&gt; to all
+</code></pre></div></div>
+<p>When a party sees a proposal chain from the view $v$ primary it checks:</p>
+<ol>
+ <li>That its view is still $v$;</li>
+ <li>That this is the first such message from the primary;</li>
+ <li>That the proposal is a valid chain with a valid lock-cert and a valid commit-cert;</li>
+ <li>That all the blocks after the lock-cert of the proposed chain contain externally valid commands;</li>
+ <li>That the lock-cert of the proposed chain has a view that is at least as high as the view of the lock-cert of <code class="language-plaintext highlighter-rouge">my-chain</code>.</li>
+ <li>If all these checks pass, then:
+ <ol>
+ <li>If the proposed chain has a commit-cert for a higher view than that of <code class="language-plaintext highlighter-rouge">my-chain</code> then 
+ execute the blocks in between the previous commit-cert and the new commit-cert.</li>
+ <li>Update <code class="language-plaintext highlighter-rouge">my-chain</code> to the new proposed chain, so it will be signed as part of the “start view” of view $v+1$.</li>
+ </ol>
+ </li>
+</ol>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Party i:
+ Upon &lt;"propose", v, chain&gt; from primary
+ Check your view is v
+ Check this is the first view v proposal
+ Check that chain is valid (has valid lock-cert and commit-cert)
+ Check that all blocks after chain.lock-cert are externally valid
+ Check that chain.lock-cert.view &gt;= my-chain.lock-cert.view
+ 
+ If chain.commit-cert.view &gt; my-chain.commit-cert.view
+ execute commands between the two commit-certs
+ my-chain := chain 
+ 
+ 
+ If the view v timer expires then start view v+1
+ 
+</code></pre></div></div>
+<h3 id="accountable-safety">Accountable Safety</h3>
+<p><strong>Theorem</strong>: Assuming $f&lt;n/3$, for any two valid <code class="language-plaintext highlighter-rouge">committed chain</code>, one chain is a sub-chain of the other.</p>
+<p>We prove this theorem via the following accountable safety lemma which is a stronger statement. It shows that even if the adversary controls more than $f$ parties, if agreement is violated then at least $f+1$ parties can be detected (and potentially punished).</p>
+<p><strong>Accountable safety lemma</strong>: If there is a commit-cert that consists of two block-certs on two blocks $B_1$ and $B_2$ of consecutive views $v^\star$ and $v^\star +1$ and a lock-cert on block $B_3$ in view $v \geq v^\star$ such that $B_1$ is not a prefix of $B_3$ then at least $f+1$ parties can be detected as malicious.</p>
+<p><em>Proof of the accountable safety lemma:</em></p>
+<p>Let $v^-$ be the <em>first</em> view after view $v^\star$ for which there is a block-cert for a block $B’$ such that $B_1$ is not a prefix of $B’$. Let $L$ be the set of $n-f$ parties that singed the block-cert for $B’$.</p>
+<p>Let $S_1$ be the set of $n-f$ parties that singed the block-cert for $B_1$ and $S_2$ be the set of $n-f$ parties that singed the block-cert for $B_2$.</p>
+<p>The first case is if $v^- = v^\star$. In this case due to quorum intersection, there are at least $n-2f \geq f+1$ parties in the intersection of $S_1 \cap L$ that must have violated the protocol by signing two different blocks in the same view $v^\star$. The two block-certs from $S_1$ and $L$ contain irrefutable cryptographic evidence of at least $f+1$ parties that misbehaved.</p>
+<p>An example of this violation, members of $S_1 \cap L$ signed in view 2 on both $c2$ and $c4$.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(Genesis,0)&lt;-(c1,1)&lt;-(c2,2)&lt;-(c3,3)
+(Genesis,0)&lt;-(c1,1)&lt;-(c4,2)
+ 
+(B1,B2) = Commit-cert on (c2,2)&lt;-(c3,3)
+B' = Lock cert on (c4,2)
+</code></pre></div></div>
+<p>The second case is if $v^- = v^\star +1$. This case is identical to the first case but with the sets $S2$ (signers of $B_2$) and $L$ (signers of $B’$). There are at least $n-2f \geq f+1$ parties in the intersection of $S_2 \cap L$ that must have violated the protocol by signing two different blocks in the same view $v^\star +1$.</p>
+<p>An example of this violation, members of $S_2 \cap L$ signed in view 3 on both $c3$ and $c4$.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(Genesis,0)&lt;-(c1,1)&lt;-(c2,2)&lt;-(c3,3)
+(Genesis,0)&lt;-(c1,1)&lt;-(c4,3)
+ 
+(B1,B2) = Commit-cert on (c2,2)&lt;-(c3,3)
+B' = Lock cert on (c4,3)
+</code></pre></div></div>
+<p>The third case is if $v^- &gt; v^\star + 1$, here we use the minimality assumption on $v^-$ to ensure the only blocks with a lock-cert that do not contain $B_1$ must be for a view that is less than $v^\star$. In this case due to quorum intersection, there are at least $n-2f \geq f+1$ parties in the intersection of $S_2 \cap L$ that must have violated the protocol by signing on a proposal chain in view $v^- &gt; v^\star +1$ that has a lock-cert whose view is <em>smaller</em> than $v^\star$, but as members of $S_2$, they previously signed (in view $v^\star +1$) that they had a valid chain with a lock-cert of a block of view $v^\star$. This is a violation of <code class="language-plaintext highlighter-rouge">Check that chain.lock-cert.view &gt;= my-chain.lock-cert.view</code>. The delivery certificate from $S_2$ and the lock certificate from $L$ contain irrefutable cryptographic evidence of their misbehavior.</p>
+<p>An example of this violation, the members of $L \cap S_2$: in view $3$ they declared their highest lock-cert is from view 2, but in view 5 they signed a proposed chain that has a strictly lower view lock-cert (either 0 or block-cert on view 1) that created a lock-cert on a view 5 block at view 6.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(Genesis,0)&lt;-(c1,1)&lt;-(c2,2)&lt;-(c3,3)
+(Genesis,0)&lt;-(c1,1)&lt;-(c5,5)
+ 
+(B1,B2) = Commit-cert on (c2,2)&lt;-(c3,3)
+B' = Lock cert on (c5,5)
+</code></pre></div></div>
+<p>This concludes the proof of accountable safety.</p>
+<h3 id="liveness-1">Liveness</h3>
+<p><strong>Theorem</strong>: There will be a commit-cert after the first three consecutive honest primaries after GST.</p>
+<p><em>Proof sketch</em></p>
+<ol>
+ <li>Assuming perfect clock synchronization to obtain view synchronization.</li>
+ <li>In the worst case the first honest primary will wait for $\Delta$ time so it hears the valid chain with the lock-certificate of the highest view among all honest parties.</li>
+ <li>Need 3 consecutive honest parties. The first creates valid proposal; the second creates the first block-cert on it; the third creates the second block-cert on the block with one view above it, so a commit cert is formed and sent to all parties.</li>
+</ol>
+<p>We will show in later posts how to use other mechanisms for view synchronization.</p>
+<h3 id="using-an-authenticated-data-structure">Using an authenticated data structure</h3>
+<p>The way the protocol is described, parties send back and forth the whole chain. This is not bandwidth efficient. Instead, we view the chain as an authenticated data structure. For example, the hash of the tip can be used as a digest of a simple hash chain authenticated structure.</p>
+<p>The protocol can send the <em>digest</em> of the chain instead of the chain. Any data this is missing for validation can be requested in a separate mechanism along with a proof that this is the correct data relative to the digest.</p>
+<p>Comments on <a href="https://twitter.com/ittaia/status/1599913117965725696?s=20&amp;t=RUTyrxNgaIvudyiV5O5IAA">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Two+Round+HotStuff&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2022-11-24-two-round-HS%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2022-11-20-pbft-via-locked-braodcast/" data-toggle="tooltip" data-placement="top" title="Linear PBFT: a gentle introduction to Practical Byzantine Fault Tolerance">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2022-12-12-what-about-validity/" data-toggle="tooltip" data-placement="top" title="What about Validity?">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

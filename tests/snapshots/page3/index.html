@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Decentralized Thoughts</title>
+ 
+ 
+ <meta name="author" content="{"name"=>"Decentralized Thinkers"}">
+ 
+ <meta name="description" content="Decentralized thoughts about decentralization">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Decentralized Thoughts">
+ <meta property="og:description" content="Decentralized thoughts about decentralization">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="website">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/page3/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/page3/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Decentralized Thoughts">
+ <meta property="twitter:description" content="Decentralized thoughts about decentralization">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+<div class="posts-list">
+ 
+ <article class="post-preview">
+ <a href="/2024-01-28-early-stopping-lower-bounds/">
+ <h2 class="post-title">Early Stopping, Same but Different: Two Rounds Are Needed Even in Failure Free Executions</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on January 28, 2024, by <b>Ittai Abraham and Gilad Stern</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ TL;DR: Even in failure-free executions, consensus protocols resilient to crash failures often require at least two rounds. This follows from the early stopping lower bound: executions with $f$ actual crashes require at least $\min {f+2, t+1}$ rounds when tolerating $t$ possible failures. Thus, the possibility of a failure forces extra rounds, even when no failures occur.
+ 
+ 
+ <a href="/2024-01-28-early-stopping-lower-bounds/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#lowerbound">lowerbound</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/2024-01-09-gather-with-binding-and-verifiability/">
+ <h2 class="post-title">Gather with Binding and Verifiability</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on January 9, 2024, by <b>Gilad Stern and Ittai Abraham</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ We extend the Gather protocol with two important properties: Binding and Verifiability. This post is based on and somewhat simplifies the information theoretic gather protocol in our recent ACS work with Gilad Asharov and Arpita Patra.
+ 
+ 
+ <a href="/2024-01-09-gather-with-binding-and-verifiability/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#research">research</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/2023-10-30-Analysis-Nakamoto/">
+ <h2 class="post-title">Simpler Security proof for Nakamoto Consensus</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on October 30, 2023, by <b>Ling Ren</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Four years ago (time flies!), I made a post on a simple security proof for Nakamoto consensus. While the proof intuition, as outlined in that post, is still reasonably simple, the actual proof has become quite delicate and crafty over the years. What happened was that some colleagues – Chen Feng at UBC and Dongning Guo at Northwestern – identified very subtle flaws in the proof, and clever mathematical maneuvers...
+ 
+ 
+ <a href="/2023-10-30-Analysis-Nakamoto/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#blockchain101">blockchain101</a>
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/2023-09-30-scaling/">
+ <h2 class="post-title">Scaling Blockchains: the Power of Batching</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on September 30, 2023, by <b>Ittai Abraham</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ A few years ago if you asked “Can blockchains scale?” most people would give three reasons why, fundamentally, the answer is “No!”
+ 
+ 
+ <a href="/2023-09-30-scaling/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/2023-09-01-FFT/">
+ <h2 class="post-title">The Fast Fourier Transform over finite fields</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on September 1, 2023, by <b>Ittai Abraham</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ The Fast Fourier Transform (FFT) developed by Cooley and Tukey in 1965 has its origins in the work of Gauss. The FFT, its variants and extensions to finite fields, are a fundamental algorithmic tool and a beautiful example of interplay between algebra and combinatorics. There are many great resources on FFT, see ingopedia’s curated list.
+ 
+ 
+ <a href="/2023-09-01-FFT/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#math">math</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/2023-07-22-agreeemnt-on-a-core-set/">
+ <h2 class="post-title">Asynchronous Agreement on a Core Set</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on July 22, 2023, by <b>Gilad Stern, Ittai Abraham</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ A challenging step in many asynchronous protocols is agreeing on a set of parties that completed some task. For example, an asynchronous protocol might start off with parties reliably broadcasting a value. Due to asynchrony and having $\leq f$ corruptions, honest parties can only wait for $n-f$ parties to complete the task. Parties may need to agree on a core set of $n-f$ such broadcasts and use them in the...
+ 
+ 
+ <a href="/2023-07-22-agreeemnt-on-a-core-set/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ <a href="/tags#asynchrony">asynchrony</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/2023-07-21-ppos2/">
+ <h2 class="post-title">Can we Obtain Privacy in a Private Proof-of-Stake Blockchain? Part-II</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on July 21, 2023, by <b>Chenghong Wang, Kartik Nayak</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ This is Part-II of a two-part post on privacy in private proof-of-stake blockchains. In Part-I, we explored attacks on existing private PoS approaches. In this post, we will discuss some ways to obtain privacy (at the expense of safety and/or liveness).
+ 
+ 
+ <a href="/2023-07-21-ppos2/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ <a href="/tags#research">research</a>
+ 
+ <a href="/tags#privacy">privacy</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/2023-07-21-ppos1/">
+ <h2 class="post-title">Can we Obtain Privacy in a Private Proof-of-Stake Blockchain? Part-I</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on July 21, 2023, by <b>Chenghong Wang, Kartik Nayak</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In this two-part post, we focus on the challenges and subtleties involved in obtaining privacy in private proof-of-stake (PoS) blockchains. For instance, designs that attempt to obtain privacy for transaction details while still relying on PoS, such as Ouroboros Crypsinous. The first part explains attacks on existing approaches, and the second part focuses on potential workarounds using differential privacy. These posts explain the intuitive ideas behind the works of Madathil...
+ 
+ 
+ <a href="/2023-07-21-ppos1/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ <a href="/tags#research">research</a>
+ 
+ <a href="/tags#privacy">privacy</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/2023-07-09-CAP-two-servers-in-psynch/">
+ <h2 class="post-title">The CAP Theorem and why State Machine Replication for Two Servers and One Crash Failure is Impossible in Partial Synchrony</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on July 9, 2023, by <b>Ittai Abraham</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In 1999, Fox and Brewer published a paper on the CAP principle, where they wrote:
+ 
+ 
+ <a href="/2023-07-09-CAP-two-servers-in-psynch/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#lowerbound">lowerbound</a>
+ 
+ <a href="/tags#SMR">SMR</a>
+ 
+ <a href="/tags#crash">crash</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/2023-06-26-dls-meets-rollback/">
+ <h2 class="post-title">$3f+1$ is needed in Partial Synchrony even against a Rollback adversary</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on June 26, 2023, by <b>Ittai Abraham</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In this post we show that trusted execution environments (TEEs) don’t help against the classic $3f$ lower bound for partial synchrony, when these TEEs have no persistent storage, against a rollback adversary.
+ 
+ 
+ <a href="/2023-06-26-dls-meets-rollback/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#lowerbound">lowerbound</a>
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/2023-04-17-blockchainsplustees-day2-summary/">
+ <h2 class="post-title">Blockchains + TEEs Day 2 Summary</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on April 17, 2023, by <b>Kartik Nayak, Ittai Abraham, Aniket Kate</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ This is the second of the two part post on the workshop on Blockchains + TEEs that concluded last week. Here are the key ideas from Day 2. You can find the post summarizing Day 1 here.
+ 
+ 
+ <a href="/2023-04-17-blockchainsplustees-day2-summary/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/2023-04-09-blockchainsplustees-day1-summary/">
+ <h2 class="post-title">Blockchains + TEEs Day 1 Summary</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on April 9, 2023, by <b>Kartik Nayak, Ittai Abraham, Aniket Kate</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Our workshop on Blockchains + TEEs concluded last week. We had a fantastic series of talks and discussions on both days of the workshop. In this two part post, we highlight some key takeaways from each of the days.
+ 
+ 
+ <a href="/2023-04-09-blockchainsplustees-day1-summary/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/2023-04-01-hotstuff-2/">
+ <h2 class="post-title">What is the difference between PBFT, Tendermint, HotStuff, and HotStuff-2?</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on April 1, 2023, by <b>Kartik Nayak, Dahlia Malkhi</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ We recently published our work HotStuff-2 on eprint, introducing a two-phase HotStuff variant which simultaneously achieves $O(n^2)$ worst-case communication, optimistically linear communication, a two-phase commit regime within a view, and optimistic responsiveness in partially-synchronous BFT.
+ 
+ 
+ <a href="/2023-04-01-hotstuff-2/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ <a href="/tags#research">research</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/2023-02-19-rand-and-consensus-2/">
+ <h2 class="post-title">Randomization and Consensus - synchronous binary agreement for minority omission failures</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on February 19, 2023, by <b>Ittai Abraham</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Continuing the series on simple ways where randomization can help solve consensus. The model is lock-step (synchrony) with $f&amp;lt;n/2$ omission failures. We know that in the worst case reaching agreement takes at least $f+1$ rounds. Can randomization help reduce the expected number of rounds? In the post, we show a simple randomized consensus algorithm including a simple weak coin protocol that works against a weak adaptive adversary.
+ 
+ 
+ <a href="/2023-02-19-rand-and-consensus-2/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#omission">omission</a>
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ <a href="/tags#randomness">randomness</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/2023-02-18-rand-and-consensus-1/">
+ <h2 class="post-title">Randomization and Consensus - synchronous binary agreement for crash failures with a perfect common coin</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on February 18, 2023, by <b>Ittai Abraham</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ What is the simplest setting where randomization can help solve consensus? Assume lock-step (synchrony) with $f&amp;lt;n$ crash failures. We know that in the worst case reaching agreement takes at least $f+1$ rounds. This lower bound holds even if the protocol is randomized so the natural question is:
+ 
+ 
+ <a href="/2023-02-18-rand-and-consensus-1/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ <a href="/tags#consensus101">consensus101</a>
+ 
+ <a href="/tags#randomness">randomness</a>
+ 
+ <a href="/tags#crash">crash</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/2023-01-30-player-replaceability-forensic-support/">
+ <h2 class="post-title">Can we Obtain Player Replaceability and Forensic Support Simultaneously?</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on January 30, 2023, by <b>Peiyao Sheng, Gerui Wang, Kartik Nayak, Sreeram Kannan, Pramod Viswanath</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Forensic support is an important property of BFT protocols that addresses the other side of security: what happens when the number of malicious parties exceeds the allowable threshold? In a previous post, we systematically studied different BFT protocols to assess their ability to detect and prove malicious behavior when safety is violated. We learned that protocols such as PBFT and HotStuff with ${\sf poly}(n)$ communication have strong forensic support, meaning...
+ 
+ 
+ <a href="/2023-01-30-player-replaceability-forensic-support/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#research">research</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/2023-01-12-what-are-blockchains-useful-for-really/">
+ <h2 class="post-title">What are Blockchains Useful for, Really?</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on January 12, 2023, by <b>Kartik Nayak</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Blockchains, or the decentralized ledger, are touted as the next big disruptive technology, as big as the Internet was in the 90s. What are these blockchains useful for, really? While there are relevant use cases, many examples people use that are either far too academic to be useful or are scenarios where blockchains are not the right solution in the first place. Thus, in this post, I am trying to...
+ 
+ 
+ <a href="/2023-01-12-what-are-blockchains-useful-for-really/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/2023-01-08-re-rand-cred/">
+ <h2 class="post-title">Pairing-based Anonymous Credentials and the Power of Re-randomization</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on January 8, 2023, by <b>Ittai Abraham and Alin Tomescu</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ David Chaum wrote in 1985:
+ Large-scale automated transaction systems are imminent. The architecture chosen for these systems may have a long-term impact on the centralization of our economic system, on some of our basic liberties, and even on our democracy. The initial choice of direction will gather economic and societal momentum, making reversal increasingly less likely.
+ 
+ 
+ <a href="/2023-01-08-re-rand-cred/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#privacy">privacy</a>
+ 
+ <a href="/tags#randomness">randomness</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/2023-01-05-player-replaceability-II/">
+ <h2 class="post-title">Player Replaceability - Towards Adaptive Security and Sub-quadratic Communication Simultaneously (Part II)</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on January 5, 2023, by <b>Kartik Nayak</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ This is part II of a two-part post on player-replaceability. Part I can be found here.
+ 
+ 
+ <a href="/2023-01-05-player-replaceability-II/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ <a href="/tags#research">research</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ <article class="post-preview">
+ <a href="/2023-01-05-player-replaceability-I/">
+ <h2 class="post-title">Player Replaceability - Towards Adaptive Security and Sub-quadratic Communication Simultaneously (Part I)</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on January 5, 2023, by <b>Kartik Nayak</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ This is part I of a two-part post on the concept of player-replaceability.
+ 
+ 
+ <a href="/2023-01-05-player-replaceability-I/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ <a href="/tags#research">research</a>
+ 
+ </div>
+ 
+ </article>
+ 
+</div>
+<ul class="pager main-pager">
+ 
+ <li class="previous">
+ <a href="/page2">&larr; Newer Posts</a>
+ </li>
+ 
+ 
+ <li class="next">
+ <a href="/page4">Older Posts &rarr;</a>
+ </li>
+ 
+</ul>
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

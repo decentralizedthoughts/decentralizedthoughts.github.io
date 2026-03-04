@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>The round complexity of Reliable Broadcast</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham, Zhuolun Xiang, Ling Ren">
+ 
+ <meta name="description" content="Reliable Broadcast is an important building block of many Asynchronous protocols. There is a broadcaster that has some input value, $v$, and a non-faulty party that terminates needs to output a value. Reliable Broadcast is defined via two properties: Validity: If the broadcaster is non-faulty then eventually all non-faulty parties will output the broadcaster’s input. Agreement: If some non-faulty party outputs a value then eventually all non-faulty parties will output...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="The round complexity of Reliable Broadcast">
+ <meta property="og:description" content="Reliable Broadcast is an important building block of many Asynchronous protocols. There is a broadcaster that has some input value, $v$, and a non-faulty party that terminates needs to output a value. Reliable Broadcast is defined via two properties: Validity: If the broadcaster is non-faulty then eventually all non-faulty parties will output the broadcaster’s input. Agreement: If some non-faulty party outputs a value then eventually all non-faulty parties will output...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham, Zhuolun Xiang, Ling Ren">
+ 
+ <meta property="og:article:published_time" content="2021-09-29T06:05:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2021-09-29-the-round-complexity-of-reliable-broadcast/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2021-09-29-the-round-complexity-of-reliable-broadcast/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="The round complexity of Reliable Broadcast">
+ <meta property="twitter:description" content="Reliable Broadcast is an important building block of many Asynchronous protocols. There is a broadcaster that has some input value, $v$, and a non-faulty party that terminates needs to output a value. Reliable Broadcast is defined via two properties: Validity: If the broadcaster is non-faulty then eventually all non-faulty parties will output the broadcaster’s input. Agreement: If some non-faulty party outputs a value then eventually all non-faulty parties will output...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>The round complexity of Reliable Broadcast</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham, Zhuolun Xiang, Ling Ren</strong><br>
+ 
+ <span class="post-meta">Posted on September 29, 2021</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p><a href="https://decentralizedthoughts.github.io/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/">Reliable Broadcast</a> is an important building block of many <a href="https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/">Asynchronous</a> protocols. There is a broadcaster that has some <em>input value</em>, $v$, and a non-faulty party that <em>terminates</em> needs to <em>output</em> a value. Reliable Broadcast is defined via two properties:</p>
+<p><strong>Validity</strong>: If the broadcaster is non-faulty then <em>eventually</em> all non-faulty parties will output the broadcaster’s input.</p>
+<p><strong>Agreement</strong>: If some non-faulty party outputs a value then <em>eventually</em> all non-faulty parties will output the same value.</p>
+<p>Let’s try to better understand and optimize the notion of <em>“eventually”</em>. There are many reasons to outright <a href="https://twitter.com/heidiann360/status/1315608969470189568?s=20">stop using the term “eventually”</a>. Can we be more precise? Instead of “eventually”, can we provide a concrete measure of the worst case round complexity?</p>
+<h2 id="what-is-the-round-complexity-of-a-synchronous-protocol">What is the round complexity of a synchronous protocol?</h2>
+<p>In the synchronous model, there is an upper bound $\Delta$ on the message delay between any two non-faulty parties. Let $roundComplexity(e)$ of an execution $e$ be the <em>total time divided by $\Delta$</em>.</p>
+<p>Define $roundComplexity(P)$ of a protocol $P$ to be the maximum $roundComplexity(e)$ over all executions and adversary strategies.</p>
+<h2 id="what-is-the-round-complexity-of-an-asynchronous-protocol">What is the round complexity of an asynchronous protocol?</h2>
+<p>Let’s adopt the synchronous definition above to the asynchronous model. The immediate problem is that we do not have any known bound $\Delta$ on the length of a round. In the asynchronous model, there is no apriori bound on the message delay between any two non-faulty. So the trick is to look at the execution <em>in hindsight</em> and define the longest delay after the adversary fixed all the delays.</p>
+<p>Imagine having an external clock that can provide an ideal clock time for each event. Consider a protocol $P$.</p>
+<ol>
+ <li>For a message $m$ that is sent and received between two non-faulty parties, define $messageDelay(m)$ as the time elapsed between the send and receive time points.</li>
+ <li>For an execution $e$, define $totalTime(e)$ as the elapsed time between the earliest time a non-faulty sends a message and the latest time a non-faulty party terminates.</li>
+ <li>For an execution $e$, define $roundComplexity(e)$ as $\frac{ totalTime(e) }{ \max_{m \in M} messageDelay(m) }.$</li>
+ <li>For the protocol $P$, define $roundComplexity(P)$ as the maximum $roundComplexity(e)$ over all executions and adversary strategies. In later posts, we will generalize this definition to randomized protocols and expected round complexity.</li>
+</ol>
+<p>There is nothing in the round complexity of an execution that forces it to be an integer. Nevertheless, the round complexity of a protocol is often manifested when an asynchronous protocol is executed in a <em>lock step</em> schedule (and hence is an integer). In fact, it’s <a href="https://decentralizedthoughts.github.io/2021-03-09-good-case-latency-of-byzantine-broadcast-the-synchronous-case/">very surprising</a> when it’s not an integer.</p>
+<h2 id="reliable-broadcast-and-round-complexity">Reliable Broadcast and round complexity</h2>
+<p>Armed with these formal definitions of round complexity in Asynchrony we can finally<br />
+ replace “eventually” with a more precise notion of <em>round complexity</em>:</p>
+<p><strong>Validity</strong>: If the broadcaster is non-faulty then, <em>after at most $R_g$ rounds</em>, all non-faulty parties will output the broadcaster’s input.</p>
+<p><strong>Agreement</strong>: If some non-faulty party outputs a value then, <em>after at most $R_{ex}$ round</em>, all non-faulty parties will output the same value.</p>
+<p>We call $R_g$ the <em>good-case latency</em>, and define $R_b=R_g+R_{ex}$ to be the <em>bad-case latency</em>. We say a Reliable Broadcast protocol is $(R_g,R_b)$-round protocol if it has good-case $R_g$ rounds and bad-case $R_b$ rounds.</p>
+<blockquote>
+ <p><em>Exercise 1</em>: Go back to the post on <a href="https://decentralizedthoughts.github.io/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/">Reliable Broadcast</a> and verify that indeed it takes three rounds when the broadcaster is non-faulty and at most one more round to reach agreement and terminate. In other words, it is $(3,4)$-round protocol. 
+</p>
+</blockquote>
+<p>Given a concrete measure of round complexity, we ask: is <em>three</em> rounds the best we can do?</p>
+<h2 id="can-reliable-broadcast-take-just-two-rounds">Can Reliable Broadcast take just two rounds?</h2>
+<p>We will show two protocols for Reliable Broadcast that have good-case round complexity of 2. The first works for $n\geq 3f+1$ and uses a Public Key Infrastructure (PKI), and the second works for $n \geq 4f$ (and does not need a PKI).</p>
+<h3 id="2-round-reliable-broadcast-for-n-geq-3f1-using-a-pki">2-round Reliable Broadcast for $n \geq 3f+1$ using a PKI:</h3>
+<p>This protocol appears in section 3 of our <a href="https://arxiv.org/pdf/2102.07240.pdf">good-case latency categorization</a> paper.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> // broadcaster s with input v
+ send &lt;v&gt;_s to all parties
+ // Party j
+ on receiving the first proposal &lt;v&gt;_s from broadcaster s:
+ send &lt;echo, v&gt;_j to all parties
+ on receiving &lt;echo, v&gt;_* signed by n-f distinct parties:
+ send the &lt;echo, v&gt;_* signed by n-f distinct parties to all parties
+ deliver v and termiante
+</code></pre></div></div>
+<p>The main insight: a party that delivers a value has a cryptographic proof that it can transfer to other parties.</p>
+<blockquote>
+ <p><em>Exercise 2</em>: Prove that for $n\geq 3f+1$, Agreement and Validity hold assuming the adversary is computationally bounded (cannot forge signatures), and the protocol is $(2,3)$-round.</p>
+</blockquote>
+<h3 id="2-round-reliable-broadcast-for-n-geq-4f-without-pki">2-round Reliable Broadcast for $n \geq 4f$ without PKI:</h3>
+<p>Do we have to assume a PKI to get to 2 rounds? This protocol decides in 2 rounds when the broadcaster is honest and requires $n\geq 4f$. The first trick is to have a <em>fast path</em> to decide early, the second trick is to ignore the broadcaster in all rounds but the first.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> // broadcaster with input v
+ send &lt;v&gt; to all parties
+ // Party j 
+ on receiving the first proposal &lt;v&gt; from broadcaster:
+ send &lt;echo 0, v&gt; to all parties
+ on receiving &lt;echo 0, v&gt; by n-f-1 distinct non-broadcaster parties:
+ deliver v, send &lt;echo 1, v&gt; and &lt;echo 2, v&gt; to all parties and terminate
+ on receiving &lt;echo 0, v&gt; by n-2f distinct non-broadcaster parties:
+ send &lt;echo 1, v&gt; (if not sent yet) to all parties
+ 
+ on receiving &lt;echo 1, v&gt; by n-f-1 distinct non-broadcaster parties:
+ send &lt;echo 2, v&gt; (if not sent yet) to all parties
+ on receiving &lt;echo 2, v&gt; by n-f-1 distinct non-broadcaster parties:
+ deliver v and terminate
+ on receiving &lt;echo 2, v&gt; by f+1 distinct non-broadcaster parties:
+ send &lt;echo 2, v&gt; (if not sent yet) to all parties
+</code></pre></div></div>
+<p><strong>Agreement claim</strong>: If an honest commits $v$, then no honest will see $n-2f$ <code class="language-plaintext highlighter-rouge">&lt;echo 0, v'&gt;</code>, or send <code class="language-plaintext highlighter-rouge">&lt;echo 1, v'&gt;</code> or <code class="language-plaintext highlighter-rouge">&lt;echo 2, v'&gt;</code> for any $v’ \neq v$. Moreover, eventually all honest will see $n-2f$ <code class="language-plaintext highlighter-rouge">&lt;echo 0, v&gt;</code>, so eventually all honest will send <code class="language-plaintext highlighter-rouge">&lt;echo 1, v&gt;</code>, so eventually all honest will send <code class="language-plaintext highlighter-rouge">&lt;echo 2, v&gt;</code>.</p>
+<p><strong><em>Proof</em></strong>:</p>
+<ol>
+ <li>If the broadcaster is honest - trivial.</li>
+ <li>
+ <p>Otherwise, there are at most $f-1$ faulty non-broadcaster parties.</p>
+ <p>2A. If even one honest party sees $n-f-1$ <code class="language-plaintext highlighter-rouge">&lt;echo 0, v&gt;</code> then at least $n-f-1-(f-1)=n-2f$ honest send <code class="language-plaintext highlighter-rouge">&lt;echo 0, v&gt;</code> and at most $2f-1$ remaining non-broadcasters can send <code class="language-plaintext highlighter-rouge">&lt;echo 0, v'&gt;</code>. Hence all honest will send <code class="language-plaintext highlighter-rouge">&lt;echo 1, v&gt;</code> and then <code class="language-plaintext highlighter-rouge">&lt;echo 2, v&gt;</code> and then decide $v$.</p>
+ <p>2B. Otherwise some honest saw $n-f-1$ <code class="language-plaintext highlighter-rouge">&lt;echo 2, v&gt;</code>, so at least $n-f-1-(f-1)=n-2f&gt;f+1$ honest send <code class="language-plaintext highlighter-rouge">&lt;echo 2, v&gt;</code>. We will now show that no honest sent <code class="language-plaintext highlighter-rouge">&lt;echo 2, v'&gt;</code> hence all honest will decide $v$: Since some honest sent <code class="language-plaintext highlighter-rouge">&lt;echo 2, v&gt;</code> then at least $n-2f$ honest sent <code class="language-plaintext highlighter-rouge">&lt;echo 1, v&gt;</code>, hence there can be at most $2f-1$ non-broadcasters that send <code class="language-plaintext highlighter-rouge">&lt;echo 1, v'&gt;</code>.</p>
+ </li>
+</ol>
+<blockquote>
+ <p><em>Exercise 3</em>: Verify that the above protocol satisfies validity and agreement, and has $(2,4)$-round.</p>
+</blockquote>
+<h3 id="ngeq-4f-is-optimal-for-2-round-unauthenticated-reliable-broadcast">$n\geq 4f$ is optimal for 2-round unauthenticated Reliable Broadcast</h3>
+<p>The previous 2-round reliable broadcast protocol that assumes no authentication requires $n\geq 4f$. This is worse than the $n\geq 3f+1$ of 2-round reliable broadcast with PKI. Can we do better?</p>
+<p>It turns out that $n\geq 4f$ is the best we can do without signatures. We prove this <em>lower bound</em> in our <a href="https://arxiv.org/pdf/2109.12454.pdf">new paper</a>: <em>any unauthenticated reliable broadcast under $n\leq 4f-1$ cannot achieve good-case 2 rounds</em>.</p>
+<h2 id="how-many-rounds-does-reliable-broadcast-need-when-the-broadcaster-is-bad">How many rounds does Reliable Broadcast need when the broadcaster is bad?</h2>
+<p>In the <em>good case</em> (when the broadcaster is non-faulty), we know that we can do Reliable Broadcast in 2 rounds, either for $n\geq 3f+1$ with PKI, or for $n\geq 4f$ without a PKI. What is the round complexity when the broadcaster is faulty?</p>
+<p>If the faulty broadcaster sends no message, Reliable Broadcast allows non-faulty parties to never output. The tricky case is when the faulty broadcaster together with other faulty parties intentionally tries to make some non-faulty party output, but not the others. To satisfy the <em>agreement</em> property, the protocol needs to take extra rounds to have all honest parties terminate and output the same value. An interesting question is, how many extra rounds do we need for this <em>bad case</em>? The previous 2-round protocol without PKI has bad case 4 rounds, can we do better?</p>
+<p>In our <a href="https://arxiv.org/pdf/2109.12454.pdf">paper</a>, we give a <em>complete categorization</em> of how many extra rounds are needed for solving 2-round unauthenticated Reliable Broadcast in the bad case. In particular, for $f\geq 3$, it is impossible to achieve the following three conditions simultaneously: (1) output in 2 rounds under non-faulty broadcaster (2) one extra round for all non-faulty parties to output once any non-faulty party outputs (3) have resilience $n\leq 5f-2$ assuming no authentication.</p>
+<p>We then present <a href="https://arxiv.org/pdf/2109.12454.pdf">four Reliable Broadcast protocols</a>, with good-case latency 2 rounds that are optimal with respect to the above impossibility result. For $f=1$, a $(2,2)$-round protocol under $n\geq 4f$; For $f=2$, a $(2,3)$-round protocol under $n\geq 4f$; For $f\geq 3$, we show two protocols, one presented earlier that has $(2,4)$-round and requires $n\geq 4f$, another one that has $(2,3)$-round and requires $n\geq 5f-1$. Below we present the $(2,3)$-round Reliable Broadcast for $n\geq 5f-1$.</p>
+<!-- 
+### (2,3) Reliable Broadcast for $n=8,f=2$ and (2,4) for $n\ge 4f$
+These protocols decide in two rounds when the broadcaster is honest.
+ // broadcaster with input v
+ send <v> to all parties
+ on receiving <v> from broadcaster:
+ if first mesage form broadcaster:
+ send <echo, v> to all parties
+ on receiving <echo, v> by n-f-1 distinct non-broadcaster parties:
+ deliver v and terminate
+ on receiving <echo, v> from j ( and j is not you and not the broadcaster):
+ if first mesage form j:
+ send <vote, j, v> to all parties
+ 
+ on receiving <vote,j,v> by n-f-1 distinct non-broadcaster and non-j parties:
+ resolve j to v
+ on resolving n-f-1 non-broadcaster parties to v:
+ deliver v and terminate
+For the case of $f\ge 3$ and $n\ge 4f-2$ we add two more rules and get (2,4):
+ on resolving n-2f+1 non-broadcaster parties to v:
+ send <echo 2 ,v> (if not sent yet) to all parties
+ on receiving <echo 2, v> by n-f-1 distinct non-broadcaster parties:
+ deliver v and terminate
+ 
+This works because for a bad $j$, if an honest sees $n-f-1$ votes then all honest will see $n-f-1 -(f-2)=n-2f+1$ and when $n \ge 4f-1$ we have that $n-2f+1$ is a strict majority out of $n-1$.
+ -->
+<h3 id="23-round-reliable-broadcast-without-pki-for-n-geq-5f-1">$(2,3)$-round Reliable Broadcast without PKI for $n \geq 5f-1$</h3>
+<p>A similar protocol was shown by <a href="https://www.worldscientific.com/doi/abs/10.1142/S0129626416500171?journalCode=ppl">Imbs and Raynal</a> for $n\geq 5f+1$, and we improve the resilience of their protocol by distinguishing the messages from the broadcaster and the non-broadcasters.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> // broadcaster with input v
+ send &lt;v&gt; to all parties
+ // Party j
+ on receiving the first proposal &lt;v&gt; from broadcaster:
+ send &lt;echo, v&gt; to all parties
+ on receiving &lt;echo, v&gt; by n-2f distinct non-broadcaster parties:
+ if not yet sent echo for v:
+ send &lt;echo, v&gt; to all parties
+ on receiving &lt;echo, v&gt; by n-f-1 distinct non-broadcaster parties:
+ deliver v and terminate
+</code></pre></div></div>
+<p>Validity in two rounds follows since all $n-f$ non-faulty parties will echo the non-faulty broadcaster’s value in the end of the second round.</p>
+<p>For Agreement, when the broadcaster is faulty, if a non-faulty party decides $v$, there there are at least $n-2f$ non-faulty non-broadcasters that echo $v$. So from quorum intersection, no value $v’ \neq v$ can receive $n-2f$ echoes. Hence all non-faulty will hear $n-2f$ echo $v$ and after at most one more round will send echo $v$. By the end of this round, all non-faulty parties will hear $n-f$ echoes and terminate.</p>
+<p>For more results, check out our <a href="https://arxiv.org/pdf/2109.12454.pdf">good-case and bad-case latency paper</a>.</p>
+<p>Your comments and decentralized thoughts on <a href="https://twitter.com/ittaia/status/1443160799665610758?s=20">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#research">research</a>
+ 
+ <a href="/tags#lowerbound">lowerbound</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=The+round+complexity+of+Reliable+Broadcast&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2021-09-29-the-round-complexity-of-reliable-broadcast%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2021-09-20-optimal-communication-complexity-of-authenticated-byzantine-agreement/" data-toggle="tooltip" data-placement="top" title="Optimal Communication Complexity of Authenticated Byzantine Agreement">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2021-09-30-distributed-consensus-made-simple-for-real-this-time/" data-toggle="tooltip" data-placement="top" title="Distributed consensus made simple (for real this time!)">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

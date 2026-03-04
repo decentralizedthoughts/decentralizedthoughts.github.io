@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Blockchain Resource Pools and a CAP-esque Impossibility Result</title>
+ 
+ 
+ <meta name="author" content="Andrew Lewis-Pye, Tim Roughgarden">
+ 
+ <meta name="description" content="The consensus layers of different blockchain protocols can look very different from one another. For example, to achieve sybil-resistance, some protocols use proof-of-work (selecting each block producer randomly, with probability proportional to its computational power), while some use proof-of-stake (with probabilities proportional to the amount of locked-up stake). To achieve consensus, some blockchain protocols use a longest-chain rule to resolve forks in-protocol, while others use BFT-style consensus to (with high...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Blockchain Resource Pools and a CAP-esque Impossibility Result">
+ <meta property="og:description" content="The consensus layers of different blockchain protocols can look very different from one another. For example, to achieve sybil-resistance, some protocols use proof-of-work (selecting each block producer randomly, with probability proportional to its computational power), while some use proof-of-stake (with probabilities proportional to the amount of locked-up stake). To achieve consensus, some blockchain protocols use a longest-chain rule to resolve forks in-protocol, while others use BFT-style consensus to (with high...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Andrew Lewis-Pye, Tim Roughgarden">
+ 
+ <meta property="og:article:published_time" content="2022-03-03T12:09:00-05:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2022-03-03-blockchain-resource-pools-and-a-cap-esque-impossibility-result/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2022-03-03-blockchain-resource-pools-and-a-cap-esque-impossibility-result/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Blockchain Resource Pools and a CAP-esque Impossibility Result">
+ <meta property="twitter:description" content="The consensus layers of different blockchain protocols can look very different from one another. For example, to achieve sybil-resistance, some protocols use proof-of-work (selecting each block producer randomly, with probability proportional to its computational power), while some use proof-of-stake (with probabilities proportional to the amount of locked-up stake). To achieve consensus, some blockchain protocols use a longest-chain rule to resolve forks in-protocol, while others use BFT-style consensus to (with high...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Blockchain Resource Pools and a CAP-esque Impossibility Result</h1>
+ 
+ 
+ 
+ 
+ By <strong>Andrew Lewis-Pye, Tim Roughgarden</strong><br>
+ 
+ <span class="post-meta">Posted on March 3, 2022</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>The consensus layers of different blockchain protocols can look very
+different from one another. For example, to achieve sybil-resistance,
+some protocols use <em>proof-of-work</em> (selecting each block producer
+randomly, with probability proportional to its computational power),
+while some use <em>proof-of-stake</em> (with probabilities proportional to the
+amount of locked-up stake). To achieve consensus, some blockchain
+protocols use a longest-chain rule to resolve forks in-protocol, while
+others use BFT-style consensus to (with high probability) avoid forks
+and achieve instant finality. (These lists are not exhaustive, and
+some blockchain protocols take still other approaches to
+sybil-resistance or consensus.) Bitcoin is one example (among
+several) of a proof-of-work longest-chain protocol. Algorand is one
+example (among many) of a proof-of-stake BFT-style protocol.</p>
+<p>Different blockchain consensus protocols also provide different sets
+of mathematical guarantees. For example, typical proof-of-work (PoW)
+longest-chain protocols like Bitcoin achieve liveness (i.e.,
+outstanding transactions are continually processed) and probabilistic
+finality (i.e., with high probability, confirmed transactions do not
+get rolled back), under two assumptions: (i) at least 51% of the block
+production power (i.e., hashrate) is controlled by nodes that honestly
+follow the intended protocol; and (ii) the communication network is
+reliable (in the sense of the synchronous model), with all messages
+arriving at their destinations in a bounded amount of time (see
+<a href="https://eprint.iacr.org/2014/765.pdf">https://eprint.iacr.org/2014/765.pdf</a>,
+<a href="https://eprint.iacr.org/2016/454.pdf">https://eprint.iacr.org/2016/454.pdf</a>, or
+<a href="https://arxiv.org/pdf/2005.10484.pdf">https://arxiv.org/pdf/2005.10484.pdf</a> for details). Such a protocol
+does not offer any finality guarantees if there can be unbounded
+network delays—for example, if there is a lengthy network partition,
+each side of the partition will grow its own longest chain
+independently, and the shorter of the two will be rolled back when the
+partition ends and the two sides compare notes.</p>
+<p>A typical proof-of-stake (PoS) BFT-type blockchain protocol like
+Algorand satisfies an incomparable set of promises, as for liveness
+and probabilistic finality it requires a stronger version of
+assumption (i) and a weaker version of (ii). Specifically, the
+protocol is guaranteed to satisfy liveness only if at least 67% of the
+stake is honest. On the other hand, the protocol satisfies
+probabilistic finality even in the partially synchronous model, in
+which messages can suffer unbounded delays (due, e.g., to network
+outages or denial-of-service attacks). (For Algorand specifically,
+see <a href="https://eprint.iacr.org/2018/377.pdf">https://eprint.iacr.org/2018/377.pdf</a> for details.)</p>
+<p>The recurring question investigated in our joint research is:</p>
+<blockquote>
+ <p>to what extent do the desired guarantees of a blockchain protocol dictate how
+the protocol needs to be implemented? Which design decisions are the
+fundamental drivers behind the mathematical differences between, say,
+the Bitcoin and Algorand protocols? Is it because one uses PoW while
+the other uses PoS? Or that one uses a longest-chain rule while the
+other uses BFT-style consensus? Both? Something else?</p>
+</blockquote>
+<p>The rest of this blog post highlights one impossibility result from
+our work, which effectively shows that PoS sybil resistance (or
+something like it) is indeed fundamental to the probabilistic finality
+guarantees of a protocol like Algorand.</p>
+<p>An impossibility result requires a formal model of what a blockchain
+protocol can do. Our work offers a general model that enables direct
+comparisons between very different blockchain protocols (e.g., PoW
+longest-chain protocols vs.\ PoS BFT-style protocols). The most
+salient part of the model is the notion of a <em>resource pool</em> (e.g.,
+hashrate or stake), which controls the extent to which different nodes
+can produce blocks, vote, etc. (See our paper linked at the end of
+this post for more details and comparisons to previous work.)</p>
+<p>Our work shows that there is a big difference between resource pools
+that are “sized,” meaning that the blockchain state determines all the
+resource balances, and those that are “unsized,” with the resource
+balances independent of the blockchain state. Typical PoS blockchains
+are appropriately modeled with a sized resource pool (as stake amounts
+are recorded as part of the blockchain state), while unsized resource
+pools provide a good model for reasoning about typical PoW blockchains
+(as nodes’ hashrates can change independently of any updates to the
+blockchain state).</p>
+<p>Here’s the statement of today’s impossibility result (phrased in the
+same “choose 2 of 3” format as the CAP Theorem from distributed
+systems):</p>
+<p><strong>Theorem:</strong> No blockchain protocol:</p>
+<ol>
+ <li>operates in the unsized setting;</li>
+ <li>is adaptively live in the synchronous setting; and</li>
+ <li>satisfies probabilistic finality in the partially synchronous
+setting.</li>
+</ol>
+<p>In the theorem statement, “adaptively live” means that liveness must
+hold even in the face of massive (e.g., 100x) changes in the total
+resource balance. In the sized setting (e.g., typical PoS), any such
+change would be immediately detectable on-chain and thus easy to
+adapt to automatically. In the unsized setting (e.g., typical PoW),
+liveness with respect to constant resource balances does not
+automatically imply adaptive liveness. Nonetheless, a typical PoW
+longest-chain protocol like Bitcoin does indeed satisfy adaptive
+liveness—if the total hashrate suddenly drops by a factor of~100,
+the rate of block production also drops by a factor of~100 (at least
+until the next difficulty adjustment) but remains bounded away from
+zero.</p>
+<p>Thus, PoW longest-chain protocols like Bitcoin satisfy (1) and (2),
+while PoS BFT-style protocols like Algorand satisfy (2) and (3).
+Our impossibility result shows that you can’t have them all! In
+particular, there’s no hope of offering Algorand-like guarantees
+without using PoS sybil-resistance or some alternative with resource
+balances directly observable on-chain. Said another way, Bitcoin’s
+reliance on PoW sybil-resistance forces the other compromises that it
+makes.</p>
+<p>Here’s a very rough sketch of the proof (see our paper for details).
+Suppose we’re in the unsized setting (property (1)), and suppose a
+node with a nonzero resource balance stops hearing any new messages
+from anybody else. This node cannot distinguish between two plausible
+scenarios: (i) all the other nodes have lost all their resources and
+therefore can no longer participate in the protocol; or (ii) all the
+messages incoming to the node have been massively delayed. (In the
+sized setting, these scenarios <em>would</em> be distinguishable because the
+other nodes’ resource balances would be directly observable via the
+blockchain’s state.) Now the node faces a catch-22 situation. It
+must choose whether to stop producing new blocks or not. If it does
+stop and (i) is the actual reality, the node will violate adaptive
+liveness (property (2)). If it plows ahead with block production and
+(ii) is the actual reality (which is a possibility in the partially
+synchronous setting), the node will violate finality (as any blocks it
+produces might well conflict with as-yet-unheard-of blocks that other
+nodes have busily been producing, triggering later rollbacks).
+[end proof sketch]</p>
+<p>This result exemplifies our research agenda, to understand the extent
+to which the desired guarantees of a blockchain protocol dictate its
+implementation. We expect that many more results along such lines are
+possible.</p>
+<p>Further reading/listening:</p>
+<ul>
+ <li>paper: <a href="http://timroughgarden.org/papers/RPCAP_public_arxiv.pdf">http://timroughgarden.org/papers/RPCAP_public_arxiv.pdf</a></li>
+ <li>talk: <a href="https://www.youtube.com/watch?v=EfsSV7ni2ZM">https://www.youtube.com/watch?v=EfsSV7ni2ZM</a></li>
+</ul>
+<p>Your thoughts/comments on <a href="...">twitter</a></p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#research">research</a>
+ 
+ <a href="/tags#lowerbound">lowerbound</a>
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Blockchain+Resource+Pools+and+a+CAP-esque+Impossibility+Result&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2022-03-03-blockchain-resource-pools-and-a-cap-esque-impossibility-result%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2021-12-07-good-case-latency-of-rotating-leader-synchronous-bft/" data-toggle="tooltip" data-placement="top" title="Good-case Latency of Rotating Leader Synchronous BFT">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2022-03-07-colordag-from-always-almost-to-almost-always-50-percent-selfish-mining-resilience/" data-toggle="tooltip" data-placement="top" title="Colordag: From always-almost to almost-always 50% selfish mining resilience">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

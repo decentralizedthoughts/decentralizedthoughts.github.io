@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Blockchains + TEEs Day 2 Summary</title>
+ 
+ 
+ <meta name="author" content="Kartik Nayak, Ittai Abraham, Aniket Kate">
+ 
+ <meta name="description" content="This is the second of the two part post on the workshop on Blockchains + TEEs that concluded last week. Here are the key ideas from Day 2. You can find the post summarizing Day 1 here. Nick Hynes: Practical Secure Decentralized Computing Nick discussed the use of TEEs by Oasis. At a high level, Oasis network creates a scalable network for TEE-enabled blockchain layer 1. Oasis Sapphire provides a...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Blockchains + TEEs Day 2 Summary">
+ <meta property="og:description" content="This is the second of the two part post on the workshop on Blockchains + TEEs that concluded last week. Here are the key ideas from Day 2. You can find the post summarizing Day 1 here. Nick Hynes: Practical Secure Decentralized Computing Nick discussed the use of TEEs by Oasis. At a high level, Oasis network creates a scalable network for TEE-enabled blockchain layer 1. Oasis Sapphire provides a...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Kartik Nayak, Ittai Abraham, Aniket Kate">
+ 
+ <meta property="og:article:published_time" content="2023-04-17T01:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2023-04-17-blockchainsplustees-day2-summary/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2023-04-17-blockchainsplustees-day2-summary/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Blockchains + TEEs Day 2 Summary">
+ <meta property="twitter:description" content="This is the second of the two part post on the workshop on Blockchains + TEEs that concluded last week. Here are the key ideas from Day 2. You can find the post summarizing Day 1 here. Nick Hynes: Practical Secure Decentralized Computing Nick discussed the use of TEEs by Oasis. At a high level, Oasis network creates a scalable network for TEE-enabled blockchain layer 1. Oasis Sapphire provides a...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Blockchains + TEEs Day 2 Summary</h1>
+ 
+ 
+ 
+ 
+ By <strong>Kartik Nayak, Ittai Abraham, Aniket Kate</strong><br>
+ 
+ <span class="post-meta">Posted on April 17, 2023</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>This is the second of the two part post on the <a href="https://blockchainsplusx.github.io">workshop on Blockchains + TEEs</a> that concluded last week. Here are the key ideas from Day 2. You can find the post summarizing Day 1 <a href="https://decentralizedthoughts.github.io/2023-04-09-blockchainsplustees-day1-summary/">here</a>.</p>
+<h4 id="nick-hynes-practical-secure-decentralized-computing">Nick Hynes: Practical Secure Decentralized Computing</h4>
+<p>Nick discussed the use of TEEs by Oasis. At a high level, Oasis network creates a scalable network for TEE-enabled blockchain layer 1. Oasis Sapphire provides a confidential EVM by putting the EVM in a TEE; it has lower fees, support for general purpose smart contract, full composability and a developer experience identical to that of Ethereum. And with Oasis Privacy Layer, smart contracts have access to a TEE. In essence, one can augment any home network from an L1 with a contract with public data to also support private logic and secrets.</p>
+<p>The primary challenges with Oasis include UX concerns related to privacy such as security-usability trade-offs, the ability for developers to reason about side channels, and agreeing on what the privacy goals are.</p>
+<p>Nick then spoke about how Blockchains can be used as a trust layer for TEEs. It provides transparency, audibility, and a way to detect TEE misuse. He then described the key idea behind his new startup where he is building Escrin, a secure decentralized computing network.</p>
+<p>You can find more details in his talk <a href="https://youtu.be/zIU3gFTb2PM?t=402">here</a> and his slides <a href="https://docs.google.com/presentation/d/1jMwMky4m9DbP3CrpH50ldJITyOsE-u56DfmHsthdCSg/edit#slide=id.p">here</a>.</p>
+<h4 id="andrew-miller-tee-based-smart-contracts-pitfalls-and-challenges">Andrew Miller: TEE-based Smart Contracts: Pitfalls and Challenges</h4>
+<p>Andrew started with summarizing the different ways in which blockchains and TEEs interact with each other, beautifully capturing the talks in the workshop. Reproducing his slide here for reference.</p>
+<p><img src="https://i.imgur.com/bUrq2Fl.png" alt="" /></p>
+<p>Andrew then spoke about the different privacy needs for blockchains and the support we have for smart contracts today. For instance, a simple commit and reveal can be easily implemented today. For more complicated instances, one can rely on ZK proofs. Finally, for arbitrary requirements, e.g., auctions, one may use TEEs or secure multiparty computation. In that vein, Andrew spoke about his new venture on hbCL, which is a privacy-preserving credit network using TEEs, which falls in the last category.</p>
+<p>Subsequently, his talk focused on issues related to using TEEs in blockchains.</p>
+<p>For instance, where are the keys in the enclave? With solutions like SecretNetwork and Obscuro, there is a single decryption key that is replicated in all enclaves. This can be problematic in theory and in practice. Instead, in the design with Oasis and Phala, there are somewhat trusted key manager enclaves, and worker enclaves only receive contract-specific keys.</p>
+<p>He then spoke about his work on SGXonerate where the issues are not related to breaking SGX but how it is used. For instance, one can attempt to modify the code around the enclave and attempt to learn the key. Finally, he spoke about issues related to rollback attacks.</p>
+<p>He concluded the talk by discussing some open challenges and opportunities in this space.</p>
+<p>You can find the talk <a href="https://youtu.be/zIU3gFTb2PM?t=1668">here</a> and his slides <a href="">here</a>.</p>
+<h4 id="ittay-eyal-teechain-a-secure-payment-network-with-asynchronous-blockchain-access">Ittay Eyal: TEEchain: A Secure Payment Network with Asynchronous Blockchain Access</h4>
+<p>Ittay started the talk discussing what we can achieve using TEEs and blockchains individually. With blockchains, while payments are possible, they take a long time today when used naively. An alternative is to use TEEs only — but this results in a 2-Generals problem.</p>
+<p>Ittay then explained the key idea behind lightning network that works on the Bitcoin blockchain; in a nutshell, it provides a bidirectional payment channel between two parties. However, to ensure that the channel works correctly, the parties need to monitor the blockchain and take appropriate actions within a given timeframe to close the channel.</p>
+<p>Ittay’s work on TEEchain instead relies on using TEEs with blockchains to provide instant payments. With his solution, parties do not need to monitor the blockchain or use it at specified time intervals. Ittay then spoke about how to extend TEEchain to a multihop scenario.</p>
+<p>Learn more about the details in his talk <a href="https://youtu.be/zIU3gFTb2PM?t=7039">here</a>. His slides are available <a href="https://blockchainsplusx.github.io/docs/tees/IttayEyal.pdf">here</a>.</p>
+<h4 id="guy-zyskind-secrets-journey-lessons-learned-from-25-years-of-running-tees-in-production">Guy Zyskind: Secret’s Journey: Lessons Learned from 2.5 Years of Running TEEs in Production</h4>
+<p>Secret Network is the first blockchain enabling secure computation. It has been in production for 2.5 years and has run more than a million private computations. Guy described the use of TEE in Secret Network for privacy which is needed in multiple applications such as e-voting, auctions, games, identity, MEV, etc. Secret Network relies on private smart contracts or “secret contracts” to achieve these privacy goals.</p>
+<p>Guy then discussed the Secret architecture at a high level. One key aspect that he touched upon is the use of a single shared secret across all TEEs on different nodes. While there are many other alternative approaches, he discussed some tradeoff including how external/social factors can play a role in such decisions.</p>
+<p>Finally, he discussed applications on Secret Network, such as NFTs and private messaging networks. Finally, he ended the talk by discussing some challenges faced by Secret Network.</p>
+<p>Listen to the talk <a href="https://youtu.be/zIU3gFTb2PM?t=9020">here</a>. His slides are available <a href="">here</a>.</p>
+<p>Please add your thoughts on <a href="https://twitter.com/kartik1507/status/1649041738810507264?s=20">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Blockchains+%2B+TEEs+Day+2+Summary&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2023-04-17-blockchainsplustees-day2-summary%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2023-04-09-blockchainsplustees-day1-summary/" data-toggle="tooltip" data-placement="top" title="Blockchains + TEEs Day 1 Summary">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2023-06-26-dls-meets-rollback/" data-toggle="tooltip" data-placement="top" title="$3f+1$ is needed in Partial Synchrony even against a Rollback adversary">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

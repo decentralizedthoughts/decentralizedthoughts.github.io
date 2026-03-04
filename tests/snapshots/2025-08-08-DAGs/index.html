@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>What’s DAG got to do with it?</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham, Neil Giridharan, and Kartik Nayak">
+ 
+ <meta name="description" content="Since 2018, blockchain research has seen a surge in DAG-based BFT protocols aimed at achieving higher throughput. These protocols trace back to Hashgraph, 2018, Aleph, 2019, the theoretical work of All You Need is DAG, 2021, and systems papers like Narwhal and Bullshark. In this post, we highlight six key aspects of this body of research: Separation of dispersal and consensus Liveness of dispersal in asynchrony and combining DACs Single-disperser...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="What’s DAG got to do with it?">
+ <meta property="og:description" content="Since 2018, blockchain research has seen a surge in DAG-based BFT protocols aimed at achieving higher throughput. These protocols trace back to Hashgraph, 2018, Aleph, 2019, the theoretical work of All You Need is DAG, 2021, and systems papers like Narwhal and Bullshark. In this post, we highlight six key aspects of this body of research: Separation of dispersal and consensus Liveness of dispersal in asynchrony and combining DACs Single-disperser...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham, Neil Giridharan, and Kartik Nayak">
+ 
+ <meta property="og:article:published_time" content="2025-08-08T00:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2025-08-08-DAGs/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2025-08-08-DAGs/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="What’s DAG got to do with it?">
+ <meta property="twitter:description" content="Since 2018, blockchain research has seen a surge in DAG-based BFT protocols aimed at achieving higher throughput. These protocols trace back to Hashgraph, 2018, Aleph, 2019, the theoretical work of All You Need is DAG, 2021, and systems papers like Narwhal and Bullshark. In this post, we highlight six key aspects of this body of research: Separation of dispersal and consensus Liveness of dispersal in asynchrony and combining DACs Single-disperser...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>What’s DAG got to do with it?</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham, Neil Giridharan, and Kartik Nayak</strong><br>
+ 
+ <span class="post-meta">Posted on August 8, 2025</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>Since 2018, blockchain research has seen a surge in <a href="https://decentralizedthoughts.github.io/2022-06-28-DAG-meets-BFT/">DAG-based BFT protocols</a> aimed at achieving higher throughput. These protocols trace back to <a href="https://files.hedera.com/hh_whitepaper_v2.2-20230918.pdf?">Hashgraph, 2018</a>, <a href="https://arxiv.org/abs/1908.05156">Aleph, 2019</a>, the theoretical work of <a href="https://arxiv.org/abs/2102.08325">All You Need is DAG, 2021</a>, and systems papers like <a href="https://arxiv.org/abs/2105.11827">Narwhal</a> and <a href="https://arxiv.org/abs/2201.05677">Bullshark</a>.</p>
+<p>In this post, we highlight <strong>six key aspects</strong> of this body of research:</p>
+<ol>
+ <li>Separation of dispersal and consensus</li>
+ <li>Liveness of dispersal in asynchrony and combining DACs</li>
+ <li>Single-disperser BFT vs. multi-disperser BFT</li>
+ <li>Certified vs. uncertified DAGs</li>
+ <li>Virtual voting: piggybacking consensus on the DAG for free</li>
+ <li>Ordering transactions</li>
+</ol>
+<h2 id="1-separation-of-dispersal-and-consensus">1. Separation of Dispersal and Consensus</h2>
+<p>DAGs highlight the separation of <strong>dispersal and consensus</strong>:</p>
+<ol>
+ <li><strong>Disperse</strong> the data and obtain a short <em>data availability certificate</em> (<strong>DAC</strong>) that proves the data can be retrieved, <em>binding</em> the DAC to the data.</li>
+ <li><strong>Reach consensus</strong> on the DAC.</li>
+ <li><strong>Retrieve</strong> the data using the DAC, achieving <em>totality</em>.</li>
+</ol>
+<p>This pattern of dispersal-consensus-retrieval using a DAC is based on <a href="https://decentralizedthoughts.github.io/2024-08-08-vid/">provable verifiable data dissemination</a> (provable VID). Provable VIDs can be implemented as <a href="https://decentralizedthoughts.github.io/2022-09-10-provable-broadcast/">provable broadcast</a> or using <a href="https://eprint.iacr.org/2020/842">error-correcting codes</a> for improved message complexity at the cost of higher latency. The latter approach appears essential for achieving <a href="https://decentralizedthoughts.github.io/2023-09-30-scaling/">$O(1)$ scaling of blockchains</a>.</p>
+<p>Another option is dispersal via provable <a href="https://decentralizedthoughts.github.io/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/">reliable broadcast</a>, which obtains totality and removes the need for a separate retrieval protocol. This method requires higher message complexity during dispersal but offers lower overall latency. Message complexity can be improved using message-efficient reliable broadcast protocols that <a href="https://drops.dagstuhl.de/storage/00lipics/lipics-vol179-disc2020/LIPIcs.DISC.2020.28/LIPIcs.DISC.2020.28.pdf">employ error-correcting codes</a>.</p>
+<h2 id="2-liveness-of-dispersal-in-asynchrony-and-combining-dacs">2. Liveness of Dispersal in Asynchrony and Combining DACs</h2>
+<ul>
+ <li>
+ <p><strong>Dispersal is live in asynchrony</strong>: since dispersal is a single-writer object and does not solve consensus, it can make progress even under asynchrony and is not limited by the <a href="https://decentralizedthoughts.github.io/2019-12-15-asynchrony-uncommitted-lower-bound/">FLP lower bound</a>.</p>
+ </li>
+ <li>
+ <p><strong>DACs can be combined</strong>: multiple data availability certificates can be aggregated within a <em>new</em> dispersal. This combined dispersal has a small DAC, and its retrieval can recursively fetch all previously dispersed data.</p>
+ </li>
+</ul>
+<p>Some systems make no progress during asynchrony because they <em>lock-step</em> dispersal with consensus progress. These systems suffer performance degradation when the network becomes synchronous again due to backlog processing. In contrast, systems that separate dispersal from consensus continue dispersing in asynchrony and commit the entire batch once synchrony returns. Many DAG-based protocols and protocols like <a href="https://arxiv.org/abs/2401.10369">Autobahn</a> follow this approach.</p>
+<p>Having seen how dispersal can progress independently of consensus, we now turn to who performs dispersal — a single proposer or multiple concurrent ones.</p>
+<h2 id="3-single-disperser-bft-vs-multi-disperser-bft">3. Single-Disperser BFT vs. Multi-Disperser BFT</h2>
+<p>BFT consensus protocols typically have a single proposer (also called primary or leader) per view. Separating consensus from dispersal opens two possibilities:</p>
+<ul>
+ <li>In <strong>single-disperser BFT</strong>, the primary is both the sole <em>proposer</em> and the sole <em>disperser</em> in the view.</li>
+ <li>In <strong>multi-disperser BFT</strong>, multiple parties act as dispersers concurrently. The single proposer then combines multiple DACs.</li>
+</ul>
+<p>Examples of multi-disperser BFT include <a href="https://arxiv.org/pdf/2102.08325">All You Need is DAG</a>, <a href="https://arxiv.org/abs/2105.11827">Narwhal</a>, <a href="https://arxiv.org/abs/2201.05677">Bullshark</a>, <a href="https://arxiv.org/abs/2306.03058">Shoal</a>, <a href="https://decentralizedthoughts.github.io/2024-05-23-sailfish/">Sailfish</a>, <a href="https://decentralizedthoughts.github.io/2024-06-12-shoalpp/">Shoal++</a>, <a href="https://arxiv.org/abs/2205.09174">Cordial Miners</a>, <a href="https://eprint.iacr.org/2022/625">Star</a>, <a href="https://arxiv.org/abs/2401.10369">Autobahn</a>, and <a href="https://arxiv.org/pdf/2310.14821">Mysticeti</a>. They demonstrate how multiple dispersers can boost throughput and achieve $O(n)$ amortized communication complexity when each disperser handles a disjoint $O(n)$-sized set of transactions.</p>
+<p>A similar throughput boost can be achieved in single-disperser BFT protocols that use error-correcting codes for dispersal (see Figure 1 in the <a href="https://eprint.iacr.org/2025/1116.pdf">Pipes</a> paper).</p>
+<h3 id="when-do-multiple-dispersers-help">When Do Multiple Dispersers Help?</h3>
+<p>Multiple dispersers help only if their transaction sets are mostly disjoint. If they overlap heavily, bandwidth is wasted because transactions are dispersed redundantly.</p>
+<p>From the client perspective (assuming clients have disjoint transactions), the ideal case is that each client uses a single non-faulty disperser, yielding a real bandwidth boost.</p>
+<p>However, if $f$ dispersers are faulty, in the worst case each client must send its transactions to $f+1$ dispersers. Without coordination, this repeats every transaction $f+1$ times, and multiple dispersers may redundantly disperse the same transactions.</p>
+<h2 id="4-multi-disperser-bft-certified-and-uncertified-directed-acyclic-graphs-dags">4. Multi-Disperser BFT: Certified and uncertified Directed Acyclic Graphs (DAGs)</h2>
+<p><strong>Certified DAG</strong>: <a href="https://arxiv.org/abs/1908.05156">Aleph</a> pioneered this approach, where each party waits to receive $n-f$ round $i$ DACs from different dispersers and combines them (along with any new data) into a new round $i+1$ dispersal protocol. Recent works like <a href="https://decentralizedthoughts.github.io/2024-05-23-sailfish/">Sailfish</a> and <a href="https://decentralizedthoughts.github.io/2024-06-12-shoalpp/">Shoal++</a> focus on improving latency for certified DAGs.</p>
+<p><strong>Uncertified DAG</strong>: <a href="https://www.swirlds.com/downloads/SWIRLDS-TR-2016-01.pdf">Hashgraph</a> introduced this pattern in the blockchain space, where each party waits for $n-f$ signed round $i$ messages and combines them (along with new data) to create a signed round $i+1$ message. This <em>uncertified DAG</em> pattern is used in <a href="https://arxiv.org/abs/2205.09174">Cordial Miners</a>, <a href="https://arxiv.org/pdf/2310.14821">Mysticeti</a>, and <a href="https://arxiv.org/pdf/2410.08670">Mahi-Mahi</a>. The general idea of converting a causal order into a total order has roots in <a href="https://www.sciencedirect.com/science/article/pii/S0890540198927705?ref=pdf_download&amp;fr=RR-2&amp;rr=9871d30bdc7e3175">20th century research on distributed systems</a>.</p>
+<h3 id="data-synchronization-for-dags">Data Synchronization for DAGs</h3>
+<p>In DAGs, dispersed data includes not only new data from round $i$ but also data from all prior rounds ($i-1$, $i-2$, etc.).</p>
+<p>If reliable broadcast is not used for dispersal, some parties may lack data from earlier rounds, requiring synchronization to fetch missing data.</p>
+<p>For uncertified DAGs, Byzantine parties can attack by selectively sending data to some parties while withholding it from others, forcing synchronization on the critical path. In certified DAGs using DACs, parties avoid synchronization on the critical path but must recursively fetch missing data before execution, potentially requiring multiple network round trips. Certified DAGs shift complexity off the critical path: consensus proceeds on DACs, not raw data, while retrieval can occur lazily or in parallel.</p>
+<p>Autobahn exemplifies a system that achieves non-blocking synchronization and avoids recursive synchronization by designing the dispersal protocol so retrieval for arbitrarily large data requires only a single round-trip.</p>
+<h2 id="5-virtual-voting-piggybacking-consensus-on-the-dag-without-extra-messages">5. Virtual Voting: Piggybacking consensus on the DAG without extra messages</h2>
+<p><em>Virtual voting</em> piggybacks consensus messages onto DAG messages, trading off throughput and latency.</p>
+<p>Virtual voting adds no bandwidth overhead. However, it can introduce latency drawbacks: consensus protocols may require different timeouts or triggers (e.g., a message from a designated leader or messages with specific content). Additionally, some virtual voting protocols on certified DAGs may incur extra queuing latency if they “miss the bus.”</p>
+<h2 id="6-ordering-transactions">6. Ordering Transactions</h2>
+<p>Most DAG protocols maintain a structure where every block in a view (round) references a super-majority of blocks from the previous view. Despite multiple dispersers, there is a single proposer (leader) per view. Parties agree on whether the proposer proposed a block in view $v$. Given a sequence of ordered proposer blocks across views, non-proposer blocks can be ordered deterministically among them. The super-majority references from view $v$ to blocks in view $v-1$ ensure that sufficiently many non-proposer blocks from $v-1$ can be ordered before the block from view $v$.</p>
+<h3 id="acknowledgements">Acknowledgements</h3>
+<p>This post follows insightful discussions at the <a href="https://www.dagstuhl.de/seminars/seminar-calendar/seminar-details/24362">Dagstuhl seminar on Next-Generation Secure Distributed Computing</a>. We thank the organizers and participants for their valuable feedback.</p>
+<p>We also thank Adi Seredinschi, Nibesh Shrestha, and Francois Garillot for useful feedback on this post.</p>
+<p>Your thoughts and comments on <a href="https://x.com/ittaia/status/1953865132724912580">X</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ <a href="/tags#BFT">BFT</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=What%E2%80%99s+DAG+got+to+do+with+it%3F&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2025-08-08-DAGs%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2025-08-06-5fminus1-simplex/" data-toggle="tooltip" data-placement="top" title="2-round BFT in Simplex style for n=5f-1">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2025-08-12-non-uniform-weak-validity/" data-toggle="tooltip" data-placement="top" title="Agreement under omission failures: non-uniformity and weak validity">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

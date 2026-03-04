@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>An Analysis of Latency and Block Capacity in Nakamoto Consensus</title>
+ 
+ 
+ <meta name="author" content="Michele Fabi">
+ 
+ <meta name="description" content="Achieving high throughput is essential for blockchain ecosystems to become competitive alternatives to their centralized counterparts across a wide range of domains. For example, high-frequency trading on decentralized platforms cannot be competitive unless transaction processing times are reduced to well below one second. The predominant strategy to address this challenge has been the development of Layer 2 (L2) scaling solutions. However, this approach often introduces trade-offs, potentially compromising decentralization and,...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="An Analysis of Latency and Block Capacity in Nakamoto Consensus">
+ <meta property="og:description" content="Achieving high throughput is essential for blockchain ecosystems to become competitive alternatives to their centralized counterparts across a wide range of domains. For example, high-frequency trading on decentralized platforms cannot be competitive unless transaction processing times are reduced to well below one second. The predominant strategy to address this challenge has been the development of Layer 2 (L2) scaling solutions. However, this approach often introduces trade-offs, potentially compromising decentralization and,...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Michele Fabi">
+ 
+ <meta property="og:article:published_time" content="2025-07-24T00:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2025-07-24-block_capacity_blog/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2025-07-24-block_capacity_blog/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="An Analysis of Latency and Block Capacity in Nakamoto Consensus">
+ <meta property="twitter:description" content="Achieving high throughput is essential for blockchain ecosystems to become competitive alternatives to their centralized counterparts across a wide range of domains. For example, high-frequency trading on decentralized platforms cannot be competitive unless transaction processing times are reduced to well below one second. The predominant strategy to address this challenge has been the development of Layer 2 (L2) scaling solutions. However, this approach often introduces trade-offs, potentially compromising decentralization and,...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>An Analysis of Latency and Block Capacity in Nakamoto Consensus</h1>
+ 
+ 
+ 
+ 
+ By <strong>Michele Fabi</strong><br>
+ 
+ <span class="post-meta">Posted on July 24, 2025</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <blockquote>
+ <p>Achieving high throughput is essential for blockchain ecosystems to become competitive alternatives to their centralized counterparts across a wide range of domains. For example, high-frequency trading on decentralized platforms cannot be competitive unless transaction processing times are reduced to well below one second. The predominant strategy to address this challenge has been the development of Layer 2 (L2) scaling solutions. However, this approach often introduces trade-offs, potentially compromising decentralization and, consequently, the core value proposition of blockchain technology. This reality underscores the importance of scaling the Layer 1 (L1) protocol directly. But to what extent is this possible?</p>
+</blockquote>
+<blockquote>
+ <p>As we push L1s into fast-block regimes, new challenges arise. One challenge is that, in the presence of transmission latency, strategic behavior by miners can create a bottleneck. This post provides a game-theoretical analysis of the impact of block propagation latency on the supply of block capacity in Nakamoto consensus, based on the paper <a href="https://ideas.repec.org/p/crs/wpaper/2024-10.html">Latency Trade-offs in Blockchain Capacity Management</a> by <a href="https://michelefabi.com/">Michele Fabi</a> (2025). The framework outlined here is most relevant when target block times are on the order of seconds or milliseconds, making propagation latency quantitatively significant.</p>
+</blockquote>
+<h2 id="the-latency-revenue-trade-off">The Latency-Revenue Trade-off</h2>
+<p>At the heart of the analysis that follows is a trade-off faced by blockchain miners in a fast-block environment:</p>
+<ul>
+ <li>
+ <p><strong>Proposing Large Blocks for More Fees:</strong> On one hand, miners are incentivized to create large blocks. A larger block can accommodate more transactions, and each transaction carries a fee. By maximizing the data included in a block, a miner maximizes their potential fee revenue.</p>
+ </li>
+ <li>
+ <p><strong>Proposing Smaller Blocks for Speedier Propagation:</strong> On the other hand, the downside to size is higher latency. A larger block, containing more data, takes longer to propagate across the miner network. During this propagation time, another miner might produce and broadcast a competing block. If this competing block is smaller and thus propagates faster, it may reach a majority of the network first. In this scenario, the larger, slower block is tail-gated and thus “orphaned” by the network. Its miner loses out on both the transaction fees and the fixed block reward (the coinbase).</p>
+ </li>
+</ul>
+<p>This creates the central conflict of the paper: <strong>Should a miner propose a large, more profitable block that risks being orphaned, or a smaller, faster block that has a higher chance of being accepted but yields lower fee revenue?</strong></p>
+<p>Crucially, the optimal decision for one miner depends on the strategies of all other miners. If others are proposing large, slow blocks, a miner might gain an edge by proposing a smaller one. If everyone else is proposing small blocks, there might be an opportunity to capture more fees with a larger one. This interdependence makes the choice of block size a game theory problem, which we will now formalize.</p>
+<h2 id="setting-the-stage">Setting the Stage</h2>
+<p>Ren’s work on the <strong>Security Proof for Nakamoto Consensus</strong> (<a href="https://decentralizedthoughts.github.io/2019-11-29-Analysis-Nakamoto/">2019 blog post here</a>) introduces a Poisson process for block arrivals assuming a synchronous network with bounded delay Δ.</p>
+<p>Building directly on this setting, we model <strong>individual miner incentives</strong>: miners now <strong>choose the capacity (i.e., the size) of their blocks</strong> strategically, which we denote by $k$. All the original assumptions remain identical, except that blocks now face a propagation delay that scales linearly with their size. Hence, blocks face a delay of Δk units of time.</p>
+<p>The timeline below illustrates how honest blocks that are mined too close in time (&lt; Δk) may <em>fork</em> or <em>tailgate</em> one another.</p>
+<p align="center">
+ <img src="/uploads/fork-probability.png" width="60%" />
+ <figcaption><em> Poisson arrivals and tailgated blocks under a bounded network delay (adapted from Ren 2019).</em></figcaption>
+</p>
+<h3 id="notation-table">Notation Table</h3>
+<table>
+ <thead>
+ <tr>
+ <th>Symbol</th>
+ <th>Meaning</th>
+ </tr>
+ </thead>
+ <tbody>
+ <tr>
+ <td>$Δ$</td>
+ <td>Propagation delay per kB</td>
+ </tr>
+ <tr>
+ <td>$μ$</td>
+ <td>Block production rate</td>
+ </tr>
+ <tr>
+ <td>$α$</td>
+ <td>Transaction‑data inflow</td>
+ </tr>
+ <tr>
+ <td>$τ$</td>
+ <td>Fee per kB</td>
+ </tr>
+ <tr>
+ <td>$π$</td>
+ <td>Coinbase reward (fixed)</td>
+ </tr>
+ <tr>
+ <td>$k$</td>
+ <td>Block capacity</td>
+ </tr>
+ <tr>
+ <td>$λ$</td>
+ <td>Growth rate of the honest chain</td>
+ </tr>
+ <tr>
+ <td>$ρ$</td>
+ <td>System load $=α/λk$</td>
+ </tr>
+ <tr>
+ <td>$Ac$</td>
+ <td>Adversary cost per second</td>
+ </tr>
+ </tbody>
+</table>
+<h2 id="1latency-and-strategic-block-capacity">1. Latency and Strategic Block Capacity</h2>
+<p>In each mining round (starting when a new block is added to the honest chain), miner $m$ selects a block capacity $k_m \in \mathbb{R}_{+}$ for the next proposed block.<br />
+We make the following assumptions on the two opposing forces that shape this choice:</p>
+<ul>
+ <li><strong>Fee revenue.</strong> Transaction fees are earned at a marginal rate $\tau$ per kB of data, so expected gross revenue, $\tau k_m$, increases linearly with block size.</li>
+ <li><strong>Latency risk.</strong> Block propagation time increases linearly in size, $\Delta k_m$; a larger block takes longer to reach the network, raising the chance that it is overtaken and orphaned by a faster competitor.</li>
+</ul>
+<p>Importantly, the probability that miner $m$’s block is accepted depends not only on its own capacity choice but also on those chosen by all other miners. Let 
+$k_{-m} = (k_{1}, …, k_{m-1}, k_{m+1}, …, k_{M})$ denote the vector of competing capacities. The win probability is given by</p>
+\[P_m(k_m; k_{-m}) = \Pr[ T_m + \Delta k_m &lt; \min_{j \neq m} \{ T_j + \Delta k_j \} ],\]
+<p>where $T_j \sim \text{Exp}(\mu/M)$ are independent exponential random variables representing Poisson block arrival times, and $\mu$ is the aggregate block production rate.</p>
+<p>The expected payoff for miner $m$ is</p>
+\[R_m(k_m; k_{-m}) = P_m(k_m; k_{-m}) \cdot (\pi + \tau k_m),\]
+<p>with $\pi$ denoting the fixed coinbase reward. A miner’s best response to the capacity profile of others is</p>
+\[k_m^{\star} = \arg\max_{k_m \geq 0} R_m(k_m; \mathbf{k}_{-m})\]
+<p>This interdependence makes the capacity choice a fully strategic decision: each miner’s optimal block size depends on beliefs about the sizes chosen by others.</p>
+<h2 id="2equilibrium-block-capacity">2. Equilibrium Block Capacity</h2>
+<p>Neglecting block size limits imposed by the protocol (see discussion below), each miner’s chosen capacity cannot exceed the current mempool size $Q$ nor fall below zero. When these bounds are not binding, the block capacity that arises in the unique symmetric Nash equilibrium of the game is</p>
+\[k_m^{\mathrm{NE}}(\pi,\tau,\mu)=\frac{\mu_{-m}^{-1}}{\Delta}-\frac{\pi}{\tau}.\]
+<p>Here</p>
+\[\mu_{-m}=\mu \frac{M-1}{M}\]
+<p>is the aggregate block‑production rate of the <em>other</em> miners (assuming homogeneous hash rates). The term $\mu_{-m}^{-1}/\Delta$ captures the ratio of their expected inter‑block time to the per‑unit propagation delay, while $\pi/τ$ expresses the relative weight of the size‑independent coinbase reward.</p>
+<p>We can see that:</p>
+<ul>
+ <li>Small Δ relative to $\mu_{-m}^{-1}$ ⇒ larger blocks.</li>
+ <li>Large $\pi/\tau$ ⇒ smaller blocks.</li>
+ <li>As $M\to\infty$, $\mu_{-m}\to\mu$.</li>
+</ul>
+<p>The effects of these ratios on the equilibrium block size are intuitive: if the transmission delay is short relative to the block production time, then the increase in forking risk caused by recording more transactions becomes less of a concern, thus miners increase block capacity.</p>
+<p>On the other hand, since fees rise from recording more transactions but the coinbase does not, a larger coinbase lowers miners’ incentive to add transactions. Extra transactions prolong propagation and raise orphan risk, so a higher coinbase shifts the cost‑benefit cutoff to a lower equilibrium capacity.</p>
+<p>When the mining population is large ($M\to\infty$), $\mu_{-m}$ converges to the aggregate block‑production rate $\mu$.</p>
+<h2 id="3mempool-dynamics">3. Mempool Dynamics</h2>
+<p>To connect miner incentives with user latency, we model the mempool as a <strong>continuous bulk‑service queue</strong>: transactions flow in at a rate of α, while blocks of size <em>k</em>—strategically chosen by miners—clear this data in batches. This extends the discrete M/M[K]/1 framework of Huberman‑Leshno‑Moallemi (2019) and the binary‑block M/M/1 queues of Hinzen et al. (2019) and Easley et al. (2019). Similar stochastic processes are also found in inventory theory and in neuroscience for modeling integrate-and-fire neurons.</p>
+<p>The mempool size $Q_t$ follows the stochastic differential equation:</p>
+\[d Q_t = \alpha dt - \min ( k,Q_t ) d B_t \quad B_t \sim \text{Poisson}(\lambda)\]
+<p>where</p>
+\[\lambda = \mu e^{ -\mu \Delta k(\pi,\tau,\mu)}\]
+<p>is the <strong>growth rate of the honest chain</strong>—the block production rate μ multiplied by the probability that a produced block is not orphaned.</p>
+<p align="center">
+  <img src="/uploads/process.png" width="80%" alt="Sample path of the mempool size process" />
+   <figcaption><em> Evolution of the sample path of the mempool size process.</em></figcaption>
+</p>
+<p>By analyzing this process, its statistical properties can be fully characterized by a single parameter: the <strong>system load</strong>:</p>
+\[\rho=\frac{\alpha}{\lambda k}\in[0,1)\]
+<p>The load, <strong>$\rho$</strong>, is an indicator of system congestion. It measures the ratio of the incoming transaction data rate ($\alpha$) to the chain’s effective data-processing rate ($\lambda k$).</p>
+<h3 id="user-performance-and-waiting-time">User Performance and Waiting Time</h3>
+<p>From a user’s perspective, the system’s load directly impacts the most critical performance metric: the <strong>expected waiting time</strong> for a transaction to be confirmed. In the vast majority of queuing models, as the load $\rho$ approaches 1, the average queue length (here, the mempool size) and the expected waiting time tend to grow exponentially. While our bulk-service model is more complex than a simple M/M/1 queue, the core principle is identical: a lower load means a less congested system and, therefore, shorter wait times.</p>
+<p>To further quantify this user experience, we can derive two specific metrics from the model:</p>
+<ul>
+ <li><strong>Partial‑utilization probability</strong>: This is the probability that all pending transactions in the mempool can be recorded in the next block. It effectively answers the user’s question: <em>“Is the network currently congested?”</em> A high probability indicates low congestion and implies a short expected waiting time for transaction confirmation.
+ <p align="center">
+   <img src="/uploads/partial_utilization_with_asympt.png" width="50%" alt="Graph of partial-utilization probability" />
+ </p>
+ </li>
+ <li><strong>Block‑inclusion probability</strong>: This is the probability that a transaction arriving at a random time is included in the very next block. It directly answers: <em>“What are the chances my transaction gets confirmed quickly?”</em> It provides an immediate sense of the service delay a user will face.
+ <p align="center">
+   <img src="/uploads/inclusion_prob_continuous.png" width="50%" alt="Graph of block-inclusion probability" />
+ </p>
+ </li>
+</ul>
+<p>Ultimately, all these user-centric metrics improve as the load $\rho$ decreases. For a given blockspace demand, an optimally designed system from a user’s point of view is arguably one that minimizes this load.</p>
+<h2 id="4-optimality-conditions">4. Optimality Conditions</h2>
+<p>We can now analyze the system’s performance from two different perspectives: what is best for miners, and what is best for users. The core of the analysis is to determine when these two objectives align or conflict.</p>
+<ul>
+ <li><strong>Miner Optimality:</strong> A parameter configuration state that maximizes the aggregate revenue of all miners.</li>
+ <li><strong>User Optimality:</strong> A parameter configuration that minimizes the system load $\rho$.</li>
+</ul>
+<h3 id="miner-optimal-capacity">Miner-Optimal Capacity</h3>
+<p>From a miner’s perspective, the goal is to maximize their revenue per unit of time. Aggregate miner revenue is given by:</p>
+\[ \mu e^{ - \mu \Delta k } ( \pi+\tau k )\]
+<p>This expression represents the rate at which non-orphaned blocks are produced ($\mu e^{-\mu\Delta k}$) multiplied by the reward for each successful block ($\pi+\tau k$). Maximizing this expression with respect to the block capacity $k$ yields the miner-optimal capacity:</p>
+\[k^{\mathrm{opt}}(\pi,\tau,\mu)=\frac{\mu^{-1}}{\Delta}-\frac{\pi}{\tau}\]
+<p>As the number of miners $M$ tends to infinity, the Nash Equilibrium capacity chosen by individual miners, $k^{\mathrm{NE}}$, converges to this revenue-maximizing capacity, $k^{\mathrm{opt}}$.</p>
+<h3 id="user-optimal-capacity">User-Optimal Capacity</h3>
+<p>From a user’s perspective, the best system is the one that minimizes the load $\rho$ and thus their waiting time. The lowest possible load the system can achieve is the <strong>efficient load</strong>:</p>
+\[\rho^{*}= \min_{\mu,k&gt;0} \frac{\alpha}{\mu k e^{-\mu\Delta k} }\]
+<p>This minimum is obtained by finding the pair $(\mu^{ * },k^{ * })$ that maximizes the denominator, which represents the chain’s effective throughput. This occurs when the system is perfectly balanced, satisfying the condition:</p>
+\[\mu^{ * } = \frac{1}{ \Delta k^{ * } }, \qquad k^{ * } \in (0,\infty)\]
+<p>Intuitively, this means the system is most efficient when <strong>the time to produce a block ($\mu^{-1}$) is exactly equal to the time it takes for that block to propagate ($\Delta k^{*}$)</strong>. If blocks are produced faster than they can propagate, the network becomes unstable with forks. If they are produced much slower, the network is underutilized. This balance point maximizes the rate of useful data being added to the chain, thereby minimizing congestion for users.</p>
+<p>The above formula extends to arbitrary block size the expression of the maximum sustainable block rate for a given latency. A similar formula appears in the distributed‑systems literature (e.g., Pass &amp; Shi 2017) and in the economics literature (e.g., Hinzen et al. 2022).</p>
+<h3 id="the-conflict-why-miner-incentives-lead-to-smaller-blocks">The Conflict: Why Miner Incentives Lead to Smaller Blocks</h3>
+<p>The crucial question now is whether the capacity chosen by miners, $k^{\mathrm{opt}}$, is the same as the capacity that is optimal for users, $k^{*}$. Comparing the two formulas reveals the conflict:</p>
+\[k^{*}=k^{\mathrm{opt}}(\pi,\tau,\mu)+\frac{\pi}{\tau}\]
+<p>Since the coinbase $\pi$ and fee rate $\tau$ are non-negative, the competitive equilibrium chosen by miners yields a block capacity that is smaller than or equal to what is optimal for users:</p>
+\[k^{\mathrm{opt}}(\pi,\tau,\mu) \le k^{*}\]
+<p>Equality—and thus a user-optimal outcome—is achieved <strong>only when the coinbase reward is zero ($\pi=0$)</strong>.</p>
+<p>Any positive coinbase ($\pi &gt; 0$) incentivizes miners to produce blocks that are inefficiently small from a user’s perspective. The reason is that the coinbase is a large, fixed reward that a miner only receives if their block wins the race and is not orphaned. By shrinking their blocks, miners reduce propagation delay, increasing their chances of winning this fixed prize. They are willing to sacrifice some fee revenue (from a larger block) to improve the odds of securing the more valuable coinbase. This strategic choice leads to a higher system load and, consequently, longer waiting times for users.</p>
+<h2 id="5-security-implications">5. Security Implications</h2>
+<p>In Nakamoto consensus safety is guaranteed only if honest miners burn <strong>at least as many resources per unit time as any attacker could</strong>.</p>
+<p>Let<br />
+$A$: computational power of a hypothetical adversary (block rate),<br />
+$c$: unit cost of that power, so $A c$ is the <strong>attack cost per unit of time</strong>,<br />
+$\lambda$: rate at which the honest chain grows by one block,<br />
+$\pi+\tau k$: reward paid to the miner of such a block.</p>
+<p>A minimal safety requirement is</p>
+\[\lambda(\pi+\tau k) \ge A c \qquad \text{(SC)}\]
+<p>Suppose we suppress the coinbase $(\pi=0)$ to reach the efficient capacity ($\mu^{-1}=\Delta k$).<br />
+At this parameter configuration $\lambda k = 1/(e\Delta)$ because the fork probability equals $1- e^{-1}$.<br />
+Plugging into (SC) gives</p>
+\[\frac{\tau}{\Delta} \ge e (Ac) \qquad \text{(FC)}\]
+<blockquote>
+ <p><em>Interpretation</em>: <strong>To secure the chain using only fees, the fee income per unit of time must exceed the marginal cost of attacking the chain by a factor of e (≈ 2.718)</strong>.</p>
+</blockquote>
+<p>If inequality (FC) holds, security is achievable <em>without</em> a coinbase and the load attains its minimum.<br />
+Otherwise, a positive $\pi$ is required, miners reduce the equilibrium block size, and the system operates at a second‑best (higher) load.</p>
+<h2 id="6-discussion-and-caveats">6. Discussion and Caveats</h2>
+<h3 id="rewarding-orphaned-uncle-blocks">Rewarding orphaned (“uncle”) blocks</h3>
+<p>How does the equilibrium change when miners are paid a coinbase reward ϕ even for forked blocks?</p>
+<p>This shifts the equilibrium capacity (in the limit with many small miners) to</p>
+\[k(\pi,\tau,\mu,\phi)=\frac{\mu^{-1}}{\Delta}-\frac{\pi-\phi}{\tau}\]
+<p>Setting $\pi=\phi$ neutralizes the fixed‑reward distortion, so the efficient capacity $k^{ * }$ is attained for <strong>any</strong> fee rate τ.<br />
+Hence uncle rewards enlarge the parameter region in which the chain can be both secure and efficient.</p>
+<p>To assess the impact of uncle rewards, there are other considerations beyond this simplified setting: For example, if the attacker is rational, paying out $\phi$ may subsidize deliberate forking and weaken security guarantees.</p>
+<hr />
+<h3 id="discrete-latency">Discrete latency</h3>
+<p>If propagation delay is <em>piecewise</em> (no delay below a packet size $\underline k$, full delay Δ above it), strategic complementarities generate <strong>multiple pure‑strategy equilibria</strong>. The qualitative comparative statics remain unaffected—larger Δ or higher $\pi/\tau$ induce miners to choose smaller blocks.</p>
+<hr />
+<h3 id="block-size-limits">Block Size Limits</h3>
+<p>The model does not include a hard-coded maximum block size ($k^{max}$), which is a well-known feature of protocols like Bitcoin. In this framework, a miner can theoretically propose a block that absorbs the entire mempool.</p>
+<p>This is a deliberate modeling choice, meant to isolate the balance between fee revenue and latency. In fact, based on the above model, the maximum size would never be binding, as due to the incentive structure of the coinbase reward, miners are already motivated to produce blocks that are <strong>inefficiently small</strong>.</p>
+<p>A bit more formally, if a maxium block size (e.g., $k^{max}$) were present in the model, the strategic capacity chosen by miners would simply be $\min(k^{NE}, k^{max})$, but since the model shows $k^{NE}$ is already smaller than what is socially optimal, $k^{max}$ would not alter the analysis.</p>
+<p>While latency is relevant for the choice of block size limits, for Bitcoin, the historical debate was driven by other concerns. In particular, it was driven by the need for spam prevention or the desire to create blockspace scarcity to foster a fee market through a priority auction.</p>
+<hr />
+<h3 id="demand-elasticity-and-feereward-calibration">Demand Elasticity and Fee–Reward Calibration</h3>
+<p>The model so far treats the transaction flow α as fixed. Taking the analysis one step further requires calibrating the elasticity of transaction demand to fees.</p>
+<hr />
+<p>*Feedback welcome at michele.fabi@ensae.fr.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ <a href="/tags#incentives">incentives</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=An+Analysis+of+Latency+and+Block+Capacity+in+Nakamoto+Consensus&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2025-07-24-block_capacity_blog%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2025-07-18-two-round-Simplex/" data-toggle="tooltip" data-placement="top" title="2-round BFT in Simplex style">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2025-07-26-Lagrange/" data-toggle="tooltip" data-placement="top" title="Lagrange's Theorem through the algorithmic lens">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

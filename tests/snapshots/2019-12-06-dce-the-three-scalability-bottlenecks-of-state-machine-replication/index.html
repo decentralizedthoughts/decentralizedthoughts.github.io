@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Data, Consensus, Execution: Three Scalability Bottlenecks for State Machine Replication</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham">
+ 
+ <meta name="description" content="If anyone asks you: how can I scale my State Machine Replication (Blockchain) system? You should answer back with a question: what is your bottleneck? Is it Data, Consensus or Execution? Data: Shipping the commands to all the replicas. For example, if a block contains 1MB of commands, then you need all these bits to arrive to all the validating replicas. The obvious bottleneck is your system’s channel capacity. Consensus:...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Data, Consensus, Execution: Three Scalability Bottlenecks for State Machine Replication">
+ <meta property="og:description" content="If anyone asks you: how can I scale my State Machine Replication (Blockchain) system? You should answer back with a question: what is your bottleneck? Is it Data, Consensus or Execution? Data: Shipping the commands to all the replicas. For example, if a block contains 1MB of commands, then you need all these bits to arrive to all the validating replicas. The obvious bottleneck is your system’s channel capacity. Consensus:...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham">
+ 
+ <meta property="og:article:published_time" content="2019-12-06T12:05:00-05:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2019-12-06-dce-the-three-scalability-bottlenecks-of-state-machine-replication/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2019-12-06-dce-the-three-scalability-bottlenecks-of-state-machine-replication/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Data, Consensus, Execution: Three Scalability Bottlenecks for State Machine Replication">
+ <meta property="twitter:description" content="If anyone asks you: how can I scale my State Machine Replication (Blockchain) system? You should answer back with a question: what is your bottleneck? Is it Data, Consensus or Execution? Data: Shipping the commands to all the replicas. For example, if a block contains 1MB of commands, then you need all these bits to arrive to all the validating replicas. The obvious bottleneck is your system’s channel capacity. Consensus:...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Data, Consensus, Execution: Three Scalability Bottlenecks for State Machine Replication</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham</strong><br>
+ 
+ <span class="post-meta">Posted on December 6, 2019</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>If anyone asks you: <em>how can I <strong>scale</strong> my State Machine Replication (Blockchain) system?</em></p>
+<p>You should answer back with a question: <em>what is your <strong>bottleneck</strong>? Is it Data, Consensus or Execution?</em></p>
+<ol>
+ <li>
+ <p><strong>Data</strong>: Shipping the commands to all the replicas. For example, if a <a href="https://en.bitcoin.it/wiki/Block_size_limit_controversy">block contains 1MB</a> of commands, then you need all these bits to arrive to all the validating replicas. The obvious bottleneck is your system’s <a href="https://en.wikipedia.org/wiki/Channel_capacity">channel capacity</a>.</p>
+ </li>
+ <li>
+ <p><strong>Consensus</strong>: Once the commands arrive, replicas engage in a <em>consensus protocol</em> (like the ones discussed here for <a href="https://decentralizedthoughts.github.io/2019-06-23-what-is-the-difference-between/">partial synchrony</a> or <a href="https://decentralizedthoughts.github.io/2019-11-11-authenticated-synchronous-bft/">synchrony</a>). For example, if a consensus protocol needs 2 round-trips and the validating replicas are spread across the globe, then the obvious <a href="https://wondernetwork.com/pings">latency</a> bottleneck is due to the speed of light and the size of Earth.</p>
+ </li>
+ <li>
+ <p><strong>Execution</strong>: After the commands have arrived and consensus is reached on the total ordering of the commands, the replicas need to <em>execute</em> the commands. The <a href="https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/">execution engine
+</a> is a function that takes the old state and applies the ordered commands to compute the new state (and compute the output). For example, if an execution requires doing many cryptographic operations, then the obvious bottleneck is that replicas need to re-execute these cryptographic operations.</p>
+ </li>
+</ol>
+<p>These three bottlenecks are <em>not</em> a tradeoff or a dilemma or even a <a href="https://en.wikipedia.org/wiki/Trilemma">trilemma</a>. They are independent bottlenecks. The ability of a State Machine Replication system to scale is bottlenecked by the <em>minimum</em> of all three. Below we provide a partial list of directions for addressing these challenges.</p>
+<h3 id="data">1. Scaling Data</h3>
+<h4 id="better-network-solutions">Better network solutions</h4>
+<p>In Bitcoin and other cryptocurrencies, the ability to scale depends crucially on the ability to reduce the latency it takes a winning block of commands to propagate and reach all other miners. Systems like <a href="https://bitcoinfibre.org/">FIBRE</a>, <a href="https://www.falcon-net.org/">Falcon</a>, and <a href="https://bloxroute.com/wp-content/uploads/2018/03/bloXroute-whitepaper.pdf">bloXroute</a> aim to reduce this latency by using <em>pipelining</em> and <em>forward error correction codes</em> to propagate blocks with lower latency.</p>
+<p>Another way to improve data scalability centers around being able to discover peers and access content via a <em>content addressable network</em>. See <a href="https://pdos.csail.mit.edu/~petar/papers/maymounkov-kademlia-lncs.pdf">Kademlia</a>, which inspired Ethereum’s <a href="https://github.com/ethereum/devp2p/blob/master/rlpx.md">RLPx</a> and was generalized in <a href="https://libp2p.io/">libp2p</a>.</p>
+<h4 id="pushing-data-to-layer-two">Pushing data to layer two</h4>
+<p>One solution to the bottleneck generated by replicating all the commands is not to replicate them! Systems like <a href="https://lightning.network/lightning-network-paper.pdf">Lightning</a>, <a href="https://www.plasma.io/plasma.pdf">Plasma</a>, and other <a href="https://eprint.iacr.org/2019/360.pdf">layer two</a> solutions aim to reduce data replication by pushing some of the intermediate commands to a smaller private group and only report periodic summaries to the main system (see our post on <a href="https://decentralizedthoughts.github.io/2019-10-25-payment-channels-are-just-a-two-person-bfs-smr-systems/">payment channels</a>). This approach has a natural drawback: not replicating all the data creates a data availability problem. The safety depends on having at least one honest party in each private group that can react in a timely manner.</p>
+<h3 id="2-scaling-consensus">2. Scaling Consensus</h3>
+<h4 id="throughput-vs-latency-trade-off">Throughput vs latency trade-off</h4>
+<p>Some people talk about <em>Transactions-Per-Second</em> (<a href="https://en.wikipedia.org/wiki/Transactions_per_second">TPS</a>) as the measure of how scalable a consensus protocol is. TPS is a measure of <em>throughput</em> and optimizing it alone is a misunderstanding of the consensus scalability challenge. A solution for scaling consensus must address both <em>throughput</em> and <em>latency</em>. Improving consensus throughput (and hurting latency) via <em>batching</em> is easy: reach consensus on the hash of the batch of all the data just once-a-day instead of every few seconds. Clearly the cost of doing consensus just once-a-day will be amortized and consensus will not be the bottleneck in terms of throughput. <em>Batching</em> is an important technique that increases latency and increases throughput for consensus protocols, but batching is not a magic solution to scale consensus performance.</p>
+<p>The <a href="http://www.pmg.csail.mit.edu/papers/bft-tocs.pdf">PBFT journal version</a> has a good discussion of latency and throughput for BFT State Machine Replication.</p>
+<p>For <a href="https://bitcoin.org/bitcoin.pdf">Nakamoto</a> <a href="https://eprint.iacr.org/2014/765.pdf">Consensus</a> based protocols there has been a series of works: <a href="https://www.usenix.org/system/files/conference/nsdi16/nsdi16-paper-eyal.pdfthat">Bitcoin-NG</a>, <a href="https://eprint.iacr.org/2016/916.pdf">Fruitchains</a>, <a href="https://arxiv.org/pdf/1909.11261.pdf">Prism</a> that aim to improve throughput and latency.</p>
+<h4 id="performance-vs-security-trade-off">Performance vs security trade-off</h4>
+<p>Some people suggest improving the performance of consensus by running it on a smaller group of validating replicas. Decreasing the set of validating replicas indeed increases the performance but it also reduces security. Before we discuss this path, let’s consider ways to improve consensus performance without reducing the number of validating replicas.</p>
+<p>One way to improve consensus performance without reducing security is to improve the <em>consensus protocol complexity</em>, for example, by reducing the number of rounds or changing the <em>message complexity</em> from quadratic to linear. This post discusses some protocol improvements in <a href="https://decentralizedthoughts.github.io/2019-06-23-what-is-the-difference-between/">partial synchrony</a> and this post discusses some protocol improvements in <a href="https://decentralizedthoughts.github.io/2019-11-11-authenticated-synchronous-bft/">synchrony</a>.</p>
+<h4 id="scale-vs-adaptivity-trade-off">Scale vs adaptivity trade-off</h4>
+<p>Consensus protocols based on the PBFT view-based paradigm are susceptible to the adversary adaptively attacking the Primary.
+Security of a consensus protocol is not just about the size of the adversary (which is controlled by the total number of validating replicas) but also about the <a href="https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/">adaptive power</a> of the adversary.</p>
+<p>Protocols that handle an adaptive adversary often incur a higher cost and are more challenging to scale. <a href="https://arxiv.org/pdf/1607.01341.pdf">Algorand</a> suggests using round based cryptographic sampling to scale Byzantine consensus and protect it from adaptive attackers. This approach has promising <a href="https://people.csail.mit.edu/nickolai/papers/gilad-algorand-eprint.pdf">simulation results</a>. An adaptive adversary can use <em>Denial-of-Service</em> attacks to block the system from making progress. <a href="https://eprint.iacr.org/2016/199.pdf">HoneyBadger</a> suggest the first practical <em>asynchronous</em> BFT protocol, which guarantees liveness without making any timing assumptions.</p>
+<h4 id="avoiding-a-total-ordering-of-all-commands">Avoiding a total ordering of <em>all</em> commands</h4>
+<p>When commands all depend on each other, there is no choice for consensus but to create a complete <a href="https://en.wikipedia.org/wiki/Total_order">total order</a> of all commands. In many workloads, commands do not depend on each other and do not interfere with each other. For example, in some cases a command where $A$ pays $B$ and a command where $C$ pays $D$ do not interfere with each other and there is no reason to bottleneck the system and spend precious consensus efforts to <em>internally</em> order these two commands. This approach has been taken in the non-Byzantine model in <a href="https://www.cs.cmu.edu/~dga/papers/epaxos-sosp2013.pdf">epaxos</a>. Protocols like <a href="https://avalanchelabs.org/QmT1ry38PAmnhparPUmsUNHDEGHQusBLD6T5XJh4mUUn3v.pdf">Avalanche</a> and other <a href="http://www.cs.tau.ac.il/~msagiv/courses/blockchain/PHANTOM_Sompolinsky.pdf">DAG based protocols</a> improve consensus throughput by allowing non-interfering commands to be committed concurrently.</p>
+<h4 id="sharding">Sharding</h4>
+<p>We are now ready to discuss the idea of improving the performance of consensus by running it on a smaller group of validating replicas and by doing so allowing many consensus systems to run in parallel.</p>
+<p>At a high level, <a href="http://delivery.acm.org/10.1145/2500000/2491245/a8-corbett.pdf?ip=77.124.127.128&amp;id=2491245&amp;acc=OA&amp;key=4D4702B0C3E38B35%2E4D4702B0C3E38B35%2E4D4702B0C3E38B35%2E3ABADC0B30E26CFA&amp;__acm__=1575188662_b429bd30b754abad7a1d2f8a4ed798e5">Sharding</a> is the idea of <em>partitioning</em> the state and the set of validating replicas. Each <em>shard</em> controls some part of the state and consensus is run by some part of the total validating replica population. Some cross shard mechanism must also be in place. The comprehensive <a href="https://github.com/ethereum/wiki/wiki/Sharding-FAQ">“Sharding FAQ”</a> of Ethereum is a great resource to learn more about sharding.</p>
+<p>Sharding is a way to parallelize the <em>data</em>, <em>consensus</em>, and <em>execution</em> bottlenecks. Parallelizing the data and execution depends on having a workload with low <em>contention</em>.
+From a consensus perspective, sharding is essentially a performance vs security trade-off: instead of using all validating replicas to secure one state machine, sharding creates multiple state machines, and each validating replica is used to secure just one of them.</p>
+<p>Having many shards (when contention is low) can obviously improve performance, but since each shard is secured by less validating replicas, it may also reduce security. See <a href="https://eprint.iacr.org/2017/406.pdf">Omniledger</a> and
+<a href="https://medium.com/chainsafe-systems/ethereum-2-0-a-complete-guide-scaling-ethereum-part-two-sharding-902370ac3be">Ethereum 2.0</a> for examples of systems that use sharding techniques.</p>
+<p>Ethereum 2.0 plans to combine the lower security of each shard with a higher security global chain. Much like layer 2 solutions, the idea is that each lower security shard can periodically finalize itself on the higher security global chain. This creates a security-latency tradeoff: waiting for high security requires waiting for the periodic global chain finalization.</p>
+<h3 id="3-scaling-execution">3. Scaling Execution</h3>
+<p>The separation of consensus and execution is one of the fundamental architecture designs of State Machine Replication (see <a href="https://www.cs.unm.edu/~cris/591/castro2003base.pdf">Base 20013</a>). The advantages of this separation are highlighted in <a href="https://www.cs.cornell.edu/lorenzo/papers/sosp03.pdf">Yin et al 2003</a>.
+In the traditional SMR design, after a command is replicated and committed, it needs to be executed on all validating replicas.</p>
+<p>In many systems, the cost of <em>executing</em> the commands is the biggest scalability bottleneck. A major type of denial-of-service attack on State Machine Replication systems is to issue legal commands that will cause the system to waste time during execution (for example, see <a href="https://blog.ethereum.org/2016/09/22/ethereum-network-currently-undergoing-dos-attack/">here</a> and <a href="https://en.cryptonomist.ch/2018/09/26/bitcoin-bug-2/">here</a>). Many systems design <em>Domain Specific Languages</em> to prevent these attacks. Bitcoin uses <a href="https://en.bitcoin.it/wiki/Script">bitcoin script</a> which carefully limits the computational complexity of each transaction. Ethereum uses a <a href="https://www.ethos.io/what-is-ethereum-gas/">gas mechanism</a> to limit the execution complexity and incentivize its usage in an efficient manner.</p>
+<h4 id="parallelizing-execution">Parallelizing execution</h4>
+<p>One proposed way to speedup the execution computation bottleneck is to leverage machine <em>parallelization</em>. This approach works when commands in the block are mostly <em>contention free</em> (commutative or independent). The main idea is to find ways to simulate a sequential execution via a protocol that exploits parallelism in the optimistic contention-free case but maintains safety even if there is contention. See <a href="https://www.cs.cornell.edu/lorenzo/papers/Kapritsos12All.pdf">Eve 2012</a>, <a href="https://arxiv.org/abs/1702.04467">Dickerson, Gazzillo, Herlihy, Koskinen 2017</a> and <a href="https://arxiv.org/abs/1901.01376">Saraph, Herlihy 2019</a>.</p>
+<h4 id="dont-execute-verify-using-economic-incentives-and-fraud-proofs-optimistic-rollups">Don’t execute, verify using economic incentives and fraud proofs (optimistic rollups)</h4>
+<p>In this solution, the commands are committed as <em>data</em> but the execution is not done by the validating replicas. The validating replicas just act as a <em>data availability layer</em>.</p>
+<p>Instead of having replicas execute the commands, there is an economically-incentivized game where players can become executers by <em>posting bonds</em>. A <em>bonded executer</em> can then commit the execution outcome. Any <em>bonded reporting agent</em> can provide a <em>fraud proof</em> claiming that the executer committed an incorrect execution outcome. If the fraud proof is correct then the executer is <em>slashed</em> and the reporting agent is partially rewarded. If the reporting agent lies about the fraud proof, then its bond can be slashed. Protocols for efficiently challenging the executer have origins in the work of <a href="https://courses.cs.washington.edu/courses/cse533/05au/feige-kilian-journal.pdf">Feige Kilian 2000</a> followed by <a href="https://www.cs.tau.ac.il/~canetti/CRR11.pdf">Canetti, Riva, Rothblum 2011</a> and were later adopted to using on-chain incentives in <em>TrueBit</em> <a href="https://people.cs.uchicago.edu/~teutsch/papers/truebit.pdf">Teutsch, Reitwießner 2017</a> and in Buterin’s
+<a href="https://blog.ethereum.org/2014/09/17/scalability-part-1-building-top/">Off-Chain Oracles</a>. This approach is now being developed under the name <a href="https://thebitcoinpodcast.com/hashing-it-out-67/">optimistic rollups</a> (also see <a href="https://ethresear.ch/t/minimal-viable-merged-consensus/5617">merged consensus</a>, <a href="https://arxiv.org/pdf/1904.06441.pdf">Adler, Mikerah, Quintyne-Collins</a>, <a href="https://arxiv.org/pdf/1809.09044.pdf">Al-Bassam, Sonnino, Buterin</a> and <a href="https://arxiv.org/pdf/1905.09274.pdf">LazyLedger</a>).</p>
+<h4 id="dont-execute-verify-using-succinct-proofs-zk-rollups">Don’t execute, verify using succinct proofs (zk rollups)</h4>
+<p>In this solution, again the commands are committed as <em>data</em> but the execution is not done by the validating replicas. The validating replicas just act as a data availability layer for the commands.</p>
+<p>Instead of using games and fraud proofs to verify execution it is possible to leverage <em>succinct non-interactive proofs</em> (<a href="https://en.wikipedia.org/wiki/PCP_theorem">PCP</a>, <a href="https://www.iacr.org/archive/asiacrypt2010/6477343/6477343.pdf">Groth 2010</a>, <a href="https://eprint.iacr.org/2016/260.pdf">Groth 2016</a>, <a href="https://eprint.iacr.org/2013/879.pdf">Ben-Sasson, Chiesa, Tromer, Virza 2013-2019</a>, <a href="https://scalingbitcoin.org/transcript/telaviv2019/survey-of-progress-in-zero-knowledge-proofs-towards-trustless-snarks">survey</a>). These cryptographic techniques allow a prover to generate very short proofs that can be efficiently verified with high cryptographic soundness and completeness. Execution (and proof generation) need to happen only at one entity. Once a short proof exists, then the validating replicas of the execution engine just need to validate the short proof instead of re-executing the long transactions.
+In Bitcoin, this approach was proposed by Maxwell (see <a href="https://bitcointalk.org/index.php?topic=277389.0">CoinWitness, 2013</a>) as a way to improve “Bitcoin’s scalability and securely integrate new and innovative alternative transaction methods and expand Bitcoin’s zero-trust nature to more types of transactions.”
+<a href="https://eprint.iacr.org/2018/962.pdf">Zexe</a> uses this approach to build a nano-kernel based proof system that allows private transactions in the UTXO setting.</p>
+<p>This approach for scaling transactions is highlighted in Buterin’s <a href="https://ethresear.ch/t/on-chain-scaling-to-potentially-500-tx-sec-through-mass-tx-validation/3477">zk-roll-up</a> post. See podcasts by <a href="https://www.youtube.com/watch?v=JI3-z4PbmXA">Ben-Sasson</a> and <a href="https://medium.com/matter-labs/matter-labs-on-zero-knowledge-podcast-6795d3226699">Gluchowski</a> and videos by <a href="https://www.youtube.com/watch?v=QyM9qdFKsEA">Gluchowski</a> and <a href="https://www.youtube.com/watch?v=mOm47gBMfg8">Buterin</a> for a way to add privacy (zero knowledge) to the succinct proofs (zk zk rollups).
+Gluchowski wrote a <a href="https://medium.com/matter-labs/optimistic-vs-zk-rollup-deep-dive-ea141e71e075">survey/comparison</a> on optimistic and zk rollups and recently an announcement on <a href="https://medium.com/matter-labs/introducing-zk-sync-the-missing-link-to-mass-adoption-of-ethereum-14c9cea83f58">ZK Sync</a>.</p>
+<p>Using a succinct proof has a huge advantage: once the proof is created, the cost of verification is very low. The disadvantage is that creating the proof of execution of the commands is often significantly more resource consuming than just executing the commands (both in terms of CPU and in terms of memory). Another disadvantage is that these protocols add non-trivial complexity. Moreover, succinct proofs come in <a href="https://github.com/matter-labs/awesome-zero-knowledge-proofs">several flavors</a>, some of these flavors require non-trivial <a href="https://medium.com/qed-it/diving-into-the-snarks-setup-phase-b7660242a0d7">trusted setup</a> ceremonies.</p>
+<p><em>Rollups</em> aim to remove the execution bottleneck, but they do not change the <a href="#data">data bottleneck</a>.</p>
+<h4 id="executing-validating-requires-state-or-can-it-be-stateless">Executing (validating) requires state or can it be stateless?</h4>
+<p>Yet another challenge for execution is that it requires not only the command but also the existing state. For example, in Ethereum <a href="https://medium.com/@marcandrdumas/are-ethereum-full-nodes-really-full-an-experiment-b77acd086ca7#:~:text=Truth%20is%2C%20a%20specific%20type,the%20space%2C%20about%20180%20GB.">a full node requires hundreds of gigabytes and an archive requires a few terabytes</a>. In Bitcoin, <a href="https://bitcoin.org/en/full-node#what-is-a-full-node">a full node also requires hundreds of gigabytes</a>. Having a large state increases the barrier to entry and significantly slows down the rate at which a new node can start validating commands. This is particularly challenging in a sharding solution where there is a need to shuffle validators around to reduce the power of an adaptive adversary. If the state of each shard is large then the time it takes to sync with the state becomes a barrier to the speed at which validators can be shuffled between shards.</p>
+<p>So reducing the amount of data needed for validation allows for a more secure sharing which in turn allows for more scalability.
+One approach is to have the command to contain cryptographic proofs of all the data that it needs for validation. This is the idea of <a href="https://ethresear.ch/t/the-stateless-client-concept/172">stateless clients</a> and can be implemented with Merkle Tree Proofs.
+New cryptographic techniques allow for ever more efficient <strong>stateless validation</strong>. For example, see <a href="https://eprint.iacr.org/2020/352.pdf">Coda</a>. Alin’s <a href="https://www.zeroknowledge.fm/156">podcast</a> is a great introduction and contains many links.</p>
+<p><strong>Acknowledgment.</strong> We would like to thank Ling Ren, Kartik Nayak, Alin Tomescu, Pratyush Mishra, Louis Guthmann, and John Adler for helpful feedback on this post.</p>
+<p>Please leave comments on <a href="https://twitter.com/ittaia/status/1202870065751896065">Twitter</a></p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Data%2C+Consensus%2C+Execution%3A+Three+Scalability+Bottlenecks+for+State+Machine+Replication&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2019-12-06-dce-the-three-scalability-bottlenecks-of-state-machine-replication%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2019-11-29-Analysis-Nakamoto/" data-toggle="tooltip" data-placement="top" title="Security proof for Nakamoto Consensus">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2019-12-15-consensus-model-for-FLP/" data-toggle="tooltip" data-placement="top" title="Consensus Lower Bounds via Uncommitted Configurations">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

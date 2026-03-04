@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>He-HTLC - Revisiting Incentives in HTLC</title>
+ 
+ 
+ <meta name="author" content="Kartik Nayak, Sarisht Wadhwa, Jannis Stoeter, Fan Zhang">
+ 
+ <meta name="description" content="Hashed Time-locked Contracts (HTLC) find many useful applications in the L2 Layer such as the lightning network and atomic swaps. In this post, we will focus on discussing protocols for implementing HTLC when taking into consideration incentives for parties in the system. We will discuss a line of work — WHF’19, MAD-HTLC, He-HTLC — towards developing an HTLC protocol secure in the presence of rational parties. TL;DR Hashed Time-locked Contracts,...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="He-HTLC - Revisiting Incentives in HTLC">
+ <meta property="og:description" content="Hashed Time-locked Contracts (HTLC) find many useful applications in the L2 Layer such as the lightning network and atomic swaps. In this post, we will focus on discussing protocols for implementing HTLC when taking into consideration incentives for parties in the system. We will discuss a line of work — WHF’19, MAD-HTLC, He-HTLC — towards developing an HTLC protocol secure in the presence of rational parties. TL;DR Hashed Time-locked Contracts,...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Kartik Nayak, Sarisht Wadhwa, Jannis Stoeter, Fan Zhang">
+ 
+ <meta property="og:article:published_time" content="2022-08-12T01:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2022-08-12-hehtlc/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2022-08-12-hehtlc/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="He-HTLC - Revisiting Incentives in HTLC">
+ <meta property="twitter:description" content="Hashed Time-locked Contracts (HTLC) find many useful applications in the L2 Layer such as the lightning network and atomic swaps. In this post, we will focus on discussing protocols for implementing HTLC when taking into consideration incentives for parties in the system. We will discuss a line of work — WHF’19, MAD-HTLC, He-HTLC — towards developing an HTLC protocol secure in the presence of rational parties. TL;DR Hashed Time-locked Contracts,...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>He-HTLC - Revisiting Incentives in HTLC</h1>
+ 
+ 
+ 
+ 
+ By <strong>Kartik Nayak, Sarisht Wadhwa, Jannis Stoeter, Fan Zhang</strong><br>
+ 
+ <span class="post-meta">Posted on August 12, 2022</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>Hashed Time-locked Contracts (HTLC) find many useful applications in the L2 Layer such as the <a href="https://lightning.network/lightning-network-paper.pdf">lightning network</a> and <a href="https://arxiv.org/abs/1801.09515#:~:text=An%20atomic%20cross%2Dchain%20swap,example%2C%20trading%20bitcoin%20for%20ether">atomic swaps</a>. In this post, we will focus on discussing protocols for implementing HTLC when taking into consideration incentives for parties in the system. We will discuss a line of work — <a href="https://eprint.iacr.org/2019/748.pdf">WHF’19</a>, <a href="https://arxiv.org/pdf/2006.12031.pdf">MAD-HTLC</a>, <a href="https://eprint.iacr.org/2022/546.pdf">He-HTLC</a> — towards developing an HTLC protocol secure in the presence of rational parties.</p>
+<h2 id="tldr">TL;DR</h2>
+<p>Hashed Time-locked Contracts, as is, are not secure under the presence of rational miners. Its successor, <a href="https://arxiv.org/pdf/2006.12031.pdf">MAD-HTLC</a>, solves this concern under the assumption that miners are passive and only maximize their utility in terms of the number of tokens based on transactions available in the mempool. If we consider <em>active miners</em>, i.e., miners who may engage in external protocols and actively seek out opportunities in the system, our recent work, <a href="https://eprint.iacr.org/2022/546.pdf">He-HTLC</a>, shows that MAD-HTLC is not secure. We present a new protocol, He-HTLC, that is secure even in the presence of actively rational miners.</p>
+<p>Now, for those of you who really want to understand the concerns and the solution, here we go :-)</p>
+<h2 id="what-is-a-hashed-time-locked-contract">What is a Hashed Time-locked Contract?</h2>
+<p>A hashed time-locked contract allows a conditional transfer of $v^{dep}$ tokens from a payer (Bob) to a payee (Alice) based on two conditions:
+(i) Alice presents a pre-image $pre_a$ of an agreed upon hash value (key to a hash-lock),
+(ii) Alice presents $pre_a$ within time $T$ (time-lock).</p>
+<p>If Alice satisfies these two conditions, then she obtains $v^{dep}$ tokens from Bob. Otherwise, after time $T$, Bob can spend these tokens (i.e., obtain a refund). The refund mechanism exists for situations where Alice may be inactive.</p>
+<p>Thus, HTLC is parameterized by the public keys of the payer and payee, the pre-image $pre_a$ and the timelock parameter $T$. Note that, when we say, “Alice <em>presents</em> a pre-image $pre_a$”, she includes this in the mempool, and this is picked up by a miner/validator at the L1 layer. Similarly, the time $T$ is defined in terms of number of blocks at the L1 layer.</p>
+<p>The contract can be represented as the following:</p>
+<p><img src="https://i.imgur.com/DbWQGFJ.png" width="600" /></p>
+<p>A pictorial representation of an example set of events is described below. The figure shows a utility of $v^{dep}$ for Alice, and some mining fees, say $f^{dep}_A$, for miner $M_3$. In the example, we assume there are three miners $M_1, M_2$ and $M_3$, in addition to Alice and Bob.</p>
+<p>If Alice provides a signed transaction $tx^{dep}_A$, she spends $v^{dep}$ tokens.
+<img src="https://i.imgur.com/Xkp4slG.png" alt="" /></p>
+<p>Otherwise, after time $T$, Bob can spend those tokens.</p>
+<p><img src="https://i.imgur.com/rPdenEb.png" alt="" /></p>
+<h2 id="bribery-attacks-in-htlc">Bribery Attacks in HTLC</h2>
+<p>Observe that miners are the ones who decide the “source of truth” of events that happen in the ecosystem, and they do so for some fees that are paid by the users of the system. If Alice and Bob are both honest (altruistic), then the above protocol suffices. However, we may see a different picture when some of these parties are rational.</p>
+<p>Miners include Alice’s transaction $tx_{A}^{dep}$ for a mining fee. Somehow, if Bob offers them an incentive (e.g., a higher fee) to censor $tx_A^{dep}$, then Bob can redeem $v^{dep}$ for himself. This can be advantageous for both, Bob and the miners. Such attacks are referred to as <em>bribery attacks</em> and have been identified in this context by <a href="https://eprint.iacr.org/2019/748.pdf">Winzer, Herd and Faust</a>, and <a href="https://arxiv.org/pdf/2006.12031.pdf">Tsabary et al.’20</a>.</p>
+<p>We intuitively present two strategies for Bob to bribe miners.</p>
+<ol>
+ <li><strong>Pay per block strategy [<a href="https://eprint.iacr.org/2019/748.pdf">WHF’19</a>].</strong> In this strategy, Bob sets up a contract to pay every block producer at height $t \leq T$ a fee $&gt; f_A^{dep}$ if Alice’s transaction has not been included in the chain at time $t$. This can perhaps be set up in different ways, e.g., the payment being conditional on the success of censoring until time $T$. WHF’19 show that if all the miners are rational, it is strictly advantageous for them to censor Alice’s transaction.
+<img src="https://i.imgur.com/Jo5P5W4.png" alt="A graphical depiction of pay per block strategy by Bob" /></li>
+ <li><strong>Probabilistic pay per miner strategy [<a href="https://arxiv.org/pdf/2006.12031.pdf">Tsabary et al.’20</a>].</strong> In this strategy, the authors show that if Bob creates a competing transaction with fee $\frac{f_A^{dep} - f}{\lambda_{\text{min}}} + f$, then miners are better off in expectation to censor Alice’s transaction and prefer to wait for the opportunity to add Bob’s transaction at time $T$. Here, $f$ denotes highest offered fee by any other mempool transaction and $\lambda_{\text{min}}$ denotes a number representing the minimum computation power (as a fraction) of any miner participating in the network. Thus, all miners with a larger computation power are incentivized. Assuming $\lambda_{\text{min}}$ is set sufficiently low (the authors argue $\lambda_{\text{min}} = 0.01$ is sufficient), most miners can be incentivized to carry out such a censorship.</li>
+</ol>
+<h2 id="mad-htlc-lets-disincentivize-bribery">MAD-HTLC: Let’s Disincentivize Bribery</h2>
+<p>In addition to presenting a strategy to bribe, <a href="https://arxiv.org/pdf/2006.12031.pdf">Tsabary et al.</a> also present an elegant protocol to disincentivize bribery attacks by Bob; they called their protocol MAD-HTLC (where MAD stands for mutually assured destruction).</p>
+<p>MAD-HTLC uses the lack of trust between Bob and miners to disincentivize bribery. Their protocol relies on two key ideas:</p>
+<p>(i) <strong>Bribe $\rightarrow$ confiscate.</strong> If Bob attempts to bribe, they introduce a path for miners to confiscate all the deposited tokens. This ensures that Bob has no utility if he attempts to attack.</p>
+<p>(ii) <strong>Lose a collateral.</strong> To disincentivize Bob further, they introduce a <em>collateral contract</em> where Bob deposits a collateral $v^{col}$, and loses it if he attempts to bribe.</p>
+<p>The deposit and collateral contracts look like the following.
+<img src="https://i.imgur.com/DSAjMkY.png" alt="" /></p>
+<p>Compared to the earlier deposit contract, refunding Bob now requires presenting an additional pre-image $pre_b$ in path $dep\text{-}B$. As is, this does not change the honest paths for Alice or Bob. However, if Bob attempts to cheat (e.g., bribe miners and attempt to refund when $pre_a$ is available in the mempool), then the miners can instead redeem $v^{dep}$ using path $dep\text{-}M$ by presenting $(pre_a, pre_b)$. Thus, this additional path acts as a deterrant for Bob to bribe.</p>
+<p>The collateral contract requires Bob to deposit an additional amount $v^{col}$. Bob can retrieve the collateral back at any time after $T$. Contrary to the deposit contract, Bob does not need to present pre-image $pre_b$ to do this. This makes sense since the collateral needs to be refunded even if Alice has redeemed the deposit contract through path $dep\text{-}A$. However, if the pre-image $pre_a$ is available and Bob attempts to bribe, miners can confiscate the collateral too.</p>
+<p>The following graphic represents an attempted bribery attack by Bob with MAD-HTLC.</p>
+<p><img src="https://i.imgur.com/sCaALsb.png" alt="" /></p>
+<h2 id="revisiting-incentives-in-htlc">Revisiting Incentives in HTLC</h2>
+<p>The previous section suggests that we have a situation where following the protocol is the best strategy for all the parties. Is that true? Well, the answer depends on how we model the actions available to miners.</p>
+<p>In our recent work, <a href="https://eprint.iacr.org/2022/546.pdf">He-HTLC: Revisiting Incentives in HTLC</a>, we observed that MAD-HTLC is secure only assuming <em><strong>passively rational miners</strong></em> where the miners maximize their utility in terms of the number of tokens based on transactions available in the mempool. However, if miners are <em><strong>actively rational</strong></em>, i.e., if they engage in external protocols and actively seek out opportunities in the system, then they can potentially obtain a higher utility. This exposes a new vector of attacks under which the earlier solution is not secure. Note that considering such actively rational behaviors is not merely a theoretical exposition; as evidenced through the growth of Flashbots, it appears miners are willing to take steps to improve their earnings, if they can.</p>
+<h3 id="can-we-still-do-some-bribery-in-mad-htlc">Can we still do some bribery in MAD-HTLC?</h3>
+<p>It turns out if the miners are actively rational, then there are still opportunities for attacks. At a high-level, observe that if Alice is cheated upon, then Bob and miners together may earn more than what they would in an honest execution. In our work, we show three different attacks to achieve this goal – <em>a success independent reverse bribery attack (SIRBA), a success dependent reverse bribery attack (SDRBA), and a hybrid bribery attack</em>. In this post, we will intuitively discuss SDRBA and the hybrid attack.</p>
+<h4 id="success-dependent-reverse-bribery-attack-sdrba">Success dependent reverse bribery attack (SDRBA)</h4>
+<p>If Alice is cheated upon, here are some potential outcomes for each of the parties under two different executions.</p>
+<p><img src="https://i.imgur.com/n7VsqEt.png" width="400" /></p>
+<p>For some values of $v^{dep}$ and $v^{col}$, the attack scenario is clearly better for both Bob and the miners. Moreover, observe that while we consider the utility due to the collateral contract for the honest execution, we ignore it altogether in the potential attack scenario. Thus, the attack scenario would yield an even better outcome for Bob and/or miners.</p>
+<p><strong>How can we reach such an attack outcome?</strong> Well, a miner can obtain $pre_b$ from Bob and confiscate $v^{dep}$ through path $dep\text{-}M$; in exchange, it can bribe Bob with $v^{col} + \epsilon$. We call such a bribery attempt <strong><em>reverse bribery</em></strong> since the role of Bob and miners have reversed compared to bribery attacks.</p>
+<p>The natural question is, how does this fair exchange between a Bob and miner take place? Clearly, if Bob offers the miner with $pre_b$ first, then the miner is not incentivized to bribe Bob. On the other hand, if the miner bribes Bob first, Bob does not have an incentive to share $pre_b$ anymore. Thus, no party would want to make the first move.</p>
+<p>There may be multiple ways of solving this problem, we sketch one such approach using a Trusted Execution Environment (TEE) here. Observe that mining a block does not require access to the entire transaction; a hash of the transaction suffices. Thus, Bob can create $tx^{dep}_M$ containing $(pre_a, pre_b)$ and share the hash $h = H(tx^{dep}_M)$ with the miner. However, the miner needs to be convinced that this transaction indeed pays the miner and contains $pre_b$. This guarantee can be provided by a TEE attestation attesting to the correct construction of $tx^{dep}_M$. The miner, on its part, can attempt to mine a block and in addition to $h$, also include a bribe to Bob. If the miner successfully mines the block, the miner shares this block with Bob, who confirms a successful bribe and shares the block along with $tx^{dep}_M$ with everyone.</p>
+<p>Note that the above protocol indeed achieves the desired all-or-none property. If the miner does not include a bribe to Bob in the block, Bob would not reveal $tx^{dep}_M$ and the block would be invalid. On the other hand, Bob does not have the option of only obtaining the bribe since the same block contains $tx^{dep}_M$.</p>
+<p>A graphical representation of the attack is as follows.</p>
+<p><img src="https://i.imgur.com/OO0ApDb.png" alt="" /></p>
+<p>In this attack, Bob and $M_3$ perform an exchange and respectively earn $v^{col}+\epsilon$ and $v^{dep}-(v^{col} + \epsilon)$. Since $tx^{col}_M$ can only be redeemed after time $T$, it is redeemed by $M_2$.</p>
+<p>We call this a <em>success-dependent reverse bribery attack</em> since in this attack a miner will only pay a bribe to Bob if it has the opportunity to redeem $v^{dep}$ through $dep\text{-}M$. Note that the expected gain for a miner who successfully mines $tx^{dep}_M$ is $v^{dep} + \lambda v^{col}$ out of which Bob is bribed $&gt; v^{col}$ ($\lambda$ is the fraction of the computation power of miner). Thus, the miner is incentivized to perform the attack when $v^{dep} &gt; (1-\lambda) v^{col}$. This also implies that we can defend against this attack using a large enough collateral.</p>
+<h4 id="hybrid-delay-reverse-bribery-attack-hydra">Hybrid delay-reverse bribery attack (HyDRA)</h4>
+<p>SDRBA can be defended by using a large enough collateral. The question then is, can we still perform an attack if the collateral is smaller than the threshold?</p>
+<p>To answer this question, observe that the expected gain of $tx^{dep}_M$ is $v^{dep} + \lambda v^{col}$ happens because $tx^{col}_M$ can only be mined at time $\geq T$. In turn, this constraint necessitates two different transactions for redeeming the deposit and collateral contract if $tx^{dep}_M$ is redeemed at time $&lt; T$. If we can somehow ensure that the two contracts are redeemed by a miner in a single block, then the gain for the miner is $v^{dep} + v^{col}$, thereby not requiring the constraint between $v^{dep}$ and $v^{col}$.</p>
+<p>We achieve this using a combination of bribery and reverse bribery where Bob funds the bribery attack until time $T$ based on the future income of a reverse bribery attack. A graphical representation of such an attack is presented below.</p>
+<p><img src="https://i.imgur.com/Xr2Nr30.png" alt="" /></p>
+<h2 id="towards-fixing-htlc-once-again-with-he-htlc">Towards Fixing HTLC (Once Again) with He-HTLC</h2>
+<p>We will now describe our solution that works correctly even in the presence of actively rational miners. Let us summarize the key reasons for successful attacks on HTLC.</p>
+<ul>
+ <li><strong>Disproportionate earnings.</strong> At the highest level, the attack is feasible because some party earns too much if other parties somehow co-operate. In the case of reverse bribery attacks, it is because the miners are overly compensated by MAD-HTLC when Bob attempts to bribe. In the case of bribery attacks, the reason is more fundamental – HTLC requires for there to be a path where Bob is refunded the entire amount.</li>
+ <li><strong>Atomic redemption.</strong> There exists a path where Bob or miners can redeem all of the tokens in a single transaction. This transaction can be used in an SDRBA-like attack.</li>
+</ul>
+<p><strong>Disincentivizing reverse bribery.</strong> The easier task is to disincentivize reverse bribery. Note that the miner would be incentivized to confiscate even when it is paid a lower amount. How low should this be? low enough that the miner is not able to afford to bribe Bob. Since Bob obtains $v^{col}$ as a refund, any amount $\leq v^{col}$ can be the confiscation amount.</p>
+<p><strong>Disincentivizing bribery.</strong> This is the harder task since there is always a gap in what Bob can be refunded ($v^{dep} + v^{col}$) and the miner receives as a confiscation amount ($\leq v^{col}$). To address this concern, we utilize the existence of multiple miners and break the atomicity in redemption to somehow ensure that Bob needs to bribe sufficiently many distinct miners a sufficiently large amount before he can obtain his refund.</p>
+<p><img src="https://i.imgur.com/QfqwBCw.png" alt="" /></p>
+<p>A graphical representation of what we want to achieve is shown above. Intuitively, if Bob wants to censor Alice’s transaction, we want him to pay sufficiently many miners a high bribe (e.g., $&gt; v^{col}$). Eventually, this amount would exceed $v^{dep}$ and Bob’s net earnings would be $&lt; v^{col}$.</p>
+<p>We achieve this intuition by requiring Bob to obtain a refund with two transactions that are at least $l$ blocks apart (thus breaking atomic redemption). In the first transaction, Bob presents $pre_b$ on the chain. This step guarantees that, if $pre_a$ is available on the chain, then Bob’s collateral will be confiscated if it is advantageous for miners to do so. Consequently, it also necessitates a bribe $&gt; v^{col}$ for every subsequent miner in the next $l$ blocks to censor confiscation. Assuming there are $\kappa$ distinct miners not colluding with Bob in the next $l$ blocks (we can conservatively estimate $\kappa$), then we need $v^{col} &gt; \frac{v^{dep}}{\kappa - 1}$ to disincentivize bribery. Our approach achieves a time-collateral trade-off for Bob: larger the collateral, faster the refund, and vice versa.</p>
+<p>To summarize, our solution, He-HTLC, is as follows:</p>
+<p><img src="https://i.imgur.com/vAfMEAI.png" width="600" /></p>
+<ul>
+ <li>If Alice reveals $pre_a$, she obtains $v^{dep}$ and Bob is refunded $v^{col}$ through path $dep\text{-}A$.</li>
+ <li>If Alice is inactive, Bob can obtain $v^{dep} + v^{col}$ through paths $dep\text{-}B + col\text{-}B$ that are $l$ blocks apart.</li>
+ <li>However, if both $pre_a$ and $pre_b$ are available, the miners can confiscate $v^{col}$ through path $col\text{-}M$.</li>
+</ul>
+<p>The only remaining point to be addressed is the fact that $v^{col} \leq v^{dep}$; otherwise, Alice and miners may be incentivized to engage in a reverse bribery and attack Bob through path $col\text{-}M$.</p>
+<h3 id="additional-notes">Additional Notes</h3>
+<ul>
+ <li>Our protocol is called He-HTLC or Helium HTLC since it is a lightweight solution that is inert to any incentive manipulation.</li>
+</ul>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ <a href="/tags#incentives">incentives</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=He-HTLC+-+Revisiting+Incentives+in+HTLC&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2022-08-12-hehtlc%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2022-06-28-DAG-meets-BFT/" data-toggle="tooltip" data-placement="top" title="DAG Meets BFT - The Next Generation of BFT Consensus">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2022-08-14-new-DR-LB/" data-toggle="tooltip" data-placement="top" title="A new Dolev-Reischuk style Lower Bound">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

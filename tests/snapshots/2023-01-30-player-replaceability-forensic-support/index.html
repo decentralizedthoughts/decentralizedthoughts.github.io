@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Can we Obtain Player Replaceability and Forensic Support Simultaneously?</title>
+ 
+ 
+ <meta name="author" content="Peiyao Sheng, Gerui Wang, Kartik Nayak, Sreeram Kannan, Pramod Viswanath">
+ 
+ <meta name="description" content="Forensic support is an important property of BFT protocols that addresses the other side of security: what happens when the number of malicious parties exceeds the allowable threshold? In a previous post, we systematically studied different BFT protocols to assess their ability to detect and prove malicious behavior when safety is violated. We learned that protocols such as PBFT and HotStuff with ${\sf poly}(n)$ communication have strong forensic support, meaning...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Can we Obtain Player Replaceability and Forensic Support Simultaneously?">
+ <meta property="og:description" content="Forensic support is an important property of BFT protocols that addresses the other side of security: what happens when the number of malicious parties exceeds the allowable threshold? In a previous post, we systematically studied different BFT protocols to assess their ability to detect and prove malicious behavior when safety is violated. We learned that protocols such as PBFT and HotStuff with ${\sf poly}(n)$ communication have strong forensic support, meaning...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Peiyao Sheng, Gerui Wang, Kartik Nayak, Sreeram Kannan, Pramod Viswanath">
+ 
+ <meta property="og:article:published_time" content="2023-01-30T20:00:00-05:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2023-01-30-player-replaceability-forensic-support/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2023-01-30-player-replaceability-forensic-support/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Can we Obtain Player Replaceability and Forensic Support Simultaneously?">
+ <meta property="twitter:description" content="Forensic support is an important property of BFT protocols that addresses the other side of security: what happens when the number of malicious parties exceeds the allowable threshold? In a previous post, we systematically studied different BFT protocols to assess their ability to detect and prove malicious behavior when safety is violated. We learned that protocols such as PBFT and HotStuff with ${\sf poly}(n)$ communication have strong forensic support, meaning...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Can we Obtain Player Replaceability and Forensic Support Simultaneously?</h1>
+ 
+ 
+ 
+ 
+ By <strong>Peiyao Sheng, Gerui Wang, Kartik Nayak, Sreeram Kannan, Pramod Viswanath</strong><br>
+ 
+ <span class="post-meta">Posted on January 30, 2023</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p><strong>Forensic support</strong> is an important property of BFT protocols that addresses the other side of security: what happens when the number of malicious parties exceeds the allowable threshold? In a <a href="https://decentralizedthoughts.github.io/2020-11-19-bft-protocol-forensics/">previous post</a>, we systematically studied different BFT protocols to assess their ability to detect and prove malicious behavior when safety is violated. We learned that protocols such as PBFT and HotStuff with ${\sf poly}(n)$ communication have strong forensic support, meaning that the $t+1$ Byzantine actors can be identified irrefutably.</p>
+<p>In another recent <a href="https://decentralizedthoughts.github.io/2023-01-05-player-replaceability-I/">post</a>, we discussed the concept of <strong>player replaceability</strong>. In short, a player replaceable protocol correctly and efficiently reaches consensus even if each of its steps is executed by a totally new, and randomly and independently selected, subset of parties with little intersection between the subsets. As we saw, such protocols achieve sub-quadratic communication and are simultaneously secure under adaptive adversaries.</p>
+<p><strong><em>Can we achieve forensic support and player replaceability simultaneously?</em></strong></p>
+<p>To identify the malicious parties, our forensic analysis for protocols such as HotStuff required us to identify conflicting actions by these parties, possibly in two different rounds of execution. On the other hand, player replaceability rotates players in each round, due to which a party may not be elected more than once. As is stands, existing BFT protocols like HotStuff have strong forensic support but are not player replaceable, while <a href="https://arxiv.org/abs/1607.01341">Algorand</a> is player-replaceable but lacks forensic support. Does this imply that only one of these two properties can be obtained? The aim of this post is to explore the fundamental relationship between player-replaceability and forensic support in BFT protocols.</p>
+<h2 id="hotstuff-made-player-replacable">HotStuff Made Player-Replacable</h2>
+<p>A possible way to achieve both player-replaceability and strong forensic support in BFT protocols is to start with a protocol that has strong forensic support and make it player-replaceable. An example of this approach is described in <a href="https://decentralizedthoughts.github.io/2023-01-05-player-replaceability-I/">this post</a>, which combines the main protocol from HotStuff and the committee election technique from Algorand. In each round of the protocol, parties use cryptographic sortition computed by verifiable random functions (VRFs) to determine eligible voters. This publicly verifiable process randomly and independently selects a voting committee in each round, leading to player-replaceability.</p>
+<figure>
+<img src="https://i.imgur.com/TwdhN7n.png" alt="Trulli" style="width:100%" />
+<figcaption align="center"><b>Fig.1 Comparison of non-player-replaceable and player-replaceable worlds.</b></figcaption>
+</figure>
+<p>Briefly, the security of HotStuff is guaranteed by a rule of locking. Every party maintains a lock (denoted by round number and value) after voting for a value, with which they will never vote for another value unless more than $n-t$ ($t$ is the security threshold) of other parties vote for it. The strong forensic support of HotStuff enables the identification of parties responsible for security breaches. In the event of a violation, the forensic support system can trace it back to a vote and a contradictory lock performed by a set of culpable parties, thereby demonstrating their deviation from the protocol. For example, consider the scenario with $n = 3t + 1$ parties participating the protocol, among which $f$ are adversarial. In some round, a subset of at least $2t + 1$ parties vote for value $v$ to be committed, if they are all honest ($f \le t$), they will be locked on $v$ so that another value will never be committed with at most $2t$ votes from the remaining parties. However, when $f&gt; t$, it is possible that $t$ honest parties who have not locked on $v$ and $f$ adversarial parties together vote for another value $v’$. In this case, it is possible to detect up to $t + 1$ responsible parties during a safety violation through the quorum intersection of the $2t + 1$ parties who have locked on value $v$ and another set of $2t + 1$ parties who later vote for a different value $v’$ (refer to Figure 1 on the left).</p>
+<p>However, this argument does not apply to player replaceable protocols. In player replaceable world, only a small fraction of parties are selected ($\lambda$ out of $n$) for each round to send messages, making it highly likely that a party only participates in the committee once. This results in mutually exclusive quorums between rounds and makes it impossible to distinguish between adversarial parties locked on $v$ outside of the committee and honest parties who do not have the same lock (as shown in Figure 1 on the right).</p>
+<h2 id="a-player-replacable-protocol-with-forensic-support">A Player Replacable Protocol with Forensic Support</h2>
+<p>Essentially, to obtain forensic support, the transcripts must keep a record of each party’s lock changes. The original HotStuff protocol includes this information implicitly in its vote messages for each round, but the player replaceable version sacrifices this detail for efficiency. To remedy this, we propose a protocol that requires all parties to wait for $\lceil 2/3\lambda\rceil$ committee members to provide lock information to form a <strong>transition certificate (TC)</strong> before proceeding to the next round. Since only committee members have the potential to compromise safety, there is no need to collect the lock information of all parties in each round. This waiting period ensures that a party’s lock is up-to-date before the start of the next round, eliminating the possibility of honest parties being wrongly blamed due to message delays. With this mechanism, we can distinguish between honest parties who experience long message delays and adversarial parties, and thus provide strong forensic support.</p>
+<p>The protocol consists of a series of consecutive rounds, each lasting for at least $4\Delta$ time (based on each party’s clock, with $\Delta$ being the maximum network delay after GST). In each round, leaders and a committee are selected from all parties through cryptographic sortition. This selection process involves each party computing a random value using VRF with its secret key, the round number, and the role seed. If the value is below a pre-defined threshold, determined by the expected number of selected parties, the party qualifies for the role. For simplicity, we present a single-shot protocol comprising the following phases.</p>
+<ul>
+ <li><strong>Propose</strong>. A party checks its potential leader eligibility using cryptographic sortition. The leader can construct a new quorum certificate (QC) and update its own lock after receiving votes for the same value from at least $\lceil 2/3\lambda\rceil$ committee members in the previous round. The leader then broadcast a proposal containing round number, value, QC and TC.</li>
+ <li><strong>Process proposals.</strong> Parties wait for a fixed period of time ($[0, 2\Delta)$) in case there are multiple eligible leaders. Upon receipt of multiple proposals, parties choose the one with the smallest VRF value. At time $2\Delta$, parties validate the value and ensure it follows the safety rule, updating their lock and TC if the proposal is both valid and safe. After two consecutive QCs are formed, the value is committed.</li>
+ <li><strong>Vote.</strong> Parties check their eligibility to vote for the round. The vote message includes the round number, value, lock, and TC.</li>
+ <li><strong>Wait for locks.</strong> A party cannot move on to the next round until they have received locks from at least $\lceil 2/3\lambda\rceil$ committee members in the current round. The round must also last for a minimum of $4\Delta$. If a more up-to-date lock is received, the party updates their own lock.</li>
+</ul>
+<h3 id="forensic-analysis">Forensic analysis</h3>
+<p>With the extra transition certificates collected in each round, we have developed a forensic protocol which can detect at least $\lceil \lambda/3\rceil$ adversarial parties when security violation happens. Specifically, we assume two values $v, v’$ are committed in round $r+2, r’+2$, w.l.o.g. let $r \le r’$. We outline the proof process for three possible scenarios.</p>
+<ol>
+ <li>If $r+2&gt;r’$, the proof is simple as the adversarial parties equivocate in the same round. The intersection of the two quorum certificates (QC) generated by the same committee in $r’$ is returned.</li>
+ <li>If $r+2\le r’$, we query the TC generated in round $r+1$ from any honest party, there are two possibilities:
+ 2(a). If all locks in the TC are formed before round $r$, the intersection of the TC and the QC formed in round $r+1$ is returned.
+ 2(b). Otherwise, we find the first round $r^<em>$ between $r+2$ and $r’$ where a QC for $v’$ is generated, all parties in QC of $r^</em>$ is returned.</li>
+</ol>
+<p>For the second case, we first check the TC in round $r+1$ to identify any stale locks. Since $v$ is committed in round $r+2$, it is ensured that at least $\lceil 2/3\lambda\rceil$ committee members in round $r+1$ are locked on at least $(v, r)$ if they are honest. In case 2(a), those parties who appear in both TC and QC of round $r+1$ must be adversarial. In case 2(b), all committee members in round $r^* &gt; r+1$ are adversarial because they must have collected TC from all previous rounds, and hence, none of them can vote for a different value.</p>
+<p>In summary, by analyzing the fundamental relationship between player replaceability and forensic support in BFT protocols, we found that it is possible to achieve both properties simultaneously by tracking states transition. We also investigated how forensic support can be implemented in longest-chain protocols and studied the impact of player replaceability on forensic properties. Please check out the <a href="https://eprint.iacr.org/2022/1513">paper</a> for more details.</p>
+<p>Do add your thoughts on <a href="https://twitter.com/kartik1507/status/1626611253551538179?s=20">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#research">research</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Can+we+Obtain+Player+Replaceability+and+Forensic+Support+Simultaneously%3F&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2023-01-30-player-replaceability-forensic-support%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2023-01-12-what-are-blockchains-useful-for-really/" data-toggle="tooltip" data-placement="top" title="What are Blockchains Useful for, Really?">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2023-02-18-rand-and-consensus-1/" data-toggle="tooltip" data-placement="top" title="Randomization and Consensus - synchronous binary agreement for crash failures with a perfect common coin">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

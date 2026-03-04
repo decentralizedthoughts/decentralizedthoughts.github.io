@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>The Dolev and Reischuk Lower Bound: Does Agreement need Quadratic Messages?</title>
+ 
+ 
+ <meta name="author" content="Kartik Nayak, Ittai Abraham">
+ 
+ <meta name="description" content="How scalable is Byzantine agreement? Does solving agreement require non-faulty parties to send a quadratic number of messages in the number of potential faults? In this post, we highlight the Dolev and Reischuk lower bound from 1982 that addresses this fundamental question. Dolev and Reischuk 1982: any deterministic Broadcast protocol that is resilient to $f$ Byzantine failures must have an execution where the non-faulty parties send $&amp;gt; (f/2)^2$ messages. In...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="The Dolev and Reischuk Lower Bound: Does Agreement need Quadratic Messages?">
+ <meta property="og:description" content="How scalable is Byzantine agreement? Does solving agreement require non-faulty parties to send a quadratic number of messages in the number of potential faults? In this post, we highlight the Dolev and Reischuk lower bound from 1982 that addresses this fundamental question. Dolev and Reischuk 1982: any deterministic Broadcast protocol that is resilient to $f$ Byzantine failures must have an execution where the non-faulty parties send $&amp;gt; (f/2)^2$ messages. In...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Kartik Nayak, Ittai Abraham">
+ 
+ <meta property="og:article:published_time" content="2019-08-16T18:30:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="The Dolev and Reischuk Lower Bound: Does Agreement need Quadratic Messages?">
+ <meta property="twitter:description" content="How scalable is Byzantine agreement? Does solving agreement require non-faulty parties to send a quadratic number of messages in the number of potential faults? In this post, we highlight the Dolev and Reischuk lower bound from 1982 that addresses this fundamental question. Dolev and Reischuk 1982: any deterministic Broadcast protocol that is resilient to $f$ Byzantine failures must have an execution where the non-faulty parties send $&amp;gt; (f/2)^2$ messages. In...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>The Dolev and Reischuk Lower Bound: Does Agreement need Quadratic Messages?</h1>
+ 
+ 
+ 
+ 
+ By <strong>Kartik Nayak, Ittai Abraham</strong><br>
+ 
+ <span class="post-meta">Posted on August 16, 2019</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>How scalable is Byzantine agreement? Does solving agreement require non-faulty parties to send a quadratic number of messages in the number of potential faults? In this post, we highlight the <a href="http://cs.huji.ac.il/~dolev/pubs/p132-dolev.pdf">Dolev and Reischuk</a> lower bound from 1982 that addresses this fundamental question.</p>
+<p><strong><a href="http://cs.huji.ac.il/~dolev/pubs/p132-dolev.pdf">Dolev and Reischuk 1982</a>: any deterministic Broadcast protocol that is resilient to $f$ Byzantine failures must have an execution where the non-faulty parties send $&gt; (f/2)^2$ messages.</strong></p>
+<p>In fact, we will observe that the result is stronger and holds even for omission failures:</p>
+<p><strong><a href="http://cs.huji.ac.il/~dolev/pubs/p132-dolev.pdf">Dolev and Reischuk 1982, (modern)</a>: any deterministic Broadcast protocol that is resilient to $f$</strong> <strong><em>omission</em></strong> <strong>failures must have an execution where the non-faulty parties send $&gt; (f/2)^2$ messages.</strong></p>
+<p>In a <a href="https://decentralizedthoughts.github.io/2024-12-16-strong-adaptive-lower-bound/">follow-up post</a> we address randomization.</p>
+<p>In 1980, <a href="https://lamport.azurewebsites.net/pubs/reaching.pdf">PSL</a> showed the <em>first</em> feasibility result for consensus in the presence of Byzantine adversaries. However, their solution had an <em>exponential</em> (in $n$, the number of parties) communication complexity. The obvious next question is to determine the lowest possible communication complexity. Dolev and Resichuk showed that the barrier to quadratic communication complexity cannot be broken by deterministic protocols.</p>
+<p>At a high level, the Dolev and Resichuk lower bound says that if the non-faulty send few messages (specifically $&lt; (f/2)^2$), then the adversary can cause some non-faulty party to receive no message! The party that receives no message has no way of reaching agreement with the rest.</p>
+<h3 id="proof-intuition">Proof Intuition</h3>
+<ul>
+ <li>If a party receives no messages, it cannot decide like the other non-faulty parties.</li>
+ <li>If a party receives few messages, the adversary can use omission failures to ensure that it receives no messages.</li>
+ <li>If all parties receive many messages, then the total number of messages sent is large.</li>
+ <li>Thus, any protocol that sends few messages must have some party that receives few messages, which can be exploited by the adversary to isolate it.</li>
+ <li>But what if the party that has few messages sent to it, receives none due to receive omission, but in response sends messages that causes more messages to be sent to it?</li>
+ <li>This is why the proof considers a world with $f/2$ candidate parties and corrupts all of them to not receive messages.</li>
+ <li>If each of these parties receives $&gt; f/2$ messages from non-faulty parties, then we have a protocol with $&gt; (f/2)^2$ messages being sent by non-faulty parties.</li>
+ <li>So if there exists a protocol sending fewer messages, there must exist one omission faulty party, say $p$, that receives $\leq f/2$ messages, that are all omitted by $p$.</li>
+ <li>In the second world we uncorrupt $p$, and corrupt the at most $f/2$ parties sending messages to $p$ to omit messages to $p$.</li>
+ <li>Hence, $p$ receives no message and the adversary corrupted at most $f$ parties.</li>
+</ul>
+<h3 id="proof">Proof</h3>
+<p>Consider a broadcast problem, where the <em>designated sender</em> has a binary input. First, we need to guarantee that the isolated party $p$ will indeed not decide like all the other non-faulty parties. Consider a party that receives no messages: it will either not decide 0 or not decide 1. Without loss of generality, assume that a majority of parties (other than the designated sender) that receive no message will not decide 0 (so either decide 1 or never decide). Let $Q$ be this set of parties and note that $|Q| \geq (n-1)/2$.</p>
+<p>We will prove the theorem by describing two worlds and using indistinguishability for all honest parties.</p>
+<p><strong>World 1:</strong></p>
+<p align="center">
+ <img src="/uploads/dr-world1.png" width="256" title="DR world 1" />
+</p>
+<p>In World 1, the adversary corrupts a set $V \subset Q$ of $f/2$ parties that do not include the designated sender. Let $U$ denote the remaining parties (not in $V$). All parties in $V$ run the designated protocol but suffer from omission failures as follows:</p>
+<ol>
+ <li>Each $v \in V$ omits the first $f/2$ messages sent to $v$ from parties in $U$,</li>
+ <li>Each $v \in V$ omits all messages it sends to and receives from parties in $V$.</li>
+</ol>
+<p>Note that messages sent from parties in $V$ to parties in $U$ are not omitted.</p>
+<p>Set the non-faulty designated sender with input 0. So from the validity property all non-faulty parties must output 0. Since the non-faulty parties send at most $\leq (f/2)^2$ messages, then there must exist some party $p \in V$ that receives $\leq f/2$ messages.</p>
+<p><strong>World 2:</strong></p>
+<p align="center">
+ <img src="/uploads/dr-world2.png" width="352" title="DR world 2" />
+</p>
+<p>In World 2, the adversary does everything as in World 1, except (i) it does not corrupt party $p$, and (ii) it corrupts all parties in $U$ that send messages to $p$ (this may also include the designated sender). Messages sent by these omission corrupt parties to $p$ are omitted. Since $p$ received $\leq f/2$ messages in World 1, at most $f$ parties are corrupted in World 2 ($\leq f/2$ senders plus $|V| = f/2$).</p>
+<p>What do honest parties in $U$ output in World 2? We argue that they will output 0. Observe that for the non-faulty parties, the two worlds are indistinguishable. Since the protocol is deterministic, they receive exactly the same messages in both worlds. However, since party $p$ does not receive any messages and $p \in Q$, then it will not output 0, so will either violate the agreement property (if it outputs 1) or violate the termination property (if it does not output anything).</p>
+<h2 id="extending-the-lower-bound">Extending the lower bound</h2>
+<p>The lower bound uses the fact that the protocol is deterministic. There have been several attempts at circumventing the lower bound using <strong>randomness</strong> and even against an adaptive adversary. Here are a few notable ones:</p>
+<ul>
+ <li><a href="https://arxiv.org/pdf/1002.4561.pdf">King-Saia</a>: Through a sequence of fascinating new ideas, King and Saia presented a beautiful information-theoretic protocol that broke the quadratic communication complexity. Their protocol uses randomness, assumes that honest parties can erase data, and does not allow the adversary to claw back messages.</li>
+ <li><a href="https://www.sciencedirect.com/science/article/pii/S030439751930091X?via%3Dihub">Algorand</a> uses cryptographic randomness (VRFs) to form small committees. Algorand assumes the adaptive adversary is weak: it cannot cause the corrupt parties to remove the in-flight messages that were sent before the party was corrupted.</li>
+ <li><a href="https://decentralizedthoughts.github.io/2024-12-16-strong-adaptive-lower-bound/">Randomized version of Dolev-Reischuk.</a> Any (possibly randomized) Byzantine Agreement protocol must in expectation incur at least $\Omega(f^2)$ communication in the presence of a strongly adaptive adversary capable of performing “after-the-fact removal”, where $f$ denotes the number of corrupt parties (see <a href="https://users.cs.duke.edu/~kartik/papers/podc2019.pdf">paper</a>).</li>
+ <li>The above result implies that even against a static adversary, any protocol that runs in $o(n^2)$ complexity must have a non-zero probability of error.</li>
+ <li>The work of <a href="https://arxiv.org/pdf/2002.06993.pdf">Spiegelman, DISC 2021</a> proves a generalization in the early stopping setting: if the actual number of failures in an execution is $k\leq f$ then $\Omega(f+kf)$ messages are required.</li>
+ <li>See this <a href="https://decentralizedthoughts.github.io/2022-08-14-new-DR-LB/">follow-up</a> post on new Dolev-Reischuk style lower bounds for <em>Crusader Agreement</em> against a Byzantine adversary.</li>
+</ul>
+<h2 id="broadcast-vs-agreement">Broadcast vs Agreement</h2>
+<p>The lower bound is presented for Broadcast (not Agreement). In terms of feasibility, the two problems are <a href="https://decentralizedthoughts.github.io/2020-09-14-broadcast-from-agreement-and-agreement-from-broadcast/">equivalent</a>. In particular, if Agreement can be solved with communication complexity $\leq Y$ then broadcast can be solved in communication complexity $\leq Y+n$; the leader can send the value to all parties, and then they can run the Agreement protocol. Thus, if $(f/2)^2$ messages are required for Broadcast then at least $(f/2)^2 - n$ messages are required for Agreement.</p>
+<p>This post was updated in November 2021 to reflect that the lower bound holds for omission failures.</p>
+<p>Please leave comments on <a href="https://twitter.com/kartik1507/status/1162564876721692675?s=20">Twitter</a></p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#lowerbound">lowerbound</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=The+Dolev+and+Reischuk+Lower+Bound%3A+Does+Agreement+need+Quadratic+Messages%3F&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2019-08-16-byzantine-agreement-needs-quadratic-messages%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2019-08-02-byzantine-agreement-is-impossible-for-$n-slash-leq-3-f$-is-the-adversary-can-easily-simulate/" data-toggle="tooltip" data-placement="top" title="Byzantine Agreement is Impossible for $n \leq 3 f$ if the Adversary can Simulate">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2019-09-13-dont-trust-checkpoint/" data-toggle="tooltip" data-placement="top" title="Dont Trust. Verify. and Checkpoint?">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

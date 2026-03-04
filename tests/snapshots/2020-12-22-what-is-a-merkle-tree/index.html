@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>What is a Merkle Tree?</title>
+ 
+ 
+ <meta name="author" content="Alin Tomescu">
+ 
+ <meta name="description" content="In this post, we will demystify Merkle trees using three examples of problems they solve: Maintaining integrity of files stored on Dropbox.com, or file outsourcing, Proving a transaction between Alice and Bob occurred, or set membership, Transmitting files over unreliable channels, or anti-entropy. $$ \def\mht{\mathsf{MHT}} \def\mrh{h_{\mathsf{root}}} \def\vect#1{\boldsymbol{\vec{#1}}} $$ By the end of the post, you’ll be able to understand key concepts that, at this point, might intimidate you: A Merkle...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="What is a Merkle Tree?">
+ <meta property="og:description" content="In this post, we will demystify Merkle trees using three examples of problems they solve: Maintaining integrity of files stored on Dropbox.com, or file outsourcing, Proving a transaction between Alice and Bob occurred, or set membership, Transmitting files over unreliable channels, or anti-entropy. $$ \def\mht{\mathsf{MHT}} \def\mrh{h_{\mathsf{root}}} \def\vect#1{\boldsymbol{\vec{#1}}} $$ By the end of the post, you’ll be able to understand key concepts that, at this point, might intimidate you: A Merkle...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Alin Tomescu">
+ 
+ <meta property="og:article:published_time" content="2020-12-22T09:05:00-05:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2020-12-22-what-is-a-merkle-tree/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2020-12-22-what-is-a-merkle-tree/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="What is a Merkle Tree?">
+ <meta property="twitter:description" content="In this post, we will demystify Merkle trees using three examples of problems they solve: Maintaining integrity of files stored on Dropbox.com, or file outsourcing, Proving a transaction between Alice and Bob occurred, or set membership, Transmitting files over unreliable channels, or anti-entropy. $$ \def\mht{\mathsf{MHT}} \def\mrh{h_{\mathsf{root}}} \def\vect#1{\boldsymbol{\vec{#1}}} $$ By the end of the post, you’ll be able to understand key concepts that, at this point, might intimidate you: A Merkle...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>What is a Merkle Tree?</h1>
+ 
+ 
+ 
+ 
+ By <strong>Alin Tomescu</strong><br>
+ 
+ <span class="post-meta">Posted on December 22, 2020</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>In this post, we will demystify <em>Merkle trees</em> using three examples of problems they solve:</p>
+<ol>
+ <li>Maintaining integrity of files stored on Dropbox.com, or <em>file outsourcing</em>,</li>
+ <li>Proving a transaction between Alice and Bob occurred, or <em>set membership</em>,</li>
+ <li>Transmitting files over unreliable channels, or <em>anti-entropy</em>.
+ 
+ </li>
+</ol>
+<p hidden="">$$
+\def\mht{\mathsf{MHT}}
+\def\mrh{h_{\mathsf{root}}}
+\def\vect#1{\boldsymbol{\vec{#1}}}
+$$</p>
+<p>By the end of the post, you’ll be able to understand <strong>key concepts</strong> that, at this point, might intimidate you:</p>
+<ol>
+ <li>A Merkle tree is<sup id="fnref:consideredtobe" role="doc-noteref"><a href="#fn:consideredtobe" class="footnote" rel="footnote">1</a></sup> a <strong>collision-resistant hash function</strong>, denoted by $\mht$, that takes $n$ inputs $(x_1, \dots, x_n)$ and outputs a <em>Merkle root hash</em> $h = \mht(x_1, \dots, x_n)$,</li>
+ <li>A verifier who only has the root hash $h$ can be given an $x_i$ and an associated <strong>Merkle proof</strong> which convinces them that $x_i$ was the $i$th input used to compute $h$.
+ <ul>
+ <li>In other words, convinces them that there exist other $x_j$’s such that $h=\mht(x_1, \dots, x_{i-1}, x_i,x_{i+1},\dots,x_n)$.</li>
+ <li>This ability to verify that an $x_i$ is the element at the $i$th position against the root hash $h$ (i.e., without having to store all $n$ inputs) is the fundamental power of Merkle trees which we explore in this post.</li>
+ </ul>
+ </li>
+ <li>If a Merkle proof says that $x_i$ was the $i$th input used to computed $h$, no attacker can come up with another Merkle proof that says a different $x_i’\ne x_i$ was the $i$th input.
+ <ul>
+ <li>More formally, an attacker cannot come up with a Merkle root $h$ and two values $x_i\ne x_i’$ with proofs $\pi_i$ and $\pi_i’$ that both verify for position $i$ w.r.t. $h$.</li>
+ </ul>
+ </li>
+</ol>
+<!-- 1. Merkle tree are quite **versatile.** They can be used to hash sets, vectors, dictionaries, directed acyclic graphs (DAGs), and many other types of data.
+ + Even better, when used to hash a set (or a dictionary), the Merkle tree can be "organized" carefully to allow for **non-membership proofs** of elements in the set (or of keys in the dictionary) -->
+<h2 id="prerequisites">Prerequisites</h2>
+<p>Merkle trees are built using an <strong>underlying</strong> <em>cryptographic hash functions</em>, which we assume you understand.
+If not, just read <a href="/2020-08-28-what-is-a-cryptographic-hash-function">our post on hash functions</a>!</p>
+<p class="box-note"><strong>Definition:</strong> A hash function $H$ is collision resistant if it is computationally-intractable<sup id="fnref:handwave" role="doc-noteref"><a href="#fn:handwave" class="footnote" rel="footnote">2</a></sup> for an adversary to find two different inputs $x$ and $x’$ with the same hash (i.e., with $H(x) = H(x’)$).</p>
+<p><strong>Notation:</strong></p>
+<ul>
+ <li>We often use $[k] = \{1,2,\dots, k\}$ and $[i,j] = \{i, i+1,\dots,j-1,j\}$.</li>
+ <li>Although a hash function $H(x)$ is formalized as taking a single input $x$, we often invoke it with two inputs as $H(x,y)$. Just think of this as $H(z)$, where $z=(x\ |\ y)$ and $|$ is a special delimiter character.</li>
+</ul>
+<h2 id="this-is-a-merkle-tree">This is a Merkle tree!</h2>
+<p>Suppose you have $n=8$ files, denoted by $(f_1, f_2, \dots, f_8)$, you have a <a href="/2020-08-28-what-is-a-cryptographic-hash-function">collision-resistant hash function</a> $H$ and you want to have some fun.</p>
+<p>You start by hashing each file as $h_i = H(f_i)$:</p>
+<!--
+\begin{align\*}
+h_1 &= H(f_1)\\\\\
+h_2 &= H(f_2)\\\\\
+ \vdots\\\\\
+h_8 &= H(f_8)
+\end{align\*}
+-->
+<div style="height: 80px; background: url(/uploads/merkle-tree-level-1.png) no-repeat bottom; background-size: 100% auto;"></div>
+<p>You could have a bit more fun by continuing to hash every two adjacent hashes:</p>
+<!--
+\begin{align\*}
+h_{1,2} &= H(h_1, h_2)\\\\\
+h_{3,4} &= H(h_3,h_4)\\\\\
+h_{5,6} &= H(h_5, h_6)\\\\\
+h_{7,8} &= H(h_7,h_8)
+\end{align\*}
+-->
+<div style="height: 180px; background: url(/uploads/merkle-tree-level-2.png) no-repeat bottom; background-size: 100% auto;"></div>
+<p>You could even go crazy and continue on these newly obtained hashes:</p>
+<!--
+$$h_{1,4} = H(h_{1,2}, h_{3,4}), h_{5,8} = H(h_{5,6}, h_{7,8})$$
+-->
+<div style="height: 300px; background: url(/uploads/merkle-tree-level-3.png) no-repeat bottom; background-size: 100% auto;"></div>
+<p>In the end, you only live once, so you’d better hash these last two hashes as $h_{1,8} = H(h_{1,4}, h_{4,8})$:</p>
+<div style="height: 415px; background: url(/uploads/merkle-tree-level-4.png) no-repeat bottom; background-size: 100% auto;"></div>
+<p><strong>Congratulations!</strong>
+What you have done is computed a Merkle tree on $n=8$ <strong>leaves</strong>, as depicted in the picture above.</p>
+<p>Note that every <strong>node</strong> in the tree stores a hash:</p>
+<ul>
+ <li>The $i$th <strong>leaf</strong> of the tree stores the hash $h_i$ of the file $f_i$.</li>
+ <li>Each <strong>internal node</strong> of the tree stores the hash of its two children.</li>
+ <li>The $h_{1,8}$ hash stored in the <strong>root node</strong> is called the <strong>Merkle root hash</strong>.</li>
+</ul>
+<p>You could easily generalize and compute a Merkle tree over any number $n$ of files.</p>
+<p>It is useful to <em>think of computing the Merkle tree as computing a collision-resistant hash function</em>, denoted by $\mht$, which takes $n$ inputs (e.g., the $n$ files) and outputs the Merkle root hash.
+For example, we will often use the following notation:</p>
+\[h_{1,8}=\mht(f_1, f_2, \dots,f_8)\]
+<p>Importantly, note that computing $\mht$ (i.e., computing the Merkle tree), involves many computations of its <strong>underlying collision-resistant hash function</strong> $H$.</p>
+<p>At the risk of overwhelming you with notation, it is useful to observe that $h_{1,8}$ has a “recursive” structure:</p>
+<p>\begin{align*}
+h_{1,8} = MHT(f_1, \dots, f_8) = H(\\<br />
+ &amp; &amp; H(\\<br />
+ &amp; &amp; &amp; &amp; H(H(f_1), H(f_2)),\\<br />
+ &amp; &amp; &amp; &amp; H(H(f_3), H(f_4)),\\<br />
+ &amp; &amp; ),\\<br />
+ &amp; &amp; H(\\<br />
+ &amp; &amp; &amp; &amp; H(H(f_5), H(f_6)),\\<br />
+ &amp; &amp; &amp; &amp; H(H(f_7), H(f_8)),\\<br />
+ &amp; &amp; )\\<br />
+)
+\end{align*}</p>
+<p class="box-note">Really this is just a (verbose) mathematical representation of the Merkle tree that we visually depicted above!</p>
+<p>We often refer to a file $f_i$ as <strong>“being in the Merkle tree”</strong> to indicate it was one of the $n$ input files used to compute the tree.</p>
+<h2 id="this-is-a-merkle-proof">This is a Merkle proof!</h2>
+<p>Alright, you’ve computed your Merkle tree over your 8 files.</p>
+<p>Next, you upload your files <strong>and</strong> Merkle tree on Dropbox.com and delete everything from your computer except the Merkle root $h_{1,8}$.
+Your goal is to later download any one of your files from Dropbox <strong>and</strong> make sure Dropbox did not accidentally corrupt it.</p>
+<div style="height: 340px; background: url(/uploads/merkle-send-to-dropbox.png) no-repeat bottom; background-size: 100% auto;"></div>
+<p>This is the <strong>file integrity</strong> problem and Merkle trees will help you solve it.</p>
+<p>The <strong>key idea</strong> is that, after you download $f_i$, you ask for a small part of the Merkle tree called a <strong>Merkle proof</strong>.
+This proof enables you to verify that the downloaded $f_i$ was not accidentally or maliciously modified.</p>
+<div style="height: 340px; background: url(/uploads/merkle-proof-from-dropbox.png) no-repeat bottom; background-size: 100% auto;"></div>
+<!--
+Merkle trees allow you to verify that the file $f_i$ you downloaded from Dropbox was indeed the same file used to compute the Merkle root $h_{1,8}$.
+-->
+<p>But how do you verify?</p>
+<p>Well, observe that the Merkle proof for $f_i$ is exactly the subset of hashes in the Merkle tree that, together with $f_i$, allow you to recompute the root hash of the Merkle tree and check it matches the real hash $h_{1,8}$, <strong>without knowing any of the other hashed files</strong>.</p>
+<p>So, to verify the proof, you simply “fill in the blanks” in the picture above by computing the missing hashes depicted with dotted boxes, in this order:
+\begin{align*}
+ h_3’ &amp;= H(f_3)\\<br />
+ h_{3,4}’ &amp;= H(h_3’, h_4)\\<br />
+ h_{1,4}’ &amp;= H(h_{1,2}, h_{3,4}’)\\<br />
+ h_{1,8}’ &amp;= H(h_{1,4}’, h_{5,8})
+\end{align*}</p>
+<p>Lastly, you check that the Merkle root $h_{1,8}’$ you computed above is equal to the Merkle root $h_{1,8}$ you kept locally!
+If that’s the case, then you can be sure you downloaded the correct $f_i$ (and we prove this later).</p>
+<div style="height: 340px; background: url(/uploads/merkle-proof-verification.png) no-repeat bottom; background-size: 100% auto;"></div>
+<p class="box-note">But why does this check suffice as a proof that $f_i$ was downloaded correctly?
+Here’s some intuition.
+Since the Merkle proof verified, this means you were able to recompute the root hash $h_{1,8}$ by using $f_i$ as the $i$th input and the Merkle proof as the remaining inputs.
+If the proof verification had yielded the same hash $h_{1,8}$ but with a different file $f_i’ \ne f_i$ as the $i$th input, then this would yield a collision in the underlying hash function $H$ used to build the tree.
+This last observation is not trivial to see but we will help you see it later, when we argue security formally.
+</p>
+<h3 id="why-use-large-merkle-proofs-anyway">Why use large Merkle proofs anyway?</h3>
+<p>Forget the Merkle tree!
+Since you only have eight files, you could check integrity by storing their hashes $h_i=H(f_i)$ rather than their Merkle root $h_{1,8} = \mht(f_1, \dots, f_8)$.
+After all, the $h_i$ hashes are much smaller than the files themselves.</p>
+<p>Then, when you download $f_i$, you hash it as $y_i = H(f_i)$ and check that $h_i = y_i$.
+Since $H$ is <a href="/2020-08-28-what-is-a-cryptographic-hash-function">collision-resistant</a>, you can be certain that $f_i$ was not modified.
+(Indeed, we already discussed how <a href="/2020-08-28-what-is-a-cryptographic-hash-function">hash functions can be used for download file integrity</a> in our previous post.)</p>
+<p>One advantage of this approach is you no longer need to download Merkle proofs.</p>
+<p>Unfortunately, the problem with this approach is you have to store $n$ hashes when you outsource $n$ files.
+While this is fine when $n=8$, it is no so great when $n=1,000,000,000$!</p>
+<p><em>“But that’s crazy! Who has one billion files?”</em> you might protest.</p>
+<p>Well, just take a look at the <a href="https://en.wikipedia.org/wiki/Certificate_Transparency">Certificate Transparency (CT)</a> project, which builds a Merkle tree over the set of all digital certificates of HTTPS websites.
+These Merkle trees easily have hundreds of millions of leaves and are designed to scale to billions.</p>
+<p><strong>Moral of the story:</strong>
+To avoid the need for the verifier to store a hash for each one of the $n$ outsourced file, we use Merkle trees.
+This way, you only need to store a Merkle root hash (rather than $n$ hashes) and receive an $O(\log{n})$-sized Merkle proof with each downloaded file.</p>
+<p class="box-note">If you are still concerned about large Merkle proof size, you should look at more <em>algebraic</em> <strong>vector commitments (VCs)</strong>, such as recent ones based on <a href="https://alinush.github.io/2020/05/06/aggregatable-subvector-commitments-for-stateless-cryptocurrencies.html">polynomial commitments</a> or on <a href="https://alinush.github.io/2020/11/24/Catalano-Fiore-Vector-Commitments.html">RSA assumptions</a>.
+However, be aware that VCs come with their own performance bottlenecks and other caveats.</p>
+<h2 id="what-else-is-a-merkle-tree-useful-for">What else is a Merkle tree useful for?</h2>
+<p>Now that we know how a Merkle tree is computed and how Merkle proofs work, let’s dig into a few more use-cases.</p>
+<h3 id="efficiently-proving-bitcoin-transactions-were-validated">Efficiently proving Bitcoin transactions were validated</h3>
+<p>Recall that a Bitcoin block is just a <em>set of transactions</em> that were validated by a miner.</p>
+<p><strong>Problem:</strong>
+Sometimes it is useful for <em>Alice</em>, who is running Bitcoin on her mobile phone, to verify that she received a payment transaction from <em>Bob</em>.</p>
+<p><img src="/uploads/merkle-bitcoin-1.png" /></p>
+<p><strong>Inefficient, consensus-based solution:</strong>
+Alice could simply download every newly mined Bitcoin block on her phone and inspect the block for a transaction from Bob that pays her.
+But this requires Alice to download a lot of data (1 MiB / block), which can be either slow or expensive, since mobile data costs money.
+<em>(The unstated assumption here is that Alice relies on Bitcoin’s proof-of-work consensus protocol to decide whether a block is valid. These consensus-related details are covered in other posts<sup id="fnref:post1" role="doc-noteref"><a href="#fn:post1" class="footnote" rel="footnote">3</a></sup>$^,$<sup id="fnref:post2" role="doc-noteref"><a href="#fn:post2" class="footnote" rel="footnote">4</a></sup> on this blog.)</em></p>
+<p class="box-warning"><strong>Insecure, polling-based solution:</strong>
+Note that Alice cannot just simply ask nodes on the Bitcoin network, <em>“Hey, was I paid by Bob?”</em> since nodes can lie and say <em>“Yes, you were”</em> showing her a transaction from Bob that is actually not yet incorporated into a block.</p>
+<p><strong>Efficient, Merkle-based solution:</strong>
+If Alice was indeed paid by Bob, then Bitcoin can prove this to her via a <strong>Merkle proof</strong>. 
+Specifically, Alice will ask a Bitcoin node if she was paid by Bob in the latest block, but instead of simply trusting the <em>“Yes, you were paid and here’s the transaction”</em> answer, she will ask the node to <em>prove membership of the transaction</em> in the block via a Merkle proof.</p>
+<p>Importantly, Alice never has to download the full block: she only needs to download a small part of the block called the <strong>block header</strong>, which contains the root of a Merkle tree built over all transactions in that block<sup id="fnref:catena" role="doc-noteref"><a href="#fn:catena" class="footnote" rel="footnote">5</a></sup>.
+This way, Alice can verify the Merkle proof leading to Bob’s transaction in this tree, which will assure her that Bob’s transaction is in the block without having to download the other transactions.</p>
+<p><img src="/uploads/merkle-bitcoin-2.png" /></p>
+<p class="box-warning">This Merkle-based solution still requires Alice to rely on Bitcoin’s proof-of-work consensus to validate block <em>headers</em>. 
+However, since headers are 80 bytes, this is much more efficient than downloading full (1 MiB) blocks.
+Furthermore, some of you might note that, because of Bitcoin’s <em>chronologically-ordered</em> Merkle tree, a node can still lie and say <em>“No, you weren’t paid by Bob”</em> and Alice would have no way to tell the truth <em>efficiently</em> without actually downloading every new block and inspecting it.
+One way this problem could be solved is by re-ordering Bitcoin’s Merkle tree, either by the payer or by the payee’s Bitcoin address.
+We leave the details of this to another post.
+</p>
+<p><strong>Moral of the story:</strong> 
+The beauty of Merkle trees is that a <em>prover</em>, who has a large set of data (e.g., thousands of transactions) can convince a <em>verifier</em>, who has access to the set’s Merkle root hash, that a piece of data (e.g., a single transaction) is in this large set by giving the verifier a Merkle proof.</p>
+<h3 id="downloading-files-over-corrupted-channels-or-anti-entropy-via-merkle-trees">Downloading files over corrupted channels, or anti-entropy via Merkle trees</h3>
+<p>In our previous example, we showed how you could outsource your files to Dropbox and <strong>detect</strong> malicious or accidental modifications of any of your files.</p>
+<p>Suppose the modifications were accidental due to an unreliable connection to Dropbox.
+It would be nice if you could not just <em>detect</em> these modifications but actually <strong>recover</strong> from them and eventually download the original, unmodified file.</p>
+<p><strong>The naive solution</strong> would be to simply restart the file download whenever you detect a modification via the Merkle-based technique we discussed before.
+However, this could be painfully slow.
+In fact, if the connection is sufficiently unreliable and if the file is sufficiently large, this might never terminate.</p>
+<p>A <strong>better solution</strong> is to split the file into <strong>blocks</strong> and use the Merkle tree to detect modifications <em>at the block level</em> (i.e., at a finer granularity) rather than at the file level.
+This way, you only need to restart the download for incorrectly downloaded blocks, which helps you make steady progress.</p>
+<p>To keep things simple, we will focus on a simpler scenario where just one file is outsourced to Dropbox rather than $n$ files.
+We will discuss later how this can be generalized to $n$ files.</p>
+<h4 id="inefficient-recovering-corrupted-file-blocks-with-one-merkle-proof-per-block">Inefficient: Recovering corrupted file blocks with one Merkle proof per block</h4>
+<p>As we said above, we will split the file $f$ into, say, $b=8$ <strong>blocks</strong>:</p>
+\[f = ( f^1, f^2,\dots, f^8 )\]
+<p>Then, we will build a Merkle tree over these 8 blocks:</p>
+<p><img src="/uploads/merkle-anti-entropy-1.png" /></p>
+<p>As before, you send $f$ and the Merkle tree to Dropbox, and you store $h_{1,8}$ locally.</p>
+<p>Next, to download $f$ reliably, you will now download each block of $f$ with its Merkle proof, which you verify as discussed in the beginning of the post.
+And if a block’s proof does not verify, you ask for that block and its proof again until it does.
+Ultimately, the unreliable channel will become reliable and the proof will verify.</p>
+<p>This approach is better than the previous one because, when the channel is unreliable, you do not need to restart the download of $f$ from scratch.
+Instead, you only restart the download for the specific block of $f$ that failed downloading.</p>
+<p class="box-note">Note that there’s an interesting choice of block size to be made, as a function of the unreliability of the channel.
+However, this is beyond the purpose of this post.
+Also note that there are other ways to deal with unreliable channels, such as error-correcting codes, which again are beyond the purpose of this post.</p>
+<p>Unfortunately, in this <strong>first solution</strong>, you are re-downloading the full Merkle tree, in addition to the blocks themselves.
+This is because Dropbox sends a Merkle proof for <em>every</em> block<sup id="fnref:dedup" role="doc-noteref"><a href="#fn:dedup" class="footnote" rel="footnote">6</a></sup>, <strong>even if that block is correct</strong>.</p>
+<p>We will fix this next.</p>
+<h4 id="recovering-corrupted-file-blocks-with-one-merkle-proof-per-corrupted-block">Recovering corrupted file blocks with one Merkle proof per <em>corrupted</em> block</h4>
+<p>A <strong>better solution</strong> is to observe that you can first <em>optimistically</em> download all $b=8$ blocks, and rebuild the Merkle tree over them.
+If you get the same root hash $h_{1,8}$, you have downloaded the file $f$ correctly and you are done!</p>
+<p>Otherwise, let’s go through an example to see how you would identify the corrupted blocks.
+Assume, for simplicity, that only block $5$ (denoted by $f^5$) is corrupted.
+Then, the Merkle tree you re-compute during the download would differ <em>only slightly</em> from the one you originally computed above.</p>
+<p>Specifically, you would re-compute the tree below, with the difference highlighted in red:</p>
+<p><img src="/uploads/merkle-anti-entropy-2.png" /></p>
+<p>If all blocks were correct, you expect the root hash of the Merkle tree above to be $h_{1,8}$.
+However, the blocks you downloaded yielded a different root hash $h_{1,8}’$.
+This tells you some of the blocks are corrupted!</p>
+<p>Even better, you realize that either:</p>
+<ol>
+ <li>Some of the first $b/2$ blocks were corrupted,</li>
+ <li>Some of the last $b/2$ blocks were corrupted,</li>
+ <li>Or both!</li>
+</ol>
+<p>And because you have the actual root hash $h_{1,8}$, you can actually tell which one of these cases you are in!
+How?
+You simply ask for the children $(h_{1,4}, h_{5,8})$ of the root $h_{1,8}$ until you receive the correct ones that verify: i.e., the ones such that $h_{1,8} = H(h_{1,4}, h_{5,8})$.</p>
+<p>Once you have the correct children, you immediately notice that you computed the correct $h_{1,4}$ but computed a different $h_{5,8}’$ instead of $h_{5,8}$.
+This tells you the first 4 blocks were correct, but the last 4 were not. 
+As a result, you can now ignore the first (correct) half of the Merkle tree for blocks $f^1,\dots,f^4$ and focus on the second (corrupted) half for blocks $f^5,\dots,f^8$.</p>
+<p><img src="/uploads/merkle-anti-entropy-3.png" /></p>
+<p>In other words, you have now reduced your initial problem of to a smaller subproblem!
+Specifically, you must now identify the corrupted block amongst blocks $f^5,\dots,f^8$.
+And, since you now know that their real Merkle root hash is $h_{5,8}$, you just need to recursively apply the same technique!</p>
+<p>Importantly, you should convince yourself that this approach works even if there is more than one corrupted block: you will just have more sub-problems.
+Furthermore, note that if all blocks are corrupted, then this approach effectively downloads all Merkle hashes in the tree.
+However, if just one block is corrupted, this approach will only download the hashes along the path to that block (i.e., the ones in red in the figure above) and the Merkle proof for that block (i.e., the sibling nodes of the red nodes).</p>
+<p>In general, this approach only downloads (roughly) a Merkle proof <em>per corrupted block</em>, without re-downloading common hashes across different proofs.
+In contrast, the first solution downloaded one Merkle proof <em>per downloaded block</em>, even if the block was correct!</p>
+<h4 id="generalizing-to-more-than-one-file">Generalizing to more than one file</h4>
+<p>We can generalize the approach above to multiple files.
+The key idea is to build a Merkle tree over each file’s blocks as already described.
+If we have $n$ files, we get $n$ Merkle trees with root hashes $r_1, r_2, \dots, r_{n-1}$ and $r_n$, respectively.
+Next, we build another Merkle tree over these root hashes.
+Lastly, denote this tree’s root hash by $z_{1,n}$.</p>
+<p>For example, here’s what this would look like when $n=8$:</p>
+<p><img src="/uploads/merkle-anti-entropy-4.png" /></p>
+<p>Now, when downloading, say, the 2nd file $f_2$ over an unreliable channel, you first ask for the 2nd leaf of the Merkle tree with root $z_{1,8}$, which is $r_2$, together with a Merkle proof.
+Once again, because the channel is unreliable, you might have to ask multiple times until the proof verifies.
+Finally, once you have $r_2$, you can run the protocol described above, since you have the root hash of $f_2$’s Merkle tree!</p>
+<!--
+It could be that either:
+ - some of the first $b/2$ blocks were downloaded incorrectly,
+ - some of the last $b/2$ blocks were downloaded incorrectly, 
+ - or both!
+To tell which half of the file is invalid, you ask for the left and right hashes $h_L, h_R$ under the root $\ell_i$ and verify their correctness by checking if $\ell_i = H(h_L, h_R)$.
+Importantly, note that $h_L$ is the Merkle root built over the first $b/2$ blocks while $h_R$ is the one for the last $b/2$ blocks:
+\begin{align}
+h_L &= \mht(f_i^1,\dots,f_i^{b/2})\\\\\
+h_R &= \mht(f_i^{b/2+1},\dots,f_i^b)
+\end{align}
+Next, you check if the corresponding hashes you computed from the $b$ downloaded blocks match $h_L$ and $h_R$.
+If one of them matches, then you are guaranteed its corresponding blocks were downloaded correctly.
+If one (or both) of them does not match, you can now recurse on these hashes, reducing the problem of size $b$ to a problem of size $b/2$ (or to two problems of size $b/2$).
+This is very nice in practice, since it could turn out that, say, the last $b/2$ blocks under $h_R$ are all correct, in which case, you never need to ask for any more Merkle hashes in that side of $f_i$'s lower Merkle tree.
+Even if both halves of the file are corrupted, you can identify the individual corrupted blocks by repeating the process above recursively until you get to a subproblem of size one: i.e., you have the correct hash of two blocks in the bottom of the tree but the two blocks you've downloaded do not verify against this hash.
+Therefore, you can ask Dropbox.com to resend those two blocks until they verify.
+{: .box-warning}
+**A small clarification:** It could be that only one of these two blocks are corrupted and not both of them.
+However, you would have no way of knowing which one.
+This is why you must ask for both.
+To avoid this overhead, you can build the Merkle tree over the hashes $H(f_i^j)$, rather than over the $f_i^j$ blocks directly.
+This way, a subproblem of size one involves you having the hash of single block and asking the server for that block only.
+-->
+<!-- 
+For simplicity, assume each file has $b$ blocks.
+Since you have $n$ files, this means you'll have $n\times b$ blocks in total.
+You can now build a Merkle tree over these $n\times b$ blocks and store it on Dropbox.com.
+**TODO: picture with full upper & lower Merkle tree**
+As explained in the beginning of the post, we can think of the Merkle tree as hash function $\mht$ that takes multiple inputs (e.g., the $n\times b$ blocks) and outputs the Merkle root $h$:
+$$h=\mht(f_1^1,\dots,f_1^b\mathbf{, }\ f_2^1,\dots, f_2^b\mathbf{, }\ \dots\mathbf{, }\ f_n^1,\dots,f_n^b)$$ 
+Next, let us focus on the Merkle **sub**tree built over just the blocks of file $f_i$ (highlighted above in **TODO:** pick color).
+We notice two things.
+First, this is just a Merkle tree over the $b$ blocks of file $f_i$.
+We'll refer to this as the $i$th **lower Merkle tree** and we'll use $\ell_i$ to denote its root hash:
+$$\ell_i = \mht(f_i^1,\dots,f_i^b)$$
+Second, we'll refer to the Merkle tree built over all these $\ell_i$ Merkle hashes as **the upper Merkle tree**.
+In other words, the Merkle root hash $h$ can be expressed as:
+\begin{align}
+h &= \mht(\ell_1, \dots, \ell_n)\\\\\
+ &= \mht(f_1^1,\dots,f_1^b\mathbf{, }\ f_2^1,\dots, f_2^b\mathbf{, }\ \dots\mathbf{, }\ f_n^1,\dots,f_n^b)
+\end{align}
+Note that the upper Merkle tree has $n$ leaves, where $\ell_i$ is the $i$th leaf.
+-->
+<!--
+Suppose you are trying to download $f$ from Dropbox and you have the Merkle root $h$ built over it.
+First, you ask Dropbox for $f$'s lower Merkle tree root $\ell_i$, together with a Merkle proof w.r.t. the root hash $h$.
+Since the connection is unreliable, you might get a bad $\ell_i$, or a bad proof, or both. 
+Nonetheless you repeat until you receive an $\ell_i$ whose proof verifies.
+You now have the Merkle root $\ell_i$, which was built over $f_i$'s blocks.
+-->
+<!--
+Note that the lower Merkle tree for a file $f_i$ can be split into a _left_ and _right_ Merkle trees:
+ 1. The Merkle tree for the left blocks of the file $f_i^1,\dots,f_i^{b/2}$ with root hash **TODO**
+ 2. The Merkle tree for the right blocks of the file $f_i^{b/2+1},\dots,f_i^b$ with root hash **TODO**
+Also note that the root hash of $f_i$'s Merkle tree is just the hash of **TODO** and **TODO**.
+This is the key observation that helps us identify which parts of $f_i$ have been corrupted during a download.
+Specifically, if $f_i$'s hash doesn't match the Merkle root **TODO**, we can split the problem into two halves by checking if the left blocks of $f_i$ have the correct hash **and** if the right blocks of $f_i$ have the correct hash.
+After we download a file, say $f_i$ of $b=4$ blocks, we will start an **anti-entropy protocol** to detect which blocks of the file have been incorrectly downloaded:
+<!-- ask for a Merkle proof to check its integrity.
+If it verifies, we are done.
+Otherwise, we will -->
+<!--
+ 1. We ask Dropbox for a Merkle proof to the _lower Merkle root_ for $f_i$ (i.e., **TODO: notation** in the figure above).
+ 1. We check it matches the actual Merkle root hash of the downloaded $f_i$, which we compute as $\mht(f_i^1,\dots,f_i^4)$.
+ 1. If it matches, we've downloaded the correct $f_i$.
+ 1. Otherwise, we recursively check if we correctly downloaded the left half of the file $f_i^1,f_i^2$ and the right half of the file $f_i^3, \dots,f_i^4$.
+ 1. Note that due to the recursive structure of the Merkle tree, both halves of the files have their own Merkle trees, whose roots are the children of **TODO: notation from above**.
+-->
+<!-- ### Proving account balances in Ethereum via ordered Merkle trees
+So far, we've discussed building Merkle trees over **vectors** of elements numbered from $1$ to $n$.
+The elements were either full files, or blocks of files.
+However, there's a plethora of other _data structures_, beyond vectors, that one can **"Merkleize"**, or compute a Merkle tree over.
+A useful data structure is a **dictionary**, which maps a **key** to a _unique_ **value**.
+For example, the state of the Ethereum cryptocurrency is represented as a dictionary that maps each user's _address_ to that user's balance in ETH. 
+Here, the address is the key and the balance is the value. 
+<small>(If you do not recall, a user's address is just a hash of that user's public key.)</small>
+In Ethereum, it is sometimes useful to prove a user's balance to a validator who only has access to the Ethereum block hashes, rather than the Ethereum full state[^CPZ18] (which would make the validator's job trivial).
+For example, so-called stateless validators who get a transaction transferring $v$ ETH from Alice to Bob will need a proof that Alice has balance $\ge v$.
+Without describing Ethereum's exact Merkle tree design, here's how one would design such a Merkle tree.
+-->
+<h2 id="want-more">Want more?</h2>
+<p>Well, I hope you found all of this fascinating and want to learn more.
+You could start by going to the bonus section below and reading our formal security proof for Merkle trees.</p>
+<p>Then, you could read my three favorite Merkle tree papers, which I think are highly approachable even for beginners.</p>
+<p>First, you should read the paper on <strong>history trees</strong> by Crosby and Wallach<sup id="fnref:CW09" role="doc-noteref"><a href="#fn:CW09" class="footnote" rel="footnote">7</a></sup>.
+History trees are Merkle trees that “grow” from left to right, in the sense that one is only allowed to append new leafs to the right of the tree.</p>
+<p>Despite their simplicity, history trees are incredibly powerful since they support <em>append-only proofs</em>: given an older tree of $t$ leaves and a new tree of $t’=t+\Delta$ leaves, one can prove (using a succinct $O(\log{t’})$-sized proof) that the new tree includes all the leaves from the old tree.
+This makes history trees very useful for building append-only logs such as <a href="https://en.wikipedia.org/wiki/Certificate_Transparency">Certificate Transparency (CT)</a>, which is at the core of securing HTTPS.</p>
+<p class="box-note"><em>“Append-only logs? Don’t you mean blockchains?”</em> you ask.
+Nope, I do not.
+These logs have a different mechanism to detect (rather than prevent) forks.
+However, each fork is always provably extended in append-only fashion using the proofs described above.</p>
+<p>Second, you should read the paper on CONIKS by Melara et al<sup id="fnref:MBBplus15" role="doc-noteref"><a href="#fn:MBBplus15" class="footnote" rel="footnote">8</a></sup>.
+CONIKS is also a transparency log, but geared more towards securing instant messaging apps such as Signal, rather than HTTPS.
+One interesting thing you’ll learn from this paper is how to lexicographically-order your Merkle trees so you can prove something is <strong>not</strong> in the tree, as we briefly touched upon in the Bitcoin section.
+In fact, I believe this paper takes the most sane, straightforward approach to doing so.
+Specifically, CONIKS builds a <strong>Merkle prefix tree</strong>, which is much simpler to implement than any binary search tree or treap (at least in my own experience).
+It also has the advantage of having expected $O(\log{n})$ height if the data being Merkle-ized is not adversarially-produced.</p>
+<p class="box-note">A related paper is would be the Revocation Transparency (RT) manuscript<sup id="fnref:LK15" role="doc-noteref"><a href="#fn:LK15" class="footnote" rel="footnote">9</a></sup>, which CONIKS can be regarded as improving upon in terms of proof size and other dimensions.</p>
+<p>Third, you should read the Verifiable Data Structures<sup id="fnref:ELC16" role="doc-noteref"><a href="#fn:ELC16" class="footnote" rel="footnote">10</a></sup> manuscript by the Certificate Transparency (CT) team, which combines a history tree with a lexicographically-ordered tree (such as CONIKS) into a single system with its own advantages.</p>
+<p>At the end of the day, I think what I’m trying to say is <em>“why don’t you go read about transparency logs and come write a blog post on Decentralized Thoughts so I don’t have to do it!”</em> :)</p>
+<h2 id="bonus-a-merkle-tree-is-a-collision-resistant-hash-function">Bonus: A Merkle tree is a collision-resistant hash function</h2>
+<p>A very simple way to think of a Merkle hash tree with $n$ <em>leaves</em> is as a collision-resistant hash function $\mht$ that takes $n$ inputs<sup id="fnref:contrast" role="doc-noteref"><a href="#fn:contrast" class="footnote" rel="footnote">11</a></sup> and ouputs a $2\lambda$-bit hash, a.k.a. the <em>Merkle root hash</em>.
+More formally, the <em>Merkle hash function</em> is defined as:</p>
+\[\mht : \left(\{0,1\}^*\right)^n \rightarrow \{0,1\}^{2\lambda}\]
+<p>And the Merkle root of some input $\vect{x} = (x_1,\dots, x_n)$ is denoted by:</p>
+\[h = \mht(x_1,\dots,x_n)\]
+<p>Here, $\lambda$ is a <em>security parameter</em> typically set to 128, which implies Merkle root hashes are 256 bits.</p>
+<p class="box-warning"><strong>Theorem (Merkle trees are collision-resistant)</strong>: It is unfeasible to find two sets of leaves $\vect{x} = (x_1, \dots, x_n)$ and $\vect{x}’ = (x_1’, \dots, x_n’)$ such that $\vect{x}\ne \vect{x}’$ but $\mht(\vect{x}) = \mht(\vect{x’})$.</p>
+<p>Instead of proving this theorem, we’ll prove an even stronger one below, which implies this one.
+However, if you want to prove this theorem, all you have to do is show that the existence of these two “inconsistent” sets of leaves implies a collision in the underlying hash function $H$.
+In fact, in the proof, you will “search” for this collision much like the anti-entropy protocol described above searches for corrupted blocks!</p>
+<p class="box-warning"><strong>Theorem (Merkle proof consistency):</strong> It is unfeasible to output a Merkle root $h$ and two “inconsistent” proofs $\pi_i$ and $\pi_i’$ for two different inputs $x_i$ and $x_i’$ at the $i$th leaf in the tree of size $n$.</p>
+<p><strong>Proof:</strong>
+The Merkle proof for $x_i$ is $\pi_i = ((h_1, b_1), \dots, (h_k,b_k))$, where the $h_i$’s are <strong>sibling hashes</strong> and the $b_i$’s are <strong>direction bits</strong>.
+Specifically, if $b_i = 0$, then $h_i$ is a left child of its parent node in the tree and if $b_i=1$, then it’s a right child.</p>
+<p class="box-note">In our previous discussion, we never had to bring up these <em>direction bits</em> because we always visually depicted a specific Merkle proof. 
+However, here, we need to reason about <em>any</em> Merkle proof for <em>any</em> arbitrary leaf.
+Since such a proof can “take arbitrary left and right turns” as it’s going down the tree, we use these direction bits as “guidance” for the verifier.
+(A careful reader might notice that the direction bits can actually be derived from the leaf index $i$ being proved and don’t actually need to be sent with the proof: the direction bits are obtained by flipping $i$’s binary representation.)</p>
+<p>Roughly speaking, to verify $\pi_i$, the verifier uses $x_i$ together with the sibling hashes and the direction bits to compute the hashes $(z_1, \dots, z_{k+1})$ along the path from $x_i$ to the root.
+More precisely, the verifier:</p>
+<ol>
+ <li>Sets $z_1 = x_i$.</li>
+ <li>For each $j\in[2,k]$, computes $z_j$ as follows:
+ <ul>
+ <li>If $b_{j-1} = 1$, then $z_j = H(z_{j-1}, h_{j-1})$</li>
+ <li>If $b_{j-1} = 0$, then $z_j = H(h_{j-1}, z_{j-1})$</li>
+ </ul>
+ </li>
+</ol>
+<p>Lastly, the verifier checks if $z_{k+1}$ equals the Merkle root hash $h$.
+If it does, then the verification succeeds.
+Otherwise, it fails.</p>
+<p class="box-note">Do not be intimidated by all the math above: we are merely generalizing the Merkle proof verification that we visually depicted in the Dropbox file outsourcing example at the beginning of this post.</p>
+<p>Similarly, the proof for $x_i’$ is $\pi_i’ = ((h_1’, b_1), \dots, (h_k’, b_k))$.
+Note that the $h_i’$ hashes could differ from the $h_i$ hashes, but the direction bits are the same, since both proofs are for the $i$th leaf in the tree.</p>
+<p>Since both proofs verify, the verification of the second proof $\pi_i’$ for $x_i’$ will yield hashes $\{z_1’,z_2’,\dots,z_{k+1}’\}$ along the same path from $x_i’$ to the root such that $z_{k+1}’ = h$.</p>
+<p>But recall from the verification of the first proof $\pi_i$ that we also have $z_{k+1} = h$.
+Thus, $z_{k+1} = z_{k+1}’$.
+This is merely saying that, since both proofs verify, they yield the same root hash $h = z_{k+1} = z’_{k+1}$.</p>
+<p>The next step is to reason about how the two different $x_i\ne x_i’$ could have possibly “hashed up” to the same root hash $h$.
+(Spoiler alert: only by having a collision in the underlying hash function $H$.)
+I think this is best explained by considering a few extreme cases and then generalizing.
+(Note that these are not the <em>only</em> two cases; just two particularly enlightening ones.)</p>
+<p><strong>Extreme case #1</strong>: 
+One way would have been for the proof verification to yield $z_j \ne z_j’$ for all $j\in[k]$ (but not for $j=k+1$ since that’s the level of the Merkle root).
+In this case, without loss of generality, assume $b_k = 1$.
+Then, we would have $h = z_{k+1} = H(z_k, h_k)$ and $h = z_{k+1}’ = H(z_k’, h_k’)$.
+But since $z_k \ne z_k’$, this gives a collision in $H$!
+(Alternatively, if $b_k = 0$, just switch the inputs to the hash function.)</p>
+<p><strong>Extreme case #2</strong>: 
+Another way would have been for the proof verification to yield $z_j = z_j’$ for all $j\in[2, k+1]$ (but not for $j=1$ since that’s the level of $x_i$ and $x_i’$ and they are not equal).
+In this case, without loss of generality, assume $b_1 = 1$.
+Then, we would have $z_2 = H(x_1, h_1)$ and $z_2’ = H(x_1’, h_1’)$.
+(Again, if $b_k = 0$, just switch $H$’s inputs.)
+But since $z_2 = z_2’$ and $x_i\ne x_i’$, this gives a collision in $H$!</p>
+<p>The point here is to see that, no matter what the two inconsistent proofs are, one can always work their way back to a collision in $H$, whether that collision is at the top of the tree (extreme case #1), at the bottom of the tree (extreme case #2) or anywhere in between, which we discuss next.</p>
+<p>You should now be able to see more easily that, as long as $x_i\ne x_i’$ but the computed root hashes are the same (i.e., $z_{k+1} = z_{k+1}’ = h$), then there must exist some level $j\in [k]$ where there is a collision:</p>
+<p>\begin{align*}
+\exists\ \text{level}\ j\in [k]\ &amp; \text{s.t.}\ 
+\begin{cases}
+H(z_{j-1}, h_{j-1}) = H(z_{j-1}’, h_{j-1}’),\ \text{if}\ b_{j-1} = 1\\<br />
+H(h_{j-1}, z_{j-1}) = H(h_{j-1}’, z_{j-1}’),\ \text{if}\ b_{j-1} = 0
+\end{cases}
+\\<br />
+\\<br />
+&amp; \text{but with}\ z_{j-1}\ne z_{j-1}’\ \text{or}\ h_{j-1}\ne h_{j-1}’
+\end{align*}</p>
+<p>(Again, recall that $z_1 = x_i$ and $z_1’=x_i’$.)
+But such a collision at level $j$ implies a break in the collision-resistance of $H$, which is a contradiction.
+QED.</p>
+<p class="box-note">The claim about the existence of such a level $j$ might not be easy to understand at first glance.
+It is best to draw yourself a Merkle proof together with the hashes computed during its verification and run through the following mental exercise: 
+<br />
+<br />
+Start at the root of the tree, at level $k+1$!
+Since both proofs verify and yield the same root hash, it could be that we either have a collision in $H$ at this level or we don’t.
+If we do have a collision, we are done.
+If we do not, then we know that $z_k = z_k’$ and $h_k = h_k’$.
+<br />
+<br />
+Next, work your way down and continue on the subtree with root hash $z_k = z_k’$.
+Again, it must be that either there was a collision or that $z_{k-1} = z_{k-1}’$ and $h_{k-1} = h_{k-1}’$.
+If there was a collision, we are done.
+Otherwise, we continue recursively.
+<br />
+<br />
+In the end, we will get to the bottom level which is guaranteed to have $z_1\ne z_1’$ (because $x_i\ne x_i’$) while $z_2 = z_2’$ from the previous level, which yields a collision.
+This is actually the <em>extreme case #2</em> that we’ve handled above!
+No matter what, there will always be a collision!</p>
+<h2 id="acknowledgments">Acknowledgments</h2>
+<p>Special thanks to <a href="https://decentralizedthoughts.github.io/about-ittai/">Ittai Abraham</a> for reviewing a draft of this post and sending insightful comments.</p>
+<h2 id="references">References</h2>
+<div class="footnotes" role="doc-endnotes">
+ <ol>
+ <li id="fn:consideredtobe" role="doc-endnote">
+ <p>To be more specific, a Merkle tree <strong>can be viewed as</strong> a hash function on $n$ inputs, but can be so much more than that. For example, when Merkle hashing a <em>dictionary</em> with a large key space, a Merkle tree can be viewed as a hash function on $2^{256}$ inputs, where most of them are not set (i.e., “null”), which makes computing it (in a careful manner) feasible. Importantly, these kinds of Merkle trees allow for <strong>non-membership</strong> proofs of inputs that are set to null. <a href="#fnref:consideredtobe" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+ </li>
+ <li id="fn:handwave" role="doc-endnote">
+ <p>Computational intractability would deserve its own post. For now, just think of it as <em>“no algorithm we can conceive of can break collision resistance <strong>and</strong> finish executing before the heat death of the Universe.”</em> <a href="#fnref:handwave" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+ </li>
+ <li id="fn:post1" role="doc-endnote">
+ <p><a href="/2020-07-05-the-first-blockchain-or-how-to-time-stamp-a-digital-document/">The First Blockchain or How to Time-Stamp a Digital Document</a> <a href="#fnref:post1" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+ </li>
+ <li id="fn:post2" role="doc-endnote">
+ <p><a href="/2019-11-29-Analysis-Nakamoto/">Security proof for Nakamoto Consensus</a> <a href="#fnref:post2" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+ </li>
+ <li id="fn:catena" role="doc-endnote">
+ <p>For a simple explanation of Bitcoin’s block structure, see the author’s <a href="https://alinush.github.io/talks.html#catena-efficient-non-equivocation-via-bitcoin">presentation on Catena</a>, #shamelessplug. <a href="#fnref:catena" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+ </li>
+ <li id="fn:dedup" role="doc-endnote">
+ <p>I’m assuming Dropbox is smart and doesn’t send a hash twice when it’s shared by two proofs. This is why the overhead is only $b-1$. <a href="#fnref:dedup" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+ </li>
+ <li id="fn:CW09" role="doc-endnote">
+ <p><strong>Efficient Data Structures for Tamper-Evident Logging</strong>, by Crosby, Scott A. and Wallach, Dan S., <em>in Proceedings of the 18th Conference on USENIX Security Symposium</em>, 2009 <a href="#fnref:CW09" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+ </li>
+ <li id="fn:MBBplus15" role="doc-endnote">
+ <p><strong>CONIKS: Bringing Key Transparency to End Users</strong>, by Marcela S. Melara and Aaron Blankstein and Joseph Bonneau and Edward W. Felten and Michael J. Freedman, <em>in 24th USENIX Security Symposium (USENIX Security 15)</em>, 2015, <a href="https://www.usenix.org/conference/usenixsecurity15/technical-sessions/presentation/melara">[URL]</a> <a href="#fnref:MBBplus15" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+ </li>
+ <li id="fn:LK15" role="doc-endnote">
+ <p><strong>Revocation Transparency</strong>, by Ben Laurie and Emilia Kasper, 2015, <a href="https://www.links.org/files/RevocationTransparency.pdf">[URL]</a> <a href="#fnref:LK15" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+ </li>
+ <li id="fn:ELC16" role="doc-endnote">
+ <p><strong>Verifiable Data Structures</strong>, by Eijdenberg, Adam and Laurie, Ben and Cutter, Al, 2016, <a href="https://github.com/google/trillian/blob/master/docs/papers/VerifiableDataStructures.pdf">[URL]</a> <a href="#fnref:ELC16" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+ </li>
+ <li id="fn:contrast" role="doc-endnote">
+ <p>In contrast, the collision-resistant functions $H$ we discussed in our <a href="/2020-08-28-what-is-a-cryptographic-hash-function">previous post</a> take just one input $x$ and hash it as $h = H(x)$. <a href="#fnref:contrast" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+ </li>
+ </ol>
+</div>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#cryptography101">cryptography101</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=What+is+a+Merkle+Tree%3F&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2020-12-22-what-is-a-merkle-tree%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2020-12-12-raft-liveness-full-omission/" data-toggle="tooltip" data-placement="top" title="Raft does not Guarantee Liveness in the face of Network Faults">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/" data-toggle="tooltip" data-placement="top" title="Good-case Latency of Byzantine Broadcast: a Complete Categorization">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

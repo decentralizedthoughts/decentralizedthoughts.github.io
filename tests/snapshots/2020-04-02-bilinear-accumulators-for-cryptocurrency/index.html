@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Bilinear Accumulators for Cryptocurrency Enthusiasts</title>
+ 
+ 
+ <meta name="author" content="Alin Tomescu">
+ 
+ <meta name="description" content="Accumulator schemes are an alternative to Merkle Hash Trees (MHTs) for committing to sets of elements. Their main advantages are: Constant-sized membership and non-membership proofs, an improvement over logarithmic-sized proofs in MHTs, Algebraic structure that enables more efficient proofs about committed elements1 (e.g., ZeroCoin2 uses RSA accumulators for anonymity), Constant-sized proofs for set relations such as subset, disjointness and difference (e.g., append-only authenticated dictionaries3 can be built using subset and...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Bilinear Accumulators for Cryptocurrency Enthusiasts">
+ <meta property="og:description" content="Accumulator schemes are an alternative to Merkle Hash Trees (MHTs) for committing to sets of elements. Their main advantages are: Constant-sized membership and non-membership proofs, an improvement over logarithmic-sized proofs in MHTs, Algebraic structure that enables more efficient proofs about committed elements1 (e.g., ZeroCoin2 uses RSA accumulators for anonymity), Constant-sized proofs for set relations such as subset, disjointness and difference (e.g., append-only authenticated dictionaries3 can be built using subset and...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Alin Tomescu">
+ 
+ <meta property="og:article:published_time" content="2020-04-02T04:10:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2020-04-02-bilinear-accumulators-for-cryptocurrency/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2020-04-02-bilinear-accumulators-for-cryptocurrency/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Bilinear Accumulators for Cryptocurrency Enthusiasts">
+ <meta property="twitter:description" content="Accumulator schemes are an alternative to Merkle Hash Trees (MHTs) for committing to sets of elements. Their main advantages are: Constant-sized membership and non-membership proofs, an improvement over logarithmic-sized proofs in MHTs, Algebraic structure that enables more efficient proofs about committed elements1 (e.g., ZeroCoin2 uses RSA accumulators for anonymity), Constant-sized proofs for set relations such as subset, disjointness and difference (e.g., append-only authenticated dictionaries3 can be built using subset and...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Bilinear Accumulators for Cryptocurrency Enthusiasts</h1>
+ 
+ 
+ 
+ 
+ By <strong>Alin Tomescu</strong><br>
+ 
+ <span class="post-meta">Posted on April 2, 2020</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p><strong>Accumulator schemes</strong> are an alternative to <a href="http://en.wikipedia.org/wiki/Merkle_Tree">Merkle Hash Trees (MHTs)</a> for committing to <strong>sets</strong> of <strong>elements</strong>.
+Their main advantages are:</p>
+<ul>
+ <li><em>Constant-sized</em> <strong>membership</strong> and <strong>non-membership proofs</strong>, an improvement over logarithmic-sized proofs in MHTs,</li>
+ <li>Algebraic structure that enables more <em>efficient</em> proofs about committed elements<sup id="fnref:Fiore20" role="doc-noteref"><a href="#fn:Fiore20" class="footnote" rel="footnote">1</a></sup> <small>(e.g., ZeroCoin<sup id="fnref:MGGR13" role="doc-noteref"><a href="#fn:MGGR13" class="footnote" rel="footnote">2</a></sup> uses RSA accumulators for anonymity)</small>,</li>
+ <li>Constant-sized proofs for set relations such as subset, disjointness and difference <small>(e.g., append-only authenticated dictionaries<sup id="fnref:TBPplus19" role="doc-noteref"><a href="#fn:TBPplus19" class="footnote" rel="footnote">3</a></sup> can be built using subset and disjointness proofs)</small>.</li>
+</ul>
+<p>Their main <strong>dis</strong>advantages are:</p>
+<ul>
+ <li>More computationally expensive due to elliptic curve group operations or hidden-order group operations (e.g., in $\mathbb{Z}_N^*$),</li>
+ <li>Setting up an accumulator scheme typically requires a <strong>trusted setup phase</strong>, which complicates deployment,</li>
+ <li>Some accumulator schemes are limited in the size of the sets they can commit to. <small>(The limit is fixed during the trusted setup phase.)</small></li>
+</ul>
+<p>In this post, we’ll talk about the ins and outs of <strong>bilinear accumulators</strong><sup id="fnref:Nguyen05" role="doc-noteref"><a href="#fn:Nguyen05" class="footnote" rel="footnote">4</a></sup>.
+(We hope to address <strong>RSA accumulators</strong><sup id="fnref:Bd93" role="doc-noteref"><a href="#fn:Bd93" class="footnote" rel="footnote">5</a></sup> in a future post.)
+A bilinear accumulators can be regarded as a type of Kate-Zaverucha-Goldberg (KZG) polynomial commitment<sup id="fnref:KZG10a" role="doc-noteref"><a href="#fn:KZG10a" class="footnote" rel="footnote">6</a></sup>.
+(Although it is not necessary for this post, you will find a <a href="https://alinush.github.io/2020/05/06/kzg-polynomial-commitments.html">brief summary of KZG here</a>.)</p>
+<p class="box-note"><strong>Note:</strong> We use the term <strong>commitment</strong> here lightly.
+Specifically, we care more about the <em>binding</em> property rather than the <em>hiding</em> property.
+Nonetheless, some accumulators have hiding properties.
+</p>
+<h2 id="the-setting">The setting</h2>
+<p>Just like with <a href="http://en.wikipedia.org/wiki/Merkle_Tree">MHTs</a>, we’ll consider accumulators in the setting of a <strong>prover</strong> and one or more <strong>verifiers</strong>.
+The prover will be the party committing to the set and computing proofs (e.g., membership, non-membership, disjointness).
+The verifiers will be the parties that verify proofs.</p>
+<p class="box-note"><strong>Example:</strong> Let’s consider Bitcoin.
+The prover is the <em>Bitcoin miner</em> that commits to the set of <em>transactions (TXNs)</em> and computes membership proofs for each TXN.
+The verifiers would be <em>Bitcoin thin clients</em>, which receive a TXN and verify its membership proof.</p>
+<p>Typically, there will be some <strong>public parameters (PPs)</strong> needed for the prover to commit to a set and compute proofs.
+Furthermore, the verifier might need (a subset of) these parameters to verify proofs.
+</p>
+<p class="box-note"><strong>Example:</strong> For MHTs, the public parameters are simply the collision-resistant hash function (CRHF) used to compute the MHT.
+Both the prover and verifier have this CRHF (e.g., they know how to compute SHA256 hashes).
+In contrast, for accumulators, the PPs will typically consist of the description of an algebraic group (e.g., an elliptic curve or $\mathbb{Z}_N^*$) as well as some other group elements.</p>
+<h2 id="bilinear-accumulators">Bilinear accumulators</h2>
+<p>Bilinear accumulators make heavy use of <a href="https://alinush.github.io/2020/03/16/polynomials-for-crypto.html">polynomials</a>, which we assume knowledge of below.
+They can also be regarded as a direct application of the <a href="https://alinush.github.io/2020/05/06/kzg-polynomial-commitments.html">Kate-Zaverucha-Goldberg (KZG) polynomial commitment scheme</a>, which we do <strong>not</strong> assume knowledge of below.</p>
+<h3 id="setting-up-an-accumulator-scheme">Setting up an accumulator scheme</h3>
+<p>Recall that, to set up an MHT scheme, all that must be done is to agree on what CRHF will be used to hash the tree.
+With bilinear accumulators, things are a bit more complicated.</p>
+<p>First, bilinear accumulators require a <strong>bilinear group</strong> $\mathbb{G}$<sup id="fnref:Joux00" role="doc-noteref"><a href="#fn:Joux00" class="footnote" rel="footnote">7</a></sup>.
+Such groups have an efficiently-computable <strong>bilinear map</strong> $e : \mathbb{G}\times\mathbb{G}\rightarrow\mathbb{G}_T$, where $\mathbb{G}_T$ is another group called the <strong>target group</strong>.
+Let $g$ denote the generator of $\mathbb{G}$ and let $p$ denote the order of $\mathbb{G}$.
+The most important thing to know about bilinear maps is that they have very useful algebraic properties:</p>
+<p>\begin{align*}
+e(g^a,g^b)=e(g^a,g)^b=e(g,g^b)^a=e(g,g)^{ab}, \forall a,b\in \mathbb{Z}_p
+\end{align*}</p>
+<p>Second, bilinear accumulators can only be used to commit to sets of <em>bounded</em> size $\ell$.
+For this, the prover needs <strong>$\ell$-Strong Diffie-Hellman ($\ell$-SDH)</strong> public parameters:</p>
+<p>\begin{align*}
+\left(g^{\tau^i}\right)_{i=0}^{\ell} &amp;= (g, g^\tau, g^{\tau^2}, g^{\tau^3},\dots,g^{\tau^\ell})
+\end{align*}</p>
+<p>Here, $\tau$ is a <strong>trapdoor</strong>: a random number in $\mathbb{Z}_p$ that must <em>not</em> be made public or else the accumulator scheme will be completely insecure.
+(We’ll discuss what “security” means later.)
+Thus, generating PPs has to be done in a manner that never reveals $\tau$.
+This is called a <strong>trusted setup phase</strong> and can be implemented naively via a <strong>trusted third party (TTP)</strong>.</p>
+<p class="box-note">Example: The TTP would take as input $\ell$, pick a random $\tau$, compute $\left(g^{\tau^i}\right)_{i=0}^\ell$ and <em>promise</em> to forget $\tau$.</p>
+<p>Since TTPs should be avoided in practice, the TTP can be implemented in a “decentralized” manner via multiple parties<sup id="fnref:BGG18" role="doc-noteref"><a href="#fn:BGG18" class="footnote" rel="footnote">8</a></sup><sup>,</sup><sup id="fnref:BGM17" role="doc-noteref"><a href="#fn:BGM17" class="footnote" rel="footnote">9</a></sup>.
+This way, all parties must collude in order to learn $\tau$, which means a single honest party suffices to keep $\tau$ secret.</p>
+<p class="box-warning"><strong>Warning:</strong>
+This requirement of a trusted setup phase is a disadvantage of bilinear accumulators, since it complicates the set up of the scheme.
+As we’ll see later, in some settings, RSA accumulators have the advantage of not needing a trusted setup.</p>
+<h3 id="committing-to-sets">Committing to sets</h3>
+<p>The prover can commit to or <strong>accumulate</strong> any set $T=\{e_1,e_2,\dots,e_n\}$ where $e_i \in \mathbb{Z}_p$ and $n &lt; \ell$.
+First, the prover computes an <strong>accumulator polynomial</strong> $\alpha$ which has roots at all the $e_i$’s:</p>
+<p>\begin{align}
+\alpha(X) &amp;= (X-e_1)(X-e_2)\cdots(X-e_n)\label{eq:acc-poly}\\<br />
+ &amp;= \prod_{j\in[n]} (X-e_j)
+\end{align}</p>
+<p>Here, “computing a polynomial” means computing its <strong>coefficients</strong> $(a_0, a_1, \dots, a_n)$ given its roots (i.e., the $e_i$’s) such that $\alpha(X)=\sum_{i=0}^n a_i X^i$.
+Also, note that the $a_i$’s are elements of $\mathbb{Z}_p$ and $\alpha$ has degree $n$.</p>
+<p>Second, the <strong>digest</strong> or <strong>accumulator</strong> of $T$ is set to $a=g^{\alpha(\tau)}$, computed as:</p>
+<p>\begin{align*}
+ a &amp;= \prod_{i=0}^n \left(g^{\tau^i}\right)^{a_i}\\<br />
+ &amp;= \prod_{i=0}^n g^{a_i \tau^i}\\<br />
+ &amp;= g^{\sum_{i=0}^n {a_i \tau^i}}\\<br />
+ &amp;= g^{\alpha(\tau)}
+\end{align*}</p>
+<p>In other words, the prover simply computes $\alpha(\tau)$ <em>“in the exponent”</em>, using the $\ell$-SDH PPs and the fact that $\alpha(\tau) = \sum_{i=0}^n a_i \tau^i$.</p>
+<p>And that’s it!
+The digest of the set is just the single group element $a\in \mathbb{G}$.
+Depending on the types of algebraic groups used, this could be as small as 32 bytes!</p>
+<h4 id="computing-the-coefficients-of-the-accumulator-polynomial">Computing the coefficients of the accumulator polynomial</h4>
+<p>You might wonder: “How do I compute the coefficients $a_i$ of $\alpha$ given its roots $e_i$?”
+The key idea is to start with monomials $(X-e_i)$ as leaves of a binary tree and multiply up the tree to obtain $\alpha(X)$’s coefficients at the root.</p>
+<p>Here’s an example for a set $T=\{e_1, e_2, \dots, e_8\}$:</p>
+<p><img src="/uploads/accumulator-subproduct-tree.png" alt="subproduct-tree" height="300px" /></p>
+<p>Let’s see how long it takes to compute $\alpha$ in this manner.
+First, recall that two degree-$n$ polynomials can be multiplied fast in $O(n\log{n})$ time using the <strong>Discrete Fourier Transform (DFT)</strong> (see Chapter 30.1 in CLRS<sup id="fnref:CLRS09" role="doc-noteref"><a href="#fn:CLRS09" class="footnote" rel="footnote">10</a></sup>).
+Second, let’s (recursively) define the time $t(n)$ to compute the tree on $n$ leaves as the sum of:</p>
+<ol>
+ <li>The time $2\cdot t(n/2)$ to compute its two subtrees of $n/2$ leaves, and</li>
+ <li>The $O(n\log{n})$ time to multiply the two degree-$(n/2)$ polynomials at the root of these two subtrees (via DFT).</li>
+</ol>
+<p>More formally, $t(n)=2t(n/2)+O(n\log{n})$, which simplifies to $t(n)=O(n\log^2{n})$ time.</p>
+<p class="box-note"><strong>Concrete performance:</strong>
+The $O(n\log^2{n})$ time to compute $\alpha$ is the most costly step, asymptotically.
+However, in a concrete implementation, more time is spent computing $g^{\alpha(\tau)}$.
+To speed this up, a fast multi-exponentiation<sup id="fnref:Henry10" role="doc-noteref"><a href="#fn:Henry10" class="footnote" rel="footnote">11</a></sup> algorithm should be used. </p>
+<h4 id="updating-commitments">Updating commitments</h4>
+<p>Unlike <a href="http://en.wikipedia.org/wiki/Merkle_Tree">MHTs</a> and RSA accumulators, bilinear accumulators cannot be <em>efficiently updated</em>.
+Specifically, given an old accumulator $a=g^{\alpha(\tau)}$, the prover cannot <em>efficiently</em> compute the new accumulator $a’=g^{\alpha’(\tau)}$, after a new element $e’$ has been added to the accumulator (i.e., $\alpha’(X) = \alpha(X) (X-e’)$).</p>
+<p>Instead, the prover has to:</p>
+<ul>
+ <li>Multiply $\alpha(X)$ by $(X-e’)$ in $O(n)$ time to obtain $\alpha’(X)$,</li>
+ <li>Commit to $\alpha’(X)$ from scratch in $O(n)$ time.</li>
+</ul>
+<p>Thus, if done naively, updates take $O(n)$ time, which is very expensive.
+(In an MHT, they take $O(\log{n})$ time and in RSA accumulators they take $O(1)$ time.)</p>
+<p><strong>So, is there any hope to speed up updating accumulators?</strong>
+Fortunately, classic static-to-dynamic transformations<sup id="fnref:Erickson15" role="doc-noteref"><a href="#fn:Erickson15" class="footnote" rel="footnote">12</a></sup> can be used to enable more efficient updates for bilinear accumulators, although at some costs.
+For example, we take this approach in our work when designing and implementing append-only authenticated dictionaries<sup id="fnref:TBPplus19:1" role="doc-noteref"><a href="#fn:TBPplus19" class="footnote" rel="footnote">3</a></sup>.
+The details are outside the scope of this post.</p>
+<h3 id="computing-membership-proofs">Computing membership proofs</h3>
+<p>Now that we know how to accumulate sets, let’s talk about how to prove membership of elements w.r.t. the accumulator of a set. 
+Looking back at Equation \ref{eq:acc-poly}, we notice that $e_i$ is in the accumulator if, and only if, $(X-e_i)$ divides $\alpha(X)$.
+Accumulator membership proofs leverage this observation!</p>
+<p class="box-note">Another way to look at this is that $e_i$ is in the accumulator if, and only if, $\alpha(e_i)=0$.
+But $\alpha(e_i)=0$ is equivalent to $(X-e_i)$ divides $\alpha(X)$!</p>
+<p>To compute a <em>membership proof</em>, the prover first divides $\alpha$ by $(X-e_i)$ obtaining a <strong>quotient</strong> polynomial $q(X)$ of degree $n-1$:</p>
+<p>\begin{align*}
+\alpha(X) = q(X)(X-e_i)
+\end{align*}</p>
+<p>Some simple math shows the quotient $q(X)$ is just $\alpha(X)$ without a root at $e_i$:</p>
+\[q(X) = \prod_{j\in[n]\setminus\{i\}} (X-e_j)\]
+<p>Second, the prover commits to $q(X)$ using the same algorithm we described for $\alpha(X)$.
+The proof is the commitment $g^{q(\tau)}$.</p>
+<p class="box-note"><strong>Note</strong>: Dividing $\alpha$ by $(x-e_i)$ takes $O(n)$ time and committing to the quotient $q$ also takes $O(n)$ time.
+(As before, the commitment step is more expensive in practice and should be implemented with a multiexp<sup id="fnref:Henry10:1" role="doc-noteref"><a href="#fn:Henry10" class="footnote" rel="footnote">11</a></sup>.)</p>
+<p>This is easier to see with an example, so let’s consider the set \(T=\{5,7,10\}\).
+The accumulator is $g^{(\tau-5)(\tau-7)(\tau-10)}$.
+The proof for element $5$ is just $g^{(\tau-7)(\tau-10)}$.
+This is just a commitment to the quotient:</p>
+\[q(X) = \frac{\alpha(X)}{(X-5)}=\frac{(X-5)(X-7)(X-10)}{(X-5)} = (X-7)(X-10)\]
+<p>Similarly:</p>
+<ul>
+ <li>The proof for element $7$ is just $g^{(\tau-5)(\tau-10)}$.</li>
+ <li>The proof for element $10$ is just $g^{(\tau-5)(\tau-7)}$.</li>
+</ul>
+<h4 id="verifying-membership-proofs">Verifying membership proofs</h4>
+<p>Let $a = g^{\alpha(\tau)}$ be the accumulator, $e_i$ be the element we’re verifying membership of and $\pi=g^{q(\tau)}$ be the proof.
+To verify $e_i$ is accumulated, we’ll use the bilinear map $e$ to check that:
+\begin{align*}
+ e(a, g) \stackrel{?}{=} e(\pi, g^\tau / g^{e_i})
+\end{align*}</p>
+<p>Note that this is equivalent to checking that:
+\begin{align*}
+ e(g^{\alpha(\tau)}, g) &amp;\stackrel{?}{=} e(g^{q(\tau)}, g^{\tau -e_i}) \Leftrightarrow \\<br />
+ e(g,g)^{\alpha(\tau)} &amp;\stackrel{?}{=} e(g^{q(\tau)}, g^{\tau -e_i}) \\<br />
+ e(g,g)^{\alpha(\tau)} &amp;\stackrel{?}{=} e(g,g)^{q(\tau)(\tau -e_i)} \\<br />
+ \alpha(\tau) &amp;\stackrel{?}{=} q(\tau)(\tau -e_i) \\<br />
+\end{align*}</p>
+<p>In other words, we are verifying that the $\alpha(X) = q(X)(X-e_i)$ equation holds <em>only for</em> $X=\tau$ rather than for all $X$.
+It turns out that, as long as nobody knows $\tau$, this is sufficient for security under the $\ell$-SDH assumption, which was originally introduced by Boneh et al<sup id="fnref:BB08" role="doc-noteref"><a href="#fn:BB08" class="footnote" rel="footnote">13</a></sup>.</p>
+<p class="box-warning"><strong>Important:</strong> To verify proofs, the verifier needs a small subset of the public parameters: just $g$ and $g^\tau$.</p>
+<h4 id="updating-membership-proofs">Updating membership proofs</h4>
+<p>Suppose we have an accumulator $a$ for \(\{e_1, \dots, e_n\}\) and we also have membership proofs $\pi_i$ for each $e_i$.
+If a new element $e_{n+1}$ is added to the accumulator, it seems like we would have to recompute all proofs $\pi_i$ for each $e_i$.
+This would take $O(n^2)$ time, which is impractical for large $n$.</p>
+<p>Fortunately, there is an efficient way to update all membership proofs after a <em>single</em> element $e_{n+1}$ was added to the accumulator<sup id="fnref:Nguyen05:1" role="doc-noteref"><a href="#fn:Nguyen05" class="footnote" rel="footnote">4</a></sup>.
+The idea is to update each proof $\pi_i$ to $\pi’_i$ as:</p>
+\[\pi'_i = a \cdot \pi_i^{e_{n+1}-e_i}\]
+<p>To see why this works, note that:</p>
+<p>\begin{align*}
+\pi’_i &amp;= a \cdot \pi_i^{e_{n+1}-e_i}\\<br />
+ &amp;= g^{\prod_{j\in[n]} (\tau - e_j)} \cdot \left(g^{\prod_{j\in[n]\setminus\{i\}} (\tau-e_j)}\right)^{-(e_{n+1}+e_i)}\\<br />
+ &amp;= \left(g^{\prod_{j\in[n]\setminus\{i\}} (\tau - e_j)}\right)^{(\tau - e_i)} \cdot \left(g^{\prod_{j\in[n]\setminus\{i\}} (\tau-e_j)}\right)^{(-e_{n+1}+e_i)}\\<br />
+ &amp;= \left(g^{\prod_{j\in[n]\setminus\{i\}} (\tau - e_j)}\right)^{(\tau - e_i) + (-e_{n+1}+e_i)}\\<br />
+ &amp;= \left(g^{\prod_{j\in[n]\setminus\{i\}} (\tau - e_j)}\right)^{(\tau - e_{n+1})}\\<br />
+ &amp;= g^{\prod_{j\in[n+1]\setminus\{i\}} (\tau - e_j)}
+\end{align*}</p>
+<p>There is also a similar technique for updating proofs after a <em>single</em> element deletion (see Section 4, pg. 10, in the original paper on bilinear accumulators<sup id="fnref:Nguyen05:2" role="doc-noteref"><a href="#fn:Nguyen05" class="footnote" rel="footnote">4</a></sup>).
+Lastly, <a href="https://twitter.com/chbpap">Papamanthou</a> also gives a proof update techniques when a single element is modified in the accumulator (see Lemma 3.16 in his thesis<sup id="fnref:Papamanthou11" role="doc-noteref"><a href="#fn:Papamanthou11" class="footnote" rel="footnote">14</a></sup>).</p>
+<p class="box-warning">Still, compared to MHTs, which can update all proofs in $O(\log{n})$ time, updating all proofs in $O(n)$ time remains slow for many bilinear accumulator applications.
+This seems to the cost paid to get constant-sized membership proofs.</p>
+<h3 id="computing-non-membership-proofs">Computing non-membership proofs</h3>
+<p>It is also possible to create a <em>non-membership proof</em> that an element $\hat{e}\notin T$ is not in the accumulator.
+We just have to (somehow) show that $\alpha(\hat{e})\ne 0$.</p>
+<p>For this, we’ll leverage the <strong>polynomial remainder theorem (PRT)</strong>, which says that:</p>
+<p>\begin{align*}
+\forall\ \text{polynomials}\ \phi,\forall k, \exists\ \text{polynomial}\ q,\ \text{s.t.}\ \phi(X) = q(X)(x - k) + \phi(k)
+\end{align*}</p>
+<p>Now, suppose we have an element $\hat{e}$ that is <em>not</em> in the accumulator.
+This means $\alpha(\hat{e}) = y$ where $y \ne 0$.
+In other words, by applying the PRT, we get:</p>
+\[\alpha(\hat{e}) = y \Leftrightarrow \exists q, \alpha(X) = q(X)(x - \hat{e}) + y\]
+<p>The non-membership proof will consist of (1) a commitment to $q$ (as before) and (2) the non-zero value $y=\alpha(\hat{e})$.</p>
+<p>Let $\pi=g^{q(\tau)}$ denote the quotient commitment.
+The proof verification remains largely the same:</p>
+<p>\begin{align*}
+ e(a, g) \stackrel{?}{=} e(\pi, g^\tau / g^{\hat{e}})e(g,g)^y
+\end{align*}</p>
+<p>Note that this is equivalent to checking that:
+\begin{align*}
+ e(g^{\alpha(\tau)}, g) &amp;\stackrel{?}{=} e(g^{q(\tau)}, g^{\tau -\hat{e}})e(g,g)^y \Leftrightarrow \\<br />
+ e(g,g)^{\alpha(\tau)} &amp;\stackrel{?}{=} e(g^{q(\tau)}, g^{\tau -\hat{e}})e(g,g)^y \\<br />
+ e(g,g)^{\alpha(\tau)} &amp;\stackrel{?}{=} e(g,g)^{q(\tau)(\tau -\hat{e})}e(g,g)^y \\<br />
+ e(g,g)^{\alpha(\tau)} &amp;\stackrel{?}{=} e(g,g)^{q(\tau)(\tau -\hat{e}) + y} \\<br />
+ \alpha(\tau) &amp;\stackrel{?}{=} q(\tau)(\tau - \hat{e}) + y
+\end{align*}</p>
+<p>As before, this only verifies that the $\alpha(X) = q(X)(X-\hat{e}) + y$ equation holds <em>only for</em> $X=\tau$ rather than for all $X$.</p>
+<p class="box-note"><strong>Note:</strong> The verification can be done more efficiently as $e(g^{\alpha(\tau)} / g^y, g) \stackrel{?}{=} e(g^{q(\tau)}, g^{\tau -\hat{e}})$.</p>
+<p class="box-note"><strong>Note:</strong> The $\alpha(X) = q(X)(X-e_i)$ equation we relied on for proving membership is just the PRT applied to $\alpha(e_i) = 0 $</p>
+<h3 id="computing-subset-proofs-or-batching-membership-proofs">Computing subset proofs (or batching membership proofs)</h3>
+<p>What if we want to prove $T_1 \subseteq T_2$ given their accumulators $a_1$ and $a_2$?
+One application of this is <strong>batching</strong> membership proofs: i.e., compute a <em>single</em>, <em>constant-sized</em> membership proof for multiple elements.
+This can be done by just setting $T_1$ to be the set of those elements.</p>
+<p>Subset proofs are based on the observation that if $T_1 \subseteq T_2$, then $\alpha_1$ divides $\alpha_2$, where $\alpha_1$ and $\alpha_2$ are the accumulator polynomials of $T_1$ and $T_2$.</p>
+<p class="box-note"><strong>Example:</strong> If $T_1=\{1,3\}$ and $T_2=\{1,3,4,10\}$, then clearly $\alpha_1(X)=(X-1)(X-3)$ divides $\alpha_2(X)=(X-1)(X-3)(X-4)(X-10)$ and the quotient is $q(X)=(X-4)(X-10)$.</p>
+<p>The subset proof is just a commitment to the quotient $q = \alpha_2 / \alpha_1$, which can be computed in $O(n\log{n})$ time using FFT-based division<sup id="fnref:vG13ModernCh9" role="doc-noteref"><a href="#fn:vG13ModernCh9" class="footnote" rel="footnote">15</a></sup>, where $n$ is the max degree of the two polynomials.</p>
+<p>To verify the proof $\pi=g^{q(\tau)}$ against the two accumulators $a_1 = g^{\alpha_1(\tau)}$ and $a_2 =g^{\alpha_2(\tau)}$, the bilinear map is used as expected:
+\begin{align*}
+ e(a_1, \pi) &amp;\stackrel{?}{=} e(a_2, g)\Leftrightarrow\\<br />
+ e(g^{\alpha_1(\tau)}, g^{q(\tau)}) &amp;\stackrel{?}{=} e(g^{\alpha_2(\tau)}, g)\Leftrightarrow\\<br />
+ e(g,g)^{\alpha_1(\tau) q(\tau)} &amp;\stackrel{?}{=} e(g,g)^{\alpha_2(\tau)}\Leftrightarrow\\<br />
+ \alpha_1(\tau) q(\tau) &amp;\stackrel{?}{=} \alpha_2(\tau)\Leftrightarrow\\<br />
+ q(\tau) &amp;\stackrel{?}{=} \alpha_2(\tau) / \alpha_1(\tau)
+\end{align*}</p>
+<h3 id="computing-disjointness-proofs">Computing disjointness proofs</h3>
+<p>Disjointness proofs are based on the observation that if $T_1 \cap T_2 = \varnothing$, then $\exists$ polynomials $u(X),v(X)$ such that:</p>
+\[u(X)\alpha_1(X)+v(X)\alpha_2(X) = 1\]
+<p>The $u,v$ polynomials can be computed using (fast versions of) the Extended Euclidean Algorithm (EEA)<sup id="fnref:vG13ModernCh11" role="doc-noteref"><a href="#fn:vG13ModernCh11" class="footnote" rel="footnote">16</a></sup> in $O(n\log^2{n})$ time, where $n$ is the max degree of the two polynomials.</p>
+<p>The disjointness proof will be the $g^{u(\tau)}$ and $g^{v(\tau)}$ commitments to $u$ and $v$ respectively.
+By now, it should be easy to tell how to verify such a proof:</p>
+<p>\begin{align*}
+ e(a_1, g^{u(\tau)}) e(a_2, g^{v(\tau)}) &amp;\stackrel{?}{=} e(g, g)
+\end{align*}</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>This post introduced <em>bilinear accumulators</em>, an alternative to <a href="http://en.wikipedia.org/wiki/Merkle_Tree">MHTs</a> that offers constant-sized (non)membership proofs.</p>
+<p>Bilinear accumulators are more “expressive” than MHTs: they can prove subset and disjointness relations between sets.
+This is typically not possible to do efficiently with MHTs, which must be “organized” differently to allow for either efficient subset proofs or efficient disjointness proofs (but not both).</p>
+<p>Unfortunately, the power of bilinear accumulators is paid for with:</p>
+<ol>
+ <li>A more complicated (trusted) setup phase,</li>
+ <li>More computational overhead,</li>
+ <li>$O(\ell)$-sized public parameters for the prover to commit to sets of size $\le \ell$</li>
+</ol>
+<p>In our next post, we’ll see how RSA accumulators can address (1) and (3), by further sacrificing on (2).</p>
+<p>If you ever need to implement bilinear accumulators in C++, I found the following libraries useful:</p>
+<ul>
+ <li>Victor Shoup’s <a href="https://www.shoup.net/ntl/">libntl</a>, for fast polynomial arithmetic like division and EEA</li>
+ <li>Zcash’s <a href="https://github.com/scipr-lab/libff">libff</a>, for fast elliptic curve groups with bilinear maps (e.g., BN254)</li>
+ <li>Zcash’s <a href="https://github.com/scipr-lab/libfqfft">libfqfft</a>, for computing FFTs in the finite field $\mathbb{F}_p$ associated with <a href="https://github.com/scipr-lab/libff">libff</a>’s elliptic curve groups of order $p$</li>
+</ul>
+<p>You can also find my own C++ implementations, based on the libraries above, here:</p>
+<ul>
+ <li><a href="https://github.com/alinush/libaad-ccs2019">libaad</a>, which implements bilinear accumulators and uses them to build more complicated append-only authenticated data structures<sup id="fnref:TBPplus19:2" role="doc-noteref"><a href="#fn:TBPplus19" class="footnote" rel="footnote">3</a></sup>.</li>
+ <li><a href="https://github.com/alinush/libpolycrypto">libpolycrypto</a>, which implements KZG polynomial commitments (which bilinear accumulators are based on)</li>
+</ul>
+<h2 id="open-problems">Open problems</h2>
+<p>Many interesting problems remain open for bilinear accumulators:</p>
+<ul>
+ <li>Efficiently updating accumulators after updates</li>
+ <li>Efficiently updating non-membership proofs</li>
+ <li>Efficiently updating subset and disjointness proofs</li>
+</ul>
+<h2 id="references">References</h2>
+<div class="footnotes" role="doc-endnotes">
+ <ol>
+ <li id="fn:Fiore20" role="doc-endnote">
+ <p><strong>Zero-Knowledge Proofs for Set Membership</strong>, by Dario Fiore, in <a href="https://zkproof.org/2020/02/27/zkp-set-membership/">ZKProof Blog</a>, 2020 <a href="#fnref:Fiore20" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+ </li>
+ <li id="fn:MGGR13" role="doc-endnote">
+ <p><strong>Zerocoin: Anonymous Distributed E-Cash from Bitcoin</strong>, by Ian Miers and Christina Garman and Matthew Green and Aviel D. Rubin, <em>in IEEE Security and Privacy ‘13</em>, 2013 <a href="#fnref:MGGR13" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+ </li>
+ <li id="fn:TBPplus19" role="doc-endnote">
+ <p><strong>Transparency Logs via Append-Only Authenticated Dictionaries</strong>, by Tomescu, Alin and Bhupatiraju, Vivek and Papadopoulos, Dimitrios and Papamanthou, Charalampos and Triandopoulos, Nikos and Devadas, Srinivas, <em>in ACM CCS ‘19</em>, 2019, #shamelessplug <a href="#fnref:TBPplus19" class="reversefootnote" role="doc-backlink">&#8617;</a> <a href="#fnref:TBPplus19:1" class="reversefootnote" role="doc-backlink">&#8617;<sup>2</sup></a> <a href="#fnref:TBPplus19:2" class="reversefootnote" role="doc-backlink">&#8617;<sup>3</sup></a></p>
+ </li>
+ <li id="fn:Nguyen05" role="doc-endnote">
+ <p><strong>Accumulators from Bilinear Pairings and Applications</strong>, by Nguyen, Lan, <em>in CT-RSA ‘05</em>, 2005 <a href="#fnref:Nguyen05" class="reversefootnote" role="doc-backlink">&#8617;</a> <a href="#fnref:Nguyen05:1" class="reversefootnote" role="doc-backlink">&#8617;<sup>2</sup></a> <a href="#fnref:Nguyen05:2" class="reversefootnote" role="doc-backlink">&#8617;<sup>3</sup></a></p>
+ </li>
+ <li id="fn:Bd93" role="doc-endnote">
+ <p><strong>One-Way Accumulators: A Decentralized Alternative to Digital Signatures</strong>, by Benaloh, Josh and de Mare, Michael, <em>in EUROCRYPT ‘93</em>, 1994 <a href="#fnref:Bd93" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+ </li>
+ <li id="fn:KZG10a" role="doc-endnote">
+ <p><strong>Constant-Size Commitments to Polynomials and Their Applications</strong>, by Kate, Aniket and Zaverucha, Gregory M. and Goldberg, Ian, <em>in ASIACRYPT ‘10</em>, 2010 <a href="#fnref:KZG10a" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+ </li>
+ <li id="fn:Joux00" role="doc-endnote">
+ <p><strong>A One Round Protocol for Tripartite Diffie–Hellman</strong>, by Joux, Antoine, <em>in Algorithmic Number Theory</em>, 2000 <a href="#fnref:Joux00" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+ </li>
+ <li id="fn:BGG18" role="doc-endnote">
+ <p><strong>A Multi-party Protocol for Constructing the Public Parameters of the Pinocchio zk-SNARK</strong>, by Bowe, Sean and Gabizon, Ariel and Green, Matthew D., <em>in Financial Cryptography and Data Security</em>, 2019 <a href="#fnref:BGG18" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+ </li>
+ <li id="fn:BGM17" role="doc-endnote">
+ <p><strong>Scalable Multi-party Computation for zk-SNARK Parameters in the Random Beacon Model</strong>, by Sean Bowe and Ariel Gabizon and Ian Miers, <em>in Cryptology ePrint Archive, Report 2017/1050</em>, 2017 <a href="#fnref:BGM17" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+ </li>
+ <li id="fn:CLRS09" role="doc-endnote">
+ <p><strong>Introduction to Algorithms, Third Edition</strong>, by Cormen, Thomas H. and Leiserson, Charles E. and Rivest, Ronald L. and Stein, Clifford, 2009 <a href="#fnref:CLRS09" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+ </li>
+ <li id="fn:Henry10" role="doc-endnote">
+ <p><strong>Pippenger’s Multiproduct and Multiexponentiation Algorithms (Extended Version)</strong>, by Ryan Henry, 2010 <a href="#fnref:Henry10" class="reversefootnote" role="doc-backlink">&#8617;</a> <a href="#fnref:Henry10:1" class="reversefootnote" role="doc-backlink">&#8617;<sup>2</sup></a></p>
+ </li>
+ <li id="fn:Erickson15" role="doc-endnote">
+ <p><strong>Static-to-dynamic tranformations</strong>, by Jeff Erickson, 2015, <a href="http://jeffe.cs.illinois.edu/teaching/datastructures/notes/01-statictodynamic.pdf">[URL]</a> <a href="#fnref:Erickson15" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+ </li>
+ <li id="fn:BB08" role="doc-endnote">
+ <p><strong>Short Signatures Without Random Oracles and the SDH Assumption in Bilinear Groups</strong>, by Boneh, Dan and Boyen, Xavier, <em>in Journal of Cryptology</em>, 2008 <a href="#fnref:BB08" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+ </li>
+ <li id="fn:Papamanthou11" role="doc-endnote">
+ <p><strong>Cryptography for Efficiency: New Directions in Authenticated Data Structures</strong>, by Charalampos Papamanthou, 2011, <a href="https://user.eng.umd.edu/~cpap/published/theses/cpap-phd.pdf">[URL]</a> <a href="#fnref:Papamanthou11" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+ </li>
+ <li id="fn:vG13ModernCh9" role="doc-endnote">
+ <p><strong>Newton iteration</strong>, by von zur Gathen, Joachim and Gerhard, Jurgen, <em>in Modern Computer Algebra</em>, 2013 <a href="#fnref:vG13ModernCh9" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+ </li>
+ <li id="fn:vG13ModernCh11" role="doc-endnote">
+ <p><strong>Fast Euclidean Algorithm</strong>, by von zur Gathen, Joachim and Gerhard, Jurgen, <em>in Modern Computer Algebra</em>, 2013 <a href="#fnref:vG13ModernCh11" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+ </li>
+ </ol>
+</div>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#cryptography">cryptography</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Bilinear+Accumulators+for+Cryptocurrency+Enthusiasts&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2020-04-02-bilinear-accumulators-for-cryptocurrency%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2020-03-29-private-set-intersection-a-soft-introduction/" data-toggle="tooltip" data-placement="top" title="Private Set Intersection">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2020-05-14-streamlet/" data-toggle="tooltip" data-placement="top" title="Streamlet: A Simple Textbook Blockchain Protocol">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

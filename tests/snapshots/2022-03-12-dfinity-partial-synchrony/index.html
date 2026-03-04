@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Consensus by Dfinity - Part II (Internet Computer Consensus)</title>
+ 
+ 
+ <meta name="author" content="Kartik Nayak">
+ 
+ <meta name="description" content="This post is part two of a two-part post on consensus protocols published by the Dfinity Foundation; you can find part one here. This post will intuitively explain the Internet Computer Consensus. The differences between DSC and ICC are primarily due to the underlying network model that they assume — while DSC works under synchrony and tolerates $t &amp;lt; n/2$ Byzantine faults, ICC works under partial synchrony and tolerates $t...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Consensus by Dfinity - Part II (Internet Computer Consensus)">
+ <meta property="og:description" content="This post is part two of a two-part post on consensus protocols published by the Dfinity Foundation; you can find part one here. This post will intuitively explain the Internet Computer Consensus. The differences between DSC and ICC are primarily due to the underlying network model that they assume — while DSC works under synchrony and tolerates $t &amp;lt; n/2$ Byzantine faults, ICC works under partial synchrony and tolerates $t...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Kartik Nayak">
+ 
+ <meta property="og:article:published_time" content="2022-03-12T00:00:00-05:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2022-03-12-dfinity-partial-synchrony/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2022-03-12-dfinity-partial-synchrony/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Consensus by Dfinity - Part II (Internet Computer Consensus)">
+ <meta property="twitter:description" content="This post is part two of a two-part post on consensus protocols published by the Dfinity Foundation; you can find part one here. This post will intuitively explain the Internet Computer Consensus. The differences between DSC and ICC are primarily due to the underlying network model that they assume — while DSC works under synchrony and tolerates $t &amp;lt; n/2$ Byzantine faults, ICC works under partial synchrony and tolerates $t...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Consensus by Dfinity - Part II (Internet Computer Consensus)</h1>
+ 
+ 
+ 
+ 
+ By <strong>Kartik Nayak</strong><br>
+ 
+ <span class="post-meta">Posted on March 12, 2022</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>This post is part two of a two-part post on consensus protocols published by the <a href="https://dfinity.org/">Dfinity Foundation</a>; you can find part one <a href="https://decentralizedthoughts.github.io/2022-03-12-dfinity-synchrony/">here</a>. This post will intuitively explain the <a href="https://eprint.iacr.org/2021/632.pdf">Internet Computer Consensus</a>.</p>
+<p>The differences between DSC and ICC are primarily due to the underlying network model that they assume — while DSC works under synchrony and tolerates $t &lt; n/2$ Byzantine faults, ICC works under partial synchrony and tolerates $t &lt; n/3$ Byzantine faults. Recall that the fault tolerance is optimal under the respective network models (<a href="https://decentralizedthoughts.github.io/2021-10-29-consensus-cheat-sheet/">cheat sheet</a>).</p>
+<h2 id="high-level-idea">High-Level Idea</h2>
+<p>The core idea in ICC seems to be heavily inspired by DSC, and our description will be reminiscent of the <a href="https://decentralizedthoughts.github.io/2022-03-12-dfinity-synchrony/">one for DSC</a>. The ICC protocol works in iterations and forming <em>certified</em> blocks in an iterattion. A block is said to be certified if it receives greater than two-third quourum of votes. In each iteration, ICC guarantees the formation of at least one certified block while attempting to obtain a unique certified block. If a block in an iteration is indeed uniquely certified, all the blocks until this block will eventually be committed.</p>
+<p>In some more detail, the protocol works as follows. In every iteration, each replica is randomly assigned a unique rank; the replica with the lowest rank is called the leader. At the beginning of each iteration, every replica proposes a block and broadcasts it to all other replicas. To prioritize proposals from the leader and lower-ranked replicas, replicas wait for some time before proposing — a replica with a higher rank will wait longer. When a replica receives a block, it will vote for this block. Again, to prioritize voting for proposals from the leader and lower-ranked replicas, replicas will wait until an appropriate amount of time before voting. However, if it receives a lower-ranked block than the last block it has voted for, it will vote for the new block too.</p>
+<p>Once a block receives $n-t$ votes (called a <em>certificate</em>), a replica will forward the certificate to all replicas and transition to the next iteration. All other replicas will transition upon receiving this certificate. Thus, at least one and possibly many blocks will be certified in each iteration. This ensures that the protocol keeps making progress in proposing and certifying blocks but not necessarily committing them.</p>
+<p>Suppose the leader is honest and the network is synchronous during an iteration. In that case, all honest replicas will prioritize voting for only the leader’s block, and only that block will be certified. If a replica observes that a block is uniquely certified in an iteration (in its local view), then it will broadcast a commit message for the certified block. The block and its predecessors will be committed if it receives $n-t$ commit messages.</p>
+<h3 id="key-invariants-in-the-internet-computer-consensus">Key Invariants in the Internet Computer Consensus</h3>
+<p>The core protocol relies on the following three invariants. The first two are necessary for liveness, whereas the last one is necessary for safety.</p>
+<p><strong>I. If the network is synchronous for a “sufficiently long time”, an honest leader’s block will be uniquely certified in an iteration for all honest replicas.</strong></p>
+<p>To see why this invariant holds, observe that replicas send proposals and vote for proposals at different times depending on the proposal rank. Thus, when the network is synchronous if the delay we set between two consecutive proposals is “long enough” (to account for the time difference between two replicas to move to the next iteration and the time to receive the proposal), the honest leader’s block will arrive at all replicas first. Thus, honest replicas will vote for the block. Moreover, replicas will not vote for any other proposal since those proposals have a higher rank.</p>
+<p><strong>II. At least one block and possibly many will be certified in each iteration.</strong></p>
+<p>As explained in the previous paragraph, Invariant II holds when the leader is honest, and the network is synchronous for sufficiently long. What happens when the leader is Byzantine, or the network is not synchronous? In the former case, a Byzantine leader can have multiple blocks certified. But at least one of them will be certified. In particular, similar analysis as described in <a href="https://decentralizedthoughts.github.io/2022-03-12-dfinity-synchrony/">Invariant II for SDC</a> will apply here too. In the latter case, replicas just wait until at least one block is certified in an iteration. Note that, under partial synchrony, this will eventually happen.</p>
+<p>We can see how Invariants I and II together ensure liveness. Invariant I ensures that the protocol can commit to a chain of blocks once there is an honest leader and we have network synchrony. Invariant II ensures that we will move on from a Byzantine leader until we get an honest one while still certifying a block in an iteration.</p>
+<p><strong>III. At the end of an iteration $k$, if a block $B_k$ is uniquely certified according to $\geq t+1$ honest replicas, then no other block $B’_k$ can be committed at height $k$.</strong>
+Observe that if $\geq t+1$ honest replicas observe $B_k$ being uniquely certified, they would send a commit message for $B_k$. More importantly, since a commit message is sent for at most one block in an iteration, they would not send a commit message for a different block $B’_k$. Thus, $B’_k$ will not be able to receive $n-t$ commit messages! This ensures the safety of $B_k$ if it is committed.</p>
+<p>Also, observe that as per Invariant I, when the leader is honest and the network is synchronous, a block $B_k$ will be uniquely certified at the end of iteration $k$ for <em>all $n-t$ honest replicas</em>. Since these $n-t$ honest replicas will send a commit message for $B_k$, $B_k$ will eventually be committed.</p>
+<h2 id="notes">Notes</h2>
+<p><strong>Remark 1: Differences between ICC and DSC.</strong> As you may have observed, the two protocols are similar. Here are the primary differences:</p>
+<ul>
+ <li>DSC relies on waiting for $2\Delta$ time at the start of an iteration; however, all replicas propose at the start of this timer. The wait time guarantees that an honest leader’s proposal is prioritized. ICC replaces this with a softer condition with staggered proposal and voting; if the network is synchronous, it achieves the same effect.</li>
+ <li>The unique extensibility invariant for iteration $k$ in DSC relies on a strong synchrony assumption to detect the absence of additional blocks at height $k-1$ potentially pointing to other certified blocks at height $k-2$. In ICC, such a condition cannot be met under partial synchrony. Replicas instead send a commit message when they believe that a block is uniquely certified (uniquely extensible). The block will be committed if an $n-t$ quorum of replicas sends this message; thus, an ICC commit relies on a quorum intersection argument instead of synchrony. This is also the reason why we are able to tolerate only $t &lt; n/3$ faults.</li>
+</ul>
+<p><strong>Remark 2: Communication complexity.</strong> Due to partial synchrony, even if the leader in an iteration is honest, under an adversarial block arrival ordering, each replica may end up voting for each of the $n$ proposals. Thus, in the worst case, the communciation complexity in an iteration would be $O(n^3)$ for $O(1)$-sized blocks. However, if the network is synchronous, the expected communication complexity is $O(n^2)$ (similar reasoning as in DSC).</p>
+<p><strong>Remark 3:</strong> The <a href="https://eprint.iacr.org/2021/632.pdf">ICC paper</a> describes three different protocols dubbed ICC0, ICC1, ICC2. In this post, we intuitively describe ICC0.</p>
+<p>ICC1 introduces some optimizations to ICC0 so that it can be used in a peer-to-peer gossip layer. For example, it introduces additional conditions for a replica to propose a new block and bound the number of stray proposals.</p>
+<p>ICC2, in addition, aims to improve the communication complexity of the protocol when the block sizes are much larger than other protocol messages. In particular, they use <a href="https://en.wikipedia.org/wiki/Erasure_code">erasure codes</a> to reduce this communication complexity. Such techniques have been used in several prior works; we will explain this technique in relation to consensus in more detail in a separate post.</p>
+<p>Please add comments on <a href="https://twitter.com/kartik1507/status/1504899744618872832?s=20&amp;t=og7wq7vnJHctbC0E17hryw">Twitter</a>.</p>
+<p><strong>Acknowledgment.</strong> We would like to thank Ittai Abraham and the authors of Internet Consensus Computer (Jan, Manu, Timo, Yvonne-Anne, Victor and Dominic) for useful discussions.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ <a href="/tags#research">research</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Consensus+by+Dfinity+-+Part+II+%28Internet+Computer+Consensus%29&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2022-03-12-dfinity-partial-synchrony%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2022-03-10-eip1559/" data-toggle="tooltip" data-placement="top" title="EIP-1559 In Retrospect">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2022-03-12-dfinity-synchrony/" data-toggle="tooltip" data-placement="top" title="Consensus by Dfinity - Part I">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

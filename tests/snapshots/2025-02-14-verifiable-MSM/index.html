@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Verifiable Multi-Exponentiation and Multi-Scalar Multiplication (MSM)</title>
+ 
+ 
+ <meta name="author" content="Benny Pinkas">
+ 
+ <meta name="description" content="Multi-exponentiations and multi-scalar multiplications (MSMs) are computations that are widely used in cryptographic proof systems, mostly in proof generation and proof verification. This note outlines an efficient method for verifying the results of these computations, which opens the door to outsourcing them. In particular, by employing this technique it is possible to have the prover in a cryptographic proof system perform a significant portion of the computation that is usually...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Verifiable Multi-Exponentiation and Multi-Scalar Multiplication (MSM)">
+ <meta property="og:description" content="Multi-exponentiations and multi-scalar multiplications (MSMs) are computations that are widely used in cryptographic proof systems, mostly in proof generation and proof verification. This note outlines an efficient method for verifying the results of these computations, which opens the door to outsourcing them. In particular, by employing this technique it is possible to have the prover in a cryptographic proof system perform a significant portion of the computation that is usually...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Benny Pinkas">
+ 
+ <meta property="og:article:published_time" content="2025-02-14T11:30:00-05:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2025-02-14-verifiable-MSM/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2025-02-14-verifiable-MSM/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Verifiable Multi-Exponentiation and Multi-Scalar Multiplication (MSM)">
+ <meta property="twitter:description" content="Multi-exponentiations and multi-scalar multiplications (MSMs) are computations that are widely used in cryptographic proof systems, mostly in proof generation and proof verification. This note outlines an efficient method for verifying the results of these computations, which opens the door to outsourcing them. In particular, by employing this technique it is possible to have the prover in a cryptographic proof system perform a significant portion of the computation that is usually...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Verifiable Multi-Exponentiation and Multi-Scalar Multiplication (MSM)</h1>
+ 
+ 
+ 
+ 
+ By <strong>Benny Pinkas</strong><br>
+ 
+ <span class="post-meta">Posted on February 14, 2025</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>Multi-exponentiations and multi-scalar multiplications (MSMs) are computations that are widely used in cryptographic proof systems, mostly in proof generation and proof verification. This note outlines an efficient method for verifying the results of these computations, which opens the door to outsourcing them. In particular, by employing this technique it is possible to have the <em>prover</em> in a cryptographic proof system perform a significant portion of the computation that is usually run by the <em>verifier</em>.</p>
+<p>The core idea involves breaking down the computation into smaller, batch-verifiable sub-computations. The efficiency gain stems from significantly reducing the length of the exponents used in the verification process. The theoretical performance gain is by a factor of roughly $m/(\lambda+\log m)$, where $m$ is the order of the group and $\lambda$ is a statistical security parameter. Experimental results support the theoretical analysis, with speedups ranging from 3.5X to 5X for representative parameter settings.</p>
+<h2 id="introduction">Introduction</h2>
+<p>A <strong>multi-exponentiation</strong> is a computation of the form $\prod_{i=1}^{n} v_i^{d_i}$, where the $v_i$ values are group elements and the exponents $d_i$ are scalars. Let us denote the bit length of the exponents by $m$. In most common use cases, the exponents are taken modulo the group order. We can set $m=256$ as a representative value for $m$. The number $n$ of group elements $v_i$ is much larger, in the order of thousands or even millions.
+A <strong>multi-scalar multiplication (MSM)</strong> is the equivalent to a multi-exponentiation in cyclic additive groups, typically elliptic curves. It involves calculating the sum of multiple scalar multiplications, and can be expressed as computing $\sum_{i=1}^{n} d_i P_i$, where the $P_i$ values are points on the curve and the $d_i$ values are scalars.
+In the rest of this note, we will interleave the usage of the terms <em>multi-exponentiation</em> and <em>multi-scalar multiplication (MSM)</em>, as our optimization can be applied to both tasks in an almost identical way. In the description of the schemes, we use a multiplicative notation that corresponds to multi-exponentiations.</p>
+<h3 id="the-runtime-of-computing-an-msm">The runtime of computing an MSM</h3>
+<p>Computing a multi-exponentiation or an MSM is resource-intensive in terms of computation. There are three common approaches for improving the run time of these operations.</p>
+<ul>
+ <li>The first approach is using Pippinger’s algorithm [<a href="https://scholarship.claremont.edu/cgi/viewcontent.cgi?article=1141&amp;context=hmc_fac_pub">P80</a>, <a href="https://cr.yp.to/papers/pippenger-20020118-retypeset20220327.pdf">B02</a>], which improves the overhead on an $n$-wide multi-exponentiation to be roughly the same as computing $O(n/ \log n)$ independent exponentiations. This is an improvement by a factor of about $\log n$ compared to the baseline of computing each exponentiation independently.</li>
+ <li>The second approach uses some precomputation, which is beneficial if the same bases $v_i$ are used in multiple multi-exponentiations.</li>
+ <li>The third approach speeds MSM computation using hardware accelerators such are GPUs or FPGAs. (See, for example, the following <a href="https://medium.com/@ingonyama/deep-dive-into-the-latest-msm-hardware-implementation-a9739b2cd107">review</a>.)</li>
+</ul>
+<h3 id="cryptographic-use-cases-of-msms">Cryptographic use-cases of MSMs</h3>
+<p>MSMs are used in various cryptographic tasks, particularly in the creation of zero-knowledge proofs and their verification. We are motivated by use-cases in which the runtime of proof verification is dominated by MSM computation. For example, MSMs dominate the runtime of the verifier in Bullet proofs (see page 29 in the <a href="https://eprint.iacr.org/2017/1066.pdf">Bullet proofs</a> paper), and in <a href="https://zcash.github.io/halo2/">Halo2</a> proofs. Both of these proof systems are widely used in numerous applications.</p>
+<p>Naively, the overhead of the verifier can be reduced by asking the <em>prover</em> to compute the multi-exponentiation. This is, of course, insecure, as the prover could cheat by sending an incorrect result. The goal is to enable the verifier to check the correctness of the result much more efficiently than computing it from scratch. This benefit becomes particularly useful when a single multi-exponentiation or MSM needs to be verified by multiple verifiers.</p>
+<h3 id="motivation">Motivation</h3>
+<h4 id="checking-instead-of-computing">Checking instead of computing</h4>
+<p>Our goal is to <em>verify</em> the computation of a multi-exponentiation in a multiplicative group $G$. As we wrote earlier, we focus on the scenario where a multi-exponentiation or a multi-scalar multiplication (MSM) is employed during the verification of a cryptographic proof, and represents a significant computational bottleneck for the verifier. (It it important to emphasize that “verification” is performed twice: First, in a cryptographic proof system there is a verifier that needs to verify a proof. The work of this verifier is dominated by computing an MSM. The verifier therefore outsources the computation of the MSM and needs to verify the result it receives. It is natural to outsource the computation of the MSM to the prover of the cryptographic proof. The proof then contains the orignal proof, the result of the MSM, and a proof that the MSM was computed correctly. The verifier verifies the result of the MSM, and then uses it to verify the original proof.)</p>
+<p>Observe that the cost of computing an MSM by a verifier might be significantly higher than the cost of the prover computing this MSM. This can be caused by several factors:</p>
+<ul>
+ <li>In many cases, the verifier is a client machine whereas the prover is a dedicated server. As a result, the verifier typically has less computational resources than the prover. In particular, the verifier might not have access to hardware acceleration in the form of GPUs or FPGAs that are commonly used to accelerate MSM computation.</li>
+ <li>Each proof might need to be verified by many different verifiers. As an example application, consider a distributed key generation (DKG) protocol with $N$ participants, that jointly generate a secret-sharing of a random key. In this protocol, each participant deals a random key, and the final key is the sum of all $N$ keys dealt by the participants. Each participant acts once as a dealer, and acts $N-1$ times as a receiver.
+Suppose that the verification of the message received from the dealer requires computing a multi-exponentiation. In a basic implementation, each participant has to compute $N-1$ multi-exponentiations as a receiver (verifier). Reducing the cost of verifying a multi-exponentiation can lead to a significant performance improvement. Moreover, for each dealer, the same multi-exponentiation must be computed by all $N-1$ receivers that verify the message sent by the dealer. As a result, offloading (most of) the cost of this single multi-exponentiation to the dealer can save (up to) a factor of $N$ in the total computation.</li>
+</ul>
+<h4 id="a-birds-eye-view">A birds-eye view</h4>
+<p>The basic setting of an <em>interactive proof system</em> includes a prover, a verifier, an input $x$ and a language $L$. The verifier receives from the prover a statement for the claim that $x\in L$. (We ingore here any zero-knowledge requirements from the proof.)
+The verifier runs a verification procedure for checking the correctness of the proof. In most interesting cases, the cost of verifying the proof that $x\in L$ is much smaller than the verifier computing by itself whether $x\in L$.
+Suppose that the verification procedure includes computing a multi-exponentiation or an MSM. This is depicted in the next image, where the verification process is shorter than the proof and is dominated by computing the MSM.
+<img src="/uploads/Benny-P1.png" alt="Presentation1" /></p>
+<p>Our goal is to have the prover compute the MSM for the client <em>and</em> prove that this MSM was computed correctly. In other words, we offload part of the verification cost to the prover. The work of the prover is now larger, since it includes the original proof as well as part of the verification work (the MSM) and a proof that this MSM was computed correctly. On the other hand, the verification procedure does not need to compute the MSM and instead it only checks its correctness. This is depicted in the following image.
+<img src="/uploads/Benny-P2.png" alt="Presentation1" />
+In other words, we replace the original proof procedure with a longer proof procedure, and gain an improvement in the work of the verifier. (Since checking the MSM in this method requires computing another MSM, albeit with much shorter exponents, it is tempting to continue this process recursively. However, we do not know how to do that.)</p>
+<h2 id="the-problem">The problem</h2>
+<p>The setting includes two types of parties. The first is an untrusted <em>prover</em>, which is responsible for computing the multi-exponentiation. The second is the <em>verifier</em>, whose role is to verify the correctness of the multi-exponentiation. The goal is to enable the verifier to verify the correctness of the multi-exponentiation much more efficiently than computing it directly.</p>
+<h3 id="the-solution">The solution</h3>
+<h4 id="preliminaries">Preliminaries</h4>
+<p>The basic concept is to <em>break down the computation of a multi-exponentiation into simpler sub-computations</em>. These sub-computations can be verified as a <em>batch</em> much more efficiently than performing the original multi-exponentiation. The prover is therefore asked to compute these sub-computations, which are then batch-checked by the verifier. (This approach is motivated by results from the theory of computation on program checking, pioneered by [<a href="https://dl.acm.org/doi/pdf/10.1145/200836.200880">Blum and Kannan</a>] and adapted to a cryptographic setting by <a href="https://dl.acm.org/doi/pdf/10.1145/237814.237998">[Frankel, Gemmell and Yung]</a>, and results on verification of delegated computation, e.g. [<a href="https://guyrothblum.wordpress.com/wp-content/uploads/2014/11/gghkr07.pdf">GGH+</a>].)</p>
+<p>The multi-exponentiation is an $n$-wise multi-exponentiation with $m$-bit long exponents. In comparison, verification will be done by computing an $n$-wise multi-exponentiation with exponents that are $(\lambda+\log m)$-bit long, where $\lambda$ is a statistical security parameter. Since the run time is linear in the length of the exponent, the theoretical improvement of the run time is by a factor of $m\over \lambda+\log m$. A representative value for $\lambda$ is $\lambda=64$, although some applications might set the statistical security parameter to be $\lambda=40$ or even smaller. For $m=256$ and $\lambda=64$, verification uses exponents which are $72$ bits long. Verification should therefore be about $256/72=3.55$ times faster than the baseline of computing the original multi-exponentiation.</p>
+<p>Prerequisites:</p>
+<ul>
+ <li>It is crucial that the group $G$ in which the multi-exponentiation is computed has an order that does not have small factors. This is the case, for example, with the popular Ristretto255 and BLS12-381 groups, which have a prime order. (The property that is ensured by this, and must be satisfied in order for the protocol to be secure, is that each value different than $1$ has an order of at least $2^{\lambda}$.)</li>
+ <li>The efficiency gain that we anticipate is based on the assumption that the multi-exponentiation uses exponents that are uniformly distributed, or at least that the expected value of the exponent is close to the order of the group. (If that is not the case, then the expected gain in performance will be smaller.)</li>
+</ul>
+<h4 id="solution">Solution</h4>
+<p>Denote the binary representation of the exponent $d_i$ as $d_i = d_{i,0} + 2d_{i,1} + \ldots + 2^{m-1}d_{i,m-1}$. The multi-exponentiation can be written as:</p>
+\[\prod_{i=1}^{n} v_i^{d_i} = \prod_{i=1}^{n} v_i^{\sum_{j=0}^{m-1} 2^j d_{i,j}} = \prod_{i=1}^{n} \prod_{j=0}^{m-1} v_i^{2^j d_{i,j}} = \prod_{j=0}^{m-1} \prod_{i=1}^{n} v_i^{2^j d_{i,j}}
+ = \prod_{j=0}^{m-1} (\prod_{i=1}^{n} v_i^{d_{i,j}})^{2^j}\]
+<p>Let us define</p>
+\[w_j = \prod_{i=1}^{n} v_i^{d_{i,j}}\]
+<p>That is, $w_j$ is the multiplication of the values $v_i$ for which the $j$th bit of the corresponding exponent is 1. 
+The multi-exponentiation can therefore be written as:</p>
+\[\prod_{j=0}^{m-1} w_j^{2^j}\]
+<p>The prover is asked to compute the intermediate values $w_0,\ldots,w_{m-1}$ and send them to the verifier. The verifier can then compute the multi-exponentiation by computing $\prod_{j=0}^{m-1} w_j^{2^j}$ (this computation can be done using $m$ multiplications and $m$ squarings, as we show <a href="#More-details-about-the-overhead">below</a>). The primary challenge is to facilitate the verifier’s efficient verification of the accuracy of the $w_j$ values.</p>
+<h3 id="verification--checking-the-correctness-of-the-w_i-values">Verification – checking the correctness of the $w_i$ values</h3>
+<p>For $j=1,\ldots,m-1$, the verifier must check that $w_j = \prod_{i=1}^{n} v_i^{d_{i,j}}$, where the $v_i$ bases and the $d_{i,j}$ bits are public, and the same $v_i$ bases are used for computing all $w_j$ values.</p>
+<p>The verifier chooses $m$ random coefficients $r_0,\ldots,r_{m-1} \in { 0,1}^{m\times \lambda}$, and runs two computations. In the first computation that it makes, it raises each $w_j$ to the power of $r_j$, and multiplies the results. In the second computation that it makes, it raises each $v_i$ to the power of $\sum_{j=0}^{m-1} r_j d_{i,j}$ (namely, the sum of the $r_j$ coefficients for which $d_{i,j}=1$), and multiplies the results. The verifier compares the two resulting values.
+In other words, the verifier computes the following two values, compares them and aborts if they are different:</p>
+<ul>
+ <li>$w’ = \prod_{j=0}^{m-1} w_j^{r_j}$. This is done using an $m$-wise multi-exponentiation with $\lambda$-bit long exponents. (Recall that $m\ll n$ and therefore this computation is much faster than an $n$-wise multi-exponentiation.)</li>
+ <li>$w’’ = \prod_{i=1}^{n} v_i^{\sum_{j=0}^{m-1} r_j d_{i,j}}$. This is done using an $n$-wise multi-exponentiation with $(\lambda+\log m)$-bit long exponents. This is the main overhead of the verification.</li>
+</ul>
+<p><strong>Claim:</strong> If not all $w_i$ values are correct, then the two values $w’$ and $w’’$ are different with probability $\geq 1- 2^{\lambda}$.</p>
+<p><strong>Proof:</strong> Note that</p>
+\[w'' = \prod_{i=1}^{n} v_i^{\sum_{j=0}^{m-1} r_j d_{i,j}} = \prod_{i=1}^{n} \prod_{j=0}^{m-1} v_i^{ r_j d_{i,j}} = \prod_{j=0}^{m-1} \prod_{i=1}^{n} v_i^{ r_j d_{i,j}}
+= \prod_{j=0}^{m-1} (\prod_{i=1}^{n} v_i^{d_{i,j}})^{r_j}\]
+<p>The value $w’’$ is compared with $w’ = \prod_{j=0}^{m-1} w_j^{r_j}$. Suppose that there is a $j$ index such that $w_j$ is incorrect. For example, $j=0$ and $w_0 \neq \prod_{i=1}^{n} v_i^{d_{i,0}}$. The test done by the verifier is equivalent to checking whether</p>
+\[1\stackrel{?}{=} {w'\over w''} = \prod_{j=0}^{m-1} \left( { w_j \over \prod_{i=1}^{n} v_i^{d_{i,j}}}\right)^{r_j} = \left( { w_0 \over \prod_{i=1}^{n} v_i^{d_{i,0}}}\right)^{r_0} \cdot \prod_{j=1}^{m-1} \left( { w_j \over \prod_{i=1}^{n} v_i^{d_{i,j}}}\right)^{r_j}\]
+<p>Verification is only successful if</p>
+\[\left( { w_0 \over \prod_{i=1}^{n} v_i^{d_{i,0}}}\right)^{r_0} = \left( \prod_{j=1}^{m-1} \left( { w_j \over \prod_{i=1}^{n} v_i^{d_{i,j}}}\right)^{r_j}\right)^{-1}\]
+<p>Since ${ w_0 / \prod_{i=1}^{n} v_i^{d_{i,0}}} \neq 1$ and the order of the group is prime and greater than $2^{\lambda}$, all values $({ w_0 / \prod_{i=1}^{n} v_i^{d_{i,0}}})^{r_0}$ are different. The choice of $r_0$ is independent of the right-hand side, and, therefore, the probability that the above equation holds is at most $2^{-\lambda}$.</p>
+<h4 id="on-setting-the-security-parameter-lambda">On setting the security parameter $\lambda$</h4>
+<p>The verification is done by a verifier that chooses its own randomness. This choice cannot be affected by the prover. (If multiple verifiers check the same multi-exponentiation, each one of them chooses its random exponents $r_j$ independently of the other verifiers.) The property that is guaranteed by the verification is that, independently of the prover’s choice of $w_j$ values, the verifier can detect incorrect values with probability $1-2^{-\lambda}$. This is a statistical security guarantee. Commonly used values for the statistical security parameter are $\lambda=40$ or $\lambda=64$. Even smaller values of $\lambda$ might be used in specific applications, as is further discussed below.</p>
+<h4 id="a-note-about-the-inadequacy-of-using-the-fiat-shamir-paradigm">A note about the inadequacy of using the Fiat-Shamir paradigm</h4>
+<p>When the Fiat-Shamir proof paradigm is used, a prover can mount a brute-force search for a challenge, namely a set of $r_i$ exponents that makes the proof pass. Therefore, the analysis given here does not hold when the exponents are chosen by the prover using the Fiat-Shamir paradigm. (In that case, the security parameter $\lambda$ should be set to be at least $\lambda=128$.) The correct procedure involves the verifier selecting the random exponents $r_0,\ldots,r_{m-1}$ and executing the computations using these values.</p>
+<h3 id="more-details-about-the-overhead">More details about the overhead</h3>
+<p>The baseline with which we compare performance is where the verifier computes the multi-exponentiation $\prod_{i=1}^{n} v_i^{d_i}$ directly.</p>
+<p>The overhead of our optimized approach is composed of the following components:</p>
+<ul>
+ <li>The prover needs to send $m$ group elements to the verifier. (This is a communication of $m$ extra group elements compared to the baseline.)</li>
+ <li>The verifier needs to compute</li>
+</ul>
+\[\prod_{j=0}^{m-1} w_j^{2^j} = w_0\cdot w_1^2 \cdot w_2^4\cdots w_{m-1}^{2^{m-1}} = w_0\cdot (w_1 \cdots (w_{m-2}\cdot w_{m-1}^2)^2\cdots )^2\]
+<p>This can be done using $m$ multiplications and $m$ squarings, which is much faster than computing an $n$-wise multi-exponentiation directly.</p>
+<ul>
+ <li>The verifier needs to verify that each $w_j$ value is correct. As we described, this property can be batch-verified for $w_j$ values using a single $n$-wide multi-exponentiation, where the exponents are $\lambda+\log(m)$ bits long.</li>
+</ul>
+<p>Since the overhead of the multi-exponentiation is linear in the length of the exponents, performance is roughtly improved by a factor of $m/(\lambda+\log m)$.</p>
+<h4 id="methods-for-improving-the-runtime-of-multi-exponentiations--msms">Methods for improving the runtime of multi-exponentiations / MSMs</h4>
+<p>Computing a multi-exponentiation can be optimized using <em>Pippinger’s algorithm</em> [<a href="https://scholarship.claremont.edu/cgi/viewcontent.cgi?article=1141&amp;context=hmc_fac_pub">P80</a>, <a href="https://cr.yp.to/papers/pippenger-20020118-retypeset20220327.pdf">B02</a>]. The overhead is roughly the same as computing $O(n/ \log n)$ independent exponentiations with exponents of the same length as the original exponents. The overhead of both the straightforward computation of a multi-exponentiation and that of Pippinger’s algorithm, depends linearly on the length of the exponents. Our optimization reduces the length of the exponents and can therefore be applied with an equal effect to Pippinger’s optimization. (This is demonstrated by the experiments described below, which measure the runtime of a multi-exponentiation library that uses Pippinger’s optimization.)</p>
+<p>There are well-known methods for improving the runtime of multi-exponenitations, and in particular MSMs, using <em>precomputation</em>. These methods require knowing in advance the values of the base points $v_i$. If that is the case then these precomputation methods can be applied to our optimized computation as well</p>
+<h3 id="further-efficiency-improvements">Further efficiency improvements</h3>
+<p><strong>Changing the range of the exponents:</strong> Choosing the exponents $r_j$ from the range $[-2^{\lambda-1},2^{\lambda-1}]$ makes the sums $\sum_{j=0}^{m-1} r_j d_{i,j}$ concentrated w.h.p. in the range $[-O(2^{\lambda-1}\sqrt{m}), O(2^{\lambda-1}\sqrt{m})]$. This means that computing the value $w’’$, which is the main overhead of the verification, now involves computing a multi-exponentiation with exponents of length about $\lambda+ 0.5\log m$ bits, instead of $\lambda+ \log m$ bits. (For $\lambda = 64, m=256$ the reduction is by a factor of $72/68 \approx 1.06$, which is quite marginal.)</p>
+<p>We note that in order to use this approach it is not essential that all sums are in the range $[-O(2^{\lambda-1}\sqrt{m}),O(2^{\lambda-1}\sqrt{m})]$. Rather, it is sufficient to observe that w.h.p. the sums do not deviate by much from this range. The additional cost of computing sums that are outside of the range is small.</p>
+<p><strong>Special cases where smaller exponents might be sufficient:</strong> In some applications it might be sufficient to provide only <a href="https://eprint.iacr.org/2007/060.pdf">covert security</a>. Namely, only ensure that malicious behavior is identified with some moderately high probability, say $99.9999\%$. This is true for applications where malicious behavior can be punished, say by slashing the revenues of the malicious party. In such cases the statistical security parameter $\lambda$ might be reduced. For example, the system can use $\lambda=20$ in order to ensure that cheating is identified with probability greater than $1-10^{-6}$.</p>
+<p>In some consensus applications it might be possible to reduce $\lambda$ based on another argument that is more interleaved with the consensus protocol. Suppose, for example, that the number of potentially corrupt parties is $t&lt;n/3$, and that the transcript sent by a participant must be signed by $2t+1$ participants. Then, even if each verifier identifies cheating with some moderate probability $p$, say $p=1/4$, the probability that $t+1$ out of the $2t+1$ honest verifiers agree to sign the transcript is exponentially small in $t$.</p>
+<h3 id="a-comment-about-the-run-time-of-the-dealer">A comment about the run time of the dealer</h3>
+<p>The dealer must compute $m=256$ values $w_j = \prod_{i=1}^{n} v_i^{d_{i,j}}$. Assuming that the $d_{i,j}$ values are random bits, these $w_j$ values are the results of multiplying random subsets of the same $n$ group elements. A straightforward implementation of this computation requires computing about ${m n\over 2}$ multiplications.</p>
+<p>The overhead of computing these subset multiplications can be reduced by observing that they have large intersections. Consider for example the computation of $w_0$ and $w_1$. Define the following subsets of indexes</p>
+\[\begin{eqnarray*}
+ S_{1,1} &amp; = &amp; \{ i\in [n] \mid d_{i,0} = 1 \; \mathrm{and} \; d_{i,1} = 1\} \\ 
+ S_{0,1} &amp; = &amp; \{ i\in [n] \mid d_{i,0} = 0 \; \mathrm{and} \; d_{i,1} = 1\} \\ 
+ S_{1,0} &amp; = &amp; \{ i\in [n] \mid d_{i,0} = 1 \; \mathrm{and} \; d_{i,1} = 0\} 
+\end{eqnarray*}\]
+<p>It holds that $|S_{1,1}| \approx |S_{0,1}| \approx |S_{1,0}| \approx n/4$.
+Let $P_{1,1} = \prod_{i\in S_{1,1}} v_i$, $P_{0,1} = \prod_{i\in S_{0,1}} v_i$, and $P_{1,0} = \prod_{i\in S_{1,0}} v_i$. Then $w_0 = P_{1,1}\cdot P_{1,0}$ and $w_1 = P_{1,1}\cdot P_{0,1}$. Therefore, after computing $P_{1,1},P_{0,1},P_{1,0}$ the dealer can compute each of $w_0$ and $w_1$ using a single multiplication. The entire computation requires $|S_{1,1}| + |S_{0,1}| + |S_{1,0}| +2 \approx 0.75n$ multiplications, and thus computing each $w_i$ value takes about $0.375n$ multiplications, compared to about $n/2$ multiplications in the naive computation.</p>
+<p>In the general case, considering the computation of $s$ random subset multiplications, $w_0,\ldots,w_{s-1}$, a similar approach for the computation requires about $(1-2^{-s}) n$ $+ s\cdot (2^{s-1}-1)$ multiplications in total, or $(1-2^{-s}) n/s$ + $(2^{s-1}-1)$ multiplications per value. This should be compared with the naive computation that requires about ${sn\over 2}$ multiplications in total, or $n/2$ multiplications per value. Due to the $2^{s-1}$ term, the improvement is only significant for $s\ll \log n$.</p>
+<h2 id="experiments">Experiments</h2>
+<p>We ran experiments using a multi-exponentiation library written by Zhoujun Ma, which implements Pippinger’s multi-exponentiation algorithm. The library is written in Rust and can be found <a href="https://github.com/zjma/pippenger">here</a>.</p>
+<p>The first experiment was run to verify that the runtime of computing multi-exponentiations in this library is linear in the length of the exponent. The following table shows the results of benchmarks for computing multi-exponentiations over BLS12-381, with different exponent lengths of 16, 32, 64, 128 and 256 bits. The order of the group is about $2^{255}$, corresponding to $m
+\approx 255$. The results were computed for multi-exponentiation widths ($n$) of 1000, 2000, 4000 and 8000. The run time is measured in milliseconds and is the median of 100 runs. All measurements were conducted on a MacBook Pro M1.</p>
+<table>
+ <thead>
+ <tr>
+ <th>n / exp length</th>
+ <th>16</th>
+ <th>32</th>
+ <th>64</th>
+ <th>128</th>
+ <th>256</th>
+ </tr>
+ </thead>
+ <tbody>
+ <tr>
+ <td>1000</td>
+ <td>1.92</td>
+ <td>3.56</td>
+ <td>6.74</td>
+ <td>13.32</td>
+ <td>25.95</td>
+ </tr>
+ <tr>
+ <td>2000</td>
+ <td>3.06</td>
+ <td>6.19</td>
+ <td>12.36</td>
+ <td>24.62</td>
+ <td>48.28</td>
+ </tr>
+ <tr>
+ <td>4000</td>
+ <td>5.76</td>
+ <td>12.11</td>
+ <td>22.48</td>
+ <td>43.15</td>
+ <td>83.53</td>
+ </tr>
+ <tr>
+ <td>8000</td>
+ <td>10.93</td>
+ <td>22.47</td>
+ <td>41.80</td>
+ <td>82.57</td>
+ <td>162.81</td>
+ </tr>
+ </tbody>
+</table>
+<p>To further demonstrate that the runtime is linear in the exponent length, the following table uses the results of the first experiment presents the ratio between the actual runtime and the theoretical runtime for each entry. The latter value is assuming a truly linear runtime and is computed by dividing the exponent length by 256 and multiplying the result by the run time for 256 bits. (For instance, the first entry in the table is $1.92$ divided by ${16\over 256}\cdot 25.95$.) All values in the table are close to 1, which is the theoretical optimum.</p>
+<table>
+ <thead>
+ <tr>
+ <th>N / exp length</th>
+ <th>16</th>
+ <th>32</th>
+ <th>64</th>
+ <th>128</th>
+ <th>256</th>
+ </tr>
+ </thead>
+ <tbody>
+ <tr>
+ <td>1000</td>
+ <td>1.184</td>
+ <td>1.097</td>
+ <td>1.039</td>
+ <td>1.027</td>
+ <td>1.000</td>
+ </tr>
+ <tr>
+ <td>2000</td>
+ <td>1.014</td>
+ <td>1.026</td>
+ <td>1.024</td>
+ <td>1.020</td>
+ <td>1.000</td>
+ </tr>
+ <tr>
+ <td>4000</td>
+ <td>1.103</td>
+ <td>1.160</td>
+ <td>1.076</td>
+ <td>1.033</td>
+ <td>1.000</td>
+ </tr>
+ <tr>
+ <td>8000</td>
+ <td>1.074</td>
+ <td>1.104</td>
+ <td>1.027</td>
+ <td>1.014</td>
+ <td>1.000</td>
+ </tr>
+ <tr>
+ <td><strong>Average</strong></td>
+ <td><strong>1.094</strong></td>
+ <td><strong>1.097</strong></td>
+ <td><strong>1.042</strong></td>
+ <td><strong>1.023</strong></td>
+ <td><strong>1.000</strong></td>
+ </tr>
+ </tbody>
+</table>
+<p>The second experiment checks the performance gain of the verification process for both $\lambda =40$ and $\lambda=64$. The main overhead during the verification phase in the new construction is computing $w’’ = \prod_{i=1}^{n} v_i^{\sum_{j=0}^{m-1} r_j d_{i,j}}$. The exponent in this computation is computed by adding $m=255$ values that are each $\lambda=40$ or $\lambda=64$ bits long, and is therefore of length $\lambda+\log m$ bits. The comparison thus compares the baseline, which is the runtime of an $n$-wide multi-exponentiation with exponents of length $m=255$, to a multi-exponentiation with exponents of length $\lambda+\log m = \lambda+8$. 
+The results are depicted in the next table. The run time is again in milliseconds and is the median of 64 runs. The table shows the runtime for exponents of lengths 48, 72, and 255 bits, respectively, corresponding to $\lambda=40$, $\lambda=64$ and the baseline. The width of the multi-exponentiations, $n$, ranges from 1,000 to 1,024,000.
+The table also shows the gain factor by which the runtime is improved compared to the baseline. The last row shows the theoretical gain, e.g.. ${255\over 48}=5.31$ for $\lambda =40$. The table demonstrates that the actual gains are very close to the theoretical gain.</p>
+<table>
+ <thead>
+ <tr>
+ <th>n</th>
+ <th>$\lambda=40$, exp len = 48, runtime</th>
+ <th>$\lambda=40$, exp len = 48, gain</th>
+ <th>$\lambda=64$, exp len = 72, runtime</th>
+ <th>$\lambda=64$, exp len = 72, gain</th>
+ <th>exp len = 255, runtime</th>
+ </tr>
+ </thead>
+ <tbody>
+ <tr>
+ <td>1,000</td>
+ <td>4.72</td>
+ <td>5.36</td>
+ <td>7.3</td>
+ <td>3.46</td>
+ <td>25.28</td>
+ </tr>
+ <tr>
+ <td>4,000</td>
+ <td>15.9</td>
+ <td>5.00</td>
+ <td>22.4</td>
+ <td>3.55</td>
+ <td>79.49</td>
+ </tr>
+ <tr>
+ <td>16,000</td>
+ <td>51.66</td>
+ <td>5.53</td>
+ <td>81.38</td>
+ <td>3.51</td>
+ <td>285.85</td>
+ </tr>
+ <tr>
+ <td>64,000</td>
+ <td>173.43</td>
+ <td>5.43</td>
+ <td>259.03</td>
+ <td>3.64</td>
+ <td>942.09</td>
+ </tr>
+ <tr>
+ <td>256,000</td>
+ <td>676.1</td>
+ <td>4.79</td>
+ <td>989.05</td>
+ <td>3.28</td>
+ <td>3241.4</td>
+ </tr>
+ <tr>
+ <td>1,024,000</td>
+ <td>2321.2</td>
+ <td>5.25</td>
+ <td>3702.4</td>
+ <td>3.29</td>
+ <td>12192</td>
+ </tr>
+ <tr>
+ <td>Ideal gain</td>
+ <td> </td>
+ <td>5.31</td>
+ <td> </td>
+ <td>3.54</td>
+ <td> </td>
+ </tr>
+ </tbody>
+</table>
+<h3 id="acknowledgements">Acknowledgements</h3>
+<p>We would like to thank Ittai Abraham, Dan Boneh, Zhoujun Ma, Omer Shlomovits and Alin Tomescu for their help and feedback.</p>
+<p>Please leave comments on <a href="">X</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#cryptography">cryptography</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Verifiable+Multi-Exponentiation+and+Multi-Scalar+Multiplication+%28MSM%29&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2025-02-14-verifiable-MSM%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2025-02-14-PBFT/" data-toggle="tooltip" data-placement="top" title="Practical Byzantine Fault Tolerant Consensus (PBFT)">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2025-05-23-smart-casual-verification/" data-toggle="tooltip" data-placement="top" title="Reasoning about Distributed Protocols with Smart Casual Verification">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

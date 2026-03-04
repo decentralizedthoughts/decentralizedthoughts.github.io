@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>The Lock-Commit Paradigm: Multi-shot and Mixed Faults</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham, Kartik Nayak">
+ 
+ <meta name="description" content="In this follow to our Lock-Commit post, we show two important extensions. The first is how to extend from single-shot to multi-shot. Multi-shot is the bases of State Machine Replication. The second is how to tolerate mix faluts: both $f$ omission failures and $k$ crash failures given k+2f &amp;lt; n. Multi-shot Lock-Commit We show a natural and simple transformation of a single-shot protocol to a multi-shot one. Unlike the single-shot...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="The Lock-Commit Paradigm: Multi-shot and Mixed Faults">
+ <meta property="og:description" content="In this follow to our Lock-Commit post, we show two important extensions. The first is how to extend from single-shot to multi-shot. Multi-shot is the bases of State Machine Replication. The second is how to tolerate mix faluts: both $f$ omission failures and $k$ crash failures given k+2f &amp;lt; n. Multi-shot Lock-Commit We show a natural and simple transformation of a single-shot protocol to a multi-shot one. Unlike the single-shot...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham, Kartik Nayak">
+ 
+ <meta property="og:article:published_time" content="2020-11-30T09:01:00-05:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2020-11-30-the-lock-commit-paradigm-multi-shot-and-mixed-faults/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2020-11-30-the-lock-commit-paradigm-multi-shot-and-mixed-faults/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="The Lock-Commit Paradigm: Multi-shot and Mixed Faults">
+ <meta property="twitter:description" content="In this follow to our Lock-Commit post, we show two important extensions. The first is how to extend from single-shot to multi-shot. Multi-shot is the bases of State Machine Replication. The second is how to tolerate mix faluts: both $f$ omission failures and $k$ crash failures given k+2f &amp;lt; n. Multi-shot Lock-Commit We show a natural and simple transformation of a single-shot protocol to a multi-shot one. Unlike the single-shot...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>The Lock-Commit Paradigm: Multi-shot and Mixed Faults</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham, Kartik Nayak</strong><br>
+ 
+ <span class="post-meta">Posted on November 30, 2020</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>In this follow to our <a href="https://decentralizedthoughts.github.io/2020-11-29-the-lock-commit-paradigm/">Lock-Commit post</a>, we show two important extensions. The first is how to extend from single-shot to <strong>multi-shot</strong>. Multi-shot is the bases of <a href="https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/">State Machine Replication</a>. The second is how to tolerate <strong>mix faluts</strong>: both $f$ omission failures and $k$ <a href="https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/">crash</a> failures given <em>k+2f &lt; n</em>.</p>
+<h1 id="multi-shot-lock-commit">Multi-shot Lock-Commit</h1>
+<p>We show a natural and simple transformation of a single-shot protocol to a multi-shot one. Unlike the <a href="https://decentralizedthoughts.github.io/2020-11-29-the-lock-commit-paradigm/">single-shot protocol</a>, the multi-shot variant does not terminate. It allows to <em>append</em> commands to an ever-growing log of committed commands we call <em>commitLog</em>. The log is extended by <strong>appending</strong> commands to it. As in the previous post, we do not discuss executing the commands as well as how clients can learn about consensus (will be covered in later posts). Another change is that each time the commitLog is sent from a sender to a recipient, the recipient <em>checks</em> if its commitLog is behind (missing commands) and then <em>updates</em> its log (<strong>learns</strong> about committed commands it missed). This is sometimes called <em>state transfer</em>.</p>
+<p>Once the primary commits a command, we use the boolean <em>readyToPropose</em> to indicate that the primary can send a new proposal to append to the log.</p>
+<p>For simplicity, we use a deterministic mapping from view to primary. Let $primary(v)$ be the id of the primary for view $v$.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// pseudocode for Replica j
+state = init // the state of the state machine
+commitLog = [] // a log of committed commands
+view = 1 // view number that indicates the current Primary
+lock-value = null
+lock-view = 0 // the highest view a propose was heard
+mycmd = null
+start timer(1) // start timer for first view
+readyToPropose = true // primary can send another propose
+while true:
+ // as a primary (you are replica j)
+ if primary(view) == j:
+ on receiving cmd from client and readyToPropose == true:
+ readyToPropose = false
+ send ("propose", commitLog, cmd, view) to all replicas
+ 
+ // as a replica in the same view -&gt; lock
+ on receiving ("propose", CL, cmd, v) and v == view:
+ // learn if needed
+ if CL &gt; commitLog then commitLog = CV
+ if CL == commitLog: 
+ lock-view = v
+ lock-value = cmd
+ send ("lock", commitLog, lock-value, lock-view) to the primary j
+ // as a primary getting n-f locks -&gt; commit
+ if primary(view) == j:
+ on receiving ("lock", CL, cmd, view) from n-f distinct replicas:
+ // append to log
+ if CL == commitLog then
+ commitLog.append(cmd)
+ send ("commit", commitLog, view) to all replicas
+ readyToPropose = true
+ 
+ // as a replica in dame view -&gt; append and start next timer
+ on receiving ("commit", CL, v) and v == view:
+ // learn if needed
+ if CL &gt; commitLog then
+ commitLog = CV
+ restart timer(v)
+</code></pre></div></div>
+<p>Note that as an optimization, we could have piggybacked the “commit” message with the next “propose” message.</p>
+<p>The <strong>view change trigger</strong> protocol is similar to the single-shot one, except that timer(i) is restarted each time a replica appends to commitLog (see “restart timer” above). This implements a <em>stable leader</em> variant where a primary can commit many entries and is replaced only when there are $f+1$ “blame” messages. An alternative variant that replaces the primary every round will be explored in later posts.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> on timer(v) expiring and view == v; or
+ on receiving ("blame", v) from f+1 distinct replicas
+ send ("blame", v) to all replicas
+ on receiving ("blame", v) from n-f distinct replicas and view &lt;= v:
+ // this will trigger view change to view v+1
+ send ("view change", v+1) to all replicas 
+</code></pre></div></div>
+<p>The <strong>view change</strong> protocol is modified so the new primary learns about committed commands it has missed (this is different from Raft where the new primary must be the most up-to-date replica). The new primary must choose the lock-value of the highest lock-view for the proposals that are about the longest commitLog entry it has seen. If the longest commitLog entry is committed and the new primary sees no append proposals then the new primary is free to choose from the client commands. Here is the view change for replica $j$:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> // send commit log and highest lock
+ on receiving ("view change", v) and view &lt; v:
+ view = v
+ start timer(view)
+ send ("highest lock", commitLog, lock-value, lock-view, view) to replica v
+ 
+ // as the primary (you are replica j)
+ if primary(view) == j: 
+ on receiving messages M={("highest lock", CL, l-value, l-view, j)} from n-f distinct replicas:
+ Let CL be the longest commit log in M.CL
+ // learn if needed
+ If CL &gt; commitLog then commitLog = CV
+ Let H be the set of messages in M where M.CL == commitLog
+ if H is empty or all H.l-view == 0:
+ mycmd = any value heard from the clients
+ otherwise:
+ // use the lock-value of the message in H with highest lock-view
+ let m in H be a message with maximum H.l-view 
+ mycmd = m.l-value
+ readyToPropose = false
+ send ("propose", commitLog, mycmd, view) to all replicas
+</code></pre></div></div>
+<p>Observe that when a primary proposes a message, as well as when replicas send their highest lock to the next primary, the entire commit log is sent in the message. This ensures that, at any time, whenever a replica is locked on value, all the previous log positions are committed. While sending the entire log each time brings conceptual simplicity, it is expensive to send the entire log. In practice, one can use message digests and chained digests to quickly identify any missing committed commands. In a future post, we will discuss how this can be optimized.</p>
+<h1 id="multi-shot-lock-commit-tolerating-both-omission-and-crash-failures">Multi-shot Lock-Commit tolerating both omission and crash failures</h1>
+<p>With both $f$ omission failures and $k$ crash failures the primary needs to guarantee that all non-crashed replicas receive a “propose” message and lock. Just waiting for $n-(k+f)$ “lock” messages may not be safe because it may be that the primary is omission faulty and these $n-(k+f)=f+1 \leq c$ parties all crash. The primary does not know if it is omission faulty!</p>
+<p>Instead, the primary asks the replicas to “help” spread the “propose” message. Each helper sends the “propose” to everyone and then sends a “help done”. This way, the primary can wait for $n-(k+f)$ parties to acknowledge “help done” and know that at least one of the helpers was non-omission faulty. Since it received a “help done”, then this non-omission faulty did not crash before sending the message to everyone!
+Here is the pseudocode for Replica $j$:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>state = init // the state of the state machine
+commitLog = [] // a log of committed commands
+view = 1 // view number that indicates the current Primary
+lock-value = null
+lock-view = 0 // the highest view a propose was heard
+start timer(1) // start timer for first view
+readyToPropose = true // primary can send another propose
+while true:
+ // as a primary (you are replica j)
+ on receiving cmd from client, view == j, readyToPropose == true:
+ send ("help", commitLog, cmd, view) to all replicas
+ readyToPropose = false
+ on receiving ("help", CL, cmd, v) and v==view:
+ // learn if needed
+ if CL &gt; commitLog then commitLog = CV
+ send ("propose", commitLog, cmd, v) to all replicas
+ send ("help done", commitLog, cmd, v) to the primary j
+ on receiving ("help done", CL, cmd, view) from f+1 distinct replicas and view == j:
+ // append to log
+ commitLog.append(cmd)
+ send ("commit", commitLog, cmd, view) to all replicas
+ readyToPropose = true
+ // as a replica: execute and restart timer
+ on receiving ("commit", CL, cmd, v):
+ // learn if needed
+ if CL &gt; commitLog then commitLog = CV
+ restart timer(v)
+ // as a backup replica in the same view
+ on receiving ("propose", CL, cmd, v) and v==view:
+ // learn if needed
+ if CL &gt; commitLog then commitLog = CV
+ //lock
+ lock-view = v
+ lock-value = cmd
+</code></pre></div></div>
+<p>Note that as an optimization, we could have piggybacked the “commit” message with the next “propose” message.</p>
+<h3 id="remarks">Remarks</h3>
+<p>Just like the previous post, we did not fully specify how the clients send commands to the replicas and we do not talk about executing the commands. We here on the consensus protocol and defer execution and clients to later posts.</p>
+<h3 id="argument-for-safety">Argument for Safety</h3>
+<p><strong>Claim:</strong> Fix any log position $j$, let $v$ be the first view where a party commits to value $cmd$.
+Then, no primary will propose $cmd’ \neq cmd$ at any view $v’\geq v$ for the log position $j$.</p>
+<p><em>Proof:</em></p>
+<p>By induction on $v’ \geq v$. For $v’=v$, this follows since the primary sends just one “propose” value per view on a given log position. Assume the hypothesis holds for all view $\leq v’$ and consider the view change of primary $v’+1$.</p>
+<p>Let $W$ be the parties that set $lock-view = v$ in view $v$ for log position $j$. Since primary $v$ had at least $f+1$ helpers that did not crash, then at least one of them must have sent the proposal to all non-faulty parties.</p>
+<p>Let $R$ be the set of at least $n-(f+k)$ parties that party $v’+1$ received their $(“highest lock”, lock-value, lock-view, v’+1)$ for view $v’+1$ on log position $j$.</p>
+<p>Since $\vert N \setminus W\vert \leq f$ and $\vert R\vert \geq f+1$ it must be that $W \cap R \neq \emptyset$. So the primary of $v’+1$ must hear from a member of $R$ and, from the induction hypothesis, we know that this member’s lock-view is at least $v$ and its lock-value must be $cmd$. In addition, from the induction hypothesis, we know that no other member of $W$ can have a lock-value for a value that has a lock-view of at least $v$ with a value $cmd’ \neq cmd$.</p>
+<p>Hence, during the view change of view $v’+1$, the value with the maximum view in $W$ must be $cmd$ with a view $\geq v$.</p>
+<h3 id="argument-for-liveness">Argument for Liveness</h3>
+<p>For liveness, we need to modify the blame threshold to $f+1$ and the view change threshold to $n-(f+k) \geq f+1$.</p>
+<p><strong>Claim:</strong> Fix some log position $j$. Let $v$ be the first view with a non-faulty primary.
+Then, all non-faulty parties will commit to the log position $j$ by the end of view $v$.</p>
+<p><em>Proof:</em></p>
+<p>Observe that in any view $&lt;v$, either some non-faulty replica commits and hence all non-faulty replicas commit one round later; or otherwise, all non-faulty do not commit, and hence will send a “blame” and hence all non-faulty will send a “view change”.</p>
+<p>If some non-faulty parties have not committed to log position $j$ before entering view $v$, then all non-faulty will enter view $v$ within one message delay. In view $v$, the non-faulty primary will gather $n-(f+k)$ distinct “help done” messages and will send a commit message that will arrive to all the non-faulty parties before their $timer(v)$ expires (assuming the timer is larger than 6 message delays). Hence, even if all omission faulty send a “blame” message, there will not be a “view change” message.</p>
+<p>Hence the non-faulty primary of view $v$ will continue to append messages to the log and will eventually reach position $j$.</p>
+<p>Please answer/discuss/comment/ask on <a href="https://twitter.com/ittaia/status/1441412266591621122?s=20">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=The+Lock-Commit+Paradigm%3A+Multi-shot+and+Mixed+Faults&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2020-11-30-the-lock-commit-paradigm-multi-shot-and-mixed-faults%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2020-11-29-the-lock-commit-paradigm/" data-toggle="tooltip" data-placement="top" title="The Lock-Commit Paradigm">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2020-12-08-a-simple-and-succinct-zero-knowledge-proof/" data-toggle="tooltip" data-placement="top" title="A Simple and Succinct Zero Knowledge Proof">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

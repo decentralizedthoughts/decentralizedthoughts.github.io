@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Benign Simplex</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham">
+ 
+ <meta name="description" content="The goal of this post is to describe a single-shot consensus protocol that is resilient to f &amp;lt; n/2 omission failures, under partial synchrony. This protocol is inspired by the multi-shot Simplex for crash faults protocol and our earlier posts on Chained Raft, Benign HotStuff, and Log Paxos. Single-Shot Consensus Each party starts with an input value. We denote by $\bot$ a special value that is not an input value....">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Benign Simplex">
+ <meta property="og:description" content="The goal of this post is to describe a single-shot consensus protocol that is resilient to f &amp;lt; n/2 omission failures, under partial synchrony. This protocol is inspired by the multi-shot Simplex for crash faults protocol and our earlier posts on Chained Raft, Benign HotStuff, and Log Paxos. Single-Shot Consensus Each party starts with an input value. We denote by $\bot$ a special value that is not an input value....">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham">
+ 
+ <meta property="og:article:published_time" content="2025-11-08T04:30:00-05:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2025-11-08-benign-simplex/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2025-11-08-benign-simplex/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Benign Simplex">
+ <meta property="twitter:description" content="The goal of this post is to describe a single-shot consensus protocol that is resilient to f &amp;lt; n/2 omission failures, under partial synchrony. This protocol is inspired by the multi-shot Simplex for crash faults protocol and our earlier posts on Chained Raft, Benign HotStuff, and Log Paxos. Single-Shot Consensus Each party starts with an input value. We denote by $\bot$ a special value that is not an input value....">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Benign Simplex</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham</strong><br>
+ 
+ <span class="post-meta">Posted on November 8, 2025</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>The goal of this post is to describe a <em>single-shot</em> <a href="https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/">consensus</a> protocol that is resilient to <em>f &lt; n/2</em> <a href="https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/">omission failures</a>, under <a href="https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/">partial synchrony</a>.
+This protocol is inspired by the multi-shot <a href="https://simplex.blog/crashfaults/">Simplex for crash faults</a> protocol and our earlier posts on <a href="https://decentralizedthoughts.github.io/2021-07-17-simplifying-raft-with-chaining/">Chained Raft</a>, <a href="https://decentralizedthoughts.github.io/2021-04-02-benign-hotstuff/">Benign HotStuff</a>, and <a href="https://decentralizedthoughts.github.io/2021-09-30-distributed-consensus-made-simple-for-real-this-time/">Log Paxos</a>.</p>
+<h2 id="single-shot-consensus">Single-Shot Consensus</h2>
+<p>Each party starts with an <em>input value</em>. We denote by $\bot$ a special value that is not an input value.</p>
+<ol>
+ <li><strong>Liveness</strong>: All non-faulty eventually <em>decide</em> on some value.</li>
+ <li><strong>Validity</strong>: Decision value is one of the parties’ input values.</li>
+ <li><strong>Uniform Agreement</strong>: All decision values are the same.</li>
+</ol>
+<h2 id="the-single-shot-benign-simplex-protocol">The single-shot benign simplex protocol</h2>
+<p>As with all partial synchrony protocols, this one progress with a series of <em>views</em>. Each view $k$ has a designated leader denoted by <code class="language-plaintext highlighter-rouge">Leader(k)</code> (for example using a round-robin).</p>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>B-Simplex
+val := input
+1. Upon entering view k:
+ Start a local timer T_k
+ Leader(k) sends (Vote, k, val)
+2. Upon receiving (Vote, k, x):
+ If x ≠ ⊥:
+ val := x // lock on x
+ If T_k &lt; 2Δ:
+ Send (Final, k, x)
+ Send (Vote, k, x)
+ Enter view k+1
+3. Upon T_k = 2Δ and not yet sent Final:
+ Send (NoVote, k)
+4. Upon receiving n−f (NoVote, k):
+ Send (Vote, k, ⊥)
+ Enter view k+1
+5. Upon receiving n−f (Final, k, x) or one (Decide, x):
+ Decide x
+ Send (Decide, x)
+ Terminate
+</code></pre></div></div>
+<h2 id="partial-synchrony">Partial Synchrony</h2>
+<p>We work in the partial synchrony model with a global stabilization time $GST$. After $GST$ every message arrives after at most $\Delta$ delay. For a given execution, we denote by $\delta \le \Delta$ the actual maximal delay after $GST$.</p>
+<h2 id="liveness">Liveness</h2>
+<h3 id="claim-1-non-faulty-start-delta-apart">Claim 1 (non-faulty start $\delta$ apart)</h3>
+<p>If a non-faulty party starts view $k+1$ at time $t &gt; GST$, then all non-faulty parties start view $k+1$ before $t + \delta$.</p>
+<p><strong>Proof:</strong><br />
+Entering view $k+1$ requires leaving view $k$, which always includes sending a <code class="language-plaintext highlighter-rouge">Vote</code> message. Any <code class="language-plaintext highlighter-rouge">Vote</code> that triggered the first party to leave view $k$ is delivered to all others within $\delta$, so all leave $k$ and start $k+1$ by $t + \delta$.</p>
+<h3 id="claim-2-views-are-short">Claim 2 (views are short)</h3>
+<p>Let $t$ be the time all non-faulty parties have entered view $k$. Then all non-faulty parties leave view $k$ before $t + 2\Delta +\delta$.</p>
+<p><strong>Proof:</strong><br />
+If some <code class="language-plaintext highlighter-rouge">Vote(k, x)</code> is delivered while $T_k &lt; 2\Delta$, rule 2 makes each receiver immediately send <code class="language-plaintext highlighter-rouge">(Vote, k, x)</code> and enter view $k+1$, by $t + 2\Delta+\delta$.</p>
+<p>If no <code class="language-plaintext highlighter-rouge">Vote</code> arrives before $T_k = 2\Delta$, every non-faulty party sends <code class="language-plaintext highlighter-rouge">(NoVote, k)</code> by time $t + 2\Delta$. Collecting $n - f$ <code class="language-plaintext highlighter-rouge">NoVote</code> messages then takes one $\delta$ time, after which rule 4 sends <code class="language-plaintext highlighter-rouge">(Vote, k, ⊥)</code> and immediately enters view $k+1$. Thus all leave by $t + 2\Delta+\delta$.</p>
+<h3 id="claim-3-good-leader-decides-after-gst">Claim 3 (good leader decides after GST)</h3>
+<p>Let $k$ be the first view where all non-faulty parties start at a time $t &gt; GST$ and that has a non-faulty leader. If no party has seen $n - f$ <code class="language-plaintext highlighter-rouge">Final</code> messages from any earlier view, then all non-faulty parties decide in view $k$ by time $t + 2\delta$.</p>
+<p><strong>Proof:</strong><br />
+At time $t$ the non-faulty leader sends <code class="language-plaintext highlighter-rouge">(Vote, k, x)</code>. Within one $\delta$ time all non-faulty parties receive this <code class="language-plaintext highlighter-rouge">Vote</code>. Since $T_k &lt; 2\Delta$ they all send <code class="language-plaintext highlighter-rouge">(Final, k, x)</code>. Within one $\delta$ time each non-faulty party accumulates $n - f$ <code class="language-plaintext highlighter-rouge">(Final, k, x)</code> messages and triggers decision by rule 5.</p>
+<h3 id="claim-4-liveness">Claim 4 (liveness)</h3>
+<p>All non-faulty parties decide before $GST + 2f\Delta + (f+2)\delta \le GST + 3f\Delta+2\Delta$</p>
+<p><strong>Proof:</strong><br />
+After $GST$, Claim 1 keeps views aligned within $\Delta$. There can be at most $f$ views with faulty leaders. Each such view lasts at most $2\Delta +\delta$ by Claim 2. In the first view with a non-faulty leader, Claim 3 ensures decision within an additional $2\delta$</p>
+<h2 id="safety">Safety</h2>
+<h3 id="claim-5-if-any-party-decides-all-parties-lock">Claim 5 (if any party decides, all parties lock)</h3>
+<p>If $n - f$ parties send <code class="language-plaintext highlighter-rouge">(Final, k, x)</code>, then any party leaving view $k$ sets <code class="language-plaintext highlighter-rouge">val := x</code> during view $k$.</p>
+<p><strong>Proof:</strong><br />
+If a party leaves via rule 2 with a non-$\bot$ value, it must have seen some <code class="language-plaintext highlighter-rouge">(Vote, k, x)</code> and therefore sets <code class="language-plaintext highlighter-rouge">val := x</code> before leaving. The only way to send <code class="language-plaintext highlighter-rouge">Vote(k, ⊥)</code> is after receiving $n - f$ <code class="language-plaintext highlighter-rouge">NoVote(k)</code> messages, which contradicts the existence of $n - f$ <code class="language-plaintext highlighter-rouge">(Final, k, x)</code> messages for the same view. Hence, every party sets <code class="language-plaintext highlighter-rouge">val := x</code> before leaving view $k$.</p>
+<h3 id="claim-6-uniform-agreement">Claim 6 (uniform agreement)</h3>
+<p>Let $k$ be the first view where $n - f$ parties send <code class="language-plaintext highlighter-rouge">(Final, k, x)</code>. Then any <code class="language-plaintext highlighter-rouge">Vote</code> in any view $&gt;k$ is for $x$.</p>
+<p><strong>Proof:</strong><br />
+By Claim 5, all non-faulty parties have <code class="language-plaintext highlighter-rouge">val := x</code> when entering view $k+1$. Rule 2 propagates only the current <code class="language-plaintext highlighter-rouge">val</code>. Induction over the views gives that any <code class="language-plaintext highlighter-rouge">Vote</code> in a view grater than $k$ is for the value $x$, establishing uniform agreement.</p>
+<h2 id="validity">Validity</h2>
+<h3 id="claim-7-validity">Claim 7 (validity)</h3>
+<p>The decided value is the input of some party.</p>
+<p><strong>Proof:</strong><br />
+Initially each <code class="language-plaintext highlighter-rouge">val</code> equals the party’s input. Later views only propagate existing <code class="language-plaintext highlighter-rouge">val</code> values through <code class="language-plaintext highlighter-rouge">Vote</code>, so by induction the decided value must be an original input.</p>
+<hr />
+<h2 id="notes">Notes</h2>
+<ol>
+ <li>Message complexity is $O(n^2)$ per view, hence $O(n^3)$ after $GST$ in the worst case. This is not optimal, but may be a good practical trade-off.</li>
+ <li>The protocol does not always wait for $n - f$ to change views. Waiting for $n - f$ happens only when all observed messages are <code class="language-plaintext highlighter-rouge">NoVote</code>. A single <code class="language-plaintext highlighter-rouge">Vote</code> is sufficient to move forward, which reduces latency in the common case.</li>
+ <li>The use of an explicit <code class="language-plaintext highlighter-rouge">NoVote</code> is a critical tool for better latency that is borrowed from Simplex and what makes this protocol different from many other Paxos based protocols.</li>
+ <li>Open problem: is it possible to improve the worst case latency or obtain this latency with $O(n^2)$ message complexity?</li>
+</ol>
+<h2 id="acknowledgments">Acknowledgments</h2>
+<p>Many thanks to Kartik Nayak for insightful comments.</p>
+<p>Your thoughts on <a href="https://x.com/ittaia/status/1988544565012263147?s=20">X</a></p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#dist101">dist101</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Benign+Simplex&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2025-11-08-benign-simplex%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2025-10-22-quiz-basics/" data-toggle="tooltip" data-placement="top" title="Test your understanding of the basics of fault tolerant distributed computing">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2025-11-15-simplex-from-benign/" data-toggle="tooltip" data-placement="top" title="From Benign Simplex to Byzantine Simplex">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

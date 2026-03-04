@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Asynchronous Fault Tolerant Computation with Optimal Resilience</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham, Danny Dolev, Gilad Stern">
+ 
+ <meta name="description" content="A basic question of distributed computing: Is there a fundamental limit to fault tolerant computation in the Asynchronous model? The celebrated FLP theorem says that any protocol that solves Agreement in the asynchronous model that is resilient to at least one crash failure must have a non-terminating execution. This means that deterministic asynchronous consensus is impossible, but with randomization, asynchronous consensus is possible in constant expected time. Randomization does not...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Asynchronous Fault Tolerant Computation with Optimal Resilience">
+ <meta property="og:description" content="A basic question of distributed computing: Is there a fundamental limit to fault tolerant computation in the Asynchronous model? The celebrated FLP theorem says that any protocol that solves Agreement in the asynchronous model that is resilient to at least one crash failure must have a non-terminating execution. This means that deterministic asynchronous consensus is impossible, but with randomization, asynchronous consensus is possible in constant expected time. Randomization does not...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham, Danny Dolev, Gilad Stern">
+ 
+ <meta property="og:article:published_time" content="2020-07-15T04:39:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2020-07-15-asynchronous-fault-tolerant-computation-with-optimal-resilience/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2020-07-15-asynchronous-fault-tolerant-computation-with-optimal-resilience/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Asynchronous Fault Tolerant Computation with Optimal Resilience">
+ <meta property="twitter:description" content="A basic question of distributed computing: Is there a fundamental limit to fault tolerant computation in the Asynchronous model? The celebrated FLP theorem says that any protocol that solves Agreement in the asynchronous model that is resilient to at least one crash failure must have a non-terminating execution. This means that deterministic asynchronous consensus is impossible, but with randomization, asynchronous consensus is possible in constant expected time. Randomization does not...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Asynchronous Fault Tolerant Computation with Optimal Resilience</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham, Danny Dolev, Gilad Stern</strong><br>
+ 
+ <span class="post-meta">Posted on July 15, 2020</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>A basic question of distributed computing:
+<strong>Is there a fundamental limit to fault tolerant computation in the Asynchronous model?</strong></p>
+<p>The celebrated <a href="https://decentralizedthoughts.github.io/2019-12-15-asynchrony-uncommitted-lower-bound/">FLP</a> theorem says that any protocol that solves Agreement in the asynchronous
+model that is resilient to at least one crash failure must have a non-terminating execution. This means that deterministic asynchronous consensus is <em>impossible</em>, but with randomization, asynchronous consensus is possible in constant expected time. Randomization does not circumvent the existence of a non-terminating execution, it just reduces the probability measure of this event to have <a href="https://en.wikipedia.org/wiki/Almost_surely">measure zero</a>.</p>
+<p>Given the above, the following question is natural:
+<strong>Is this potentially measure zero event of non-termination the only limitation for fault tolerant computation in the asynchronous model?</strong></p>
+<p>In 1983, <a href="https://dl.acm.org/doi/10.1145/167088.167109">Ben-Or, Canetti, and Goldreich</a> initiated the study of <a href="https://en.wikipedia.org/wiki/Secure_multi-party_computation">secure multiparty computation</a> in the <em>asynchronous model</em>. Their fundamental result is that the answer above is <strong>yes</strong> when there are $n &gt;4t$ servers and an adversary that can corrupt at most $t$ parties in a Byzantine manner. They show that <strong>perfect</strong> security with finite expected run time can be obtained for any functionality.</p>
+<p>The BCG83 work left open the domain of $3t&lt;n \le 4t$.
+In 1993, <a href="https://dl.acm.org/doi/10.1145/167088.167105">Canetti and Rabin</a> obtained a protocol for Asynchronous Byzantine Agreement with optimal resilience ($3t&lt;n$) and conditioned on terminating, had a constant expected running time. Their protocol had an <em>“annoying property”</em>: the non-termination event has a <strong>non-zero</strong> probability measure. This problematic non-zero probability of non-termination came from their verifiable secret sharing protocol.</p>
+<p>In 1994, <a href="https://dl.acm.org/doi/10.1145/197917.198088">Ben-Or, Kelmer, and Rabin</a> addressed this problem. They provided an optimal resilience asynchronous secure multiparty computation protocol with the same “annoying property”: the non-termination event has a <strong>non-zero</strong> probability measure. Moreover, BKR94 claim that this is unavoidable. That is, if $n\le 4t$ then any t-resilient asynchronous verifiable secret sharing protocol $A$ must have some <strong>non-zero</strong> probability $q_A&gt;0$ of not terminating.</p>
+<p>In other words, there is a fundamental limit to Asynchronous Fault Tolerant Computation with Optimal Resilience:</p>
+<p><strong>Theorem [BKR94]: any protocol solving verifiable secret sharing in the asynchronous model with optimal resilience must have a positive probability of deadlock.</strong></p>
+<p>In this blog post, we provide a proof overview of this lower bound. For a full proof that strengthens the BKR statement (and a fascinating new upper bound showing what can be done without a non-zero probability of non-termination) please see our <a href="https://arxiv.org/pdf/2006.16686.pdf">PODC 2020 paper</a>.</p>
+<h3 id="what-is-verifiable-secret-sharing-vss">What is Verifiable Secret Sharing (VSS)?</h3>
+<p>Verifiable Secret Sharing (VSS) is a pair of protocols: <em>Share</em> and <em>Reconstruct</em>, with one designated party, called the <em>Dealer</em>. The Dealer has an <em>input value</em> $s$ for the Share protocol. The Reconstruct protocol has an output value. VSS has the following properties:</p>
+<p><strong>Termination:</strong></p>
+<ol>
+ <li>If the dealer is non-faulty, and all non-faulty participate, then all non-faulty will complete the Share protocol.</li>
+ <li>If any non-faulty completes the Share protocol, then every non-faulty that participates in the Share protocol completes it.</li>
+ <li>If all non-faulty complete the Share protocol, then if all non-faulty start the Reconstruct protocol, then all non-faulty will complete the Reconstruct protocol.</li>
+</ol>
+<p><strong>Binding:</strong>
+Once the first non-faulty completes the Share protocol there exists some value $r$ such that:</p>
+<ol>
+ <li>If the dealer is honest, then $r=s$ ($r$ is the Dealer’s input value).</li>
+ <li>Any non-faulty that completes the Reconstruct protocol outputs $r$.</li>
+</ol>
+<p><strong>Hiding:</strong>
+If the dealer is non-faulty, and no honest party has begun the Reconstruct protocol, then the adversary can gain no information about the Dealer’s input value, $s$.</p>
+<p>In other words, the Share protocol forces a dealer that completes Share to <em>commit</em> to a value of its choice. For non-faulty dealers that will be its input. If the dealer is non-faulty, the Hiding property keeps the value hidden from the adversary (as long as no non-faulty start the Reconstruct protocol). If the dealer is faulty, the Binding property prevents the adversary from changing the committed value (once one non-faulty completed the Share protocol).</p>
+<h3 id="lower-bound-techniques">Lower bound techniques</h3>
+<p>Like many previous lower bounds, this lower bound heavily relies on two powerful techniques: <em>indistinguishability</em> (where some parties can not tell between two potential worlds) and <em>hybridization</em> (where we build intermediate worlds between the two contradicting worlds and use a chain of indistinguishability arguments for a contradiction.). Unlike previous <a href="https://decentralizedthoughts.github.io/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/">lower bounds</a> we have seen in this <a href="https://decentralizedthoughts.github.io/2019-08-02-byzantine-agreement-is-impossible-for-$n-slash-leq-3-f$-is-the-adversary-can-easily-simulate/">blog</a>, this one uses indistinguishability more subtly. We will call this <strong>indistinguishability boosting</strong>:</p>
+<ol>
+ <li>Start with a very weak notion of <em>conditional indistinguishability</em>: that there is a non-zero probability event during the Share protocol, such that conditioned on this event two worlds are indistinguishable.</li>
+ <li>Boost this conditional indistinguishability event in the Share protocol to prove the existence of a full indistinguishability event in the Reconstruct protocol.</li>
+</ol>
+<h3 id="the-setting">The setting</h3>
+<p>We have four parties $A,B,C,D$, where $D$ is the dealer and at most one party may be byzantine (so $n=4$, $f=1$). Using standard techniques, this can be generalized to any $3f &lt;n \leq 4f$. The network is fully asynchronous so messages can be delayed by any finite amount.</p>
+<p><strong>Crash World 0:</strong>
+In Crash World 0, party $C$ is slow, $D$ has input 0 and $A$ is passive (honest but curious).</p>
+<p><strong>Crash World C:</strong>
+In Crash World C, party $C$ is crashed and $D$ has input 0.</p>
+<p>From $B$ and $D$’s point of view, Crash World $0$ and Crash World C are entirely indistinguishable. In crash world 0, all non-faulty participate in the Share protocol and thus must complete it. Since the worlds are indistinguishable, $A$,$B$ and $D$ complete the protocol even if $C$ is slow throughout it.</p>
+<p>In Crash World 0 $A$ is faulty so it must not know that the value $0$ was shared (otherwise the Hiding property would be violated). This almost obvious statement gives us a very powerful tool: whichever messages $A$ exchanged throughout the Share protocol, it must be possible for those messages to be exchanged, regardless of the value $D$ shared. There is nothing special in this argument about $A$ or the value $0$, so we can use this argument with $B$ or with $1$. This tool will be very important for the rest of our arguments.</p>
+<p><strong>Share World A:</strong>
+In Share World A, party $C$ is crashed, and $D$ has input 0.</p>
+<p><strong>Share World B:</strong>
+In Share World B, party $C$ is crashed, and $D$ has input 1.</p>
+<p><strong>Share World Hybrid:</strong>
+In Share World Hybrid, party $C$ is slow, party $D$ is malicious, and acts as if its input is 0 to $A$ and as if its input is 1 to $B$.</p>
+<p>Note that in Share Worlds A and B, all non-faulty must complete the Share Protocol. The important question to ask if the Share World Hybrid will complete the Share protocol. Because if it always completes then one could derive an easy lower bound. Either in Share Worlds A or in B there would be a violation of the Binding property (that $r=s$) with constant probability.</p>
+<p>BKR’s insight was that it’s enough to prove that the Share World Hybrid has some non-zero probability of completing the Share protocol! Indeed it can be shown that if the Adversary guesses the random bits of the honest parties then completion of the Share protocol is guaranteed. This happens because conditioned on this event, $D$ can predict how $A$ and $B$ will respond to its messages. As shown above, every set of messages $A$ and $B$ can exchange must be possible regardless of the value $D$ shared. This means that $D$ can tailor the messages it sends to $A$ and $B$ such that $A$ sees Share World A, $B$ sees Share World B, and the messages they exchange with each other are entirely compatible with both of their views. Since the worlds $A$ and $B$ see are indistinguishable from worlds in which they complete the Share protocol, they do so in Share World Hybrid, but only if $D$ guesses their randomness correctly.</p>
+<p>To conclude, we created a strategy for a malicious dealer such that with an extremely small (but non-zero) probability, the Share protocol will complete, and if it completes then the two non-faulty parties $A$ and $B$ are at a disagreement about the Reconstruct output value.</p>
+<p>This already shows an important point: <strong>perfect VSS is impossible in this setting and some (non-zero) probability of error is unavoidable</strong>. But BKR claimed something stronger: that some (non-zero) probability of deadlock is unavoidable (even with constant error probability)!</p>
+<h3 id="boosting-a-non-zero-error-probability-in-the-share-protocol-to-a-constant-error-probability-in-the-reconstruct-protocol">Boosting a non-zero error probability in the Share protocol to a constant error probability in the Reconstruct protocol</h3>
+<p>The idea will be to boost this malicious strategy for the Share phase that obtains a non-zero probability of error, under the assumption that there is no deadlock, to a malicious strategy for the Reconstruct protocol that obtains a constant probability of error.</p>
+<p><strong>Reconstruct World A:</strong>
+In Reconstruct World A, party $C$ is slow during Share, $D$ has input 0 and is slow during Reconstruct, party $B$ is malicious: during Share, it acts correctly, but during Reconstruct, it acts as if $D$ had input 1.</p>
+<p><strong>Reconstruct World B:</strong>
+In Reconstruct World B, party $C$ is slow during Share, $D$ has input 1 and is slow during Reconstruct, party $A$ is malicious: during Share, it acts correctly, but during Reconstruct, it acts as if $D$ had input 0.</p>
+<p><strong>Reconstruct World Hybrid:</strong>
+In Reconstruct World Hybrid, $D$ is malicious and executes the attack in Share World Hybrid. After completing the Share protocol, $D$ goes silent and lets $A$, $B$ and $C$ run without interruption in the Reconstruct protocol.</p>
+<p>The main challenge here is to show that the malicious party can “act as if $D$ had the opposite value” by using the probability distribution induced by the conditional event of completing the Share protocol in the Share World Hybrid. As shown above, whichever messages $A$ and $B$ exchange during the Share protocol, those messages must be possible both in the case that $D$ shares 0 and in the case that $D$ shares $1$. We will show the attack for Reconstruct World A (the same attack works for Reconstruct World B). After completing the Share protocol, $A$ can claim that $D$ guessed its randomness correctly and sent it messages corresponding to sharing the value $1$. $A$ already knows which messages it exchanged with $B$, and those messages must be possible if $D$ shares the value $1$. This means that $A$ can find some set of messages $D$ could have sent that would result in $A$ sending the messages it sent. Very importantly, even though the original attack in Share World Hybrid would only succeed with some nonzero probability, $A$ can <em>always</em> claim $D$’s attack succeeded, because it already knows which messages it exchanged with $B$. This also means that Reconstruct World A is indistinguishable from Reconstruct World Hybrid conditioned upon the event that $D$’s original attack succeeded. This is the core of the <em>boosting</em> technique.</p>
+<p>We can now finally look at party $C$ and construct a chain of indistinguishable worlds: Reconstruct World A is indistinguishable from Reconstruct World Hybrid, conditioned upon $D$’s attack succeeding, which is indistinguishable from Reconstruct World B. In Reconstruct World Hybrid, if $D$’s attack succeeds, all non-faulty complete the Share protocol and start the Reconstruct protocol. This also means that they all complete the Reconstruct protocol and output some value. Since Reconstruct Worlds A and B are indistinguishable from Reconstruct World Hybrid conditioned upon $D$’s attack succeeding, all non-faulty complete the Reconstruct protocol in those worlds as well. The fact that Reconstruct World A is indistinguishable from Reconstruct world B implies that party $C$ must output the wrong value with a constant (large) probability. Proving this indistinguishability chain by using the conditional probability distribution of completing the Share protocol in the Reconstruct World Hybrid is subtle and non-trivial.</p>
+<p>Observe that to get a constant probability of error, we strongly used the fact that party $C$ <strong>must</strong> complete the Reconstruct protocol and output some value. The reason party $C$ must complete and cannot wait for a message from $D$ is that it could be that we are in Reconstruct World Hybrid and $D$ will never respond.
+Let’s see where this proof would fail if we allowed even a small probability of deadlock: in that case party $C$ could decide to wait for one more response! If $C$ were in either Reconstruct World A or B, it could indeed wait for $D$. This would only violate the termination property of the Reconstruct protocol in Reconstruct World Hybrid, but would only do so with a very small probability because there is a very small probability that the Share protocol of Share World Hybrid will complete!</p>
+<p>To conclude we showed that if you assume there is no deadlock, then a malicious strategy in the Share protocol causing a small (non-zero) error probability can be boosted to a malicious strategy in the Reconstruct protocol causing a large (constant) probability of error, under the assumption that there is never a deadlock.</p>
+<p>The contrapositive is: there cannot be a protocol that is both: (1) correct with some constant probability, and (2) has a measure zero probability of deadlock. This concludes the lower bound overview.</p>
+<p>For a full proof that strengthens the BKR statement (and a fascinating new upper bound showing what can be done without a non-zero probability of non-termination) please see our <a href="https://arxiv.org/pdf/2006.16686.pdf">PODC 2020 paper</a>.</p>
+<p>Please leave comments on <a href="https://twitter.com/ittaia/status/1283411228677857284?s=20">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#lowerbound">lowerbound</a>
+ 
+ <a href="/tags#asynchrony">asynchrony</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Asynchronous+Fault+Tolerant+Computation+with+Optimal+Resilience&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2020-07-15-asynchronous-fault-tolerant-computation-with-optimal-resilience%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2020-07-10-encrypted-blockchain-databases-part-ii/" data-toggle="tooltip" data-placement="top" title="Encrypted Blockchain Databases (Part II)">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2020-07-17-the-marvels-of-polynomials-over-a-field/" data-toggle="tooltip" data-placement="top" title="The Marvels of Polynomials over a Field">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

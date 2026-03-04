@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Streamlet: A Simple Textbook Blockchain Protocol</title>
+ 
+ 
+ <meta name="author" content="{"name"=>"Decentralized Thinkers"}">
+ 
+ <meta name="description" content="Guest post by Benjamin Chan and Elaine Shi In this post, we describe an extraordinarily simple blockchain protocol called Streamlet. Consensus is a complex problem and has been studied since the 1980s. More recently, blockchain research has spawned many new works aiming for performance and ease-of-implementation. However, simple, understandable protocols remain elusive, and that’s where Streamlet comes in. Streamlet in a nutshell: The protocol proceeds in synchronized epochs. Define a...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Streamlet: A Simple Textbook Blockchain Protocol">
+ <meta property="og:description" content="Guest post by Benjamin Chan and Elaine Shi In this post, we describe an extraordinarily simple blockchain protocol called Streamlet. Consensus is a complex problem and has been studied since the 1980s. More recently, blockchain research has spawned many new works aiming for performance and ease-of-implementation. However, simple, understandable protocols remain elusive, and that’s where Streamlet comes in. Streamlet in a nutshell: The protocol proceeds in synchronized epochs. Define a...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="{"name"=>"Decentralized Thinkers"}">
+ 
+ <meta property="og:article:published_time" content="2020-05-14T13:48:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2020-05-14-streamlet/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2020-05-14-streamlet/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Streamlet: A Simple Textbook Blockchain Protocol">
+ <meta property="twitter:description" content="Guest post by Benjamin Chan and Elaine Shi In this post, we describe an extraordinarily simple blockchain protocol called Streamlet. Consensus is a complex problem and has been studied since the 1980s. More recently, blockchain research has spawned many new works aiming for performance and ease-of-implementation. However, simple, understandable protocols remain elusive, and that’s where Streamlet comes in. Streamlet in a nutshell: The protocol proceeds in synchronized epochs. Define a...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Streamlet: A Simple Textbook Blockchain Protocol</h1>
+ 
+ 
+ 
+ 
+ <span class="post-meta">Posted on May 14, 2020</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p align="center">
+Guest post by <a href="https://www.cs.cornell.edu/\~byc/">Benjamin Chan</a> and <a href="http://elaineshi.com/">Elaine Shi</a>
+</p>
+<p>In this post, we describe an extraordinarily simple blockchain protocol called <a href="https://eprint.iacr.org/2020/088">Streamlet</a>. Consensus is a complex problem and has been studied since the 1980s. More recently, blockchain research has spawned many new works aiming for performance and ease-of-implementation. However, <em>simple</em>, <em>understandable</em> protocols remain elusive, and that’s where Streamlet comes in.</p>
+<h3 id="streamlet-in-a-nutshell">Streamlet in a nutshell:</h3>
+<ul>
+ <li>
+ <p>The protocol proceeds in synchronized epochs.</p>
+ </li>
+ <li>
+ <p>Define a “notarized block” to be a block accompanied by votes (for that block) from $2n/3$ distinct players. A “notarized blockchain” is a blockchain in which every block is notarized.</p>
+ </li>
+ <li>
+ <p>At the beginning of every epoch, a randomly chosen player (the “leader”) proposes a new block for that epoch, extending the longest notarized blockchain that the <em>leader</em> has seen.</p>
+ </li>
+ <li>
+ <p>During an epoch, every player votes for the first new block proposal they see for that epoch, but only if it also extends one of the longest notarized blockchains that the <em>voter</em> has seen.</p>
+ </li>
+ <li>
+ <p>When a player observes, in a notarized blockchain, three adjacent notarized blocks from consecutive epochs, the player <em>finalizes</em> the second block out of the three and its parent chain.</p>
+ </li>
+</ul>
+<h3 id="state-of-blockchain">State of Blockchain</h3>
+<p>Historically, <a href="https://lamport.azurewebsites.net/pubs/paxos-simple.pdf">Paxos</a> (1989), <a href="http://pmg.csail.mit.edu/papers/osdi99.pdf">PBFT</a> (1999), and their variants have been the mainstream practical approach in distributed consensus. As consensus became more useful, simplifying consensus became a first-order goal, motivating works such as <a href="https://raft.github.io/">Raft</a>. More recently, the spurt of modern cryptocurrency research has brought with it a leap in understanding of how to construct simple blockchain protocols. These new techniques - which we refer to as the “streamlined blockchain paradigm” - are surprisingly simple and practical, and have the potential to replace prior work in the classroom and in practice.</p>
+<p><a href="https://arxiv.org/abs/1710.09437">Casper FFG</a> introduced what are perhaps the first streamlined blockchains, and works such as <a href="https://research.vmware.com/files/attachments/0/0/0/0/0/7/7/podc.pdf">Hotstuff</a>, <a href="https://eprint.iacr.org/2018/980.pdf">PiLi</a>/<a href="https://eprint.iacr.org/2018/981">PaLa</a>, and <a href="https://arxiv.org/abs/1807.04938">Tendermint</a> extend it further. Despite this, the literature is scattered and difficult to navigate, which leaves room for a unifying, simple blockchain paradigm. To the best of our knowledge, Streamlet is the simplest blockchain protocol; it is an ideal protocol to teach, implement, and to illustrate <em>just how simple consensus has become</em>, compared with Paxos, Raft, and PBFT.</p>
+<h3 id="streamlet-in-depth">Streamlet In-Depth</h3>
+<p>In this section, we dive into the details of the Streamlet protocol; for a formal treatment, see the <a href="https://eprint.iacr.org/2020/088">paper</a>.</p>
+<h2 id="the-blockchain-problem">The Blockchain Problem</h2>
+<p>Streamlet solves the following problem – besides the modern name “blockchain”, it was also known as State Machine Replication (<a href="https://decentralizedthoughts.github.io/2019-10-25-flavours-of-state-machine-replication/">SMR</a>) or Byzantine-Fault Tolerance (i.e. <a href="http://pmg.csail.mit.edu/papers/osdi99.pdf">PBFT</a>) in the literature. We’ll just call it (permissioned) ‘blockchain’:</p>
+<ul>
+ <li>
+ <p>$n$ players, $f$ of which are byzantine. Honest players follow the protocol, whereas Byzantine players may deviate arbitrarily from the protocol. Assume that $f &lt;n/3$.</p>
+ </li>
+ <li>
+ <p>Players receive signed transactions from the environment and seek to order these transactions into a log, which we call a blockchain, comprised of blocks.</p>
+ </li>
+ <li>
+ <p>(Consistency) Every honest player must finalize prefixes of the same blockchain.</p>
+ </li>
+ <li>
+ <p>(Liveness) If some honest player receives a transaction, that transaction must eventually be finalized by every honest player - ideally in expected constant time when the network is reliable.</p>
+ </li>
+</ul>
+<h2 id="execution-model">Execution Model</h2>
+<p>We describe a simplified model in which Streamlet operates:</p>
+<ul>
+ <li>
+ <p><strong>Epochs</strong>: The protocol runs sequentially in synchronized ‘epochs’ that are 2 seconds long. Every player starts in epoch 0 at the same time, and then after 2 seconds have elapsed, every player enters epoch 1 at the same time, and so forth<sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup>.</p>
+ </li>
+ <li>
+ <p><strong>Epoch Leaders</strong>: For each epoch, there is a single global ‘leader’ of that epoch, known to all players. We assume the leader is randomly chosen, e.g., with a public hash function.</p>
+ </li>
+ <li>
+ <p><strong>Partially Synchronous Network</strong>: The network can at times be unreliable, or adversarial; the protocol must not lose consistency in this case. However, when network conditions are good, i.e., when honest players can communicate with each other within 1 second, the protocol must make progress.</p>
+ </li>
+ <li>
+ <p><strong>Digital Signatures</strong>: every vote and proposal is signed by the corresponding player.</p>
+ </li>
+</ul>
+<h2 id="data-structures">Data Structures</h2>
+<p>Streamlet has only a single message type, a ‘vote’, which is a signature on a block.</p>
+<ul>
+ <li>
+ <p><strong>Blocks</strong>: The protocol reaches agreement on ‘blocks’, each of which comprises a set of transactions, and contains a cryptographic hash of a parent chain. Each block thus ‘extends’ and commits to a unique blockchain<sup id="fnref:2" role="doc-noteref"><a href="#fn:2" class="footnote" rel="footnote">2</a></sup>, which can be thought of as a history or distributed ledger of transactions.</p>
+ </li>
+ <li>
+ <p><strong>Notarized Blocks</strong>: Players can cast ‘votes’ for specific blocks using digital signatures. When a player sees a block with $2n/3$ votes from unique players (where n is the number of total players), the player considers that block ‘notarized’. When every block in a chain of blocks is notarized, the player calls that chain a ‘notarized blockchain’.</p>
+ </li>
+</ul>
+<h2 id="finally-the-protocol">Finally, the Protocol</h2>
+<ul>
+ <li>
+ <p>At the beginning of each epoch,</p>
+ <p><strong>Proposal:</strong> Let $ch$ denote (one of) the longest notarized chain(s) that the leader has seen so far.</p>
+ <p>The leader of the epoch aggregates new, unconfirmed transactions, and proposes a new block containing the current epoch number, those transactions, and a hash of $ch$ (colloquially, the new block ‘extends’ $ch$).</p>
+ </li>
+ <li>
+ <p>During each epoch,</p>
+ <p><strong>Vote</strong>: Each player, when it sees a new block proposal for that epoch, votes for it iff it extends (one of) the longest notarized chain(s) the voter has seen thus far. Each player casts at most one vote per epoch.</p>
+ </li>
+ <li>
+ <p>A block is finalized when:</p>
+ <p><strong>Finalization Rule:</strong> On seeing three adjacent blocks in a notarized blockchain with consecutive epoch numbers, a player can finalize (or commit) the second of the three blocks, and its entire prefix chain. We illustrate this pictorially in Figure 1.</p>
+ </li>
+</ul>
+<p>Intuitively, if the network delivers messages in 1 second, and if the leader is honest and has an up-to-date view of the blockchain, their block proposal propagates and accumulates votes quickly enough that every player sees a new notarized block by the end of the epoch.</p>
+<p>And that’s it!</p>
+<p>The entire protocol is <strong>“propose-vote-propose-vote-propose-vote…”</strong>. There is no other fallback or recovery path like in classical protocols such as PBFT/Paxos!</p>
+<h2 id="a-brief-argument-for-consistency">A Brief Argument for Consistency</h2>
+<p align="center">
+<img src="/uploads/streamlet.png" width="512" title="Figure 1: A player sees three consecutive notarized blocks in a row, with consecutive epoch numbers 5, 6, 7 (denoted by the green box). Then, applying the finalization rule, the player finalizes block 6 and its prefix. This is allowed because no competing notarized block (denoted by $X$) at the same height as the epoch 6 block (i.e. the ‘middle’ block) can exist in any epoch, past, present, or future." />
+</p>
+<p>Let’s briefly go over why consistency holds in Streamlet - or in other words, why double spending is impossible.</p>
+<p>Figure 1 illustrates the scenario in question. A player has seen three consecutive notarized blocks (denoted by the double-lined boxes in the diagram) with epoch numbers 5, 6, and 7. Now the finalization rule can be applied (marked by a green box); so block 6 is finalized by the player, along with its parent chain (blocks 2 and 5).</p>
+<p>For consistency, we want to show that no other honest player will finalize a ‘competing’ block (e.g., blocks 1, 3, and $X$). We can show this by showing that block 6 is the unique notarized block at its height, where a block’s height is its distance from the genesis block. In other words, a notarized block $X$ cannot exist. Since block 6 is unique at its height, then every longer notarized chain must contain block 6, and thus blocks 2 and 5. This excludes blocks 1 and 3 from ever being included in a longer notarized blockchain; thus they can never be finalized.</p>
+<p>Why can’t a notarized block $X$ exist? Note that if a notarized $X$ exists, then a majority of honest players must have seen a notarized block 3 by the end of epoch $X$. We can derive a contradiction. First, note that there can be at most one notarized block for each epoch number (since players vote for a single block per epoch). As a result, $X$ must be less than 5 or greater than 7.</p>
+<ul>
+ <li>
+ <p>Case 1: $X&lt;5$: since block $X$ got notarized, it means that more than $n/3$ honest players, denoted $S$, must have voted for block $X$ and not only so, at the time of this voting (that is, during epoch $X &lt; 5$), they must have observed block 3 notarized. Now the honest players in $S$ will not vote for block 5 during epoch 5, since it fails to extend a longest notarized chain seen, which is block 3 or longer. Since $f &lt;n/3$, this means that block 5 can never get notarized. This leads to a contradiction.</p>
+ </li>
+ <li>
+ <p>Case 2: $X &gt; 7$: since block 7 is notarized, more than $n/3$ honest players (denoted the set S) must have seen a notarized block 6 by the time they vote for block 7 (i.e., by the end of epoch 7). As a result, by the time epoch $X$ comes around, the set $S$ of players have seen block 6 notarized and will not vote for block $X$, since $X$ now fails to extend the longest notarized chain seen (which is block 6). Then $X$ cannot accumulate $2n/3$ votes, so $X$ cannot be notarized, which is a contradiction.</p>
+ </li>
+</ul>
+<p>This argument generalizes to arbitrary epoch numbers $e, e+1, e+2$ as opposed to epochs 5, 6, 7, which completes our sketch of the consistency argument.</p>
+<p>Observe that the consistency proof does not require any message delivery guarantees by the network. In other words, even when there can be arbitrarily bad network partitions, we still guarantee consistency (however, during network partitions progress can halt). Again, this model is called <a href="https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/">partially synchronous</a>.</p>
+<p><strong>Liveness</strong></p>
+<p>In our <a href="https://eprint.iacr.org/2020/088">paper</a>, we show that when network conditions are good, i.e., when honest players can deliver messages to each other within 1 second, then Streamlet makes progress whenever there are five consecutive epochs whose leaders are all honest. At a high level, the first couple “honest” epochs may be needed to undo any bad effect from bad leaders from previous epochs. We then top that off with three honest epochs to create three consecutive notarized blocks (with consecutive epochs), after which a new block (from an honest proposer) is finalized in the view of every honest player.</p>
+<p>The liveness argument is slightly more subtle than the consistency argument but nonetheless still quite simple. We refer the reader to our full <a href="https://eprint.iacr.org/2020/088">paper</a> for the liveness argument.</p>
+<p><strong>Conclusion</strong></p>
+<p>We hope that this post is a useful exposition of what might be the simplest blockchain protocol known. We think that Streamlet has the potential to unify existing protocols and perhaps become a de facto standard.</p>
+<p>We thank <a href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a> for the opportunity to write this blog post, and Ittai Abraham for insightful and thoughtful feedback on an initial draft.</p>
+<p>Please leave comments on <a href="https://twitter.com/ittaia/status/1261261415391862784?s=20">Twitter</a>.</p>
+<div class="footnotes" role="doc-endnotes">
+ <ol>
+ <li id="fn:1" role="doc-endnote">
+ <p>The length of each epoch should be configured to match the time it takes for a message round trip when network conditions are good. We guarantee consistency even when network conditions are arbitrary but guarantee liveness when network conditions are good. <a href="#fnref:1" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+ </li>
+ <li id="fn:2" role="doc-endnote">
+ <p>With high probability, using a collision resistant hash function family. <a href="#fnref:2" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+ </li>
+ </ol>
+</div>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Streamlet%3A+A+Simple+Textbook+Blockchain+Protocol&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2020-05-14-streamlet%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2020-04-02-bilinear-accumulators-for-cryptocurrency/" data-toggle="tooltip" data-placement="top" title="Bilinear Accumulators for Cryptocurrency Enthusiasts">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2020-06-12-optimal-optimistic-responsiveness/" data-toggle="tooltip" data-placement="top" title="On the Optimality of Optimistic Responsiveness">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

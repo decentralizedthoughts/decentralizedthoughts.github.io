@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Approximate Agreement: definitions and the robust midpoint protocol</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham and Gilad Stern">
+ 
+ <meta name="description" content="This post covers the basics of Approximate Agreement. We define the problem, explain in what way its an interesting variation of classic Agreement, and describe the idea behind the robust midpoint protocol. In classic consensus, the space of possible decision values is just a set and the goal is to agree on a decision value that must be the input value if all non-faulty have the same input value. Approximate...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Approximate Agreement: definitions and the robust midpoint protocol">
+ <meta property="og:description" content="This post covers the basics of Approximate Agreement. We define the problem, explain in what way its an interesting variation of classic Agreement, and describe the idea behind the robust midpoint protocol. In classic consensus, the space of possible decision values is just a set and the goal is to agree on a decision value that must be the input value if all non-faulty have the same input value. Approximate...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham and Gilad Stern">
+ 
+ <meta property="og:article:published_time" content="2022-06-07T03:11:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2022-06-07-approx-agreement-one/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2022-06-07-approx-agreement-one/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Approximate Agreement: definitions and the robust midpoint protocol">
+ <meta property="twitter:description" content="This post covers the basics of Approximate Agreement. We define the problem, explain in what way its an interesting variation of classic Agreement, and describe the idea behind the robust midpoint protocol. In classic consensus, the space of possible decision values is just a set and the goal is to agree on a decision value that must be the input value if all non-faulty have the same input value. Approximate...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Approximate Agreement: definitions and the robust midpoint protocol</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham and Gilad Stern</strong><br>
+ 
+ <span class="post-meta">Posted on June 7, 2022</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>This post covers the basics of <strong>Approximate Agreement</strong>. We define the problem, explain in what way its an interesting variation of classic <a href="https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/">Agreement</a>, and describe the idea behind the robust midpoint protocol.</p>
+<p>In classic consensus, the space of possible decision values is just a set and the goal is to agree on a decision value that must be the input value if all non-faulty have the same input value. <em>Approximate Agreement</em> is a variation, first suggested by <a href="https://groups.csail.mit.edu/tds/papers/Lynch/jacm86.pdf">Dolev, Lynch, Pinter, Stark, Weihl, 1985-86</a>, where the goal is to approximately agree (up to some $&lt;\epsilon$ difference) on a value that is in the convex hull of the non-faulty input values. To make this well defined, in approximate agreement the space of possible decision values is a <a href="https://en.wikipedia.org/wiki/Convex_set">convex set</a>, for this post just assume the rational numbers $\mathcal{R}$. This naturally induces a notion of two values being <em>close</em> to each other and that a value is <em>in between</em> two other values.</p>
+<p>There are many cases where (approximate) agreement on a rational value makes sense. For example, if parties want to reach approximate agreement on the current exchange rate of dollar vs euro, we can define the distance between two exchange rates as say the distance in US cents. Similarly, if parties want to reach approximate agreement on the current temperature, we can define the distance between two measurements as say the distance in degrees of Celsius.</p>
+<p>As in classic Agreement:</p>
+<ul>
+ <li><strong>Validity</strong>: if all non-faulty parties have the same value then this is the decision value.</li>
+ <li><strong>Termination</strong>: all non-faulty decide.</li>
+</ul>
+<p>Unlike classic agreement, <em>Approximate Agreement</em> strengthens the validity property and weakens (relaxes) the agreement property:</p>
+<ul>
+ <li><strong>Convex validity</strong>: if a non-faulty party outputs $v$ then there exists some non-faulty parties with inputs $c_1$ and $c_2$ such that $c_1 \leq v \leq c_2$. More generally, we can say that $v$ must belong to the <a href="https://en.wikipedia.org/wiki/Convex_hull">convex hull</a> of the non-faulty input values.</li>
+ <li><strong>$\epsilon$-Approximate consensus</strong>: if two non-faulty parties output $v_i$ and $v_j$ then $|v_j-v_i|&lt;\epsilon$ (or more generally, $d(v_i,v_j)&lt;\epsilon$). In other words, the decisions of all non-faulty are $\epsilon$-close to each other.</li>
+</ul>
+<h2 id="why-is-approximate-agreement-interesting">Why is Approximate Agreement interesting?</h2>
+<p>From a foundations perspective, relaxing to <strong>approximate consensus</strong> allows to circumvent fundamental limitations of classic (exact) consensus and obtain qualitatively better round complexity. We will see in a <a href="..">later post</a> that this relaxation circumvents the $f+1$ round lower bound in synchrony and the infinite execution lower bound in asnychrony. On the other hand, the strengthening to <strong>convex validity</strong> seems to require more resources and hence is an interesting trade-off.</p>
+<p>From a practical perspective, there are use cases (many in the blockchain world) where we would like an <em>oracle service</em> to (approximately) agree on some external values and often these values have a natural notion of convexity (for example, the exchange rate of two assets or the interest rate, etc). In many of these cases the input values of non-faulty parties are close but not exactly the same. The classic validity property allows any value to be output in this case, which clearly does not seem like the desired outcome. Convex validity captures a very natural requirement of outputting a value in the convex hull of these inputs (for example, if all non-faulty inputs are in the range [3.99,4.01], we would want the output value to be in that range as well!).</p>
+<h2 id="convex-validity-using-a-broadcast-channel">Convex validity using a broadcast channel</h2>
+<p>Let’s jump right in and assume we have $n=3f+1$ parties and a malicious adversary that can control at most $f$ parties. Party $i$ has input $v_i \in \mathcal{R}$.</p>
+<p>In this section we assume parties have access to a powerful a <a href="https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/">broadcast channel</a> (a blockchain). This makes everything much easier :-). The first step of the protocol is trivial:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Each party i broadcasts its input v_i
+</code></pre></div></div>
+<p>Assuming synchrony for now, each party gathers a multi-set $V$ of between $n-f$ and $n$ values from the broadcast values. The only question is how does a party extract a single decision value from this multi-set $V$?</p>
+<p>What can the adversary do? Intuitively, if the adversary chooses to send values inside the non-faulty convex hull, it wouldn’t do us much harm. These values are roughly where they should be. However, it can cause the $f$ parties it controls to post very high or very low inputs. So it is very natural to <em>trim</em> (or remove) the $f$ smallest and $f$ largest values from the multi-set $V$. Given a representation of $V$ as an ordered sequence $V=\{v_1,v_2,\dots, v_k\}$, define the <strong>trim</strong> of $V$ by $f$ values as the sub-multi-set formed by removing the lowest $f$ values and the highest $f$ values from the sequence.</p>
+\[T=trim(V)=\{v_{f+1},\dots,v_{k-f}\}\]
+<p>Observe that $|T| = |V|-2f$ so $T$ is only well defined when $|V| \geq 2f+1$ (indeed this is why we required $n=3f+1$ and hence assured to see at least $n-f \geq 2f+1$ values). BTW the idea of trimming the outliers is deeply connected to <a href="https://en.wikipedia.org/wiki/Robust_statistics">robust statistics</a>.</p>
+<p>Let $G$ be the multi-set of input values of all the non-faulty parties.</p>
+<p>We are now ready to state a simple but important fact about $\max(T)$ and $\min(T)$ relative to $\max(G), \min(G)$ and $median(G)$.</p>
+<p><strong>Claim 1:</strong> $median(G) \leq \max(T) \leq \max(G)$ and similarly $\min(G) \leq \min(T) \leq median(G)$.</p>
+<p><em>Proof:</em> 
+To see that $\max(T) \leq \max(G)$ observe that the worst the adversary can do is post $f$ values that are higher than $\max(G)$ but those will be removed by $T=trim(V)$.</p>
+<p>Recall that $T=trim(V)$ and $V$ is the set of all values that are broadcast. So in particular we have $G \subseteq V$.</p>
+<p>To see that $median(G) \leq \max(T)$ observe that $2f+1 \leq |G|$ hence even if the top $f$ values will be removed by $T=trim(V)$, the $median(G)$ value will remain.</p>
+<p>The proof for $\min(G) \leq \min(T) \leq median(G)$ is identical.</p>
+<p>We can finally complete the protocol, return the robust midpoint:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Given a multi-set V let T=trim(V)
+output (max(T)+min(T))/2
+</code></pre></div></div>
+<p><em>Proof:</em> Trivially we have termination and (exact) agreement from using the powerful the broadcast channel assumption. For convex validity, the claim above shows that $\min(G) \leq \min(T) \leq \max(T) \leq \max(G)$.</p>
+<p>Note that any function that outputs a value in the convex hull of $T$ would be fine. For example some oracle services use the median (see <a href="https://research.chain.link/whitepaper-v2.pdf">Chainlink</a>).</p>
+<h3 id="in-synchrony-without-a-broadcast-channel">In synchrony without a broadcast channel</h3>
+<p>Let’s look at the natural robust midpoint protocol:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Each party i sends its input v_i to all
+Each party waits for 2 Delta to gather a multi-set V
+let T=trim(V)
+output (min(T)+max(T))/2
+</code></pre></div></div>
+<p><em>Proof:</em> Termination is immediate. Convex validity follows from Claim 1. What about (approximate) agreement?</p>
+<p>For example with $n=4$, party A may see $V_1=\{0,0,1,1\}$ from parties A,B,C,D (so it outputs 1/2) and party D may see $V_2 = \{0,1,1,1\}$ from parties $A,B,C,D$ (so it outputs 1). We don’t have agreement, did we make progress?</p>
+<p>Yes! It’s time to introduce an important measure for a multi-set of non-faulty parties:</p>
+\[span(G) = \max(G)-\min(G)\]
+<p>Let $G$ be the multi-set of input values of the non-faulty parties and $G_1$ be the multi-set of output values of the non-faulty from the protocol (so $G_1=\{\frac{\min(T_i)+\max(T_i)}{2}\}_{i \in G}$):</p>
+<p><strong>Claim 2:</strong> $span(G_1) \leq span(G)/2$.</p>
+<p><em>Proof:</em> 
+From Claim 1 we have</p>
+\[median(G) \leq \max(T) \leq \max(G)\]
+<p>and</p>
+\[\min(G) \leq \min(T) \leq median(G)\]
+<p>Recall that</p>
+\[\min(G_1) = \min_{i \in G} \frac{\min(T_i)+\max(T_i)}{2}\]
+<p>So we have</p>
+\[\min(G_1) \geq \frac{\min(G) + median(G)}{2}\]
+<p>and similarly</p>
+\[\max(G_1) \leq \frac{\max(G) + median(G)}{2}\]
+<p>Hence</p>
+\[span(G_1) = \max(G_1) - \min(G_1) \\
+\leq \frac{\max(G) + median(G)}{2} - \frac{\min(G) + median(G)}{2}\\
+= \frac{\max(G) -\min(G)}{2} = span(G)/2\]
+<p>Every time we do this calculation we are re-surprised how everything cleans up so nicely :-)</p>
+<p>So what did we achieve? The robust mid-point protocol allows parties to output values in the convex hull of their inputs, while cutting their span in half!</p>
+<p>In the next posts we will see how repeating this one round protocol can eventually cut the span to any desired $&lt;\epsilon$ and how to terminate with approximate agreement.</p>
+<p>Cant wait for the follow up post? Let us know if this protocol can also work in asynchrony?</p>
+<p>Your thoughts/comments on <a href="https://twitter.com/ittaia/status/1534074996083109888?s=20&amp;t=ytroU493gGzJind9MeGJKQ">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Approximate+Agreement%3A+definitions+and+the+robust+midpoint+protocol&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2022-06-07-approx-agreement-one%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2022-04-05-aa-part-five-ABBA/" data-toggle="tooltip" data-placement="top" title="Asynchronous Agreement Part 5: Binary Byzantine Agreement from a strong common coin">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2022-06-09-phase-king-via-gradecast/" data-toggle="tooltip" data-placement="top" title="Phase-King through the lens of Gradecast: A simple unauthenticated synchronous Byzantine Agreement protocol">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

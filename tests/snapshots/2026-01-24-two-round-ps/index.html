@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Concurrent 2-round and 3-round BFT protocols under granular synchrony</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham, Kartik Nayak, and Alejandro Ranchal-pedrosa">
+ 
+ <meta name="description" content="Consensus protocols for $n=3f+1$ can tolerate $f$ Byzantine faults under partial synchrony. However, they also require a latency of 3 rounds in the good-case when the leader is non-faulty, and the system is synchronous. Can we get a protocol with better latency, or tolerate more faults, if we assume $n=3f+2p+1$? Better latency: If the actual number of Byzantine faults in an execution are fewer, then the protocol can commit faster....">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Concurrent 2-round and 3-round BFT protocols under granular synchrony">
+ <meta property="og:description" content="Consensus protocols for $n=3f+1$ can tolerate $f$ Byzantine faults under partial synchrony. However, they also require a latency of 3 rounds in the good-case when the leader is non-faulty, and the system is synchronous. Can we get a protocol with better latency, or tolerate more faults, if we assume $n=3f+2p+1$? Better latency: If the actual number of Byzantine faults in an execution are fewer, then the protocol can commit faster....">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham, Kartik Nayak, and Alejandro Ranchal-pedrosa">
+ 
+ <meta property="og:article:published_time" content="2026-01-24T01:00:00-05:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2026-01-24-two-round-ps/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2026-01-24-two-round-ps/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Concurrent 2-round and 3-round BFT protocols under granular synchrony">
+ <meta property="twitter:description" content="Consensus protocols for $n=3f+1$ can tolerate $f$ Byzantine faults under partial synchrony. However, they also require a latency of 3 rounds in the good-case when the leader is non-faulty, and the system is synchronous. Can we get a protocol with better latency, or tolerate more faults, if we assume $n=3f+2p+1$? Better latency: If the actual number of Byzantine faults in an execution are fewer, then the protocol can commit faster....">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Concurrent 2-round and 3-round BFT protocols under granular synchrony</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham, Kartik Nayak, and Alejandro Ranchal-pedrosa</strong><br>
+ 
+ <span class="post-meta">Posted on January 24, 2026</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>Consensus protocols for $n=3f+1$ can tolerate $f$ Byzantine faults under partial synchrony. However, they also require a latency of <a href="https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/">3 rounds in the good-case</a> when the leader is non-faulty, and the system is synchronous. <em>Can we get a protocol with better latency, or tolerate more faults, if we assume $n=3f+2p+1$?</em></p>
+<ol>
+ <li>
+ <p><strong>Better latency:</strong> If the actual number of Byzantine faults in an execution are fewer, then the protocol can commit faster. Starting with <a href="https://www.cs.cornell.edu/lorenzo/papers/fab.pdf">Fab</a> and <a href="https://dl.acm.org/doi/10.1145/1658357.1658358">Zyzzyva</a> (also see technical reports <a href="https://lpdwww.epfl.ch/upload/documents/publications/567931850DGV-feb-05.pdf">here</a> and <a href="https://lamport.azurewebsites.net/pubs/lower-bound.pdf">here</a>), later <a href="https://arxiv.org/pdf/1804.01626.pdf">SBFT</a>, and recently <a href="https://arxiv.org/pdf/2505.08771.pdf">KudzuBFT</a>, there is a line of protocols for $n = 3f + 2p + 1$ that can have a two round fast path when there are at most $p$ Byzantine faults, and a regular three round path when there are up to $f$ Byzantine faults, for $p\le f$. See <a href="https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/">our post on this topic</a>.</p>
+ </li>
+ <li>
+ <p><strong>Tolerating more faults:</strong> There are folklore constructions with $n = 3f+2c+1$ that can tolerate up to $f$ Byzantine faults <em>and</em> $c$ crash faults, which obtain a latency of 3 rounds in the good case.</p>
+ </li>
+</ol>
+<p>Thus, a natural question is whether we can obtain the best of both worlds:</p>
+<ol>
+ <li>Good case 2 rounds when there are $\le p$ Byzantine faults, and simultaneously;</li>
+ <li>Good case 3 rounds when there are $f$ Byzantine <strong>and</strong> $p$ crash faults.</li>
+</ol>
+<p>There are three ways to address this question:</p>
+<ol>
+ <li>
+ <p><a href="https://eprint.iacr.org/2025/1112.pdf">Hydrangea</a> address this question assuming partial synchrony. For $n = 3f+2c+k+1$ (where $k$ is a parameter), they show a protocol with: (i) a good case 2 rounds when there $\le p = (c+k)/2$ Byzantine faults, and (ii) a good case 3 rounds when there are $f$ Byzantine and $c$ crashes. As an example, when setting $c = k (= p)$, we have $n = 3f+3p+1$. Moreover, they show this is tight by presenting a matching lower bound under partial synchrony.</p>
+ </li>
+ <li>
+ <p><a href="https://www.anza.xyz/alpenglow-1-1">Alpenglow</a> address this question assuming partial synchrony and that no leader can equivocate (<em>Assumption 3</em> in their paper). For $n = 3f + 2p + 1$, they get a two-round good case when there are at most $p$ Byzantine faults, and a regular three-round good case when there are $f$ Byzantine <em>and</em> $p$ crashes.</p>
+ <p>Assuming the leader cannot equivocate is traditionally interpreted as a full synchrony style assumption (see the <a href="https://decentralizedthoughts.github.io/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/">DLS lower bound</a>).</p>
+ </li>
+ <li>
+ <p>In this post, we explore potentially weaker synchrony assumptions that still enable the same quorum arithmetic. We show that it is possible to get $n = 3f + 2p + 1$ in a model that is in between partial synchrony and synchrony:</p>
+ <p>Fix delay bounds $\Delta \le \Gamma$. After GST, any message sent at time $t$ arrives by time $t+\Delta$. Before GST, we assume the granular synchrony condition below:</p>
+ <p><strong>Granular synchrony before GST:</strong> Before GST, for every honest party, at all times, there are at most $f$ honest parties whose messages to it may be delayed by more than $\Gamma$. We note that this is a specific instantiation of the more general <a href="https://arxiv.org/pdf/2408.12853">granular synchrony model</a>.</p>
+ <p>This assumption is strictly stronger than partial synchrony and strictly weaker than full synchrony or a non-equivocating leader assumption. Importantly, it is used primarily for safety reasoning, specifically to infer the non-existence of a fast commit from the absence of a fast certificate after waiting $\Gamma$.</p>
+ <p>In this post, we will show how to use this assumption to modify the <a href="https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/">Concurrent 2-round and 3-round Simplex-style BFT</a> by essentially changing <em>one line</em>. Similar results can be obtained by minimal changes in similar protocols (like Alpenglow or Hydrangea).</p>
+ <p>Specifically, the result obtained is:</p>
+ <ul>
+ <li>Honest leader post GST with $p$ Byzantine faults: commit in $2\delta$.</li>
+ <li>Honest leader post GST with $f$ Byzantine faults and $p$ crashes: commit in $3\delta$.</li>
+ <li>Non equivocating leader post GST: view completes in at most $3\Delta + \delta$.</li>
+ <li>Equivocating leader post GST: view completes in at most $2\Gamma + 5\Delta + \delta$ and the leader is publicly detected as malicious.</li>
+ <li>Safety under up to $f$ Byzantine faults and $p$ crashes given the granular synchrony assumption before GST.</li>
+ </ul>
+ </li>
+</ol>
+<h2 id="intuition">Intuition</h2>
+<p><strong>Why waiting for $n-f$ is required under partial synchrony and equivocation</strong></p>
+<p>In partial synchrony, the only case where the <a href="https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/">2,3 protocol</a> is required to wait for $n-f$ messages is to provide safety in the case that some party has a fast commit (see Upon 7 in the <a href="https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/">blog post</a>).</p>
+<p>If a party fast commits, we want all other parties to leave the view with a fast certificate for that value. Since a fast commit is $n-p$ votes, then waiting for $n-f$ implies hearing at least $n-p-f-f$ honest votes and since $n-p-2f = f+p+1$, this is a fast certificate.</p>
+<p>If we only wait for $n-p-f$ votes, we may see only $n-p-f-f-p$ honest votes and hence only $f+1$ votes. But this may not be unique; a malicious leader may cause us to see two values with $f+1$ votes!</p>
+<p><strong>Why non-equivocation allows waiting for $n-f-p$</strong></p>
+<p>The first observation is that a non-equivocating leader cannot cause this problem. Each honest party either votes for the common value or for $\bot$, hence either half of the $2f+2p+1$ honest parties vote for the leader’s value $x$ or half vote for $\bot$. In either case, at least $f+p+1$ honest votes are for the same value, hence fast certificate will eventually form.</p>
+<p><strong>Why granular synchrony replaces non-equivocation</strong></p>
+<p>The second observation is that waiting for $n-p-f$ and a timeout is safe under our granular synchrony assumption: Out of the $n-p-f$ honest that helped a fast commit of $n-p$ to form, at most $f$ of them are delayed by more than $\Gamma$, hence everyone waiting sufficiently long will hear $n-p-f-f$ of them which is $f+p+1$ and is enough to obtain the required fast certificate. If the timeout expires and no fast certificate is seen, then it means it is safe to vote for $\bot$.</p>
+<h2 id="quorum-sizes">Quorum sizes</h2>
+<p>Recall the quorum sizes of interest from the <a href="https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/">2,3 protocol</a> post:</p>
+<ul>
+ <li>$n-f-p$, a slow certificate, is the quorum used in the non-optimistic case for progress under $f$ Byzantine and $p$ crashes;</li>
+ <li>$f+p+1$, a fast certificate, is the quorum used during view change to account for a fast path commit in earlier views</li>
+ <li>$n-p$, fast commit threshold</li>
+</ul>
+<h2 id="the-protocol-change">The protocol change</h2>
+<p>Our <a href="https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/">2,3 protocol</a> has the following rule, which is the only one that requires $n-f$:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>7. Upon receiving n-f (Vote, k, *) but no Fast-Cert(k, x) for any x 
+    Send (Vote, k, ⊥) 
+</code></pre></div></div>
+<p>We modify it by adding a $\Lambda = 2\Gamma + 2\Delta$ wait and changing the threshold from $n-f$ to $n-f-p$:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>7. Upon receiving n-f-p (Vote, k, *) but no Fast-Cert(k, x) for any x 
+ Start timer T2_k
+ 
+7'. Upon T2_k = Λ // will only happen if we stay in view
+     Send (Vote, k, ⊥) 
+</code></pre></div></div>
+<h2 id="proof-sketch">Proof sketch</h2>
+<h3 id="liveness-no-additional-wait-for-a-non-equivocating-leader">Liveness: no additional wait for a non-equivocating leader</h3>
+<p>After GST with a non-equivocating leader that proposes $x$, all honest parties vote for either $x$ or $\bot$. Hence a majority of the $2f+2p+1$ honest parties will either form a fast certificate for $x$ or for $\bot$ (a fast certificate requires $f+p+1$ votes). Hence a fast certificate of size $f+p+1$ forms without the $\Lambda$ wait.</p>
+<h3 id="liveness-additional-wait-for-an-equivocating-leader">Liveness: additional wait for an equivocating leader</h3>
+<p>After GST, if no fast certificate is formed by the time all honest end their $\Lambda$ wait, then all honest will send a vote for $\bot$ and hence a fast certificate will form. The worst case latency of such a view is $\Lambda + 3\Delta+\delta = 2\Gamma + 5\Delta+\delta$. Moreover, the leader of this view is publicly detected as malicious.</p>
+<h3 id="safety-fast-commit-for-x-implies-at-most-fp-votes-for-any-other-value-and-a-fast-certificate-for-x-after-at-most-gamma">Safety: Fast commit for $x$ implies at most $f+p$ votes for any other value and a fast certificate for $x$ after at most $\Gamma$.</h3>
+<p>Assume a fast commit for $x$ was formed with $n - p = 3f + p + 1$ votes.</p>
+<p>Consider any honest party that receives $n - f - p = 2f + p + 1$ votes at time $t$, since that set contains at least $f+1$ honest votes we know from the granular synchrony assumption that every honest party must hear at least one of them by time $t+\Gamma$. Hence all honest must start their view by time $t + \Gamma$.</p>
+<p>Honest parties only vote for a non-$\bot$ value in the first $2\Delta$ time after starting the view, so by time $t + \Gamma + 2\Delta + \Gamma = \Lambda$ all honest votes for $x$ that are at most $\Gamma$ delayed must have been seen.</p>
+<p>Therefore, if a fast commit of $n - p = 3f + p + 1$ votes was formed then least $(3f + p + 1) - f = 2f + p + 1$ of these votes were sent by honest parties and from the above reasoning, after the $\Lambda$ wait, each honest party will have seen at least $(2f + p + 1) - f = f + p + 1$ votes for $x$ and hence a fast certificate for $x$ and therefore will not vote for $\bot$.</p>
+<h2 id="summary">Summary</h2>
+<p>There are currently three ways to get a 2-round good case with $p$ Byzantine and a 3-round good case with $f$ Byzantine and $p$ crash:</p>
+<ol>
+ <li>Assuming asynchrony before GST, <a href="https://eprint.iacr.org/2025/1112.pdf">Hydrangea</a> gets it with $n=3f+3p+1$.</li>
+ <li>Assuming the leader cannot ever equivocate, <a href="https://www.anza.xyz/alpenglow-1-1">Alpenglow</a> gets it with $n=3f+2p+1$.</li>
+ <li>Assuming granular synchrony before GST, that at most $f$ honest can be asynchronous and the rest are $\Gamma$ bounded, this post also gets it with $n=3f+2p+1$.</li>
+</ol>
+<h2 id="notes">Notes</h2>
+<p>We note that a similar change under the same granular synchrony assumption allows Hydrangea to operate under $n = 3f+2p+1$. Specifically, if there is a fast commit for $x$ with $n-p$ votes in a view, a subsequent leader will obtain a fast certificate for $x$ since, $n-p-f$ of these votes are honest, and by the granular synchrony assumption, the leader receives $\geq n-p-2f = f+p+1$ of these votes. A similar change applies to Alpenglow as well.</p>
+<h2 id="acknowledgments">Acknowledgments</h2>
+<p>We would like to thank our co-authors Yuval Efron and Ling Ren. We also thank Lefteris Kokoris-Kogias, Quentin Kniep, Kobi Sliwinski, and Roger Wattenhofer for discussions and insights on this topic.</p>
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Concurrent+2-round+and+3-round+BFT+protocols+under+granular+synchrony&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2026-01-24-two-round-ps%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2026-01-21-simple-payment/" data-toggle="tooltip" data-placement="top" title="Simple Payment Systems with Unlinkability">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2026-02-02-ps-cheat-sheet/" data-toggle="tooltip" data-placement="top" title="Partial Synchrony Progress Cheat Sheet">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

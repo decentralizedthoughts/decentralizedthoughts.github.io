@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>The FLP Impossibility, Asynchronous Consensus Lower Bound via Uncommitted Configurations</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham">
+ 
+ <meta name="description" content="In this third post, we conclude with the celebrated Fischer, Lynch, and Paterson impossibility result from 1985. It is the fundamental lower bound for consensus in the asynchronous model. Theorem 1 (FLP85): Any protocol $\mathcal{P}$ solving consensus in the asynchronous model that is resilient to even just one crash failure must have an infinite execution. Bad news: Deterministic asynchronous consensus is impossible. Good news: With randomization, asynchronous consensus is possible...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="The FLP Impossibility, Asynchronous Consensus Lower Bound via Uncommitted Configurations">
+ <meta property="og:description" content="In this third post, we conclude with the celebrated Fischer, Lynch, and Paterson impossibility result from 1985. It is the fundamental lower bound for consensus in the asynchronous model. Theorem 1 (FLP85): Any protocol $\mathcal{P}$ solving consensus in the asynchronous model that is resilient to even just one crash failure must have an infinite execution. Bad news: Deterministic asynchronous consensus is impossible. Good news: With randomization, asynchronous consensus is possible...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham">
+ 
+ <meta property="og:article:published_time" content="2019-12-15T12:15:00-05:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2019-12-15-asynchrony-uncommitted-lower-bound/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2019-12-15-asynchrony-uncommitted-lower-bound/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="The FLP Impossibility, Asynchronous Consensus Lower Bound via Uncommitted Configurations">
+ <meta property="twitter:description" content="In this third post, we conclude with the celebrated Fischer, Lynch, and Paterson impossibility result from 1985. It is the fundamental lower bound for consensus in the asynchronous model. Theorem 1 (FLP85): Any protocol $\mathcal{P}$ solving consensus in the asynchronous model that is resilient to even just one crash failure must have an infinite execution. Bad news: Deterministic asynchronous consensus is impossible. Good news: With randomization, asynchronous consensus is possible...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>The FLP Impossibility, Asynchronous Consensus Lower Bound via Uncommitted Configurations</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham</strong><br>
+ 
+ <span class="post-meta">Posted on December 15, 2019</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>In this third post, we conclude with the celebrated Fischer, Lynch, and Paterson impossibility result from 1985. It is the fundamental lower bound for consensus in the <a href="https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/">asynchronous model</a>.</p>
+<p><strong><a href="https://groups.csail.mit.edu/tds/papers/Lynch/jacm85.pdf">Theorem 1 (FLP85)</a></strong>: Any protocol $\mathcal{P}$ solving consensus in the <em>asynchronous</em> model that is resilient to even just one crash failure must have an infinite execution.</p>
+<ul>
+ <li><strong>Bad news</strong>: Deterministic asynchronous consensus is <em>impossible</em>.</li>
+ <li><strong>Good news</strong>: With randomization, asynchronous consensus is possible in constant expected time. See <a href="https://research.vmware.com/files/attachments/0/0/0/0/0/7/8/practical_aba_2_.pdf">this paper</a> for a recent result. Note that randomization does not circumvent the existence of a non-terminating execution, it just reduces the probability measure of this event to have <a href="https://en.wikipedia.org/wiki/Almost_surely">measure zero</a>.</li>
+</ul>
+<p class="box-note">A much simpler proof for this theorem <a href="https://decentralizedthoughts.github.io/2024-03-07-mobile-is-FLP/">in this post</a>.</p>
+<p>This post assumes you are familiar with the <a href="https://decentralizedthoughts.github.io/2019-12-15-consensus-model-for-FLP/">definitions of the first post</a> and with Lemma 1 that we proved in the first post:</p>
+<p><strong>Lemma 1: (Lemma 2 of FLP85)</strong>: $\mathcal{P}$ has an initial <strong>uncommitted configuration</strong>.</p>
+<p>Recall that given a configuration $C$ there is a set $M$ of pending messages. These are messages that have been sent but not delivered yet. For $e \in M$ we write $e=(p,m)$ to denote that party $p$ has been sent a message $m$. Also, recall that an <a href="https://decentralizedthoughts.github.io/2019-12-15-consensus-model-for-FLP/"><strong>uncommitted configuration</strong></a> is a configuration where no party can decide because the adversary can still change the decision value.</p>
+<p>Given an initial <strong>uncommitted configuration</strong>, our goal will be to build an infinite execution such that:</p>
+<ol>
+ <li>The sequence is <strong>uncommitted</strong>: every configuration of the infinite execution is <strong>uncommitted</strong>. If a configuration is <strong>uncommitted</strong>, then no party can decide.</li>
+ <li>The sequence is <em>fair</em>: every message sent is eventually delivered. This is the essence of asynchrony, the adversary can delay messages, but only by a finite amount.</li>
+</ol>
+<p>To prove the theorem, we use the following key technical Lemma:</p>
+<p><strong>Lemma 2: Uncommitted Configurations Can Always be Extended (<a href="https://groups.csail.mit.edu/tds/papers/Lynch/jacm85.pdf">Lemma 3 of FLP85</a>)</strong>: If $C$ is an <strong>uncommitted configuration</strong> and $e=(p,m)$ is any pending message of $C$, then there exists some $C \stackrel{\pi}{\rightsquigarrow} C’ \xrightarrow{e=(p,m)} C’’$ such that $e \notin \pi$ and $C’’$ is an <strong>uncommitted configuration</strong>.</p>
+<h4 id="proof-of-theorem-1-from-lemma-1-and-lemma-2">Proof of Theorem 1 from Lemma 1 and Lemma 2:</h4>
+<p>Start with Lemma 1, which gives us an initial <strong>uncommitted configuration</strong>. Repeat Lemma 2 infinitely often; each time apply it to the pending messages in a FIFO order. Clearly, from Lemma 2, the sequence is <strong>uncommitted</strong>. For fairness, due to FIFO, a message $e$ that has $|M|$ pending messages before it will be derived after at most $|M|+1$ applications of Lemma 2.</p>
+<h4 id="proof-of-lemma-2">Proof of Lemma 2:</h4>
+<p>Recall the <strong>proof pattern</strong> for showing the existence of an <strong><em>uncommitted configuration</em></strong>:</p>
+<ol>
+ <li>Proof by <em>contradiction</em>: assume all configurations are either 1-committed or 0-committed.</li>
+ <li>Find a <em>local structure</em>: two <strong>adjacent configurations</strong> $X$ and $X’$ such that $X$ is 1-committed and $X’$ is 0-committed.</li>
+ <li>Reach a contradiction due to an <strong>indistinguishability</strong> argument between the two adjacent configurations, $X$ and $X’$ using the adversary’s ability to crash one party.</li>
+</ol>
+<p><strong>Proof of Lemma 2</strong> follows this pattern exactly:
+The <em>contradiction</em> of the statement of Lemma 2 is that: there exists a configuration $C$ and a message $e=(p,m)$ such that for all $\pi$ with $e \notin \pi$, let $C \stackrel{\pi}{\rightsquigarrow} C’$, let $C’ \xrightarrow{e=(p,m)} C’’$, then either $C’’$ is 1-committed or $C’’$ is 0-committed ($C’’$ is not <strong>uncommitted</strong>).</p>
+<p><img src="https://i.imgur.com/6eb3I6t.jpg" alt="" /></p>
+<p>Define two configurations $X,X’$ as <strong>adjacent</strong> (i.e., differing by a single pending message delivery) if $X \xrightarrow{T’, e’=(p’,m’)} X’$ and $e’$ is a pending message in $X$.</p>
+<p><strong>Claim</strong>: there must exist two <strong>adjacent configurations</strong> $Y \xrightarrow{T’, e’} Y’$ and a pending message $e’=(p’,m’)$ in $Y$ such that:</p>
+<ol>
+ <li>$C \rightsquigarrow Y \xrightarrow{e} Z$ and Z is 1-committed.</li>
+ <li>$C \rightsquigarrow Y \xrightarrow{T’, e’} Y’ \xrightarrow{e} Z’$ and $Z’$ is 0-committed.</li>
+</ol>
+<p><strong>Proof of claim</strong>: Since $C$ is an <strong>uncommitted configuration</strong>, there must exist two sequences $\tau_0$ and $\tau_1$ such that $C \stackrel{\tau_0}{\rightsquigarrow} D_0$ and $C \stackrel{\tau_1}{\rightsquigarrow} D_1$, where $D_0$ is 0-committed and $D_1$ is 1-committed.</p>
+<p>For each $i \in {0,1}$, let $\pi_i$ be the longest prefix of $\tau_i$ that does not contain $e$. Let $C \stackrel{\pi_0}{\rightsquigarrow} C_0 \xrightarrow{e} C’_0$ and $C \stackrel{\pi_1}{\rightsquigarrow} C_1 \xrightarrow{e} C’_1$. It follows from the assumption that $C’_0,C’_1$ must be committed and from $\tau_0,\tau_1$ that $C’_0$ is 0-committed and $C’_1$ is 1-committed.</p>
+<p>Since $\pi_0,\pi_1$ start from the same configuration $C$, let $G$ be the least common ancestor configuration of $\pi_0,\pi_1$ and assume without loss of generality that $G\xrightarrow{e} G’$ is such that $G’$ is 1-committed.</p>
+<p><img src="https://i.imgur.com/sZWp2VU.jpg" alt="" /></p>
+<p>Now examine the sub-sequence $G=Y_1,\dots,Y_k=C_0$ of $\pi_0$ from $G$ to $C_0$. Let $G’=Z_1,\dots,Z_k=C’_0$ be such that $Y_i \xrightarrow{e} Z_i$. Since $Z_1=G’$ is 1-committed and $Z_k=C’_0$ is 0-committed then clearly there must exist two <strong>adjacent configurations</strong> $Y \xrightarrow{T’, e’} Y’$ (in the path $Y_1,\dots,Y_k$) such that that $Z$ is 1-committed and $Z’$ is 0-committed where $Y \xrightarrow{e} Z$ and $Y’ \xrightarrow{e} Z’$. Note that this follows from the <a href="https://en.wikipedia.org/wiki/Sperner%27s_lemma#One-dimensional_case">discrete version of the intermediate value theorem</a>.</p>
+<p><img src="https://i.imgur.com/TLWm47j.jpg" alt="" /></p>
+<h4 id="proof-of-lemma-2-given-the-claim">Proof of Lemma 2 given the claim</h4>
+<p>Let $Y,Y’$ be these two <strong>adjacent configurations</strong>. There are three cases to consider when looking at $e=(p,m)$, $e’=(p’,m’)$ and $T’$. In each case we derive a contradiction:</p>
+<ul>
+ <li>
+ <p><em>Case 1</em>: $Y \xrightarrow{T’} Y’’$ is such that $Y’’ \xrightarrow{e} Z’’$ is 0-committed. This means that the time of receiving $e$ is the only difference between these two worlds. But in this case $p$ may crash in both worlds after receiving $e$. Then $Y \xrightarrow{T’} Y’’ \xrightarrow{e} Z’’ \xrightarrow{p ~~crashes} W’’ $ is indistinguishable from $Y \xrightarrow{e} Z \xrightarrow{p ~~crashes, T’} W$ but $W’’$ is 0-committed (due to $Y’’$) and $W$ is 1-committed (due to $Z$).</p>
+ </li>
+ <li>
+ <p><em>Case 2A</em>: (trivial case): $p \neq p’$. This implies that processing $e$ before $e’$ will lead to a different outcome than processing $e’$ before $e$. But since $e$ and $e’$ reach different parties there is no way to distinguish these two worlds, but again one is 0-committed and the other is 1-committed.</p>
+ </li>
+ <li>
+ <p><em>Case 2B</em>: $p=p’$. This implies that the committed value must change between the world where $p$ receives $m$ first and $m’$ later relative to the world where $p$ receives $m’$ first and $m$ later. But what if in both worlds, $p$ crashes right after receiving both messages? These two worlds will be indistinguishable to the rest of the parties, but again one is 0-committed and the other is 1-committed.</p>
+ </li>
+</ul>
+<p>This completes the proof of Lemma 2, and that completes the proof of the FLP Theorem.</p>
+<h3 id="discussion">Discussion</h3>
+<p>We started from an <strong>uncommitted configuration</strong> (Lemma 1) and then showed that we could extend this to another <strong>uncommitted configuration</strong> infinitely many times and do this while eventually delivering every pending message (Lemma 2).</p>
+<p>This proof is non-constructive; it shows that an infinite execution must exist. Using randomization, there are protocols that are <em>almost surely terminating</em> (their probability measure of terminating is one). There exist asynchronous consensus protocols that terminate in an expected constant number of rounds. More on that in later posts.</p>
+<h3 id="acknowledgments">Acknowledgments</h3>
+<p>We would like to thank Nancy Lynch, Kartik Nayak, Ling Ren, <a href="https://twitter.com/NibeshShrestha1">Nibesh Shrestha</a>, Sravya Yandamuri for valuable feedback on this post.</p>
+<p>Please leave comments on <a href="https://twitter.com/ittaia/status/1206298743823355905?s=20">Twitter</a></p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#asynchrony">asynchrony</a>
+ 
+ <a href="/tags#lowerbound">lowerbound</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=The+FLP+Impossibility%2C+Asynchronous+Consensus+Lower+Bound+via+Uncommitted+Configurations&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2019-12-15-asynchrony-uncommitted-lower-bound%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2019-12-15-synchrony-uncommitted-lower-bound/" data-toggle="tooltip" data-placement="top" title="Synchronous Consensus Lower Bound via Uncommitted Configurations">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2019-12-22-dolev-strong/" data-toggle="tooltip" data-placement="top" title="Dolev-Strong Authenticated Broadcast">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

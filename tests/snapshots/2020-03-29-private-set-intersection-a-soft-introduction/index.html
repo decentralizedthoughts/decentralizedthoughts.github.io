@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Private Set Intersection</title>
+ 
+ 
+ <meta name="author" content="Avishay Yanai">
+ 
+ <meta name="description" content="Private Set Intersection (PSI) is a problem within the broader field of secure computation. The PSI problem There are two friends Alice and Bob such that Alice has a set of items $A=(a_1,\ldots,a_n)$ and Bob has the set $B=(b_1,\ldots,b_n)$. The goal is to design a protocol by which Alice and Bob obtain the intersection $A\cap B$, under the following privacy restriction: The protocol must not reveal anything about items that...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Private Set Intersection">
+ <meta property="og:description" content="Private Set Intersection (PSI) is a problem within the broader field of secure computation. The PSI problem There are two friends Alice and Bob such that Alice has a set of items $A=(a_1,\ldots,a_n)$ and Bob has the set $B=(b_1,\ldots,b_n)$. The goal is to design a protocol by which Alice and Bob obtain the intersection $A\cap B$, under the following privacy restriction: The protocol must not reveal anything about items that...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Avishay Yanai">
+ 
+ <meta property="og:article:published_time" content="2020-03-29T14:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2020-03-29-private-set-intersection-a-soft-introduction/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2020-03-29-private-set-intersection-a-soft-introduction/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Private Set Intersection">
+ <meta property="twitter:description" content="Private Set Intersection (PSI) is a problem within the broader field of secure computation. The PSI problem There are two friends Alice and Bob such that Alice has a set of items $A=(a_1,\ldots,a_n)$ and Bob has the set $B=(b_1,\ldots,b_n)$. The goal is to design a protocol by which Alice and Bob obtain the intersection $A\cap B$, under the following privacy restriction: The protocol must not reveal anything about items that...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Private Set Intersection</h1>
+ 
+ 
+ 
+ 
+ By <strong>Avishay Yanai</strong><br>
+ 
+ <span class="post-meta">Posted on March 29, 2020</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>Private Set Intersection (PSI) is a problem within the broader field of <a href="https://en.wikipedia.org/wiki/Secure_multi-party_computation">secure computation</a>.</p>
+<h2 id="the-psi-problem">The PSI problem</h2>
+<p>There are two friends Alice and Bob such that Alice has a set of items $A=(a_1,\ldots,a_n)$ and Bob has the set $B=(b_1,\ldots,b_n)$.</p>
+<p><em>The goal is to design a protocol by which Alice and Bob obtain the intersection $A\cap B$</em>, under the following privacy restriction: The protocol must not reveal anything about items that are not in the intersection.</p>
+<p>If $a_i\notin B$ then Bob learns nothing about it. In other words, Bob’s apriori knowledge about whether Alice has item $z$, where $z$ is not in the intersection, is not affected by the execution of the protocol.</p>
+<p>For example, the following solution is not private: Alice sends $A$ to Bob, Bob computes $A\cap B$ and sends the result to Alice. This is not private because Bob learns that Alice has item $a_j$ even if $a_j\notin A\cap B$.</p>
+<p>Another problematic solution would be: Alice and Bob agree on some cryptographic hash function $H$. Alice computes $\hat A=H(a_1),\ldots,H(a_n)$ and Bob computes $\hat B=H(b_1),\ldots,H(b_n)$. In addition, for each $b_i$ Bob stores the entry $D_B[H(b_i)]=b_i$ in a dictionary $D_B$. Then, Alice sends $\hat A$ to Bob, who computes $\hat A \cap \hat B$. For every item $c\in \hat A \cap \hat B$ Bob outputs $D_B[c]$ as the intersection.</p>
+<p>In general this is not a private solution since if the items of the parties are from a small space (e.g. phone numbers and SSN) then Bob may launch a brute force attack to learn all of Alice’s items. Specifically, if the space of all possible items is $S$ and it is of size $N$, then Bob can compute $\hat S=H(s_1),\ldots,H(s_N)$ and store $D_B[H(s_i)]=s_i$ for every $i=1,\ldots,N$. Then, for every item $\hat a_i\in \hat A$ that Bob receives from Alice it computes $D_B[\hat a_i]$ to learn $a_i$. That is, Bob learns all Alice’s items, regardless of whether they are in the intersection or not.</p>
+<h3 id="is-psi-an-important-problem">Is PSI an important problem?</h3>
+<p>The answer is yes, it finds applications in many areas.</p>
+<p><strong>An example</strong>.
+Suppose you sequenced your DNA and obtained a set of genes $A=a_1,\ldots,a_n$. You want to find the risk of having a complex disease in the future. To this end, you use the service of a research institute, which found a set of genes, $B=b_1,\ldots,b_m$, that increase the risk for complex diseases. Say that having the gene $b_i$ in your sequence increases the risk by a constant $1/c$. You don’t want to reveal to the institue your set of genes (since it is a highly personal and sensitive information) and the institute does not want to reveal its findings. Then, you conduct a PSI protocol with the institute, obtain $A\cap B$ and conclude that your risk is $|A\cap B|/cm$. In fact, there are variants of PSI protocols that reveal to you (and to the institute) $|A\cap B|$ only (rather than the set itself); such variants are called PSI-Cardinality.</p>
+<p><strong>Other applications</strong>:</p>
+<ul>
+ <li>Contact discovery (see <a href="https://eprint.iacr.org/2018/579.pdf">this</a> and references within)</li>
+ <li>Remote diagnostic (see <a href="https://www.cs.cornell.edu/~shmat/shmat_ccs07.pdf">this</a>)</li>
+ <li>Record linkage (see <a href="https://arxiv.org/pdf/1702.00535.pdf">this</a>)</li>
+ <li>Measuring the effectiveness of online advertising (see <a href="https://eprint.iacr.org/2017/738.pdf">this</a>)</li>
+ <li>and many more…</li>
+</ul>
+<p>Providing a comprehensive set of applications of PSI is worth a separate blog post, will do that soon!</p>
+<h3 id="what-are-the-rules-what-can-we-use-when-designing-a-psi-protocol">What are the rules? What can we use when designing a PSI protocol?</h3>
+<p>As in any problem in secure computation, we can design a protocol that involves a trusted third party (TTP), called Steve, to which Alice and Bob send $A$ and $B$ respectively. Then Steve computes the set $A\cap B$ and sends it back to Alice and Bob. Such a protocol is not acceptable as Alice and Bob want to avoid the disclosure of their items to anyone. They are willing to reveal $A\cap B$ to each other only.</p>
+<p>In addition, Alice and Bob do not want to rely on a hardware solution like SGX or any other trusted execution environment (TEE).</p>
+<p>They do, however, agree to use the service of an <strong>untrusted</strong> third party:</p>
+<h2 id="psi-with-an-untrusted-third-party-also-known-as-server-aided-psi">PSI with an untrusted third party (also known as “server aided PSI”)</h2>
+<p>In this setting there is an additional party, called Steve again, with which Alice and Bob interact. But the privacy requirement remains: <strong>Steve should not learn information about the items of Alice and Bob</strong>.</p>
+<p>In this model we assume <strong>no collusion</strong>, meaning that Alice and Steve do not collude in order to fool Bob (i.e. make Bob conclude the intersection has more/less items than it really has) nor to break Bob’s privacy (i.e. revealing information about Bob’s items). Bob and Steve do not collude as well.</p>
+<p>(It is possible to design a protocol that does not require a third party at all, not even an untrusted one. We’ll keep this to a future post).</p>
+<h2 id="the-protocol">The protocol</h2>
+<p>We are going to use following ingredient:</p>
+<p><strong><em>Pseudorandom function (PRF)</em></strong> - a function $F$ over two arguments, a key $K$ and an input $X$, outputs $Y$. $F$ is pseudorandom if for every $X$, the output $Y=F(K,X)$ looks random to someone who does not know the key $K$.</p>
+<p>Now, the protocol proceeds as follows:</p>
+<ol>
+ <li>Alice has $A={a_1,\ldots,a_n}$, Bob has $B={b_1,\ldots,b_n}$.</li>
+ <li>Alice, Bob and Steve agree on a PRF $F$ they are going to use.</li>
+ <li>Alice and Bob agree on a key $K$ for $F$. This key remains secret to Steve.</li>
+ <li>For each $i=1,\ldots,n$, Alice sends $\hat a_i=F(K,a_i)$ to Steve. Alice also stores $D_A[\hat a_i]=a_i$.</li>
+ <li>For each $i=1,\ldots,n$, Bob sends $\hat b_i=F(K,b_i)$ to Steve. Bob also stores $D_B[\hat b_i]=b_i$.</li>
+ <li>Steve computes $\hat A\cap \hat B$, namely, the intersection between ${\hat a_1,\ldots,\hat a_n}$ and ${\hat b_1,\ldots,\hat b_n}$ and sends $\hat A\cap \hat B$ to Alice and Bob.</li>
+ <li>Let $\hat A\cap \hat B=(c_1,\ldots,c_m)$.</li>
+ <li>For each $i=1,\ldots,m$, Alice (resp. Bob) outputs $D_A[c_i]$ (resp. $D_B[c_i]$) as the intersection.</li>
+</ol>
+<h2 id="is-the-protocol-private">Is the protocol private?</h2>
+<p>The only information leaked to Steve is the number of items Alice and Bob originally have and the size of the intersection, $|A\cap B|$. But let’s assume this is acceptable (for now).</p>
+<p>Steve does not learn anything about the <em>value</em> of the items (neither those in the intersection nor the rest) because all he sees are outputs of $F$, and these look random to him, since he doesn’t know $K$.</p>
+<p>Alice learns only what items are in the intersection and nothing more, since Steve doesn’t sends her $\hat b_j$ that are not in $\hat A\cap \hat B$.</p>
+<h2 id="is-the-protocol-secure">Is the protocol secure?</h2>
+<p>It depends, if we assume that Steve follows the protocol faithfully then yes. If we suspect Steve tries to cheat (i.e. fool Alice and Bob to conclude with a wrong intersection) then no, the protocol is not secure.</p>
+<h3 id="steve-may-cheat-1">Steve may cheat (1)</h3>
+<p>Steve may send Alice and Bob a different set of values, even values that are not in the intersection.</p>
+<p><strong>Example:</strong>
+Let $A={a_1,a_2,a_3,a_4,a_5}$ and $B={b_1,b_2,b_3,b_4,b_5}$ such that $a_1=b_1$ and $a_2=b_2$ and $A\cap B={a_1,a_2}={b_1,b_2}$. Then Steve receives $\hat A={\hat a_1,\hat a_2,\hat a_3,\hat a_4,\hat a_5}$ from Alice and $\hat B={\hat b_1,\hat b_2,\hat b_3,\hat b_4,\hat b_5}$ from Bob.</p>
+<p>Steve may send ${\hat a_1,\hat a_2,\hat a_3}$ back to Alice and ${\hat b_3, \hat b_4}$ back to Bob so Alice outputs $a_1, a_2, a_3$ and Bob outputs $b_3,b_4$ as the intersection. This way, not only Alice and Bob do not agree on the result, they output incorrect results, specifically none of $a_3, b_3$ and $b_4$ are in the intersection.</p>
+<p><strong>A solution by equality test.</strong>
+Fortunately, this cheat can be detected by Alice and Bob as follows: Alice and Bob will sort the items that they are about to output as the intersection and compute a hash on that set. Then, they will verify that they obtained the same hash value, this could be done by Alice sending the hash value to Bob, or in a safer way, by running a private equality test (PET) protocol on their results.</p>
+<h3 id="steve-may-cheat-2">Steve may cheat (2)</h3>
+<p>The above verification that the two output sets are the same is not sufficient. Specifically, Steve may send the same set to both Alice and Bob and still result in an incorrect output. For example, Steve may send the value $\hat a_1$, alone, to the parties, by which they output only $a_1$ as the intersection (instead of ${a_1,a_2}$).</p>
+<p>In general, Steve could claim that the intersection is smaller than it really is.</p>
+<h2 id="how-to-detect-cheating">How to detect cheating?</h2>
+<p>We will show 2 different ways to detect the above cheating strategy:</p>
+<h2 id="redundancy-based-proof-based-on-kmrs14">Redundancy-based proof (based on <a href="https://fc14.ifca.ai/papers/fc14_submission_52.pdf">[KMRS14]</a>)</h2>
+<p>This is based on a work by Seny Kamara, Payman Mohassel, Mariana Raykova and Saeed Sadeghian.</p>
+<p>The idea is this, choose some redundancy parameter $t$, now Alice, instead of sending to Steve only $\hat{a}_i=F(K,a_i)$ (for all $i$), she will send $t$ values $\hat a^1_i, \hat a^2_i,\ldots,\hat a^t_i$ where $\hat a^j_i=F(K,a_i||j)$ (the term $a_i||j$ means a concatenation of values $\hat a_i$ and $j$). 
+In addition, Alice stores $D_A[\hat a^j_i]=a_i$ for every $j=1,\ldots,t$.
+Bob will do the same, for every $i=1,\ldots, n$ he sends $\hat b^1_i, \hat b^2_i,\ldots, \hat b^t_i$ where $\hat b^j_i=F(K,b_i||j)$. In addition, Bob stores $D_B[\hat b^j_i]=b_i$ for every $j=1,\ldots,t$.</p>
+<p>But now, it is important that before Alice and Bob send $\hat A$ and $\hat B$ to Steve, they will shuffle them. This is in order to prevent a linkage between the $t$ PRF’s results (e.g. $\hat a^1_i, \hat a^2_i,\ldots,\hat a^t_i$) that actually refer to the same original item (e.g. $a_i$).</p>
+<p>Steve receives $n\cdot t$ values in total from Alice and from Bob. Obviously, if $|A\cap B|=q$ then now Steve finds that $|\hat A\cap \hat B|=q\cdot t$ because each value appears $t$ times.</p>
+<p>When Alice and Bob receive the list $\hat A\cap \hat B$ from Steve, they will check that each item appears $t$ times. That is, Alice will check that for each item $x$ in the intersection there are exactly $t$ values $c_1,\ldots,c_t$ such that $D_A[c_i]=x$. If that doesn’t hold then Alice conclude that either Steve is cheating or Bob is cheating.</p>
+<p>Now, suppose Steve wants to omit one value, say $a_i$, from the intersection, he will have to omit $t$ values $\hat a^1_i, \hat a^2_i,\ldots,\hat a^t_i$, but those are spread randomly all over the list $\hat A$ so he could not tell (except with small probability) where they are.</p>
+<p>Take our concrete example above and fix $t=3$, Steve receives $n\cdot t=5\cdot 3=15$ values from Alice and from Bob. If Steve wants to omit $a_1$ from the result intersection then it has to find the 3 values associated with $a_1$, that is, the values $\hat a^1_1, \hat a^2_1$ and $\hat a^3_1$. Since the set $\hat A$ is randomly shuffled, the probability of guessing correctly is $\binom{5}{3}^{-1}=1/10$. In general, the probability to remove a specific value from the intersection would be $\binom{n}{t}^{-1}$.</p>
+<h3 id="are-we-done">Are we done?</h3>
+<p>No. There are two edge cases:</p>
+<ol>
+ <li>Steve can omit <em>all</em> values from the intersection and simply give back an empty list to Alice and Bob.</li>
+ <li>Steve can send back to Alice her <em>entire list</em> $\hat A$ and to Bob his <em>entire list</em> $\hat B$. However, recall that we have already treated this case. This is considered as cheating only if $\hat A\neq \hat B$, which is covered by the equality test performed by Alice and Bob after receiving the result.</li>
+</ol>
+<p>To solve the first case, Alice and Bob agree on a set of $s$ values $E={e_1,\ldots,e_s}$ such that both Alice and Bob take $E$ as part of their input sets. So now instead of computing the intersection $A\cap B$, they will compute the intersection $(A\cup E)\cap (B\cup E)$ which has at least $s$ items. This way, Bob could not return an empty set.</p>
+<h2 id="polynomial-based-proof-based-on-lrg19">Polynomial-based proof (based on <a href="https://eprint.iacr.org/2019/1338.pdf">[LRG19]</a>)</h2>
+<p>Phi Hung Le, Samuel Ranellucci and Dov Gordon proposed a different approach for solving the above cheating potential by Steve without the need for redunduncy. In their solution, Steve sends back to Alice and Bob the intersection $\hat A\cap \hat B$ as described above. In addition, if $|\hat A\cap \hat B|=k$, then Steve also proves to Alice and Bob that (1) there are at least $2n-k$ values in the union $A\cup B$ (which implies there are at most $k$ values in the intersection) and that (2) there are at least $k$ values in the intersection. Since the intersection and union sizes complete each other to a sum of $2n$, these two proofs are sufficient for convincing Alice and Bob that Steve does not cheat.</p>
+<p>For more details see <a href="https://decentralizedthoughts.github.io/2020-07-26-private-set-intersection-2/">the next post</a> in the series.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#cryptography">cryptography</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Private+Set+Intersection&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2020-03-29-private-set-intersection-a-soft-introduction%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2020-03-03-range-proofs-from-polynomial-commitments-reexplained/" data-toggle="tooltip" data-placement="top" title="Range Proofs from Polynomial Commitments, Re-explained">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2020-04-02-bilinear-accumulators-for-cryptocurrency/" data-toggle="tooltip" data-placement="top" title="Bilinear Accumulators for Cryptocurrency Enthusiasts">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

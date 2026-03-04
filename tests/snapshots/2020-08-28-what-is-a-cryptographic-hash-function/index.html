@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>What is a Cryptographic Hash Function?</title>
+ 
+ 
+ <meta name="author" content="Alin Tomescu">
+ 
+ <meta name="description" content="If you ever tried to understand Bitcoin, you’ve probably banged your head against the wall trying to understand what is a cryptographic hash function? The goal of this post is to: Give you a very simple mental model for how hash functions work, called the random oracle model Give you three key applications of hash functions: Downloading files over the internet The proof-of-work at the core of Bitcoin Commitments and...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="What is a Cryptographic Hash Function?">
+ <meta property="og:description" content="If you ever tried to understand Bitcoin, you’ve probably banged your head against the wall trying to understand what is a cryptographic hash function? The goal of this post is to: Give you a very simple mental model for how hash functions work, called the random oracle model Give you three key applications of hash functions: Downloading files over the internet The proof-of-work at the core of Bitcoin Commitments and...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Alin Tomescu">
+ 
+ <meta property="og:article:published_time" content="2020-08-28T13:05:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2020-08-28-what-is-a-cryptographic-hash-function/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2020-08-28-what-is-a-cryptographic-hash-function/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="What is a Cryptographic Hash Function?">
+ <meta property="twitter:description" content="If you ever tried to understand Bitcoin, you’ve probably banged your head against the wall trying to understand what is a cryptographic hash function? The goal of this post is to: Give you a very simple mental model for how hash functions work, called the random oracle model Give you three key applications of hash functions: Downloading files over the internet The proof-of-work at the core of Bitcoin Commitments and...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>What is a Cryptographic Hash Function?</h1>
+ 
+ 
+ 
+ 
+ By <strong>Alin Tomescu</strong><br>
+ 
+ <span class="post-meta">Posted on August 28, 2020</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>If you ever tried to understand Bitcoin, you’ve probably banged your head against the wall trying to understand what is a <strong>cryptographic hash function</strong>?
+The goal of this post is to:</p>
+<ol>
+ <li>Give you a very simple mental model for how hash functions work, called the <em>random oracle model</em></li>
+ <li>Give you three key applications of hash functions:
+ <ul>
+ <li>Downloading files over the internet</li>
+ <li>The proof-of-work at the core of Bitcoin</li>
+ <li>Commitments and coin flipping</li>
+ </ul>
+ </li>
+</ol>
+<p>We’ll refer to cryptographic hash functions simply as “hash functions” in this post.</p>
+<h2 id="what-this-post-is-not">What this post is NOT</h2>
+<p>This post will <strong>NOT</strong> explain to you how a concrete hash function like SHA256 works.
+Explaining the internals of SHA256 (or any other hash function) would be like explaining to a new driver how the engine of a car works before teaching them how to drive it: most people would get bored fast and lose interest.</p>
+<p>Also, this post will <strong>NOT</strong> explain to you how Bitcoin works, nor how its proof-of-work consensus works!
+Instead, we’ll explain the proof-of-work scheme itself, which is a core component of Bitcoin and its consensus algorithm.
+(For that, you could go <a href="/2019-11-29-Analysis-Nakamoto/">here</a>.)</p>
+<p>Finally, this post is in no way a formal treatment of hash functions and their many interesting properties.
+At the same time, this post tries not to oversimplify hash functions either.
+Our hope is that, by the end of the post, you’ll be curious enough to dig deeper into hash functions yourself.
+(As a starting point, use the references at the end<sup id="fnref:BR93" role="doc-noteref"><a href="#fn:BR93" class="footnote" rel="footnote">1</a></sup>$^,$<sup id="fnref:KL15" role="doc-noteref"><a href="#fn:KL15" class="footnote" rel="footnote">2</a></sup>$^,$<sup id="fnref:KM15" role="doc-noteref"><a href="#fn:KM15" class="footnote" rel="footnote">3</a></sup>$^,$<sup id="fnref:RS04" role="doc-noteref"><a href="#fn:RS04" class="footnote" rel="footnote">4</a></sup>$^,$<sup id="fnref:CGH98" role="doc-noteref"><a href="#fn:CGH98" class="footnote" rel="footnote">5</a></sup>.)</p>
+<h2 id="a-hash-function-is-a-guy-in-the-sky-flipping-coins">A hash function is a “guy in the sky,” flipping coins</h2>
+<p>My favorite analogy for how a hash function works is the <strong>“guy in the sky”</strong> analogy<sup id="fnref:gal" role="doc-noteref"><a href="#fn:gal" class="footnote" rel="footnote">6</a></sup>, as illustrated below.</p>
+<p><img src="/uploads/guy-in-the-sky.png" alt="guy-in-the-sky" /></p>
+<!--
+You should think of a hash function as a **box**.
+This box takes an **input** of arbitrary size.
+In simpler words, you feed _data_ into this box: i.e., bits, bytes, files, videos, pictures, PDFs, etc.
+Then, the box gives you a _random_ **output** of _fixed_ size.
+Specifically, it outputs 256 "random" _bits_: i.e., a sequence of ones and zeros.
+"Random" means that every bit in this sequence has a 50% chance of being a one and 50% chance of being a zero.
+Most importantly, the box "remembers" the output it gave for every input.
+In other words, if you feed the box twice with the same picture, it will give you the same output both times, rather than picking a new sequence of 256 random bits for the second time.
+-->
+<p>Here’s the analogy.
+There’s a “guy in the sky.”
+You can give him an arbitrarily-sized input $x$.
+In return, he’ll give you a fixed-size, “random looking” output $y$ back.
+<em>Super-importantly</em>, if you ever give him $x$ again, he’ll give you that same $y$ back!
+How does he do it?</p>
+<p>When he gets your input $x$, he initially ignores it!
+Then, he flips 256 coins, getting a sequence of 256 random bits (i.e., ones and zeros), denoted by $y=\langle y_1, y_2, \dots, y_{256}\rangle$.
+Next, he forever remembers that your input $x$ maps to output $y$ by writing down $(x,y)$ in his magic scroll.
+This way, if you ever give this “guy in the sky” the same input $x$, he will give you back the same output $y$ (rather than flip new coins and give you a new random 256-bit output $y’\ne y$).</p>
+<p><strong>That’s it!</strong>
+The simplest way you can think of a hash function is as a “guy in the sky” who flips coins for each input you give him, remembering what coins he got for every input you gave him, just in case you give him that input again.
+Since inputs are arbitrarily-sized and outputs are fixed-size, a hash function effectively “compresses” the input.
+However, the key insight you should keep in mind is that this “compression” is done by picking the output randomly, which has many interesting implications!
+(Well, the devil is in the details, but for now this intuition is good enough.)</p>
+<h2 id="a-hash-function-is-a-random-oracle">A hash function is a “random oracle”</h2>
+<p>Now, let’s take a step away from mythical creatures in the sky and a step closer towards formalizing hash functions.</p>
+<p>What we are saying is that a hash function is a kind of “algorithm” or “oracle” that “compresses” inputs to outputs as follows:</p>
+<ol>
+ <li>You give it an arbitrarily-sized input.</li>
+ <li>It checks if it already generated 256 random bits for that input.
+ <ul>
+ <li>If so, it gives you those 256 random bits as output.</li>
+ <li>If not, it flips 256 random coins, associates them to this input, and gives you the coins as output.</li>
+ </ul>
+ </li>
+</ol>
+<p>This idealization of hash functions is called the <em>random oracle model</em><sup id="fnref:BR93:1" role="doc-noteref"><a href="#fn:BR93" class="footnote" rel="footnote">1</a></sup>.
+Simple enough, no?
+Get an input, flip some coins for it (unless already done so in the past) and return those coins!</p>
+<h3 id="limitations-of-the-random-oracle-model">Limitations of the random oracle model</h3>
+<p>It turns out the random oracle model is incredibly useful to reason about the properties of hash functions.
+It’s also a very simple mental model for how a hash function works!</p>
+<p>Of course, in practice, we need to actually build an algorithm that behaves like this “guy in the sky” or this random oracle.
+Unfortunately, this is <a href="https://en.wikipedia.org/wiki/Random_oracle#Limitations">impossible</a>.</p>
+<p>Kthxbye, end of post!</p>
+<p>Just kidding.
+Fortunately, in practice, we can circumvent this impossibility in a few ways.
+For example, in some applications, we settle for hash functions whose outputs are not random but have other useful properties that are implied by the random oracle model.
+One such property is <strong>collision-resistance</strong>, which says it is infeasible to find two inputs $x\ne x’$ such that their outputs $y$ and $y’$ are equal.
+(We’ll touch upon this later.)
+In other applications, cryptographers simply “hope” that replacing the idealized random oracle with a concrete hash function like SHA256 will not lead to security breaks in practice.</p>
+<p class="box-warning"><strong>Note:</strong> There is reason to be skeptical of such hope.
+We know that, for certain cryptosystems proven secure with a random oracle, replacing the random oracle with <em>any</em> concrete hash function makes them insecure<sup id="fnref:CGH98:1" role="doc-noteref"><a href="#fn:CGH98" class="footnote" rel="footnote">5</a></sup>.</p>
+<h2 id="hash-functions-as-mathematical-functions">Hash functions as mathematical functions</h2>
+<p>We’ve established that a hash function can be thought of as a random oracle that, given some input $x\in \{0,1\}^*$ (i.e., an arbitrarily-sized sequence of bits) returns a “random,” fixed-size output $y\in \{0,1\}^{256}$ (i.e., 256 bits) and will always return that same $y$ given that same $x$ as input.
+(We assume the output size is 256 bits. We’ll explain later why.)</p>
+<p>Formally, we can define a hash function as a <a href="https://en.wikipedia.org/wiki/Function_(mathematics)">mathematical function</a> $H : \{0,1\}^* \mapsto \{0,1\}^{256}$.
+We use $H(x) = y$ to denote that $y$ is the output of $H$ on input $x$.</p>
+<h3 id="collision-resistance-and-the-pigeonhole-principle">Collision-resistance and the pigeonhole principle</h3>
+<p>This definition brings one limitation of hash functions into light, which is worth discussing now.</p>
+<p>Note that a hash function maps the set of all arbitrarily-sized binary strings (which is of infinite size) to the set of binary strings of length 256 (which is of size $2^{256}$).
+For the mathematically-inclined, the <a href="https://en.wikipedia.org/wiki/Pigeonhole_principle">“pigeonhole principle”</a> immediately tells us that, as a consequence, there must exist two inputs $x\ne x’$ such that $H(x)=H(x’)$.
+Such a pair $(x,x’)$ is called a <strong>collision</strong> and can be disastrous in many applications of hash functions, as we’ll discuss later.</p>
+<p class="box-note"><em>For the less mathematically-inclined:</em> It’s as if we have an infinite amount of puppies and $2^{256}$ people who want to pet them. This tells us that, if all puppies are to be petted by someone, then someone has to pet more than one puppy!
+In other words, there will be two puppies $x$ and $x’$ that are petted by the same person $y$<sup id="fnref:bliss" role="doc-noteref"><a href="#fn:bliss" class="footnote" rel="footnote">7</a></sup>$^,$<sup id="fnref:ppp" role="doc-noteref"><a href="#fn:ppp" class="footnote" rel="footnote">8</a></sup>.</p>
+<p>Restated formally, because the <em>domain</em> $\{0,1\}^*$ of $H$ is larger than the <em>range</em> $\{0,1\}^{256}$ of $H$, there must exist two inputs $x\ne x’$ that map to the same output $y=H(x)=H(x’)$.</p>
+<p>Fortunately, in the random oracle model, one can show that finding such a collision is infeasible, requiring on average $2^{128}$ hash function invocations, which is an astronomical number that is outside the realm of practicality.
+(We’ll describe this collision-finding algorithm, which is called the <em>birthday attack</em>, in another post.)
+Even better, as cryptographers, we know how to construct <strong>collision-resistant</strong> hash functions from hard computational problems such as <em>computing discrete logarithms</em>.</p>
+<h2 id="what-can-i-do-with-a-hash-function">What can I do with a hash function?</h2>
+<p>By now, you know that a hash function “compresses” an arbitrarily-large input to a fixed-size output, which is uniquely determined by flipping some coins.
+Next, let’s see what a hash function is useful for.</p>
+<h3 id="downloading-files-correctly-over-the-internet">Downloading files correctly over the Internet</h3>
+<!--
+CR holds => TCR holds => (+compression) => OW holds
+q-SBDH holds => q-SDH holds => DL holds
+-->
+<p>Did you ever notice how sometimes websites display a hash next to a file after you click the download button?
+For example, this is what you see if you try to download Apache OpenOffice:</p>
+<p><img src="/uploads/download-hash.png" width="720" /></p>
+<p>What is this all about?
+It’s about preventing attackers from modifying the files you’re downloading!</p>
+<p>The Apache OpenOffice installer is a large, frequently-downloaded file.
+As a result, instead of being hosted on the Apache website itself, it might be hosted on external, <em>insecure</em> FTP or HTTP servers (which might be cheaper and/or faster to download from).
+However, since FTP and HTTP channels are not secure, this means that when a user downloads the file, an attacker might maliciously modify it!
+For example, he might replace the file with a virus.</p>
+<p>To deal with such attacks, the <em>secure</em> Apache website allows the user to first download the hash $h$ of the OpenOffice installer file $f$.
+In other words, the user can correctly obtain $h=H(f)$.
+Note that the attacker cannot maliciously modify the hash $h$, since the Apache website uses HTTPS.
+This way, the user is guaranteed to have the correct hash $h$ of the installer $f$ they are trying to download.</p>
+<p>Next, the user can download the installer file $f$ over the insecure FTP or HTTP channel.
+However, the attacker might replace $f$ with $f’$ by tampering with the channel.
+Fortunately, the user can easily check that $H(f’) \ne h$, so they can detect the attack.</p>
+<p>But what if the user downloads $f’$ with $H(f’) = h$?
+In other words, can the attacker come up with a file $f’\ne f$ but with $H(f’) = H(f) = h$?
+This would trick the user into downloading the wrong file $f’$!
+The short answer is “no:” since the hash function is collision resistant, the user can be certain that $f’ = f$, so he downloaded the file he intended to.
+We explain why below.</p>
+<h4 id="why-the-adversary-cant-replace-f-with-a-different-file-f">Why the adversary can’t replace $f$ with a different file $f’$</h4>
+<p>The adversary’s goal is to trick the user, who has the hash $h$, and give him a different file $f’\ne f$ such that $H(f’)=H(f)$.
+Let’s see why he can’t do this.</p>
+<p>If we think of $H$ as a random oracle, what can the adversary do to find such an $f’$?
+The adversary can only query $H$ at whatever points he might think will return $H(f)$.
+But since the random oracle $H$ returns random coin flips for whatever input the adversary provides, this means the adversary has no particular strategy other than brute-force for finding an $f’$ with $H(f’)=H(f)$.</p>
+<p>With a little probability theory, one can show that the adversary has to query $H$ around $2^{256}$ times to actually find such an $f’$.
+Since this is outside the realm of practicality, our file downloading scheme is considered secure!</p>
+<p class="box-note"><strong>Remark:</strong> In the attack above, the attacker is trying to find a collision $f’$ w.r.t. a particular <em>fixed</em> file $f$.
+However, depending on the application, the attacker might have more “freedom.”
+Specifically, the attacker could try and find <em>any</em> collision $(f,f’)$ in the hash function.
+This would take him a smaller, but still astronomical, amount of time: $2^{128}$ rather than $2^{256}$ hash function invocations.
+If the attacker is successful, he could trick users who have the same $h$ into downloading different files.
+(As an exercise, try and think of application scenarios where that might be problematic!)</p>
+<h3 id="proof-of-work">Proof of work</h3>
+<p>Suppose you want to convince me you’ve done some amount of computational work.
+Specifically, let’s assume you want to convince me you’ve computed roughly $n$ <em>different</em> hashes by calling $H$ on $n$ <em>different</em> inputs.
+Such a protocol is called a <strong>proof of work</strong> and you can leverage the random oracle nature of hash functions to implement it!</p>
+<h4 id="an-inefficient-protocol">An inefficient protocol</h4>
+<p>Note that if I send you a random value $r$, and you give me back $y=H(r)$, I can check that you computed $H(r)$ correctly by recomputing it myself.
+But it seems like in order to check that you’ve computed $n$ hashes, I have to give you $n$ different $r$’s and re-compute the $n$ hashes you computed too.
+While this protocol could be thought of as a “proof-of-work,” it’s not very efficient for me to check that you’ve done the work.
+Can I verify your work faster?</p>
+<h4 id="an-efficient-probabilistic-protocol">An efficient, probabilistic protocol</h4>
+<p>Let’s come up with a more efficient protocol for convincing me you’ve computed <em>roughly</em> $n=2^k$ different hashes.
+Here $k$ can be very large (e.g., $k=60$), since my goal is to really make sure you take a long time to compute these $n=2^k=2^{60}$ hashes.
+This protocol is <em>probabilistic</em> in the sense that, with very small probability, you might trick me into thinking you’ve computed $n$ hashes when in fact you’ve computed much fewer.
+(In contrast, in the inefficient protocol, I was always certain you computed <em>exactly</em> $n$ different hashes.)
+The probabilistic nature is not a big deal in certain applications (e.g., Bitcoin), so we accept it.</p>
+<p>First, some intuition!</p>
+<p>Since $H$ can be viewed as a random oracle, we know that a hash $H(r)$ is obtained by flipping 256 random coins.
+For the mathematically-inclined, we also know that, if we want the first $k=60$ coins flips to be all “heads”, then we have to flip these 256 random coins around $2^{60}$ times.
+For the less mathematically-inclined, if you have 1 in 3 chances to win a teddy bear in a game, you kind of know that if you play around 3 times you’re likely to win.
+Similarly, there are 1 in $2^{60}$ chances for the first $k=60$ coins to be all “heads”, which is why you have to flip the coins around $2^{60}$ times.</p>
+<p>So, it takes $2^{60}$ tries to get 256 random coins where the first $60$ coins all heads.
+That’s like saying it takes around $2^{60}$ hash computations to get a hash whose first $60$ bits are equal to zero!</p>
+<p>That’s starting to look like a proof of work!</p>
+<p>In other words, say I give you a random value $r$ and you give me a pair $\langle i, h_i = H(i \mid r)\rangle$, where $h_i$ has the first $k=60$ bits all set to zero and $|$ denotes concatenation.
+Then, I can easily check that $h_i = H(i \mid r)$ using only <em>one</em> hash computation and I’ll be pretty sure that it took you around $n=2^k=2^{60}$ hash computations to find such an $i$.
+I say “pretty sure” because it’s also possible you got very lucky and the first $i$ you picked happened to give you an $H(i \mid r)$ with the first $k=60$ bits zero.
+(But the probability of that happening is pretty low, around $1/2^{60}$.)</p>
+<h4 id="why-you-cant-easily-trick-me-when-you-havent-done-the-work">Why you can’t easily trick me when you haven’t done the work</h4>
+<p>Your goal, as the adversary, is to find an $i$ such that $h_i = H(i \mid r)$ has $k$ leading zeros, but you want to do so while computing much fewer than $2^k$ hashes.</p>
+<p>Once again, since $H$ is a random oracle, your only strategy is to simply query $H$ at inputs of the form $i\mid r$.
+Each query gives you an output $h_i$ whose probability of having $k$ leading zeros is $1/2^k$.
+As a result, to ensure you get such an $h_i$ you have to “try” computing different $h_i$’s around $2^k$ times (for those who are into probability theory, this <em>around</em> is essentially <em>concentration of measure</em>).</p>
+<p class="box-note">Why is the probability of a hash having $k$ leading zeros equal to $1/2^k$?
+Because $H$ is a random oracle and each bit of the output has probability $1/2$ of being a zero and $1/2$ of being a one!
+As a consequence, the probability that you get $k$ consecutive zeros is $\underbrace{1/2 \cdot 1/2 \cdot \cdots \cdot 1/2}_{k\ \text{times}}=(1/2)^k = 1/2^k$.</p>
+<h3 id="commitments-and-coin-flipping">Commitments and coin flipping</h3>
+<p>Suppose you and your friend are trying to decide whether you should go to the beach or not.
+You want to swim, so you say “beach!” but your friend is not too excited about the hot summer days, so they say “no beach!”
+Obviously, one thing you could do is end the friendship immediately.
+But as a middle ground, you propose flipping a coin to decide!
+Unfortunately, your friend is far away, so you have to do this remotely.
+How might you two do this without any shenanigans?</p>
+<p>If you flip the coin and tell the outcome to your friend, you might as well lie and tell them the outcome was “beach!”
+However, your friend is smart and they wouldn’t believe you.
+Similarly, why would you believe them if they flipped a coin and told you the outcome?</p>
+<h4 id="flip-your-coin-and-lock-it-away">Flip your coin and lock it away!</h4>
+<p>One possible solution is for both of you to flip your own coin and then combine your two coins (somehow) into a flipped coin that is <em>“fair”</em>: each coin side has $1/2$ chance of occurring.
+As an (impractical) example, you could flip your own coin, write the result on a piece of paper and put it in a <em>locked box</em>.
+Your friend would do the same using their own coin and <em>locked box</em>.
+Think of the locked box as a <em>commitment</em>: it hides the outcome of the coin flip while binding you to it, since you can’t change your mind about it once you’ve given the locked box to your friend.
+To reveal your coin flip, you would give your friend the key to the box.
+They would do the same for you.
+(We simplify and assume both of you always give each other the keys!)</p>
+<p>Now, both of you will have two coin flip outcomes, which you can combine to simulate a “joint” coin flip as follows.
+If both coins are “heads” or “tails”, the joint coin is “heads” or “tails,” respectively.
+If one of the coin is “tails” but the other is “head”, the joint coin is “tails.”
+This “joint” coin will be “fair” as long as one of you flipped their coins fairly.</p>
+<h4 id="committing-to-your-coin-flips">Committing to your coin flips</h4>
+<p>The remaining question is how can we build such a <strong>commitment scheme</strong> that <strong>hides</strong> the coin flip and <strong>binds</strong> you to it.
+Note that if we simply hash the coin outcome as, say, $h = H(\text{“heads”})$ and let $h$ be the commitment, then this is <strong>not</strong> hiding.
+Specifically, if you give your friend the hash $h$, they can easily check if $h$ is equal to $H(\text{“heads”})$ or to $H(\text{“tails”})$, so they will know your coin flip.
+On the other hand, $h$ is binding since, once you’ve given $h = H(\text{“heads”})$ to your friend, you cannot later pretend that $h = H(\text{“tails”})$, since the probability of that happening is $1/2^{256}$.</p>
+<p>The next observation is we can get hiding by hashing as $h=H(\text{“heads”}\mid r)$ rather than as $h=H(\text{“heads”})$, where $r$ is a random 256-bit string.
+Now, your friend cannot easily check if $h$ is the hash of “heads” or “tails” because they do not know $r$.
+So this scheme hides the coin!
+Furthermore, this scheme remains binding since, to break binding, you would have to find $r_1, r_2$ such that $H(\text{“heads”}\mid r_1) = H(\text{“tails”} \mid r_2)$, which would be a collision in the hash function.
+Fortunately, we know collisions can be found with probability $1/2^{128}$.</p>
+<p class="box-note">The fact that such collisions exist (but are infeasible to find) also hints that the scheme is hiding.
+In other words, existence of collisions implies you can reveal a different coin flip and randomness that has the same hash $h$.
+Therefore, $h$ cannot leak anything about the hashed input.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>I promised this post would give you two things.</p>
+<h3 id="a-very-simple-mental-model-for-how-hash-functions-work">A very simple mental model for how hash functions work</h3>
+<p>A hash function is a <em>random oracle</em>: it takes an arbitrarily-sized input $x$, flips 256 coins $y=\langle y_1, y_2, \dots, y_{256}\rangle$, “remembers” $x\mapsto y$, and from now on always returns $y$ (i.e., 256 bits) on input $x$.</p>
+<h3 id="applications-of-hash-functions">Applications of hash functions</h3>
+<p><em>Download integrity:</em> Users can verify the integrity of a file downloaded over an insecure channel against the file’s hash, which the user is assumed to have (somehow) obtained correctly.</p>
+<p><em>Proof-of-work:</em> You can convince me you’ve computed around $2^k$ hashes by giving me a number $i$ and a hash $h_i = H(i \mid r)$ with $k$ leading zeros, where $r$ is a random 256-bit string I gave you first.</p>
+<p><em>Commitments:</em> You can compute a commitment $h = H(m\mid r)$ to a message $m$ using some randomness $r$ you generated.
+Anybody who receives the commitment $h$ does not learn anything about $m$ until you reveal $r$ to them.
+On the other hand, you cannot reveal a different $m’\ne m$, so you have bound yourself to $m$ by giving $h$ away.
+This is the equivalent of a <em>digital lock box</em> that stores the message $m$ while hiding it until you choose to open the box.
+A key application of commitments are coin-flipping protocols (with some caveats).</p>
+<p><strong>What is next?</strong>
+Next, we hope to give you a formal model of hash functions, introduce you to Merkle hash trees and then reduce Merkle hash tree security to the collision-resistance of hash-functions.</p>
+<p><strong>Acknowledgment.</strong> We would like to thank Ittai Abraham for his help on this post!</p>
+<h2 id="references">References</h2>
+<div class="footnotes" role="doc-endnotes">
+ <ol>
+ <li id="fn:BR93" role="doc-endnote">
+ <p><strong>Random Oracles Are Practical: A Paradigm for Designing Efficient Protocols</strong>, by Bellare, Mihir and Rogaway, Phillip, <em>in Proceedings of the 1st ACM Conference on Computer and Communications Security</em>, 1993, <a href="https://doi.org/10.1145/168588.168596">[URL]</a> <a href="#fnref:BR93" class="reversefootnote" role="doc-backlink">&#8617;</a> <a href="#fnref:BR93:1" class="reversefootnote" role="doc-backlink">&#8617;<sup>2</sup></a></p>
+ </li>
+ <li id="fn:KL15" role="doc-endnote">
+ <p><strong>Introduction to Modern Cryptography</strong>, by Jonathan Katz and Yehuda Lindell, 2007 <a href="#fnref:KL15" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+ </li>
+ <li id="fn:KM15" role="doc-endnote">
+ <p><strong>The Random Oracle Model: A Twenty-Year Retrospective</strong>, by Neal Koblitz and Alfred Menezes, <em>in Cryptology ePrint Archive, Report 2015/140</em>, 2015, <a href="https://eprint.iacr.org/2015/140">[URL]</a> <a href="#fnref:KM15" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+ </li>
+ <li id="fn:RS04" role="doc-endnote">
+ <p><strong>Cryptographic Hash-Function Basics: Definitions, Implications and Separations for Preimage Resistance, Second-Preimage Resistance, and Collision Resistance</strong>, by Phillip Rogaway and Thomas Shrimpton, <em>in Cryptology ePrint Archive, Report 2004/035</em>, 2004, <a href="https://eprint.iacr.org/2004/035">[URL]</a> <a href="#fnref:RS04" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+ </li>
+ <li id="fn:CGH98" role="doc-endnote">
+ <p><strong>The Random Oracle Methodology, Revisited</strong>, by Ran Canetti, Oded Goldreich, Shai Halevi, <em>in Cryptology ePrint Archive, Report 1998/011</em>, 1998, <a href="https://eprint.iacr.org/1998/011">[URL]</a> <a href="#fnref:CGH98" class="reversefootnote" role="doc-backlink">&#8617;</a> <a href="#fnref:CGH98:1" class="reversefootnote" role="doc-backlink">&#8617;<sup>2</sup></a></p>
+ </li>
+ <li id="fn:gal" role="doc-endnote">
+ <p>Obviously, this could’ve been a “gal in the sky” or a “person in the sky,” but “guy in the sky” rhymes better! <a href="#fnref:gal" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+ </li>
+ <li id="fn:bliss" role="doc-endnote">
+ <p>In fact, each person will pet an infinite amount of puppies, which incidentally is the most blissful thing I can imagine right now! <a href="#fnref:bliss" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+ </li>
+ <li id="fn:ppp" role="doc-endnote">
+ <p>Henceforth, everybody shall stop using the Pigenhole Principle and adopt this more modern Puppy Petting Principle, which has the advantage of both filling your heart with joy and your mind with mathematics. <a href="#fnref:ppp" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+ </li>
+ </ol>
+</div>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#cryptography101">cryptography101</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=What+is+a+Cryptographic+Hash+Function%3F&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2020-08-28-what-is-a-cryptographic-hash-function%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2020-07-26-private-set-intersection-2/" data-toggle="tooltip" data-placement="top" title="Private Set Intersection #2">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2020-09-13-synchronous-consensus-omission-faults/" data-toggle="tooltip" data-placement="top" title="Commit-Notify Paradigm for Synchronous Consensus with Omission Faults">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

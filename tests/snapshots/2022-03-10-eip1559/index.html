@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>EIP-1559 In Retrospect</title>
+ 
+ 
+ <meta name="author" content="Yinhong (William) Zhao, Kartik Nayak">
+ 
+ <meta name="description" content="On August 5, 2021, Ethereum implemented Ethereum Improvement Proposal 1559 (EIP-1559) on its mainnet as part of the London Hardfork, which modified the transaction fee mechanism on Ethereum from a first price auction to one that involves blocks of varying sizes, separating transaction fees as history-dependent base fees and tips, and burning of the base fees. How does such a mechanism fare in practice? In a recent work together with...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="EIP-1559 In Retrospect">
+ <meta property="og:description" content="On August 5, 2021, Ethereum implemented Ethereum Improvement Proposal 1559 (EIP-1559) on its mainnet as part of the London Hardfork, which modified the transaction fee mechanism on Ethereum from a first price auction to one that involves blocks of varying sizes, separating transaction fees as history-dependent base fees and tips, and burning of the base fees. How does such a mechanism fare in practice? In a recent work together with...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Yinhong (William) Zhao, Kartik Nayak">
+ 
+ <meta property="og:article:published_time" content="2022-03-10T00:00:00-05:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2022-03-10-eip1559/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2022-03-10-eip1559/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="EIP-1559 In Retrospect">
+ <meta property="twitter:description" content="On August 5, 2021, Ethereum implemented Ethereum Improvement Proposal 1559 (EIP-1559) on its mainnet as part of the London Hardfork, which modified the transaction fee mechanism on Ethereum from a first price auction to one that involves blocks of varying sizes, separating transaction fees as history-dependent base fees and tips, and burning of the base fees. How does such a mechanism fare in practice? In a recent work together with...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>EIP-1559 In Retrospect</h1>
+ 
+ 
+ 
+ 
+ By <strong>Yinhong (William) Zhao, Kartik Nayak</strong><br>
+ 
+ <span class="post-meta">Posted on March 10, 2022</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>On August 5, 2021, Ethereum implemented <em>Ethereum Improvement Proposal 1559</em> (EIP-1559) on its mainnet as part of the London Hardfork, which modified the transaction fee mechanism on Ethereum from a first price auction to one that involves blocks of varying sizes, separating transaction fees as history-dependent base fees and tips, and burning of the base fees. How does such a mechanism fare in practice?</p>
+<p>In a recent <a href="https://arxiv.org/abs/2201.05574">work</a> together with Yuxuan, Luyao, Fan, and Yulin, we analyze this mechanism using rich data from the Ethereum blockchain, mempool, and exchanges. At a high level, we find that EIP-1559 improves the user experience by making fee estimation easier, mitigates the intra-block difference of gas price paid, and reduces users’ waiting times. Moreover, EIP-1559 has only a small effect on gas fee levels and blockchain security. In this post, we will elaborate on these results.</p>
+<h2 id="transaction-fee-mechanism">Transaction Fee Mechanism</h2>
+<p>Public blockchain networks such as Ethereum accept transactions from anyone on the network and add them to the chain. However, processing these transactions and executing the operations requires bandwidth, computation, and memory resources. Moreover, there is a limit to the number of transactions that can be processed. For instance, Ethereum processes about 30 transactions per second. Thus, to efficiently allocate the resources and the space available, blockchains charge a transaction fee through a transaction fee mechanism (TFM).</p>
+<p>Most blockchains adopt the transaction fee mechanism first proposed by Bitcoin. Simply put, this mechanism is a first-price auction where (i) each user bids a transaction fee associated with the transaction, (ii) the miner chooses which transactions to include in the block, and (iii) the miner gets all the transaction fees that users bid in the block.</p>
+<p>However, first-price auction may require users to either overpay transaction fees or have a long waiting time. In particular, in periods of high demand, transaction fees can be volatile due to which it is difficult for users to make the right bid. If we overbid, we end up overpaying. If we bid low, we may experience a long waiting time.</p>
+<h2 id="what-is-eip-1559">What is EIP-1559?</h2>
+<p>EIP-1559 introduces four major changes to the transaction fee mechanism on Ethereum to address some of the concerns with first-price auction.</p>
+<p>First, EIP-1559 changes the requirement from fixed-sized blocks to variable-sized blocks. The block gas limit is doubled from 15 million to 30 million, while the block gas target is still set at 15 million. The following figure shows block gas used before and after EIP-1559.</p>
+<figure>
+<img align="center" src="https://i.imgur.com/CcyXwzQ.png" />
+<figcaption align="center"><b>Figure 1: Each dot represents a block. Before EIP-1559, almost all blocks used 15 million gas; after EIP 1559, block gas used varies between 0-30 million. </b></figcaption>
+</figure>
+<p>Second, EIP-1559 introduces a base fee parameter determined by network conditions. Base fee is the minimum gas price that every transaction must pay, to be included in a block. If the block gas used in a block is greater than the target, the base fee for the next block increases, and vice versa.</p>
+<figure>
+<img align="center" src="https://i.imgur.com/lJURP52.png" />
+<figcaption align="center"><b>Figure 2: Each dot represents a block. There's no base fee before EIP-1559. Afterwards, it with occasional peaks. </b></figcaption>
+</figure>
+<p>Third, the way users bid is modified in a backward-compatible manner. In addition to the required base fee, users can optionally bid two parameters in their transactions, max priority fee per gas (“tip”) and max fee per gas (“cap”). Priority fees per gas are the tips with which users incentivize miners to prioritize their transactions. Max fees are the fee caps users will pay including both base fees and priority fees. Thus, the gas price can be obtained as min(base fee + max priority fee, max fee). The difference between the max fee and the sum of the base fee and priority fee, if any, will be refunded to the user.</p>
+<p>Finally, the base fee is burned, while the priority fee is rewarded to the miners. Before EIP-1559, miners earned all the gas fees in a block. With EIP-1559 implemented, tips are de facto mandatory because miners do not earn the base fee and otherwise they may mine empty blocks.</p>
+<h2 id="our-goal">Our Goal</h2>
+<p>This transaction fee mechanism had been studied by <a href="https://arxiv.org/pdf/2106.01340.pdf">Roughgarden</a> using a game-theoretic analysis. In fact, he pointed out its incentive compatibility for myopic miners. Our goal in this study was to <em>empirically</em> evaluate this mechanism. In particular, we wanted to answer the following three questions:</p>
+<ul>
+ <li>Does EIP-1559 affect the transaction fee dynamics in terms of overall fee level, users’ bidding strategies, and intra-block distribution of fees?</li>
+ <li>Does EIP-1559 affect the distribution of transaction waiting time?</li>
+ <li>Does EIP-1559 affect consensus security, in terms of fork rates, network loads, and Miner Extractable Value (MEV)?</li>
+</ul>
+<h2 id="our-findings">Our Findings</h2>
+<h3 id="does-eip-1559-affect-the-transaction-fee-dynamics">Does EIP-1559 affect the transaction fee dynamics?</h3>
+<p>We observe that EIP-1559 did not lower the transaction fee level itself in our data period, but it enabled easier fee estimation for users. High gas fee is a scalability issue, not a mechanism design issue.</p>
+<p>Before EIP-1559, users paid the entirety of their bids, so they risk overpaying transaction fees if the network condition turns out less congested after they bid. With the new TFM, however, such risks are avoided, because users can set two parameters in their bids: a fee cap and a tip for the miner on top of the base fee. This separation enables a simple yet optimal bidding strategy where users just set the max fee per gas to their intrinsic value for the transaction and set the max priority fee per gas to the marginal cost of miners.</p>
+<figure>
+<img align="center" src="https://i.imgur.com/FDTzpci.png" />
+<figcaption align="center"><b>Figure 3: Max fee bids were usually much higher than the actual gas prices paid. Each dot represents a block. </b></figcaption>
+</figure>
+<figure>
+<img align="center" src="https://i.imgur.com/EwuzmrI.png" />
+<figcaption align="center"><b>Figure 4: Priority fee bids remained at low level in most cases (&lt; 10 Gwei), especially after block number 13.06M. Each dot represents a block.</b></figcaption>
+</figure>
+<p>We observe that the bids users submit after EIP-1559 are consistent with this obvious optimal bid. While the median gas price paid and median max fee bid are volatile and highly correlated to each other, Figure 3 shows that the max fee bids are usually higher than the gas price paid. Meanwhile, Figure 4 shows that the median max priority bid remains at a low level (almost always &lt; 10 Gwei throughout the period and &lt; 3 Gwei after block number 13.06M).</p>
+<p>We also observe that users who adopt EIP-1559 bidding pay a lower fee than those who stick to the legacy bidding.</p>
+<figure>
+<img align="center" src="https://i.imgur.com/JWGMQ14.png" />
+<figcaption align="center"><b>Figure 5: Distributions of median gas prices of a block for legacy transactions and EIP-1559 transactions. The distribution of EIP-1559 transactions is overall to the left of that of legacy transactions, which means that users who adopt EIP-1559 pay a lower gas price.</b></figcaption>
+</figure>
+<h3 id="does-eip-1559-affect-the-distribution-of-transaction-waiting-time">Does EIP-1559 affect the distribution of transaction waiting time?</h3>
+<p>We define waiting time as the difference between the time when we first observe the transaction in mempool and when the transaction is mined. Thus, waiting time determines the latency for committing a transaction, also taking into account the time spent by the transaction in the mempool. We find that waiting time significantly reduces after London Hardfork from ~17 secs to ~10secs, possibly as a result of easier gas price bidding and variable-sized blocks. This benefits both the transactions that adopt the new bid style and the ones that still adopt legacy bidding. Thus, EIP-1559 improved the waiting time for transactions even though not all users have adopted it.</p>
+<figure>
+<img align="center" src="https://i.imgur.com/w2VKwbB.png" />
+<figcaption align="center"><b>Figure 6: Priority fee bids remained at low level in most cases (&lt; 10 Gwei), especially after block number 13.06M. Each dot represents a block.</b></figcaption>
+</figure>
+<h3 id="does-eip-1559-affect-consensus-security">Does EIP-1559 affect consensus security?</h3>
+<p>EIP-1559 changes important consensus parameters such as block size and the incentives of miners and users. To understand its impact on consensus security, we identified three possible avenues through which the EIP might affect consensus:</p>
+<ul>
+ <li>
+ <p><strong>Fork rate.</strong> Larger blocks may take more time to propagate through the network, and as described in a previous <a href="https://decentralizedthoughts.github.io/2021-10-15-Nakamoto-Consensus/">post</a>, this may lead to more forks, have the ability to tolerate fewer adversarial parties, and even possibly affect the safety guarantees of the protocol even when there are no adversaries. Our results show that London Hardfork did increase the block size on average, and consequently also led to about 3% rise in fork rates. Thus, it did negatively impact security, but the extent of the impact is modest.</p>
+ </li>
+ <li>
+ <p><strong>Network load.</strong> Another natural question is whether EIP-1559 significantly affects the amount of computation and storage required to participate in the protocol. Vitalik argued that EIP-1559 will not significantly affect the network load in his <a href="https://notes.ethereum.org/@vbuterin/eip_1559_spikes">post</a> from a year ago. To answer this question, we analyzed the moving averages of block gas used over different time intervals. Our results confirm Vitalik’s conclusion that EIP-1559 does not put the blockchain system under a significantly higher load for an extended period. We do observe load spikes – periods during which an above-average amount of gas is consumed – but its frequency is not significantly different before or after the London fork.</p>
+ </li>
+</ul>
+<figure>
+ <p align="center">
+<img align="center" src="https://i.imgur.com/2y89fJn.png" />
+<figcaption align="center"><b>Figure 7: Moving averages of block gas used per second for different time intervals.</b></figcaption>
+ </p>
+</figure>
+<ul>
+ <li><strong>Miner Extractable Value (MEV).</strong> MEV refers to the profit a miner can make through their ability to arbitrarily include, exclude, or re-order transactions within the blocks they produce. We find that MEV from Flashbots becomes a much larger share of miners’ revenue after EIP-1559, mainly because the base fees are burnt. This might create an incentive for miners to invest more in MEV extraction.</li>
+</ul>
+<figure>
+<p align="center">
+<img align="center" height="300" src="https://i.imgur.com/G6Bw13v.png" />
+ </p>
+<figcaption align="center"><b>Figure 8: Ratio of revenue from Flashbots to non-static revenue.</b></figcaption>
+</figure>
+<p>You can find more details on this work including our data sources and methodology on <a href="https://arxiv.org/abs/2201.05574">ArXiv</a>.</p>
+<p>Please add comments on <a href="https://twitter.com/kartik1507/status/1501979453580320768?s=20&amp;t=2lReHQcadHqCUI4TDQrF0A">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ <a href="/tags#incentives">incentives</a>
+ 
+ <a href="/tags#research">research</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=EIP-1559+In+Retrospect&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2022-03-10-eip1559%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2022-03-07-colordag-from-always-almost-to-almost-always-50-percent-selfish-mining-resilience/" data-toggle="tooltip" data-placement="top" title="Colordag: From always-almost to almost-always 50% selfish mining resilience">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2022-03-12-dfinity-partial-synchrony/" data-toggle="tooltip" data-placement="top" title="Consensus by Dfinity - Part II (Internet Computer Consensus)">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

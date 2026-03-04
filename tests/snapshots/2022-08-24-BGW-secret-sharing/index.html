@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>The BGW Verifiable Secret Sharing Protocol</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham and Gilad Asharov">
+ 
+ <meta name="description" content="In this post, we present the classic Ben-or, Goldwasser, and Wigderson, 1988 (BGW) Verifiable Secret Sharing protocol (VSS) with the simplifications of Feldman, 1988. The analysis and notation in this post are based on the full proof of the BGW MPC protocol of Asharov and Lindell. This post is a continuation of our previous posts on secret sharing for passive and crash failures. Consider a malicious adversary controlling at most...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="The BGW Verifiable Secret Sharing Protocol">
+ <meta property="og:description" content="In this post, we present the classic Ben-or, Goldwasser, and Wigderson, 1988 (BGW) Verifiable Secret Sharing protocol (VSS) with the simplifications of Feldman, 1988. The analysis and notation in this post are based on the full proof of the BGW MPC protocol of Asharov and Lindell. This post is a continuation of our previous posts on secret sharing for passive and crash failures. Consider a malicious adversary controlling at most...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham and Gilad Asharov">
+ 
+ <meta property="og:article:published_time" content="2022-08-24T08:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2022-08-24-BGW-secret-sharing/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2022-08-24-BGW-secret-sharing/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="The BGW Verifiable Secret Sharing Protocol">
+ <meta property="twitter:description" content="In this post, we present the classic Ben-or, Goldwasser, and Wigderson, 1988 (BGW) Verifiable Secret Sharing protocol (VSS) with the simplifications of Feldman, 1988. The analysis and notation in this post are based on the full proof of the BGW MPC protocol of Asharov and Lindell. This post is a continuation of our previous posts on secret sharing for passive and crash failures. Consider a malicious adversary controlling at most...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>The BGW Verifiable Secret Sharing Protocol</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham and Gilad Asharov</strong><br>
+ 
+ <span class="post-meta">Posted on August 24, 2022</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>In this post, we present the classic <a href="https://inst.eecs.berkeley.edu/~cs276/fa20/notes/BGW88.pdf">Ben-or, Goldwasser, and Wigderson, 1988</a> (<strong>BGW</strong>) Verifiable Secret Sharing protocol (<strong>VSS</strong>) with the simplifications of <a href="https://dspace.mit.edu/handle/1721.1/14368">Feldman, 1988</a>. The analysis and notation in this post are based on the full proof of the BGW MPC protocol of <a href="https://eprint.iacr.org/2011/136.pdf">Asharov and Lindell</a>. This post is a continuation of our previous posts on secret sharing for <a href="https://decentralizedthoughts.github.io/2020-07-17-polynomial-secret-sharing-and-the-lagrange-basis/">passive</a> and <a href="https://decentralizedthoughts.github.io/2022-08-17-secret-sharing-with-crash/">crash</a> failures.</p>
+<p>Consider a <strong>malicious adversary</strong> controlling at most $f$ parties. The only restriction on the adversary is that honest parties have <strong>private channels</strong>: the adversary cannot see the content of messages sent between any two honest parties.</p>
+<p>For simplicity, we abstract consensus and broadcast away, and assume parties have access to a <strong>Broadcast channel</strong>. We will discuss the challenges and concrete costs of broadcast in more detail in later posts. Note for now that broadcast <a href="https://decentralizedthoughts.github.io/2019-08-02-byzantine-agreement-is-impossible-for-$n-slash-leq-3-f$-is-the-adversary-can-easily-simulate/">requires</a> to assume $f&lt;n/3$.</p>
+<h3 id="verifiable-secret-sharing-properties">Verifiable Secret Sharing properties</h3>
+<p>A <em>secret sharing scheme</em> is composed of two protocols: <em>Share</em> and <em>Reconstruct</em>. These protocols are run by the $n$ parties. A designated <em>dealer</em> has a <em>secret</em> $s$ in a commonly known finite field $\mathbb{F}_p$ with $p&gt;n$, which is given as <em>input</em> to the Share protocol. We assume $p&gt;n$ to ensure unique polynomial interpolation and to avoid degeneracies. The adversary is malicious - and corrupted parties are not guaranteed to follow the protocol specification. A secret sharing protocol that tolerates such adversaries is called <strong>verifiable secret sharing (VSS)</strong>. 
+The three properties of VSS:</p>
+<ol>
+ <li><strong>Validity</strong>: If the dealer is honest, the Reconstruct protocol outputs the dealer’s input value $s$.</li>
+ <li><strong>Hiding</strong>: If the dealer is honest and no honest party has begun the Reconstruct protocol, then the adversary learns nothing about $s$.</li>
+ <li><strong>Binding</strong>: At the end of the Share protocol, the output of the Reconstruct protocol is well-defined. There exists an efficient algorithm that takes the view of the honest parties at the end of the Share protocol and outputs a value $s$. Later, when the parties execute the Reconstruct protocol, the output will necessarily be $s$.</li>
+</ol>
+<p>Note that the binding property ensures that by the end of the Share protocol, even a malicious dealer must have fixed the value to be reconstructed.</p>
+<p>We also need termination properties:</p>
+<ol>
+ <li><strong>Termination of Share</strong>: if an honest party completes the Share protocol then all honest parties complete the Share protocol.</li>
+ <li><strong>Termination of Reconstruct</strong>: if all honest parties complete the Share protocol and all honest parties start the Reconstruct protocol then all honest parties complete the Reconstruct protocol.</li>
+</ol>
+<h3 id="the-main-idea">The main idea</h3>
+<p>There are 5 challenges VSS needs to solve:</p>
+<ol>
+ <li>What if during the Reconstruct protocol the corrupted parties send incorrect shares? The solution is to uniquely interpolate with errors by using <a href="http://cyber.biu.ac.il/wp-content/uploads/2020/02/Threshold-Secret-SharingToPublish.pdf">Reed Solomon error correction</a>. To overcome $f$ errors of a degree $f$ polynomial with unique decoding requires at least $2f+1$ correct shares. Hence VSS requires $n&gt;3f$ and that all honest parties have the correct share (assume $n=3f+1$ for this post).</li>
+ <li>What if a malicious dealer sends shares to some honest parties, but not to all of them? The BGW approach is to enable the honest parties that are missing their share to publicly broadcast a <em>complaint</em>, asking for their shares. The dealer will need to publicly broadcast these shares.</li>
+ <li>What if a malicious dealer sends inconsistent shares to the honest parties? Inconsistent shares imply that the shares held at the honest parties form a polynomial of degree higher than $f$. This will lead to failure of unique interpolation during Reconstruct. The BGW solution is to prove that the sharing is of degree at most $f$ by an interactive distributed zero knowledge protocol. The insight is to share a bi-variate polynomial of degree at most $f$ in each variable:
+Instead of sharing some degree-$f$ polynomial $g(x)$, the dealer shares a bi-variate polynomial $p(x,y)$ such that $p(x,0)=g(x)$, by sharing the $i$th row and $i$th column to party $i$. That is, party $P_i$ receives both $p(x,i)$ and $p(i,y)$. Now every two parties $i,j$ can <em>privately</em> exchange $p(i,j)$ and $p(j,i)$. On the one hand, this reveals no new information about $g(x)$ - this is the perfect zero knowledge part. On the other hand, if <em>all</em> honest parties $i,j$ agree on $p(i,j)$ and $p(j,i)$ then this is a <em>proof</em> that the dealer shared a degree at most $f$ bi-variate polynomial.</li>
+ <li>But what if some pairs of parties disagree on the privately exchanged points? The BGW solution is to have parties publicly broadcast a <em>complaint</em> and to have the dealer broadcast a <em>resolution</em> making the row and column of the parties <em>public</em>.</li>
+ <li>Finally, what if the resolution by the dealer is inconsistent with the private shares of honest parties? parties check that their private values are consistent with the public values and that the dealer responded to all complaints. If enough honest parties broadcast $\langle 1\rangle$ then BGW prove that even a malicious dealer must have uniquely fixed the reconstruct value at the end of the Share protocol.</li>
+</ol>
+<h3 id="the-bgw-secret-sharing-protocol-vss">The BGW secret sharing protocol (VSS)</h3>
+<p>The <strong>Share protocol</strong> has five rounds: share, exchange sub-shares, publicly complain, publicly resolve, and publicly accept.</p>
+<ol>
+ <li>
+ <p><strong>Dealer sends rows and columns</strong>: The dealer, given $s$, uniformly chooses coefficients $a_{i,j}$ for all $i,j \in {0,\dots, f}$ except for $a_{0,0}$.
+ It defines a bi-variate polynomial of degree at most $f$:</p>
+\[p(x,y) = s + \sum_{(i,j) \in \{0,\dots,f \}^2\mid(i,j) \neq (0,0)} a_{i,j} x^i y^j .\]
+ <p>It defines projection univariate polynomials: $row_i(x)=p(i, x)$ and $col_i(x)=p(x, i)$, and sends each party $i$ the two polynomials $\langle row_i(x), col_i(x)\rangle$.
+ If a party does not receive a valid message, it sets its value to two zero polynomials.</p>
+ </li>
+ <li>
+ <p><strong>Parties exchange sub-shares</strong>: Each party $i$ sends each party $j$ the two values $\langle row_i(j)$, $col_i(j)\rangle$.</p>
+ </li>
+ <li><strong>Parties publicly complain</strong>: If a party $i$ receives a pair from party $j$ that is different from its share, it <strong>broadcasts</strong> a complaint with 4 values it thinks are the correct values $\langle i,j,row_i(j), col_i(j)\rangle$.</li>
+ <li><strong>Dealer publicly resolves complaints</strong>: if the dealer hears a complaint from party $i$ that does not agree with $p(x,y)$ then it <strong>broadcasts</strong> $\langle i, row_i(x), col_i(x)\rangle$ of the row and column of party $i$. Such a party $i$ is called <em>public</em>.<br />
+A public party is one whose entire row and column are treated as public values and used during reconstruction.</li>
+ <li>
+ <p><strong>Parties publicly accept</strong>: if a non-public party $i$:
+(1) has row and column shares that agree with:
+ (A) all the public parties values broadcast by the dealer and
+ (B) all the non-public parties that broadcast complaint values;
+(2) for each two parties $j,k$ with disagreeing complaints, at least one of them is public,
+then it is <em>happy</em> and <strong>broadcasts</strong> $\langle 1 \rangle$. Otherwise, it <strong>broadcasts</strong> $\langle 0\rangle$.</p>
+ <p>If less than $2f+1$ non-public parties broadcast $\langle 1\rangle$ then set your shares $row_i(x), col_i(x)$ to be the zero polynomials.</p>
+ </li>
+</ol>
+<p>The <strong>Reconstruct protocol</strong> is just robust univariate interpolation using the public values:</p>
+<ol>
+ <li>Each non-public party $i$ sends $\langle col_i(0) \rangle$ to all parties.</li>
+ <li>Each party interpolates a degree at most $f$ polynomial with at most $f$ errors using the values $col_1(0),\dots, col_n(0)$, where $col_j(0)$ uses the public value if party $j$ is <em>public</em>, or the value party $j$ sent during Reconstruct otherwise. If a non-public party sends nothing you can interpret this as 0.</li>
+</ol>
+<h3 id="proof-of-validity-when-the-dealer-is-honest">Proof of Validity (when the dealer is honest)</h3>
+<p>Since the dealer is honest, no two honest parties will complain on each other.</p>
+<p>If a corrupt party complains about an honest party or vice versa, then the honest dealer will agree with the honest party so only the corrupt party may become public. Moreover, these two points $p(i,j), p(j,i)$ are already known to the adversary from the dealer so the adversary learns no new information.</p>
+<p>Finally, if two corrupt parties complain about each other, then the adversary learns no new information, and they may become public.</p>
+<p>So in the end of the Share protocol, all honest parties will remain non-public and will agree with each other privately and agree with all the public values. If a pair of corrupted parties send conflicting values, at least one of them will become public. Hence, all honest parties are non-public and will broadcast $\langle 1\rangle$.</p>
+<p>The validity of the Reconstruct protocol follows from the fact that the $n-f \geq 2f+1$ honest parties are enough to error correct any $f$ errors.</p>
+<h3 id="proof-of-hiding-when-the-dealer-is-honest">Proof of Hiding (when the dealer is honest)</h3>
+<p>The polynomial $p(x,y)$ contains $(f+1)^2$ coefficients, $f^2+2f$ are chosen uniformly at random, and $1$ is the secret. Thus, the dealer has $f^2+2f$ degrees of freedom. The adversary view has $f^2$ points from each pair $i,j$ that the adversary controls, another $f$ points for each of the rows, and another $f$ points for each of the columns - for a total of $f^2 +2f$ points.</p>
+<p>As in the univariate case, for any $s$, conditioned on $p(0,0)=s$, there is a one-to-one mapping between these spaces. This follows since any non-trivial bi-variate polynomial of degree at most $f$ cannot have $f+1$ rows (or $f+1$ columns) that are univariate roots - their projection is the zero (trivial) univariate polynomial.</p>
+<p>The one-to-one mapping means that for any secret $s$, the dealer’s uniform distribution over the remaining $f^2+2f$ degrees of freedom induces a uniform distribution over the adversary view.</p>
+<p>So the view of the adversary reveals nothing about $s$. Note that whenever the honest dealer publicly reveals some polynomial, it is a polynomial that is already known to the adversary and the adversary learns nothing new when resolving the complaints.</p>
+<h4 id="more-proof-detail">More proof detail</h4>
+<p>Fix a set $I \subset N$ such that $|I|=f$ are the parties controlled by the adversary. Let $V_I= { p(i,j) \mid i,j \in I } \cup { p(0,i), p(i,0) \mid i \in I }$ and observe that $V_I$ completely defines the view of the adversary and that $|V_I|=f^2+2f$.</p>
+<p>Observe that a bi-variate polynomial where each variable has degree at most $f$ has $(f+1)^2$ coefficients.</p>
+<p>Fix a secret $s$ and consider the function $\phi: \mathbb{F}^{f^2+2f} \to V_I$ that maps the remaining coefficients of $p$ to the points that the adversary sees. The domain and co-domain have equal cardinality. So in order to prove that $\phi$ is one-to-one all we need is to prove that $\phi$ is a bijection.</p>
+<p>Assume that $\phi( \vec{a} )=\phi( \vec{b} )$, and consider the bi-variate polynomial $p’$ of degree at most $f$ with coefficients $0, ( \vec{a} - \vec{b} )$. For any $j \in I \cup {0}$, consider the univariate polynomial $p’(j,x)$. Observe that for any $i\in I$ we have $p’(j,i) = 0$ (because $\phi( \vec{a} ) = \phi( \vec{b} )$). Hence $p’(j,x)$ is the zero polynomial.
+Similarly, for any $j \in I \cup {0}$, $p’(x,j)$ is the zero polynomial.</p>
+<p>Now consider any $k$ and the univariate polynomial $p’(k,x)$. Since $p’(k,i)=0$ for all $i\in I \cup {0}$, it follows that $p’(k,x)$ is the zero polynomial.
+Similarly, $p’(x,k)$ is the zero polynomial.</p>
+<p>Hence $p’$ is the zero polynomial, so $a=b$, and therefore $\phi$ is a bijection.</p>
+<p>Since $\phi$ is one-to-one, then for any secret $s$, the uniform distribution on the $f^2+2f$ remaining coefficients induces a uniform distribution on $V_I$.</p>
+<h3 id="proof-of-binding-when-the-dealer-is-corrupt">Proof of Binding (when the dealer is corrupt)</h3>
+<p>If all honest parties have the zero polynomial as output then the bound value is 0. Otherwise, there are at least $f+1$ non-public honest parties that broadcast $\langle 1\rangle$.</p>
+<p>In this case consider the set $G$, consisting of the first $f+1$ honest parties that broadcast $\langle 1\rangle$.</p>
+<p>The key invariant is that any two honest non-public parties must agree on all cross points, which forces consistency with a single degree-$f$ polynomial.</p>
+<p>We will show that the rows and columns of the parties in $G$ define a unique bi-variate polynomial $g(x,y)$ of degree at most $f$ such that $g(0,0)$ is the bound value.</p>
+<p>Indeed, observe that the parties in $G$ define $(f+1)^2$ points from each pair $i,j \in G$. Consider the unique polynomial $g(x,y)$ induced by these points, we will show that all honest parties and all public resolutions agree with $g(x,y)$ and hence it is as if the dealer was honest and shared $g(x,y)$ (but may have caused honest parties to be public).</p>
+<p>Clearly, $g(x,y)$ agrees with all the points of all the parties in $G$.</p>
+<p>If an honest party $\notin G$ agrees with all the sub-shares of all the $f+1$ parties in $G$ then this party must agree with $g(x,y)$ as well.</p>
+<p>If an honest party $j$ received shares conflicting with sub-shares of parties in $G$, it will complain, and since the $f+1$ parties in $G$ sent $\langle 1\rangle$, it must be that the dealer resolution made $j$ public and this public information must agree with $g(x,y)$ as well.</p>
+<p>So given that the $f+1$ honest parties in $G$ sent $\langle 1\rangle$, it is as if the malicious dealer is acting in a way that is consistent with a dealer that honestly shares $g(x,y)$ to honest non-public parties and publicly resolved all remaining parties consistent with $g(x,y)$.</p>
+<p>In particular, all honest parties are either: non-public and agree with $g$ or public and agree with $g$. So there are at least $n-f\geq 2f+1$ honest parties (some may be public) and at most $f$ corrupt non-public parties. Hence no matter what the corrupt parties send during Reconstruct protocol, robust interpolation with error correction will uniquely reconstruct $g(x,y)$ with the secret being $g(0,0)$.</p>
+<h3 id="notes">Notes</h3>
+<p><em>Complexity</em>: in the Share protocol, the dealer first sends $O(n)$ words to each party. In the second round, each party privately sends $O(n)$ words. In the public complain round, each party broadcasts at most $O(n)$ words. In the resolve round, the dealer broadcasts at most $O(n^2)$ words. Finally in the fifth round, each party broadcasts one word.</p>
+<p>Total of $O(n^2)$ words in private channels and $O(n^2)$ words of broadcast for the Share protocol. Since each $O(n^2)$ broadcast word must be received by $n$ parties, the total communication received is $O(n^3)$ words.</p>
+<p><em>Open question</em>: can the worst case word complexity of VSS Share protocol in this setting be reduced to $o(n^3)$ received words?</p>
+<p><em>Good case complexity</em>: if all parties are honest, then we can use <a href="https://arxiv.org/abs/1805.07954">two rounds of silence</a> to replace the broadcast protocol to indicate the public complain round is empty which implies that the protocol can be optimized to use just two rounds of $O(n^2)$ words followed by two rounds of silence.</p>
+<p>-<em>Future posts</em> on VSS: we will explore how VSS is the gateway to full MPC, benefits of VSS in the computational setting, how VSS works in asynchrony, how to pack many secrets in a single VSS, and much more.</p>
+<h4 id="acknowledgements">Acknowledgements</h4>
+<p>We would like to thank Gilad Stern for insightful comments and feedback.</p>
+<p>Comments on <a href="https://twitter.com/ittaia/status/1562449944853614593?s=20&amp;t=5Tmd0Wj6UZtg2ntYgIIHkw">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#cryptography">cryptography</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=The+BGW+Verifiable+Secret+Sharing+Protocol&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2022-08-24-BGW-secret-sharing%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2022-08-17-secret-sharing-with-crash/" data-toggle="tooltip" data-placement="top" title="Polynomial Secret Sharing with Crash Failures">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2022-08-25-dining-cryptographers-additive/" data-toggle="tooltip" data-placement="top" title="Dining Cryptographers and the additivity of polynomial secret sharing">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

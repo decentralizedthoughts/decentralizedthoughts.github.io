@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Agreement under omission failures: non-uniformity and weak validity</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham and Gilad Stern">
+ 
+ <meta name="description" content="In this post, we study non-uniform agreement and weak validity under synchronous networks with general omission failures, where faulty parties may lose some or all incoming and outgoing messages. In this model, agreement, concerns only non-faulty parties. Omission-faulty parties may disagree, and validity is weak: the output must equal some party’s input. We present a protocol for $f &amp;lt; n$ omission faults that runs in $\min{f+1,n-1}$ rounds. We then show...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Agreement under omission failures: non-uniformity and weak validity">
+ <meta property="og:description" content="In this post, we study non-uniform agreement and weak validity under synchronous networks with general omission failures, where faulty parties may lose some or all incoming and outgoing messages. In this model, agreement, concerns only non-faulty parties. Omission-faulty parties may disagree, and validity is weak: the output must equal some party’s input. We present a protocol for $f &amp;lt; n$ omission faults that runs in $\min{f+1,n-1}$ rounds. We then show...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham and Gilad Stern">
+ 
+ <meta property="og:article:published_time" content="2025-08-12T00:05:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2025-08-12-non-uniform-weak-validity/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2025-08-12-non-uniform-weak-validity/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Agreement under omission failures: non-uniformity and weak validity">
+ <meta property="twitter:description" content="In this post, we study non-uniform agreement and weak validity under synchronous networks with general omission failures, where faulty parties may lose some or all incoming and outgoing messages. In this model, agreement, concerns only non-faulty parties. Omission-faulty parties may disagree, and validity is weak: the output must equal some party’s input. We present a protocol for $f &amp;lt; n$ omission faults that runs in $\min{f+1,n-1}$ rounds. We then show...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Agreement under omission failures: non-uniformity and weak validity</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham and Gilad Stern</strong><br>
+ 
+ <span class="post-meta">Posted on August 12, 2025</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>In this post, we study non-uniform agreement and weak validity under <a href="https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/">synchronous networks</a> with general omission failures, where faulty parties may lose some or all incoming and outgoing messages.</p>
+<p>In this model, agreement, concerns only non-faulty parties. Omission-faulty parties may disagree, and validity is weak: the output must equal some party’s input. We present a protocol for $f &lt; n$ omission faults that runs in $\min{f+1,n-1}$ rounds. We then show that both non-uniformity and weak validity are necessary for $f &lt; n$.</p>
+<h2 id="broadcast-for-fn">Broadcast for $f&lt;n$</h2>
+<blockquote>
+ <p>Think of it as: PBFT is to Paxos as Dolev–Strong is to this protocol.</p>
+</blockquote>
+<p>Let’s start with a broadcast protocol that is essentially the non-Byzantine version of the classic <a href="https://decentralizedthoughts.github.io/2019-12-22-dolev-strong/">Dolev-Strong protocol for Byzantine broadcast</a>.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Broadcast for f&lt;n:
+let k=min{f+1,n-1}
+Round 1: leader sends its value to everyone
+Rounds 2...k: if you hear a value for the first time, send it to everyone
+End of round k: if you heard a value at any time then output it, 
+ otherwise output ⊥
+</code></pre></div></div>
+<p><strong>Liveness (all non-faulty output):</strong>
+All non-faulty parties output in round $k$ by construction of the protocol.</p>
+<p><strong>Validity (leader is non-faulty then output is its input, otherwise may be $\bot$)</strong>: 
+The first part follows from round 1; the second follows by induction, showing that no party sends any message other than the leader’s input.</p>
+<p><strong>Non-uniform Agreement (all non-faulty output same value)</strong>:
+It is useful to reason in terms of message chains: if some party sends a value in round $r$, then some party must have sent that value in round $r-1$, which in turn must have come from a send in round $r-2$, and so on—tracing back to the leader’s initial message in round $1$. Each link in the chain is a distinct sender; since parties send a value at most once.</p>
+<p><em>Case 1.</em> No non-faulty party receives a value during the entire protocol. Then all output ⊥.</p>
+<p><em>Case 2.</em> Some non-faulty party receives a value before the final round. It forwards the value, ensuring that by the next round, all non-faulty parties receive it and output the same value.</p>
+<p><em>Case 3.</em> A non-faulty party first receives a value in the final round $k$. This message is the end of a chain of length $k$:</p>
+<ul>
+ <li>If $k = f+1$, the chain must include at least one non-faulty sender. By Case 2, all non-faulty parties will have received the value by the end.<br />
+– If $k = n-1$, the chain must include all other parties. This implies all others are faulty, so agreement among the single non-faulty party is trivial.</li>
+</ul>
+<p>Thus, in all cases, all non-faulty parties output the same value, completing the proof.</p>
+<h2 id="agreement-for-fn">Agreement for $f&lt;n$</h2>
+<p>The protocol is simply to let all parties broadcast and then take (say) the maximum value:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Agreement for f&lt;n:
+let k=min{f+1,n-1}
+Round 1: each party broadcasts its value (using above)
+End of round k: output the maximum non-⊥ value from any broadcast
+</code></pre></div></div>
+<p><strong>Weak Validity (output is the input of some party):</strong>
+Since at least one party is non-faulty, the validity of broadcast ensures that every party receives at least one input value, and that all received values are actual inputs of parties. Each party then outputs one of these values.</p>
+<p><strong>Liveness (all non-faulty output):</strong>
+By construction, all non-faulty parties produce an output in round $k$.</p>
+<p><strong>Non-uniform Agreement (all non-faulty output the same value):</strong>
+All non-faulty parties agree on the complete set of broadcast values and computes the same maximum among them. Note: this maximum may originate from a faulty party.</p>
+<h2 id="what-about-stronger-validity-or-uniform-agreement">What about stronger validity or uniform agreement</h2>
+<p>In uniform agreement we want all parties that decide (even if faulty) to output the same value. This is useful because a party may not know its faulty or when a party needs to convince an (external) client.</p>
+<p>In strong validity we want the decision to be $x$ if all non-faulty parties have the value $x$. This is useful when we want the inputs of the non-faulty parties. For example, if the input is some external event that non-faulty parties observe.</p>
+<h3 id="strong-validity-requires-fn2">Strong validity requires $f&lt;n/2$</h3>
+<p><em>Strong validity</em> means: if all <em>non‑faulty</em> parties have the same input $v$, then every non‑faulty party must output $v$. (By contrast, weak validity only requires the output to equal some party’s input, possibly faulty.)</p>
+<p><strong>Lemma</strong>: Any protocol that guarantees strong validity (together with non‑uniform agreement and liveness) against $f$ faults must have $f&lt;n/2$.</p>
+<p><em>Proof</em>: Assume toward contradiction that $f\ge n/2$. Consider an input assignment with exactly $n/2$ parties holding $0$ and $n/2$ holding $1$.</p>
+<p>Construct two executions in a fully synchronous, reliable network, for all parties:</p>
+<ul>
+ <li>World $E_0$: The $0$‑holders are designated non‑faulty and the $1$‑holders are designated faulty. Faulty parties behave honestly according to the protocol on input $1$.</li>
+ <li>World $E_1$: Roles swap. The $1$‑holders are non‑faulty; the $0$‑holders are faulty and (again) behave honestly on input $0$.</li>
+</ul>
+<p>Because in both worlds every party follows the protocol (the designated faulty parties happen to act in a non-faulty manner), every party sees exactly the same sequence of messages with the same senders. Hence each party’s local view—and thus its output under the protocol—is identical in $E_0$ and $E_1$.</p>
+<p>However, strong validity demands different outputs: in $E_0$, all non‑faulty parties (the $0$‑holders) must output $0$; in $E_1$, all non‑faulty parties (the $1$‑holders) must output $1$. This contradicts the indistinguishability of the two executions. Therefore $f&lt;n/2$.</p>
+<h3 id="uniform-agreement-requires-fn2">Uniform agreement requires $f&lt;n/2$</h3>
+<p>We can see this from the simple case $n = 2$ and $f = 1$.</p>
+<ul>
+ <li>World A: Both parties’ inputs are 0 and party $B$ crashes before sending any messages. By validity, $A$ must decide $0$.</li>
+ <li>World B: Both parties’ inputs are 1 and party $A$ crashes before sending any messages. By the same reasoning, $B$ must decide $1$.</li>
+ <li>World C: Party $A$’s input is 0 and party $B$’s input is 1, and all messages between them are omitted.</li>
+</ul>
+<p>From $A$’s perspective, worlds A and C are indistinguishable: $B$ never sends any messages in either, therefore $A$ must decide $0$ in world C.
+From $B$’s perspective, worlds B and C are indistinguishable, so $B$ must decide $1$ in world C.</p>
+<p>This violates uniform agreement, since in world C the two parties output different values (note that one of the parties has omission failures).</p>
+<p>Thus, uniform agreement is impossible when $f \ge n/2$.</p>
+<p>See a similar statement for <a href="https://decentralizedthoughts.github.io/2019-11-02-primary-backup-for-2-servers-and-omission-failures-is-impossible/">state machine replication</a> (and also see a <a href="https://decentralizedthoughts.github.io/2024-01-30-between-crash-and-omission/">strengthening</a>).</p>
+<h2 id="what-about-byzantine-failures">What about Byzantine failures</h2>
+<p>Note that weak validity in omission is similar to <a href="https://decentralizedthoughts.github.io/2022-12-12-what-about-validity/">external validity</a> in the Byzantine setting.</p>
+<p>Note that uniform agreement in omission is analogous to provable agreement in the Byzantine setting. Provable agreement allows clients and other offline parties to verify the agreement outcome.</p>
+<p>Indeed, the broadcast protocol in omission is similar to the <a href="https://decentralizedthoughts.github.io/2019-12-22-dolev-strong/">Dolev Strong broadcast</a> in the Byzantine setting which provides external validity but not provable agreement.</p>
+<h2 id="acknowledgments">Acknowledgments</h2>
+<p>We thank Amit Aminov for pointing out an error in a previous version.</p>
+<p>Please leave comments on <a href="https://x.com/ittaia/status/1955311880840315205">X</a></p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#omission">omission</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Agreement+under+omission+failures%3A+non-uniformity+and+weak+validity&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2025-08-12-non-uniform-weak-validity%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2025-08-08-DAGs/" data-toggle="tooltip" data-placement="top" title="What’s DAG got to do with it?">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2025-09-24-Kuplex/" data-toggle="tooltip" data-placement="top" title="Variants of Simplex with Reduced Bad-case Latency: C-Simplex and Kuplex">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

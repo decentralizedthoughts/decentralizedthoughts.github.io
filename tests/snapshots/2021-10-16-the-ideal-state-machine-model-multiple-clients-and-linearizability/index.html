@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>The Ideal State Machine Model: Multiple Clients and Linearizability</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham">
+ 
+ <meta name="description" content="We introduced state machines and state machine replication in an earlier post. In this post, we elaborate on the exact notion of safety and liveness that can be obtained by an ideal state machine when there are multiple clients. First, these definitions highlight the challenges of serving multiple clients. Second, when we implement a replicated state machine we need to formally argue that this real environment behaves the same as...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="The Ideal State Machine Model: Multiple Clients and Linearizability">
+ <meta property="og:description" content="We introduced state machines and state machine replication in an earlier post. In this post, we elaborate on the exact notion of safety and liveness that can be obtained by an ideal state machine when there are multiple clients. First, these definitions highlight the challenges of serving multiple clients. Second, when we implement a replicated state machine we need to formally argue that this real environment behaves the same as...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham">
+ 
+ <meta property="og:article:published_time" content="2021-10-16T15:45:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2021-10-16-the-ideal-state-machine-model-multiple-clients-and-linearizability/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2021-10-16-the-ideal-state-machine-model-multiple-clients-and-linearizability/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="The Ideal State Machine Model: Multiple Clients and Linearizability">
+ <meta property="twitter:description" content="We introduced state machines and state machine replication in an earlier post. In this post, we elaborate on the exact notion of safety and liveness that can be obtained by an ideal state machine when there are multiple clients. First, these definitions highlight the challenges of serving multiple clients. Second, when we implement a replicated state machine we need to formally argue that this real environment behaves the same as...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>The Ideal State Machine Model: Multiple Clients and Linearizability</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham</strong><br>
+ 
+ <span class="post-meta">Posted on October 16, 2021</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>We introduced state machines and <a href="https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/">state machine replication</a> in an earlier post. In this post, we elaborate on the exact notion of safety and liveness that can be obtained by an ideal state machine when there are multiple clients.</p>
+<p>First, these definitions highlight the challenges of serving multiple clients. Second, when we implement a <em>replicated</em> state machine we need to formally argue that this real environment behaves the same as some ideal environment also with respect to multiple clients. This post will connect the notion of an ideal state machine to Herlihy and Wing’s seminal notion of <a href="https://cs.brown.edu/~mph/HerlihyW90/p463-herlihy.pdf">linearizability</a> from 1987. Linearizability is the <em>gold standard</em> in concurrent programming. It captures the powerful and elegant property that overlapping function calls to a <em>linearizable object</em> behave as if each function call is executed instantaneously.</p>
+<h3 id="the-ideal-state-machine-model">The Ideal State Machine Model</h3>
+<p>In the <em>ideal model</em>, there is a single <em>server</em> and a set of <em>clients</em>. Clients only communicate with the server. The adversary can corrupt clients and cause them to have omission failures. A client that is not corrupted is called <em>non-faulty</em>. We assume a synchronous model of communication where the adversary can delay messages by at most some known bound $\Delta$. In order to focus on the communication delay effects, we assume that local computation takes zero time.</p>
+<h3 id="a-sequential-client">A Sequential Client</h3>
+<p>The client is modeled as a simple state machine that sends commands to the server and listens to the server responses. Importantly, the client is <em>sequential</em>: it waits to receive the response of its previous command before sending a new command. This simplifies the client and in some settings also provides a basic flow control mechanism that bounds the total number of in-flight commands as a function of the number of permissioned clients. We model the client as having an external <code class="language-plaintext highlighter-rouge">command-queue</code> and <code class="language-plaintext highlighter-rouge">response-queue</code>. Finally, we assume each command has a unique identifier, and the output includes this identifier. Hence, the client can match the response to the request and avoid duplication.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// Client state machine
+pending = empty
+while true
+ if pending = empty and command-queue is not empty
+ cmd = command-queue.dequeue()
+ send &lt;cmd&gt; to server
+ pending = cmd
+ on &lt;response&gt; from server where response matches pending
+ response-queue.enqueue(response)
+ pending = empty
+</code></pre></div></div>
+<p>Note that if a <code class="language-plaintext highlighter-rouge">&lt;response&gt;</code> arrives without a matching pending command it is ignored.</p>
+<h3 id="a-batched-server-implementing-a-sequential-state-machine">A batched server implementing a sequential state machine:</h3>
+<p>The state machine is defined by the <em>transition function</em> <code class="language-plaintext highlighter-rouge">apply()</code> that takes the existing state and a new command and outputs the new state and the response: <code class="language-plaintext highlighter-rouge">(state, response) = apply(state, cmd)</code>. The server uses a <em>timer</em> that ticks every $\Delta$ time to batch client commands into <em>blocks</em>. It then executes each block and sends the responses to the relevant clients.</p>
+<p>To maintain the history, the blocks of commands are recorded in a log of blocks.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// Server state machine
+state = init
+log = []
+counter = 1
+while true
+ on &lt;cmd&gt; from client
+ add (cmd, client) to log[counter]
+ on Delta-timer ticking
+ for each (cmd,client) in log[counter]
+ (state, response) = apply(state, cmd)
+ send &lt;response&gt; to client
+ counter++
+</code></pre></div></div>
+<p>We assume here that the server can process all the commands in zero time. Recalls that the adversary controls message delays by up to $\Delta$.</p>
+<h3 id="the-client-experience-liveness">The Client Experience: Liveness</h3>
+<p>When a non-faulty client sends a command, it may take up to $3 \Delta$ of network delay before it gets a response: one $\Delta$ to send the command, one $\Delta$ delay for batching, and a final $\Delta$ delay for the response. Here we explicitly ignore the processing and computation time (assume it’s zero). So we can state a simple liveness property:</p>
+<p><strong>Liveness</strong>: Each non-faulty client request gets a response after at most $3 \Delta$ time of network delay.</p>
+<p>The above requirement is for non-faulty clients. If the client is faulty (can suffer omission faults) then it may happen that the client never receives a response (because the adversary omits the responses at the client).</p>
+<h3 id="the-client-experience-safety">The Client Experience: Safety</h3>
+<p>Now that we defined the liveness property we need to ask: given a request, what should we consider as a correct response from the server? More generally, we will look at a full <em>client history</em> (all the requests and responses of all the clients) and ask: is this history correct?</p>
+<p>We will give two answers to this question. The first is by saying that a history is correct if it can be generated in an execution in our ideal model:</p>
+<p><strong>Safety (relative to the ideal model)</strong>: a client history is safe if it can be generated in the ideal model.</p>
+<p>Our second answer is to use the definition of <strong><a href="https://www.researchgate.net/publication/213876653_The_Art_of_Multiprocessor_Programming">linearizability</a> (Chapter 3.5)</strong>. We can view each request-response pair as a function call to the state machine object and require that each function call has a <strong>linearization point</strong> at some time between the request and the response. The behavior of the system is as if the function occurs instantaneously at its linearization point and the object behaves like its sequential definition.</p>
+<p>Note that since clients may fail, the last client request may not have a response in the client history. Formally, we require that a request with no response either has a linearization point that is after the request or there is no linearization point for this request.</p>
+<p><strong>Safety (linearizability)</strong>: a client history is safe if it is linearizable.</p>
+<p>So these are two ways to say the same thing! Let’s say a few words about why that is the case. The single server executes requests as a sequential state machine. The linearization point of a request is precisely the point in time when the server sequentially executes the request (and a request that has no response and no linearization point is exactly the case that this request message was omitted by the adversary).</p>
+<h3 id="is-this-a-good-definition">Is this a good definition?</h3>
+<p>On the positive side, we have defined a natural ideal model and showed its equivalent to the strong consistency notion of linearizability. This seems like a good definition - it prevents behaviors that seem to be obviously incorrect, like ignoring commands and reordering them in ways that ignore the client responses. Safety violations like double-spending or equivocation can all be viewed as violations of the ideal model (or essentially of linearizability).</p>
+<p>On the negative side, there is considerable arbitrariness in the ideal model: The adversary has the power to delay messages (by at most $\Delta$) and this way can control the order of requests in the blocks. A server can reorder requests and still maintain the definition of safety. Even worse, a server can see the content of client messages but behave as if the message arrived later. During this time, the server can collude with other clients that can send commands based on this information (known as <a href="https://medium.com/coinmonks/defi-sandwich-attack-explain-776f6f43b2fd">sandwich attacks</a> in the DeFi world).</p>
+<p>Recently there is much interest in this powder of the server and the adversary to reorder, censor, and front-run. The term <a href="https://arxiv.org/abs/1904.05234">Miner Extractable Value (MEV)</a> captures this in the context of economic value. One approach is to use <a href="https://eprint.iacr.org/2020/248">MPC</a> to build a functionality that limits the ability of the adversary. We will explore this topic in later posts.</p>
+<p>Let’s now show how to implement a system that behaves like an ideal system even though it is composed of failure-prone servers.</p>
+<h2 id="implementing-an-ideal-state-machine-with-two-servers-where-one-can-crash">Implementing an Ideal State Machine with Two Servers Where One Can Crash</h2>
+<p>In this part, we will extend the protocol in our <a href="https://decentralizedthoughts.github.io/2019-11-01-primary-backup/">previous post</a> to the multi-client setting.</p>
+<h3 id="the-two-server-one-crash-model">The Two-Server One-Crash Model</h3>
+<p>There are two <em>servers</em> we call <code class="language-plaintext highlighter-rouge">Primary</code> and <code class="language-plaintext highlighter-rouge">Backup</code> and a set of <em>clients</em>. Clients only communicate with the two servers. The adversary can cause a crash failure to one of the two servers and also cause omission failures to any number of clients. Clients that have no omission failures are called non-faulty. Communication is synchronous: the adversary can delay messages by at most some known bound $\Delta$.</p>
+<p>Note that the adversary in this model can both control the network delays, cause client omission faults, and crash one of the servers while the adversary in the Ideal Model can only control network delays and cause client omission faults.</p>
+<p>Our goal is to obtain a protocol with the following two properties:</p>
+<ol>
+ <li><strong>Liveness</strong>: Each non-faulty client request gets a response after at most $8 \Delta$ time. Note that we changed the required response time from $3 \Delta$ to $8 \Delta$ and that we only require this for non-faulty clients.</li>
+ <li><strong>Safety</strong>: for every client history that is created when running this protocol is a client history that can be generated in the ideal model. In more detail, for any adversary behavior in this model when running the protocol, there exists some adversary behavior in the ideal model that generates the client history. 
+Note that the adversary behavior captures all the power the adversary has in each model.</li>
+</ol>
+<h3 id="a-fault-tolerant-client">A Fault-Tolerant Client</h3>
+<p>The basic idea is to interact with the Primary server until the Backup informs the client to change view with a new <code class="language-plaintext highlighter-rouge">&lt;view change&gt;</code> message.</p>
+<p>The second idea is to resend the request if a <code class="language-plaintext highlighter-rouge">&lt;view change&gt;</code> message arrives but no response.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// Client state machine
+pending = empty
+leader = Primary
+while true
+ if pending = empty and command-queue is not empty
+ cmd = command-queue.dequeue()
+ send &lt;cmd&gt; to leader
+ pending = cmd
+ on &lt;response&gt; where response matches pending
+ response-queue.enqueue(response)
+ pending = empty
+ on &lt;view change&gt; from Backup
+ leader = Backup
+ if pending not empty
+ send &lt;cmd&gt; to leader
+</code></pre></div></div>
+<p>Here it may happen that the same <code class="language-plaintext highlighter-rouge">&lt;response&gt;</code> arrives twice (once from the Primary and once from the Backup). The protocol will simply ignore the second <code class="language-plaintext highlighter-rouge">&lt;response&gt;</code>.</p>
+<h3 id="the-primary">The Primary</h3>
+<p>The main change is that the Primary sends the block of requests to the Backup server <em>before</em> executing them. Note that even if there are no client requests, an empty block is sent to the Backup every $\Delta$ time - this is a form of a heartbeat that will allow the Backup to detect if the Primary has crashed.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// Primary state machine
+state = init
+log = []
+counter = 1
+while true
+ on &lt;cmd&gt; from client
+ add (cmd, client) to log[counter]
+ on Delta-timer ticking
+ send &lt;log[counter]&gt; to Backup
+ for each (cmd, client) in log[counter]
+ (state, response) = apply(state, cmd)
+ send &lt;response&gt; to client
+ counter++
+</code></pre></div></div>
+<h3 id="the-backup">The Backup</h3>
+<p>The backup waits to receive a block message. If it does not arrive on time then it deduces that the Primary crashed and assumes the role of the leader.</p>
+<p>When the Backup is not the leader it does not send responses to the clients. When the Backup becomes the leader is will send the <code class="language-plaintext highlighter-rouge">responses</code> of the previous block (in case the Primary crashed before sending the responses). In this case, the client may receive a response twice (having unique request ids allows to ignore the second response).</p>
+<p>Finally, the client may need to resend its command. The Backup may receive the same command: once from the Primary and once from the client resend. So the Backup checks the command from the client is not already part of a previous block.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// Backup state machine
+state = init
+log = []
+counter = 1
+leader = Primary
+set view-change-timer to 2 Delta
+while true
+ // as a follower
+ on &lt;log[counter]&gt; from leader and 
+ responses = empty
+ for each (cmd, client) in log[counter]
+ (state, response) = apply(state, cmd)
+ add (response, client) to responses
+ counter++
+ reset view-change-timer to 2 Delta
+ // view change
+ on view-change-timer expiring
+ leader = Backup
+ for each (response, client) in responses
+ send &lt;response&gt; to client
+ for each client
+ send &lt;view change&gt; to client
+ // as a leader
+ on &lt;cmd&gt; from client and leader = Backup
+ if (cmd, client) not in log[counter] or log[counter-1]
+ add (cmd, client) to log[counter]
+ on Delta-timer ticking and leader = Backup
+ for each (cmd,client) in log[counter]
+ (state, response) = apply(state, cmd)
+ send &lt;response&gt; to client
+ counter++
+</code></pre></div></div>
+<h3 id="liveness-analysis">Liveness analysis</h3>
+<p>First, as long as the Primary does not crash, the Backup will not initiate a view change. In that case, commands sent by a client will arrive in $&lt;\Delta$ time, be processed in a batch in $&lt;\Delta$ time, and sent a response in $&lt;\Delta$ time, for a total of $&lt;3\Delta$ time.</p>
+<p>Now consider a client command and the Primary crashing. There are two cases:</p>
+<ol>
+ <li>
+ <p>The Primary crashes after sending the client command to the Backup (but before sending a response). In this case, the Backup will receive the command at time $&lt;3\Delta$. Will detect the Primary crashed by time $&lt;5\Delta$, and will send the response. The client will receive the response in at most $&lt;6\Delta$ time.</p>
+ </li>
+ <li>
+ <p>The Primary crashes just before sending the client command to the Backup, so just at $&lt;2 \Delta$ from when the client sends a command. This means that the last command from the Primary to the Backup is sent at $&lt;\Delta$ and arrives at $&lt;2\Delta$ from the client command. So the Backup will start a view change at time $&lt;4\Delta$. The client will receive the view change in time $&lt;5\Delta$. The client will resend the command to the Backup and get a response after $&lt;3 \Delta$. So the client will receive a response in at most $&lt;8 \Delta$ time.</p>
+ </li>
+</ol>
+<p>Finally, after the view change, each command sent to the Backup will get a response in $&lt;3 \Delta$ time.</p>
+<h3 id="safety-analysis">Safety analysis</h3>
+<p>For a client command, let’s define its linearization point as:</p>
+<ol>
+ <li><strong>Type 1</strong>: If the Primary sends the command to the Backup then the time it sends is the linearization point.</li>
+ <li><strong>Type 2</strong>: Otherwise, the Primary crashed before sending the command to the Backup so define the linearization point as the time the Backup executes the command.</li>
+</ol>
+<p>Observe that these points are indeed between the client request and the response and that this definition captures all cases.</p>
+<p>Given this, let’s show that the response is equal to a response of the sequential execution that respects the linearization points.</p>
+<p><strong>The core observation</strong>: due to the Backup’s $2 \Delta$ view change timer, all the type 1 linearization points reflect messages that will arrive at the backup and be executed by the Backup before all the executions that are related to type 2 linearization points.</p>
+<p>Since the Primary is sequential, all the type 1 linearization points respect the sequential execution at the Primary. If Primary crashes, then all the type 1 linearization points are also respected at the backup since it is sequential, and it receives all of them.</p>
+<p>Since the Backup is sequential, then all the type 2 linearization points respect the sequential execution at the Backup, and they all appear after all the type 1 linearization points as needed.</p>
+<h3 id="acknowledgments">Acknowledgments</h3>
+<p>Many thanks to Matan, Avihu, and Noa for fixing several bugs in the Backup state machine pseudo code.</p>
+<p>Your decentralized thoughts and comments on <a href="https://twitter.com/ittaia/status/1451515584139730949?s=20">Twitter</a></p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#SMR">SMR</a>
+ 
+ <a href="/tags#models">models</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=The+Ideal+State+Machine+Model%3A+Multiple+Clients+and+Linearizability&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2021-10-16-the-ideal-state-machine-model-multiple-clients-and-linearizability%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2021-10-15-Nakamoto-Consensus/" data-toggle="tooltip" data-placement="top" title="Nakamoto's Longest-Chain Wins Protocol">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2021-10-29-consensus-cheat-sheet/" data-toggle="tooltip" data-placement="top" title="Consensus cheat sheet">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

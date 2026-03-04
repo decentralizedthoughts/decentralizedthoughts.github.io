@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Primary-Backup State Machine Replication for Crash Failures</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham, Kartik Nayak">
+ 
+ <meta name="description" content="We continue our series of posts on State Machine Replication (SMR). In this post we discuss the most simple form of SMR: Primary-Backup for crash failures. We will assume synchronous communication. For simplicity, we will consider the case with two replicas, out of which one can crash. Recall that when a party crashes, it irrevocably terminates. The Primary-Backup Protocol The goal is to give the clients exactly the same experience...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Primary-Backup State Machine Replication for Crash Failures">
+ <meta property="og:description" content="We continue our series of posts on State Machine Replication (SMR). In this post we discuss the most simple form of SMR: Primary-Backup for crash failures. We will assume synchronous communication. For simplicity, we will consider the case with two replicas, out of which one can crash. Recall that when a party crashes, it irrevocably terminates. The Primary-Backup Protocol The goal is to give the clients exactly the same experience...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham, Kartik Nayak">
+ 
+ <meta property="og:article:published_time" content="2019-11-01T06:10:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2019-11-01-primary-backup/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2019-11-01-primary-backup/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Primary-Backup State Machine Replication for Crash Failures">
+ <meta property="twitter:description" content="We continue our series of posts on State Machine Replication (SMR). In this post we discuss the most simple form of SMR: Primary-Backup for crash failures. We will assume synchronous communication. For simplicity, we will consider the case with two replicas, out of which one can crash. Recall that when a party crashes, it irrevocably terminates. The Primary-Backup Protocol The goal is to give the clients exactly the same experience...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Primary-Backup State Machine Replication for Crash Failures</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham, Kartik Nayak</strong><br>
+ 
+ <span class="post-meta">Posted on November 1, 2019</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>We continue our series of posts on <a href="https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/">State Machine Replication</a> (SMR). In this post we discuss the most simple form of SMR: Primary-Backup for crash failures. We will assume <a href="https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/">synchronous</a> communication. For simplicity, we will consider the case with two replicas, out of which one can crash. Recall that when a party <em>crashes</em>, it irrevocably terminates.</p>
+<h3 id="the-primary-backup-protocol">The Primary-Backup Protocol</h3>
+<p>The goal is to give the clients exactly the same experience as if they are interacting with an ideal state machine as described below.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// Ideal State Machine
+state = init
+log = []
+while true:
+ on receiving cmd from a client:
+ log.append(cmd)
+ state, output = apply(cmd, state)
+ send output to the client
+</code></pre></div></div>
+<ol>
+ <li>To avoid duplication of input, each command <code class="language-plaintext highlighter-rouge">cmd</code> includes a unique identifier.</li>
+ <li>To avoid duplication of output, each <code class="language-plaintext highlighter-rouge">output</code> includes a unique identifier and also the unique identifier of the <code class="language-plaintext highlighter-rouge">cmd</code>.</li>
+</ol>
+<p>The above state machine can be made tolerant to a single crash failure via the primary-backup paradigm.</p>
+<p><strong>Primary.</strong> The <code class="language-plaintext highlighter-rouge">primary</code> behaves exactly like an ideal state machine until it crashes. However, if it does crash, it needs the backup to take over execution and continue serving clients.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// Primary
+state = init
+log = []
+while true:
+ on receiving cmd from a client library:
+ send cmd to the backup
+ log.append(cmd)
+ state, output = apply(cmd, state)
+ send output to the client library
+ if no client message for some predetermined time t: 
+ send "heartbeat" to backup
+</code></pre></div></div>
+<p>The code for the primary is the same as that of an ideal state machine except for two changes. First, it needs to maintain an invariant: <em>update the backup before responding back to the client</em>. Due to synchrony, the message is bound to reach the backup within a known bounded delay $\Delta$. Second, the backup may not be able to differentiate between a crashed primary and absence of client commands. In either case, the backup receives no information. Hence, the primary sends an occasional <em>heartbeat</em> to indicate that it has not crashed.</p>
+<p><strong>Backup.</strong> The <code class="language-plaintext highlighter-rouge">backup</code> passively replicates as long as it either hears client commands or heartbeats. If it receives neither, then it invokes a <em>view change</em> by sending (“view change”, 1) to the clients. Once a view-change has occurred, it is also responsible for responding back to the client.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// Backup
+state = init
+log = []
+view = 0
+while true:
+ on receiving cmd for the first time from the primary or a client library:
+ log.append(cmd)
+ state, output = apply(cmd, state)
+ if view == 1:
+ send output to the client library
+ on missing any message from primary in the last t + Δ time units:
+ view = 1
+ send ("view change", 1) to all client libraries
+</code></pre></div></div>
+<p>Note that in some cases <code class="language-plaintext highlighter-rouge">cmd</code> may arrive twice (from both the primary and the client library), in this case the backup ignores the second time (here we use the fact that <code class="language-plaintext highlighter-rouge">cmd</code> contains a unique identifier that can detect this duplication).</p>
+<p><strong>Client.</strong> In the ideal world, the client needs to interact with only a single state machine. With the primary-backup paradigm, it needs to be aware of their existence and send messages accordingly. Thus, we augment the client with a <em>client library</em>. The <code class="language-plaintext highlighter-rouge">client library</code> acts as the required relay between the client in the ideal world and the real world protocol. It implements a mechanism to switch from the primary to the backup:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// Client library 
+view = 0
+replica = [primary, backup]
+while true:
+ on receiving cmd from client
+ send cmd to replica[view]
+ on receiving output for the first time from a replica
+ send output to client
+ on receiving ("view change", 1) from backup
+ view = 1
+ resend cmd to replica[view]
+</code></pre></div></div>
+<p>Note that in some cases, the same <code class="language-plaintext highlighter-rouge">output</code> may arrive twice (from both the primary and the backup), in this case the client library ignores the second time (here we use the fact that <code class="language-plaintext highlighter-rouge">output</code> contains a unique identifier and can detect this duplication).</p>
+<p>Due to the invariant maintained by the primary, a client knows that the response it got from a primary must have been sent to the backup. If the backup crashes then the primary will continue to serve the clients. If the primary is faulty and crashes then the backup is guaranteed to have seen any command whose output was returned to the client.</p>
+<p><strong>A couple of remarks on the setting.</strong></p>
+<ol>
+ <li>
+ <p>We assumed that the adversary can crash any client and that all non-faulty client messages arrive at the primary/backup and vice-versa. This Primary-Backup protocol works even if we assume that the adversary can fail any client by <a href="https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/">omission failures</a>. To handle this model, even with an ideal state machine we need to maintain a unique identifier for every command sent to the state machine and use a retry mechanism.</p>
+ </li>
+ <li>
+ <p>In practice, there is often an out-of-band procedure to reset the system to allow the primary to be the primary again after it recovers from its failure. For example, one can first stop the backup and then restart the whole system.</p>
+ </li>
+ <li>
+ <p>In the above description, we assume that there will be at most 1 crash. We now discuss a mechanism for $n &gt; 2$ capable of tolerating any $f&lt;n$ crash faults.</p>
+ </li>
+</ol>
+<h3 id="generalized-primary-backup">Generalized Primary-Backup</h3>
+<p>When there are $n&gt;2$ replicas, the new primary must do some more work to continue to maintain the invariant: <strong>send the command to all the backups before responding back to the client</strong>.</p>
+<p>Assume $n$ replicas with identifiers ${0,1,2,\dots,n-1}$. A major problem is that a replica may crash in the middle of sending to all the backups. We fix this using two measures:</p>
+<ol>
+ <li>The primary sends the command to the backup <strong>in order</strong>, so messages first arrive to the next primary, then to the next next primary, and so on.</li>
+ <li>Each <code class="language-plaintext highlighter-rouge">replica j</code> maintains a <em>resend</em> variable that stores the last command it received from the primary. If $j$ becomes the new primary, it resends the last command to all replicas when it does a view change.</li>
+</ol>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// Replica j
+state = init
+log = []
+resend = []
+view = 0
+while true:
+ // as a Backup
+ on receiving cmd from replica[view]:
+ log.append(cmd)
+ state, output = apply(cmd, state)
+ resend = cmd 
+ // as a Primary
+ on receiving cmd from a client library (and view == j):
+ send cmd to all replicas (in order)
+ log.append(cmd)
+ state, output = apply(cmd, state)
+ send output to the client library
+ // View change
+ on missing "heartbeat" from replica[view] in the last t + $\Delta$ time units:
+ view = view + 1
+ if view == j
+ send ("view change", j) to all client libraries
+ send resend to all replicas (in order)
+ // Heartbeat from primary
+ if no client message for some predetermined time t: 
+ send "heartbeat" to all replicas (in order)
+</code></pre></div></div>
+<p>This protocol implements state machine replication with $n$ servers in a synchronous system that is resilient to $n-1$ crash failures.</p>
+<h3 id="notes">Notes</h3>
+<ol>
+ <li>Clients need a mechanism to discover who is the current primary. For example, they can send a query to all replicas to learn what is the current view number.</li>
+ <li>The crash model is actually quite useful to model replicas with secure hardware.</li>
+ <li>If sending in a particular order is not allowed, or we want to use randomization to choose the next primary, then an additional round is needed where each party sends to the new primary its latest command, and then the new primary can resend it.</li>
+</ol>
+<h3 id="acknowledgments">Acknowledgments</h3>
+<p>We would like to thank Tim Roughgarden for insightful comments and noticing an error in the $n&gt;2$ case.</p>
+<p>Please leave comments on <a href="https://twitter.com/ittaia/status/1191141070685507586?s=20">Twitter</a></p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#SMR">SMR</a>
+ 
+ <a href="/tags#crash">crash</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Primary-Backup+State+Machine+Replication+for+Crash+Failures&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2019-11-01-primary-backup%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2019-10-25-payment-channels-are-just-a-two-person-bfs-smr-systems/" data-toggle="tooltip" data-placement="top" title="A Payment Channel is a two person BFS-SMR system">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2019-11-02-primary-backup-for-2-servers-and-omission-failures-is-impossible/" data-toggle="tooltip" data-placement="top" title="State Machine Replication for Two Servers and One Omission Failure is Impossible even in a lock-step model">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

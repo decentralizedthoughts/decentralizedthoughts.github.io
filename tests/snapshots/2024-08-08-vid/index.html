@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>What is Verifiable Information Dispersal?</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham, Kartik Nayak, Ling Ren, Gilad Stern">
+ 
+ <meta name="description" content="Verifiable Information Dispersal (or VID) has its roots in the work of Michael Rabin, 1989 which introduced the notion of Information Dispersal (ID). Adding verifiability (referred to as binding in this post) to obtain VIDs was done by Garay, Gennaro, Jutla, and Rabin, 1998 (called SSRI). Cachin and Tessaro, 2004 introduced the notion of Asynchronous VID (or AVID). See LDDRVXG21 for the state-of-the-art. VIDs are important primitives at the intersection...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="What is Verifiable Information Dispersal?">
+ <meta property="og:description" content="Verifiable Information Dispersal (or VID) has its roots in the work of Michael Rabin, 1989 which introduced the notion of Information Dispersal (ID). Adding verifiability (referred to as binding in this post) to obtain VIDs was done by Garay, Gennaro, Jutla, and Rabin, 1998 (called SSRI). Cachin and Tessaro, 2004 introduced the notion of Asynchronous VID (or AVID). See LDDRVXG21 for the state-of-the-art. VIDs are important primitives at the intersection...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham, Kartik Nayak, Ling Ren, Gilad Stern">
+ 
+ <meta property="og:article:published_time" content="2024-08-08T07:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2024-08-08-vid/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2024-08-08-vid/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="What is Verifiable Information Dispersal?">
+ <meta property="twitter:description" content="Verifiable Information Dispersal (or VID) has its roots in the work of Michael Rabin, 1989 which introduced the notion of Information Dispersal (ID). Adding verifiability (referred to as binding in this post) to obtain VIDs was done by Garay, Gennaro, Jutla, and Rabin, 1998 (called SSRI). Cachin and Tessaro, 2004 introduced the notion of Asynchronous VID (or AVID). See LDDRVXG21 for the state-of-the-art. VIDs are important primitives at the intersection...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>What is Verifiable Information Dispersal?</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham, Kartik Nayak, Ling Ren, Gilad Stern</strong><br>
+ 
+ <span class="post-meta">Posted on August 8, 2024</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p><em>Verifiable Information Dispersal</em> (or <strong>VID</strong>) has its roots in the work of <a href="https://dl.acm.org/doi/pdf/10.1145/62044.62050">Michael Rabin, 1989</a> which introduced the notion of <em>Information Dispersal</em> (<strong>ID</strong>). Adding <em>verifiability</em> (referred to as <em>binding</em> in this post) to obtain <strong>VID</strong>s was done by <a href="https://eprint.iacr.org/1998/025">Garay, Gennaro, Jutla, and Rabin, 1998</a> (called SSRI). <a href="https://homes.cs.washington.edu/~tessaro/papers/dds.pdf">Cachin and Tessaro, 2004</a> introduced the notion of <em>Asynchronous VID</em> (or <strong>AVID</strong>). See <a href="https://eprint.iacr.org/2022/775">LDDRVXG21</a> for the state-of-the-art.</p>
+<p>VIDs are important primitives at the intersection of distributed computing and cryptography. Their centrality can be seen through four different perspectives:</p>
+<ol>
+ <li><em>VIDs through the lens of <strong>BFT</strong></em>: An important optimization in BFT protocols is to allow proposing larger messages without increasing the communication complexity. This line of work has roots in <a href="https://groups.csail.mit.edu/tds/papers/Coan/MIT-LCS-TR-315.pdf">TC84</a> and extended to use error correction codes in <a href="https://crypto.ethz.ch/publications/files/FitHir06.pdf">FH06</a> and <a href="https://arxiv.org/pdf/1101.3520">LV11</a>. VIDs (and their variations) are a key building block that allows state-of-the-art BFT protocols to do this efficiently (for example, see <a href="https://eprint.iacr.org/2021/1403.pdf">BLLN21</a>, <a href="https://eprint.iacr.org/2020/842">Dumbo-MVBA</a>, and <a href="https://www.usenix.org/system/files/nsdi22-paper-yang_lei.pdf">DispersedLedger</a>).</li>
+ <li><em>VIDs through the lens of <strong>Secure Multi-Party Computation</strong> (MPC)</em>: VIDs can be seen as Verifiable Secret Sharing (VSS) without the <em>hiding</em> property. VIDs and VSSs share the same binding properties and the same termination properties. Many of the variations of VSS (for example, packed VSS and <a href="https://en.wikipedia.org/wiki/Publicly_verifiable_secret_sharing">publicly verifiable VSS</a>) can be cast to VID variations and vice versa.</li>
+ <li><em>VIDs through the lens of <strong>traditional distributed computing</strong></em>: VIDs can be viewed as the extension from <em>crash</em> failures to <em>Byzantine</em> failures (and the corresponding transition from <em>erasure</em> codes to <em>error correction</em> codes) for the fundamental distributed computing primitive of <em>Single Writer Multi Reader</em> objects. These objects go back to the foundational <em>ABD</em> protocol for sharing memory robustly <a href="https://groups.csail.mit.edu/tds/papers/Attiya/TM-423.pdf">Attiya, Bar-Noy, and Dolev, 1990</a>. The extension of ABD to use erasure coding (see <a href="https://arxiv.org/pdf/1407.4167">Cadambe, Lynch, Medard, and Musial, 2014</a>) is used in all major cloud storage solutions (see <a href="https://arxiv.org/pdf/2111.12009">here</a>).</li>
+ <li><em>VIDs through the lens of blockchain scalability</em>: the recent surge of interest in VIDs is related to the realization that they are a key building block in obtaining blockchain scalability (see <a href="https://decentralizedthoughts.github.io/2023-09-30-scaling/">this post</a>). The influential work of <a href="https://arxiv.org/pdf/1809.09044">Al-Bassam, Sonninio, Buterin</a> led to the creation of <a href="https://arxiv.org/abs/1905.09274">modular data availability networks</a> and a key part of the Ethereum’s <a href="https://eips.ethereum.org/EIPS/eip-4844">danksharding</a> design. The use of VIDs is an important part of many other <strong>Data Availability</strong> solutions, like <a href="https://docs.eigenlayer.xyz/eigenda/overview">EigenDA</a> and <a href="https://hackmd.io/@EspressoSystems/HotShot-and-Tiramisu#Part-III-Tiramisu-The-Three-Layered-Espresso-DA">Espresso DA</a>. Just as SNARKs are vital for $O(1)$ scaling of blockchain <em>execution</em> overhead, VIDs are vital for $O(1)$ scaling of blockchain <em>storage</em> overhead.</li>
+</ol>
+<p>It’s fascinating that different communities can see the same object through different lenses, but underneath it all - it’s the same object and the work is very much connected!</p>
+<h3 id="what-is-a-vid">What is a VID?</h3>
+<p>A VID is a pair of protocols: <strong>dispersal</strong> and <strong>retrieval</strong>. In the dispersal protocol, a <em>designated sender</em> commits to a message $M$ and <em>disperses</em> parts of it to the whole network. In the retrieval protocol, parties can now cooperate to all <em>retrieve</em> the committed message.</p>
+<p>This pattern of two protocols follows the same pattern as VSS’s <em>share</em> and <em>recover</em> and SWMR register’s <em>write</em> and <em>read</em> operations.</p>
+<p>A VID has the following key properties (the termination properties can be strengthened in synchrony):</p>
+<ol>
+ <li><strong>Binding</strong>: at the time the first non-faulty party completes the dispersal protocol, there exists a committed value, $M’$. Slightly more formally, it is sometimes required to prove that there exists an extractor that can generate $M’$ from the views of the honest parties.</li>
+ <li><strong>Validity</strong>: if the designated sender is non-faulty, then the committed value is its input, $M=M’$.</li>
+ <li><strong>Agreement</strong>: any two non-faulty parties that output a value in the retrieval protocol, output the same value, $M’$ (defined in the binding property).</li>
+ <li><strong>Termination of dispersal</strong>: if the designated sender is non-faulty, it will complete the dispersal protocol.</li>
+ <li><strong>Totality of dispersal</strong>: if any non-faulty completes the dispersal protocol then all non-faulty will complete it.</li>
+ <li><strong>Termination of retrieval</strong>: if all non-faulty start the retrieval protocol after all non-faulty terminate dispersal then all non-faulty will complete it.</li>
+</ol>
+<p>For some use cases <em>totality of dispersal</em> is not needed, and termination of retrieval is weakened so that even if one honest party terminated the dispersal, all will complete the retrieval. We will call this variation, <em>provable but un-total AVID</em>. See the end of this post for why it is crucial for efficient BFT protocols.</p>
+<h3 id="security-of-vids">Security of VIDs</h3>
+<p>VIDs vary in the assumptions needed to obtain their properties: the <a href="https://decentralizedthoughts.github.io/2019-06-17-the-threshold-adversary/">size of the adversary</a>, its <a href="https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/">adaptiveness</a>, and the cryptographic assumptions.</p>
+<p>An important variant is where the retrieval can be run for a particular recipient, often with reduced communication complexity. Additional properties like being additive and/or packable are also sometimes useful.</p>
+<h3 id="complexity-measures">Complexity measures</h3>
+<p>Three main measures:</p>
+<ol>
+ <li><strong>Round complexity</strong>: how many rounds do the dispersal and retrieval protocols take. Often the retrieval is a single round. See <a href="https://decentralizedthoughts.github.io/2021-09-29-the-round-complexity-of-reliable-broadcast/">this post</a> for how rounds are defined in asynchrony.</li>
+ <li><strong>Communication complexity</strong>: as a function of the number of parties $n$ and the size of the input message $\ell=|M|$. Dispersal costs of $O(\ell + \kappa n^2)$ and retrieval costs of $(\ell + \kappa n)$ where $\kappa$ is a cryptographic security parameter are the current <a href="https://eprint.iacr.org/2022/775.pdf">state of the art</a>.</li>
+ <li><strong>Storage overhead</strong>: the ratio between the total storage of all parties and the message size $\ell=|M|$. Obtaining a small constant ratio is important both in theory and in practice.</li>
+</ol>
+<h3 id="lower-bounds">Lower bounds</h3>
+<p>Running dispersal and then retrieval is equivalent to <a href="https://decentralizedthoughts.github.io/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/">reliable broadcast</a>. Therefore:</p>
+<ul>
+ <li>
+ <p>The best resilience one can hope for is $t&lt;n/3$ in <a href="https://decentralizedthoughts.github.io/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/">partial synchrony</a> and $t&lt;n/2$ <a href="https://decentralizedthoughts.github.io/2019-11-02-primary-backup-for-2-servers-and-omission-failures-is-impossible/">in synchrony</a> (here the contradiction is on the bound value of the dispersal).</p>
+ </li>
+ <li>
+ <p>The <a href="https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/">Dolev Reischuk</a> lower bound holds. This means the total message complexity of both protocols together must be at least $O(n^2)$ messages (in the worst case, or in the average case against a strongly adaptive adversary that can claw back messages).</p>
+ </li>
+</ul>
+<p>This implies that getting an overhead of $O(n \ell)$ is only possible when the size of the message $\ell$ is at least $\Omega(n)$. This is again the <a href="https://decentralizedthoughts.github.io/2023-09-30-scaling/">power of batching</a>.</p>
+<p>Understanding the exact round complexity lower bounds remains an interesting open problem.</p>
+<p>Storage overhead: Since we want to be resilient to any $t$ malicious parties, then storing $\ell$ bits requires any $n-t$ parties to be able to retrieve. So the total storage divided by $\ell$ cannot be smaller than $\frac{n}{n-t}$. For example, if 7 parties, 2 of which may crash, want to store 5 bits, then every party needs to store one bit, so the storage overhead is at least $7/5=1.4$.</p>
+<h2 id="the-classic-asynchronous-vid-of-cachin-and-tessaro">The classic Asynchronous VID of <a href="(https://homes.cs.washington.edu/~tessaro/papers/dds.pdf)">Cachin and Tessaro</a></h2>
+<p>This elegant scheme uses four building blocks:</p>
+<ol>
+ <li><a href="https://decentralizedthoughts.github.io/2020-08-28-what-is-a-cryptographic-hash-function/">Cryptographic hash function</a> which we will denote $H(x)$.</li>
+ <li><a href="https://decentralizedthoughts.github.io/2020-12-22-what-is-a-merkle-tree/">Merkle tree</a> which is used as a succinct <a href="https://eprint.iacr.org/2011/495.pdf">vector commitment</a>.</li>
+ <li>Non-trivial degree at most $t$ polynomials (over a finite field) <a href="https://decentralizedthoughts.github.io/2020-07-17-the-marvels-of-polynomials-over-a-field/">have at most $t$ roots</a> and the <a href="https://decentralizedthoughts.github.io/2020-07-17-polynomial-secret-sharing-and-the-lagrange-basis/">bijective mapping</a> between its $t+1$ coefficients and any $t+1$ evaluations.</li>
+ <li><a href="https://decentralizedthoughts.github.io/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/">Reliable Broadcast</a> to broadcast the root of the Merkle tree.</li>
+</ol>
+<p>We assume $n=3t+1$ and will be working over a finite field of order larger than $n$. The designated sender has a message $M=m_0,\dots, m_t$ consisting of $t+1$ field elements (so $O(n\log n)$ bits). Let $P(X)$ be the polynomial $\sum_{0\le i\le t} m_i X^i$.</p>
+<h3 id="dispersal-protocol">Dispersal protocol:</h3>
+<ol>
+ <li>The designated sender computes $P(1), \dots ,P(n)$ and builds a Merkle tree $T$ whose leaves are the values $P(1), \dots, P(n)$.</li>
+ <li>The designated sender sends $root(T)$ via <a href="https://decentralizedthoughts.github.io/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/">reliable broadcast</a>.</li>
+ <li>The designated sender sends each party $i$, the value $P(i)$ and the Merkle proof $proof(T,P(i))$.</li>
+ <li>Party $i$ that receives a root $r$ via Reliable Broadcast and the value $p_i$, and a proof $proof_i$ checks the validity of the proof relative to the root $r$ and the value $p_i$. If the proof is valid, it sends an $ACK$ to all parties.</li>
+ <li>Each party that sees $2t+1$ $ACK$ messages sends a $DONE$ message to all.</li>
+ <li>Each party that sees $t+1$ $DONE$ messages sends a $DONE$ to all (if it did not send it earlier).</li>
+ <li>Each party that sees $2t+1$ $DONE$ messages completes the Dispersal protocol.</li>
+</ol>
+<p>For a variant that is <em>provable but un-total</em>, the $ACK$ is sent back to the sender, which sends back $2t+1$ $ACK$s to all. Seeing $2t+1$ $ACK$s is a certificate that retrieval will succeed.</p>
+<h3 id="retrieval-protocol">Retrieval protocol:</h3>
+<ol>
+ <li>Each party $i$ that has a valid $p_i$ sends it to all along with its $proof_i$.</li>
+ <li>Each party that sees $t+1$ values that have valid proofs relative to the root: interpolate these values to a polynomial and check the validity of the Merkle tree. That is, compute a Merkle tree from the polynomial whose leaves are the evaluations at the points 1 to $n$ and check that it has the same root as the one broadcast in the dispersal protocol. If valid, then output the coefficients of the polynomial; otherwise, output $\bot$.</li>
+</ol>
+<p>Note that the check above works because a Merkle tree is a deterministic commitment to a vector.</p>
+<h3 id="proof-of-binding">Proof of binding</h3>
+<p>Once the first non-faulty party completes the dispersal protocol, it has received $2t+1$ $DONE$ messages. The first non-faulty party to send such a message did so after receiving at most $t$ $DONE$ messages, so it must have sent its message after receiving $2t+1$ $ACK$ messages. This means that by the time the first non-faulty party completes the protocol, at least $t+1$ non-faulty parties sent ACK messages after receiving points with correct proofs.</p>
+<p>Choose some set of $ t+1$ non-faulty parties that sent such ACKs, and interpolate their points to a polynomial $P$ of degree at most $t$.</p>
+<p>Now compute a Merkle tree of the evaluations of $P$ and check that the root is equal to the root that the designated sender sent via reliable broadcast. Assuming the Merkle tree commitment is binding, then during retrieval, the only polynomial that can be interpolated must correspond to $P$.</p>
+<p>Otherwise, the binded value is set to $\bot$. Due to the binding of the Merkle tree. During retrieval, all parties will see that it does not encode a degree at most $t$ polynomial and hence output $\bot$.</p>
+<p>Note that this operation is an <strong>extraction</strong> of $P$ (or of $\bot$) from the views of the non-faulty parties at the time the first non-faulty completes the dispersal protocol.</p>
+<h3 id="proof-of-validity">Proof of validity</h3>
+<p>If the designated sender is non-faulty and has polynomial $P$ as input, then at least $t+1$ honest parties will get their shares and proofs during dispersal. So during retrieval, all parties will be able to reconstruct. Due to the binding properties of the Merkle tree, the adversary cannot provide proof for points outside of $P$.</p>
+<h3 id="proof-of-agreement">Proof of agreement</h3>
+<p>If the binded value is the coefficient of a polynomial $P$, then the Merkle root is indeed a root for the vector $(P(1),\ldots,P(n))$. In that case, no party $j$ will be able to generate a correct opening proof for a point $p_j\neq P(j)$. This means that honest parties will only receive points on the polynomial $P$, and thus interpolate it and output its coefficients.</p>
+<p>On the other hand, if the binded value is $\bot$, then there are $t+1$ parties that received openings of the Merkle tree with proofs, and interpolating these points results in some polynomial $Q$ such that the Merkle root is not a commitment to $(Q(1),\ldots,Q(n))$. Now, observe some honest party that completes the retrieval protocol. We would like to show that it outputs $\bot$. Assume by way of contradiction that it does not. This means that it received $t+1$ points with proofs, interpolated them to a polynomial $Q’$, and saw that committing to $(Q’(1),\ldots,Q’(n))$ yields the original Merkle root. However, from the commitment of the Merkle tree, it shouldn’t be possible to open the root to differing values at the same index. This means that $Q(i)=Q’(i)$ for the $t+1$ openings of the root defined above. Since both are polynomials of degree $\leq t$, $Q=Q’$. In total, we found that the root is not a commitment to $Q$, but is a commitment to $Q’=Q$, which is a contradiction. Therefore, any honest party that completes the retrieval protocol outputs $\bot$.</p>
+<p>Here we use the Binding property and argue that any $t+1$ from $P$ will be interpolated to the same polynomial $P$.</p>
+<h4 id="proof-of-termination-of-dispersal">Proof of termination of dispersal</h4>
+<p>If the designated sender is non-faulty, then all non-faulty will eventually send an $ACK$. Hence, eventually all will send a $DONE$ and eventually terminate.</p>
+<h4 id="proof-of-totality-of-dispersal">Proof of totality of dispersal</h4>
+<p>Suppose some non-faulty terminates after seeing $2t+1$ $DONE$, so all non-faulty will see at least $t+1$ $DONE$. So eventually all will send a $DONE$ and eventually terminate.</p>
+<h4 id="proof-of-termination-of-retrieval">Proof of termination of retrieval</h4>
+<p>Consider the first non-faulty that sends $DONE$, then there are at least $t+1$ non-faulty that send $ACK$. So during retrieval, each non-faulty party will hear from at least $t+1$ non-faulty parties with correct proofs. Hence, all non-faulty will terminate.</p>
+<h3 id="complexity-analysis">Complexity Analysis</h3>
+<h3 id="round-complexity">Round complexity</h3>
+<p>For a non-faulty designated dealer, the reliable broadcast takes 3 rounds, after which the $ACK$ and $DONE$ take another two rounds.</p>
+<p>Note that sending an $ACK$ requires validating the proof which requires a root which means seeing the output of the reliable broadcast. One optimization is to wait for 2 rounds to get $n-f$ $ECHO1$ messages. This will save one round but also requires checking the reliable broadcast arrived before sending a $DONE$ message (a similar round reduction trick is done <a href="https://arxiv.org/pdf/2102.07240">here</a>).</p>
+<p>For a malicious designated dealer, the reliable broadcast may take 4 rounds, after which it may take one round of $ACK$ and two rounds of $DONE$ for a total of 7 rounds.</p>
+<p>The retrieval protocol takes a single round.</p>
+<h3 id="message-complexity">Message complexity</h3>
+<p>We will assume each field element is a <em>word</em> (typically $O(\log n)$ bits).</p>
+<p>We will also assume that the hash function maps to a <em>word</em> (a more detailed analysis would call this out explicitly as $\kappa$ bits where this is related to the required security parameter).</p>
+<p>The Reliable broadcast takes $O(n^2)$ words as the content is the root which is a hash output.</p>
+<p>The sender sends $O(n \log n)$ words because each Merkle proof is $O(\log n)$ words long. Each party sends $O(n)$ bits for a total of $O(n^2)$ words for the dispersal protocol.</p>
+<p>Finally, the dispersal requires each party to send $O(n \log n)$ words because each Merkle proof is $O(\log n)$ words long. For a total of $O(n^2 \log n)$ words for the 
+retrieval protocol.</p>
+<h3 id="storage-overhead">Storage overhead</h3>
+<p>Each party stores $O(\log n)$ words and the message size is $t$ words. So the storage ratio is $O(n \log n)/t = O(\log n)$.</p>
+<h3 id="analysis-of-the-provable-but-un-total-avid-variant">Analysis of the provable but un-total AVID variant</h3>
+<p>Note that using succinct signatures, the dispersal is now just $O(n)$ message complexity.</p>
+<p>This allows running $n$ copies of dispersal, then choosing a leader and running a single $O(n^2)$ revival for just one party. For a total message complexity of $O(n^2)$. Many efficient BFT protocols use this pattern.</p>
+<h3 id="acknowledgments">Acknowledgments</h3>
+<p>Many thanks to Qiang Tang for insightful comments and feedback.</p>
+<p>Your feedback on <a href="https://x.com/ittaia/status/1821587801701568626">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#VID">VID</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=What+is+Verifiable+Information+Dispersal%3F&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2024-08-08-vid%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2024-06-12-shoalpp/" data-toggle="tooltip" data-placement="top" title="Shoal++: High Throughput DAG-BFT Can Be Fast!">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2024-08-09-sap/" data-toggle="tooltip" data-placement="top" title="The SAP theorem for storing secret keys">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>
