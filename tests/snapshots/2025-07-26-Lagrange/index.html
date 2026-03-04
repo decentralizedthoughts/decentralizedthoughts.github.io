@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Lagrange's Theorem through the algorithmic lens</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham">
+ 
+ <meta name="description" content="Groups lie at the heart of many cryptographic constructions. In this post, we revisit the classic Lagrange’s theorem through a more algorithmic lens. Largange’s theorem is a simple structure theorem that will be useful for many more advanced results. Recall that a group is a non-empty set $G$ and a function $f: G \times G \to G$ (often denoted as a binary operator $\cdot$) such that: Associativity: $\forall a,b,c \in...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Lagrange's Theorem through the algorithmic lens">
+ <meta property="og:description" content="Groups lie at the heart of many cryptographic constructions. In this post, we revisit the classic Lagrange’s theorem through a more algorithmic lens. Largange’s theorem is a simple structure theorem that will be useful for many more advanced results. Recall that a group is a non-empty set $G$ and a function $f: G \times G \to G$ (often denoted as a binary operator $\cdot$) such that: Associativity: $\forall a,b,c \in...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham">
+ 
+ <meta property="og:article:published_time" content="2025-07-26T00:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2025-07-26-Lagrange/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2025-07-26-Lagrange/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Lagrange's Theorem through the algorithmic lens">
+ <meta property="twitter:description" content="Groups lie at the heart of many cryptographic constructions. In this post, we revisit the classic Lagrange’s theorem through a more algorithmic lens. Largange’s theorem is a simple structure theorem that will be useful for many more advanced results. Recall that a group is a non-empty set $G$ and a function $f: G \times G \to G$ (often denoted as a binary operator $\cdot$) such that: Associativity: $\forall a,b,c \in...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Lagrange's Theorem through the algorithmic lens</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham</strong><br>
+ 
+ <span class="post-meta">Posted on July 26, 2025</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p><a href="https://en.wikipedia.org/wiki/Group_(mathematics)">Groups</a> lie at the heart of many cryptographic constructions. In this post, we revisit the classic <a href="https://en.wikipedia.org/wiki/Lagrange%27s_theorem_(group_theory)">Lagrange’s theorem</a> through a more algorithmic lens. Largange’s theorem is a simple structure theorem that will be useful for many more advanced results.</p>
+<p>Recall that a <strong>group</strong> is a non-empty set $G$ and a function $f: G \times G \to G$ (often denoted as a binary operator $\cdot$) such that:</p>
+<ul>
+ <li><strong>Associativity</strong>: $\forall a,b,c \in G, \ (a \cdot b) \cdot c = a \cdot (b \cdot c)$</li>
+ <li><strong>Identity</strong>: $\exists e \in G, \ \forall a \in G, \ a \cdot e = e \cdot a = a$</li>
+ <li><strong>Inverse</strong>: $\forall a \in G, \ \exists b \in G, \ a \cdot b = b \cdot a = e$</li>
+</ul>
+<p>We denote the identity element as $e$, and often use $a^{-1}$ to denote the inverse of $a$.</p>
+<p>A <strong>subgroup</strong> $H \subseteq G$ is a subset that forms a group under the same operation.</p>
+<p>For a finite group $G$, we define the <strong>order</strong> of $G$, written $\lvert G\rvert$, as the number of elements in $G$.</p>
+<p>Given a subgroup $H$ and an element $g \in G$, the <strong>left coset</strong> of $H$ by $g$ is the set:</p>
+\[gH = \{g \cdot h \mid h \in H\}\]
+<p>Each left coset is a “shifted copy” of $H$ in the group $G$. These cosets will be the main building blocks in our constructive proof of Lagrange’s Theorem.</p>
+<h2 id="lagranges-theorem">Lagrange’s Theorem</h2>
+<p><strong>Theorem</strong>:<br />
+If $G$ is a finite group and $H$ is a subgroup of $G$, then:</p>
+\[\lvert H \rvert \mid \lvert G\rvert \quad \text{(i.e., } \lvert G \rvert / \lvert H \rvert \in \mathbb{Z} \text{)}\]
+<p>In words: the order of any subgroup divides the order of the group.</p>
+<hr />
+<h2 id="an-algorithmic-perspective">An Algorithmic Perspective</h2>
+<p>Let’s take a constructive approach. Suppose we know all elements of a subgroup $H$, and want to explore the entire group $G$ by applying operations with elements from $H$. We’ll build a <strong>partition</strong> of $G$ using left multiplication.</p>
+<hr />
+<h3 id="algorithm-lagrangecosetcountg-h">Algorithm: <code class="language-plaintext highlighter-rouge">LagrangeCosetCount(G, H)</code></h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Input: finite group G, subgroup H
+# Output: the number k of disjoint left cosets of H in G
+</span>
+<span class="n">C</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">G</span><span class="p">)</span> <span class="c1"># Elements of G not yet covered
+</span><span class="n">k</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># Number of cosets constructed
+</span>
+<span class="k">while</span> <span class="n">C</span><span class="p">:</span>
+ <span class="n">g</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">C</span><span class="p">))</span> <span class="c1"># Pick an uncovered element
+</span> <span class="n">coset</span> <span class="o">=</span> <span class="p">{</span><span class="n">g</span> <span class="o">*</span> <span class="n">h</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">H</span><span class="p">}</span> <span class="c1"># Construct a new left coset
+</span> <span class="n">C</span> <span class="o">-=</span> <span class="n">coset</span> <span class="c1"># Remove all its elements from the not yet covered set
+</span> <span class="n">k</span> <span class="o">+=</span> <span class="mi">1</span> <span class="c1"># Count this coset
+</span>
+<span class="k">return</span> <span class="n">k</span>
+</code></pre></div></div>
+<p>At termination, the algorithm has found $k$ disjoint left cosets of $H$ in $G$, and each has exactly $\lvert H \rvert$ elements. Therefore:</p>
+\[\lvert G \rvert = k \cdot \lvert H \rvert \Rightarrow \lvert H \rvert \mid \lvert G\rvert\]
+<hr />
+<h3 id="proof">Proof</h3>
+<p>We split the argument into three claims that correspond directly to the logic of the algorithm.</p>
+<p><strong>Claim 1: Each coset $gH = {g \cdot h : h \in H}$ has exactly $\lvert H \rvert$ elements.</strong></p>
+<p><em>Proof</em>: The map $f: H \to gH$ defined by $f(h) = g \cdot h$ is injective (because if $g \cdot h_1 = g \cdot h_2$ then $h_1 = h_2$ by left-cancellation in the group) and surjective by definition. So it’s a bijection, and $\lvert gH \rvert = \lvert H \rvert$.</p>
+<p><strong>Claim 2: For any $g_1, g_2 \in G$, the cosets $g_1H$ and $g_2H$ are either disjoint or equal.</strong></p>
+<p><em>Proof</em>: Suppose $x \in g_1H \cap g_2H$. Then there exist $h_1, h_2 \in H$ such that $x = g_1h_1 = g_2h_2$. Rearranging gives $g_2^{-1}g_1 = h_2h_1^{-1} \in H$, so $g_1 \in g_2H$, and thus $g_1H = g_2H$.</p>
+<p>This shows that no element of $G$ can appear in more than one coset. So the sets built by the algorithm are disjoint. This is the core essence of the Theorem’s proof.</p>
+<p><strong>Claim 3: The algorithm terminates after finitely many steps and produces a partition of $G$.</strong></p>
+<p><em>Proof</em>: Initially, $C = G$. In each iteration, the algorithm selects an element $g \in C$ and removes $\lvert H \rvert $ elements from $C$ by adding $gH$. Since the cosets are disjoint and $G$ is finite, this process must terminate. When $C = \emptyset$, the algorithm has covered all of $G$ with $k$ disjoint cosets, each of size $\lvert H \rvert $. Therefore:</p>
+\[\lvert G \rvert = k \cdot \lvert H \rvert \Rightarrow \lvert H \rvert \mid \lvert G \rvert.\]
+<p>This proves Lagrange’s Theorem constructively.</p>
+<p>This post will serve as a building block for more advanced results, like showing that the set of $n$th roots of unity in a finite field forms a cyclic group — a structure essential in FFT-based cryptographic protocols.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#math">math</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Lagrange%27s+Theorem+through+the+algorithmic+lens&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2025-07-26-Lagrange%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2025-07-24-block_capacity_blog/" data-toggle="tooltip" data-placement="top" title="An Analysis of Latency and Block Capacity in Nakamoto Consensus">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2025-07-29-2-round-3-round-simplex/" data-toggle="tooltip" data-placement="top" title="Concurrent 2-round and 3-round Simplex-style BFT">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

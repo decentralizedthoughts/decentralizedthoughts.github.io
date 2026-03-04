@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Asynchronous Agreement Part 5: Binary Byzantine Agreement from a strong common coin</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham, Naama Ben-David, Sravya Yandamuri ">
+ 
+ <meta name="description" content="In this post we show how to use Binding Crusader Agreement from the previous post, along with a strong common coin to get a simple and efficient Binary Byzantine Agreement with only an expected $O(n^2)$ message complexity. This is a simplified version from our paper. In the four previous posts we: (1) defined the problem and discussed the FLP theorem; (2) Ben-Or’s protocol for crash failures; (3) a modern version...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Asynchronous Agreement Part 5: Binary Byzantine Agreement from a strong common coin">
+ <meta property="og:description" content="In this post we show how to use Binding Crusader Agreement from the previous post, along with a strong common coin to get a simple and efficient Binary Byzantine Agreement with only an expected $O(n^2)$ message complexity. This is a simplified version from our paper. In the four previous posts we: (1) defined the problem and discussed the FLP theorem; (2) Ben-Or’s protocol for crash failures; (3) a modern version...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham, Naama Ben-David, Sravya Yandamuri ">
+ 
+ <meta property="og:article:published_time" content="2022-04-05T08:11:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2022-04-05-aa-part-five-ABBA/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2022-04-05-aa-part-five-ABBA/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Asynchronous Agreement Part 5: Binary Byzantine Agreement from a strong common coin">
+ <meta property="twitter:description" content="In this post we show how to use Binding Crusader Agreement from the previous post, along with a strong common coin to get a simple and efficient Binary Byzantine Agreement with only an expected $O(n^2)$ message complexity. This is a simplified version from our paper. In the four previous posts we: (1) defined the problem and discussed the FLP theorem; (2) Ben-Or’s protocol for crash failures; (3) a modern version...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Asynchronous Agreement Part 5: Binary Byzantine Agreement from a strong common coin</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham, Naama Ben-David, Sravya Yandamuri </strong><br>
+ 
+ <span class="post-meta">Posted on April 5, 2022</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>In this post we show how to use Binding Crusader Agreement from the <a href="https://decentralizedthoughts.github.io/2022-04-05-aa-part-four-CA-and-BCA/">previous post</a>, along with a strong common coin to get a simple and efficient Binary Byzantine Agreement with only an expected $O(n^2)$ message complexity. This is a simplified version from our <a href="https://eprint.iacr.org/2022/711.pdf">paper</a>.</p>
+<p>In the four previous posts we: (1) <a href="https://decentralizedthoughts.github.io/2022-03-30-asynchronous-agreement-part-one-defining-the-problem/">defined the problem</a> and discussed the <a href="https://decentralizedthoughts.github.io/2019-12-15-asynchrony-uncommitted-lower-bound/">FLP theorem</a>; (2) <a href="https://decentralizedthoughts.github.io/2022-03-30-asynchronous-agreement-part-two-ben-ors-protocol/">Ben-Or’s protocol</a> for crash failures; (3) <a href="https://decentralizedthoughts.github.io/2022-03-30-asynchronous-agreement-part-three-a-modern-version-of-ben-ors-protocol/">a modern version</a> for crash failures; and (4) Crusader Agreement and <a href="https://decentralizedthoughts.github.io/2022-04-05-aa-part-four-CA-and-BCA/">Binding Crusader Agreement</a> in the Byzantine Model.</p>
+<p>Over the years, many solutions have been proposed for Asynchronous Binary Byzantine Agreement that use random coin flips. In this post, we aim to present existing algorithms for ABA under a common framework, and to make reasoning about such algorithms as simple as possible.</p>
+<h2 id="common-coins">Common Coins</h2>
+<p>First we need to define <em>random common coins</em> with two parameters, controlling their fairness and their unpredicability, as follows.</p>
+<blockquote>
+ <p>An <strong>$\epsilon$-good $d$-unpredictable common coin</strong> provides an <em>access</em> primitive that takes no arguments and outputs either $0$ or $1$ with the following properties:</p>
+ <ul>
+ <li>The output value for all parties is completely unpredictable until at least $d+1$ parties have accessed the coin.</li>
+ <li>With probability at least $\epsilon$, all non-faulty parties get $0$, and with probability at least $\epsilon$, all non-faulty parties get $1$.</li>
+ </ul>
+</blockquote>
+<p>In this post, we focus on the simplest setting: we assume that we have access to a <em>strong common coin</em>:</p>
+<p><strong>Strong common coin</strong>: is a $1/2$-good $f$-unpredictable coin where $f$ is the maximum number of faulty parties in the system.</p>
+<p>In other words, all parties have access to a shared source of randomness which outputs either 0 to all parties or 1 to all parties, this value is not revealed until at least one non-faulty party accesses the strong common coin. In later posts, we’ll relax this assumption and show how that affects algorithms for ABA.</p>
+<p>Before showing an algorithm that <em>does</em> work, lets first look at a protocol that seems to work and understand where it fails.</p>
+<h2 id="crusader-agreement-ca-is-not-enough-for-asynchronous-binary-byzantine-agreement-with-a-strong-common-coin">Crusader Agreement (CA) is not enough for Asynchronous Binary Byzantine Agreement with a strong common coin</h2>
+<p>Recall that in Crusader Agreement, parties have an input of either 0 or 1 and an output of either 0, or 1, or a special value $\bot$ such that:</p>
+<ul>
+ <li><strong>Weak Agreement</strong>: If two non-faulty parties output values $x$ and $y$, then either $x=y$ or one of the values is $\bot$.</li>
+ <li><strong>Validity</strong>: If all non-faulty parties have the same input, then this is the only possible output. Furthermore, if a non-faulty party outputs $x \neq \bot$, then $x$ was the input of some non-faulty party.</li>
+ <li><strong>Termination</strong>: All non-faulty parties eventually terminate.</li>
+</ul>
+<p>Many ABA algorithms in the literature can be viewed as operating in rounds of crusader agreement followed by coin flips. We illustrate this concept in the following pseudocode.</p>
+<p>In this pseudocode, we call CrusaderAgreement with a round number. We assume that each new round number gets a new CrusaderAgreement instance in which all variables are reinitialized, and that messages with different round numbers are ignored. The StrongCommonCoin() function returns $0$ for all parties with probability $1/2$ and $1$ for all parties with the remaining probability $1/2$.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Atempting Asynchronous Binary Byzantine Agreement via Crusader Agreement
+input: v (0 or 1)
+r:= 1
+while true
+ value := CrusaderAgreement(r,v)
+ c:= StrongCommonCoin()
+ if value != bot, then
+ v:= value
+ if c = v, then decide(v) 
+ otherwise v:= c
+ r++ 
+</code></pre></div></div>
+<p>The PODC 2014 version of <a href="https://dl.acm.org/doi/10.1145/2611462.2611468">Mostefaoui, Moumen, Raynal</a> has a similar structure. However, it is known that against an adaptive adversary this protocol <strong>will never terminate</strong>.</p>
+<p>Consider the following execution, with $n=4$ and $f=1$. Parties $X$ and $Y$ are non-faulty, party $B$ is Byzantine, and party $S$ is non-faulty but slow. $X$’s input is 0 and $Y$’s input is 1.
+Let $X$ and $Y$ call crusader agreement, and let them both decide $\bot$. Then, we have $X$ and $Y$ reveal the coin, $c$. The adversary, knowing $c$, will now force $S$ to decide $1-c$ in its crusader agreement. This will ensure that while $X$ and $Y$ both start the next round with value $c$, $S$ starts the next round with $1-c$. We can then continue this execution forever, rotating $X,Y,S$ roles since we can always create rounds in which not all non-faulty parties have the same input.
+Note that by the definition of crusader agreement as stated at the beginning of this post, there is nothing to prevent the above scenario from happening. Indeed, many implementations of crusader agreement do allow this to happen.</p>
+<p>We can see that crusader agreement alone is not enough to solve ABA in the framework illustrated in the pseudocode above.</p>
+<h2 id="asynchronous-binary-byzantine-agreement-with-a-strong-common-coin-from-binding-crusader-agreement-bca">Asynchronous Binary Byzantine Agreement with a strong common coin from Binding Crusader Agreement (BCA)</h2>
+<p>Recall that in Binding Crusader Agreement (BCA) strengthens the definition of crusader agreement by adding:</p>
+<ul>
+ <li><strong>Binding:</strong> At the time at which the first non-faulty party outputs a value, there is a value $b$ such that no non-faulty party outputs the value $1−b$ in any extension of this execution.</li>
+</ul>
+<p>We show that simply <strong>replacing</strong> the line <code class="language-plaintext highlighter-rouge">value:= CrusaderAgreement(r,v)</code> with <code class="language-plaintext highlighter-rouge">value:= BindingCrusaderAgreement(r,v)</code> in the pseudocode above <strong>yields a correct ABA algorithm</strong>. To do so, we first recall the definition of Asynchronous Byzantine Agreement:</p>
+<ul>
+ <li><strong>Agreement:</strong> If two non-faulty parties decide $x$ and $y$ respectively, then $x=y$.</li>
+ <li><strong>Weak Validity:</strong> If all parties are non-faulty and have the same input $x$, then no non-faulty party decides a value $y \neq x$.</li>
+ <li><strong>Finite Expected Termination:</strong> All non-faulty parties decide in a finite expected number of rounds.</li>
+</ul>
+<p>In fact we will show that with a strong common coin, the protocol above terminates in a <strong>constant</strong> expected number of rounds.</p>
+<p>Proof of Correctness of ABA with Binding Crusader Agreement and a Strong Common Coin.</p>
+<p><strong>Lemma 1:</strong> If all non-faulty parties start a round $r$ with the same value $b$, then all non-faulty parties will decide $b$ within a constant expected number of rounds.</p>
+<p><em>Proof:</em> As expected, we use the properties of Binding Crusader Agreement (BCA). By BCA Validity, since every non-faulty party inputs $b$ to the instance of BCA, all non-faulty parties output $b$. If $c=b$ then all non-faulty parties <code class="language-plaintext highlighter-rouge">decide(b)</code> in this round. Otherwise, all non-faulty parties set <code class="language-plaintext highlighter-rouge">v:= b</code> and start the next round. This continues for each round until we reach a round in which $c=b$, which happens in an expected constant number of rounds from round $r$.</p>
+<p>Using this lemma, it is now easy to show the correctness of the ABA algorithm.</p>
+<p><strong>Agreement:</strong> 
+Note that a non-faulty party $X$ only decides a value in a round $r$ if the coin agreed with its value and it was the output of $X$’s BCA in round $r$. Let $X$ be the first non-faulty party that decides, and let $r$ be the round in which it decides. Note that in round $r$, no other value can be decided, since the decision value is always the same as the coin of that round. Recall that BCA ensures that if a non-faulty party outputs $x$ from BCA, every other non-faulty party outputs either $\bot$ or $x$ from that instance of BCA. Since the coin value was $x$ in round $r$, all non-faulty parties must have started round $r+1$ with $v:=x$. Therefore, by the lemma above, every other correct party Y must also decide x.</p>
+<p><strong>Validity:</strong>
+If all non-faulty parties have the same input, then they all start round $r=1$ with the same value. Therefore, by Lemma 1, they will all decide on that input in a constant expected number of rounds.</p>
+<p><strong>Constant Expected Termination:</strong>
+Note that if in any round, either all non-faulty parties decide $\bot$ in their BCA, or the coin is the same as the non-$\bot$ decision value of BCA, then Lemma 1 applies in the next round. Furthermore, by the binding property of BCA, the adversary is bound to some non-$\bot$ decision value of the BCA in any round $r$ (if there is one) by the time the first non-faulty party finishes its BCA in round $r$. In particular, this must happen before the coin value is revealed in any coin that is $f$ unpredictable. Therefore, in each round, with probability at least $1/2$ the BCA <strong>binded</strong> value $b$ will be the same as the Strong Common Coin.</p>
+<p><strong>Message Complexity:</strong>
+Since each round takes $O(n^2)$ messages of constant size, the expected message complexity is $O(n^2)$ which is asymptotically optimal.</p>
+<h3 id="a-note-on-byzantine-finality-gadgets">A note on Byzantine Finality Gadgets</h3>
+<p>Much like in the <a href="https://decentralizedthoughts.github.io/2022-03-30-asynchronous-agreement-part-two-ben-ors-protocol/">crash-model</a>, we can add a folklore Byzantine Termination Gadget to ensure termination:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Termination Gadegt for Byzantine failures
+If receive f+1 &lt;decide u&gt;, then
+ decide(u) 
+If decide(u), then
+ send &lt;decide u&gt; to all
+If receive n-f &lt;decide u&gt;, then
+ Terminate.
+</code></pre></div></div>
+<p>Note that the first condition is safe, since it means that at least one non-faulty party sent <code class="language-plaintext highlighter-rouge">&lt;decide u&gt;</code>. Second, if all non-faulty parties decide, then they terminate in one round due to the third condition. Finally the activation of the third condition implies that all non-faulty parties will eventually activate the first condition which in turn implies all non-faulty parties will terminate (even if they did not decide yet).</p>
+<h3 id="acknowledgments">Acknowledgments</h3>
+<p>Many thanks to Andreas Tzionis for helpful feedback and fixing broken links.</p>
+<p>Thoughts and comments on <a href="https://twitter.com/ittaia/status/1511665002188574727?s=20&amp;t=gJEZwTvUN72KwbNBJ53eYQ">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#asynchrony">asynchrony</a>
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ <a href="/tags#research">research</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Asynchronous+Agreement+Part+5%3A+Binary+Byzantine+Agreement+from+a+strong+common+coin&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2022-04-05-aa-part-five-ABBA%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2022-04-05-aa-part-four-CA-and-BCA/" data-toggle="tooltip" data-placement="top" title="Asynchronous Agreement Part 4: Crusader Agreement and Binding Crusader Agreement">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2022-06-07-approx-agreement-one/" data-toggle="tooltip" data-placement="top" title="Approximate Agreement: definitions and the robust midpoint protocol">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

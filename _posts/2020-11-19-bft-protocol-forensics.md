@@ -13,7 +13,7 @@ In a recent work called [BFT Protocol Forensics](https://arxiv.org/pdf/2010.0678
 - Availability of the culpability proof with as many replicas (witnesses) as possible
 - Identification should be conducted as distributedly as possible, i.e., with little or no communication between replicas
 
-The notion of *accountability* was introduced in seminal works such as [PeerReview](https://www.cis.upenn.edu/~ahae/papers/peerreview-sosp07.pdf), and, more recently, the [Casper](https://arxiv.org/abs/1710.09437) protocol was designed with accountability as a primary consideration. In our work, we show that many existing partially synchronous protocols and asynchronous protocols such as [PBFT, HotStuff](https://decentralizedthoughts.github.io/2019-06-22-what-is-the-difference-between/), and [VABA](https://arxiv.org/abs/1811.01332) have strong forensic support. In particular, if $t < n/3$ denotes the maximum number of Byzantine faults tolerated by the protocol, and there are $f > t$ Byzantine faults in the system, then for all of these protocols,
+The notion of *accountability* was introduced in seminal works such as [PeerReview](https://www.cis.upenn.edu/~ahae/papers/peerreview-sosp07.pdf), and, more recently, the [Casper](https://arxiv.org/abs/1710.09437) protocol was designed with accountability as a primary consideration. In our work, we show that many existing partially synchronous protocols and asynchronous protocols such as [PBFT, HotStuff](https://decentralizedthoughts.github.io/2019-06-23-what-is-the-difference-between/), and [VABA](https://arxiv.org/abs/1811.01332) have strong forensic support. In particular, if $t < n/3$ denotes the maximum number of Byzantine faults tolerated by the protocol, and there are $f > t$ Byzantine faults in the system, then for all of these protocols,
 - we can identify $\geq t+1$ Byzantine faults,
 - where $2t+1-f$ honest replicas can act as witnesses, 
 - and the proof can be obtained by communicating with just one of these witnesses.
@@ -76,7 +76,6 @@ As we observed in the case of HotStuff, when the number of Byzantine replicas ar
 > There does not exist a validated Byzantine agreement protocol with weak forensic support with parameters $n$, $t<n/2$, $m \geq n−t$ and $d>n−2t$.
 
 In particular, this implies that the result we obtain is tight. As another special case, when $n = 2t+1$, then all but one replica must go undetected. 
-
 
 
 

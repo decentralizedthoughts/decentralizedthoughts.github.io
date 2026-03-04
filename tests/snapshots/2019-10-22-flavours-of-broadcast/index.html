@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Flavours of Broadcast</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham">
+ 
+ <meta name="description" content="What is the difference between broadcast, crusader broadcast, gradecast, weak broadcast, detectable broadcast, and broadcast with abort? This post is a follow up to our basic post on: What is Broadcast? The focus of this post is on computationally unbounded adversaries in the synchronous model, but we begin with considering both bounded and unbounded adversaries for the (classic) Broadcast problem. Broadcast Let’s start by defining the basic Broadcast problem again....">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Flavours of Broadcast">
+ <meta property="og:description" content="What is the difference between broadcast, crusader broadcast, gradecast, weak broadcast, detectable broadcast, and broadcast with abort? This post is a follow up to our basic post on: What is Broadcast? The focus of this post is on computationally unbounded adversaries in the synchronous model, but we begin with considering both bounded and unbounded adversaries for the (classic) Broadcast problem. Broadcast Let’s start by defining the basic Broadcast problem again....">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham">
+ 
+ <meta property="og:article:published_time" content="2019-10-22T10:44:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2019-10-22-flavours-of-broadcast/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2019-10-22-flavours-of-broadcast/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Flavours of Broadcast">
+ <meta property="twitter:description" content="What is the difference between broadcast, crusader broadcast, gradecast, weak broadcast, detectable broadcast, and broadcast with abort? This post is a follow up to our basic post on: What is Broadcast? The focus of this post is on computationally unbounded adversaries in the synchronous model, but we begin with considering both bounded and unbounded adversaries for the (classic) Broadcast problem. Broadcast Let’s start by defining the basic Broadcast problem again....">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Flavours of Broadcast</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham</strong><br>
+ 
+ <span class="post-meta">Posted on October 22, 2019</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>What is the difference between broadcast, crusader broadcast, gradecast, weak broadcast, detectable broadcast, and broadcast with abort? This post is a follow up to our basic post on: <a href="https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/">What is Broadcast?</a></p>
+<p>The focus of this post is on <a href="https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/">computationally unbounded adversaries</a> in the <a href="https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/">synchronous model</a>, but we begin with considering both bounded and unbounded adversaries for the (classic) Broadcast problem.</p>
+<h3 id="broadcast">Broadcast</h3>
+<p>Let’s start by defining the basic <em>Broadcast problem</em> again. We assume a set of $n$ parties. One party is designated as being called the <em>sender</em>. We assume the sender has some initial <em>value</em>.</p>
+<p>A protocol solves the (classic) <strong>broadcast</strong> problem:</p>
+<ol>
+ <li><strong>Agreement</strong>: If an honest party outputs $x$, then all honest parties output $x$.</li>
+ <li><strong>Validity</strong>: If the sender is honest, then all honest parties output the sender’s value.</li>
+</ol>
+<p>Assuming a PKI and a <a href="https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/">computationally bounded</a> adversary, the <a href="https://www.cs.huji.ac.il/~dolev/pubs/authenticated.pdf">Dolev-Strong</a> Broadcast protocol solves Byzantine broadcast assuming an adversary that can control up to $n−1$ parties out of $n$ in the Synchronous model.</p>
+<p>For computationally unbounded adversaries the <a href="https://decentralizedthoughts.github.io/2019-08-02-byzantine-agreement-is-impossible-for-$n-slash-leq-3-f$-is-the-adversary-can-easily-simulate/">FLM lower bound</a> shows that broadcast is possible only when $n&gt;3f$.</p>
+<p>So for computationally unbounded adversaries, it is natural to ask <em>are there relaxations of the broadcast problem that circumvent the $n\leq 3f$ lower bound?</em></p>
+<h3 id="weak-broadcast-and-detectable-broadcast">Weak Broadcast and Detectable Broadcast</h3>
+<p>If we keep the agreement property and relax the validity property we arrive at the classic weak Byzantine Broadcast problem of <a href="https://zoo.cs.yale.edu/classes/cs426/2014/bib/lamport83theweak.pdf">Lamport from 1984</a>.</p>
+<p>A protocol solves the <strong>weak broadcast</strong> problem:</p>
+<ol>
+ <li><strong>Agreement</strong>: If an honest party outputs $x$, then all honest parties output $x$.</li>
+ <li><strong>Weak Validity</strong>: If the sender is honest, then all honest parties output either sender’s value or <em>⊥</em>.</li>
+ <li><strong>Non-triviality</strong>: If all parties are honest, then all parties output the sender’s value.</li>
+</ol>
+<p>Note on lower bounds: <a href="https://groups.csail.mit.edu/tds/papers/Lynch/FischerLynchMerritt-dc.pdf">Fischer, Lynch, and Merritt</a> show that weak broadcast is impossible for deterministic protocols for $n \leq 3f$.</p>
+<p>For randomized protocols <a href="http://www.math.ucsd.edu/~ronspubs/89_08_byzantine.pdf">Karlin and Yao 1984, unpublished</a> show that Broadcast must have a constant (more than $1/3$) error probability for $n\leq 3f$.</p>
+<p>This lower bound for randomized protocols does not hold for weak Broadcast. Using randomization and private channels, <a href="https://iacr.org/archive/eurocrypt2002/23320478/qbc.pdf">Fitzi, Gisin, Maurer, and von Rotz 2002</a> strengthen Weak Broadcast to a notion of <em>Detectable Broadcast</em> that also provides a stronger notion of fairness that is important for SMPC. They show that it is possible to solve weak broadcast for $n&gt;2f$ with just a <a href="post on security definitions">negligible error probability</a>.</p>
+<p><a href="https://groups.csail.mit.edu/tds/papers/Smith-Adam/fghhs-PODC2002-new-final.pdf">Fitzi, Gottesman, Hirt, Holenstein, and Smith 2002</a> improve this bound to $n&gt;f$ again with just a <a href="post on security definitions">negligible error probability</a>.</p>
+<h3 id="crusader-broadcast-and-gradecast">Crusader Broadcast and Gradecast</h3>
+<p>An alternate way to relax the broadcast problem is to keep the validity property and relax the agreement property. This gives us the <strong>Crusader broadcast</strong> of <a href="http://infolab.stanford.edu/pub/cstr/reports/cs/tr/81/846/CS-TR-81-846.pdf">Dolev 1981</a>.</p>
+<p>A protocol solves the <strong>crusader broadcast</strong> problem:</p>
+<ol>
+ <li><strong>Weak Agreement</strong>: If an honest party outputs x, then all honest parties output either x or ⊥.</li>
+ <li><strong>Validity</strong>: If the sender is honest, then all honest parties output the sender’s value.</li>
+</ol>
+<p>See <a href="https://decentralizedthoughts.github.io/2022-06-19-crusader-braodcast/">this post</a> for Crusader Boardcast with $O(n^2)$ words and $O(1)$ rounds, for any $f&lt;n$ given a PKI.</p>
+<p><a href="https://people.csail.mit.edu/silvio/Selected%20Scientific%20Papers/Distributed%20Computation/An%20Optimal%20Probabilistic%20Algorithm%20for%20Byzantine%20Agreement.pdf">Feldman and Micali 1988, 1997</a> strengthened the definition of crusader agreement so the output of the protocol is <em>both</em> a decision value and a $grade \in {0,1,2}$.</p>
+<p>A protocol solves the <strong>Gradecast</strong> problem:</p>
+<ol>
+ <li><strong>Knowledge of Agreement</strong>: If an honest party outputs x with grade 2 then all honest parties output $x$ with $grade \in {1,2}$.</li>
+ <li><strong>Weak Agreement</strong>: If an honest party outputs x, then all honest parties output either x or ⊥.</li>
+ <li><strong>Validity with knowledge</strong>: If the sender is honest, then all honest parties output the sender’s value with grade $2$.</li>
+</ol>
+<p>Gradecast <a href="https://eprint.iacr.org/2006/065.pdf">and its variants</a> are very important building blocks in many MPC and Byzantine Agreement protocols.</p>
+<p>Note on lower bounds for adversaries that can simulate (for example computationally unbounded adversaries): impossibility for $n\leq 3f$ for deterministic protocol was shown by <a href="https://www.cse.huji.ac.il/~dolev/pubs/byz-strike-again.pdf">Dolev 1982</a>. For randomized protocols, even a small constant error is impossible. This extension of the FLM lower bound to crusader agreement is folklore and was first mention by <a href="https://eprint.iacr.org/2002/040.pdf">Goldwasser and Lindell, 2002</a>, see <a href="https://decentralizedthoughts.github.io/2021-10-04-crusader-agreement-with-dollars-slash-leq-1-slash-3$-error-is-impossible-for-$n-slash-leq-3f$-if-the-adversary-can-simulate/">this post</a> for more details.</p>
+<h3 id="broadcast-with-abort">Broadcast with Abort</h3>
+<p>If we relax both Agreement and Validity we obtain the notion of <em>Broadcast with abort</em> of <a href="https://eprint.iacr.org/2002/040.pdf">Goldwasser and Lindell</a>, <a href="http://groups.csail.mit.edu/cis/pubs/shafi/2002-disc.pdf">2002</a>.</p>
+<p>A protocol solves the <strong>Broadcast with abort</strong> problem:</p>
+<ol>
+ <li><strong>Weak Agreement</strong>: If an honest party outputs x, then all honest parties output either x or ⊥.</li>
+ <li><strong>Weak Validity</strong>: If the sender is honest, then all honest parties output either sender’s value or ⊥.</li>
+ <li><strong>Non-triviality</strong>: If all parties are honest, then all parties output the sender’s value.</li>
+</ol>
+<p>Goldwasser and Lindell show that this relaxation can be solved even if the adversary controls $n-1$ parties out of $n$. The solution is a natural two-round protocol and obtains <a href="post on security definitions">perfect security</a>. Here is the protocol for Broadcast with abort:</p>
+<ol>
+ <li>The sender sends $x$ to all parties.</li>
+ <li>Denote by $x_i$ the value received by party $i$ from the sender in the previous round. If $i$ did not receive a value from the sender in the first round, then it sets $x_i = ⊥$. Then, every party $i$ (for $i &gt; 1$) sends its value $x_i$ to all other parties.</li>
+ <li>Denote the value received by $i$ from $j$ in the previous round by $x_{i,j}$ Then, $i$ outputs $x_i$ if this is the only
+value that it saw ($\forall i&gt;1: x_i=x_{i,j}$). Otherwise, it
+outputs $⊥$.</li>
+</ol>
+<h3 id="notes">Notes</h3>
+<p>Many of the results of this post have been extended to Secure Multi Party Computation. More on that in later posts.</p>
+<p>Please leave comments on <a href="https://twitter.com/ittaia/status/1186630509931184134?s=20">Twitter</a></p>
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Flavours+of+Broadcast&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2019-10-22-flavours-of-broadcast%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2019-10-15-consensus-for-state-machine-replication/" data-toggle="tooltip" data-placement="top" title="Consensus for State Machine Replication">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2019-10-25-flavours-of-state-machine-replication/" data-toggle="tooltip" data-placement="top" title="Flavours of State Machine Replication">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>What is the difference between PBFT, Tendermint, HotStuff, and HotStuff-2?</title>
+ 
+ 
+ <meta name="author" content="Kartik Nayak, Dahlia Malkhi">
+ 
+ <meta name="description" content="We recently published our work HotStuff-2 on eprint, introducing a two-phase HotStuff variant which simultaneously achieves $O(n^2)$ worst-case communication, optimistically linear communication, a two-phase commit regime within a view, and optimistic responsiveness in partially-synchronous BFT. The main takeaway is that two phases are enough for BFT after all. In this post, we will elaborate on the key observation made in the work, and compare and contrast it to relevant prior...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="What is the difference between PBFT, Tendermint, HotStuff, and HotStuff-2?">
+ <meta property="og:description" content="We recently published our work HotStuff-2 on eprint, introducing a two-phase HotStuff variant which simultaneously achieves $O(n^2)$ worst-case communication, optimistically linear communication, a two-phase commit regime within a view, and optimistic responsiveness in partially-synchronous BFT. The main takeaway is that two phases are enough for BFT after all. In this post, we will elaborate on the key observation made in the work, and compare and contrast it to relevant prior...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Kartik Nayak, Dahlia Malkhi">
+ 
+ <meta property="og:article:published_time" content="2023-04-01T01:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2023-04-01-hotstuff-2/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2023-04-01-hotstuff-2/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="What is the difference between PBFT, Tendermint, HotStuff, and HotStuff-2?">
+ <meta property="twitter:description" content="We recently published our work HotStuff-2 on eprint, introducing a two-phase HotStuff variant which simultaneously achieves $O(n^2)$ worst-case communication, optimistically linear communication, a two-phase commit regime within a view, and optimistic responsiveness in partially-synchronous BFT. The main takeaway is that two phases are enough for BFT after all. In this post, we will elaborate on the key observation made in the work, and compare and contrast it to relevant prior...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>What is the difference between PBFT, Tendermint, HotStuff, and HotStuff-2?</h1>
+ 
+ 
+ 
+ 
+ By <strong>Kartik Nayak, Dahlia Malkhi</strong><br>
+ 
+ <span class="post-meta">Posted on April 1, 2023</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>We recently published our work <a href="https://eprint.iacr.org/2023/397.pdf">HotStuff-2</a> on eprint, introducing a two-phase HotStuff variant which simultaneously achieves $O(n^2)$ worst-case communication, optimistically linear communication, a two-phase commit regime within a view, and optimistic responsiveness in partially-synchronous BFT.</p>
+<p>The main takeaway is that two phases are enough for BFT after all.</p>
+<p>In this post, we will elaborate on the key observation made in the work, and compare and contrast it to relevant prior works: PBFT, Tendermint, and the original HotStuff. We will focus on explaining one key component that also forms the difference between these works – <em>how do we ensure liveness during a view change while simultaneously achieving other useful properties: responsiveness, good communication complexity, and fewer number of phases in the protocol?</em></p>
+<p>HotStuff-2 is remarkably simple, adding no substantive complexity to the original HotStuff protocol. Hence, other aspects such as the way leaders change, differences in the normal case leader commit phase, pipelining, concurrency, and randomness are the same in HotStuff-2 as in HotStuff. Details regarding these aspects can be found in earlier posts, see the <a href="#suggested-tutorials">suggested tutorials</a> section at the bottom of the post for background material.</p>
+<h2 id="overview-of-approaches">Overview of Approaches</h2>
+<p>For simplicity, we will assume that these partially synchronous protocols with $n \geq 3t+1$ are committing a single value, though the idea directly extends to multiple values. At the core, all of these protocols use (roughly) the same approach to obtain the safety property.</p>
+<p>In these protocols, in a <em>view</em>, parties hope to <em>certify</em> and commit to at most one value. Thus, they introduce one phase of votes between parties to ensure the uniqueness of a value within the view. They then engage in another phase that allows parties to commit the value. A two-phase regime materializing this approach, where each phase uses a <a href="https://dl.acm.org/doi/10.1145/343477.343531">linear secure broadcast</a>, looks like the following. Note that party 4 is Byzantine in all of the examples below.</p>
+<p><img src="https://i.imgur.com/4yFLAhe.png" alt="" /></p>
+<p>When a party commits a value $v$ after the second phase, a principal invariant that is ensured is that $\geq 2t+1$ parties (and thus $\geq t+1$ honest parties) are <em>locked</em> on $v$ from the first phase. These $\geq t+1$ honest parties would guard the safety of the commit. <em>Thus, they would not vote on a conflicting value unless they are shown a proof that it is safe to do so.</em></p>
+<p>Thus, all of these protocols rely on a lock-commit paradigm (also known as <a href="https://dl.acm.org/doi/10.1145/277697.277724">commit-adopt</a>) where sufficiently many parties are locked before any party can commit. Consequently, if a leader fails or the network stalls, we can end up in one of three situations depicted below.</p>
+<p><img src="https://i.imgur.com/Yb4fiPc.png" alt="" /></p>
+<ol>
+ <li>No party has a lock and a fortioti, no value is committed.</li>
+ <li>One or a few parties are locked on a value, but no honest party has committed.</li>
+ <li>$2t+1$ parties are locked, some honest parties have committed but not all.</li>
+</ol>
+<p>Observe that while case 1 is not great from the perspective of making progress, all parties are free to vote on other values in subsequent views. The key question is how do parties that are locked on a value, behave in the other two cases given that they do not know which scenario is the true system state. It turns out that all of these <em>safety-preferring</em> protocols, the locked parties guard the safety of a <em>potential</em> commit, i.e., by default assume we are in case 3, and not vote for a conflicting value unless shown a proof otherwise. When we are indeed in case 2, we need some mechanism to ensure that these locked honest parties vote for a safe proposal from a leader (perhaps conflicting with a locked value) after a view-change. The different schemes differ in this regard. Note that since all of these are safety-preferring protocols, we are only concerned about an honest leader making progress — a malicious leader, at the most, can delay progress, and it can do so by simply not sending a proposal in the view.</p>
+<h2 id="how-does-the-view-change-protocol-differ-between-these-protocols">How does the view-change protocol differ between these protocols?</h2>
+<p>While reading about these protocols, it may be beneficial to think about these two questions: <em>(i) What does the leader learn about the status of the system (w.r.t. the three scenarios) at the start of a view? (ii) How does the leader convince other parties about the status of the system (and thus to vote for its proposal)?</em></p>
+<h3 id="pbft">PBFT</h3>
+<p>In PBFT, the leader collects a status of locks from $2t+1$ parties at the start of a view. Consider case 3 depicted above, namely, that some party has committed in earlier views. Among the $2t+1$ locks in the status, up to $t$ can be malicious, up to $t$ can be from honest parties are not locked on the committed value, but there is at least one honest party locked on the committed value. That party would not vote for a leader proposal conflicting with the lock it holds, thus guarding the safety of the commit. Moreover, the leader would necessarily learn about that lock when it collects the status message.</p>
+<p>Now consider case 2 depicted below, namely, no party had committed in an earlier view, but some parties (in the figure below, parties 1 and 4) locked on the value. Their status may or may not be a part of the locks the leader receives. For instance, we can be in a scenario where the leader receives a status from all parties except party 1, and Byzantine party 4 does not report its lock. In this case, the leader is actually guaranteed that no honest party may have committed the value and is free to propose any value.</p>
+<p><img src="https://i.imgur.com/PxGS3bj.png" alt="" /></p>
+<p>How does the leader convince the honest parties locked on a conflicting value to vote for the value it proposed? It sends the <em>status certificate</em> containing the $2t+1$ locks in its proposal. For example, in the figure below, the leader provides (absence of) locks from itself, party 3, and party 4 (who is lying). Observe that every honest party can apply the same reasoning as the leader did, and thus know that it is safe to vote for the value. In particular, this holds even in situations when a party is locked on a value and the leader proposes a different value that is justified by the status certificate. In the figure above, party 1 is locked in a previous proposal but it will vote for the leader proposal. In other words, the status certificate from an honest leader provides sufficient information to all honest parties to vote on the proposal.</p>
+<p>Note that sending this message can be responsive since the leader can act as soon as it receives $2t+1$ locks. However, the status certificate has linear complexity and thus sending it in the proposal leads to a quadratic communication complexity.</p>
+<h3 id="buchmans-thesis-variant-of-tendermint1">Buchman’s Thesis Variant of Tendermint$^1$</h3>
+<p>Buchman’s Thesis variant of Tendermint improves PBFT by not requiring the leader to send a $(2t+1)$-sized status certificate and thus can perform a view change with linear complexity. Well, how can a leader convince honest parties would indeed vote for it? Observe that by receiving $2t+1$ locks, an honest leader perhaps knows what to propose, but if parties do not have access to those locks (through a status certificate), they may not vote for it. In particular, in a situation where some honest party $p$ is locked on a value, and a leader proposes a conflicting value, $p$ cannot distinguish whether we are in case 2 or case 3 in the scenarios described above. A generalization of this dilemma for this party is presented as a livelessness attack in <a href="https://arxiv.org/pdf/1803.05069.pdf">HotStuff</a>.</p>
+<p><img src="https://i.imgur.com/zMYcMB6.png" alt="" /></p>
+<p>To address this concern, the protocol requires the leader to wait for an $O(\Delta)$ time at the start of the view. After GST, the $O(\Delta)$ wait ensures that the leader receives locks from <em>all</em> honest parties. In the figure above, the leader will obtain the highest lock value from party 1. Thus, it can send a proposal that conforms with the value corresponding to the lock from the highest view, and send this lock together with the proposal. The highest-ranked lock convinces <em>all</em> honest parties to vote on the proposal sent by the leader. Note that, in this solution, while the leader learns the globally highest-ranked lock, the parties do not. However, the amount of information is sufficient to ascertain that the proposal is safe to vote on.</p>
+<p>This protocol obtains a linear communication complexity for view change compared to PBFT’s quadratic communication complexity. However, due to the $O(\Delta)$ wait, the protocol is not responsive.$^1$</p>
+<h3 id="hotstuff">HotStuff</h3>
+<p>The HotStuff protocol simultaneously obtains a linear view change and responsiveness when the leader is honest after GST. HotStuff addresses the livelessness concern differently while still ensuring that the value corresponding to the highest lock is proposed by the leader. Abstractly speaking, it uses the same argument as the one used for safety. For safety, we said, “if some party commits, then $\geq 2t+1$ parties hold a lock that will guard the safety of the commit, and ensure that the next leader receives it”. For liveness, HotStuff introduces another phase of votes and obtains a similar invariant: “if some party locks, then $\geq 2t+1$ parties know about the existence of this lock and thus hold a <em>key</em> corresponding to it. This key will be shared with the next leader to decide on a proposal appropriately.”
+<img src="https://i.imgur.com/fitJEFX.png" alt="" /></p>
+<p>In the figure below, a leader failure or poor network at a critical moment leaves parties 1 and 4 locked; the extra phase guarantees that $2t+1$, namely parties 1, 3, and 4, already obtained a key corresponding to this lock. Note that, in particular, party 3 has a key despite not reaching the lock step.</p>
+<p><img src="https://i.imgur.com/1C6i7jT.png" alt="" /></p>
+<p>Correspondingly, the next leader would learn about the highest lock through the $2t+1$ keys it receives, and the proposal would respect the globally highest lock held by any honest party. In the example, the new leader (party 2) obtains the key from party 3 (Byzantine party 4 may not send its key). Note that, while locks guard the safety of a commit, keys do not, and thus honest parties only holding a higher key on a different value than the proposal can still vote for the proposal.</p>
+<p>Thus, HotStuff obtains linear view change and responsiveness, but introducing the <em>key phase</em> makes it a three-phase protocol.</p>
+<h3 id="hotstuff-2">HotStuff-2</h3>
+<p>Our work takes a fresh look at the livelessness concern and asks, <em>do we really need to add another phase to address this concern while still obtaining linear communication complexity and optimistic responsiveness?</em> Following the above discussion, if a leader knows about the highest lock <em>and</em> it can convince all honest parties about it, then the problem is solved.</p>
+<p>The key observation is that a new leader can choose between two options:</p>
+<ul>
+ <li>If the leader obtains a lock (a quorum certificate) from the preceding view, it <strong>knows</strong> that it has obtained the maximal locked value that possibly exists in the system. In this case, it proceeds with a proposal in a responsive manner.</li>
+ <li>Otherwise, the leader <strong>knows</strong> that a timer delay of $\Omega(\Delta)$ must have expired in the preceding view. In that case, there is no responsiveness anyway, hence it waits an extra $O(\Delta)$ delay after all parties are guaranteed to enter the view to obtain the maximal locked value in the system.</li>
+</ul>
+<p>Indeed if a leader would receive a lock corresponding to the previous view, there <em>cannot</em> exist an even higher lock. Thus, a proposal respecting this lock would be voted for by all honest parties and the livelessness concern does not exist. If the leader does not obtain such a lock from the previous view, it would wait to hear about the locks from all honest parties by waiting $O(\Delta)$ time — this can happen when the leader from the previous view is malicious or the previous view was before GST. However, in those cases, we cannot hope to obtain responsiveness anyway. Thus, if we have a sequence of honest leaders after GST, each of them is guaranteed to drive progress responsively and generate a certificate in a view that will aid the next leader. Thus, all leaders except the first one in the chain can make honest parties commit responsively.</p>
+<p>Revisiting the example above, in HotStuff-2 one of the following two scenarios depicted below may happens:</p>
+<ul>
+ <li>Scenario 1: Some parties may not commit in a view but they become locked in it; the highest lock is obtained by the next view leader and it proceeds responsively.</li>
+ <li>Scenario 2: No (honest) party obtains a lock on a value in a view, and the next view leader has to wait $\Delta$ to propose in the next view.</li>
+</ul>
+<p><img src="https://i.imgur.com/dDVmH8r.png" alt="" /></p>
+<p>It’s worth noting that using a dual leader regime differentiating between the case of a normal/faulty preceding view has been used in prior works; see the <a href="https://eprint.iacr.org/2023/397.pdf">HotStuff-2 manuscript</a> for a detailed discussion of related works. The first one (to our knowledge) is <a href="https://eprint.iacr.org/2018/981.pdf">Pala</a> which introduced a dual regime into the Tendermint protocol. Subsequently, several works have attempted to improve the number of phases in the HotStuff protocol using a dual leader regime. This includes <a href="https://arxiv.org/abs/2010.11454">Fast-HotStuff</a> and a recent <a href="https://decentralizedthoughts.github.io/2022-11-24-two-round-HS/">post</a> that adds a $\Delta$ wait to Tendermint and to the <a href="https://arxiv.org/pdf/1803.05069v1.pdf">original two-phase HotStuff paper</a>, but with no discussion of responsiveness or view synchronization.</p>
+<p>The protocol modification in HotStuff-2 is remarkably simple, adding no substantive complexity to the original HotStuff protocol. The essence of our result is not in a new protocol but understanding that a simple solution such as this suffices and we can simultaneously obtain a linear communication complexity view change with optimistic responsiveness, worst-case quadratic complexity while still committing within two phases. Our key observation is subtle, but once the insight is understood, really simple (at least we think so!), allowing us to solve the problem without any heavy machinery.</p>
+<h2 id="summary">Summary</h2>
+<p>Here’s a summary of the differences between these protocols.</p>
+<table>
+ <thead>
+ <tr>
+ <th> </th>
+ <th>Phases</th>
+ <th>Worst-case complexity</th>
+ <th>View-change communication</th>
+ <th>Responsive view-change?</th>
+ </tr>
+ </thead>
+ <tbody>
+ <tr>
+ <td>PBFT</td>
+ <td>2</td>
+ <td>$O(n^3)$</td>
+ <td>$O(n^2)$</td>
+ <td>Yes</td>
+ </tr>
+ <tr>
+ <td>Buchman’s Thesis variant of Tendermint</td>
+ <td>2</td>
+ <td>$O(n^2)$</td>
+ <td>$O(n)$</td>
+ <td>No$^1$</td>
+ </tr>
+ <tr>
+ <td>HotStuff</td>
+ <td>3</td>
+ <td>$O(n^2)$</td>
+ <td>$O(n)$</td>
+ <td>Yes</td>
+ </tr>
+ <tr>
+ <td>HotStuff-2</td>
+ <td>2</td>
+ <td>$O(n^2)$</td>
+ <td>$O(n)$</td>
+ <td>Yes</td>
+ </tr>
+ </tbody>
+</table>
+<h2 id="suggested-tutorials">Suggested Tutorials</h2>
+<ul>
+ <li><a href="https://decentralizedthoughts.github.io/2022-09-10-provable-broadcast/">Provable Broadcast (2022)</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/">On PBFT from Locked Broadcast (2022)</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2022-11-24-two-round-HS/">Two-Round HotStuff (2022)</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2019-06-23-what-is-the-difference-between/">What is the difference between PBFT, Tendermint, SBFT and HotStuff? (2019)</a></li>
+ <li><a href="https://malkhi.com/posts/2019/08/hotstuff-three-chain-rules/">HotStuff: Three-Chain Rules! (2019)</a></li>
+ <li><a href="https://malkhi.com/posts/2018/04/BFT-lens-tndrmnt/">The BFT Lens: Tendermint (2018)</a></li>
+ <li><a href="https://malkhi.com/posts/2018/03/bft-lens-casper/">The BFT Lens: HotStuff and Casper (2018)</a></li>
+</ul>
+<h2 id="notes">Notes</h2>
+<ol>
+ <li>Buchman’s Thesis protocol was followed by the <a href="https://arxiv.org/pdf/1807.04938">BKM paper</a> which is the Tendermint protocol used in production today. This protocol achieves optimistic responsiveness too. Refer to the blog post by Informal Systems <a href="https://informal.systems/blog/tendermint-responsiveness">here</a>.</li>
+</ol>
+<p>Please add your comments on <a href="https://twitter.com/kartik1507/status/1642214584277663746?s=20">Twitter</a>.</p>
+<p><strong>Acknowledgment.</strong> We thank Benjamin Chan, Adi Seredinschi, and Nenad Milosevic for providing feedback on this post.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ <a href="/tags#research">research</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=What+is+the+difference+between+PBFT%2C+Tendermint%2C+HotStuff%2C+and+HotStuff-2%3F&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2023-04-01-hotstuff-2%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2023-02-19-rand-and-consensus-2/" data-toggle="tooltip" data-placement="top" title="Randomization and Consensus - synchronous binary agreement for minority omission failures">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2023-04-09-blockchainsplustees-day1-summary/" data-toggle="tooltip" data-placement="top" title="Blockchains + TEEs Day 1 Summary">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

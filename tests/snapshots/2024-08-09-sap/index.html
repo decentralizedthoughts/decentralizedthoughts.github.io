@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>The SAP theorem for storing secret keys</title>
+ 
+ 
+ <meta name="author" content="Marwa Mouallem, Ittay Eyal, Ittai Abraham">
+ 
+ <meta name="description" content="Public key cryptography (PKC) is a fundamental technology that is a key enabler to the Internet and the whole client-server paradigm. Without public key cryptography, the modern Internet economy, from cryptocurrencies to online banking and retail, would simply not exist. In the PKC paradigm with clients and servers, clients authenticate to servers by holding secret keys and servers verify the authentication by using known corresponding public keys. Servers performing critical...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="The SAP theorem for storing secret keys">
+ <meta property="og:description" content="Public key cryptography (PKC) is a fundamental technology that is a key enabler to the Internet and the whole client-server paradigm. Without public key cryptography, the modern Internet economy, from cryptocurrencies to online banking and retail, would simply not exist. In the PKC paradigm with clients and servers, clients authenticate to servers by holding secret keys and servers verify the authentication by using known corresponding public keys. Servers performing critical...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Marwa Mouallem, Ittay Eyal, Ittai Abraham">
+ 
+ <meta property="og:article:published_time" content="2024-08-09T07:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2024-08-09-sap/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2024-08-09-sap/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="The SAP theorem for storing secret keys">
+ <meta property="twitter:description" content="Public key cryptography (PKC) is a fundamental technology that is a key enabler to the Internet and the whole client-server paradigm. Without public key cryptography, the modern Internet economy, from cryptocurrencies to online banking and retail, would simply not exist. In the PKC paradigm with clients and servers, clients authenticate to servers by holding secret keys and servers verify the authentication by using known corresponding public keys. Servers performing critical...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>The SAP theorem for storing secret keys</h1>
+ 
+ 
+ 
+ 
+ By <strong>Marwa Mouallem, Ittay Eyal, Ittai Abraham</strong><br>
+ 
+ <span class="post-meta">Posted on August 9, 2024</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p><a href="https://en.wikipedia.org/wiki/Public-key_cryptography">Public key cryptography</a> (PKC) is a fundamental technology that is a key enabler to the <strong>Internet</strong> and the whole <strong>client-server</strong> paradigm. Without public key cryptography, the modern Internet economy, from cryptocurrencies to online banking and retail, would simply not exist.</p>
+<p>In the PKC paradigm with clients and servers, clients authenticate to servers by holding <em>secret keys</em> and servers verify the authentication by using known corresponding <em>public keys</em>.</p>
+<p>Servers performing critical tasks are at greater risk of failure. To increase fault tolerance, distributed protocols with multiple servers are used. Systems that coordinate multiple servers are challenging; these systems may suffer <em>liveness violations</em> (stop responding) and <em>safety violations</em> (provide inconsistent views to clients).</p>
+<p>The <strong>CAP theorem</strong> (Consistency - Availability - Partition tolerance) is a <a href="https://decentralizedthoughts.github.io/2023-07-09-CAP-two-servers-in-psynch/">fundamental result</a> that captures the inherent limitations of replicating a server:</p>
+<blockquote>
+ <p><strong>Any replicated server system, in the face of a perceived 50-50 split, can either protect against safety violations or liveness violations, but not both.</strong></p>
+</blockquote>
+<p>While the CAP theorem focuses on servers, clients face a parallel dilemma when storing secret keys.</p>
+<p>But what about the client? It needs to store its secret keys, not lose them, and protect them from being stolen. Storing secret keys for critical tasks is challenging due to the risk of failures. To increase fault tolerance, distributed storage protocols with multiple storage nodes are used. Systems that distribute client secrets are challenging; these distributed storage systems may suffer <em>key loss</em> (availability failure: losing access to your assets) or <em>key theft</em> (safety failure: attacker gains access to your assets). Several recent papers study this space, see <a href="https://eprint.iacr.org/2022/1682.pdf">MKE22</a>, <a href="https://arxiv.org/pdf/2312.13967">ME24</a>.</p>
+<p>The <strong>SAP theorem</strong> (Safety - Availability - Partition tolerance) is the fundamental analog result that captures the inherent limitations of distributing the secrets of a client:</p>
+<blockquote>
+ <p><strong>Any distributed client secret storage system, in the face of a perceived 50-50 split (where the system cannot distinguish between a network partition and node failure), can either protect against key theft or key loss, but not both.</strong></p>
+</blockquote>
+<h2 id="sap-theorem-for-two-nodes">SAP theorem for two nodes</h2>
+<p>We proceed by contradiction, assuming the system achieves both properties and constructing two indistinguishable worlds that violate safety.</p>
+<p><em>It is impossible to implement a distributed client secret key storage that is resilient to both key loss and key theft given two storage nodes and an adversary that can either crash one storage node or gain access to one storage node, in the partial synchrony model.</em></p>
+<h3 id="proof">Proof</h3>
+<p>Consider a system with two storage nodes and two possible worlds. We will assume the system provides key loss resilience and prove that it cannot provide key theft resilience.</p>
+<p>World A: Storage node 2 crashes. To provide liveness (key loss resilience) the system must still be able to sign commands in this setting.</p>
+<p>World B: Storage node 1 is compromised, and the adversary has control over it. Moreover, due to asynchrony, storage node 2 is slow. The adversary can send malicious commands to storage node 1. From the perspective of the honest node, the network delay in World B is indistinguishable from a crash in World A.</p>
+<p>Due to the indistinguishably between the two worlds, the execution of world B must succeed in signing commands. Therefore, in any execution consistent with World B, the system signs commands under adversarial control, violating key-theft resilience.</p>
+<h2 id="general-sap-theorem">General SAP theorem</h2>
+<p><em>Let $P \subset N$ be any non-empty proper subset ($P \neq \emptyset$ and $P \neq N$).</em></p>
+<p>The intuition is that the subset $P$ represents the crashed portion of the system, while its complement models the potentially compromised side.</p>
+<p><em>It is impossible to implement a distributed client secret key storage that is resilient to both key loss and key theft given $N$ storage nodes and an adversary that can either crash the storage nodes in $P$ or gain access to the storage nodes in $N\setminus P$, in the partial synchrony model.</em></p>
+<h3 id="proof-1">Proof</h3>
+<p>The proof of the general statement is a reduction to the two node case. The main observation is that world A must make progress if the storage nodes in $P$ crash, and hence world B must make progress even if the storage nodes in $P$ are all slow.</p>
+<p>Just as the CAP theorem defines the limits of distributed servers, the SAP theorem defines the limits of distributed clients.</p>
+<p>These limitations motivate ongoing research into techniques such as threshold signing and hardware enclaves that can partially mitigate the SAP tradeoff.</p>
+<p>Your comments on <a href="https://x.com/ittaia/status/1821883577467834550">twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#research">research</a>
+ 
+ <a href="/tags#lowerbound">lowerbound</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=The+SAP+theorem+for+storing+secret+keys&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2024-08-09-sap%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2024-08-08-vid/" data-toggle="tooltip" data-placement="top" title="What is Verifiable Information Dispersal?">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2024-08-24-hotstuff1/" data-toggle="tooltip" data-placement="top" title="HotStuff-1 and the Prefix Speculation Dilemma in BFT Consensus">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

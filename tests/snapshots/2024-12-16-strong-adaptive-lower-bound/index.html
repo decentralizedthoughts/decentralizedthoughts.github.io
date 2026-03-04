@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Agreement against strongly adaptive adversaries needs quadratic communication</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham, Kartik Nayak, Ling Ren">
+ 
+ <meta name="description" content="In this post, we prove a result of Abraham, Hubert Chan, Dolev, Nayak, Pass, Ren, Shi, 2019 showing that: Theorem: Any broadcast protocol in synchrony that is resilient to $f$ strongly adaptive omission failures and has less than $1/8$ probability of error must have an expected communication of at least $f^2/64$ messages. The classic Dolev and Reischuk 1982 lower bound for deterministic protocols is covered in this post. Here we...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Agreement against strongly adaptive adversaries needs quadratic communication">
+ <meta property="og:description" content="In this post, we prove a result of Abraham, Hubert Chan, Dolev, Nayak, Pass, Ren, Shi, 2019 showing that: Theorem: Any broadcast protocol in synchrony that is resilient to $f$ strongly adaptive omission failures and has less than $1/8$ probability of error must have an expected communication of at least $f^2/64$ messages. The classic Dolev and Reischuk 1982 lower bound for deterministic protocols is covered in this post. Here we...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham, Kartik Nayak, Ling Ren">
+ 
+ <meta property="og:article:published_time" content="2024-12-16T07:30:00-05:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2024-12-16-strong-adaptive-lower-bound/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2024-12-16-strong-adaptive-lower-bound/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Agreement against strongly adaptive adversaries needs quadratic communication">
+ <meta property="twitter:description" content="In this post, we prove a result of Abraham, Hubert Chan, Dolev, Nayak, Pass, Ren, Shi, 2019 showing that: Theorem: Any broadcast protocol in synchrony that is resilient to $f$ strongly adaptive omission failures and has less than $1/8$ probability of error must have an expected communication of at least $f^2/64$ messages. The classic Dolev and Reischuk 1982 lower bound for deterministic protocols is covered in this post. Here we...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Agreement against strongly adaptive adversaries needs quadratic communication</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham, Kartik Nayak, Ling Ren</strong><br>
+ 
+ <span class="post-meta">Posted on December 16, 2024</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>In this post, we prove a result of <a href="https://users.cs.duke.edu/~kartik/papers/podc2019.pdf">Abraham, Hubert Chan, Dolev, Nayak, Pass, Ren, Shi, 2019</a> showing that:</p>
+<p><strong>Theorem: Any broadcast protocol in synchrony that is resilient to $f$ strongly adaptive omission failures and has less than $1/8$ probability of error must have an expected communication of at least $f^2/64$ messages.</strong></p>
+<p>The classic <a href="https://www.cs.huji.ac.il/~dolev/pubs/p132-dolev.pdf">Dolev and Reischuk 1982</a> lower bound for <em>deterministic</em> protocols is covered <a href="https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/">in this post</a>.</p>
+<p>Here we extend this lower bound to hold even for <em>randomized protocols</em> but require the adversary to be <a href="https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/">strongly adaptive</a>.</p>
+<blockquote>
+ <p>What are strongly adaptive adversaries and why are they required for the lower bound?</p>
+</blockquote>
+<ul>
+ <li>A strongly adaptive adversary can adaptively corrupt parties and, in addition, once a party is corrupted, it can <em>claw back</em> messages that have been sent but not delivered yet.</li>
+ <li>The core idea of the Dolev and Reischuk lower bound is to isolate some party $p$ and make sure it does not receive any message and hence will not reach agreement. But in a randomized protocol, how can the adversary isolate party $p$? The answer is that it uses its ability to claw back: once it sees any party send a message to $p$, it immediately corrupts that party and claws back that message.</li>
+</ul>
+<p>Note that the lower bound on broadcast in synchrony implies a lower bound on agreement in synchrony. In turn, this implies a lower bound on agreement in asynchrony.</p>
+<h3 id="proof-idea">Proof idea</h3>
+<p>As in Dolev and Reischuk’s proof from 1982, we show that some designated party gets no message and hence must violate agreement or termination with a (large) constant probability. This is done by defining two worlds. In world 1 there are $f/2$ parties, $V$, with omission failures. In world 2, we choose a uniformly random party $p \in V$ and un-corrupt it. In addition, we cause omission failures to the $f/2$ first messages sent to $p$. This is where claw back may be required.</p>
+<p>Seeking a contradiction, we look at world 1 and use Markov inequity to argue that with a large probability the protocol sends not too many messages to parties in $V$. Conditioned on this event, there is a large probability that the party $p$ gets no more than $f/2$ messages. Conditioned on this event, there is a probability that all parties output the leader value (there is no error).</p>
+<p>We then show indistingushability between world 1 and world 2. Then in world 2, conditioned on these three events, party $p$, which is non-faulty, sees no message, so there is a constant probability that party $p$ has either a safety error or a liveness error.</p>
+<h3 id="proof">Proof</h3>
+<p>Consider a broadcast problem, where the <em>designated sender</em> has a binary input.</p>
+<p>Observe what happens to a party that receives no messages: it will either not decide 0 with probability at least 1/2 or not decide 1 with probability at least 1/2. Without loss of generality, assume that a majority of parties (other than the designated sender) that receive no message will not decide 1 with probability at least 1/2. Let $Q$ be this set of parties and note that $|Q| \geq (n-1)/2$.</p>
+<p>As with Dolev and Reischuk’s proof from 1982, the proof describes two worlds and uses indistinguishability.</p>
+<h3 id="world-1">World 1</h3>
+<p>In World 1, the adversary corrupts a set $V \subset Q$ of $f/2$ parties that do not include the designated sender. Let $U$ denote the remaining parties (not in $V$). All parties in $V$ run the designated protocol but suffer from omission failures as follows:</p>
+<ol>
+ <li>Each $v \in V$ omits the first $f/2$ messages sent to $v$ from parties in $U$,</li>
+ <li>Each $v \in V$ omits all messages it sends to and receives from parties in $V$.</li>
+</ol>
+<p>Note that messages sent from parties in $V$ to parties in $U$ are not omitted.</p>
+<p>Set the non-faulty designated sender with input 0. So from the validity property, all non-faulty parties must output 0.</p>
+<h4 id="the-events-mathcalx_1--mathcalx_2-and-mathcalx_3">The events $\mathcal{X}_1$, $\mathcal{X}_2$, and $\mathcal{X}_3$</h4>
+<p>Let $\mathcal{X}_1$ be the event that the parties in $V$ send at most $f^2/8$ messages to parties in $U$. Since the expected number of messages is at most $f^2/64$, we have that $\Pr[\mathcal{X}_1] \le 1-1/8$. This is because from Markov Inequality:</p>
+\[\Pr[ \text{not } \mathcal{X}_1] = \Pr[\text{more than }f^2/8] = \Pr[\text{more than }8\mu] &lt; 1/8.\]
+<p>Let $p\in U$ be a uniformly randomly chosen party in $U$ and let $\mathcal{X}_2$ be the event that there are at least $f/4$ parties in $U$ that receive more messages from parties in $V$ than $p$ (so $p$ is below the median).</p>
+<p>So, $\Pr[\mathcal{X}_2] = 1/2$.</p>
+<p>We can bound $\Pr[\mathcal{X}_1 \cap \mathcal{X}_2] \ge 1/2 +1 - 1/8 -1 =3/8$.</p>
+<p>If event $\mathcal{X}_1 \cap \mathcal{X}_2$ occurs, then party $p$ receives at most $f/2$ messages from parties in $U$. This is because otherwise, there are $f/4$ parties that receive $f/2$ messages for a total of $f^2/8$, which is a contradiction.</p>
+<p>Let $\mathcal{X}_3$ be the event that all non-faulty parties output 0. From validity in world 1 and the fact that the error is at most 1/8, we have that $\Pr[\mathcal{X}_3] \geq 1 - 1/8$.</p>
+<p>So we can bound $\Pr[(\mathcal{X}_1 \cap \mathcal{X}_2) \cap \mathcal{X}_3] \ge 3/8 +1 - 1/8 -1 = 1/4$.</p>
+<p>Observe that conditioned on $\mathcal{X}_1 \cap \mathcal{X}_2 \cap \mathcal{X}_3$, in world 1, with probability at least $1/4$:</p>
+<ol>
+ <li>All non-faulty parties output 0.</li>
+ <li>The faulty party $p$ sees no messages.</li>
+</ol>
+<h3 id="world-2">World 2</h3>
+<p>In world 2, the adversary does everything as in World 1, except:</p>
+<ol>
+ <li>It does not corrupt the randomly chosen party $p$, and</li>
+ <li>It corrupts all parties in $U$ that correspond to the first $f/2$ messages sent to $p$. Messages sent by these omission corrupt parties to $p$ are omitted, and claw back is used if needed. Call this set $W$.</li>
+</ol>
+<p>Clearly the adversary can do this because it corrupts at most $f/2$ in $V$ and at most $f/2$ in $W$.</p>
+<h4 id="worlds-are-indistinguishable">Worlds are indistinguishable</h4>
+<p>The only difference between worlds 1 and 2 is that in world 1 it’s party $p$ that blocks the first $f/2$ <em>incoming</em> messages from $W$ and in world 2 it’s the parties in $W$ that block these same messages to $p$ as <em>outgoing</em> messages.</p>
+<h4 id="the-event-mathcaly">The event $\mathcal{Y}$</h4>
+<p>Due to world 1 and 2 being indistinguishable, we have that, conditioned on $\mathcal{X}_1 \cap \mathcal{X}_2 \cap \mathcal{X}_3$, in world 2, with probability at least $1/4$:</p>
+<ol>
+ <li>All non-faulty parties output 0.</li>
+ <li>The non-faulty party $p$ sees no messages.</li>
+</ol>
+<p>Now we use the fact that in world 2, $p$ is non-faulty, sees no message, and hence does not output 0 with probability at least 1/2. Moreover, since $p$ sees no message, this probability is independent of the events $\mathcal{X}_1 \cap \mathcal{X}_2 \cap \mathcal{X}_3$. Let $\mathcal{Y}$ be the event that $p$ either does not terminate or outputs 1.</p>
+\[\Pr[\mathcal{Y} \mid \mathcal{X}_1 \cap \mathcal{X}_2 \cap \mathcal{X}_3 ] &gt;1/2\]
+<p>So in world 2, we have an error of more than 1/8:</p>
+\[\Pr[\mathcal{X}_1 \cap \mathcal{X}_2 \cap \mathcal{X}_3 \cap \mathcal{Y}] &gt; 1/8\]
+<p>Which is a contradiction.</p>
+<p>Please leave comments on <a href="https://x.com/ittaia/status/1868794373267448243">X</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#lowerbound">lowerbound</a>
+ 
+ <a href="/tags#research">research</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Agreement+against+strongly+adaptive+adversaries+needs+quadratic+communication&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2024-12-16-strong-adaptive-lower-bound%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2024-12-10-multi-world-vaba/" data-toggle="tooltip" data-placement="top" title="Multi-world Validated Asynchronous Byzantine Agreement">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2025-02-14-partial-synchrony-protocols/" data-toggle="tooltip" data-placement="top" title="Key Principles Underlying Partial Synchrony BFT">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

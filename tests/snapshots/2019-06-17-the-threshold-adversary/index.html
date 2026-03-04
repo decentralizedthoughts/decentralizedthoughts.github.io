@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>The threshold adversary</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham">
+ 
+ <meta name="description" content="In addition to limiting the adversary via a communication model synchrony, asynchrony, or partial synchrony, we need a way to limit the adversary’s power to corrupt parties. Power tends to corrupt, and absolute power corrupts absolutely. – John Dalberg-Acton 1887 As John observed almost 150 years ago, if the adversary’s power is unlimited, there is very little we can do. Let’s begin with the traditional notion of a threshold adversary...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="The threshold adversary">
+ <meta property="og:description" content="In addition to limiting the adversary via a communication model synchrony, asynchrony, or partial synchrony, we need a way to limit the adversary’s power to corrupt parties. Power tends to corrupt, and absolute power corrupts absolutely. – John Dalberg-Acton 1887 As John observed almost 150 years ago, if the adversary’s power is unlimited, there is very little we can do. Let’s begin with the traditional notion of a threshold adversary...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham">
+ 
+ <meta property="og:article:published_time" content="2019-06-17T09:11:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2019-06-17-the-threshold-adversary/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2019-06-17-the-threshold-adversary/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="The threshold adversary">
+ <meta property="twitter:description" content="In addition to limiting the adversary via a communication model synchrony, asynchrony, or partial synchrony, we need a way to limit the adversary’s power to corrupt parties. Power tends to corrupt, and absolute power corrupts absolutely. – John Dalberg-Acton 1887 As John observed almost 150 years ago, if the adversary’s power is unlimited, there is very little we can do. Let’s begin with the traditional notion of a threshold adversary...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>The threshold adversary</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham</strong><br>
+ 
+ <span class="post-meta">Posted on June 17, 2019</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>In addition to limiting the adversary via a communication model <a href="https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/">synchrony, asynchrony, or partial synchrony</a>, we need a way to limit the adversary’s power to corrupt parties.</p>
+<blockquote>
+ <p>Power tends to corrupt, and absolute power corrupts absolutely.
+– <cite> <a href="https://en.wikipedia.org/wiki/John_Dalberg-Acton,_1st_Baron_Acton">John Dalberg-Acton 1887</a> </cite></p>
+</blockquote>
+<p>As John observed almost 150 years ago, if the adversary’s power is unlimited, there is very little we can do. Let’s begin with the traditional notion of a <em>threshold adversary</em> as used in Distributed Computing and Cryptography to limit the power of the adversary.</p>
+<h2 id="the-threshold-adversary">The threshold adversary</h2>
+<p>The traditional model is that of a <em>threshold adversary</em> over a static group of $n$ nodes.</p>
+<p>A threshold adversary is an adversary that can corrupt up to $f$ nodes. There are three typical thresholds:</p>
+<ol>
+ <li>$f&lt;n$ where the adversary can corrupt all parties but one. Sometimes called the <em>dishonest majority</em> model or the <a href="https://www.ohmygodel.com/publications/d3-eurosec12.pdf">anytrust</a> model.</li>
+ <li>$f&lt;n/2$ where the adversary can corrupt a minority of the nodes. Often called the <em>dishonest minority</em> model.</li>
+ <li>$f&lt;n/3$ where the adversary can corrupt less than a third of the nodes.</li>
+</ol>
+<p>There are many examples of protocols that work in the above threshold models. Here are some classics:</p>
+<ol>
+ <li>The Dolev, Strong <a href="https://www.cs.huji.ac.il/~dolev/pubs/authenticated.pdf">Broadcast protocol</a> solves Byzantine broadcast assuming an adversary that can corrupt up to $n-1$ parties out of $n$ in the Synchronous model. See <a href="https://decentralizedthoughts.github.io/2019-12-22-dolev-strong/">this post</a> for details.</li>
+ <li>Lamport’s <a href="https://lamport.azurewebsites.net/pubs/lamport-paxos.pdf">Paxos</a> protocol solves state machine replication assuming an adversary that can corrupt less than $n/2$ parties out of $n$ in the Partially synchronous model. See <a href="https://decentralizedthoughts.github.io/2022-11-04-paxos-via-recoverable-broadcast/">this post</a> for details.</li>
+ <li>Ben Or’s <a href="http://www.cs.utexas.edu/users/lorenzo/corsi/cs380d/papers/p27-ben-or.pdf">randomized protocol</a> solves Byzantine agreement in the Asynchronous model assuming a $f&lt;n/5$ threshold. This was later <a href="https://core.ac.uk/download/pdf/82523202.pdf">improved by Bracha</a> to the optimal $f&lt;n/3$ bound. See <a href="https://decentralizedthoughts.github.io/2022-03-30-asynchronous-agreement-part-one-defining-the-problem/">this series of posts</a> for details.</li>
+</ol>
+<p>There are other less common thresholds. For example, <a href="https://decentralizedthoughts.github.io/2020-07-15-asynchronous-fault-tolerant-computation-with-optimal-resilience/">perfect asynchronous verifiable secret sharing</a> requires $f&lt;n/4$. And there are even bounds that are not integer divisions of $n$. For example, <a href="https://decentralizedthoughts.github.io/2021-09-29-the-round-complexity-of-reliable-broadcast/">2 round unauthenticated reliable broadcast</a> requires $f &lt; (n+1)/4$.</p>
+<h2 id="what-does-the-12-and-13-threshold-provide-quorum-intersection">What does the $1/2$ and $1/3$ threshold provide? Quorum intersection</h2>
+<p>Since the adversary can corrupt $f$ parties, which may include crash failures, then protocols often collect $n-f$ message to guarantee they don’t get stuck. These sets of $n-f$ parties have very useful properties based on quorum intersection (essentially the <a href="https://en.wikipedia.org/wiki/Pigeonhole_principle">Pigeonhole principle</a>):</p>
+<p>For example, for $f&lt;n/2$:</p>
+<ol>
+ <li>Any two sets of size $n-f$ have at least one party in the intersection.</li>
+ <li>If you hear $n-f$ parties that sent a message, then you know at least one of them is non-faulty. In synchrony, you know all parties will hear from this non-faulty party in the same round.</li>
+</ol>
+<p>For example, for $f&lt;n/3$:</p>
+<ol>
+ <li>Any two sets of size $n-f$ have at least one non-faulty party in the intersection.</li>
+ <li>If you hear $n-f$ parties that sent a message, then you know at least $f+1$ of them are non-faulty. So any set of size $n-f$ must hear from at least one of these $f+1$ parties.</li>
+</ol>
+<p>More generally, observe that any two sets of size $n-f$ intersect with at least $n-2f$ parties, so with at least $n-3f$ non-faulty parties.</p>
+<h2 id="proof-of-work-and-proof-of-stake">Proof of work and proof of stake</h2>
+<p>The blockchain disruption brought significant interest to settings where the set of participants are not static and not fixed in advance. Two main models are <strong>proof of work (PoW)</strong> and <strong>proof of stake (PoS)</strong>. Both use the idea of some <em>bounded resource</em>:</p>
+<ol>
+ <li><strong>Proof of work</strong>: In <a href="https://decentralizedthoughts.github.io/2021-10-15-Nakamoto-Consensus/">Nakamoto Consensus</a> (the consensus mechanism used by Bitcoin), one can consider the bounded resource to be the total CPU power of the participants. The assumption is then that the adversary controls less CPU power than the honest nodes (a minority adversary). The Nakamoto authors explicitly mention the assumption of a resource bounded <em>minority</em> adversary:
+ <blockquote>
+ <p>The system is secure as long as honest nodes collectively control more CPU power than any cooperating group of attacker nodes.
+– <cite><a href="https://bitcoin.org/bitcoin.pdf">Bitcoin whitepaper</a> </cite></p>
+ </blockquote>
+ </li>
+ <li><strong>Proof of stake</strong>: In systems that use <a href="https://www.investopedia.com/terms/p/proof-stake-pos.asp">proof-of-stake</a> the bounded resource is a finite set of coins. It is then natural to assume that the adversary controls a threshold of the total coins. One can often map voting power based on the relative amount of coins at a given time. For example, Tendermint mentions the total voting power of the adversary is bounded by a third:
+ <blockquote>
+ <p>it requires that the total voting power of faulty processes is smaller than one-third of the total voting power
+– <cite> <a href="https://arxiv.org/pdf/1807.04938.pdf">Tendermint whitepaper</a> </cite></p>
+ </blockquote>
+ </li>
+</ol>
+<h2 id="generalized-bounded-resource-threshold-adversary">Generalized bounded resource threshold adversary</h2>
+<p>In this model instead of having a static total <em>n</em> that represents the total number of nodes or participating parties, we assume some general <strong><em>bounded resource</em></strong> (see Szabo definition of <a href="https://nakamotoinstitute.org/scarce-objects/">scarce object</a>). A generalized threshold adversary is an adversary that can corrupt some <strong><em>fraction</em></strong> of this <em>bounded resource</em>. Again, there are three thresholds, with a small $0&lt;\epsilon$ parameter:</p>
+<ol>
+ <li>The adversary can corrupt at most $1-\epsilon$ fraction of the bounded resource (say 99 percent).</li>
+ <li>The adversary can corrupt at most $1/2 - \epsilon$ fraction of the bounded resource (say at most 49 percent).</li>
+ <li>The adversary can corrupt at most $1/3 - \epsilon$ fraction of the total bounded resource (say 32 percent).</li>
+</ol>
+<p>In this model, the total resources and their allocation can change over time. Typically, the assumption is that the above threshold restrictions hold at any given time (and sometimes as a function of the <em>active</em> participants). If this is not the case at all times then special care is needed.</p>
+<h1 id="notes">Notes</h1>
+<h2 id="on-stake-based-bounded-resources">On <em>stake</em> based bounded resources</h2>
+<p>Basing the security assumption on the adversary controlling a threshold of some set of coins issued by the system (stake) has both advantages and disadvantages.</p>
+<ol>
+ <li>On the one hand, using a resource that is issued by the platform allows one to control the resource allocation in ways that are not possible when the resource is external. In particular, the platform can create <em>punishment mechanisms</em> to better incentivize honest behavior. For example, <a href="https://medium.com/@VitalikButerin/minimal-slashing-conditions-20f0b500fc6c">Buterin suggests</a> conditions to detect malicious behavior and then punish the adversary by reducing (slashing) the offender’s stake.</li>
+ <li>On the other hand, if the value of the stake depends on the platform, this may create circular reasoning about security, especially regarding how to set the external cost of buying stake. If the cost of buying stake is too high, then it may happen that not enough honest entities will sign up, and the system will lose liveness. If the cost of buying stake is initially too low, then an attacker can gain early monopoly power. One option is to bootstrap proof-of-stake using an existing high-value proof-of-work coin or traditional fiat (see <a href="https://bitcoinist.com/visa-paypal-10-million-run-facebook-coin-node/">here</a>). This type of solution assumes that the adversary does not already have monopoly power over the bootstrapping resource. Another option is to bootstrap a proof-of-stake system from an existing high-value proof-of-work system (for example, see <a href="https://github.com/ethereum/eth2.0-specs">eth2.0</a>).</li>
+</ol>
+<h2 id="on-distributed-computing-vs-game-theory">On distributed computing vs game theory</h2>
+<p>The threshold adversary model captures the ability of the adversary to corrupt some fraction of the parties allowing them to deviate from prescribed behavior. It divides parties into honest and corrupt. This is rather different from traditional <em>Game Theory</em> models where all parties are considered <em>rational</em>.</p>
+<p>As mentioned above, in the <em>proof of stake</em> setting there is a notion of <em>slashing</em> which captures the fact that deviating coalitions may suffer economic loss and that may deter them from deviation.</p>
+<p>In fact, there are deep connections between the models. In particular, just like distributed computing protocols quantifies over all possible adversaries that can modify the behavior of up to $f$ parties, a Nash equilibrium (and its extension to a coalition resilient equilibrium) can be viewed as quantifying over a rational adversary that can modify the behavior of up to $f$ parties.
+%
+In later posts, we will cover the amazing connections in detail.</p>
+<h2 id="on-permissioned-vs-permissionless">On permissioned vs permissionless</h2>
+<p>The traditional model with $n$ parties is often called the <strong>permissioned model</strong> because the parties are fixed in advance and in essence there is some initial source of trust that granted permission to these specific $n$ parties. Typically, all participants know the identity of all other participants.</p>
+<p>In contrast, many of the generalized bounded resource models are often considered part of a wider class of <strong>permissionless models</strong>. In these models there is some bounded resource, sometimes the allocation of this bounded resource can dynamically change. Participation in these systems is called <em>permissionless</em> because anyone holding this resource can participate. In some cases participation can be done without needing to have an explicit identity and without all participants knowing each other.</p>
+<p>The fact that the protocol is permissionless in the sense that anyone holding the bounded resource is allowed to participate does not mean that obtaining the bounded resource is without restrictions (both economic and permission based). In essence, it is moving the task of granting the bounded resource to an external process. For example, it may be that obtaining specific hardware or buying staking tokens is a permission process.</p>
+<p>The work of Lewis-Pye and Roughgarden on <a href="https://arxiv.org/pdf/2304.14701.pdf">Permissionless Consensus</a> provides a comprehensive categorization and deep analysis of this model.</p>
+<h2 id="acknowledgments">Acknowledgments</h2>
+<p>Many thanks to Kartik Nayak and Gilad Stern for their insightful comments</p>
+<p>Please comment on <a href="https://twitter.com/ittaia/status/1141475000278556674?s=20">Twitter</a></p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#dist101">dist101</a>
+ 
+ <a href="/tags#models">models</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=The+threshold+adversary&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2019-06-17-the-threshold-adversary%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2019-06-07-modeling-the-adversary/" data-toggle="tooltip" data-placement="top" title="The power of the adversary">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2019-06-23-what-is-the-difference-between/" data-toggle="tooltip" data-placement="top" title="What is the difference between PBFT, Tendermint, SBFT and HotStuff ?">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

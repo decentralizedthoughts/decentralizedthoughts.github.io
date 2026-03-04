@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Good-case Latency of Byzantine Broadcast: a Complete Categorization</title>
+ 
+ 
+ <meta name="author" content="Zhuolun Xiang">
+ 
+ <meta name="description" content="Guest post by Zhuolun Xiang State Machine Replication and Broadcast Many existing permission blockchains are built using Byzantine fault-tolerant state machine replication (BFT SMR), which ensures all honest replicas agree on the same sequence of client inputs. Most of the practical solutions for BFT SMR are based on the Primary-Backup paradigm. In this approach, in each view, there is a leader in charge to drive decisions efficiently, until replaced by...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Good-case Latency of Byzantine Broadcast: a Complete Categorization">
+ <meta property="og:description" content="Guest post by Zhuolun Xiang State Machine Replication and Broadcast Many existing permission blockchains are built using Byzantine fault-tolerant state machine replication (BFT SMR), which ensures all honest replicas agree on the same sequence of client inputs. Most of the practical solutions for BFT SMR are based on the Primary-Backup paradigm. In this approach, in each view, there is a leader in charge to drive decisions efficiently, until replaced by...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Zhuolun Xiang">
+ 
+ <meta property="og:article:published_time" content="2021-02-28T13:07:00-05:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Good-case Latency of Byzantine Broadcast: a Complete Categorization">
+ <meta property="twitter:description" content="Guest post by Zhuolun Xiang State Machine Replication and Broadcast Many existing permission blockchains are built using Byzantine fault-tolerant state machine replication (BFT SMR), which ensures all honest replicas agree on the same sequence of client inputs. Most of the practical solutions for BFT SMR are based on the Primary-Backup paradigm. In this approach, in each view, there is a leader in charge to drive decisions efficiently, until replaced by...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Good-case Latency of Byzantine Broadcast: a Complete Categorization</h1>
+ 
+ 
+ 
+ 
+ By <strong>Zhuolun Xiang</strong><br>
+ 
+ <span class="post-meta">Posted on February 28, 2021</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p><span style="color:grey"> Guest post by <a href="https://sites.google.com/site/danielxiangzl/">Zhuolun Xiang</a> </span></p>
+<h2 id="state-machine-replication-and-broadcast">State Machine Replication and Broadcast</h2>
+<p>Many existing permission blockchains are built using <em>Byzantine fault-tolerant state machine replication (BFT SMR)</em>, which ensures all honest replicas agree on the same sequence of client inputs. Most of the practical solutions for BFT SMR are based on the <strong>Primary-Backup paradigm</strong>. In this approach, in each view, there is a leader in charge to drive decisions efficiently, until replaced by the next leader. The Primary-Backup approach for SMR exposes deep connections to <em>broadcast</em>. Each view in BFT SMR is similar to an instance of broadcast where the leader taking on a similar role as the broadcaster, and hence <strong>an efficient broadcast protocol can be converted to an SMR protocol with similar efficiency guarantees</strong>.</p>
+<h2 id="good-case-latency">Good-case Latency</h2>
+<p>Practical SMR solutions care about the <strong>good case</strong> performance measured as the <em>latency to commit when the Primary is honest</em>. For many applications, <em>latency</em> is crucial. In a <a href="https://youtu.be/Uj638eFIWg8?t=800">talk from 2000</a>, Barbara Liskov, the author of <a href="http://pmg.csail.mit.edu/papers/osdi99.pdf">PBFT</a>, commented on PBFT needing 3 rounds in the good case:</p>
+<blockquote>
+ <p>I don’t know about a minimality proof that would show you require three phases, though I certainly haven’t been able to think of a way of doing it with fewer.</p>
+</blockquote>
+<p>Therefore, it is natural and important to ask</p>
+<p class="box-note">What is the best latency a BFT SMR can achieve to commit decisions in the good case?</p>
+<p>We refer to the above latency notion as <em>good-case latency</em>. For broadcast, we similarly define the good-case latency to be the <em>latency to commit when the broadcaster is honest</em>.</p>
+<p>Somehow surprisingly, the above question has not been formally answered yet. Although a sequence of efforts improves the good-case latency of BFT SMR, there lacks a complete and rigorous characterization of the whole picture. Before we present our results, let’s take a quick look at the <strong>existing best solutions</strong> for BFT SMR on the good-case latency. For the synchrony model where the network delay is bounded by $\Delta$, <a href="https://decentralizedthoughts.github.io/2019-11-12-Sync-HotStuff/">Sync HotStuff</a> commits in $2\Delta$ under $n\geq 2f+1$. For the partial synchrony model where the network delay is bounded only after a Global Stable Time (GST), <a href="http://pmg.csail.mit.edu/papers/osdi99.pdf">PBFT</a> commits in 3 rounds after GST under $n\geq 3f+1$, and <a href="https://ieeexplore.ieee.org/document/1467815">FaB</a> commits in 2 rounds after GST under $n\geq 5f+1$. <strong>We show that all these protocols can be improved!</strong></p>
+<h2 id="results-overview">Results Overview</h2>
+<h3 id="--theory"><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f4a1.png?v8" alt="" /> <strong>Theory</strong></h3>
+<p>Our <strong><a href="https://arxiv.org/abs/2102.07240">good-case latency paper</a></strong> gives a <strong>complete categorization</strong> of the good-case latency for broadcast, under <em>synchrony, partial synchrony and asynchrony</em>. As mentioned, the protocols for broadcast can be converted to BFT SMR with similar good-case latency guarantees. The lower bound results also shed light on what is the limitation of good-case latency for BFT SMR. All of our bounds are <strong>tight</strong> except for just one case, as summarized in the table below (new and non-trivial results are marked bold).</p>
+<p><img src="https://i.imgur.com/Okje5V8.png" alt="" /></p>
+<ul>
+ <li>For asynchrony, Byzantine broadcast is impossible and the standard broadcast formulation is <em>Byzantine reliable broadcast (BRB)</em>, which has a <strong>tight bound of 2 rounds</strong> for the good-case latency.</li>
+ <li>For partial synchrony, we propose a new broadcast formulation called <em>partially synchronous Byzantine broadcast (Psync-BB)</em> that captures a single-shot of BFT SMR protocols like PBFT. We show that <strong>$n\geq 5f-1$ is the tight resilience bound</strong> for solving psync-BB with good-case latency of 2 rounds. Since psync-BB solves a single-shot of BFT SMR, our results directly refute the claim made in <a href="https://ieeexplore.ieee.org/document/1467815">FaB</a> saying that $n=5f+1$ is the best possible resilience for $2$-round BFT SMR protocols.</li>
+ <li>For synchrony, we reveal a surprisingly rich structure of the good-case latency for Byzantine broadcast (BB). For a more accurate characterization, we adopt the separation of <em>assumed network delay $\Delta$</em> and the <em>actual (unknown) network delay $\delta$</em>. For instance, 1 round in the bounds for asynchrony and partial synchrony above equals $\delta$, as the protocols can proceed with the network speed. We also distinguish two assumptions about the clock synchronization – the <em>synchronized start</em> case where all parties can start the protocol and local clock at the same time, and the <em>unsynchronized start</em> case where all parties start the protocol and local clock within $\Delta$ time of each other. To strengthen the results, all lower bounds assume sync start and all upper bounds assume unsynchronized start, except the case when $n/3&lt;f&lt;n/2$, which is especially interesting as the <em>tight bounds depend on the clock synchronization assumption</em>, and for unsynchronized start the tight bound is $\Delta+1.5\delta$, <em>not even an integer multiple of the delay</em>!</li>
+</ul>
+<h3 id="-practice"><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f680.png?v8" alt="" /> <strong>Practice</strong></h3>
+<p>For the practical side, the investigation on good-case latency leads to <strong>better BFT SMR protocols</strong> over <a href="http://pmg.csail.mit.edu/papers/osdi99.pdf">PBFT</a>, <a href="https://ieeexplore.ieee.org/document/1467815">FaB</a>, and <a href="https://decentralizedthoughts.github.io/2019-11-12-Sync-HotStuff/">Sync HotStuff</a> in terms of good-case latency.</p>
+<ul>
+ <li>For partial synchrony, we obtain a <strong><a href="https://arxiv.org/abs/2102.07932">2-round BFT SMR</a></strong> protocol that only requires $n\geq 5f-1$. Our protocol refutes the claim made in <a href="https://ieeexplore.ieee.org/document/1467815">FaB</a> saying that $n=5f+1$ is the best possible resilience for $2$-round BFT SMR protocols. Interestingly, for the canonical example with $n=4$ and $f=1$, we can have a 2-round PBFT protocol with the optimal resilience!</li>
+ <li>For synchrony, we obtain a <strong><a href="https://arxiv.org/abs/2003.13155">$1\Delta$-SMR</a></strong> protocol that commits in $\Delta+2\delta$ with $n\geq 2f+1$, reducing the commit latency (which is $2\Delta$) of <a href="https://decentralizedthoughts.github.io/2019-11-12-Sync-HotStuff/">Sync HotStuff</a> by almost half when $\delta\ll\Delta$.</li>
+</ul>
+<h2 id="protocols-and-impossibility-proofs">Protocols and Impossibility Proofs</h2>
+<p>Check out our <a href="https://decentralizedthoughts.github.io/2021-03-03-2-round-bft-smr-with-n-equals-4-f-equals-1/">next post</a> and the <a href="https://decentralizedthoughts.github.io/2021-03-09-good-case-latency-of-byzantine-broadcast-the-synchronous-case/">next one</a>!</p>
+<p>Please answer/discuss/comment/ask on <a href="https://twitter.com/ittaia/status/1366106073145442304?s=20">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#research">research</a>
+ 
+ <a href="/tags#lowerbound">lowerbound</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Good-case+Latency+of+Byzantine+Broadcast%3A+a+Complete+Categorization&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2020-12-22-what-is-a-merkle-tree/" data-toggle="tooltip" data-placement="top" title="What is a Merkle Tree?">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2021-03-03-2-round-bft-smr-with-n-equals-4-f-equals-1/" data-toggle="tooltip" data-placement="top" title="2-round BFT SMR with n=4, f=1">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

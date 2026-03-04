@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>2-round BFT in Simplex style for n=5f-1</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham and Ling Ren">
+ 
+ <meta name="description" content="In our previous post, we described a 2-round partially synchronous BFT protocol for $n = 5f+1$. In this follow-up post, we push the bound to $n = 5f-1$, achieving optimal 2-round commit in the Simplex style. We then extend the result to $n=3f+2p-1$ for $0&amp;lt;p\leq f$ that obtains liveness for $p$ Byzantine. This can be used to obtain a concurrent 2 round and 3 round protocol with the optimal fault...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="2-round BFT in Simplex style for n=5f-1">
+ <meta property="og:description" content="In our previous post, we described a 2-round partially synchronous BFT protocol for $n = 5f+1$. In this follow-up post, we push the bound to $n = 5f-1$, achieving optimal 2-round commit in the Simplex style. We then extend the result to $n=3f+2p-1$ for $0&amp;lt;p\leq f$ that obtains liveness for $p$ Byzantine. This can be used to obtain a concurrent 2 round and 3 round protocol with the optimal fault...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham and Ling Ren">
+ 
+ <meta property="og:article:published_time" content="2025-08-06T00:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2025-08-06-5fminus1-simplex/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2025-08-06-5fminus1-simplex/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="2-round BFT in Simplex style for n=5f-1">
+ <meta property="twitter:description" content="In our previous post, we described a 2-round partially synchronous BFT protocol for $n = 5f+1$. In this follow-up post, we push the bound to $n = 5f-1$, achieving optimal 2-round commit in the Simplex style. We then extend the result to $n=3f+2p-1$ for $0&amp;lt;p\leq f$ that obtains liveness for $p$ Byzantine. This can be used to obtain a concurrent 2 round and 3 round protocol with the optimal fault...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>2-round BFT in Simplex style for n=5f-1</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham and Ling Ren</strong><br>
+ 
+ <span class="post-meta">Posted on August 6, 2025</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>In our <a href="https://decentralizedthoughts.github.io/2025-07-18-two-round-Simplex/">previous post</a>, we described a 2-round <a href="https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/">partially synchronous</a> BFT protocol for $n = 5f+1$. In this follow-up post, we <strong>push the bound to $n = 5f-1$</strong>, achieving <a href="https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/">optimal 2-round commit</a> in the <a href="https://decentralizedthoughts.github.io/2025-06-18-simplex/">Simplex style</a>.</p>
+<p>We then extend the result to $n=3f+2p-1$ for $0&lt;p\leq f$ that obtains liveness for $p$ Byzantine. This can be used to obtain a <a href="https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/">concurrent 2 round and 3 round protocol</a> with the optimal fault tolerance.</p>
+<h2 id="intuition">Intuition</h2>
+<p>A party commits a value $x$ after receiving $n-f$ votes for $x$.<br />
+We consider what must happen so that all other honest parties eventually commit $x$ (safety), even if the committer experiences network asynchrony.</p>
+<p>Let $n = 5f-1$ where $f$ is the maximum number of Byzantine faults.</p>
+<ul>
+ <li>$n-f = 4f-1$ votes are needed for commit.</li>
+ <li>Among these, at least $n-2f = 3f-1$ are honest votes.</li>
+ <li>Any other honest party waiting for $n-f$ votes will see at least $n-3f = 2f-1$ votes for $x$.</li>
+ <li>
+ <p>Two cases:</p>
+ <ul>
+ <li><strong>(No leader equivocation</strong>): If the leader does not equivocate, a commit implies that any other honest party receives at least $2f-1$ votes for $x$ and the rest of the votes are for $\bot$.
+ <ul>
+ <li>Define <strong>Special certificate for $x$</strong> as $2f-1$ votes for $x$ and $2f$ votes for $\bot$.</li>
+ <li>Define <strong>Regular certificate for $x$</strong> as $2f$ votes for $x$.</li>
+ </ul>
+ </li>
+ <li><strong>(With leader equivocation)</strong>: If a party detects leader equivocation, it ignores the leader’s vote and waits for one more vote. Then it will see at least $n-3f+1 = 2f$ votes for $x$, which form a regular cert for $x$
+ <ul>
+ <li>There are at most $2f-1$ non-$x$ votes, so the party favors $x$.</li>
+ </ul>
+ </li>
+ </ul>
+ </li>
+</ul>
+<p>Define a <strong>skip certificate</strong> as $2f+1$ votes for $\bot$. A commit in a view implies at least $n-2f$ honest votes for some $x$, so a skip certificate cannot form in the same view.</p>
+<hr />
+<h2 id="two-round-simplex-protocol-for-n5f-1">Two-round Simplex protocol for $n=5f-1$</h2>
+<p>Let <code class="language-plaintext highlighter-rouge">Cert(k, x)</code> denote a collection of votes for $x \neq \bot$ in view $k$ sufficient to certify $x$:</p>
+<ul>
+ <li>$2f$ votes for $x$ (regular cert), or</li>
+ <li>$2f-1$ votes for $x$ and $2f$ votes for $\bot$ (special cert).</li>
+</ul>
+<p>Let <code class="language-plaintext highlighter-rouge">Cert(k, bot)</code> denote a collection of $2f+1$ votes for $\bot$ in view $k$.</p>
+<p>Once we define the certs above (with modified thresholds and the special cert), the protocol is actually unchanged from the <a href="https://decentralizedthoughts.github.io/2025-07-18-two-round-Simplex/">previous post</a>.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. Upon entering view k:
+ Start local timer T_k
+ Leader sends (Propose, k, x, Cert(k’, x)) for highest k’
+2. Upon receiving (Propose, k, x, Cert(k’, x)) 
+ and Cert(l, bot) for all k' &lt; l &lt; k and has not sent Vote
+ Send (Vote, k, x) 
+3. Upon T_k = 2Δ and has not sent Vote
+ Send (Vote, k, bot) 
+4. Upon receiving n-f (Vote, k, x)
+ Decide x
+ Forward these votes
+ Terminate
+5. Upon receiving n-f (Vote, k, *), but no Cert(k, x)
+ Send (Vote, k, bot) 
+6. Upon receiving Cert(k, *) and has sent Vote
+ Forward Cert(k, *)
+ Enter view k+1
+</code></pre></div></div>
+<h2 id="two-round-simplex-protocol-for-n3f2p-1-where-0pleq-f">Two-round Simplex protocol for $n=3f+2p-1$ where $0&lt;p\leq f$</h2>
+<p>Let’s extend this protocol to get safety for $f$ and liveness for $0&lt;p\leq f$. So a commit requires $3f+p-1$ votes and this means at least $2f+p+1$ honest votes. So waiting for $n-f$ votes gives at least $f+p-1$ honest votes. If there is an equivocation, a party can again wait for one more vote.</p>
+<p>This calls for three obvious generalizations to the protocol:</p>
+<p>A. <code class="language-plaintext highlighter-rouge">Cert(k, x)</code> is a collection of votes for $x \neq \bot$ in view $k$ sufficient to certify $x$:</p>
+<ul>
+ <li>$f+p$ votes for $x$ (regular cert), or</li>
+ <li>$f+p-1$ votes for $x$ and $f+p$ votes for $\bot$ (special cert).</li>
+</ul>
+<p>B. <code class="language-plaintext highlighter-rouge">Cert(k, bot)</code> is a collection of $f+p+1$ votes for $\bot$ in view $k$.</p>
+<p>C. The commit rule requires $n-p$ votes:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>4. Upon receiving n-p (Vote, k, x):
+ Decide x;
+ Forward these votes;
+ Terminate
+</code></pre></div></div>
+<p>Finally, to obtain a <a href="https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/">concurrent 2 round and 3 round protocol</a> with $n=3f+2p-1$, the quorum size for the 3-round path needs to be $n-(f+p-1)=2f+p$ (so that $2(2f+p)-n\geq f+1$).</p>
+<h2 id="proof-sketches">Proof Sketches</h2>
+<p><strong>Lemma 1 (Safety)</strong>:
+If an honest party commits $x$ in view $k$, all honest will have a cert for $x$.</p>
+<p><em>Proof sketch</em>: A commit requires $n-p = 3f+p-1$ votes for $x$, of which at least $2f+p-1$ are honest. Any other honest party gathering $n-f$ votes will see at least $f+p-1$ votes for $x$.</p>
+<p>If equivocation is detected, it waits for $n-f+1 = 3f+p$ votes and sees at least $f+p$ for $x$, which dominates any conflicting votes ($\le f+p-1$).</p>
+<p>If no equivocation is detected, it sees just $f+p-1$ votes for $x$ then the remaining $f+p$ votes are for $\bot$, so a special cert is formed, or $f+p$ votes or more arrive then a regular cert is formed.</p>
+<p><strong>Lemma 2 (No-commit detection)</strong>:<br />
+If no honest party commits in view $k$, all honest parties eventually see either a <code class="language-plaintext highlighter-rouge">Cert(k, x)</code> or a <code class="language-plaintext highlighter-rouge">Cert(k, bot)</code>.</p>
+<p><em>Proof sketch</em>: If a certificate for some $x$ exists, it is forwarded. If no certificate exists, by the fifth <code class="language-plaintext highlighter-rouge">Upon</code> rule all honest parties eventually vote $\bot$, forming a <code class="language-plaintext highlighter-rouge">Cert(k, bot)</code>.</p>
+<p><strong>Lemma 3 (Liveness)</strong>:<br />
+If the leader of some view $k$ is honest and GST has occurred, all honest parties commit in view $\le k$.</p>
+<p><em>Proof sketch</em>: If a commit already occurs in a prior view, the commit certificate is forwarded. Otherwise, all honest parties eventually vote for the honest leader in view $k$, producing $n-f$ votes and committing.</p>
+<h2 id="acknowledgments">Acknowledgments</h2>
+<p>This work is done in part during the authors’ visits to a16z Crypto Research. The authors thank Yuval Efron and Kartik Nayak for insightful discussions. We thank Brendan Kobayashi Chou, Andrew Lewis-Pye, Patrick O’Grady for spotting a liveness error in a previous version.</p>
+<p>Your thoughts/comments on <a href="https://x.com/ittaia/status/1954109234917883985">X</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ <a href="/tags#BFT">BFT</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=2-round+BFT+in+Simplex+style+for+n%3D5f-1&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2025-08-06-5fminus1-simplex%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2025-08-01-graded-dispersal/" data-toggle="tooltip" data-placement="top" title="Graded dispersal with perfect security">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2025-08-08-DAGs/" data-toggle="tooltip" data-placement="top" title="What’s DAG got to do with it?">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Consensus Lower Bounds via Uncommitted Configurations</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham">
+ 
+ <meta name="description" content="In this series of three posts, we discuss two of the most important consensus lower bounds: Lamport, Fischer [1982]: any protocol solving consensus in the synchronous model that is resilient to $t$ crash failures must have an execution with at least $t+1$ rounds. Fischer, Lynch, and Patterson [1983, 1985]: any protocol solving consensus in the asynchronous model that is resilient to even one crash failure must have an infinite execution....">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Consensus Lower Bounds via Uncommitted Configurations">
+ <meta property="og:description" content="In this series of three posts, we discuss two of the most important consensus lower bounds: Lamport, Fischer [1982]: any protocol solving consensus in the synchronous model that is resilient to $t$ crash failures must have an execution with at least $t+1$ rounds. Fischer, Lynch, and Patterson [1983, 1985]: any protocol solving consensus in the asynchronous model that is resilient to even one crash failure must have an infinite execution....">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham">
+ 
+ <meta property="og:article:published_time" content="2019-12-15T12:03:00-05:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2019-12-15-consensus-model-for-FLP/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2019-12-15-consensus-model-for-FLP/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Consensus Lower Bounds via Uncommitted Configurations">
+ <meta property="twitter:description" content="In this series of three posts, we discuss two of the most important consensus lower bounds: Lamport, Fischer [1982]: any protocol solving consensus in the synchronous model that is resilient to $t$ crash failures must have an execution with at least $t+1$ rounds. Fischer, Lynch, and Patterson [1983, 1985]: any protocol solving consensus in the asynchronous model that is resilient to even one crash failure must have an infinite execution....">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Consensus Lower Bounds via Uncommitted Configurations</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham</strong><br>
+ 
+ <span class="post-meta">Posted on December 15, 2019</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>In this series of three posts, we discuss two of the most important consensus lower bounds:</p>
+<ol>
+ <li><a href="https://lamport.azurewebsites.net/pubs/trans.pdf">Lamport, Fischer [1982]</a>: any protocol solving consensus in the <em>synchronous</em> model that is resilient to $t$ crash failures must have an execution with at least $t+1$ rounds.</li>
+ <li><a href="https://groups.csail.mit.edu/tds/papers/Lynch/jacm85.pdf">Fischer, Lynch, and Patterson [1983, 1985]</a>: any protocol solving consensus in the <em>asynchronous</em> model that is resilient to even one crash failure must have an infinite execution.</li>
+</ol>
+<p>The modern interpretation of these lower bounds highlights the importance of <em>randomness</em>:</p>
+<ul>
+ <li><strong>Bad news</strong>: Without randomness, asynchronous consensus is <em>impossible</em>, and synchronous consensus is <em>slow</em>.</li>
+ <li><strong>Good news</strong>: With randomness, consensus (both in synchrony and in asynchrony) is possible in a <em>constant expected number of rounds</em>. Randomness does not circumvent the lower bounds; it just reduces the probability of bad events implied by the lower bounds. In synchrony, the probability of slow executions can be made exponentially small. In asynchrony, termination happens <a href="https://en.wikipedia.org/wiki/Almost_surely">almost surely</a>. Formally, the <em>probability measure</em> of the complement of the event of terminating in some finite number of rounds is zero.</li>
+</ul>
+<h3 id="the-plan-three-posts">The plan: three posts</h3>
+<ol>
+ <li>
+ <p>In this <em>first</em> post, we provide key <em>definitions</em> and prove an important <em>Lemma</em> about having some initial <strong>uncommitted configuration</strong>. This lemma shows that any consensus protocol has some initial input where the adversary has control over the decision value (it can cause it to be either 0 or 1). This lemma will then be used in both lower bounds.</p>
+ </li>
+ <li>
+ <p>In the <a href="https://decentralizedthoughts.github.io/2019-12-15-synchrony-uncommitted-lower-bound/">second post</a>, we use the approach of <a href="https://ecommons.cornell.edu/bitstream/handle/1813/7355/98-1701.pdf?sequence=1&amp;isAllowed=y">Aguilera and Toueg [1999]</a> to prove that any protocol solving consensus in the <em>synchronous</em> model that is resilient to $t$ crash failures must have an execution with at least $t+1$ rounds. The proof uses the definitions and the lemma in this post.</p>
+ </li>
+ <li>
+ <p>In the <a href="https://decentralizedthoughts.github.io/2019-12-15-asynchrony-uncommitted-lower-bound/">third post</a>, we prove the celebrated <a href="https://groups.csail.mit.edu/tds/papers/Lynch/jacm85.pdf">Fischer, Lynch, and Patterson [1985]</a> result that any protocol solving consensus in the <em>asynchronous</em> model that is resilient to even one crash failure must have an infinite execution. The proof uses the same definitions and the lemma in this post.</p>
+ </li>
+</ol>
+<h3 id="definitions">Definitions</h3>
+<h4 id="the-goal-binary-agreement-with-crash-failures">The goal: Binary Agreement with crash failures</h4>
+<p>There are $n$ parties. Each party is a state machine that has some <em>initial input</em> $\in {0,1}$. The state machine has a special <em>decide</em> action that irrevocably sets its <em>decision</em> $\in {0,1}$.</p>
+<p>We say that a protocol $\mathcal{P}$ solves <em>agreement against $t$ crash failures</em> if in any execution with at most $t$ crash failures:</p>
+<ol>
+ <li><strong>Termination</strong>: all non-faulty parties eventually decide.</li>
+ <li><strong>Agreement</strong>: all non-faulty parties decide on the same value.</li>
+ <li><strong>Validity</strong>: if all non-faulty parties have the same input value, then this is the decision value.</li>
+</ol>
+<h4 id="parties-as-state-machines">Parties as State Machines</h4>
+<p>We model each party as a deterministic state machine, and model randomness by giving the state machine read-only access to a tape of random bits.
+Each state machine has access to an immutable <em>input</em> register, a read-only <em>incoming-messages</em> queue, and a write-only <em>outgoing-messages</em> queue. At any given moment, the <em>local state</em> of a party is fully defined by the state of its state machine and the content of it input register and local message queues. A <strong>protocol</strong>, $\mathcal{P}$, for $n$ parties is a set of $n$ state machines.</p>
+<h4 id="message-passing">Message passing</h4>
+<p>When a party wishes to send a message $m$ to a recipient party $p$, it locally writes $(m,p)$ on its outgoing-messages queue. The system then adds this event $e=(m,p)$ to a <em>global</em> set of <em>pending messages</em>. Once an event enters the pending messages set, the adversary can decide when to <em>deliver</em> the event (with some constraints that depend on the network model: synchrony or asynchrony). When event $e=(m,p)$ is delivered, the system adds the message $m$ to the local incoming-messages queue of party $p$.</p>
+<h4 id="configuration">Configuration</h4>
+<p>Given a protocol $\mathcal{P}$, a <strong>configuration</strong> of a system is just the state of all the parties and the set of all pending, undelivered messages. More formally, a configuration $C$ is a vector of <em>local states</em> and a set $C_M$ of pending messages. We say that $e\in C_M$ is a pending message and $e=(m,p)$ if the configuration $C$ has a pending message $m$ sent to a party $p$ that party $p$ did not receive yet.</p>
+<h4 id="initial-configuration">Initial Configuration</h4>
+<p>Given a protocol $\mathcal{P}$, the <strong>initial configuration</strong> of the system is fully described by the vector of inputs.</p>
+<h4 id="deciding-configuration"><strong>Deciding Configuration</strong></h4>
+<p><strong>$C$ is a <em>deciding</em> configuration</strong>: if all non-faulty parties have decided in $C$. We say that $C$ is <em>1-deciding</em> if the common decision value is 1, and similarly that $C$ is <em>0-deciding</em> if the decision is 0.</p>
+<p>Note that it’s easy to check if a configuration is deciding - just look at the local state of each non-faulty party.</p>
+<h4 id="committed-configuration-informal"><strong>Committed Configuration (informal)</strong></h4>
+<p>The goal of a consensus protocol is for the system to eventually reach a deciding configuration (despite the adversary’s control of the asynchrony and ability to corrupt parties). The <em>magic moment</em> (sometimes called the “commit point”) of any consensus protocol is when the system reaches a <em>committed configuration</em>. This is a configuration where no matter what the adversary does from this point onwards, the eventual decision value is already <em>fixed</em>. Note that there is no obvious externally observable way to know if a configuration is indeed a committed configuration or is still uncommitted. In particular, parties need to learn that they are in a committed configuration before they decide.</p>
+<p>We choose to use new names to these definitions, which we feel provide a more intuitive and modern viewpoint. The classical name for a committed configuration is <em>univalent configuration</em> and for an uncommitted configuration is <em>bivalent configuration</em>.</p>
+<h4 id="transitioning-from-one-configuration-to-another">Transitioning from one configuration to another</h4>
+<p>We write <strong>$C \rightarrow C’$</strong>: If in configuration $C$ there exists a time interval $T$ and a pending message $e$ (or all undelivered messages $E$ in the synchronous model) such that configuration $C$ changes to configuration $C’$ by processing all local parties for $t$ time and then delivering $e$ (or delivering all $E$ in the synchronous model). 
+When a pending message $e=(m,p)$ is delivered, then party $p$ receives message $m$ in its incoming-messages queue.</p>
+<p>We write <strong>$C \xrightarrow{T, e=(p,m)} C’$</strong> when we are explicit about the event $e$ causing the transition, and write <strong>$C \xrightarrow{e=(p,m)} C’$</strong> when $T=0$ and <strong>$C \xrightarrow{T} C’$</strong> when only $T$ time passes.</p>
+<p>The differences between $C$ and $C’$ are:</p>
+<ol>
+ <li>The local state of party $p$ includes the message $e$;</li>
+ <li>The set of pending messages $C’_M$ of configuration $C’$:
+ <ol>
+ <li>$e$ is removed from $C’_M$;</li>
+ <li>$C’_M$ may contain new messages that are sent by parties while processing for $T$ time.</li>
+ </ol>
+ </li>
+</ol>
+<p>Observe that the local state of any party that is not $p$ is exactly the same in $C \xrightarrow{T} C’’$ and in $C \xrightarrow{T,e=(p,m)} C’$.</p>
+<p>We write <strong>$C \rightsquigarrow C’$</strong>: If there exists a sequence $C = C_1 \rightarrow C_2 \rightarrow \dots \rightarrow C_k=C’$ ($\rightsquigarrow$ is the <a href="https://en.wikipedia.org/wiki/Transitive_closure">transitive closure</a> of $\rightarrow$).</p>
+<p>For a sequence of delays and events $\pi=T_1,e_1,\dots,T_{k}, e_{k}$ we write $C \stackrel{\pi}{\rightsquigarrow} C’$.</p>
+<p><strong>Discussion</strong>: Note that in <a href="https://groups.csail.mit.edu/tds/papers/Lynch/jacm85.pdf">FLP JACM 85</a> a step is defined as a receiving of an event $e$ and immediately sending a finite set of messages. This model does not explicitly allow using timeouts or sending an unbounded number of messages over time. We assume a global clock model and model a step as first an amount of global time $T$ that passes and then the receiving event $e$. This explicitly captures the use of timeouts. Note that this means that during a transition $C \xrightarrow{T} C’’$ the state of all parties may change and the proof needs to take this into account when arguing for indistinguishability.</p>
+<h4 id="uncommitted-configuration"><strong>Uncommitted Configuration</strong></h4>
+<p><strong>$C$ is an <em>uncommitted</em> configuration</strong>: if it has a future 0-deciding configuration and a future 1-deciding configuration. There exists $C \rightsquigarrow D_0$ and $C \rightsquigarrow D_1$ such that $D_0$ is 0-deciding and $D_1$ is 1-deciding.</p>
+<p>Said differently, an <strong>uncommitted configuration</strong> is a configuration where the adversary still has control over the decision value. There are some adversary actions (crash events, message delivery order) that will cause the parties to decide 0 and some adversary actions that will cause the parties to decide 1.</p>
+<p>An <strong>uncommitted configuration</strong> is a state of a system as a whole, not something that can be observed locally. Note that there is no simple way to know if a configuration is uncommitted. It requires examining all the possible future configurations (all possible adversary actions).</p>
+<h4 id="committed-configuration"><strong>Committed Configuration</strong></h4>
+<p><strong>$C$ is a <em>committed</em> configuration</strong>: if every future deciding configuration $D$ (such that $C \rightsquigarrow D$) is deciding on the <em>same</em> value. We say that $C$ is <em>1-committed</em> if every future ends in a 1-deciding configuration, and similarly that $C$ is <em>0-committed</em> if every future ends in a 0-deciding configuration.</p>
+<p>Said differently, a <strong>committed configuration</strong> is a configuration where the adversary has no control over the decision value. When a configuration is committed to $v$, no matter what the adversary does, the decision value will eventually be $v$.</p>
+<p>Note that there is no simple way to know if a configuration is committed or uncommitted. In particular, there is no local indication in the configuration, and it may well be that no party knows that the configuration is committed.</p>
+<p align="center">
+ <img src="/uploads/FLP post 1 - definitions.png" width="600" title="definitions" />
+</p>
+<h3 id="the-existence-of-an-initial-uncommitted-configuration">The existence of an initial uncommitted configuration</h3>
+<p>With these definitions, we can re-state the validity property as:</p>
+<p><strong>Validity</strong>: if all non-faulty parties have the same input $b$ then that initial configuration must be $b$-committed.</p>
+<p>Are all initial configurations either 1-committed or 0-committed? The following lemma shows that this is not the case: every protocol that can tolerate even one crash failure must have some initial configuration that is <strong>uncommitted</strong>.</p>
+<p><strong>Lemma 1 (<a href="https://lamport.azurewebsites.net/pubs/trans.pdf">Lemma 2 of FLP85</a>)</strong>: If $\mathcal{P}$ solves agreement against at least one crash failure, then $\mathcal{P}$ has an initial <strong>uncommitted</strong> configuration.</p>
+<p>A recurring <strong>proof pattern</strong> for showing the existence of an uncommitted configuration will appear many times in these three posts. We start by stating it in an abstract manner:</p>
+<ol>
+ <li>Proof by <em>contradiction</em>: assume all configurations are either 1-committed or 0-committed.</li>
+ <li>Define a notion of <em>local adjacency</em> that differ by just one party. Find <em>two adjacent</em> configurations $C$ and $C’$ such that $C$ is 1-committed and $C’$ is 0-committed.</li>
+ <li>Reach a contradiction due to an <strong>indistinguishability</strong> argument between the two adjacent configurations $C$ and $C’$. The adjacency allows the adversary to cause indistinguishability via <em>crashing of just one</em> party.</li>
+</ol>
+<p><strong>Proof of the Lemma 1</strong> follows the proof pattern above:</p>
+<ol>
+ <li>Seeking a contradiction, assume there is no initial configuration that is uncommitted. So all initial configurations are either 1-committed or 0-committed.</li>
+ <li>Define two initial configurations as <em>$i$-adjacent</em> if the initial value of all parties other than party $i$ are the same. Consider the sequence (or path) of $n+1$ initial configurations: $(1,\dots,1),(0,1,\dots,1),(0,0,1,\dots,1),\dots,(0,\dots,0,1), (0,\dots,0)$. By the validity property, the leftmost is 1-committed and the rightmost is 0-committed. So there must be some party $i$ such that the two $i$-adjacent configurations $C,C’$ are 1-committed and 0-committed, respectively.</li>
+ <li>Now consider in both configurations $C$ and $C’$ the execution where party $i$ crashes right at the start of the protocol. We now have two configurations $\hat{C}, \hat{C’}$. Observe that these two configurations are indistinguishable for all non-faulty parties. So the non-faulty parties must decide the same value in any future of $\hat{C}$ and $\hat{C’}$. This is a contradiction to the assumption that $C$ is 1-committed and $C’$ is 0-committed.</li>
+</ol>
+<p>This proves that any protocol $\mathcal{P}$ must have some initial uncommitted configuration. The next two posts will use the existence of an initial uncommitted configuration and extend it to more rounds!</p>
+<p><strong>Proof by example for n=3</strong>:
+For $n=3$ parties consider the 4 initial configurations $(1,1,1), (0,1,1),(0,0,1),(0,0,0)$. By validity, configuration $(1,1,1)$ must be 1-committed and configuration $(0,0,0)$ must be 0-committed. Seeking a contradiction, let’s assume none of the 4 initial configurations is uncommitted. So both $(0,1,1)$ and $(0,0,1)$ are committed. Since all 4 initial configurations are committed there must be two adjacent configurations that are committed to different values. Without loss of generality, assume that $(0,1,1)$ is 1-committed and $(0,0,1)$ is 0-committed. Now suppose that in both configurations, party 2 crashes right at the start of the protocol. Observe that both configurations look like $(1,CRASH,0)$. So both executions must decide the same, but this is a contradiction because one is 1-committed and the other is 0-committed.</p>
+<h4 id="minimal-validity-condition">Minimal validity condition</h4>
+<p>Note that all this proof required was the existence of one 1-committed initial configuration and one 0-committed initial configuration.</p>
+<h3 id="acknowledgment">Acknowledgment</h3>
+<p>Many thanks to Kartik Nayak for valuable feedback on this post.</p>
+<p>Please leave comments on <a href="https://twitter.com/ittaia/status/1206296071154159617?s=20">Twitter</a></p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#asynchrony">asynchrony</a>
+ 
+ <a href="/tags#lowerbound">lowerbound</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Consensus+Lower+Bounds+via+Uncommitted+Configurations&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2019-12-15-consensus-model-for-FLP%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2019-12-06-dce-the-three-scalability-bottlenecks-of-state-machine-replication/" data-toggle="tooltip" data-placement="top" title="Data, Consensus, Execution: Three Scalability Bottlenecks for State Machine Replication">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2019-12-15-synchrony-uncommitted-lower-bound/" data-toggle="tooltip" data-placement="top" title="Synchronous Consensus Lower Bound via Uncommitted Configurations">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

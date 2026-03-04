@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Graded dispersal with perfect security</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham, Gilad Asharov, Anirudh Chandramouli">
+ 
+ <meta name="description" content="In a previous post we covered the basics of Asynchronous Verifiable Information Dispersal (AVID) and the classic AVID of Cachin and Tessaro, 2004. That protocol allows a sender to disperse a message of $O(n\log n)$ bits at a cost of just $O(n^2 \log^2 n)$ bits. However, It incurs a $O(\log n)$ storage overhead. It uses a cryptographic hash function, and obtains computational security. It’s natural to ask: Do VID protocols...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Graded dispersal with perfect security">
+ <meta property="og:description" content="In a previous post we covered the basics of Asynchronous Verifiable Information Dispersal (AVID) and the classic AVID of Cachin and Tessaro, 2004. That protocol allows a sender to disperse a message of $O(n\log n)$ bits at a cost of just $O(n^2 \log^2 n)$ bits. However, It incurs a $O(\log n)$ storage overhead. It uses a cryptographic hash function, and obtains computational security. It’s natural to ask: Do VID protocols...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham, Gilad Asharov, Anirudh Chandramouli">
+ 
+ <meta property="og:article:published_time" content="2025-08-01T07:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2025-08-01-graded-dispersal/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2025-08-01-graded-dispersal/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Graded dispersal with perfect security">
+ <meta property="twitter:description" content="In a previous post we covered the basics of Asynchronous Verifiable Information Dispersal (AVID) and the classic AVID of Cachin and Tessaro, 2004. That protocol allows a sender to disperse a message of $O(n\log n)$ bits at a cost of just $O(n^2 \log^2 n)$ bits. However, It incurs a $O(\log n)$ storage overhead. It uses a cryptographic hash function, and obtains computational security. It’s natural to ask: Do VID protocols...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Graded dispersal with perfect security</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham, Gilad Asharov, Anirudh Chandramouli</strong><br>
+ 
+ <span class="post-meta">Posted on August 1, 2025</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>In a <a href="https://decentralizedthoughts.github.io/2024-08-08-vid">previous post</a> we covered the basics of <em>Asynchronous Verifiable Information Dispersal</em> (AVID) and the classic AVID of <a href="https://homes.cs.washington.edu/~tessaro/papers/dds.pdf">Cachin and Tessaro, 2004</a>.</p>
+<p>That protocol allows a sender to disperse a message of $O(n\log n)$ bits at a cost of just $O(n^2 \log^2 n)$ bits. However,</p>
+<ul>
+ <li>It incurs a $O(\log n)$ storage overhead.</li>
+ <li>It uses a cryptographic hash function, and obtains computational security.</li>
+</ul>
+<p>It’s natural to ask:</p>
+<blockquote>
+ <p>Do VID protocols require cryptography? Can they obtain $O(1)$ storage overhead without computational assumptions?</p>
+</blockquote>
+<p>In 2020 Jinyuan Chen published a <a href="https://arxiv.org/abs/2009.10965">breakthrough result</a> (also see <a href="https://drops.dagstuhl.de/storage/00lipics/lipics-vol209-disc2021/LIPIcs.DISC.2021.17/LIPIcs.DISC.2021.17.pdf">DISC 2021</a>), proving that Multi-valued Byzantine agreement with perfect security and optimal resilience in synchrony can be obtained with the asymptotically optimal $O(n)$ overhead!</p>
+<p>The crux of Jinyuan’s breakthrough is a new VID variation that has <strong>perfect security</strong>, where dispersal of $O(n\log n)$ bits cost just $O(n^2 \log n)$ bits.</p>
+<p>Jinyuan’s VID protocol is natural, but its proof is based on rather intricate arguments that combine coding theory, graph theory, and linear algebra. In this post we show a slightly improved version of this result with a simpler proof that is based on our recent work <a href="https://eprint.iacr.org/2024/2036">Simple is COOL: Graded Dispersal and its Applications for Byzantine Fault Tolerance</a>. You can also watch a video about this work <a href="https://www.youtube.com/watch?v=QuGvDU2NFuE">here</a>.</p>
+<p>Using this graded VID we prove two results:</p>
+<p><strong>Theorem 1 <a href="https://eprint.iacr.org/2022/052">[SZR22]</a></strong>: perfect security Reliable broadcast of $O(n\log n)$ bits at a cost of $O(n^2 \log^2 n)$ bits and $O(1)$ rounds in asynchrony against $f&lt;n/3$ malicious corruptions.</p>
+<p><strong>Theorem 2 <a href="https://arxiv.org/abs/2009.10965">[C20]</a></strong>: perfect security multi-valued Agreement with inputs of $O(n\log n)$ bits at a cost of $O(n^2 \log^2 n)$ bits and $O(n)$ rounds in synchrony against $f&lt;n/3$ malicious corruptions.</p>
+<h2 id="does-perfect-security-matter">Does perfect security matter</h2>
+<p>Let’s first answer the question: in a world with abundant cryptography why should we care about non-cryptographic constructions and perfect security?</p>
+<ul>
+ <li>Everlasting security and composability: cryptography depends on assumptions that may break and on security parameters that may become weak over time. Perfect security will always remain secure and is easy to compose.</li>
+ <li>Simplicity and elegance: cryptography often increases the attack surface and requires more complex constructions. Perfect security is often simple and easy to verify. Simplicity also makes these schemes easy to learn and understand.</li>
+ <li>Perfect security constructions provide a baseline upon which cryptography can then try to improve. This may expose the places where cryptography is necessary.</li>
+</ul>
+<h2 id="graded-dispersal-with-perfect-security">Graded dispersal with perfect security</h2>
+<p>The core building block is a new <strong>graded dispersal</strong> protocol with <strong>perfect security</strong>. There are $n=3t+1$ parties that work over a field $\mathbb{F}$ with $n&lt;|\mathbb{F}|$. Denote $w= \log |\mathbb{F}|$ and assume there are $t$ malicious parties.</p>
+<p>In this <strong><em>Graded Dispersal</em></strong> parties start with an input value of size $(t/3) w$ bits and output a value and a grade $0,1,2$, with the following properties:</p>
+<ol>
+ <li><strong>Validity</strong>: If all honest parties start with the same input, they all output this value and grade $2$.</li>
+ <li><strong>Weak Graded Agreement</strong>: If an honest party outputs grade 2, then all honest parties with grade $\geq 1$ output the same value and there are at least $t+1$ honest with grade $\geq 1$.</li>
+</ol>
+<p>Note that if no honest party has grade 2, then honest parties with non-$\bot$ output and grade 1 may disagree on their output value. Moreover, grade 2 does not imply full agreement among the honest parties. Nevertheless, we show that this <strong>Weak Graded Agreement</strong> property is sufficient to work well with the Data Dissemination protocol (see Section <a href="#data-dissemination">Data Dissemination</a>).</p>
+<h2 id="a-protocol-for-graded-dispersal">A protocol for graded dispersal</h2>
+<p>The core protocol takes just 3 rounds.</p>
+<p><strong>Input:</strong> Each party $P_i$ holds $f_i(x)$ of degree at most $d = \lfloor t / 3 \rfloor$ over $\mathbb{F}$.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Graded Dispersal Protocol:
+Round 1 - exchange points:
+ Pi sends (f_i(i), f_i(j)) to each Pj
+Round 2 - dynamic Set A1
+ Let (u_j, v_j) be the two values that Pi receives from Pj
+ If f_i(j) = u_j and f_i(i) = v_j 
+ add j to A1
+ If |A1| &gt;= n - t
+ send OK1 to all parties.
+Round 3 - dynamic Set A2
+ If OK1 is received from Pj and j in A1
+ add j to A2
+ If |A2| &gt;= n - t
+ send OK2 to all parties.
+End of round 3 - output
+ If OK2 was sent, and at least 2t + 1 OK2 messages were received
+ output (f_i(x), 2)
+ If OK2 was sent, but &lt;= 2t OK2 messages were received
+ output (f_i(x), 1)
+ Otherwise
+ output (bot, 0)
+</code></pre></div></div>
+<p>Each party sends two field elements and at most two more bits to each other party, so the total message complexity is $O(n^2 w)$ bits.</p>
+<h3 id="proof-of-the-validity-property">Proof of the validity property</h3>
+<p>If all honest parties start with the same polynomial $f(x)$:</p>
+<ol>
+ <li>All honest parties exchange consistent evaluation points $f(i)$ during round 1.</li>
+ <li>The $A^1$ set for each honest party will include all other honest parties.</li>
+ <li>Every honest party will broadcast an $\text{OK}_1$ message to all others.</li>
+ <li>Since no honest party is excluded from any honest $A^1$ set, all honest parties send $\text{OK}_2$ messages.</li>
+ <li>Each honest party receives $2t+1$ $\text{OK}_2$ messages, ensuring all output grade 2.</li>
+</ol>
+<p>Thus, validity holds as all honest parties output grade 2 when starting with the same polynomial. This reasoning also holds in asynchrony.</p>
+<h3 id="proof-of-the-weak-graded-agreement-property">Proof of the weak graded agreement property</h3>
+<p>We do this via three claims:</p>
+<h4 id="claim-1-no-three-honest-parties-with-different-inputs-can-send-textok_1">Claim 1: No three honest parties with different inputs can send $\text{OK}_1$</h4>
+<p>Seeking a contradiction, assume there are $t$ malicious parties, so there are 2t+1 honest and that honest parties 1,2,3 have different inputs and $\lvert B_1^1\rvert,\lvert B_2^1\rvert,\lvert B_3^1\rvert \geq 2t+1$.</p>
+<p>Let $B_i^1$ be the honest parties in $A_i^1$, so $\lvert B_i^1\rvert \geq t+1$:</p>
+<ul>
+ <li>Observe that $\lvert B_i^1 \cap B_j^1\rvert \leq d$ for any $i,j \in {1,2,3}$ because we assume they all have a different degree at most $d$ inputs, so <a href="https://decentralizedthoughts.github.io/2020-07-17-the-marvels-of-polynomials-over-a-field/">can have at most $d$ points in common</a>.</li>
+ <li>So by the <a href="https://en.wikipedia.org/wiki/Inclusion–exclusion_principle">Inclusion-Exclusion Principle</a> we get $\lvert B_1^1 \cup B_2^1 \cup B_3^1\rvert \geq 3t+3 -3d$ but since $d=t/3$, this means there are more than $2t+1$ honest, creating a contradiction.</li>
+</ul>
+<p>So we conclude that there are at most two inputs that have honest parties that send $\text{OK}_1$.</p>
+<h4 id="claim-2-if-there-is-a-set-of-at-least-t1-honest-parties-holding-the-same-input-only-parties-from-that-set-may-send-textok_2">Claim 2: If there is a set of at least $t+1$ honest parties holding the same input, only parties from that set may send $\text{OK}_2$</h4>
+<ul>
+ <li>From claim 1, at most two values may send $OK_1$. Call them, the majority set with input $g$ and the minority set with input $f$.</li>
+ <li>Any party $i$ in the minority set such that $f(i) \neq g(i)$ will not send $OK_1$ because they can get at most $t+t$ values in $A^1$. Because at most $t$ from being the minority and at most $t$ from the adversary.</li>
+ <li>So at most $d$ parties in the minority set can send $OK_1$.</li>
+ <li>Moreover, their $A^1$ set contains at most $d$ parties from the majority set, so no party in the minority set will see enough $OK_1$ in their $A^1$ set to send an $OK_2$. Because at most $d$ from the majority, $d$ from the minority, and $t$ from the adversary, and using $2d+t&lt;2t+1$ (since 2d&lt;t).</li>
+</ul>
+<h4 id="claim-3-if-no-set-of-at-least-t1-parties-exists-no-honest-party-outputs-grade-2">Claim 3: If no set of at least $t+1$ parties exists, no honest party outputs grade 2</h4>
+<ul>
+ <li>From claim 1, at most two values may send $OK_1$.</li>
+ <li>Similar to claim 2, at most $d$ parties in each value will send $OK_1$</li>
+ <li>And similarly, their $A^1$ sets will contain at most $d$ parties from the other value.</li>
+ <li>Hence, no party will see enough $OK_1$ in their $A^1$ set to send an $OK_2$ (because $2d+t&lt;2t+1$).</li>
+</ul>
+<hr />
+<p>By combining these claims, <em>Weak Graded Agreement</em> holds: if any party outputs grade 2, there must be at least $t+1$ honest parties outputting grade $\geq 1$ with the same input.</p>
+<h2 id="theorem-1-adding-a-post-round-for-totality-in-asynchrony">Theorem 1: adding a post-round for totality in asynchrony</h2>
+<p>In the post-round parties send a “grade 2” message if they have grade 2, or they hear $t+1$ “grade 2” messages. Parties terminate if they hear $n-t$ “grade 2” messages.</p>
+<ul>
+ <li><strong>Totality</strong>: If an honest party terminates then eventually all honest parties terminate with grade 2.</li>
+</ul>
+<p>Note that there is no guaranteed termination in this version.</p>
+<h3 id="adding-a-pre-round-for-a-designated-dealer">Adding a pre-round for a designated dealer</h3>
+<p>In dispersal, there is a designated dealer. In the pre-round the dealer sends its input to all parties. Then parties run graded dispersal. So we have</p>
+<ul>
+ <li><strong>Validity</strong>: If the designated sender is honest then all honest parties eventually output the sender’s value and grade $2$. Moreover, with the post-round, all honest parties are guaranteed to terminate in this case.</li>
+</ul>
+<h2 id="theorem-2-adding-a-post-binary-agreement-for-termination">Theorem 2: adding a post-binary agreement for termination</h2>
+<p>In this variation, parties with grade 2 enter a binary agreement with 1 and otherwise enter with 0. If the outcome of the binary agreement is 1, then at least one honest party has grade 2, hence the retrieval protocol below will succeed.</p>
+<h3 id="retrieval-protocol">Retrieval protocol:</h3>
+<p>The retrieval protocol is run after the graded dispersal protocol. It has the following properties:</p>
+<ul>
+ <li><strong>Binding</strong>: If some honest party has output $f,2$ in the graded dispersal protocol then all parties output $f$ in the retrieval.</li>
+</ul>
+<p>If some honest party has output $f$ with grade 2 then from Weak Graded Agreement there are $t+1$ honest that have $f$ and all other honest either have $f$ or know they don’t.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Retrieval protocol
+Round 1 - send point
+ If Pi has grade &gt;= 1
+ send f_i(j) to each Pj
+Round 2 - take the t+1
+ If Pi has grade 0, and a value is sent t+1 times
+ send this value to all
+ If Pi has grade &gt;=1
+ send f_i(i) to all
+End of round 2
+ Wait to have 2t+1 values that agree on a degree &lt;= t polynomial f
+ output f
+</code></pre></div></div>
+<p>Your feedback on <a href="https://x.com/ittaia/status/1951364975265718756">X</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#VID">VID</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Graded+dispersal+with+perfect+security&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2025-08-01-graded-dispersal%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2025-07-29-2-round-3-round-simplex/" data-toggle="tooltip" data-placement="top" title="Concurrent 2-round and 3-round Simplex-style BFT">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2025-08-06-5fminus1-simplex/" data-toggle="tooltip" data-placement="top" title="2-round BFT in Simplex style for n=5f-1">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

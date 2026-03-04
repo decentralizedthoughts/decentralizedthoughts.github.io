@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Concurrent 2-round and 3-round Simplex-style BFT</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham, Yuval Efron, Kartik Nayak, and Ling Ren">
+ 
+ <meta name="description" content="In the last two posts, we presented two partially synchronous BFT protocols in the Simplex-style: a 3-round protocol with $n\geq3f+1$ and a 2-round protocol with $n\geq 5f+1$. In this post, we describe a protocol that runs a 2-round commit rule and a 3-round commit rule concurrently. A new parameter $p$ ($0 \leq p \leq f$) is introduced, and the goal is to design protocols that have $n \geq 3f+2p+1$ parties...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Concurrent 2-round and 3-round Simplex-style BFT">
+ <meta property="og:description" content="In the last two posts, we presented two partially synchronous BFT protocols in the Simplex-style: a 3-round protocol with $n\geq3f+1$ and a 2-round protocol with $n\geq 5f+1$. In this post, we describe a protocol that runs a 2-round commit rule and a 3-round commit rule concurrently. A new parameter $p$ ($0 \leq p \leq f$) is introduced, and the goal is to design protocols that have $n \geq 3f+2p+1$ parties...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham, Yuval Efron, Kartik Nayak, and Ling Ren">
+ 
+ <meta property="og:article:published_time" content="2025-07-29T00:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Concurrent 2-round and 3-round Simplex-style BFT">
+ <meta property="twitter:description" content="In the last two posts, we presented two partially synchronous BFT protocols in the Simplex-style: a 3-round protocol with $n\geq3f+1$ and a 2-round protocol with $n\geq 5f+1$. In this post, we describe a protocol that runs a 2-round commit rule and a 3-round commit rule concurrently. A new parameter $p$ ($0 \leq p \leq f$) is introduced, and the goal is to design protocols that have $n \geq 3f+2p+1$ parties...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Concurrent 2-round and 3-round Simplex-style BFT</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham, Yuval Efron, Kartik Nayak, and Ling Ren</strong><br>
+ 
+ <span class="post-meta">Posted on July 29, 2025</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>In the last two posts, we presented two partially synchronous BFT protocols in the <a href="https://eprint.iacr.org/2023/463.pdf">Simplex-style</a>: a <a href="https://decentralizedthoughts.github.io/2025-06-18-simplex/">3-round protocol</a> with $n\geq3f+1$ and a <a href="https://decentralizedthoughts.github.io/2025-07-18-two-round-Simplex/">2-round protocol</a> with $n\geq 5f+1$. In this post, we describe a protocol that runs a 2-round commit rule and a 3-round commit rule concurrently.</p>
+<p>A new parameter $p$ ($0 \leq p \leq f$) is introduced, and the goal is to design protocols that have $n \geq 3f+2p+1$ parties and the following properties:</p>
+<ul>
+ <li>Safety and liveness in the presence of $f$ Byzantine parties;</li>
+ <li>If the leader is honest, the network is synchronous (GST=0), and at most $f$ parties are Byzantine, then all honest parties commit in 3 rounds; and</li>
+ <li>If the leader is honest, the network is synchronous (GST=0), and at most $p$ parties are Byzantine, then all honest parties commit in 2 rounds.</li>
+</ul>
+<p>To our knowledge, such protocols were first proposed in <a href="https://ieeexplore.ieee.org/document/1467815">FaB</a> and <a href="https://dl.acm.org/doi/10.1145/1658357.1658358">Zyzzyva</a> around 2005. Those initial protocols <a href="https://arxiv.org/abs/1712.01367">had safety and liveness errors</a> that were later <a href="https://arxiv.org/pdf/1801.10022">fixed</a> (and implemented in <a href="https://arxiv.org/pdf/1804.01626">SBFT</a>). Recently, there has been increased interest in this line of research with <a href="https://arxiv.org/pdf/2312.05869">Banyan</a>, <a href="https://arxiv.org/abs/2505.08771">Kudzu</a>, and <a href="https://www.anza.xyz/alpenglow-1-1">Alpenglow</a> that gave <a href="https://simplex.blog/">Simplex</a>-inspired variants.</p>
+<p>In this post, we describe a natural Simplex-style protocol achieving the above guarantees. Our approach is to merge the 3-round and 2-round protocols with minimal modifications. The key subtlety is enforcing the <em>Fast &lt; Slow</em> ordering of certificates and requiring <em>both</em> to complete a view.</p>
+<h2 id="2-round-n5f1-recast-to-n3f2p1">2-round $n=5f+1$ recast to $n=3f+2p+1$</h2>
+<p>To start, here is the $n=5f+1$ protocol, adapted to $n=3f+2p+1$ to obtain safety for up to $f$ Byzantine faults and liveness assuming up to $p$ Byzantine and an honest leader. The only changes are that the commit quorum size becomes $n-p$, and the certificate size becomes $n-p-2f$. (See our <a href="https://decentralizedthoughts.github.io/2025-07-18-two-round-Simplex/">last post</a> for why the certificate size should be $2f$ less than commit quorum size.)</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2-round commit BFT
+1. Upon entering view k: 
+    Everyone starts a local timer T_k 
+    Leader sends (Propose, k, x, Fast-Cert(k’, x)) for the highest k’ 
+ 
+2. Upon received (Propose, k, x, Fast-Cert(k’, x)) 
+ and Fast-Cert(l, ⊥) for all k' &lt; l &lt; k 
+ and has not sent Vote 
+    Send (Vote, k, x)  // Denote n-2f-p (Vote, k, x) as Fast-Cert(k, x) 
+3. Upon T_k = 2Δ and has not sent Vote
+    Send (Vote, k, ⊥)   // Denote n-2f-p (Vote, k, ⊥) as Fast-Cert(k, ⊥) 
+4. Upon receiving n-p (Vote, k, x) // Monitored even after exiting view k
+    Decide x 
+    Forward these n-p (Vote, k, x)
+    Terminate 
+5. Upon receiving n-f (Vote, k, *) but no Fast-Cert(k, x) for any x 
+    Send (Vote, k, ⊥) 
+6. Upon receiving Fast-Cert(k, *) and has sent Vote
+    Forward Fast-Cert(k, *) 
+    Enter view k+1 if in view k 
+</code></pre></div></div>
+<h2 id="3-round-n3f1-recast-to-n3f2p1">3-round $n=3f+1$ recast to $n=3f+2p+1$</h2>
+<p>Now here is the $n=3f+1$ protocol, adopted to $n=3f+2p+1$ to obtain safety and liveness for $f$ Byzantine. The only change is that the quorum size is reduced from $n-f$ to $n-f-p$, because now two quorums of $n-f-p$ intersect at $2(n-f-p)-n \geq f+1$.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>3-round commit BFT
+1. Upon entering view k: 
+    Everyone starts a local timer T_k 
+    Leader sends (Propose, k, x, Slow-Cert(k’, x)) for the highest k’ 
+ 
+2. Upon received (Propose, k, x, Slow-Cert(k’, x)) 
+ and Slow-Cert(l, ⊥) for all k' &lt; l &lt; k
+ and has not sent Vote 
+    Send (Vote, k, x)  // Denote n-f-p (Vote, k, x) as Slow-Cert(k, x) 
+3. Upon receiving Slow-Cert(k, x) and has not sent Final
+    Send (Final, k, x)     
+4. Upon T_k = 3Δ 
+    Send (Final, k, ⊥)  // Denote n-f-p (Final, k, ⊥) as Slow-Cert(k, ⊥) 
+5. Upon receiving n-f-p (Final, k, x) // Monitored even after exiting view k
+    Decide x 
+    Forward these n-f-p (Final, k, x)
+    Terminate 
+6. Upon receiving Slow-Cert(k, *) and has sent Final
+ Forward Slow-Cert(k, *) 
+    Enter view k+1 if in view k 
+</code></pre></div></div>
+<h2 id="merged-2-round-and-3-round">Merged 2-round and 3-round</h2>
+<p>Let’s merge the 2-round and 3-round protocols for $n=3f+2p+1$. Note that the merge is seamless in that all the certificates remain exactly as in their original protocols above:</p>
+<ul>
+ <li>$n-f-p$ votes is a slow cert</li>
+ <li>$n-f-p$ finals of ⊥ is a slow cert of ⊥</li>
+ <li>$n-2f-p$ votes is a fast cert</li>
+ <li>$n-2f-p$ votes of ⊥ is a fast cert of ⊥</li>
+ <li>$n-p$ votes is a fast commit</li>
+ <li>$n-f-p$ finals is a slow commit</li>
+</ul>
+<p>Two important aspects of the merge:</p>
+<ul>
+ <li>We order certificates first by view and then by <strong>Fast &lt; Slow</strong>. For example, a proposal in view 4 with Fast-Cert(2, x) would be voted for if Slow-Cert(2, ⊥), Fast-Cert(3, ⊥), Slow-Cert(3, ⊥) exist. While voting for a proposal in view 4 with Slow-Cert(2, x) only needs a Fast-Cert(3, ⊥) and Slow-Cert(3, ⊥) to exist.</li>
+ <li>We wait to get both a slow cert and fast cert to complete a view (Upon 8).</li>
+</ul>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// This merges the 2-round and 3-round protocols, maintaining both fast and slow commit paths.
+2-round and 3-round BTF
+1. Upon entering view k: 
+    Everyone starts a local timer T_k 
+    Leader sends (Propose, k, x, X-Cert(k’, x)) for the highest k’, 
+ where certs are ordered first by view and then by Fast &lt; Slow 
+ 
+2. Upon received (Propose, k, x, X-Cert(k’, x)) for some X in {Fast, Slow} 
+ and ⊥ certificates for all higher certificates of view &lt;k, 
+ and has not sent Vote 
+    Send (Vote, k, x)    // Denote n-2f-p (Vote,k,x) as Fast-Cert(k, x)
+ // Denote n-f-p (Vote,k,x) as Slow-Cert(k, x) 
+ 
+3. Upon receiving Slow-Cert(k, x) and has not sent Final
+    Send (Final, k, x)     
+4. Upon receiving n-f-p (Final, k, x) or n-p (Vote, k, x) 
+    Decide x // Monitored even after exiting view k
+    Forward commit proof 
+    Terminate 
+5. Upon T_k = 2Δ and has not sent Vote
+    Send (Vote, k, ⊥)   // Denote n-2f-p (Vote,k,⊥) as Fast-Cert(k, ⊥)
+6. Upon T_k = 3Δ and has not sent Final
+    Send (Final, k, ⊥)  // Denote n-f-p (Final,k,⊥) as Slow-Cert(k, ⊥) 
+7. Upon receiving n-f (Vote, k, *) but no Fast-Cert(k, x) for any x 
+    Send (Vote, k, ⊥) 
+8. Upon receiving Slow-Cert(k, *) and Fast-Cert(k, *) 
+ and has sent Vote and Final
+    Forward Slow-Cert(k, *) and Fast-Cert(k, *) 
+    Enter view k+1 if in view k 
+</code></pre></div></div>
+<h2 id="safety-and-liveness-proof-sketches">Safety and liveness proof sketches</h2>
+<p><strong>Lemma 1</strong>: If an honest party fast commits $x$ in view $k$, then X-Cert(k, x’) for $x’ \neq x$ and $X \in {Fast, Slow}$ cannot form. Furthermore, Fast-Cert(k, ⊥) can not form.</p>
+<p><em>Proof sketch</em>: A fast commit requires $n-p$ votes for $x$, so no other value (including ⊥) can get $n-2f-p$ votes, because the $n-p$ votes needed for a fast commit already intersect with any other potential quorum. Note that a Slow-Cert for $x$ or for ⊥ will form, and both are fine.</p>
+<p><strong>Lemma 2</strong>: If an honest party slow commits $x$ in view $k$, then Slow-Cert(k, ⊥) or Slow-Cert(k, x’) for $x’ \neq x$ cannot form.</p>
+<p><em>Proof sketch</em>: A slow commit requires $n-f-p$ votes for $x$, so no other value can get $n-f-p$ votes by quorum intersection. In addition, a slow commit requires $n-f-p$ final for $x$, so no $n-f-p$ final for ⊥ by quorum intersection. Note that we don’t care about Fast-Certs for this view because they are weaker.</p>
+<p><strong>Lemma 3</strong>: If an honest party commits $x$ in view $k$, no honest party votes for $x’ \neq x$ ($x’ \neq ⊥$) in any view higher than $k$.</p>
+<p><em>Proof sketch:</em> Consider the leader’s proposal in view $k+1$, with accompanying certificate X-Cert(k’, x). There are two cases:</p>
+<ol>
+ <li>$k’&lt;k$: Lemma 1 and Lemma 2 imply that either Fast-Cert(k, ⊥) <em>or</em> Slow-Cert(k, ⊥) do not exist, and hence the proposal isn’t valid.</li>
+ <li>$k’=k$: Lemma 1 and Lemma 2 imply that the proposal must be for x.</li>
+</ol>
+<p>This completes the proof for $k+1$, the proof for higher views follows by induction.</p>
+<p>Safety is straightforward from Lemma 3. Liveness follows from the lemmas below.</p>
+<p><strong>Lemma 4</strong>: If no honest party commits in views $k$ or lower, then every honest party eventually receives either X-Cert(k, x) for some $x \neq \bot$ or X-Cert(k, ⊥) for each $X \in {Fast, Slow}$.</p>
+<p><em>Proof sketch</em>: If any honest party gets Fast-Cert(k, x), it forwards the certificate. Otherwise, all honest parties eventually vote for ⊥ by Upon 5 of the protocol, so all honest parties eventually get a Fast-Cert(k, ⊥). Moreover, each party either gets a Slow-Cert(k, x) forwarded to it, or by definition, hold a Slow-Cert(k, ⊥).</p>
+<p><strong>Lemma 5</strong>: If view $k$ starts after GST, and the leader of view $k$ is honest, then all honest parties commit in view $\leq k$.</p>
+<p><em>Proof sketch</em>: If an honest party commits in view $&lt;k$, it forwards the commit certificate, so all honest parties commit in view $&lt;k$. If no honest party commits in view $&lt;k$, then given synchrony after GST, all honest parties enter view $k$, vote for the honest leader.</p>
+<p>If at most $p$ Byzantine then all honest will commit in view $k$ in 2 rounds.</p>
+<p>If at most $f$ Byzantine then all honest will send final and commit in view $k$ in 3 rounds.</p>
+<h2 id="notes">Notes</h2>
+<p>In a <a href="https://decentralizedthoughts.github.io/2025-08-06-5fminus1-simplex/">follow-up post</a> we show how to get the optimal $n=3f+2p-1$.</p>
+<h2 id="acknowledgments">Acknowledgments</h2>
+<p>This work was conducted while Yuval Efron was affiliated with a16z Crypto Research and the other authors were visiting. We would like to thank Quentin Kniep, Jakub Sliwinski, and Roger Wattenhofer for insightful discussions and feedback. We thank Brendan Kobayashi Chou, Andrew Lewis-Pye, Patrick O’Grady for spotting a liveness error in a previous version.</p>
+<p>We thank Eugen Zalinescu from nomadic labs for spotting an error in the safety proof sketch.</p>
+<p>Your thoughts/comments on <a href="https://x.com/ittaia/status/1950642366483992880">X</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ <a href="/tags#research">research</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Concurrent+2-round+and+3-round+Simplex-style+BFT&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2025-07-29-2-round-3-round-simplex%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2025-07-26-Lagrange/" data-toggle="tooltip" data-placement="top" title="Lagrange's Theorem through the algorithmic lens">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2025-08-01-graded-dispersal/" data-toggle="tooltip" data-placement="top" title="Graded dispersal with perfect security">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

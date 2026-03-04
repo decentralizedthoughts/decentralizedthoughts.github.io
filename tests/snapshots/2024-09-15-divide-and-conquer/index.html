@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Divide and Conquer in Distributed Computing - synchronous BFT with quadratic communication via recursive phase king</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham, Renas Bacho, and Gilad Stern">
+ 
+ <meta name="description" content="The idea of decomposing a hard problem into easier problems is a fundamental algorithm design pattern in Computer Science. Divide and Conquer is used in so many domains: sorting, multiplication, and FFT, to mention a few. But what about distributed computing? In this post we will highlight how divide and conquer can help unauthenticated synchronous Byzantine agreement obtain quadratic communication, which is asymptotically optimal due to Dolev and Reischuk’s lower...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Divide and Conquer in Distributed Computing - synchronous BFT with quadratic communication via recursive phase king">
+ <meta property="og:description" content="The idea of decomposing a hard problem into easier problems is a fundamental algorithm design pattern in Computer Science. Divide and Conquer is used in so many domains: sorting, multiplication, and FFT, to mention a few. But what about distributed computing? In this post we will highlight how divide and conquer can help unauthenticated synchronous Byzantine agreement obtain quadratic communication, which is asymptotically optimal due to Dolev and Reischuk’s lower...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham, Renas Bacho, and Gilad Stern">
+ 
+ <meta property="og:article:published_time" content="2024-09-15T07:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2024-09-15-divide-and-conquer/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2024-09-15-divide-and-conquer/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Divide and Conquer in Distributed Computing - synchronous BFT with quadratic communication via recursive phase king">
+ <meta property="twitter:description" content="The idea of decomposing a hard problem into easier problems is a fundamental algorithm design pattern in Computer Science. Divide and Conquer is used in so many domains: sorting, multiplication, and FFT, to mention a few. But what about distributed computing? In this post we will highlight how divide and conquer can help unauthenticated synchronous Byzantine agreement obtain quadratic communication, which is asymptotically optimal due to Dolev and Reischuk’s lower...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Divide and Conquer in Distributed Computing - synchronous BFT with quadratic communication via recursive phase king</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham, Renas Bacho, and Gilad Stern</strong><br>
+ 
+ <span class="post-meta">Posted on September 15, 2024</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>The idea of decomposing a hard problem into easier problems is a fundamental algorithm design pattern in Computer Science. <a href="https://en.wikipedia.org/wiki/Divide-and-conquer_algorithm">Divide and Conquer</a> is used in so many domains: sorting, <a href="https://www.youtube.com/watch?v=JCbZayFr9RE">multiplication</a>, and <a href="https://decentralizedthoughts.github.io/2023-09-01-FFT/">FFT</a>, to mention a few. But what about distributed computing?</p>
+<p>In this post we will highlight how divide and conquer can help unauthenticated synchronous Byzantine agreement obtain <strong>quadratic communication</strong>, which is asymptotically optimal due to <a href="https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/">Dolev and Reischuk’s lower bound</a>.</p>
+<blockquote>
+ <p><strong>Theorem:</strong> <a href="https://www.sciencedirect.com/science/article/pii/089054019290004Y">Coan and Welch, 1992</a>, and <a href="https://link.springer.com/chapter/10.1007/978-1-4615-3422-8_27">Berman, Garay, and Perry, 1992</a>: 
+There exists a synchronous unauthenticated agreement protocol with $O(n^2)$ message complexity that can tolerate $f&lt;n/3$ Byzantine parties.</p>
+</blockquote>
+<p>The idea is to run a <a href="https://decentralizedthoughts.github.io/2022-06-09-phase-king-via-gradecast/">phase king protocol</a>, with two (instead of $f+1$) phases. Recall that in the original phase king protocol, each phase had a king whose value was used if the <code class="language-plaintext highlighter-rouge">gradedConsensus</code> does not output grade 2. Here we replace the king’s value with a majority on the recursive outcome of half the parties.</p>
+<p>See our <a href="https://decentralizedthoughts.github.io/2022-06-09-phase-king-via-gradecast/">previous post</a> for implementing <code class="language-plaintext highlighter-rouge">gradedConsensus</code> and its properties.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Protocol for N parties that are split into two halves: N1, N2 
+v[0] := input
+// Phase 1:
+1. (v[1], grade[1]) := gradedConsensus(v[0])
+2. Parties in N1: // recursive call
+ c: = Consensus-on-N1(v[1])
+3. Each party in N1 sends its c value to everyone 
+4. If grade[1] &lt; 2 then v[1] := majority of N1 c values
+// Phase 2:
+1. (v[2], grade[2]) := gradedConsensus(v[1])
+2. Parties in N2: // second recursive call
+ c: = Consensus-on-N2(v[2])
+3. Each party in N2 sends its c value to everyone
+4. If grade[2] &lt; 2 then v[2] := majority of N2 c values
+Decide v[2]
+</code></pre></div></div>
+<p>At first glance, this may seem circular—solving consensus using consensus—but the recursion reveals how the approach truly works. However, note that consensus for $n$ parties is solved assuming we know how to solve consensus for $n/2$ parties. Each consensus instance is then solved recursively by breaking that instance into two as well. We can continue dividing the number of parties until we get to such a small number of parties that solving consensus is almost trivial. At that point we can use any protocol we want (as long as it’s not very inefficient). We then use the output in the small instances to reach consensus in the bigger instances.</p>
+<h3 id="proof">Proof</h3>
+<p><em>Proof of Validity</em>: As in the regular Phase King protocol, if all honest parties have the same input $b$, then from the validity property of graded consensus, in each phase, the grade will be 2, so the value will not change. Hence, the output will be $b$ as well.</p>
+<p><em>Proof of Agreement</em>: Since $N$ has less than $1/3$ malicious, then either $N_1$ or $N_2$ must have less than a $1/3$ fraction of malicious parties (even Byzantine parties cannot live in <a href="https://en.wikipedia.org/wiki/Lake_Wobegon">Lake Wobegon</a>). So let $i$ be the (first) index $i \in 1,2$ such that $N_i$ has less than a $1/3$ fraction of malicious parties and consider two cases:</p>
+<ul>
+ <li>
+ <p>Case 1: some honest party gets grade 2 in the graded consensus of phase $i$, then all honest parties have the same value $v[i]$, and from the validity of the consensus, this is the decision value in $N_i$. This means that every party will either have that value because its grade was $2$ in the graded consensus, or adopt the value it received from a majority of the parties in $N_i$. Since all honest parties in $N_i$ output $v[i]$ and the majority of the parties in $N_i$ are honest, every party will receive $v[i]$ from a majority of parties in $N_1$ and adopt $v[i]$ as well.</p>
+ </li>
+ <li>
+ <p>Case 2: no honest party gets grade 2 in the graded consensus of phase $i$, then let $b$ be the decision value in the consensus on $N_i$. So all honest parties will hear a majority of parties in $N_i$ say $b$ and hence adopt that value because their grade is $&lt;2$ and thus set $v[i] := b$.</p>
+ </li>
+</ul>
+<p>Finally, in either of the above cases, if $i=1$, then all honest parties will get grade 2 in phase 2, hence agree on this value ($v[1] = v[2]$). On the other hand, if $i=2$, they will simply output $v[2]$ after phase $2$.</p>
+<h3 id="quadratic-message-complexity">Quadratic message complexity</h3>
+<p>Let’s prove by induction that the message complexity for a set of $n$ parties is at most $d n^2$ for some constant $d &gt;8$.</p>
+<p>Base case for $n=4$: use the regular <a href="https://decentralizedthoughts.github.io/2022-06-09-phase-king-via-gradecast/">phase king protocol</a> that for $t=1$ runs in 2 phases where each phase has a graded consensus and an all to all send. Each graded consensus for $n=4$ costs at most $2n^2 = 32$ messages, and each all-to-all costs at most $n^2 = 16$ messages. With two phases, the total is at most 96 messages. Setting $d=9$ gives $9 \cdot 16 = 144 \geq 96$, so the bound holds.</p>
+<p>Now from the induction hypothesis, the consensus protocol for $n/2$ parties has message complexity of $d n^2/4$. Consider the message complexity of the protocol above for $n$ parties: it consists of two graded consensus instances, two all to all sends, and two consensus invocations on sets of size $n/2$ each. Since each graded consensus is at most $2n^2$, the total is less than:</p>
+\[6 n^2 + d n^2/4\]
+<p>Which is smaller than $d n^2$ for $d &gt;8$.</p>
+<h3 id="notes">Notes</h3>
+<ul>
+ <li>
+ <p>This is a follow-up post to our post on <a href="https://decentralizedthoughts.github.io/2022-06-09-phase-king-via-gradecast/">graded consensus and the phase king protocol</a>.</p>
+ </li>
+ <li>
+ <p>This recursive solution can also be used in the authenticated setting to obtain $O(n^2)$ communication and resilience of $t&lt;n/2$ (or $t&lt;n/(2+\epsilon)$). See <a href="https://arxiv.org/pdf/2007.13175">Momose and Ren 2021</a>, they are also the first to make the connection to an abstract graded consensus (or graded Byzantine agreement) as a building block. See this <a href="https://decentralizedthoughts.github.io/2021-09-20-optimal-communication-complexity-of-authenticated-byzantine-agreement/">blog post</a> for more details.</p>
+ </li>
+</ul>
+<h3 id="acknowledgments">Acknowledgments</h3>
+<p>Many thanks to Ling Ren for insightful comments and pointers</p>
+<p>Your thoughts/comments on <a href="https://x.com/ittaia/status/1835357484195709231">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Divide+and+Conquer+in+Distributed+Computing+-+synchronous+BFT+with+quadratic+communication+via+recursive+phase+king&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2024-09-15-divide-and-conquer%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2024-08-24-hotstuff1/" data-toggle="tooltip" data-placement="top" title="HotStuff-1 and the Prefix Speculation Dilemma in BFT Consensus">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2024-12-10-bind-and-rand/" data-toggle="tooltip" data-placement="top" title="Living with asynchrony and eventually reaching agreement by combining binding and randomness">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

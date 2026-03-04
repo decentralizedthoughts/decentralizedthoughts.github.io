@@ -1,0 +1,1 @@
+# One external URL per line if it is known to be flaky or intentionally unreachable from CI.

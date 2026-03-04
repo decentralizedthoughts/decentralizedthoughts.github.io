@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Dont Trust. Verify. and Checkpoint?</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham">
+ 
+ <meta name="description" content="Imagine that that Aliens land on earth with a new superfast SHA256 machine. Imagine this machine always gives them more than 51% of the current world Bitcoin hash power (but not enough hash power to completely break SHA256). Suppose they decide to build a chain from the Bitcoin Genesis block that is longer than any other chain on earth and put only empty blocks on it. Could they erase all...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Dont Trust. Verify. and Checkpoint?">
+ <meta property="og:description" content="Imagine that that Aliens land on earth with a new superfast SHA256 machine. Imagine this machine always gives them more than 51% of the current world Bitcoin hash power (but not enough hash power to completely break SHA256). Suppose they decide to build a chain from the Bitcoin Genesis block that is longer than any other chain on earth and put only empty blocks on it. Could they erase all...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham">
+ 
+ <meta property="og:article:published_time" content="2019-09-13T16:32:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2019-09-13-dont-trust-checkpoint/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2019-09-13-dont-trust-checkpoint/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Dont Trust. Verify. and Checkpoint?">
+ <meta property="twitter:description" content="Imagine that that Aliens land on earth with a new superfast SHA256 machine. Imagine this machine always gives them more than 51% of the current world Bitcoin hash power (but not enough hash power to completely break SHA256). Suppose they decide to build a chain from the Bitcoin Genesis block that is longer than any other chain on earth and put only empty blocks on it. Could they erase all...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Dont Trust. Verify. and Checkpoint?</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham</strong><br>
+ 
+ <span class="post-meta">Posted on September 13, 2019</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>Imagine that that Aliens land on earth with a new superfast SHA256 machine. Imagine this machine always gives them more than 51% of the current world Bitcoin hash power (but not enough hash power to completely break SHA256). Suppose they decide to build a chain from the <a href="https://ittaiab.github.io/2019-07-18-do-bitcoin-and-ethereum-have-any-trusted-setup-assumptions/">Bitcoin Genesis block</a> that is longer than any other chain on earth and put only empty blocks on it. <em>Could they erase all bitcoin transactions?</em></p>
+<p>Anticipating this type of attack, Satoshi suggested the following <a href="https://satoshi.nakamotoinstitute.org/posts/bitcointalk/232/">security safeguard</a>:</p>
+<blockquote>
+ <p>The security safeguard makes it so even if someone does have more than 50% of the network’s CPU power, they can’t try to go back and redo the block chain before yesterday. (if you have this update)</p>
+ <p>I’ll probably put a checkpoint in each version from now on. Once the software has settled what the widely accepted block chain is, there’s no point in leaving open the unwanted non-zero possibility of revision months later. – <a href="https://bitcointalk.org/index.php?topic=437">Satoshi 2010</a></p>
+</blockquote>
+<p>So the answer is that the Aliens with a superfast SHA256 will fail. By <a href="https://github.com/bitcoin/bitcoin/blob/master/src/validation.cpp#L120">default</a> the bitcoin core client enforces a set of <a href="https://github.com/bitcoin/bitcoin/blob/master/src/chainparams.cpp#L138">checkpoints</a>. In fact it seems that the person behind the Satoshi email in 2010 suggested to add a checkpoint <strong>in each version from now on</strong>.</p>
+<p>A <strong>checkpoint</strong> on a blockchain is pair (block number, hash). For example the checkpoint (295000, 0x00000000000000004d9b4ef50f0f9d686fd69db2e03af35a100370c64632a983) indicates that the hash of the 295000th block must be 0x00000000000000004d9b4ef50f0f9d686fd69db2e03af35a100370c64632a983.
+A checkpoint provides <strong>finality</strong>. All the transactions till block 295000 are final, there is no way to revert them, even if you are an alien with a superfast SHA256 machine <sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup>.</p>
+<p>While some believe this is <a href="https://bitcoin.stackexchange.com/questions/39097/do-all-bitcoin-client-enforce-checkpoints">not a security feature</a>, it does effectively enforce a consensus decision (by default) that forces all users using the same codebase to accept this checkpoint and everything before it as final.</p>
+<p>The idea of adding checkpoints by publishing hardcoded values into a <a href="https://github.com/bitcoin">github</a> repository is somewhat controversial. It’s essentially a way for a code base to create a new genesis and effectively disallows any alternative chain from the previous genesis. On the one hand this is a strong security measure but on the other hand this gives non-trivial power to the maintainers of the github repository. The real question then becomes: who decides what will be a checkpoint? who decides how often? what will be its value?</p>
+<p>The Bitcoin core client uses checkpoints in a sporadic manner. Seems to be used till 2014 and later abandoned. Their motivation seems to be that it <a href="https://github.com/bitcoin/bitcoin/issues/15095">protects against header flooding attacks</a>. However there seems to be no documented systematic reasoning as to when to use checkpoints.</p>
+<p>The <a href="https://arxiv.org/abs/1710.09437">Casper finality gadget</a> can be viewed as a way to use a <a href="https://ittaiab.github.io/2019-06-23-what-is-the-difference-between/">BFT based</a> sub-system to decide on checkpoints that is governed by a set of validators (instead of a set of Github maintainers). More on finality gadgets in a later post.</p>
+<p>Please leave comments on <a href="https://twitter.com/ittaia/status/1181022613511888896?s=20">Twitter</a></p>
+<div class="footnotes" role="doc-endnotes">
+ <ol>
+ <li id="fn:1" role="doc-endnote">
+ <p>This is assuming the superfast machine is just faster than all the current world hashpower - not a machine that can completely break SHA256. <a href="#fnref:1" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+ </li>
+ </ol>
+</div>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Dont+Trust.+Verify.+and+Checkpoint%3F&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2019-09-13-dont-trust-checkpoint%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2019-08-16-byzantine-agreement-needs-quadratic-messages/" data-toggle="tooltip" data-placement="top" title="The Dolev and Reischuk Lower Bound: Does Agreement need Quadratic Messages?">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2019-09-13-flavours-of-partial-synchrony/" data-toggle="tooltip" data-placement="top" title="Flavours of Partial Synchrony">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

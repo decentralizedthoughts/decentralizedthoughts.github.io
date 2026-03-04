@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Nakamoto's Longest-Chain Wins Protocol</title>
+ 
+ 
+ <meta name="author" content="Kartik Nayak">
+ 
+ <meta name="description" content="In this post, we will cover Nakamoto’s Consensus protocol presented in the Bitcoin whitepaper. There are a lot of posts and videos that explain this seminal and simple protocol. Our goal in this post will be to intuitively piece out the need for different aspects of the protocol, such as proof-of-work and how network synchrony plays a role in the protocol. The proof-of-work chain is a solution to the Byzantine...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Nakamoto's Longest-Chain Wins Protocol">
+ <meta property="og:description" content="In this post, we will cover Nakamoto’s Consensus protocol presented in the Bitcoin whitepaper. There are a lot of posts and videos that explain this seminal and simple protocol. Our goal in this post will be to intuitively piece out the need for different aspects of the protocol, such as proof-of-work and how network synchrony plays a role in the protocol. The proof-of-work chain is a solution to the Byzantine...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Kartik Nayak">
+ 
+ <meta property="og:article:published_time" content="2021-10-15T00:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2021-10-15-Nakamoto-Consensus/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2021-10-15-Nakamoto-Consensus/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Nakamoto's Longest-Chain Wins Protocol">
+ <meta property="twitter:description" content="In this post, we will cover Nakamoto’s Consensus protocol presented in the Bitcoin whitepaper. There are a lot of posts and videos that explain this seminal and simple protocol. Our goal in this post will be to intuitively piece out the need for different aspects of the protocol, such as proof-of-work and how network synchrony plays a role in the protocol. The proof-of-work chain is a solution to the Byzantine...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Nakamoto's Longest-Chain Wins Protocol</h1>
+ 
+ 
+ 
+ 
+ By <strong>Kartik Nayak</strong><br>
+ 
+ <span class="post-meta">Posted on October 15, 2021</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>In this post, we will cover Nakamoto’s Consensus protocol presented in the <a href="https://bitcoin.org/bitcoin.pdf">Bitcoin whitepaper</a>. There are a lot of posts and videos that explain this seminal and simple protocol. Our goal in this post will be to <em>intuitively</em> piece out the need for different aspects of the protocol, such as proof-of-work and how network synchrony plays a role in the protocol.</p>
+<blockquote>
+ <p>The proof-of-work chain is a solution to the Byzantine Generals’ Problem. I’ll try to rephrase it in that context. <a href="https://satoshi.nakamotoinstitute.org/emails/cryptography/11/">Satoshi Nakamoto 2008-11-13</a></p>
+</blockquote>
+<p>We are in the setting described in our <a href="https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/">state machine replication</a> post where a group of $n$ server replicas known to each other agrees on a sequence of values. For simplicity, we start with reaching consensus on a single value. In the second part of this post, we will generalize it to multiple values.</p>
+<p>The key intuition behind Nakamoto’s protocol is to ask a majority of the parties what should be committed. What the majority says is decided peculiarly by building chains and using the “longest chain wins” rule. For now, it is unclear why we should be building chains to learn about how a majority of the parties think. We will revisit this question later in the post.</p>
+<p>In the following, we will describe a simpler version of the protocol to get an intuitive understanding of its core aspects.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Let v denote a replica's input
+Each replica maintains a set of chains, initially empty.
+The protocol proceeds in rounds. In each round r:
+- A unique replica is elected uniformly at random to be the leader L of round r.
+- L adds an empty vote block to the longest chain known to it. 
+ If no chain is known, it creates a new chain with a single block with input v.
+- L shares the longest chain with all replicas.
+- All replicas update their set of chains based on L's message.
+Commit rule: If some chain is k blocks long, commit the value in the first block. 
+ Share the chain with all other replicas.
+</code></pre></div></div>
+<p>Observe that there are two simplifications made in the above protocol. First, the input value is added only to the first block (a proposal). Subsequent blocks are empty (which act as votes). Second, we did not discuss how a unique leader is elected uniformly at random each round and how everyone knows that this replica is the leader. For now, we will assume that there is an oracle that provides us with this abstraction.</p>
+<p>Let us understand how the protocol under some specific scenarios:</p>
+<ul>
+ <li><strong>All replicas are honest.</strong> In this scenario, the first-round leader proposes a value v in the first block, and in the next k rounds, the honest leaders in those rounds extend the only chain that exists.</li>
+</ul>
+<p align="center">
+<img src="https://i.imgur.com/6eQNWsB.png" width="512" title="Scenario 1" />
+</p>
+<ul>
+ <li>
+ <p><strong>20% of the replicas are Byzantine, and Byzantine replicas attempt to create a different chain.</strong> Observe that if 20% of the replicas are Byzantine, then in expectation, they will be leaders in 20% of the rounds.</p>
+ <p>For example, we may have HHBBHHHHH… as the sequence of leaders resulting in the chain as follows.</p>
+ </li>
+</ul>
+<p align="center">
+<img src="https://i.imgur.com/DcvCxKi.png" width="512" title="Scenario 2a" />
+</p>
+<p>Here, the Byzantine leader in the third round started a different chain, with the first block having value v = Orange (or orange chain) even when a longer blue chain existed. Eventually, the blue chain was committed.</p>
+<p>However, the order could have been HHBBBHHHH… resulting in the following chain.</p>
+<p align="center">
+<img src="https://i.imgur.com/nDMRMFJ.png" width="512" title="Scenario 2b" />
+</p>
+<p>In this scenario, the orange chain grew longer, and eventually, all replicas committed value v = Orange. It is important to stress that, from a consensus standpoint, all honest replicas have still committed the same value. Thus, we have safety and liveness so far as the orange value is a valid value (as per some validity rule).</p>
+<p>However, when we achieve consensus on many values instead of just one, a situation where the fraction of Byzantine values committed is higher than the fraction of Byzantine replicas in the system is not ideal. For instance, if all blocks committed are proposed by Byzantine replicas, then we have concerns such as censorship, fairness, etc. This ratio of honest blocks to the total number of blocks is also referred to as <em>chain quality</em>. Ideally, we want this ratio to be the same as the fraction of honest replicas. The attack described here will not yield a worse chain quality. However, there exist other attacks to worsen chain quality, e.g., selfish mining attack (described in an earlier <a href="https://decentralizedthoughts.github.io/2020-02-26-selfish-mining/">post</a>).</p>
+<ul>
+ <li>
+ <p><strong>80% of the replicas are Byzantine, attempting to create a different chain.</strong> In this scenario, Byzantine replicas can easily create a “private chain” of length k before honest replicas do. When honest replicas reach length k, by selectively revealing the private chain to only some honest replicas, the Byzantine replicas can cause a safety violation.</p>
+ <p>As an example, the leader order can be BBHBHBBBHBHBHB….</p>
+ </li>
+</ul>
+<p align="center">
+<img src="https://i.imgur.com/eV3TXOV.png" width="768" title="Scenario 3" />
+</p>
+<p>Observe that if the Byzantine replicas do not show a chain to honest replicas, an honest leader in the third round can start a new chain instead.</p>
+<ul>
+ <li><strong>49% of the replicas are Byzantine, attempting to create a different chain.</strong> Byzantine replicas can attempt the same attack as in Scenario 3. The probability with which they win any election is 0.49. Since each of these elections happens independently at random, it can be shown that the probability with which Byzantine chain reaches length $k$ before honest chain is $e^{-O(\text{k})}$. In other words, when Byzantine replicas are in the minority, they will win a private chain attack only with probability exponentially small in $k$.</li>
+</ul>
+<p>Thus, for a sufficiently large $k$ (security parameter), a private chain attack by Byzantine replicas does not succeed against Nakamoto’s protocol so far as they are in minority. This was shown using some analytical evaluation in the original <a href="https://bitcoin.org/bitcoin.pdf">Bitcoin whitepaper</a>. We should caution you that this is not a proof of security for the protocol – it is just a security argument against <em>one of the attacks</em>. A proof (of the more generalized version of the protocol) has been shown by <a href="https://eprint.iacr.org/2014/765.pdf">GKL’15</a>, <a href="https://eprint.iacr.org/2016/454.pdf">PSS’17</a> and more recently by <a href="https://decentralizedthoughts.github.io/2019-11-29-Analysis-Nakamoto/">Ren’19</a> (with an accompanying <a href="https://decentralizedthoughts.github.io/2019-11-29-Analysis-Nakamoto/">blog post</a>). Having said that, it has also been shown <a href="https://arxiv.org/pdf/2005.10484.pdf">recently</a> that a private-chain attack is indeed the worst attack possible when there is no network delay.</p>
+<h3 id="from-single-shot-consensus-to-consensus-for-multiple-values">From single-shot consensus to consensus for multiple values</h3>
+<p>How do we commit more than one value? Of course, an option is to have multiple values in the same block. But note that we cannot have all values in one block due to arrival of values at a later point such that they depend on previous ones. Thus, committing multiple blocks is necessary for any SMR system. Nakamoto achieves this by pipelining this process in an intuitive manner: each block acts as a proposer for a value (or values) and a vote for all the blocks that precede it. So, there is a genesis block, with only one longest chain that extends the genesis, and every block plays both roles in this longest chain.</p>
+<p align="center">
+<img src="https://i.imgur.com/CxhdIWa.png" width="768" title="Many values" />
+</p>
+<p>A block can be committed if it is on the longest chain starting from genesis and if at least k blocks extend it. Thus, the commit latency for each block is still k. Due to pipelining, a block is committed every round (or a constant number of rounds in expectation). Since all blocks are now connected to the genesis, the notion of creating a new chain by a Byzantine replica is now replaced by a <em>fork</em> from the longest chain.</p>
+<h3 id="permissionlessness-proof-of-work-and-need-for-synchrony">Permissionlessness, proof-of-work, and need for synchrony</h3>
+<p>Earlier, we made several simplifying assumptions: 1. there is a fixed number of replicas that know each other, 2. there is a well-defined notion of <em>rounds</em>, and 3. there is a leader election oracle that uniquely and verifiably identifies a leader uniformly at random. Given our basic understanding of the protocol, we will now either relax these assumptions or learn how to realize these oracles.</p>
+<p><strong>Permissioned vs. permissionless.</strong> The notion of having a set of replicas that know each other is called the <em>permissioned</em> setting. In effect, any replica that needs to join the system requires permission to be a part of it. Bitcoin works in a more generic setting where any replica can leave or join the system at any point in time. Moreover, the replicas do not have any identity associated with them – all replicas are pseudonymous. Yet, the expectation is that the protocol still provides us with safety and liveness guarantees. This setting is referred to as <em>permissionless</em>, and it is strictly harder to design permissionless protocols.</p>
+<p>Since replicas can join at any time and replicas do not have identities associated with them, an adversary can masquerade itself as many replicas, also referred to as <em>Sybil replicas</em>. Given our leader election protocol, this is concerning: if elections happen uniformly at random, almost all elections will be won by (a Sybil of) the adversary. It can then always pull off a private chain attack described earlier, leading to a safety violation.</p>
+<p><strong>Resource constraints and proof-of-work.</strong> Nakamoto consensus solves this problem by making an additional assumption that relates the <em>computation power</em> of honest and Byzantine replicas and uses the computation power to determine leaders. Specifically, the protocol is only secure so far as the honest computation power is more than Byzantine computation power. To elect leaders, all replicas engage in a continuous randomized competition that depends on the number of hashes they can compute at any time. The winner of each iteration of this competition needs to present a proof-of-work (explained in more detail in this <a href="https://decentralizedthoughts.github.io/2020-08-28-what-is-a-cryptographic-hash-function/">post</a>). The process of finding the next block is also referred to as <em>mining</em>; hence, the replicas are referred to as miners.</p>
+<p>Thus, an updated version of the protocol looks like the following:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Maintain a tree rooted at a publicly defined genesis block
+At any point in time, let C denote the longest chain known to the replica
+while (true) {
+ in parallel, do the following:
+ 1. attempt to find the next block (containing values/transactions) on C 
+ with a valid proof-of-work // compute intensive step
+ 2. if the replica receives a new longest chain, 
+ update C to be this longest chain
+}
+Commit rule: if the longest chain has length x, commit the first x-k blocks.
+ Share the chain with all other replicas.
+</code></pre></div></div>
+<p>Proof-of-work provides us with a verifiable unique leader elected uniformly at random in intermittent intervals (earlier referred to as rounds). Well, almost! It turns out that, when parameterized correctly, we achieve these properties with high probability. But in some cases, the uniqueness property does not hold. Why? Each attempt at finding a proof-of-work for the next block involves computing a hash function based on random input (nonce), and thus this process is memoryless (i.e., success in an attempt does not depend on previous attempts). Thus, the arrival rate of the next block in the entire system is governed by a <em>Poisson process</em>, and we may have two replicas (both of them potentially honest) who mine a block within a short time interval. If this time interval is short enough that the replicas do not receive each other’s block, we have an honest fork in the system. Observe that this fork exists purely due to a delay in the network. This is why Bitcoin is parameterized to produce a block every ten minutes – this ensures that honest forks are rare. On the other hand, protocols such as Ethereum generate blocks faster and observe a higher honest forking rate. Honest forking rate reduces the effective computation power of honest replicas, which was shown quantitatively in a previous <a href="https://decentralizedthoughts.github.io/2019-11-29-Analysis-Nakamoto/">post</a>. A graphical illustration of the relationship between the two, shown below, was plotted by <a href="https://eprint.iacr.org/2020/601.pdf">DKT+19</a> in their analysis.</p>
+<p align="center">
+<img src="https://i.imgur.com/G5xpPyq.png" width="512" title="Graph" />
+</p>
+<p>In the above figure, the x-axis represents the block time relative to the synchronous network delay. The y-axis represents the adversarial fraction, and the blue line represents the adversarial fraction tolerated for a given block time. When block time is large, e.g., 60, there is little reduction in the effective computation power, and we can tolerate an adversarial power close to 50%. On the other hand, when block time is small, e.g., 0.1, we observe a reduction. The other lines in the graph represent adversarial lower bounds shown by some other works.</p>
+<p>This also explains why a synchrony assumption is critical for Nakamoto consensus. Once an honest block is mined in an asynchronous or partially synchronous network, it may not arrive at any other replica, leading to forks (even without Byzantine participation).</p>
+<p><strong>Remarks.</strong></p>
+<ul>
+ <li>There is a key distinction between Nakamoto consensus and “classical BFT” protocols that primarily exist in the permissioned setting. Classical techniques typically maintain safety at all times in the protocol execution; if conditions are favorable, the protocol achieves liveness too. On the other hand, Nakamoto consensus maintains liveness at all points in time; safety holds (probabilistically) only under favorable conditions.</li>
+ <li>In a purely permissionless setting (no identities associated with replicas), the only class of solutions known is Nakamoto consensus or variants therein, e.g., <a href="https://www.avivz.net/pubs/15/btc_ghost_full.pdf">Ghost</a> protocol. This is why “what the majority says” is decided using such a chain-based protocol. On the other hand, for the permissioned setting and protocols that use proof-of-stake, one can use classical BFT protocols as well as Nakamoto consensus.</li>
+ <li>In terms of <a href="https://decentralizedthoughts.github.io/2019-07-19-setup-assumptions/">setup assumptions</a>, observe that the permissioned version of this protocol requires setup, e.g., PKI setup, to verifiably elect leaders. On the other hand, in a proof-of-work world, the only setup needed is to agree on a genesis block (which is a public setup). In both cases, we circumvent the <a href="https://decentralizedthoughts.github.io/2019-08-02-byzantine-agreement-is-impossible-for-$n-slash-leq-3-f$-is-the-adversary-can-easily-simulate/">FLM bound</a> to tolerate more than one-third adversaries.</li>
+ <li>The expected time to mine a block depends on the difficulty of proof-of-work and the computation power invested by all miners participating in the protocol. Since the participants (and consequently the computation power) can change over time, proof-of-work mining difficulty is adjusted every two weeks in Bitcoin to still maintain a mean rate of one block every ten minutes. However, the protocol cannot tolerate a sudden surge or drop in computation power.</li>
+</ul>
+<p><strong>Acknowledgment.</strong> We would like to thank Ittai Abraham and Ling Ren for providing feedback on this post!</p>
+<p>Please share your comments on <a href="https://twitter.com/kartik1507/status/1449379437586354191?s=20">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#blockchain101">blockchain101</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Nakamoto%27s+Longest-Chain+Wins+Protocol&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2021-10-15-Nakamoto-Consensus%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2021-10-04-crusader-agreement-with-dollars-slash-leq-1-slash-3$-error-is-impossible-for-$n-slash-leq-3f$-if-the-adversary-can-simulate/" data-toggle="tooltip" data-placement="top" title="Crusader Agreement with $\leq 1/3$ Error is Impossible for $n\leq 3f$ if the Adversary can Simulate">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2021-10-16-the-ideal-state-machine-model-multiple-clients-and-linearizability/" data-toggle="tooltip" data-placement="top" title="The Ideal State Machine Model: Multiple Clients and Linearizability">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

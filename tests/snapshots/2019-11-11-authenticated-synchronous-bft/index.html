@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Authenticated Synchronous BFT</title>
+ 
+ 
+ <meta name="author" content="Kartik Nayak, Ittai Abraham, Ling Ren">
+ 
+ <meta name="description" content="Post updated in March 2021 Different modeling assumptions under which we construct BFT protocols often make it hard to compare two protocols and understand their relative contributions. In this post we discuss synchronous protocols in the authenticated model (assuming a PKI). A protocol runs in the synchronous model if it assumes a bounded message delay, i.e., all messages will arrive within a bounded delay of $\Delta$. A common strengthening of...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Authenticated Synchronous BFT">
+ <meta property="og:description" content="Post updated in March 2021 Different modeling assumptions under which we construct BFT protocols often make it hard to compare two protocols and understand their relative contributions. In this post we discuss synchronous protocols in the authenticated model (assuming a PKI). A protocol runs in the synchronous model if it assumes a bounded message delay, i.e., all messages will arrive within a bounded delay of $\Delta$. A common strengthening of...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Kartik Nayak, Ittai Abraham, Ling Ren">
+ 
+ <meta property="og:article:published_time" content="2019-11-11T03:01:00-05:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2019-11-11-authenticated-synchronous-bft/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2019-11-11-authenticated-synchronous-bft/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Authenticated Synchronous BFT">
+ <meta property="twitter:description" content="Post updated in March 2021 Different modeling assumptions under which we construct BFT protocols often make it hard to compare two protocols and understand their relative contributions. In this post we discuss synchronous protocols in the authenticated model (assuming a PKI). A protocol runs in the synchronous model if it assumes a bounded message delay, i.e., all messages will arrive within a bounded delay of $\Delta$. A common strengthening of...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Authenticated Synchronous BFT</h1>
+ 
+ 
+ 
+ 
+ By <strong>Kartik Nayak, Ittai Abraham, Ling Ren</strong><br>
+ 
+ <span class="post-meta">Posted on November 11, 2019</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p><span style="color:grey"> <img src="https://github.githubassets.com/images/icons/emoji/unicode/23f0.png?v8" alt="" /> Post updated in March 2021</span></p>
+<p>Different modeling assumptions under which we construct BFT protocols often make it hard to compare two protocols and understand their relative contributions. In this post we discuss <em><a href="https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/">synchronous</a></em> protocols in the <em><a href="https://decentralizedthoughts.github.io/2019-07-19-setup-assumptions/">authenticated</a></em> model (assuming a PKI).</p>
+<p>A protocol runs in the <a href="https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/">synchronous model</a> if it assumes a <strong>bounded message delay</strong>, i.e., all messages will arrive within a bounded delay of $\Delta$. A common strengthening of the synchronous model is <em>lock-step</em> synchrony, i.e., replicas execute the protocol in rounds in a synchronized manner. A message sent at the start of a round arrives by the end of the round.</p>
+<h3 id="is-the-synchronous-model-practical">Is the synchronous model practical?</h3>
+<p>The short answer is, it’s hard to say. For practitioners, the synchrony assumption may seem strong for several reasons. First, if the bounded-message delay assumption does not hold <em>even</em> for a single message between honest parties, then we may have a safety violation. Second, lock-step execution may be hard to implement in practice. Finally, waiting for multiple rounds/$\Delta$’s implies a high latency to commit. On the other hand, research in the synchronous setting has been improving all of these aspects to bring synchrony closer to practice.</p>
+<h3 id="the-advantage-of-synchrony-tolerating-a-minority-corruption">The advantage of synchrony: tolerating a minority corruption</h3>
+<p>The <a href="https://decentralizedthoughts.github.io/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/">DLS</a> lower bound implies that we can tolerate at most one-third corruption with weaker assumptions such as partial synchrony/asynchrony.
+The synchronous model, together with digital signatures or PoW, can tolerate up to minority corruption.</p>
+<h3 id="comparing-authenticated-synchronous-bft-protocols">Comparing authenticated synchronous BFT protocols</h3>
+<p>To evaluate and compare authenticated synchronous protocols we analyze them in the following dimensions:</p>
+<ol>
+ <li><em>Consensus definition.</em> Whether the protocol was intended to solve Byzantine Broadcast (<a href="https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/">BB</a>), Byzantine Agreement (<a href="https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/">BA</a>), or State Machine Replication (<a href="https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/">SMR</a>).</li>
+ <li><em>Lock-step vs bounded-message delay.</em> Whether the protocol requires a lock-step execution of replicas, or can they rely only on bounded-message delay.</li>
+ <li><em>Latency to commit.</em> For protocols with lock-step execution, the (expected) latency is measured in the number of #rounds to commit. For protocols that only assume bounded-message delay, the (expected) latency is measured in terms of $\Delta$. For protocols in SMR that use the <a href="https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/">steady-state-and-view-change paradigm</a>, we mention the latency as a tuple of (steady state time to commit, expected time to arrive at the next steady state through view changes).</li>
+ <li><em>Communication complexity.</em> The (expected) number of signatures sent by honest parties. Wherever applicable, the message complexity is described assuming the presence of threshold signatures.</li>
+ <li><em>Optimistic responsiveness (OR).</em> Some protocols can commit in time independent of $\Delta$ when certain <em>optimistic</em> conditions hold. e.g., the actual number of Byzantine behaving parties is less than $n/4$. We discuss this further in a <a href="https://decentralizedthoughts.github.io/2020-06-12-optimal-optimistic-responsiveness/">separate post</a>.</li>
+ <li><em>Adaptive adversary.</em> Is the protocol resilient to an <a href="https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/">adaptive adversary</a>?</li>
+</ol>
+<table>
+ <thead>
+ <tr>
+ <th> </th>
+ <th>Defn</th>
+ <th>Lock-step?</th>
+ <th>Latency</th>
+ <th>Communication complexity</th>
+ <th>OR?</th>
+ <th>Adaptive?</th>
+ </tr>
+ </thead>
+ <tbody>
+ <tr>
+ <td><a href="https://people.eecs.berkeley.edu/~luca/cs174/byzantine.pdf">LSP [1982]</a></td>
+ <td>BB/BA</td>
+ <td>Y</td>
+ <td>$O(n)$ rounds</td>
+ <td>$O(2^n)$</td>
+ <td>N</td>
+ <td>Y</td>
+ </tr>
+ <tr>
+ <td><a href="https://www.researchgate.net/publication/220616485_Authenticated_Algorithms_for_Byzantine_Agreement">Dolev-Strong [1982]</a></td>
+ <td>BB</td>
+ <td>Y</td>
+ <td>$O(n)$ rounds</td>
+ <td>$O(n^2f)$</td>
+ <td>N</td>
+ <td>Y</td>
+ </tr>
+ <tr>
+ <td><a href="https://eprint.iacr.org/2006/065.pdf">Katz-Koo [2006]</a></td>
+ <td>BA</td>
+ <td>Y</td>
+ <td>$29$ rounds</td>
+ <td>$O(n^2)$</td>
+ <td>N</td>
+ <td>Y</td>
+ </tr>
+ <tr>
+ <td><a href="https://dspace.mit.edu/bitstream/handle/1721.1/107927/MIT-CSAIL-TR-2017-004.pdf?sequence=1&amp;isAllowed=y">Micali-Vaikuntanathan [2017]</a>*</td>
+ <td>BB</td>
+ <td>Y</td>
+ <td>$\kappa$ rounds</td>
+ <td>$O(\kappa n^3)$</td>
+ <td>N</td>
+ <td>Y</td>
+ </tr>
+ <tr>
+ <td><a href="https://eprint.iacr.org/2018/1028.pdf">Abraham et al. [2017]</a></td>
+ <td>BB/BA</td>
+ <td>Y</td>
+ <td>$16$ rounds</td>
+ <td>$O(n^2)$</td>
+ <td>N</td>
+ <td>Y</td>
+ </tr>
+ <tr>
+ <td><a href="https://www.usenix.org/system/files/conference/osdi16/osdi16-liu.pdf">XFT [2016]</a></td>
+ <td>SMR</td>
+ <td>N</td>
+ <td>($O(\delta)$, $O({n \choose f} \Delta)$ )</td>
+ <td>($O(n)$, $O{n \choose f}$)</td>
+ <td>Y</td>
+ <td>N</td>
+ </tr>
+ <tr>
+ <td><a href="https://dfinity.org/static/dfinity-consensus-0325c35128c72b42df7dd30c22c41208.pdf">Dfinity [2018]</a></td>
+ <td>SMR</td>
+ <td>N</td>
+ <td>$9\Delta$</td>
+ <td><a href="https://eprint.iacr.org/2018/1153.pdf">$O(n^2)$</a></td>
+ <td>N</td>
+ <td>N</td>
+ </tr>
+ <tr>
+ <td><a href="https://eprint.iacr.org/2018/980.pdf">PiLi [2018]</a>**</td>
+ <td>SMR</td>
+ <td>Y</td>
+ <td>$65\Delta$</td>
+ <td>$O(n^2)$</td>
+ <td>Y</td>
+ <td>N</td>
+ </tr>
+ <tr>
+ <td><a href="https://eprint.iacr.org/2019/270.pdf">Sync HotStuff [2019]</a>**</td>
+ <td>SMR</td>
+ <td>N</td>
+ <td>$(2\Delta, O(\Delta))$</td>
+ <td>$(O(n^2), O(n^2))$</td>
+ <td>Y</td>
+ <td>N</td>
+ </tr>
+ <tr>
+ <td><a href="https://eprint.iacr.org/2020/458.pdf">OptSync [2020]</a>$^+$</td>
+ <td>SMR</td>
+ <td>N</td>
+ <td>$((2\delta, 2\Delta), O(\Delta))$</td>
+ <td>$(O(n^2), O(n^2))$</td>
+ <td>Y</td>
+ <td>N</td>
+ </tr>
+ <tr>
+ <td><a href="https://arxiv.org/abs/2003.13155">Near-optimal Good-case Latency [2020]</a></td>
+ <td>SMR</td>
+ <td>N</td>
+ <td>$\Delta + 2\delta$</td>
+ <td>$(O(n^2), O(n^2))$</td>
+ <td>N</td>
+ <td>N</td>
+ </tr>
+ <tr>
+ <td><a href="https://arxiv.org/pdf/2102.07240.pdf">Optimal Good-case Latency [2021]</a>$^{++}$</td>
+ <td>BB</td>
+ <td>N</td>
+ <td>$(1+\frac{1}{2m})\Delta + 1.5\delta$</td>
+ <td>$O(mn^2)$</td>
+ <td>N</td>
+ <td>N</td>
+ </tr>
+ </tbody>
+</table>
+<p>* The protocol by Micali and Vaikuntanathan requires $\kappa$ rounds where $\kappa$ is a statistical security parameter and obtains a “player replaceability” notion of adaptive security.</p>
+<p>** PiLi and Sync HotStuff also handle a weaker synchrony model with <em>mobile sluggish faults</em>.</p>
+<p>$^+$ For OptSync, in steady state, we describe the latency for the optimistic case as well as the regular case.</p>
+<p>$^{++}$ For the work on optimal good-case latency, we have $m \geq 1$. The parameters are described assuming an <em>unsynchronized start</em> between different parties. The latency is optimal when $m \rightarrow \infty$. If different parties start at the same time, the latency is $\Delta + \delta$ and communication complexity is $O(n^3)$.</p>
+<p><strong>Lock-step execution vs. bounded-message delay.</strong> As can be seen in the latency column, lock-step protocols express latency in terms of #rounds, whereas non-lock-step protocols in terms of $\Delta$.
+This distinction is minor in theory (or asymptotically) because one can obtain lock-step execution from a bounded message delay assumption, by merely using a <em>clock synchronization</em> protocol such as <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.499.2250&amp;rep=rep1&amp;type=pdf">Dolev et al.</a> and <a href="https://eprint.iacr.org/2018/1028.pdf">Abraham et al.</a>.
+Specifically, these protocols have $O(n^2)$ message complexity and can synchronize honest parties’ clocks within $\Delta$ time.
+Thus, using rounds of duration $2\Delta$ suffices to implement lock-step execution.
+However, state-of-art non-lock-step protocols can achieve lower latency by avoiding such transformations.</p>
+<p><strong>Remark.</strong> All protocols derived from Nakamoto consensus rely on synchrony. We will discuss them separately <a href="https://decentralizedthoughts.github.io/2019-11-29-Analysis-Nakamoto/">here</a>.</p>
+<p>Please leave comments on <a href="https://twitter.com/kartik1507/status/1194393359399497733?s=20">Twitter</a></p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#research">research</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Authenticated+Synchronous+BFT&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2019-11-11-authenticated-synchronous-bft%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2019-11-02-primary-backup-for-2-servers-and-omission-failures-is-impossible/" data-toggle="tooltip" data-placement="top" title="State Machine Replication for Two Servers and One Omission Failure is Impossible even in a lock-step model">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2019-11-12-Sync-HotStuff/" data-toggle="tooltip" data-placement="top" title="Sync HotStuff, A Simple and Practical State Machine Replication">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

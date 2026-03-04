@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Benign Hotstuff</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham, Heidi Howard, and Kartik Nayak">
+ 
+ <meta name="description" content="In this post we describe a variant of Paxos (or Raft or Lock-Commit) that is inspired by looking through the lens of HotStuff and Blockchain protocols. The most noticeable difference is that while Paxos and Raft aim to maintain a stable Primary/Leader (and change views infrequently), in Benign Hotstuff (as in HotStuff), the Primary is rotated every round! A more subtle difference is that in Paxos and Raft each block...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Benign Hotstuff">
+ <meta property="og:description" content="In this post we describe a variant of Paxos (or Raft or Lock-Commit) that is inspired by looking through the lens of HotStuff and Blockchain protocols. The most noticeable difference is that while Paxos and Raft aim to maintain a stable Primary/Leader (and change views infrequently), in Benign Hotstuff (as in HotStuff), the Primary is rotated every round! A more subtle difference is that in Paxos and Raft each block...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham, Heidi Howard, and Kartik Nayak">
+ 
+ <meta property="og:article:published_time" content="2021-04-02T05:54:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2021-04-02-benign-hotstuff/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2021-04-02-benign-hotstuff/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Benign Hotstuff">
+ <meta property="twitter:description" content="In this post we describe a variant of Paxos (or Raft or Lock-Commit) that is inspired by looking through the lens of HotStuff and Blockchain protocols. The most noticeable difference is that while Paxos and Raft aim to maintain a stable Primary/Leader (and change views infrequently), in Benign Hotstuff (as in HotStuff), the Primary is rotated every round! A more subtle difference is that in Paxos and Raft each block...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Benign Hotstuff</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham, Heidi Howard, and Kartik Nayak</strong><br>
+ 
+ <span class="post-meta">Posted on April 2, 2021</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>In this post we describe a variant of <a href="https://lamport.azurewebsites.net/pubs/lamport-paxos.pdf">Paxos</a> (or <a href="https://raft.github.io/raft.pdf">Raft</a> or <a href="https://decentralizedthoughts.github.io/2020-11-30-the-lock-commit-paradigm-multi-shot-and-mixed-faults/">Lock-Commit</a>) that is <a href="https://dahliamalkhi.github.io/posts/2018/03/bft-lens-casper/">inspired by looking through the lens</a> of <a href="https://research.vmware.com/files/attachments/0/0/0/0/0/7/7/podc.pdf">HotStuff</a> and Blockchain protocols. The most noticeable difference is that while Paxos and Raft aim to maintain a stable Primary/Leader (and change views infrequently), in Benign Hotstuff (as in HotStuff), the Primary is rotated every round! A more subtle difference is that in Paxos and Raft each block of commands is associated with both a view and a <em>position</em> in the log, in Benign Hotstuff (as in HotStuff), each block of commands is associated with a view and a <em>pointer to a previous block</em>.</p>
+<p>The setting is that of clients that can issue commands and $n$ <em>replicas</em> that implement a replicated log of committed commands (or more generally a replicated state machine). An adversary can cause $f&lt;n/2$ <a href="https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/">crash failures</a> in the <a href="https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/">partial synchrony</a> model (this is the <a href="https://decentralizedthoughts.github.io/2019-11-02-primary-backup-for-2-servers-and-omission-failures-is-impossible/">optimal</a> threshold). Communication is reliable, but initially network delays may be unbounded. There is an unknown time, called Global Stabilization Time (GST), after which all message delays are bounded by a known value $\Delta$.</p>
+<p>The goal is for the replicas to maintain a log of committed commands such that:</p>
+<ul>
+ <li><strong>Always safe</strong>: no two parties disagree on a prefix of their commit log</li>
+ <li><strong>Live after GST</strong>: client commands are added to the commit log in a timely manner</li>
+</ul>
+<h2 id="benign-hotstuff-protocol">Benign Hotstuff protocol</h2>
+<p>We enumerate the replicas as $0,\dots,n{-}1$. The protocol follows the <strong>Primary-Backup</strong> paradigm and is <strong>view based</strong>: in view $v$ the <strong>Primary</strong> is simply replica $v\pmod{n}$.</p>
+<p>Each replica stores its current view; initially, all replicas are in view 0. Each replica increases its view over time in response to messages received and timeouts. In the steady state, replicas in view $i$ send a <code class="language-plaintext highlighter-rouge">vote</code> message to the view $v$ Primary, and the view $v$ Primary sends back a <code class="language-plaintext highlighter-rouge">propose</code> message that triggers the replicas to increment their view to $v{+}1$ (and hence send a <code class="language-plaintext highlighter-rouge">vote</code> message to the view $v{+}1$ Primary and so on).</p>
+<h3 id="data-structures">Data structures:</h3>
+<ol>
+ <li>
+ <p><strong>block</strong>: is a triple consisting of a sequence of commands, a view number, and a pointer to a block with a lower view. The <em>genesis block</em> is empty and has the lowest view. We say that block $A$ <em>extends</em> block $B$ if there is a path of pointers from block $A$ to block $B$.</p>
+ </li>
+ <li>
+ <p><strong>highestBlock</strong>: the block with the highest view number that the replica saw a <code class="language-plaintext highlighter-rouge">propose</code> message for. Updated each time a <code class="language-plaintext highlighter-rouge">propose</code> message is received. Initially set to the genesis block.</p>
+ </li>
+ <li>
+ <p><strong>blockChain</strong>: a rooted tree of blocks. Each block points to a block of a lower view number. The root of the tree is the empty <em>genesis block</em>, and the block with the highest view is called <em>highestBlock</em>.</p>
+ </li>
+ <li>
+ <p><strong>commitMark</strong>: a pointer to the block in the <em>blockChain</em> with the highest view that is marked as <em>committed</em>. All blocks on the path from the genesis block to this block are considered committed. Initially set to the genesis block and updated when a <code class="language-plaintext highlighter-rouge">propose</code> message is received.</p>
+ </li>
+</ol>
+<h3 id="three-message-types">Three message types:</h3>
+<ol>
+ <li><code class="language-plaintext highlighter-rouge">&lt;vote, v, B&gt;</code>: contains a view number and a block. Used to vote for proposals. As expected, $n{-}f$ votes on the same block in the same view cause it to be committed.</li>
+ <li><code class="language-plaintext highlighter-rouge">&lt;propose, B, mark&gt;</code>: contains a block and a commitMark (the view number is embedded inside the block). Used by the Primary to propose additions to the log, notify of committed blocks, and causes the view to increment.</li>
+ <li><code class="language-plaintext highlighter-rouge">&lt;goto, v&gt;</code>: contains a view number. Used by the Primary, when it perceives a delay, to notify replicas to <em>fast-forward</em> their view. In the failure free steady state, this message is not used.</li>
+</ol>
+<h3 id="the-protocol">The protocol:</h3>
+<p>Initially, each replica executes “Change to view 0 and vote”.</p>
+<ol>
+ <li>The Primary of view $v$:
+ <ol>
+ <li><strong>Gather votes</strong>: Gathers <code class="language-plaintext highlighter-rouge">vote</code> messages for view $v$ and updates $highestBlock$ to be the block in those vote messages with the highest view (note the view in the block is lower than $v$). As part of <em>State Transfer</em>: If the block in the vote message points to earlier blocks that the Primary does not have it asks for them.</li>
+ <li><strong>Send goto</strong>: If $n-f$ <code class="language-plaintext highlighter-rouge">vote</code> messages for view $v$ do not arrive by $\Delta$ time, the Primary can send <code class="language-plaintext highlighter-rouge">&lt;goto, v&gt;</code> to all replicas.</li>
+ <li><strong>Propose and try to commit</strong>: Once $n-f$ <code class="language-plaintext highlighter-rouge">vote</code> messages for view $v$ arrive:
+ <ol>
+ <li>The Primary creates a new proposal block $B=(cmd, v, highestBlock)$ to extend the blockChain, where $cmd$ is the commands from the clients.</li>
+ <li><strong>Commit rule</strong>: If $n-f$ <code class="language-plaintext highlighter-rouge">vote</code> messages for view $v$ have the same $highestBlock$ and $highestBlock$ is from view $v-1$ then the Primary increments its $commitMark$ to be $highestBlock$.</li>
+ <li>The Primary sends <code class="language-plaintext highlighter-rouge">&lt;propose, B, commitMark&gt;</code> to all replicas. The Primary then changes to view $v{+}1$.</li>
+ </ol>
+ </li>
+ </ol>
+ </li>
+ <li>Change to view $v$ and vote:
+ <ol>
+ <li><strong>Start Timer</strong>: Set $T_{v}$ for $5\Delta$.</li>
+ <li><strong>Vote</strong>: Send <code class="language-plaintext highlighter-rouge">&lt;vote, v, highestBlock&gt;</code> to the primary of view $v$, where $highestBlock$ is the block with the highest view that the replica has seen in a <code class="language-plaintext highlighter-rouge">propose</code> message.</li>
+ </ol>
+ </li>
+ <li>Triggers to change to view $v+1$:
+ <ol>
+ <li><strong>Due to a propose</strong>: If a replica in any view $\le v$ receives a <code class="language-plaintext highlighter-rouge">propose</code> message for view $v$ it updates $highestBlock$ and $commitMark$ as needed and changes to view $v+1$. As part of <em>State Transfer</em>: If the <code class="language-plaintext highlighter-rouge">propose</code> message points to earlier blocks that the replica does not have it asks for them.</li>
+ <li><strong>Due to a goto</strong>:If a replica in any view $\le v$ receives a <code class="language-plaintext highlighter-rouge">&lt;goto, v+1&gt;</code> it changes to view $v{+}1$.</li>
+ <li><strong>Due to a timeout</strong>:If a replica in view $v$ fails to receive a <code class="language-plaintext highlighter-rouge">propose</code> message for view $v$ when the timer $T_v$ expires, it changes to view $v{+}1$.</li>
+ <li><strong>Due to a vote</strong>: If the replica that would be the primary of view $v+1$ is in any view $\le v$ and it receives a <code class="language-plaintext highlighter-rouge">vote</code> message for view $v{+}1$ it changes to view $v{+}1$.</li>
+ </ol>
+ </li>
+</ol>
+<h2 id="examples">Examples</h2>
+<p>Observe that orphan blocks (and even orphan sub-trees) may occur and represent proposals that were eventually abandoned. In the first example below, Primary 0 sends a <code class="language-plaintext highlighter-rouge">propose</code> message, and all replicas <code class="language-plaintext highlighter-rouge">vote</code> for it. The Primary of view 1 sees $n{-}f$ votes for block 0, so it updates $commitBlock$ to point to block 0 and forwards this along with the proposal of block 1. The Primary of view 2 locally commits to block 1 and creates a proposal at view 2 that extends block 1 but all its messages are delayed. View 3 is triggered by $T_2$, the view 2 timer expiring at all replicas. The Primary of view 3 gathers $n{-}f=2$ votes that do not include replica 2. Note that since block 1 had $n{-}f$ votes, then Primary 3 will commit block 1. It creates a block with view 3 that extends the block at view 1. Replica 1 which is the Primary of view 4 gathers $n{-}f=2$ votes with this block and commits block 3. Replica 2 receives the $commitMark$ at block 3, so it’s $blockChain$ includes an orphan block at view 2.</p>
+<p><img src="https://i.imgur.com/EmKTWP7.jpg" alt="" /></p>
+<p>In the second example below, Primary 0 sends a <code class="language-plaintext highlighter-rouge">propose</code>, and all replicas <code class="language-plaintext highlighter-rouge">vote</code> for it. The Primary of view 1 sees $n{-}f$ votes for block 0, so it updates $commitBlock$ to point to block 0 and forwards this along with the proposal of block 1. Then replica 2 which is the Primary of. view 2 crashes. Here we assume that the timer $T_2$ of replica 0 expires much sooner and it switches to view 3. As replica 2 crashed and replica 1 is still in view 2, replica 3 does not receive $n{-}f=2$ votes, so it sends a <code class="language-plaintext highlighter-rouge">goto</code> message. This message causes replica 2 to move to view 3 and allows replica 0 to gather $n{-}f=2$ votes for view 3 and move the $commitMark$ to block 1.</p>
+<p><img src="https://i.imgur.com/TC5xNVI.jpg" alt="" /></p>
+<h2 id="safety-and-liveness-analysis">Safety and Liveness analysis</h2>
+<p>Fix a block $B$. Let $v$ be the first view in which there are $n{-}f$ replicas $Q$ that vote for the same block $A$ at view $v$ such that:</p>
+<ol>
+ <li>Either $A=B$ or $A$ extends $B$.</li>
+ <li>The block $A$ is form view $v-1$.</li>
+</ol>
+<p><strong>Safety claim</strong>: Any <code class="language-plaintext highlighter-rouge">propose</code> message of any view $v$ or higher must extend $B$.</p>
+<p><strong>Proof</strong>: For the base case, the <code class="language-plaintext highlighter-rouge">propose</code> block $A$ of view $v-1$, by definition, is either $B$ or extends $B$.</p>
+<p>Assume the statement is true for all <code class="language-plaintext highlighter-rouge">propose</code> messages from view $v$ to view $u{-}1$ and consider view $u$.</p>
+<p>By the induction hypothesis, all <code class="language-plaintext highlighter-rouge">propose</code> messages from view $v$ to view $u{-}1$ extend $B$, so at the beginning of view $u$, the highest block of any replica in $Q$ must either be $B$ or extend $B$.</p>
+<p>The Primary of view $u$ collects votes from $n{-}f$ replicas $R$ and extends the block in $R$ with the highest view. By quorum intersection, the sets $Q$ and $R$ must intersect ($n-2f&gt;0$), so the Primary of view $u$ must see at least one block of view at least $v$ and at most $u{-}1$ from a replica in $Q$. Since all blocks of view at least $v$ extend $B$ then the Primary of view $u$ must also extend $B$.</p>
+<p><strong>Live after GST claim</strong>: when the system is in synchrony, then a sequence of two good primaries will make progress.</p>
+<p><strong>Proof</strong>: Consider the first time $t$ where a message for the highest view $v$ is sent at $t$ and no timer expires before $t+5\Delta$. Observe that this happens at most $5\Delta$ after GST. Also, note that by this time all the State Transfer has concluded.</p>
+<p>Lets first assume that the replicas of view $v$ and $v+1$ do not crash:</p>
+<p>By $t+\Delta$, the Primary of view $v$ will receive a message and will change to view $v$. By $t+2\Delta$ it will send <code class="language-plaintext highlighter-rouge">&lt;goto, v&gt;</code>, so all replicas will move to view $v$ by $t+3\Delta$ and the primary will gather $n-f$ votes by time $t+4\Delta$, by time $t+5\Delta$ all replicas will get the view $v$ <code class="language-plaintext highlighter-rouge">propose</code> message and send their <code class="language-plaintext highlighter-rouge">vote</code> message to the Primary of view $v+1$.</p>
+<p>The Primary of view $v+1$ will get $n-f$ votes on the same block from view $v$ and hence will update its $commitMark$. All replicas will receive this $commitMark$ by time $t+6\Delta$.</p>
+<p>If some replicas crash, then consider the first two consecutive nonfaulty replicas at views $v&lt;v’$. In the worst case, it may take $O(\Delta f)$ rounds to have two consecutive nonfaulty replicas.</p>
+<h2 id="complexity-analysis">Complexity analysis</h2>
+<p>Benign Hotsuff maintains a linear message complexity per view. In each round either all replicas send to the Primary or the Primary sends to all replicas. In the failure free case, the amortized cost of committing a block is just $2n$ messages. In the worst case, the total number of messages to commit to one block after GST is $O(fn)$ which is <a href="https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/">asymptotically optimal</a>.</p>
+<h2 id="adding-a-relaxed-one-chain-rule">Adding a relaxed one chain rule</h2>
+<p>The commit rule requires the view $v$ Primary to gather $n{-}f$ votes on a block from view $v-1$. Can we relax this and allow to commit even if the votes are on a previous block? This is a relaxed “one chain” safety rule that allows to “skip” replicas that crashed.</p>
+<p>The core observation is that at view $v$ in order to commit a block of view $v’&lt;v$ we need to say that we did not vote for any other block (other than $v’$) in all views $v’&lt;u&lt;v$. Note, this statement is trivial when $v’=v-1$.</p>
+<p>We make two changes, the first is to add a Boolean flag <code class="language-plaintext highlighter-rouge">power</code> in the vote message:</p>
+<ul>
+ <li><strong>Vote with power</strong>: Send <code class="language-plaintext highlighter-rouge">&lt;vote, v, highestBlock, power&gt;</code> to the primary of view $v$, where $highestBlock$ is the block with the highest view $v’$ that the replica has seen in a <code class="language-plaintext highlighter-rouge">propose</code> message, such that:
+ <ol>
+ <li>If any <code class="language-plaintext highlighter-rouge">vote</code> in the views between $v’+1$ and $v-1$ are for $highestBlock’ \neq highestBlock$ then set <code class="language-plaintext highlighter-rouge">power=weak</code>.</li>
+ <li>Otherwise (all votes in the views between $v’+1$ and view $v-1$ where for $highestBlock$ or were skipped), then set <code class="language-plaintext highlighter-rouge">power=strong</code>.</li>
+ </ol>
+ </li>
+</ul>
+<p>The second change is for the commit rule to only use strong votes:</p>
+<ul>
+ <li><strong>Relaxed commit rule</strong>: If $n-f$ <code class="language-plaintext highlighter-rouge">vote</code> messages for view $v$ have the same $highestBlock$ and <code class="language-plaintext highlighter-rouge">power=strong</code> then the Primary increments its $commitMark$ to be $highestBlock$.</li>
+</ul>
+<p>For safety observe that in all the views $v’&lt;u&lt;v$ there could not be any party that commits any block that does not extend $B$. Moreover, any proposal of $v’&lt;u&lt;v$ will be lower than the proposals from the member of $Q$ of view at least $v$.</p>
+<p>In the following posts, we will see how the Byzantine variants of Hotsuff can be extended to these relaxed “two chain” (and “three chain”) safety rules in order to add non-equivocation (and responsiveness).</p>
+<h2 id="more-notes">More notes</h2>
+<p>Note that the path from $highestBlock$ to the genesis consists of a sub-path of un-committed blocks and a sub-path from the $commitMark$ to the genesis of committed blocks. During State Transfer, replicas can safely exchange the $commitMark$ and any missing blocks on this path.</p>
+<p>The <code class="language-plaintext highlighter-rouge">goto</code> message is used to synchronize the replicas. We could have the Primary send it every round but chose to optimize it away in the synchronized failure free steady state case.</p>
+<p>We describe Benign Hotstuff as a system for replicating a log, but the same can be used to implement any <a href="https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/">replicated state machine</a>.</p>
+<p>Please answer/discuss/comment/ask on <a href="https://twitter.com/ittaia/status/1379061379899006984?s=20">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ <a href="/tags#SMR">SMR</a>
+ 
+ <a href="/tags#crash">crash</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Benign+Hotstuff&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2021-04-02-benign-hotstuff%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2021-03-26-living-with-asynchrony-the-gather-protocol/" data-toggle="tooltip" data-placement="top" title="Living with Asynchrony: the Gather protocol">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2021-06-14-neither-non-equivocation-nor-transferability-alone-is-enough-for-tolerating-minority-corruptions-in-asynchrony/" data-toggle="tooltip" data-placement="top" title="Neither Non-equivocation nor Transferability alone is enough for tolerating minority corruptions in asynchrony">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

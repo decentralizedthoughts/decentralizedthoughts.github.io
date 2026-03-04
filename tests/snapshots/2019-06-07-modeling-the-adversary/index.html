@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>The power of the adversary</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham">
+ 
+ <meta name="description" content="After we fix the communication model, synchrony, asynchrony, or partial synchrony, and a threshold adversary there are still five important modeling decisions regarding the adversary’s power: The type of corruption (passive, crash, omission, or Byzantine). The computational power of the adversary (unbounded, computational, or fine-grained). The adaptivity of the adversary (static, delayed adaptive, weak adaptive, adaptive, or strongly adaptive). The visibility of the adversary (full information or private channel). The...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="The power of the adversary">
+ <meta property="og:description" content="After we fix the communication model, synchrony, asynchrony, or partial synchrony, and a threshold adversary there are still five important modeling decisions regarding the adversary’s power: The type of corruption (passive, crash, omission, or Byzantine). The computational power of the adversary (unbounded, computational, or fine-grained). The adaptivity of the adversary (static, delayed adaptive, weak adaptive, adaptive, or strongly adaptive). The visibility of the adversary (full information or private channel). The...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham">
+ 
+ <meta property="og:article:published_time" content="2019-06-07T23:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="The power of the adversary">
+ <meta property="twitter:description" content="After we fix the communication model, synchrony, asynchrony, or partial synchrony, and a threshold adversary there are still five important modeling decisions regarding the adversary’s power: The type of corruption (passive, crash, omission, or Byzantine). The computational power of the adversary (unbounded, computational, or fine-grained). The adaptivity of the adversary (static, delayed adaptive, weak adaptive, adaptive, or strongly adaptive). The visibility of the adversary (full information or private channel). The...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>The power of the adversary</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham</strong><br>
+ 
+ <span class="post-meta">Posted on June 7, 2019</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>After we fix the communication model, <a href="/2019-06-01-2019-5-31-models/">synchrony, asynchrony, or partial synchrony</a>, and a <a href="/2019-06-17-the-threshold-adversary/">threshold adversary</a> there are still five important modeling decisions regarding the adversary’s power:</p>
+<ol>
+ <li>The type of corruption (passive, crash, omission, or Byzantine).</li>
+ <li>The computational power of the adversary (unbounded, computational, or fine-grained).</li>
+ <li>The adaptivity of the adversary (static, delayed adaptive, weak adaptive, adaptive, or strongly adaptive).</li>
+ <li>The visibility of the adversary (full information or private channel).</li>
+ <li>The mobility of the adversary (fixed or mobile).</li>
+</ol>
+<h2 id="1-type-of-corruption">1. Type of corruption</h2>
+<p align="center">
+ <img src="/uploads/types.jpeg" width="512" title="Types" />
+</p>
+<p>The first fundamental aspect is what <em>type</em> of corruption the adversary can inflict on the $f$ parties it can corrupt. There are four classic types of corruption: Passive, Crash, Omission, and Byzantine.</p>
+<ol>
+ <li><strong>Passive</strong>: a passively corrupted party must follow the protocol just like an honest party, but it allows the adversary to learn information. A passive adversary (sometimes called <a href="https://eprint.iacr.org/2011/136.pdf">Honest-But-Curious</a> or <a href="http://www.wisdom.weizmann.ac.il/~oded/foc-vol2.html">Semi-Honest</a>) does not deviate from the protocol but can learn all possible information from its <em>view</em>: i.e., the messages sent and received by parties it controls. The adversary can aggregate all the views of the corrupted parties. Typically, the goal of the adversary designer is to limit the information that the adversary learns.</li>
+ <li><strong>Crash</strong>: in addition to passive, once the party is corrupted, the adversary can decide to cause a crash event which causes the party to stop sending and receiving all messages. The crash may occur mid-message, and once it happens, it is irrevocable.</li>
+ <li><strong>Omission</strong>: in addition to passive, once corrupted, the adversary can decide, for each message sent or each message received, to either drop or allow it to continue. The party is unaware of its corruption.</li>
+ <li><strong>Byzantine</strong>: this gives the adversary full power to control the party and take any (arbitrary) action on the corrupted party. This is also called active or arbitrary corruption.</li>
+</ol>
+<p>Note that each corruption type subsumes the previous one.</p>
+<p>There are other types of corruption. Most notable are variants of <a href="https://eprint.iacr.org/2007/060.pdf">Covert adversaries</a>. <em>Covert adversaries</em> can be used to model rational behavior where there is fear (utility loss) from punishment through some form of detection.</p>
+<p>There are sub-variants of omission corruption:</p>
+<ul>
+ <li><strong>Send omission</strong> and <strong>Receive omission</strong>: which are in between crash and omission. See <a href="https://decentralizedthoughts.github.io/2024-01-30-between-crash-and-omission/">this</a> post.</li>
+</ul>
+<p>There is a subtle modeling choice for crash corruptions when a party sends messages to multiple parties in the same round:</p>
+<ul>
+ <li>In the traditional model, <strong>prescribed order model</strong>, the protocol is allowed to prescribe the <em>order</em> of the messages, so the adversary can choose any <em>prefix</em> of this prescribed order to be sent before crashing. This requires the protocol to explicitly mention the order.</li>
+ <li>In the more challenging model, <strong>adversarial order model</strong>, the protocol sends to a set of parties and the adversary can choose any sub-set of these messages to be sent before crashing.</li>
+</ul>
+<p>These two models have a fundamental round complexity difference in <a href="https://decentralizedthoughts.github.io/2024-01-28-early-stopping-lower-bounds/">early stopping</a>, and seem to <a href="https://decentralizedthoughts.github.io/2019-11-01-primary-backup/">require another round for SMR</a>.</p>
+<h2 id="2-computational-power">2. Computational power</h2>
+<p align="center">
+ <img src="/uploads/compute power.jpeg" width="512" title="Types" />
+</p>
+<p>The computational power of the adversary:</p>
+<ol>
+ <li>
+ <p><strong>Unbounded</strong>: the adversary has unbounded computational power. This model often leads to notions of <em>perfect security</em> or <em>statistical security</em>. The advantage of this model is that it remains secure indefinitely.</p>
+ </li>
+ <li><strong>Computationally bounded</strong>: the adversary has a polynomial advantage in computational power over the honest parties. Typically, this means that the adversary cannot (except with negligible probability) break the cryptographic primitives being used. For example, we typically assume the adversary cannot forge signatures of parties outside its control (see <a href="http://www.wisdom.weizmann.ac.il/~oded/PSBookFrag/part1N.pdf">Goldreich’s chapter one</a> for traditional CS formal definitions of polynomially bounded adversaries). All of modern cryptography depends on this type of adversary and typically there is a security parameter that needs to be updated over time (as computation becomes cheaper).</li>
+ <li><strong>Fine-grained computationally bounded</strong>: there is some concrete measure of computational power and the adversary is limited concretely. This model is used in proof-of-work based protocols. For example, see <a href="https://www.iacr.org/archive/crypto2015/92160235/92160235.pdf">Andrychowicz and Dziembowski</a> for a way to model the hash rate. It is often needed for <a href="https://eprint.iacr.org/2018/601.pdf">Verifiable Delay Functions</a> and time lock puzzles.</li>
+</ol>
+<h2 id="3-adaptivity">3. Adaptivity</h2>
+<p align="center">
+ <img src="/uploads/adaptiv.jpeg" width="512" title="Types" />
+</p>
+<p>Adaptivity is the ability of the adversary to corrupt dynamically based on information the adversary learns during the execution.</p>
+<ol>
+ <li>
+ <p><strong>Static</strong>: the adversary has to decide which $f$ parties to corrupt in advance before the execution of the protocol. Note that this is always sufficient when the protocol is deterministic because there are no surprises for the adversary. One natural thing for randomized protocols in this setting it to operate on a random subcommittee. This often leads to $O(n)$ message complexity.</p>
+ </li>
+ <li>
+ <p><strong>Delayed Adaptive</strong>: given a parameter $k$, once the adversary asks to corrupt a party, the party is corrupted after $k \Delta$ time (or some notion of $k$ rounds in asynchrony). Leader based protocols in synchrony and partial synchrony can often obtain $O(1)$ expected time in this paradigm (using a weak randomness beacon). Linear-per-view protocols can obtain $O(n)$ expected messages after GST in this model.</p>
+ </li>
+ <li>
+ <p><strong>Weak Adaptive</strong>: once the adversary asks to corrupt a party, the party is corrupted after it completes sending all its outgoing messages. Said differently, the corruption starts once the party looks at its incoming messages. So while the adversary is adaptive, the actual corruption may be delayed to after the party sends all its messages in that round (or in asynchrony after it sends all the messages it wants to immediately send). Sometimes in this model, it is also required that honest parties can <a href="https://eprint.iacr.org/2008/291.pdf">safely erase</a> some information in order to get forward security, or assume that messages always maintain FIFO order in each channel. This is the model used by Algorand and YOSO type protocols in synchrony.</p>
+ </li>
+ <li>
+ <p><strong>Adaptive</strong>: once the adversary asks to corrupt a party, the party is immediately corrupted. Messages sent from the party before corruption cannot be erased (so will eventually arrive in asynchrony or arrive within $\Delta$ time in synchrony).</p>
+ </li>
+ <li>
+ <p><strong>Strong Adaptive</strong>: once the adversary asks to corrupt a party, the party is immediately corrupted. Moreover, messages sent from the party before corruption that have not yet arrived can be erased (or clawed back) by the adversary. Some <a href="https://users.cs.duke.edu/~kartik/papers/podc2019.pdf">lower bounds</a> assume this model to obtain a constant error. This model is sometimes called adaptive with <em>claw back</em>.</p>
+ </li>
+</ol>
+<h2 id="4-visibility">4. Visibility</h2>
+<p>The visibility is the power of the adversary to see the messages and the states of corrupted and non-corrupted parties.</p>
+<ol>
+ <li>
+ <p><strong>Full information</strong>: the adversary sees the internal state of <em>all</em> parties and the content of <em>all</em> message sent. This often severely limits the protocol designer. See for example: <a href="https://www.wisdom.weizmann.ac.il/~feige/Others/leader.ps">Feige’s</a> selection protocols, or <a href="https://people.csail.mit.edu/vinodv/BA.pdf">Ben-Or et al’s</a> Byzantine agreement. Often, the only thing that the adversary cannot do is predict the value of coins that have not been tossed yet.</p>
+ </li>
+ <li>
+ <p><strong>Private channels</strong>: in this model, we assume the adversary cannot see the internal state of honest parties and cannot see the internal content of messages between honest parties. Each time a message between two honest parties is sent, the adversary learns the source, target, and message size. Depending on the communication model, it can decide to delay it by any value that is allowed by the communication model. The adversary can see the full internal state of corrupted parties.</p>
+ </li>
+ <li>
+ <p><strong>Oblivious</strong>: the adversary can see the header of each message (source, destination, and message length) sent to and from a corrupt party, and based on that can decide its actions (crash, omit, delay, modify) depending on the adversary corruption type and network model. This type of adversary can model an adversary that has peripheral control (via a corrupt NIC, or local router/gateway). An oblivious omission adversary is often used to model an adversary that can maliciously corrupt parties that have a Trusted Execution Environments (TEEs) that cannot be corrupted.</p>
+ </li>
+ <li>
+ <p><strong>Erasure model</strong>: in this model, once a party is corrupted, the adversary can see all the current state of the party, but cannot see data that was erased before the party was corrupted. This model is in contrast to a model where, once a party is corrupted, the adversary can see the full history of the party.</p>
+ </li>
+</ol>
+<h3 id="rushing">Rushing</h3>
+<p>For models that are round-based, another visibility distinction is the adversary’s ability to <em>rush</em>. When does the adversary see the messages sent to parties it controls? In the <em>rushing adversary model</em>, the adversary is allowed to see all the messages sent to parties it controls in round $i$ <em>before</em> it needs to decide what messages to send in its round $i$ messages. In the <em>non-rushing adversary model</em>, the adversary must commit to the round $i$ messages it sends before it receives any round $i$ messages from non-faulty parties.</p>
+<h2 id="5-mobility">5. Mobility</h2>
+<p>In the traditional <strong>fixed model</strong> the adversary is allowed to corrupt honest parties with some fixed budget of up to $f$ parties, but is not allowed to un-corrupt (or heal) corrupt parties back to being honest. In the <strong>mobile model</strong> the adversary is allowed to dynamically decide to corrupt and un-corrupt parties. The total number of corrupted parties at any given time is at most $f$, but over time the set of corrupted parties may change. It is often required that there is a <em>gap</em> between the time the adversary un-corrupts one party and the time it is allowed to corrupt another. This model was introduced by <a href="https://web.cs.ucla.edu/~rafail/PUBLIC/05.pdf">Ostrovsky and Yung</a> and exemplified by <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.40.8922&amp;rep=rep1&amp;type=pdf">proactive secret sharing</a>. Another modeling decision is whether the party is aware that it is un-corrupted (in which case it may be able to remove in-memory corrupt data).</p>
+<h2 id="more-models">More models</h2>
+<p>There are many more models and variations - here is an incomplete list (let us know in the comments about more).</p>
+<h3 id="mixed-corruptions">Mixed corruptions</h3>
+<p>In some cases, we are interested in a mix of say $f$ Byzantine and $k$ crash corruptions (for example <a href="https://eprint.iacr.org/2022/805">here</a>) or any other mix. For example, when the requirement is $n&gt;3f+2k$ it can be thought of as if the adversary has a corruption budget of $n-1$ where each Byzantine corruption costs 3 and each crash corruption costs 2.</p>
+<h3 id="sleepy-model">Sleepy model</h3>
+<p>In the <a href="https://eprint.iacr.org/2016/918.pdf">sleepy model</a> of Pass and Shi, in addition to being either honest or corrupt, parties may be <em>active</em> or <em>inactive</em> in each round. The assumption is that the threshold bound on the adversary holds at each round on the actual number of active parties in that round. This is sometimes called the <a href="https://eprint.iacr.org/2023/280.pdf">dynamic participation</a> model. This is similar to a model assuming a mix of Byzantine failures (with a corruption cost of 2) and mobile oblivious crash failures (with a corruption cost of 1).</p>
+<h3 id="mobile-sluggish">Mobile sluggish</h3>
+<p>One of the challenges in the mobile model is the fact that the adversary can accumulate the private keys of parties. In the <a href="https://eprint.iacr.org/2019/179.pdf">weak synchrony model</a> (also called <a href="https://eprint.iacr.org/2019/270.pdf">mobile sluggish</a>), the adversary is allowed to corrupt either via a Byzantine corruption (that is not mobile) or a mobile sluggish corruption. Critically, the sluggish corruption allows the adversary to delay messages to and from the corrupted party but not to learn its private keys. Hence, allowing sluggish corruptions to be mobile does not allow the adversary to accumulate private keys. This is similar to assuming a mix of Byzantine failures and mobile oblivious omission failures.</p>
+<h3 id="flexible-model">Flexible model</h3>
+<p>The <a href="https://eprint.iacr.org/2019/270.pdf">Flexible BFT model</a> introduces two variations. First, a model where different properties hold under different threshold assumptions. Second, a model where the same protocol may serve different clients, where each client may have a different adversary threshold in mind.</p>
+<h2 id="acknowledgments">Acknowledgments</h2>
+<p>Special thanks to <a href="http://twitter.com/alinush407">Alin Tomescu</a>, Kartik Nayak, Gilad Stern, and Tim Roughgarden for insightful comments.</p>
+<p>Please leave comments on <a href="https://twitter.com/ittaia/status/1141481767121170434?s=20">Twitter</a></p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#dist101">dist101</a>
+ 
+ <a href="/tags#models">models</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=The+power+of+the+adversary&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2019-06-07-modeling-the-adversary%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2019-06-01-2019-5-31-models/" data-toggle="tooltip" data-placement="top" title="Synchrony, Asynchrony and Partial synchrony">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2019-06-17-the-threshold-adversary/" data-toggle="tooltip" data-placement="top" title="The threshold adversary">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

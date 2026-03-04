@@ -10,7 +10,7 @@ A very useful tool in [Asynchronus](https://decentralizedthoughts.github.io/2019
 
 
 A natural extension of broadcast is a *Multi-Broadcast*, where each party has an input. Ideally, you may want all parties to *agree on the same set* of outputs.
-We discuss this primitive, called *Agreement on a Core Set* (ACS) in a [separate post](https://decentralizedthoughts.github.io/2023-07-22-agreeemnt-on-a-core-set/) (also see  [Canetti](http://www.cs.technion.ac.il/users/wwwb/cgi-bin/tr-get.cgi/1993/CS/CS0755.pdf) page 15). ACS requires to solve Consensus in asynchrony, [which we know must have infinite executions](https://decentralizedthoughts.github.io/2019-12-15z-asynchrony-uncommitted-lower-bound/). Running ACS typically also incurs high costs, traditionally using $n$ binary agreements.
+We discuss this primitive, called *Agreement on a Core Set* (ACS) in a [separate post](https://decentralizedthoughts.github.io/2023-07-22-agreeemnt-on-a-core-set/) (also see  [Canetti](http://www.cs.technion.ac.il/users/wwwb/cgi-bin/tr-get.cgi/1993/CS/CS0755.pdf) page 15). ACS requires to solve Consensus in asynchrony, [which we know must have infinite executions](https://decentralizedthoughts.github.io/2019-12-15-asynchrony-uncommitted-lower-bound/). Running ACS typically also incurs high costs, traditionally using $n$ binary agreements.
 
 
 In this post, we explore a surprising alternative, called **Gather** which runs in a constant number of rounds. To the best of our knowledge, this primitive first appeared as the main building block in Canetti and Rabin's [Asynchronous Byzantine Agreement protocol](https://dl.acm.org/doi/10.1145/167088.167105). Variations of this primitive have many uses, for example in [Asynchronous Approximate Agreement](https://www.cs.huji.ac.il/~ittaia/papers/AAD-OPODIS04.pdf), [Asynchronous Distributed Key Generation](https://arxiv.org/abs/2102.09041) and recently for [multi-valued oblivious common coin](https://eprint.iacr.org/2023/1003) and [ACS](https://eprint.iacr.org/2023/1130) in constant expected time. 
@@ -84,4 +84,3 @@ Each party sends a single broadcast (which requires $O(n^2)$ words), requiring $
 We would like to thank Victor Shoup for insightful comments.
 
 Please answer/discuss/comment/ask on [Twitter](https://twitter.com/ittaia/status/1375454545103499264?s=20).  
-

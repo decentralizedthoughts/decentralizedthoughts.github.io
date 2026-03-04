@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>What are Blockchains Useful for, Really?</title>
+ 
+ 
+ <meta name="author" content="Kartik Nayak">
+ 
+ <meta name="description" content="Blockchains, or the decentralized ledger, are touted as the next big disruptive technology, as big as the Internet was in the 90s. What are these blockchains useful for, really? While there are relevant use cases, many examples people use that are either far too academic to be useful or are scenarios where blockchains are not the right solution in the first place. Thus, in this post, I am trying to...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="What are Blockchains Useful for, Really?">
+ <meta property="og:description" content="Blockchains, or the decentralized ledger, are touted as the next big disruptive technology, as big as the Internet was in the 90s. What are these blockchains useful for, really? While there are relevant use cases, many examples people use that are either far too academic to be useful or are scenarios where blockchains are not the right solution in the first place. Thus, in this post, I am trying to...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Kartik Nayak">
+ 
+ <meta property="og:article:published_time" content="2023-01-12T00:00:00-05:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2023-01-12-what-are-blockchains-useful-for-really/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2023-01-12-what-are-blockchains-useful-for-really/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="What are Blockchains Useful for, Really?">
+ <meta property="twitter:description" content="Blockchains, or the decentralized ledger, are touted as the next big disruptive technology, as big as the Internet was in the 90s. What are these blockchains useful for, really? While there are relevant use cases, many examples people use that are either far too academic to be useful or are scenarios where blockchains are not the right solution in the first place. Thus, in this post, I am trying to...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>What are Blockchains Useful for, Really?</h1>
+ 
+ 
+ 
+ 
+ By <strong>Kartik Nayak</strong><br>
+ 
+ <span class="post-meta">Posted on January 12, 2023</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>Blockchains, or the decentralized ledger, are touted as the next big disruptive technology, as big as the Internet was in the 90s. What are these blockchains useful for, really? While there are relevant use cases, many examples people use that are either far too academic to be useful or are scenarios where blockchains are not the right solution in the first place. Thus, in this post, I am trying to compile a list of use cases where blockchains or the idea of decentralized trust would be helpful, say, a decade from now, if not earlier. The use cases should be conceptually sensible even if they may or may not have been implemented correctly today. They should be accessible to an undergraduate student starting to explore blockchains. Many of these examples are based on conversations with others in the space in the past few years.</p>
+<p><em>Generally, a post on Decentralized Thoughts attempts to explain a concept lucidly. Contrary to that, I hope to capture decentralized thoughts on this topic in one post. I will start by explaining some thoughts that I have. Through discussions on <a href="https://twitter.com/kartik1507/status/1614314708101652488?s=20">Twitter</a>, I hope we can refine these thoughts and add more use cases.</em></p>
+<p>In a previous <a href="https://decentralizedthoughts.github.io/2022-09-05-what-is-a-blockchain/">post</a>, we said blockchains decentralize trust by relying on multiple parties, incentivizing them correctly to take the right actions, and having the ability to externally audit them for misbehavior. Moreover, many blockchains embrace openness in participation, be it maintaining the ledger or reading and writing. In what situations are these properties beneficial?</p>
+<ol>
+ <li>
+ <p><strong>Decentralized cryptocurrency.</strong> Cryptocurrency is a poster child example use of a blockchain. A large part of the world today thinks of the two interchangeably. The use case is natural; cryptocurrencies attempt to bypass the centralized institutional trust. Many large vendors today, such as Amazon, PayPal, Overstock, AT&amp;T, and CheapAir accept cryptocurrencies in some form as a payment method. However, at the time of writing, the average transaction fee for Ethereum and Bitcoin are &gt; 2 USD and &gt; 1 USD, respectively, which may be expensive for many transactions.</p>
+ <p>Most cryptocurrencies such as Bitcoin and Ethereum, today, do not allow private transactions where the sender, receiver, and the amount is hidden. Cryptocurrencies such as Zcash are at the other end of the spectrum where all of these aspects are hidden. Perhaps, what we need is somewhere in between – some degree of privacy/anonymity for a set of transactions, e.g., small or inconsequent transactions, whereas accountability and auditability for transactions satisfying some other predicate, e.g., transfer of huge sums of money from a given account.</p>
+ <p>Question: 1a. Do you believe payments would be a primary use case a decade from now?</p>
+ </li>
+ <li>
+ <p><strong>Web3.</strong> There are <em>multiple</em> definitions of what Web3 means today, and I am not attempting to precisely define it either. But it does appear that one aspect of Web3 can benefit from the use of blockchains compared to Web2. Today, with Web2, companies such as Twitter, Google, Apple, and Facebook hold a lot of individual data; moreover, they control the ability of individuals to access this data. The creation of walled data gardens provide a disproportionate amount of power to these companies. As examples, Apple decides to take a 30\% cut on any spend that happen on the apps of an iOS, the order in which my Twitter feed or Facebook Newsfeed appear is entirely controlled by the respective companies and the algorithms they design. These companies as platforms unilaterally control whether or not certain users or <a href="https://www.buzzincontent.com/story/how-wittyfeed-devises-catchup-strategy-after-facebook-shocker/">applications</a> stay on the platform. Thus, while the Internet is built on a set of open protocols, a small number of companies hold a lot of power over the users and applications today. At the same time they facilitate extremely easy to use interfaces with the ability to easily consume and publish information. With Web3, the hope is to combine the best of both worlds – while having all of the advantages of Web2, the data would be democratized so that the entire ecosystem can benefit from it. Thus, while we may still have a single agreed-upon dataset, there can be multiple applications that allow accessing this dataset differently. A user is not tied to a platform or an application; they control their data and can switch to a different application of their choice, e.g., if I do not like a change made by Twitter, I can move to a different platform along with all of my data including my tweets, replies and followers.</p>
+ <p>Question: 2a. Privacy is essential for most users in such systems. Currently, we rely on the service provider, e.g., Facebook, to maintain the privacy of our data. What is the proposed mechanism to obtain privacy in Web3?</p>
+ </li>
+ <li>
+ <p><strong>Non-fungible tokens (NFTs): Maintaining documents such as land records, university transcripts, concert tickets, and gaming tokens.</strong> Many news articles talk about NFTs as selling a piece of digital art for millions of dollars. At the outset, the value proposition of such an NFT is not clear (to me). However, there are many other examples where the concept of NFTs would be instrumental. I discuss four different use cases.</p>
+ <p>In many developing countries like India, land records are maintained with a stamp-paper as the proof-of-ownership. The proof can be easily counterfeited, making it challenging to identify the true owner. While the (trusted) government can maintain records in an opaque database, it is hard to avoid potential fraudulent transactions by some employees. The use of blockchains can help provide the necessary degree of transparency; users can have a timestamped record of the transfer of ownership of a piece of land over a given time period, and thus the record is indisputable. Consequently, they would reduce the load on civil courts to resolve conflicts. <a href="https://www.cnbc.com/2017/10/10/this-indian-state-wants-to-use-blockchain-to-fight-land-ownership-fraud.html">Andhra Pradesh</a>, <a href="https://economictimes.indiatimes.com/industry/services/property-/-cstruction/maharashtra-govt-starts-property-e-registrations-to-also-introduce-blockchain/articleshow/94034462.cms">Maharashtra</a> and <a href="https://www.livemint.com/Politics/4IOMVhyOuK6k0LwSVGikZL/Telangana-govt-to-use-blockchain-tech-for-securing-land-reco.html">Telangana</a> state governments in India have mentioned that they will use blockchains for maintaining land records.</p>
+ <p>A related example in the same vein is the potential for fraud with university transcripts. Often, there is not an easy way to determine whether a given transcript or a diploma is genuine. Blockchains, as a means to storing these transcripts, can ensure that it has been issued by the correct entity (appropriate university), it has been issued to the individual that indeed earned them, and it has not been modified (e.g., revoked) since it has been issued. <a href="https://www.blockcerts.org/guide/">Blockcerts</a> and <a href="https://eductx.org/">EduCTX</a> are a couple of example applications used for maintaining transcripts on blockchains.</p>
+ <p>A third use case is to eliminate fraud in concert tickets. Artists may sell concert tickets for a relatively low price. However, if there is significant demand for a given show, they are bought by intermediaries and resold at a much higher price. For one, the artists do not reap the benefits of reselling. Secondly, the buyer of a secondary ticket may not know if they are buying a legitimate ticket, and perhaps end up in the <a href="https://www.nytimes.com/2022/06/01/sports/soccer/champions-league-final-tickets.html">Champions Leage Final without a seat</a>. Using NFTs to track the ownership of a ticket has the potential to solve both of these concerns.</p>
+ <p>Finally, many games maintain a market of virtual equipments, accessories, badges, and skins. These may be limited edition; however, there is no easy way for users to track the number and types of such items. Blockchains provide an easy mechanism to transparently track the existence of and ownership of these items.</p>
+ <p>We note that in these examples, the blockchain does not prevent uploading of incorrect data if the primary party uploading the information is faulty. For instance, a government employee may incorrectly change the ownership state of a piece of land. However, the change would be recorded and transparent, which may be sufficient in practice.</p>
+ <p>Questions:</p>
+ <p>3a. What are other similar examples in this space?</p>
+ <p>3b. Although one party may own an NFT at a given time, it can be seen/accessed by everyone. Thus, if a digital art is stored as an NFT, the owner does not have exclusive access to it. What is the rationale behind paying large amounts of money for such NFTs? The best answer I have heard until now is social status or the ability to flip it for higher returns. Do you agree with the rationale? If not, is there a better reason?</p>
+ </li>
+ <li>
+ <p><strong>Decentralized Finance (DeFi).</strong> There is a lot of excitement around decentralized finance where there is a separation between <em>who builds a financial product</em> and <em>who needs to be trusted</em>. In traditional finance, both of these are the same entity; in addition, the entity is subject to a regulatory compliance. Due to the amount of work involved in the process, this may be restricted to a few large entities. With DeFi, the necessary trust can be borrowed from the underlying blockchain, allowing any party to build these financial products.</p>
+ <p>This has a couple of advantages. First, blockchains provide transparency. We now do not need to trust a centralized entity to follow the rules. Second, reducing the barrier to entry and opening up the system to everyone spurs innovation. In a world with fewer entities, there isn’t an incentive to innovate. At the same time, there are some challenges to reaching an ideal world situation. As an example, a potential concern with centralized exchanges is their outright ability to order transactions in a given order. This concern is valid in a decentralized world, too; due to the potential of gaining stake if transactions are ordered in a certain way, a form of Miner Extractable Value (MEV), parties are incentivized to maximize their own gains. Moreover, while many parties can build financial products encoded as smart contracts, the verification of the correctness of this new software falls on the users.</p>
+ </li>
+ <li>
+ <p><strong>The most important use case that we missed?</strong></p>
+ </li>
+</ol>
+<p>Do add your thoughts and responses to these questions on <a href="https://twitter.com/kartik1507/status/1614314708101652488?s=20">Twitter</a>!</p>
+<h3 id="notes">Notes</h3>
+<ul>
+ <li>It is not clear if all of these use cases are exclusive or not,e.g., are NFTs a part of DeFi or Web3 or neither?</li>
+ <li>An interesting blog post by Vitalik on Ethereum applications <a href="https://vitalik.eth.limo/general/2022/12/05/excited.html">here</a>. A version from 2014 <a href="https://ethereum.org/669c9e2e2027310b6b3cdce6e1c52962/Ethereum_Whitepaper_-_Buterin_2014.pdf">here</a>.</li>
+ <li>An interesting reading list on use cases by a16z <a href="https://a16z.com/wp-content/uploads/2021/10/The-web3-Readlng-List.pdf">here</a>.</li>
+ <li>A description of the NFT ecosystem for art and collectables <a href="https://www.arijuels.com/wp-content/uploads/2022/04/NFTs__Primer_and_Outlook.pdf">here</a>.</li>
+ <li>A podcast episode on Web3:<a href="https://www.theverge.com/23020727/decoder-chris-dixon-web3-crypto-a16z-vc-silicon-valley-investing-podcast-interview">Chris Dixon thinks web3 is the future of the internet — is it?</a></li>
+</ul>
+<h3 id="acknowledgment">Acknowledgment</h3>
+<p>I learned about most of these use cases through discussions with several other researchers and practitioners in this space. Notably, I have had direct conversations with <a href="https://people.ece.uw.edu/kannan_sreeram/">Sreeram Kannan</a>, <a href="https://web3.princeton.edu/">Pramod Viswanath</a>, <a href="https://www.cs.princeton.edu/~smattw/">Matt Weinberg</a>, <a href="https://www.fanzhang.me/">Fan Zhang</a>, <a href="https://research.vmware.com/researchers/ittai-abraham">Ittai Abraham</a> and also learned from an <a href="https://freakonomics.com/podcast/are-n-f-t-s-all-scams/">episode</a> in Freakonomics. Thanks to <a href="https://alinush.github.io/">Alin Tomescu</a>, <a href="https://soc1024.ece.illinois.edu/">Andrew Miller</a>, <a href="https://www.cs.purdue.edu/homes/akate/">Aniket Kate</a>, and <a href="https://isi.jhu.edu/~mgreen/">Matthew Green</a> for helping improve the post through interesting discussions on Twitter.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=What+are+Blockchains+Useful+for%2C+Really%3F&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2023-01-12-what-are-blockchains-useful-for-really%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2023-01-08-re-rand-cred/" data-toggle="tooltip" data-placement="top" title="Pairing-based Anonymous Credentials and the Power of Re-randomization">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2023-01-30-player-replaceability-forensic-support/" data-toggle="tooltip" data-placement="top" title="Can we Obtain Player Replaceability and Forensic Support Simultaneously?">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

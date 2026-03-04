@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Scalable Agreement - Near Linear Communication and Constant Expected Time</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham">
+ 
+ <meta name="description" content="Agreement needs quadratic communication and linear time in the worst case. Scalable Agreement aims for near linear communication and constant time in expectation. In this post, we show scalable agreement against a weak adaptive adversary that can cause omission failures. This will be the basis for the Byzantine case that we will explore in future posts. This post can be seen as followup to the posts that solve binary consensus...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Scalable Agreement - Near Linear Communication and Constant Expected Time">
+ <meta property="og:description" content="Agreement needs quadratic communication and linear time in the worst case. Scalable Agreement aims for near linear communication and constant time in expectation. In this post, we show scalable agreement against a weak adaptive adversary that can cause omission failures. This will be the basis for the Byzantine case that we will explore in future posts. This post can be seen as followup to the posts that solve binary consensus...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham">
+ 
+ <meta property="og:article:published_time" content="2025-12-12T06:00:00-05:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2025-12-12-scalable-agreement/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2025-12-12-scalable-agreement/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Scalable Agreement - Near Linear Communication and Constant Expected Time">
+ <meta property="twitter:description" content="Agreement needs quadratic communication and linear time in the worst case. Scalable Agreement aims for near linear communication and constant time in expectation. In this post, we show scalable agreement against a weak adaptive adversary that can cause omission failures. This will be the basis for the Byzantine case that we will explore in future posts. This post can be seen as followup to the posts that solve binary consensus...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Scalable Agreement - Near Linear Communication and Constant Expected Time</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham</strong><br>
+ 
+ <span class="post-meta">Posted on December 12, 2025</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>Agreement needs quadratic communication and linear time in the worst case. <strong>Scalable Agreement</strong> aims for <em>near linear communication</em> and <em>constant time</em> in expectation. In this post, we show scalable agreement against a <a href="https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/">weak adaptive adversary</a> that can cause <strong>omission failures</strong>. This will be the basis for the Byzantine case that we will explore in future posts.</p>
+<p>This post can be seen as followup to the posts that solve binary consensus for <a href="https://decentralizedthoughts.github.io/2023-02-18-rand-and-consensus-1/">crash failures</a> and for <a href="https://decentralizedthoughts.github.io/2023-02-19-rand-and-consensus-2/">omission failures</a> in <strong>constant expected time</strong>. Rhose protocols had <strong>quadratic message complexity</strong>.</p>
+<h3 id="what-is-the-best-we-can-hope-for">What is the best we can hope for?</h3>
+<p>Three lower bounds and barriers stand in our way:</p>
+<ol>
+ <li>In the <a href="https://decentralizedthoughts.github.io/2019-12-15-synchrony-uncommitted-lower-bound/">worst case</a> reaching agreement takes at least $f+1$ rounds.
+ <ul>
+ <li>We will use randomization to reduce the <em>expected</em> number of rounds to constant.</li>
+ </ul>
+ </li>
+ <li>In the <a href="https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/">worst case</a> reaching agreement with no error requires $\Omega(n^2)$ communication.
+ <ul>
+ <li>Assuming a weak adaptive adversary we will reduce the <em>expected</em> communication to $O(n \log^\gamma n)$ (for some fixed constant $\gamma$) and in doing so incur a non-zero probability of error (denoted $\delta$).</li>
+ </ul>
+ </li>
+ <li>We know that the <a href="https://decentralizedthoughts.github.io/2019-11-02-primary-backup-for-2-servers-and-omission-failures-is-impossible/">best resilience</a> one can hope for is $f&lt;n/2$. It is not known how to obtain this tight bound with $o(n^2)$ expected communication (see <a href="https://eprint.iacr.org/2023/1757">Ramboud, Theorem 5</a>).
+ <ul>
+ <li>So we assume some $\epsilon&gt;0$ and obtain <em>near-optimal</em> resilience $f&lt;n/(2+\epsilon)$.</li>
+ </ul>
+ </li>
+</ol>
+<p>Given this the best we can hope for:</p>
+<p><strong><em>Theorem:</em></strong> <em>there exists a synchronous binary agreement protocol with $\delta$ error that is resilient to a weak adaptive adversary that can cause omission failures to $f&lt;n/(2+\epsilon)$ parties. The expected number of rounds to terminate is constant and the expected communication complexity is $O(n \log^\gamma n)$.</em></p>
+<p>Specifically, we obtain <strong>super-polynomially small error</strong> $\delta= n^{-O(\log n)}$, <strong>sub linear near optimal resilience</strong> $\epsilon=1/\log n$, and <strong>near linear message complexity</strong> with $\gamma=7$.</p>
+<p>This post aims for simplicity and does not optimize the parameter $\gamma$ or explore the full space of options for $\epsilon$ and $\delta$.</p>
+<h3 id="main-idea-subsample-committees-that-only-speaks-once">Main Idea: subsample committees that only speaks once</h3>
+<ul>
+ <li>
+ <p>Instead of having all parties speak in each round, only a <em>poly-logarithmic</em> number of parties will speak in each round: This reduces the communication from $O(n^2)$ to $O(n \log^{O(1)} n)$. In this post, the committee members will run a variant of <a href="https://decentralizedthoughts.github.io/2023-02-19-rand-and-consensus-2/">this constant expected time protocol</a>, but this idea can be generalized to many other protocols.</p>
+ </li>
+ <li>
+ <p>In each round, each party will choose a random rank in $[1..n]$ and only parties with rank at most $k=\log^6 n$ will send messages in that round. These elected parties will speak just once. The weak adaptive adversary cannot predict who will speak in round $j$ before round $j$ starts, and corrupting them after seeing their messages is too late. This paradigm is called <strong>You Only Speak Once</strong> (YOSO) and was first introduced in the context of <a href="https://people.csail.mit.edu/nickolai/papers/gilad-algorand-eprint.pdf">Blockchains by Algorand</a> and in the context of <a href="https://eprint.iacr.org/2021/210">MPC by Gentry et al</a>.</p>
+ </li>
+</ul>
+<h3 id="using-measure-concentration-to-prove-that-committees-are-small-and-contains-many-non-faulty-parties">Using measure concentration to prove that committees are small and contains many non-faulty parties</h3>
+<p>Fix a round $j$. Each party independently chooses a fresh random rank in $[1..n]$. Define</p>
+\[k=\log^6 n,\qquad \ell = k-\log^4 n,\qquad h = k+\log^4 n.\]
+<p>Let $C=C_j$ be the random set of parties whose rank is at most $k$ in round $j$ and $F$ be the set of parties that are faulty before round $j$. The adversary can corrupt at most $f&lt;n/(2+\epsilon)$ parties with $\epsilon=1/\log n$.</p>
+<p><strong>Lemma 1 (committee size concentration):</strong></p>
+<ul>
+ <li><em>Fix $\delta_1=2e^{-\log^2 n/3}=n^{-O(\log n)}$. With probability at least $1-\delta_1$,</em></li>
+</ul>
+\[|C| \in[\ell,h].\]
+<p>From Lemma 1, with probability $1-\delta_1$ the committee size in round $j$ is in $[\ell,h]$. We next show that, conditioned on this event, the committee contains many parties that are not faulty before round $j$.</p>
+<p>Define</p>
+\[q=h-\ell/2.\]
+<p><strong>Lemma 2 (many non-faulty in the committee):</strong></p>
+<ul>
+ <li>Condition on the event that $ | C | \in[\ell,h]$. Then, with probability at least $1-\delta_2$,</li>
+</ul>
+\[| C\setminus F | \ge q,\]
+<p>where $\delta_2=\exp(-\Omega(\log^4 n))$.</p>
+<p>This means that in any round $j$, any party can wait for $q$ round $j$ messages.</p>
+<p>Moreover, since $q &gt; |C|/2$ then any two sets of at least $q$ round $j$ messages must intersect. The proofs for both lemmas appear at the end of the post.</p>
+<p>Let $\delta=\delta_1+\delta_2$, and note that $\delta=n^{-O(\log n)}$. From now on, we will condition on the good event that both lemmas hold for all rounds of the protocol. Since we will apply this a polynomially bounded number of times, the overall error remains $\delta=n^{-O(\log n)}$.</p>
+<h3 id="weak-adaptive-adversaries">Weak adaptive adversaries</h3>
+<p>As in the <a href="https://decentralizedthoughts.github.io/2023-02-19-rand-and-consensus-2/">previous post</a>, we need to make sure that the randomness is <em>unpredictable</em> and that the adversary can only <em>adapt</em> to the randomness when it’s too late for it to matter.</p>
+<p>Recall the weak adaptive adversary in the lock-step model: If the adversary decides to corrupt a party after seeing the content of its round $j$ message then it can only corrupt it after the party sends all its round $j$ messages to all parties.</p>
+<h3 id="a-near-linear-weak-common-coin-against-a-weak-adaptive-adversary">A Near Linear Weak Common Coin against a weak adaptive adversary</h3>
+<p>A <em>near linear weak common coin</em> for round $j$ has the following properties against any weak adaptive minority omission failures:</p>
+<p><strong>Unpredictable</strong>: The coin value for round $j$ cannot be predicted before seeing the round $j$ messages.</p>
+<p><strong>$\alpha$-correct</strong>: for any $b \in {0,1}$, with probability at least $\alpha$, all parties output $b$. In particular, here we will aim for $\alpha =1/5$. Note that a totally fair coin is $\alpha=1/2$.</p>
+<p><strong>Near linear</strong>: the message complexity is $n \log^{O(1)} n$.</p>
+<p><strong>$\delta$ error liveness</strong>: all non-faulty parties output a coin value with probability $1-\delta$.</p>
+<p>The main idea is simple, every party chooses a random rank and a random bit. Only parties with rank at most $k$ send their rank and bit. Parties output the bit from the <em>lowest</em> rank they hear:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Each party randomly chooses:
+ a rank in [1,...,n]
+ a bit in [0,1]
+ if rank &lt;= k then
+ send (rank,bit) to all parties
+Each party that hears q (rank,bit) values:
+ outputs the bit associated with the lowest rank it heard
+ (break ties arbitrarily)
+</code></pre></div></div>
+<h4 id="proof-for-the-weak-coin">Proof for the weak coin</h4>
+<p><em>Unpredictability</em> holds because the randomness is chosen in round $j$. The weak adaptive adversary can either choose to act before seeing a party’s messages - in which case the value is unpredictable, or after seeing its message - in which case its too late.</p>
+<p>For <em>$1/5$-correctness</em>: let $C_j$ be the set of parties with rank at most $k$ in round $j$. The minimum is unique except with probability at most $O(k^2/n)$, since a tie for the minimum implies that at least two parties picked the same rank in $[1..n]$, and there are at most $k$ ranks that could be the minimum.</p>
+<p>Let $E$ be the event that $C_j \in [\ell,h]$, the minimum rank in $C_j$ is unique, and $p$ is not corrupted before round $j$. Since the adversary corrupts fewer than $n/(2+\epsilon)$ parties overall, we have $\Pr[p\ \text{is non-faulty before round}\ j] \ge 1-1/(2+\epsilon) &gt; 1/2$. For sufficiently large $n$, the other two conditions fail with negligible probability, hence $\Pr[E] &gt; 2/5$.</p>
+<p>On event $E$, party $p$ sends $(\text{rank},\text{bit})$ in round $j$, and since messages between non-faulty parties are delivered reliably, every non-faulty party receives this message. Because $p$ has the minimum rank, every non-faulty party outputs $p$’s bit. Therefore, for each $b\in{0,1}$, with probability at least $\Pr[E]/2 \ge 1/5$, all non-faulty parties output $b$.</p>
+<p>For <em>near linear</em>: by Lemma 1, in round $j$ only $|C_j|=O(\log^6 n)$ parties send, so the total number of messages in the coin round is $O(n\log^6 n)$.</p>
+<p>For <em>$\delta$ error liveness</em>: conditioned on Lemma 1 and 2, $C_j$ will contain at least $q$ non-faulty members.</p>
+<h3 id="near-linear-binary-agreement-from-a-near-linear-weak-common-coin">Near Linear Binary agreement from a Near Linear Weak Common Coin</h3>
+<p>Each party has an input 0 or 1, and the goal is to output a common value (agreement) that is an input value (validity).</p>
+<p>We use the same sampling rule in every round: in round $r$, parties with rank at most $k=\log^6 n$ send. Let $C_r$ be the set of parties that speak in round $r$.</p>
+<p>Fix any round $r$ from Lemma 1 and 2 there are at least $q$ non-faulty parties in $C_r$. So every non-faulty party receives at least $q$ round $r$ messages.</p>
+<p>The protocol runs in <em>phases</em>. Each phase consists of 3 <em>rounds</em>.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>value := input
+Round 3j-2:
+ Choose a rank in [1,...,n]
+ If rank &lt;= k then
+ send &lt;value&gt; to all parties
+ If fewer than q messages are received then
+ shut down
+ If all received values are b then
+ value := b
+ Otherwise
+ value := ⊥
+Round 3j-1:
+ Choose a rank in [1,...,n]
+ If rank &lt;= k then
+ send &lt;value&gt; to all parties
+ If fewer than q messages are received then
+ shut down
+ If some received value is b and not ⊥ then
+ value := b
+ If all received values are b and not ⊥ then
+ output b
+Round 3j:
+ Choose a rank in [1,...,n]
+ Choose a bit in [0,1]
+ If rank &lt;= k then
+ send &lt;rank, bit&gt; to all parties
+ If fewer than q messages are received then
+ shut down
+ Let bit be from the lowest rank
+ If value = ⊥ then
+ value := bit
+</code></pre></div></div>
+<p>Protocol in words: in the first round, a random subset of parties sends their values and all parties either keep their value or switch to $\bot$ if they hear a conflict. In the second round, a random subset of parties sends their values again. This time parties stay with $\bot$ only if they don’t hear value, and they output a bit if all received values are identical and not $\bot$. Finally, in the third round, parties that end with $\bot$ use the weak coin protocol to obtain a new value.</p>
+<h3 id="proof-for-the-agreement-protocol">Proof for the Agreement protocol</h3>
+<p><strong>Validity</strong>: assume all parties start with input $b$. In round $1$, every non-faulty party receives at least $q$ messages, and all values received are $b$, so every non-faulty party sets its value to $b$. In round $2$, again every non-faulty party receives at least $q$ messages, all equal to $b$, so every non-faulty party outputs $b$.</p>
+<p><strong>No split values after round $3j-2$</strong>: fix a phase $j$. Suppose some non-faulty party ends round $3j-2$ with value $b\in{0,1}$ (not $\bot$). Then it received at least $q$ messages in round $3j-2$, all equal to $b$. Any other non-faulty party that reaches the end of round $3j-2$ also received at least $q$ messages in that round. Since $q&gt;|C_{3j-2}|/2$, the two size-$q$ sender sets intersect in at least one sender from $C_{3j-2}\setminus F$, and that sender sent value $b$ to all parties. Therefore the second party received at least one message with value $b$ and cannot end round $3j-2$ with value $1-b$.</p>
+<p>We conclude that there exists a bit $b\in{0,1}$ such that every party that starts the coin round $3j$ has a value in ${b,\bot}$.</p>
+<p><strong>Agreement</strong>: let $j^\star$ be the first phase in which some non-faulty party outputs a value at the end of round $3j^\star-1$, and let this value be $b$. The deciding party received at least $q$ messages in round $3j^\star-1$, all equal to $b$. Any other non-faulty party that reaches the end of round $3j^\star-1$ also received at least $q$ messages in that round, and since $q&gt;|C_{3j^\star-1}|/2$ their sender sets intersect in at least one sender from $C_{3j^\star-1}\setminus F$, so it received at least one message with value $b$. Hence any party that enters the next phase has value $b$. So an argument similar to the validity above implies that all non-faulty parties output $b$ by the end of round $3(j^\star+1)-1$.</p>
+<p><strong>Expected Termination</strong>: fix a phase $j$. If no party outputs a value by the end of round $3j-1$, then by the previous claim there exists a bit $b$ such that every non-faulty party starts the coin round $3j$ with value in ${b,\bot}$. In the coin round, the weak coin is $\alpha$-correct with $\alpha\ge 1/5$, so for this particular bit $b$ we have that with probability at least $1/5$ all non-faulty parties output coin value $b$. Parties with value $\bot$ adopt the coin bit, so at the end of round $3j$ all non-faulty parties have value $b$. In the next phase, an argument similar to the validity above implies that all non-faulty parties output $b$ by the end of round $3(j+1)-1$. Therefore, each phase leads to a decision with constant probability, so the expected number of phases, and hence rounds, to decide is constant.</p>
+<p><strong>Message complexity</strong>: in each round $r$, only the committee $C_r$ sends messages, and each sender broadcasts to all $n$ parties, so the number of messages in round $r$ is $n\cdot |C_r|$. Lemma 1 gives $|C_r|\in[\ell,h]=\Theta(\log^6 n)$, hence the message complexity per round is $\Theta(n\log^6 n)$. In the agreement rounds, each message carries a constant size value, so the bit complexity per agreement round is $\Theta(n\log^6 n)$. In the coin round, each sender also includes a rank in $[1..n]$, which costs $\Theta(\log n)$ bits, so the bit complexity of the coin round is $\Theta(n\log^6 n\log n)$. Over a constant expected number of phases, the expected total communication is $O(n\log^\gamma n)$ for $\gamma=7$.</p>
+<h3 id="proofs-for-measure-concentration-lemmas">Proofs for measure concentration lemmas</h3>
+<p><strong>Proof of Lemma 1</strong>:</p>
+<p>Let $K$ be the random variable that counts the number of parties that have rank at most $k$. Then $K$ is binomial with $\Pr[\text{rank} \le k]=k/n$, and from linearity of expectation, $E[K]=\mu=\log^6 n$.</p>
+<p>For simplicity, we apply measure concentration via a generic two sided <a href="https://math.mit.edu/~goemans/18310S15/chernoff-notes.pdf">Chernoff bound</a>. For $0&lt;\beta&lt;1$:</p>
+\[Pr[\|K-\mu\| \geq \beta \mu] \leq 2 e^{-\mu \beta^2/3}\]
+<p>Taking $\mu=\log^6 n$ and $\beta = \log^{-2} n$ we get $\beta\mu=\log^4 n$ and $\mu\beta^2=\log^2 n$, hence:</p>
+\[Pr[\|K-\mu\| \geq \log^4 n] \leq 2e^{-\log^2 n /3} = n^{-O(\log n)}\]
+<p>This concludes the proof with $\delta_1=2e^{-\log^2 n /3} = n^{-O(\log n)}$. Here $\log$ is the natural logarithm, changing the base only affects constants.</p>
+<p>We will apply this lemma a polynomially bounded number of times, so even when we union bound over all applications we get an error of $\delta = n^{-O(\log n)}$.</p>
+<p><strong>Proof of Lemma 2</strong>:</p>
+<p>Condition on $|C|=m\in[\ell,h]$ and on the set $F$ of parties corrupted before round $j$. Since ranks in round $j$ are fresh and independent, $C$ is a uniform size-$m$ subset of $[n]$.</p>
+<p>Let $X=|C\cap F|$ be the number of faulty parties in $C$. Since $C$ is sampled uniformly without replacement, $X$ is hypergeometric with
+$\mu = E[X\mid m] = m\cdot\frac{|F|}{n} \le \frac{m}{2+\epsilon}$.</p>
+<p>We must show $X \le m-q$. The worst case is $m=\ell$, in which case
+$m-q = 3\ell/2-h = \frac{k}{2}-\frac{5}{2}\log^4 n =: T$.</p>
+<p>With $\epsilon=1/\log n$,
+$\mu \le \frac{\ell}{2+\epsilon} = \frac{k}{2}-\Theta(\log^5 n)$.
+Thus, $T=(1+\alpha)\mu$ for some $\alpha=\Theta(1/\log n)$. Using an upper-tail Chernoff bound,
+$\Pr[X\ge T] \le \exp(-\Omega(\mu\alpha^2)) = \exp(-\Omega(\log^4 n))$.</p>
+<p>Therefore, conditioned on $|C|\in[\ell,h]$, with probability at least $1-\delta_2$, we have $X\le m-q$, equivalently $|C\setminus F|\ge q$.</p>
+<h3 id="notes">Notes</h3>
+<ul>
+ <li>The protocol can be adapted to multi-valued agreement using a weak leader election instead of a weak common coin.</li>
+ <li>We will explore how to extend this protocol to Byzantine agreement in a future post.</li>
+ <li>Its a good exercise to verify that the protocol can obtain uniform agreement.</li>
+ <li>Its also a good exercise to add an explicit termination detection mechanism so that parties can know when to stop sending messages.</li>
+</ul>
+<p>Your thoughts on <a href="https://x.com/ittaia/status/1999552330966995097?s=20">X</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#randomness">randomness</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Scalable+Agreement+-+Near+Linear+Communication+and+Constant+Expected+Time&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2025-12-12-scalable-agreement%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2025-11-23-finality/" data-toggle="tooltip" data-placement="top" title="Finality Is in the Eye of the Behodler">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2025-12-12-dpaas/" data-toggle="tooltip" data-placement="top" title="DPaaS - Improving Decentralization by Removing Relays in Ethereum PBS">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

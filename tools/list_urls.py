@@ -1,39 +1,47 @@
 #!/usr/bin/env python3
-import os, glob
+import os
+from pathlib import Path
 
-root="_site"
-urls=[]
+ROOT = Path("_site")
+EXCLUDED_PREFIXES = ("tests/", "tools/")
+EXCLUDED_FILES = {
+    "grep.sh",
+    "print-logs.sh",
+    "setup-docker.sh",
+    "start-server.sh",
+    "stop-server.sh",
+}
 
-def add(u):
-    if u not in urls:
-        urls.append(u)
 
-# stable pages
-for p in ["", "tags/", "start-here/", "course/", "videos/", "feed.xml"]:
-    fp = os.path.join(root, p, "index.html") if p.endswith("/") else os.path.join(root, p)
-    if os.path.exists(fp):
-        add("/"+p)
+def to_url(path: Path):
+    rel = path.relative_to(ROOT).as_posix()
+    if rel in EXCLUDED_FILES or rel.startswith(EXCLUDED_PREFIXES):
+        return None
+    if rel == "index.html":
+        return "/"
+    if rel.endswith("/index.html"):
+        return "/" + path.relative_to(ROOT).parent.as_posix().strip("/") + "/"
+    if rel.endswith(".html"):
+        return "/" + rel
+    if rel.endswith(".xml"):
+        return "/" + rel
+    return None
 
-# pagination pages if present
-for p in sorted(glob.glob(os.path.join(root, "page*/index.html"))):
-    rel = p[len(root):].replace("/index.html","/")
-    add(rel)
 
-# about pages
-for p in sorted(glob.glob(os.path.join(root, "about-*/index.html"))):
-    rel = p[len(root):].replace("/index.html","/")
-    add(rel)
+def main():
+    if not ROOT.exists():
+        raise SystemExit("Build the site first")
 
-# posts: sample across time, 1 per year if possible
-posts = sorted(glob.glob(os.path.join(root, "20??-??-??-*/index.html")))
-by_year={}
-for p in posts:
-    year=os.path.basename(os.path.dirname(p))[:4]
-    by_year.setdefault(year, []).append(p)
-for year in sorted(by_year.keys()):
-    plist=by_year[year]
-    pick=plist[len(plist)//2]
-    rel = pick[len(root):].replace("/index.html","/")
-    add(rel)
+    urls = []
+    for path in sorted(ROOT.rglob("*")):
+        if not path.is_file():
+            continue
+        url = to_url(path)
+        if url is not None:
+            urls.append(url)
 
-print("\n".join(urls))
+    print("\n".join(urls))
+
+
+if __name__ == "__main__":
+    main()

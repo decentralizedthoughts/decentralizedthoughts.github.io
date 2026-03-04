@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>The First Blockchain or How to Time-Stamp a Digital Document</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham">
+ 
+ <meta name="description" content="This post is about the work of Stuart Haber and W. Scott Stornetta from 1991 on How to Time-Stamp a Digital Document and their followup paper Improving the Efficiency and Reliability of Digital Time-Stamping. In many ways, this work introduced the idea of a chain of hashes to create a total order of commitments to a dynamically growing set of documents. It’s no wonder these two papers are cited by...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="The First Blockchain or How to Time-Stamp a Digital Document">
+ <meta property="og:description" content="This post is about the work of Stuart Haber and W. Scott Stornetta from 1991 on How to Time-Stamp a Digital Document and their followup paper Improving the Efficiency and Reliability of Digital Time-Stamping. In many ways, this work introduced the idea of a chain of hashes to create a total order of commitments to a dynamically growing set of documents. It’s no wonder these two papers are cited by...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham">
+ 
+ <meta property="og:article:published_time" content="2020-07-05T22:58:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2020-07-05-the-first-blockchain-or-how-to-time-stamp-a-digital-document/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2020-07-05-the-first-blockchain-or-how-to-time-stamp-a-digital-document/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="The First Blockchain or How to Time-Stamp a Digital Document">
+ <meta property="twitter:description" content="This post is about the work of Stuart Haber and W. Scott Stornetta from 1991 on How to Time-Stamp a Digital Document and their followup paper Improving the Efficiency and Reliability of Digital Time-Stamping. In many ways, this work introduced the idea of a chain of hashes to create a total order of commitments to a dynamically growing set of documents. It’s no wonder these two papers are cited by...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>The First Blockchain or How to Time-Stamp a Digital Document</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham</strong><br>
+ 
+ <span class="post-meta">Posted on July 5, 2020</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>This post is about the work of Stuart Haber and W. Scott Stornetta from 1991 on <a href="https://www.anf.es/pdf/Haber_Stornetta.pdf">How to Time-Stamp a Digital Document</a> and their followup paper <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.71.4891&amp;rep=rep1&amp;type=pdf">Improving the Efficiency and Reliability of Digital Time-Stamping</a>. In many ways, this work introduced the idea of a chain of hashes to create a total order of commitments to a dynamically growing set of documents. It’s no wonder these two papers are cited by the <a href="https://bitcoin.org/bitcoin.pdf">Bitcoin whitepaper</a>.</p>
+<blockquote>
+ <p>Who watches the watchmen?
+Quis custodiet ipsos custodes?
+– <cite> <a href="https://en.wikipedia.org/wiki/Juvenal">Juvenal</a> </cite></p>
+</blockquote>
+<p>From 1995, the ideas of this paper have been in use by a company called <a href="http://www.surety.com/solutions/intellectual-property-protection/sign-seal">Surety</a>. This makes it the longest-running chain of hashes! Here are two photos from 2018 of Stuart Haber with the current hash circled in red on the New York Times:</p>
+<p align="center">
+ <img src="/uploads/Haber1.jpeg" width="600" title="The first blockchain" />
+</p>
+<p align="center">
+ <img src="/uploads/Haber2.jpeg" width="600" title="The first blockchain" />
+</p>
+<h2 id="how-to-time-stamp-a-digital-document">How to Time-Stamp a Digital Document?</h2>
+<p>In 1991, Haber and Stornetta asked this very basic question. Today, after 30 years of exponential growth in digital documents, this question is even more relevant! Let’s describe their basic scheme:</p>
+<p>The system is composed of users, a Time-Stamp Service (TSS), and a repository. At some regular interval, the TSS publishes an “interval hash” to a “widely available repository”.</p>
+<ol>
+ <li>
+ <p>Users send <em>certification requests</em> to the TSS.</p>
+ </li>
+ <li>
+ <p>The TSS creates a <em>Merkle tree</em> of all the requests.</p>
+ </li>
+ <li>
+ <p>The “hash chaining” happens: The <em>new interval hash</em> is computed by taking the <em>root hash</em> of the Merkle tree and hashing it with the <em>previous interval hash</em>.</p>
+ </li>
+ <li>
+ <p>The TSS publishes the new interval hash to the <em>public repository</em>.</p>
+ </li>
+ <li>
+ <p>The TSS also sends each requester a <em>Merkle proof</em> that their document is committed in the Merkle tree.</p>
+ </li>
+ <li>
+ <p>Users can <em>validate</em> a document’s time-stamp by querying the repository for the relevant interval hash and use the Merkle proof to compare the relevant leaf to the hash of the document.</p>
+ </li>
+</ol>
+<p>In their own words, if we assume the repository is durable and trusted (think about the New York Times weekend circulation) then:</p>
+<ol>
+ <li>
+ <p>“The TSS cannot forward-date a document, because the certificate must contain bits from requests that immediately preceded the desired time, yet the TSS has not received them.” – note that this assumes there is enough uncertainty in the future requests that is beyond the control of the TSS.</p>
+ </li>
+ <li>
+ <p>“The TSS cannot feasibly back-date a document by preparing a fake time-stamp for an earlier time, because bits from the document in question must be embedded in certificates immediately following that earlier time, yet these certificates have already been issued.” – Note that this assumes the hash function is collision-resistant.</p>
+ </li>
+ <li>
+ <p>“The only possible spoof is to prepare a fake chain of time-stamps, long enough to exhaust the most suspicious challenger that one anticipates.” – quite remarkable that even the notion of the longest chain has origins in this paper!</p>
+ </li>
+</ol>
+<p>Note that there are some underlying assumptions here. We are trusting the TSS (Surety) to <em>not censor users</em> and we are trusting the repository (New York Times) to be <em>durable and show a consistent version to all users</em>.</p>
+<p>This is a very simple and intuitive scheme. It does make quite strong trust assumptions. Can we remove them?</p>
+<h2 id="connection-to-bitcoin-and-cryptocurrencies">Connection to Bitcoin and Cryptocurrencies</h2>
+<p>The Bitcoin whitepaper made a breakthrough connection between this time-stamping scheme and proof-of-work: instead of assuming a centralized trusted TSS and a centralized trusted repository, it uses the chain of hashes to incentivize miners to implement the TSS and the repository in a decentralized manner! A miner that wins the race to produce a proof-of-work is incentivized to implement the TSS functionality and correctly publish a new interval hash. Censorship resistance is obtained by randomizing the winning miner and by adding fees that reward adding user requests. Miners are collectively incentivized to implement a replicated repository. Consistency is obtained by incentivizing miners to use the notion of the <em>longest (PoW heaviest) chain of hashes</em>.</p>
+<p>Seen from the lens of distributed computing, the Bitcoin blockchain implements the TSS state machine and the repository is replicated via a byzantine fault-tolerant protocol called <a href="https://decentralizedthoughts.github.io/2019-11-29-Analysis-Nakamoto/">Nakamoto Consensus</a>. Seen from the lens of game theory, the contents of the documents recorded are restricted to be transactions over an internal digital asset with a controlled supply. Using this scarce resource, Bitcoin builds a novel incentive scheme that <a href="https://decentralizedthoughts.github.io/2020-02-26-selfish-mining/">typically</a> incentivizes miners to implement the TSS and the public repository.</p>
+<h2 id="is-it-only-about-cryptocurrencies">Is it only about Cryptocurrencies?</h2>
+<p>The ability to order (time-stamp) all transactions in a trusted and immutable manner is a key ingredient of many decentralized state machines. This is a core enabler of many cryptocurrencies.</p>
+<p>There could be many other cases where a trusted method to time-stamp digital documents is beneficial and a central trusted party is acceptable. Here are some examples:</p>
+<ol>
+ <li>
+ <p>The git protocol implements a <a href="https://git-scm.com/docs/commit-graph">hash chain on all commits</a>. In a way, <a href="https://stackoverflow.com/questions/46192377/why-is-git-not-considered-a-block-chain">GitHub</a> can be viewed as a centralized implementation of a TSS and public repository for documents (in particular, for code).</p>
+ </li>
+ <li>
+ <p><a href="https://www.certificate-transparency.org/log-proofs-work">Certificate transparency</a> uses a chain of hashes (in fact, a Merkle tree) to maintain a public log of certificates and their revocations.</p>
+ </li>
+ <li>
+ <p>The <a href="https://ipfs.io/">InterPlanetary File System (IPFS) protocol</a> uses elements of the TSS and repository idea to build a verifiable file system with a global namespace using a Distributed Hash Table (DHT).</p>
+ </li>
+ <li>
+ <p>Digital news outlets, blogs, or any web server could be able to provide a signed certificate of the time-stamp of their documents. For example, a blogger could prove <a href="https://medium.com/@cryptofuse/the-legendary-nick-szabo-bitgold-smart-contracts-cryptocurrency-and-blockchain-story-3523db6766a3">that their posts are not backdated</a>.</p>
+ </li>
+ <li>
+ <p>Educational institutions, Medical institutions, Government authorities could be able to provide a signed certificate of the time-stamp of their documents. This could allow digital verification of certificates of education, health, licenses, title, and more.</p>
+ </li>
+ <li>
+ <p>Financial institutions and multi-party business transactions could all rely on a trusted party to sign certificates about financial facts. Having a single source of truth that all parties can verify could reduce friction and risk in many transactions.</p>
+ </li>
+</ol>
+<p>I can imagine that sometime in the future many digital documents will use some form of time-stamp based on the work of Haber and Stornetta.</p>
+<p><strong>Acknowledgment.</strong> Thanks to <a href="https://users.cs.duke.edu/~kartik/">Kartik</a>, <a href="https://research.vmware.com/researchers/avishay-yanai">Avishay</a>, <a href="https://webee.technion.ac.il/people/ittay/">Ittay</a>, and <a href="https://research.vmware.com/researchers/alin-tomescu">Alin</a> for helpful feedback on this post.</p>
+<p>Please leave comments on <a href="https://twitter.com/ittaia/status/1279716517140140032?s=20">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#blockchain101">blockchain101</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=The+First+Blockchain+or+How+to+Time-Stamp+a+Digital+Document&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2020-07-05-the-first-blockchain-or-how-to-time-stamp-a-digital-document%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2020-06-12-optimal-optimistic-responsiveness/" data-toggle="tooltip" data-placement="top" title="On the Optimality of Optimistic Responsiveness">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2020-07-10-encrypted-blockchain-databases-part-i/" data-toggle="tooltip" data-placement="top" title="Encrypted Blockchain Databases (Part I)">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

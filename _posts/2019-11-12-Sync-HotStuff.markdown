@@ -8,7 +8,7 @@ tags:
 author: Kartik Nayak, Ling Ren
 ---
 
-In the [previous post](https://decentralizedthoughts.github.io/2019-11-12-authenticated-synchronous-bft/), we discussed progress in authenticated synchronous consensus protocols. In this post, we will discuss one of the recent protocols [Sync HotStuff](https://eprint.iacr.org/2019/270), which is a simple and practical Byzantine Fault Tolerant SMR protocol to tolerate $f < n/2$ faults.
+In the [previous post](https://decentralizedthoughts.github.io/2019-11-11-authenticated-synchronous-bft/), we discussed progress in authenticated synchronous consensus protocols. In this post, we will discuss one of the recent protocols [Sync HotStuff](https://eprint.iacr.org/2019/270), which is a simple and practical Byzantine Fault Tolerant SMR protocol to tolerate $f < n/2$ faults.
 
 We first present one of the key ideas of Sync HotStuff. Later, we briefly discuss some of the other results in the paper.
 In order to be practical, the main goal of Sync HotStuff is to allow replicas to commit with as low latency as possible.

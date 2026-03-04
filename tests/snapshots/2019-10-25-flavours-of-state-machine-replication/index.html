@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Flavours of State Machine Replication</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham">
+ 
+ <meta name="description" content="State Machine Replication is a fundamental approach in distributed computing for building fault tolerant systems. This post is a followup to our basic post on Fault Tolerant State Machine Replication. After defining what a state machine is and the transition function apply we then defined a Fault Tolerant State Machine Replication system as having two properties: (Safety) Any two honest replicas store the same sequence of commands in their logs....">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Flavours of State Machine Replication">
+ <meta property="og:description" content="State Machine Replication is a fundamental approach in distributed computing for building fault tolerant systems. This post is a followup to our basic post on Fault Tolerant State Machine Replication. After defining what a state machine is and the transition function apply we then defined a Fault Tolerant State Machine Replication system as having two properties: (Safety) Any two honest replicas store the same sequence of commands in their logs....">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham">
+ 
+ <meta property="og:article:published_time" content="2019-10-25T15:54:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2019-10-25-flavours-of-state-machine-replication/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2019-10-25-flavours-of-state-machine-replication/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Flavours of State Machine Replication">
+ <meta property="twitter:description" content="State Machine Replication is a fundamental approach in distributed computing for building fault tolerant systems. This post is a followup to our basic post on Fault Tolerant State Machine Replication. After defining what a state machine is and the transition function apply we then defined a Fault Tolerant State Machine Replication system as having two properties: (Safety) Any two honest replicas store the same sequence of commands in their logs....">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Flavours of State Machine Replication</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham</strong><br>
+ 
+ <span class="post-meta">Posted on October 25, 2019</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p><a href="https://www.cs.cornell.edu/fbs/publications/ibmFault.sm.pdf">State Machine Replication</a> is a fundamental approach in distributed computing for building fault tolerant systems. This post is a followup to our basic post on <a href="https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/">Fault Tolerant State Machine Replication</a>.</p>
+<p>After defining what a state machine is and the transition function <code class="language-plaintext highlighter-rouge">apply</code> we then defined a Fault Tolerant State Machine Replication system as having two properties:</p>
+<p><strong>(Safety)</strong> Any two honest replicas store the same sequence of commands in their logs.</p>
+<p><strong>(Liveness)</strong> Honest server replicas will eventually (when the system is synchronous) execute a command proposed by a client.</p>
+<p>In this post we elaborate on several common types of State Machine Replication Systems as a function of the <a href="https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/">type of corruption</a> and the system guarantees. We first make a distinction between Omission failures and Byzantine failures. Then we make a distinction between <em>fault tolerance</em> (masking failures) and <em>fault safety</em> (losing liveness but safely terminating when a failure is detected).</p>
+<h3 id="omission-fault-tolerant-state-machine-replication-oft-smr">Omission Fault Tolerant State Machine Replication (OFT-SMR)</h3>
+<p>This is the classic setting of <a href="https://lamport.azurewebsites.net/pubs/paxos-simple.pdf">Paxos</a> where we assume there are $n&gt;2f$ replicas and at most $f$ of them can fail by <a href="https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/">omission</a>. Two well-known examples of OFT-SMR systems that implement some Paxos protocol variants are <a href="https://raft.github.io/">Raft</a> and <a href="https://www.confluent.io/blog/distributed-consensus-reloaded-apache-zookeeper-and-replication-in-kafka/">ZooKeeper</a>.</p>
+<h3 id="byzantine-fault-tolerant-state-machine-replication-bft-smr">Byzantine Fault Tolerant State Machine Replication (BFT-SMR)</h3>
+<p>This is the setting of many <em>Blockchain</em> based systems. The canonical example is perhaps <a href="http://pmg.csail.mit.edu/papers/osdi99.pdf">PBFT</a> and <a href="http://cygnus-x1.cs.duke.edu/courses/cps210/spring06/papers/base.pdf">BASE</a>. We assume there are $n&gt;3f$ replicas and at most $f$ of them can fail by being <a href="https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/">Byzantine</a> and act maliciously. There are many other systems that implement Byzantine Fault Tolerant State Machine Replication. Here is a <a href="https://decentralizedthoughts.github.io/2019-06-23-what-is-the-difference-between/">post</a> that discusses some of them.</p>
+<h2 id="fault-safety-vs-fault-tolerance">Fault Safety vs Fault Tolerance</h2>
+<p>The traditional approach to State Machine Replication is to mask failures. We use the term <em>fault tolerance</em> to indicate a system’s ability to maintain both safety and liveness.</p>
+<p>But what if we could design a system that is <em>safe</em> but instead of masking failures and maintaining liveness, it would <em>detect</em> failure and then allow other systems to handle the failure?</p>
+<p>For this to work we must also add the ability for any honest replica to <em>safely terminate</em> if it <em>detects</em> that there is a liveness problem.
+In this approach we maintain the safety property but weaken the liveness to be optimistic:</p>
+<p><strong>(Safety)</strong> Any two honest replicas store the same sequence of commands in their logs.</p>
+<p><strong>(Optimistic Liveness)</strong> If all replicas are honest and the system is synchronous then all honest replicas will execute a command proposed by a client in a timely manner.</p>
+<p><strong>(Safe Termination)</strong> If an honest replicas does not make progress it can terminate and guarantee that no honest replica will make further progress.</p>
+<h3 id="omission-fault-safe-state-machine-replication-ofs-smr">Omission Fault Safe State Machine Replication (OFS-SMR)</h3>
+<p>The idea of building a Fault Safe State Machine Replication system that is resilient to Fail-Stop failures can be traced to the chain replication work of <a href="http://www.cs.cornell.edu/home/rvr/papers/OSDI04.pdf">van Renesse and Schneider 2004</a>.</p>
+<p>The basic idea is simple: a chain contains $f+1$ replicas ordered in a sequence from <em>head</em> to <em>tail</em>. When the head receives a command from the client it sends it along the chain. When the tail (the last replica in the chain) receives the command, the command is <em>committed</em>. The tail can then cause the replicas and the client to <em>learn</em> about the command being committed by traveling the chain in the reverse direction.</p>
+<p>More generally, there is no need to use a chain: a primary can send the command and wait for all the $f+1$ replicas to acknowledge the command before committing.</p>
+<p>Optimistic liveness is obvious. For Safe Termination note that if an honest replica decides to terminate then no further progress can be made. Safety follows but requires careful handling of failures.</p>
+<p>This design has been extended to handle transient or omission failures in <a href="http://www.cs.yale.edu/homes/mahesh/papers/corfumain-final.pdf">CORFU</a> and was suggested for using to replicate <a href="https://www.microsoft.com/en-us/research/wp-content/uploads/2012/01/malki-acmstyle.pdf">Flash storage units</a>. The survey of 
+<a href="https://paperswelove.org/2015/topic/christopher-meiklejohns-a-brief-history-of-chain-replication/">Christopher Meiklejohn</a> provides a good overview of chain replication follow up papers.</p>
+<h3 id="byzantine-fault-safe-state-machine-replication-bfs-smr">Byzantine Fault Safe State Machine Replication (BFS-SMR)</h3>
+<p>Chain replication was extended to the Byzantine setting by <a href="http://www.cs.cornell.edu/~ns672/publications/2012OPODIS.pdf">van Renesse, Ho, and Schiper 2012</a>. 
+The main idea is to use a chain of $2f+1$ replicas instead of $f+1$. So in <a href="https://decentralizedthoughts.github.io/2019-09-13-flavours-of-partial-synchrony/">partial synchrony</a>, even if $f$ replicas are malicious there will be at least one honest replica that can provide the latest committed state.</p>
+<p>With $2f+1$ replicas, obtaining a safe termination requires an explicit wedging operation.</p>
+<p>In a <a href="https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/">synchronous</a> model it is possible to use just $f+1$ replicas and as we mentioned before there is no need to use a chain. This is the approach taken by <a href="https://www.usenix.org/system/files/conference/osdi16/osdi16-liu.pdf">XFT 2016</a>. XFT use a BFT-SMR system that only decides what is the group of $f+1$ that should make progress. The $f+1$ group implement a Byzantine Fault Safe SMR system using signatures.</p>
+<p>When there is an assumption of synchrony, obtaining safe termination is immediate. A specific group of $f+1$ replicas is needed for progress and if just one honest group member stops responding then the group cannot make more progress. Care must be taken so that malicious members do not report old values of the state machine after it is terminated.</p>
+<p>If this sounds similar to what happens in a payment channel this is not a coincidence. This follow up post explains how <a href="https://decentralizedthoughts.github.io/2019-10-25-payment-channels-are-just-a-two-person-bfs-smr-systems/">Layer 2 is a smaller BFS-SMR that is opened and closed by the larger Layer 1 BFT-SMR</a>.</p>
+<p>Please leave comments on <a href="https://twitter.com/ittaia/status/1187864506074046464?s=20">Twitter</a></p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#SMR">SMR</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Flavours+of+State+Machine+Replication&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2019-10-25-flavours-of-state-machine-replication%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2019-10-22-flavours-of-broadcast/" data-toggle="tooltip" data-placement="top" title="Flavours of Broadcast">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2019-10-25-payment-channels-are-just-a-two-person-bfs-smr-systems/" data-toggle="tooltip" data-placement="top" title="A Payment Channel is a two person BFS-SMR system">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

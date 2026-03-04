@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>From Benign Simplex to Byzantine Simplex</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham">
+ 
+ <meta name="description" content="In this post we present a Simplex protocol that solves single shot consensus and is resilient to $f &amp;lt; n/3$ Byzantine failures, under partial synchrony. In a previous post we showed how to move from Tendermint to Simplex. In this post we show how to move from Benign Simplex to Simplex. Benign Simplex is resilient to $f&amp;lt;n/2$ omission failures in the same setting. Moving from omission failures to Byzantine failures...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="From Benign Simplex to Byzantine Simplex">
+ <meta property="og:description" content="In this post we present a Simplex protocol that solves single shot consensus and is resilient to $f &amp;lt; n/3$ Byzantine failures, under partial synchrony. In a previous post we showed how to move from Tendermint to Simplex. In this post we show how to move from Benign Simplex to Simplex. Benign Simplex is resilient to $f&amp;lt;n/2$ omission failures in the same setting. Moving from omission failures to Byzantine failures...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham">
+ 
+ <meta property="og:article:published_time" content="2025-11-15T04:30:00-05:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2025-11-15-simplex-from-benign/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2025-11-15-simplex-from-benign/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="From Benign Simplex to Byzantine Simplex">
+ <meta property="twitter:description" content="In this post we present a Simplex protocol that solves single shot consensus and is resilient to $f &amp;lt; n/3$ Byzantine failures, under partial synchrony. In a previous post we showed how to move from Tendermint to Simplex. In this post we show how to move from Benign Simplex to Simplex. Benign Simplex is resilient to $f&amp;lt;n/2$ omission failures in the same setting. Moving from omission failures to Byzantine failures...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>From Benign Simplex to Byzantine Simplex</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham</strong><br>
+ 
+ <span class="post-meta">Posted on November 15, 2025</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>In this post we present a <a href="https://simplex.blog">Simplex</a> protocol that solves single shot <a href="https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/">consensus</a> and is resilient to $f &lt; n/3$ <a href="https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/">Byzantine failures</a>, under <a href="https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/">partial synchrony</a>. In a previous post we showed how to move <a href="https://decentralizedthoughts.github.io/2025-06-18-simplex/">from Tendermint to Simplex</a>.</p>
+<p>In this post we show how to move from <a href="https://decentralizedthoughts.github.io/2025-11-08-benign-simplex/">Benign Simplex</a> to Simplex. Benign Simplex is resilient to $f&lt;n/2$ omission failures in the same setting. Moving from omission failures to Byzantine failures requires three changes:</p>
+<ol>
+ <li>To prevent the adversary from controlling more than $f$ parties, we add signatures to all messages. This prevents the adversary from forging incorrect proposals when the leader is honest or forge votes from honest voters.</li>
+ <li>To prevent a malicious leader from equivocating, we require $f&lt;n/3$ and the protocol waits for $n{-}f$ votes for the same value. When honest parties vote for at most one value, this prevents having $n{-}f$ votes for two different values. Because for $f&lt;n/3$, any two sets of size $n{-}f$ must intersect by more than $f$, indicating some honest party voted twice.</li>
+ <li>
+ <p>To protect against a malicious leader proposing an <em>unsafe</em> value in view $k$. An unsafe value is a value that is different from the value that was committed in a previous view. To do this, Simplex obtains the following skip property:</p>
+ <ul>
+ <li><strong>Skip property</strong>: If a view $v$ has $n{-}f$ <code class="language-plaintext highlighter-rouge">&lt;Vote, v, ⊥&gt;</code> messages, then no decision certificate can form in this view.</li>
+ </ul>
+ <p>Simplex uses this property to verify that the leader’s proposal comes from the highest view $w&lt;k$ in which there could have been a decision for $x$, this guarantees that the proposal is safe. This verification is done by checking that:</p>
+ <ol>
+ <li>All views $w&lt;v&lt;k$ have $n{-}f$ <code class="language-plaintext highlighter-rouge">&lt;Vote, v, ⊥&gt;</code>.</li>
+ <li>If $w&gt;0$ then there are $n{-}f$ <code class="language-plaintext highlighter-rouge">&lt;Vote, w, x&gt;</code>.</li>
+ <li>If $w=0$ we check that $x$ is externally valid (signed by a client).</li>
+ </ol>
+ <p>Safety is provided because a view with a decision certificate cannot be skipped, hence forcing the proposer to use a proposal from that view or higher (and higher is safe via induction).</p>
+ </li>
+</ol>
+<p>That’s it! With these three changes we get Provable Validated Byzantine Agreement.</p>
+<h2 id="single-shot-provable-validated-byzantine-agreement">Single-Shot Provable Validated Byzantine Agreement</h2>
+<p>Each party starts with an <em>input value</em> that is externally valid (signed by some client). We denote by $\bot$ a special value that is not an input value.</p>
+<ol>
+ <li><strong>Liveness</strong>: All honest eventually obtain a <em>decision certificate</em>.</li>
+ <li><strong>External Validity</strong>: Decision certificates have an externally valid value.</li>
+ <li><strong>Provable Agreement</strong>: All decision certificates have the same value.</li>
+</ol>
+<h2 id="the-single-shot-simplex-protocol">The single-shot simplex protocol</h2>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Simplex
+val := input
+w := 0 // the view this input came from
+1. Upon entering view k:
+ Start a local timer T_k
+ Leader(k) sends &lt;Propose, k, val, w&gt;
+2. Upon receiving &lt;Propose, k, x, w&gt;
+ from leader(k) for the first time
+ and for all views w &lt; v &lt; k exists n−f &lt;Vote, v, ⊥&gt;
+ and if w &gt; 0, exists n-f &lt;Vote, w, x&gt;
+ and if w = 0, x is externally valid:
+ Send &lt;Vote, k, x&gt;
+3. Upon receiving n−f &lt;Vote, k, x&gt;:
+ If x ≠ ⊥:
+ val := x
+ w := k
+ If T_k &lt; 3Δ:
+ Send &lt;Final, k, x&gt;
+ Send n-f &lt;Vote, k, x&gt;
+ Enter view k+1
+4. Upon T_k = 3Δ and not yet sent Final:
+ Send &lt;Vote, k, ⊥&gt;
+5. Upon receiving n−f &lt;Vote, k, ⊥&gt;:
+ Send n−f &lt;Vote, k, ⊥&gt;
+ Enter view k+1
+6. Upon receiving n−f &lt;Final, k, x&gt;:
+ This is a decision certificate for x
+ Send n−f &lt;Final, k, x&gt;
+ Terminate
+</code></pre></div></div>
+<h2 id="partial-synchrony">Partial Synchrony</h2>
+<p>We work in the partial synchrony model with a global stabilization time $GST$. After $GST$ every message arrives after at most $\Delta$ delay. For a given execution, we denote by $\delta \le \Delta$ the actual maximal delay after $GST$.</p>
+<h2 id="liveness">Liveness</h2>
+<h3 id="claim-1-honest-start-delta-apart">Claim 1 (honest start $\delta$ apart)</h3>
+<p>If an honest party starts view $k+1$ at time $t &gt; GST$, then all honest parties start view $k+1$ before $t + \delta$.</p>
+<p><strong>Proof:</strong><br />
+Entering view $k+1$ requires leaving view $k$, which always includes sending $n{-}f$ <code class="language-plaintext highlighter-rouge">Vote</code> messages. Any $n{-}f$ <code class="language-plaintext highlighter-rouge">Vote</code> messages that triggered the first party to leave view $k$ is delivered to all others within $\delta$, so all leave $k$ and start $k+1$ by $t + \delta$.</p>
+<h3 id="claim-2-views-are-short">Claim 2 (views are short)</h3>
+<p>Let $t$ be the time all honest parties have entered view $k$. Then all honest parties leave view $k$ before $t + 3\Delta +\delta$.</p>
+<p><strong>Proof:</strong><br />
+If some <code class="language-plaintext highlighter-rouge">&lt;Final, k, x&gt;</code> is sent by an honest party then it happened $\le 3 \Delta$, along with $n{-}f$ <code class="language-plaintext highlighter-rouge">&lt;Vote, k, x&gt;</code>, so all honest enter view $k+1$, by $t + 3\Delta+\delta$.</p>
+<p>If no honest sends <code class="language-plaintext highlighter-rouge">&lt;Final, k, x&gt;</code> then all honest send <code class="language-plaintext highlighter-rouge">&lt;Vote, k, ⊥&gt;</code> by $t+3\Delta$, so by $t + 3\Delta+\delta$ all honest see $n{-}f$ <code class="language-plaintext highlighter-rouge">&lt;Vote, k, ⊥&gt;</code> and enter view $k+1$.</p>
+<h3 id="claim-3-good-leader-decides-after-gst">Claim 3 (good leader decides after GST)</h3>
+<p>Let $k$ be the first view where all honest parties start at a time $t &gt; GST$ and that has an honest leader. If no honest has seen $n - f$ <code class="language-plaintext highlighter-rouge">Final</code> messages from any earlier view, then all honest parties decide in view $k$ by time $t + 3\delta$.</p>
+<p><strong>Proof:</strong><br />
+At time $t$ the honest leader sends <code class="language-plaintext highlighter-rouge">&lt;Propose, k, x, w&gt;</code>. Within one $\delta$ time all honest parties receive this <code class="language-plaintext highlighter-rouge">Propose</code>.</p>
+<p>Since the leader is honest it sends the value $x$ from the highest view $w$ for which it saw $n{-}f$ <code class="language-plaintext highlighter-rouge">&lt;Vote, w, x&gt;</code> and that means for all higher views $w&lt;v&lt;k$ it saw $n{-}f$ <code class="language-plaintext highlighter-rouge">&lt;Vote, v, ⊥&gt;</code>. Hence for all views $w \le v&lt;k$ the leader has previously sent for each view $v$ the required verification.</p>
+<p>Since we are after $GST$, those will all arrive to all honest parties before (or with) the proposal, hence all honest will send <code class="language-plaintext highlighter-rouge">&lt;Vote, k, x&gt;</code>.</p>
+<p>Within one more $\delta$, all honest will see $n{-}f$ <code class="language-plaintext highlighter-rouge">&lt;Vote, k, x&gt;</code> and send <code class="language-plaintext highlighter-rouge">&lt;Final, k, x&gt;</code>. Within one $\delta$ time each honest party accumulates $n{-}f$ <code class="language-plaintext highlighter-rouge">&lt;Final, k, x&gt;</code> messages and triggers decision.</p>
+<h3 id="claim-4-liveness">Claim 4 (liveness)</h3>
+<p>All honest parties hold a decision certificate before $GST + 3f\Delta + (f+3)\delta \le GST + 4f\Delta+3\Delta$.</p>
+<p><strong>Proof:</strong><br />
+After $GST$, Claim 1 keeps views aligned within $\Delta$. There can be at most $f$ views with faulty leaders. Each such view lasts at most $3\Delta +\delta$ by Claim 2. In the first view with an honest leader, Claim 3 ensures decision within an additional $3\delta$</p>
+<h2 id="safety">Safety</h2>
+<h3 id="claim-5-no-skip-in-decision-view">Claim 5 (no skip in decision view)</h3>
+<p>If $n - f$ parties send <code class="language-plaintext highlighter-rouge">&lt;Final, k, x&gt;</code>, then any honest party leaving view $k$ sets <code class="language-plaintext highlighter-rouge">val := x</code> and <code class="language-plaintext highlighter-rouge">w := k</code> during view $k$. Moreover, there cannot be $n{-}f$ <code class="language-plaintext highlighter-rouge">&lt;Vote, k, ⊥&gt;</code>.</p>
+<p><strong>Proof:</strong><br />
+If an honest party leaves due to $n{-}f$ non-$\bot$ votes, due to quorum intersection it must be that this value is $x$ and therefore sets <code class="language-plaintext highlighter-rouge">val := x</code> and <code class="language-plaintext highlighter-rouge">w := k</code> before leaving.</p>
+<p>This is because $2(n − f) &gt; n + f$ when $f &lt; n/3$, so any two quorums of size $n − f$ intersect in at least $n − 2f &gt; f$ parties</p>
+<p>The only other way to leave view $k$ is due to $n{-}f$ <code class="language-plaintext highlighter-rouge">&lt;Vote, k, ⊥&gt;</code>, but since we know there are $n{-}f$ <code class="language-plaintext highlighter-rouge">&lt;Final, k, x&gt;</code> messages, again due to quorum intersection this cannot happen as honest parties do not send both <code class="language-plaintext highlighter-rouge">&lt;Final, k, x&gt;</code> and <code class="language-plaintext highlighter-rouge">&lt;Vote, k, ⊥&gt;</code> messages.</p>
+<h3 id="claim-6-provable-agreement">Claim 6 (provable agreement)</h3>
+<p>Let $k$ be the first view where $n{-}f$ parties send <code class="language-plaintext highlighter-rouge">&lt;Final, k, x&gt;</code>. Then any honest that sends a <code class="language-plaintext highlighter-rouge">Vote</code> in any view $&gt;k$ is only for the value $x$.</p>
+<p><strong>Proof:</strong><br />
+By Claim 5, there cannot be $n{-}f$ <code class="language-plaintext highlighter-rouge">&lt;Vote, k, ⊥&gt;</code>, hence the only way to accept a proposal is if it has $w\ge k$. (This is because accepting a proposal for $w&lt;k$ requires showing $n{-}f$ <code class="language-plaintext highlighter-rouge">&lt;Vote, k, ⊥&gt;</code>).</p>
+<p>An induction argument shows that this implies that the only <code class="language-plaintext highlighter-rouge">Vote</code> from an honest party is for a value $x$.</p>
+<p>Claim 6 implies that any $n{-}f$ <code class="language-plaintext highlighter-rouge">&lt;Final, k', x'&gt;</code> for $k’&gt;k$ must be for $x’=x$ hence we get provable agreement.</p>
+<h2 id="validity">Validity</h2>
+<h3 id="claim-7-validity">Claim 7 (validity)</h3>
+<p>The decided value is externally valid (signed by a client).</p>
+<p><strong>Proof:</strong><br />
+Initially each <code class="language-plaintext highlighter-rouge">val</code> is externally valid and this is checked before voting. Later views only propagate existing <code class="language-plaintext highlighter-rouge">val</code> values through $n{-}f$ <code class="language-plaintext highlighter-rouge">Vote</code>, so by induction the decided value must be externally valid.</p>
+<p>Your thoughts on <a href="https://x.com/ittaia/status/1991596859295727824?s=20">X</a></p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#dist101">dist101</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=From+Benign+Simplex+to+Byzantine+Simplex&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2025-11-15-simplex-from-benign%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2025-11-08-benign-simplex/" data-toggle="tooltip" data-placement="top" title="Benign Simplex">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2025-11-22-three-round-BFT/" data-toggle="tooltip" data-placement="top" title="Why BFT Needs Three Rounds">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Resolving the Availability-Finality Dilemma</title>
+ 
+ 
+ <meta name="author" content="{"name"=>"Decentralized Thinkers"}">
+ 
+ <meta name="description" content="Guest post by Joachim Neu, Ertem Nusret Tas, and David Tse DLS and Nakamoto: Where to Go From Synchrony? An earlier blog post has explained classical models of the consensus literature from the 1980s, synchrony, asynchrony and partial synchrony. To recapitulate, the most basic network/adversary model is synchrony, where it is assumed that all communication between honest parties suffers a delay that is bounded by a value $\Delta$, known to...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Resolving the Availability-Finality Dilemma">
+ <meta property="og:description" content="Guest post by Joachim Neu, Ertem Nusret Tas, and David Tse DLS and Nakamoto: Where to Go From Synchrony? An earlier blog post has explained classical models of the consensus literature from the 1980s, synchrony, asynchrony and partial synchrony. To recapitulate, the most basic network/adversary model is synchrony, where it is assumed that all communication between honest parties suffers a delay that is bounded by a value $\Delta$, known to...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="{"name"=>"Decentralized Thinkers"}">
+ 
+ <meta property="og:article:published_time" content="2020-11-01T01:16:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2020-11-01-ebb-and-flow-protocols-a-resolution-of-the-availability-finality-dilemma/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2020-11-01-ebb-and-flow-protocols-a-resolution-of-the-availability-finality-dilemma/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Resolving the Availability-Finality Dilemma">
+ <meta property="twitter:description" content="Guest post by Joachim Neu, Ertem Nusret Tas, and David Tse DLS and Nakamoto: Where to Go From Synchrony? An earlier blog post has explained classical models of the consensus literature from the 1980s, synchrony, asynchrony and partial synchrony. To recapitulate, the most basic network/adversary model is synchrony, where it is assumed that all communication between honest parties suffers a delay that is bounded by a value $\Delta$, known to...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Resolving the Availability-Finality Dilemma</h1>
+ 
+ 
+ 
+ 
+ <span class="post-meta">Posted on November 1, 2020</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p align="center">
+Guest post by <a href="https://www.jneu.net/">Joachim Neu</a>, <a href="https://tselab.stanford.edu/people/students/ertem-nusret-tas/">Ertem Nusret Tas</a>, and <a href="https://tselab.stanford.edu/people/principal-investigator/david-tse/">David Tse</a>
+</p>
+<h2 id="dls-and-nakamoto-where-to-go-from-synchrony">DLS and Nakamoto: Where to Go From Synchrony?</h2>
+<p>An earlier blog post has explained classical models of the consensus literature from the 1980s, <a href="https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/">synchrony, asynchrony and partial synchrony</a>. To recapitulate, the most basic network/adversary model is <em>synchrony</em>, where it is assumed that all communication between honest parties suffers a delay that is bounded by a value $\Delta$, known to the protocol. This model was perceived as too simplistic as it does not capture network partitions, <em>i.e.</em>, sustained periods of extraordinary delay or even occasional violations of the delay bound. <a href="https://decentralizedthoughts.github.io/2019-09-13-flavours-of-partial-synchrony/"><em>Partial synchrony</em></a> (introduced by <a href="https://groups.csail.mit.edu/tds/papers/Lynch/jacm88.pdf">Dwork, Lynch, and Stockmeyer in 1988</a>) extended the synchronous model to be able to capture such periods of asynchrony, using a global stabilization time $\mathsf{GST}$ determined by the adversary and unknown to the protocol. Before $\mathsf{GST}$, the adversary can delay network messages arbitrarily. After $\mathsf{GST}$, delay is bounded again by $\Delta$. Security is guaranteed if less than $33\%$ of the nodes are adversary.</p>
+<p align="center">
+ <img src="/uploads/ebb-and-flow-models.png" width="100%" title="Synchrony has been extended in two directions: to partial synchrony (DLS '88) and to dynamic participation (Nakamoto '08)." />
+</p>
+<p>Thirty years later, in 2008, Nakamoto invented the Bitcoin protocol. Equally importantly, the environment the protocol is designed for can be viewed as an extension of the synchrony model in a different direction than partial synchrony. In earlier models it was assumed that honest nodes follow the protocol <em>always</em>. In particular, honest nodes are always <em>awake</em>, they never simply not-participate, for whatever practical impediment such as maintenance or to conserve energy. In contrast, in Nakamoto’s implicit model (later formalized in works such as <a href="https://link.springer.com/chapter/10.1007/978-3-319-70697-9_14">‘The Sleepy Model of Consensus’</a>), honest nodes are allowed to <em>fall asleep</em> and <em>wake up</em>, to sometimes not-participate, without being counted as adversarial. The fraction of awake honest parties fluctuates over time, modelling the <em>dynamic participation</em> seen in Internet-scale open-participation consensus infrastructures such as Bitcoin or Ethereum. Security is <a href="https://decentralizedthoughts.github.io/2019-11-29-Analysis-Nakamoto/">guaranteed</a> if less than $50\%$ of all awake nodes are adversary, but <em>assuming the asleep nodes are inactive</em>.</p>
+<h2 id="a-tale-of-two-protocols">A Tale of Two Protocols</h2>
+<p>These two incommensurable extensions of the synchronous model have sparked two quite different families of protocols. On the one hand, <em>BFT protocols</em> such as <a href="https://decentralizedthoughts.github.io/2019-06-23-what-is-the-difference-between/">PBFT or HotStuff</a> were designed to operate under partial synchrony. As a result they provide a very strong notion of safety called <em>finality</em>, <em>i.e.</em>, a decision once made will under no circumstances be reverted (assuming no more than $33\%$ of the nodes are adversarial). On the other hand, <em>longest-chain</em> based protocols such as Bitcoin or Ouroboros were designed to operate under dynamic participation. They provide enhanced liveness, sometimes called <em>dynamic availability</em>, <em>i.e.</em>, they keep making decisions even in periods of low participation.</p>
+<p align="center">
+ <img src="/uploads/ebb-and-flow-protocols.png" width="70%" title="To families of protocols: partially synchronous BFT protocols (e.g., PBFT, Tendermint, HotStuff, Algorand) and Nakamoto-style longest-chain based protocols (Bitcoin, Ethereum 1.0, Ouroboros)." />
+</p>
+<p>Which model a protocol was designed for shapes the implicit assumptions it makes and how it interprets the context it is in. As a result, different protocols behave differently when faced with the same scenario, and if a protocol is used in a different model than what it was designed for, then it might make a mistake. Let’s take a closer look at how the model influences the actions of the above two families of protocols.</p>
+<p align="center">
+ <img src="/uploads/ebb-and-flow-da-normal.png" width="100%" title="Longest-chain based protocols under normal conditions" />
+ <br />Longest-chain based protocols under normal conditions
+</p>
+<p>In longest-chain based protocols, miners or validators run a lottery (such as trying to solve a proof-of-work or proof-of-stake cryptographic puzzle). The winner gets to append a block with new transactions to the blockchain.</p>
+<p align="center">
+ <img src="/uploads/ebb-and-flow-da-low-participation.png" width="100%" title="Longest-chain based protocols under low participation" />
+ <br />Longest-chain based protocols under low participation
+</p>
+<p>Even if participation is low, the remaining parties keep running the lottery and extending the chain. As a result, the chain always grows and thus the protocol provides dynamic availability.</p>
+<p align="center">
+ <img src="/uploads/ebb-and-flow-da-network-partition.png" width="100%" title="Longest-chain based protocols under network partition" />
+ <br />Longest-chain based protocols under network partition
+</p>
+<p>If however there is a network partition, then this will look to participants in individual parts as if participation was low. And since the parties keep going during low participation, separate network parts will continue to build incompatible blockchains. Eventually, when the partition heals, this conflict has to be resolved by reverting all but one chain, resulting in a safety violation. As a result, dynamically available protocols do not provide finality.</p>
+<p align="center">
+ <img src="/uploads/ebb-and-flow-psync-normal.png" width="100%" title="Propose-and-vote style protocols under normal conditions" />
+ <br />Propose-and-vote style protocols under normal conditions
+</p>
+<p>In propose-and-vote style BFT protocols, all participants are asked to vote for a proposed block. Only if enough votes come together (a <em>quorum</em>), then the block is considered valid and appended to the blockchain.</p>
+<p align="center">
+ <img src="/uploads/ebb-and-flow-psync-network-partition.png" width="100%" title="Propose-and-vote style protocols under network partition" />
+ <br />Propose-and-vote style protocols under network partition
+</p>
+<p>As a result, during a network partition, quorum is not reached in the individual parts, preventing the parts from confirming conflicting blocks and obviating reconciliation. BFT protocols thus provide finality.</p>
+<p align="center">
+ <img src="/uploads/ebb-and-flow-psync-low-participation.png" width="100%" title="Propose-and-vote style protocols under low participation" />
+ <br />Propose-and-vote style protocols under low participation
+</p>
+<p>On the flip side, if there is a period of low participation where many participants are asleep, then quorum is not reached as too few votes are being cast. Blocks do not get the votes they need and the blockchain stalls. Thus, BFT protocols do not provide dynamic availability.</p>
+<h2 id="from-protocols-to-trust-assumptions">From Protocols to Trust Assumptions</h2>
+<p>We have witnessed the different behavior of longest chain and BFT protocols under low participation and network partitions. The differences in behavior express different trust assumptions: Participating nodes in longest chain protocols are optimistic: <em>‘Peers that I don’t hear from are just asleep doing nothing. Thus, it is OK to go ahead without them.’</em> Participating nodes in BFT protocols are pessimistic: <em>‘Peers that I don’t hear from are plotting against me! Thus, it is <strong>not</strong> OK to go ahead without them.’</em> If we simulate the two protocols under an identical environment with dynamic participation and sporadic network partitions, we see that the ledger output by protocols providing dynamic availability always keeps growing, no matter what, while the ledger output by protocols providing finality stalls during low participation or network partitions.</p>
+<p align="center">
+ <img src="/uploads/ebb-and-flow-dynamic-availability-finality-comparison.png" width="100%" title="Longest chain protocols remain live even under low participation and thus provide dynamic availability. BFT protocols remain safe even under network partition and thus provide finality." />
+</p>
+<h2 id="the-availability-finality-dilemma">The Availability-Finality Dilemma</h2>
+<p><em>Can we have both?</em> Can we have a consensus protocol that provides both dynamic availability and finality? <em>Obviously not!</em> The ledger from a protocol that provides finality needs to stop growing during network partition, so the protocol cannot be dynamically available. This observation is made formal in <a href="https://arxiv.org/abs/2006.10698">a recent variant</a> of the notorious <a href="https://en.wikipedia.org/wiki/CAP_theorem">CAP theorem</a>. It is clear that the two families of fundamentally different protocols we have examined before fall exactly on the two different sides of this availability-finality dilemma. Longest chain protocols favor liveness over safety and provide dynamic availability, while BFT protocols favor safety over liveness and provide finality.</p>
+<h2 id="the-ebb-and-flow-property">The Ebb-and-Flow Property</h2>
+<p>That’s a bummer. What now? Something in our wishlist needs to be weakened. To look for inspiration, we turn once more to Nakamoto. In Nakamoto consensus, the parameter $k$ of the $k$-deep confirmation rule trades off between confirmation latency and confirmation error probability. Small $k$ means fast latency but high error probability, large $k$ means slow latency but low error probability. You cannot simultaneously have both. Note however that every client can set their own $k$, depending on whether latency or error probability is more important for their application and according to their preferences. And while a client with small $k$ and a client with large $k$ disagree how much of recent history to accept as confirmed, looking far into the past, they share a stabilized common account of history.</p>
+<p>The availability-finality dilemma says that there cannot be a consensus protocol <a href="https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/">for state-machine replication</a>, one that outputs a single ledger, that provides both properties. The next best thing is then ask for a protocol with <em>two</em> confirmation rules that output <em>two</em> ledgers, one that provides availability under dynamic participation, and one that provides finality even under network partitions, and in the long run they should agree on a common account of history.</p>
+<p align="center">
+ <img src="/uploads/ebb-and-flow-ebb-and-flow.png" width="100%" title="An ebb-and-flow protocol has two confirmation rules that output two ledgers, one that provides availability under dynamic participation (available ledger), and one that provides finality even under network partitions (finalized prefix), and in the long run they agree on a common account of history." />
+</p>
+<p>The above requirements are made precise by the <em>ebb-and-flow</em> property introduced in <a href="https://arxiv.org/abs/2009.04987">this paper</a>. Consider a network environment where:</p>
+<ul>
+ <li>Communication is asynchronous until a <em>global stabilization time</em> $\mathsf{GST}$ after which communication becomes synchronous.</li>
+ <li>Honest nodes sleep and wake up until a <em>global awake time</em> $\mathsf{GAT}$ after which all nodes are awake. Adversary nodes are always awake.</li>
+</ul>
+<p>Then, we say that a protocol $\Pi$ is a <em>$(\beta_1,\beta_2)$-secure ebb-and-flow protocol</em> if it outputs an <em>available ledger</em> $\mathsf{LOG}_{\mathrm{da}}$ and a <em>finalized</em> ledger $\mathsf{LOG}_{\mathrm{fin}}$ satisfying the following properties:</p>
+<ol>
+ <li><strong>Finality</strong>: The finalized ledger $\mathsf{LOG}_{\mathrm{fin}}$ is guaranteed to be safe at all times, and live after $\max\{\mathsf{GST},\mathsf{GAT}\}$, provided that fewer than $\beta_1$ proportion of all the nodes are adversarial.</li>
+ <li><strong>Dynamic Availability</strong>: If $\mathsf{GST} = 0$, the available ledger $\mathsf{LOG}_{\mathrm{da}}$ is guaranteed to be safe and live at all times, provided that at all times fewer than $\beta_2$ proportion of the awake nodes are adversarial.</li>
+ <li><strong>Prefix</strong>: $\mathsf{LOG}_{\mathrm{fin}}$ is a prefix of $\mathsf{LOG}_{\mathrm{da}}$ at all times.</li>
+</ol>
+<p>Together, <strong>Finality</strong> and <strong>Dynamic Availability</strong> say that the finalized ledger $\mathsf{LOG}_{\mathrm{fin}}$ is safe under network partitions, <em>i.e.</em>, before $\max\{\mathsf{GST},\mathsf{GAT}\}$, and afterwards catches up with the available ledger $\mathsf{LOG}_{\mathrm{da}}$. The <strong>Prefix</strong> property ensures that eventually all clients, no matter what confirmation rule they follow, will still agree on a single account of history.</p>
+<p>One motivation for the definition of the ebb-and-flow property was to formalize the design goals implicit in <a href="https://arxiv.org/abs/2003.03052">Gasper</a>, the current candidate protocol for Ethereum 2.0’s beacon chain. Upon closer inspection, however, it became apparent that Gasper is not even secure under synchrony but suffers from <a href="https://ethresear.ch/t/a-balancing-attack-on-gasper-the-current-candidate-for-eth2s-beacon-chain/8079/">a liveness attack</a>. So, are there protocols that satisfy the ebb-and-flow property?</p>
+<h2 id="the-snap-and-chat-construction">The Snap-and-Chat Construction</h2>
+<p>There are indeed! We next provide a class of protocols, which we call <em>snap-and-chat protocols</em>, that not only provably satisfy the ebb-and-flow security property, but do so with optimal resilience.</p>
+<p align="center">
+ <img src="/uploads/ebb-and-flow-snap-and-chat.png" width="100%" title="Snap-and-chat protocols are constructed from an off-the-shelf dynamically available protocol and an off-the-shelf partially synchronous BFT protocol. Nodes execute the snap-and-chat protocol by executing the two sub-protocols in parallel. The dynamically available sub-protocol receives transactions from the environment and outputs an ever-increasing ledger LOGlc of transactions. Over time, each node takes snapshots of this ledger based on its own current view, and inputs these snapshots into the partially synchronous BFT sub-protocol. The output ledger LOGbft of that sub-protocol is an ever-increasing ordered list of such snapshots, i.e., of prefixes of LOGlc. To create the finalized ledger LOGfin of transactions, LOGbft is flattened and sanitized. Finally, LOGfin is prepended to LOGlc and sanitized to form the available ledger LOGda." />
+</p>
+<p>The snap-and-chat construction uses as sub-protocols an off-the-shelf dynamically available protocol $\Pi_{\mathrm{lc}}$, such as a longest-chain protocol, and an off-the-shelf partially synchronous BFT protocol $\Pi_{\mathrm{bft}}$, such as <a href="https://decentralizedthoughts.github.io/2019-06-23-what-is-the-difference-between/">PBFT, Hotstuff</a>, or <a href="https://decentralizedthoughts.github.io/2020-05-14-streamlet/">Streamlet</a>. Nodes execute the snap-and-chat protocol, $\Pi_{\mathrm{sac}}$, by executing the two sub-protocols in parallel. The $\Pi_{\mathrm{lc}}$ sub-protocol takes as inputs transactions $\mathsf{txs}$ from the environment and outputs an ever-increasing ledger $\mathsf{LOG}_{\mathrm{lc}}$. This ledger is generated by whatever confirmation rule native to $\Pi_{\mathrm{lc}}$, such as the $k$-deep confirmation rule if $\Pi_{\mathrm{lc}}$ is a longest-chain protocol. Over time, each node takes <em>snapshots</em> of this ledger based on its own current view, and inputs these snapshots (<em>i.e.</em>, whole prefixes of $\mathsf{LOG}_{\mathrm{lc}}$) into the second sub-protocol $\Pi_{\mathrm{bft}}$ for finalization. This can be implemented efficiently, as snapshots can be represented by a reference to the tip of the blockchain that makes $\mathsf{LOG}_{\mathrm{lc}}$. The output ledger $\mathsf{LOG}_{\mathrm{bft}}$ of $\Pi_{\mathrm{bft}}$ is an ordered list of such snapshots. To create the finalized ledger $\mathsf{LOG}_{\mathrm{fin}}$ of transactions, $\mathsf{LOG}_{\mathrm{bft}}$ is flattened (<em>i.e.</em>, all snapshots included in $\mathsf{LOG}_{\mathrm{bft}}$ are concatenated) and sanitized so that only the first appearance of a transaction remains. Finally, $\mathsf{LOG}_{\mathrm{lc}}$ is appended to $\mathsf{LOG}_{\mathrm{fin}}$ and sanitized to form the available ledger $\mathsf{LOG}_{\mathrm{da}}$. The append-and-sanitize operation ensures that the transactions in $\mathsf{LOG}_{\mathrm{fin}}$ take precedence over the transactions in $\mathsf{LOG}_{\mathrm{lc}}$ in case there are any conflicts.</p>
+<p>Even though honest nodes following a snap-and-chat protocol input snapshots of the (confirmed) ledger $\mathsf{LOG}_{\mathrm{lc}}$ into $\Pi_{\mathrm{bft}}$, an adversary could, in an attempt to break safety, input an ostensible ledger snapshot which really contains unconfirmed transactions. This motivates the last detail of the construction: in the $\Pi_{\mathrm{bft}}$ sub-protocol, each honest node boycotts the finalization of snapshots that are not confirmed in $\Pi_{\mathrm{lc}}$ in its view. An off-the-shelf BFT protocol needs to be modified to implement this constraint. Fortunately, the required modification is minor for several example protocols, including PBFT, Hotstuff and Streamlet.</p>
+<p>When any of these slightly modified BFT protocols is used in conjunction with a permissioned longest chain protocol, the resulting snap-and-chat protocol is a secure ebb-and-flow protocol with optimal resilience:</p>
+<p><strong>Theorem</strong> Snap-and-chat protocols are $(1/3,1/2)$-secure ebb-and-flow protocols.</p>
+<p>In what sense does this provide ‘optimal resilience’? If $\mathsf{GAT} = 0$, then the environment is the classical partially synchronous network, and the ledger $\mathsf{LOG}_{\mathrm{fin}}$ has the optimal resilience achievable in that environment ($33\%$). On the other hand, if $\mathsf{GST} = 0$ and $\mathsf{GAT} = \infty$, then the environment is a synchronous network with dynamic participation, and the ledger $\mathsf{LOG}_{\mathrm{da}}$ has the optimal resilience achievable in that environment ($50\%$). Thus, this construction achieves consistency between the two ledgers without sacrificing the best possible security guarantees of the individual ledgers. A resolution of the availability-finality dilemma using a provably secure ebb-and-flow protocol is thus achievable.</p>
+<p>Besides optimal resilience, snap-and-chat protocols have other useful properties:</p>
+<ol>
+ <li>Snap-and-chat protocols are constructed via an (almost) black-box composition of off-the-shelf protocols. Thus, we can use state-of-the-art dynamically available protocols and state-of-the-art partially synchronous BFT protocols without having to reinvent the wheel.</li>
+ <li>As a result, the construction is ‘future-proof’ because it can take advantage of future advances in the design of dynamically available protocols and in the design of partially synchronous BFT protocols. Both problems have received and are continuing to receive significant attention from the community.</li>
+ <li>The black-box nature of the composition also enables a relatively easy and modular security proof.</li>
+</ol>
+<p>In <a href="https://arxiv.org/abs/2010.10447">this paper</a>, we show how to exploit these properties to endow snap-and-chat protocols with additional features such as accountable safety and light-client support.</p>
+<p>The BFT sub-protocol in snap-and-chat protocols can be viewed as providing finalized <a href="https://decentralizedthoughts.github.io/2019-09-13-dont-trust-checkpoint/">checkpoints</a> for the dynamic ledger. Connections between snap-and-chat protocols and finality gadgets such as Casper FFG are discussed in our papers. Another interesting connection discussed in <a href="https://arxiv.org/abs/2009.04987">our paper</a> is with <a href="https://arxiv.org/abs/1904.10067">‘Flexible Byzantine Fault Tolerance’ protocols</a>, which also support multiple ledgers but the consistency requirement between these ledgers is different from that of ebb-and-flow protocols.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#SMR">SMR</a>
+ 
+ <a href="/tags#research">research</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Resolving+the+Availability-Finality+Dilemma&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2020-11-01-ebb-and-flow-protocols-a-resolution-of-the-availability-finality-dilemma%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/" data-toggle="tooltip" data-placement="top" title="Living with Asynchrony: Bracha's Reliable Broadcast">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2020-11-19-bft-protocol-forensics/" data-toggle="tooltip" data-placement="top" title="BFT Protocol Forensics">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

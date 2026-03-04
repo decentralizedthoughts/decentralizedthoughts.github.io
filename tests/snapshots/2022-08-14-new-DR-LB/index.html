@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>A new Dolev-Reischuk style Lower Bound</title>
+ 
+ 
+ <meta name="author" content="Gilad Stein, Ittai Abraham">
+ 
+ <meta name="description" content="In a previous post we discussed Crusader Broadcast and showed a $O(n^2)$ words, $O(1)$ time solution for $f&amp;lt;n$ and assuming a PKI. In this post, we overview a new Dolev-Reischuk style bower bound (see our full paper): Theorem AS22: In any deterministic protocol solving Crusader Broadcast with $f&amp;lt;n$ Byzantine failures there exists at least one run in which the nonfaulty parties send at least $\Omega(nf)$ messages, if the adversary can...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="A new Dolev-Reischuk style Lower Bound">
+ <meta property="og:description" content="In a previous post we discussed Crusader Broadcast and showed a $O(n^2)$ words, $O(1)$ time solution for $f&amp;lt;n$ and assuming a PKI. In this post, we overview a new Dolev-Reischuk style bower bound (see our full paper): Theorem AS22: In any deterministic protocol solving Crusader Broadcast with $f&amp;lt;n$ Byzantine failures there exists at least one run in which the nonfaulty parties send at least $\Omega(nf)$ messages, if the adversary can...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Gilad Stein, Ittai Abraham">
+ 
+ <meta property="og:article:published_time" content="2022-08-14T08:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2022-08-14-new-DR-LB/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2022-08-14-new-DR-LB/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="A new Dolev-Reischuk style Lower Bound">
+ <meta property="twitter:description" content="In a previous post we discussed Crusader Broadcast and showed a $O(n^2)$ words, $O(1)$ time solution for $f&amp;lt;n$ and assuming a PKI. In this post, we overview a new Dolev-Reischuk style bower bound (see our full paper): Theorem AS22: In any deterministic protocol solving Crusader Broadcast with $f&amp;lt;n$ Byzantine failures there exists at least one run in which the nonfaulty parties send at least $\Omega(nf)$ messages, if the adversary can...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>A new Dolev-Reischuk style Lower Bound</h1>
+ 
+ 
+ 
+ 
+ By <strong>Gilad Stein, Ittai Abraham</strong><br>
+ 
+ <span class="post-meta">Posted on August 14, 2022</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>In a <a href="https://decentralizedthoughts.github.io/2022-06-19-crusader-braodcast/">previous post</a> we discussed <strong>Crusader Broadcast</strong> and showed a $O(n^2)$ words, $O(1)$ time solution for $f&lt;n$ and assuming a PKI. In this post, we overview a new <a href="https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/">Dolev-Reischuk</a> style bower bound (<a href="https://eprint.iacr.org/2022/730.pdf">see our full paper</a>):</p>
+<p><strong><em>Theorem <a href="https://eprint.iacr.org/2022/730.pdf">AS22</a></em></strong>: In any deterministic protocol solving <strong>Crusader Broadcast</strong> with $f&lt;n$ <em>Byzantine</em> failures there exists at least one run in which the nonfaulty parties send at least $\Omega(nf)$ messages, <em>if the adversary can simulate nonfaulty parties</em>.</p>
+<p>Note the difference with the (modern view) of the classic Dolev-Reischuk Lower Bound:</p>
+<p><strong><em>Theorem <a href="http://cs.huji.ac.il/~dolev/pubs/p132-dolev.pdf">DR82+</a></em></strong>: In any deterministic protocol solving <strong>Broadcast</strong> with $f&lt;n$ <em>omission</em> failures there exists at least one run in which the nonfaulty parties send at least $\Omega(nf)$ messages.</p>
+<h4 id="three-obvious-differences">Three obvious differences:</h4>
+<ol>
+ <li>DR82 holds even against the weaker <em>omission</em> failure adversary, while AS22 holds only against a <em>Byzantine</em> failure adversary.</li>
+ <li>AS22 holds even for the weaker <em>Crusader Broadcast</em> problem, while DS82 holds only against the <em>Broadcast</em> problem.</li>
+ <li>AS22 holds only against computationally bounded adversaries (formally, when the <em>adversary can simulate</em>), while DR82 works even against <em>unbounded adversaries</em>.</li>
+</ol>
+<h4 id="what-does-this-new-lower-bound-imply-on-upper-bounds">What does this new Lower Bound imply on upper bounds?</h4>
+<ol>
+ <li>
+ <p>In the <a href="https://decentralizedthoughts.github.io/2022-06-19-crusader-braodcast/">previous post</a> we showed a protocol with a PKI that uses $O(n^2)$ messages for crusader agreement. Getting $O(n)$ words for strongly adaptive adversaries with a PKI seems to be an open question.</p>
+ </li>
+ <li>
+ <p>For $f&lt;n/2$ with a PKI it is easy to get $O(n)$ messages, and with $O(1)$ size using threshold signatures. Our lower bound shows that a PKI is required for this.</p>
+ </li>
+ <li>
+ <p>For $f&lt;n/3$ and against a computationally unbounded adversary, it is easy to get $O(n^2)$ messages and $O(1)$ rounds. Our lower bound shows that this is optimal for deterministic protocols.</p>
+ </li>
+</ol>
+<h3 id="recap-crusader-broadcast">Recap: Crusader Broadcast</h3>
+<p>As a reminder, consider a network of $n$ parties with up to $f$ Byzantine faults. Let $s$ be a designated sender with some input $m$. Every party outputs either a message $m’$ from the protocol, or a special non-message value, $\bot$. This value is used to signify that either no message was received from the sender, or that conflicting messages were received.</p>
+<p>A Crusader Broadcast protocol has the following properties:</p>
+<ul>
+ <li><strong>Validity.</strong> If $s$ is nonfaulty, then all nonfaulty parties output $m$.</li>
+ <li><strong>Weak Agreement.</strong> If two nonfaulty parties output $m,m’$ such that $m\neq \bot$ and $m’\neq \bot$, then $m=m’$.</li>
+</ul>
+<h3 id="lower-bound-high-level-idea">Lower bound: high level idea</h3>
+<p>In order to prove this lower bound, we will construct an adversary that attacks any deterministic protocol in which no such runs exists (see the <a href="https://eprint.iacr.org/2022/730.pdf">full paper</a> for the adaptation to randomized protocols).</p>
+<ul>
+ <li>
+ <p>Like in the Dolev-Reischuk lower bound, the adversary isolates a certain nonfaulty party $i$, and makes sure it talks only with parties the adversary controls.</p>
+ </li>
+ <li>
+ <p>Unlike the Dolev-Reischuk lower bound, the adversary cannot just omit messages, in fact it needs to be able to simulate an alternative world.</p>
+ </li>
+ <li>
+ <p>Unlike the Dolev-Reischuk lower bound, the adversary acts as if the sender sent the value $1$ when talking with the isolated party $i$, and acts as if the sender sent the value $0$ when talking with the rest of the nonfaulty parties. This leads $i$ to output $1$ and every other nonfaulty party to output $0$, which is a contradiction to the Weak Agreement property.</p>
+ </li>
+</ul>
+<h2 id="lower-bound-proof-of--main-theorem">Lower Bound: Proof of main Theorem</h2>
+<p>In this proof, we will assume that $n\geq f+2$ in order for the task to be non-trivial. In addition, we will assume extremely strong synchrony: lockstep synchrony. In this setting, the standard way to model a synchronous message-passing system is round-based communication. Messages sent in the beginning of a round reach their destination by the end of the round. If no protocol exists in such a system, then it cannot exist in any system with weaker synchrony assumptions.</p>
+<p>We will start by assuming by way of contradiction that there exists a deterministic protocol solving Crusader Broadcast in which all nonfaulty parties send no more than $\frac{1}{4}(n-1)f$ messages in any run of the protocol.</p>
+<p>In this case, observe two worlds $W_0$ and $W_1$. In $W_0$ there are no faults, and $s$ has the input $0$. Similarly, in $W_1$ there are no faults, and $s$ has the input $1$. Note that in $W_0$ all parties must output the value $0$ and in $W_1$ all parties must output $1$. If our attack manages to make some parties think they are in $W_0$ and some parties think they are in $W_1$ (using an indistinguishability argument), we will reach a contradiction to the weak agreement property.</p>
+<p>We would like to observe the behavior of the nonfaulty parties in these worlds in order to isolate some party $i$, other than the sender (which we cannot fool because it knows its own input).</p>
+<p><strong><em>Claim 1</em></strong>: There exists some party $i\neq s$ which communicates with no more than $f$ parties in both $W_0$ and $W_1$ combined.</p>
+<p><em>Proof</em>: Assume by way of contradiction that every party $i\neq s$ communicates with at least $f+1$ parties in $W_0$ and in $W_1$ combined. This means that in total in both worlds, every party either sent or received a message from at least $f+1$ parties. Define $M_i$ to be the number of messages sent or received by party $i$ in $W_0$ and in $W_1$ combined. By the above assumption, we know that $\sum_{i\neq s} M_i \geq (n-1)(f+1)$. Unfortunately, summing over all the $M_i$ we count every message up to twice: once in $M_i$ if $i$ sent the message and once in $M_j$ if $j$ receives it (the only time when we don’t is when either $i=s$ or $j=s$). Therefore, we can conclude that at least $\frac{1}{2}(n-1)(f+1)$ messages were sent overall in both $W_0$ and $W_1$.</p>
+<p>However, we assumed that in our protocol all nonfaulty parties send no more than $\frac{1}{4}(n-1)f$ messages in any run of the protocol, including in $W_0$ and in $W_1$. In total, we get that they sent no more than $\frac{1}{2}(n-1)f$ messages in both worlds, reaching a contradiction.</p>
+<p>Now using Claim $1$, we know that there is some party $i$ which communicates with no more than $f$ parties in <strong>both</strong> worlds. All that is left to do is isolate $i$ and make it think it is in $W_1$ while the rest of the parties think they are in $W_0$. We will show that in the following claim.</p>
+<p><strong><em>Claim 2</em></strong>: There exists a strategy for the adversary in which $i$ outputs $1$ and all other nonfaulty parties output $0$.</p>
+<p>Define the world $W_{hybrid}$ in which the adversary levies an attack. In this world, $s$ has the input $0$. Before the first round, the adversary simulates runs of both $W_0$ and of $W_1$ in its head. It then corrupts all parties with which $i$ communicates in either world. By our previous claim, the adversary needs to corrupt no more than $f$ parties in total in both worlds, so it is allowed this many parties. Define $P$ to be the set of parties controlled by the adversary.</p>
+<p>The adversary now simulates the whole run of $W_1$ in its head round-by-round, controlling all parties other than $i$. If in any round a party $j$ sends $i$ a message in $W_1$, the adversary instructs $j$ to send the same message to $i$ in $W_{hybrid}$. If $i$ ever sends a message to some party $j$ in $W_{hybrid}$, then the adversary simulates $j$ receiving the same message in the run of $W_1$.</p>
+<p>Similarly, the adversary simulates a full run of $W_0$ in its head, controlling only parties in $P$ and $i$. Whenever a faulty party receives a message from a nonfaulty party other than $i$ in $W_{hybrid}$, the adversary simulates the same message being sent in $W_0$. Whenever one of the parties in $P$ sends a message to a nonfaulty party other than $i$ in its simulation of $W_0$, it instructs that corrupted party to send the same message in $W_{hybrid}$ as well. The adversary also simulates all messages to and from $i$ in $W_0$, but does not send any corresponding message in $W_{hybrid}$.</p>
+<p>In total, this means that $i$’s communication in $W_{hybrid}$ proceeds according to the adversary’s simulation of $W_1$. In addition, every other nonfaulty party’s communication in $W_{hybrid}$ proceeds according to the adversary’s simulation of $W_0$. In both of those runs, no messages are exchanged between $i$ and other nonfaulty parties, so the run continues being consistent with both of these simulations in each round. Since $i$’s view is indistinguishable from its view in $W_0$, it must output $0$ in $W_{hybrid}$. Similarly, every other nonfaulty party’s view is indistinguishable from its view in $W_1$, so they must output $1$ in $W_{hybrid}$, reaching a contradiction.</p>
+<h3 id="generalizations-and-remarks">Generalizations and Remarks</h3>
+<p>The main insight in the above lower bound is that if a few messages are sent, then at least one nonfaulty party can be isolated and made to talk only with faulty parties. The rest of the proof is essentially just bookkeeping we do in order to make sure that after isolating that party, we can make its run look correct, and other parties’ run look correct as well (but with $s$ having different inputs). In this second part of the proof we make use of the assumption that the adversary can simulate other parties.</p>
+<p>Using this insight, this lower bound can be generalized to randomized protocols with some probability of failure. This is done by noticing that if a few messages are sent in expectation, there is a good probability that some party talks with no more than $f$ parties overall in two runs of the protocol. In order to do so, we require a strongly-adaptive adversary that can corrupt parties on the fly and delete messages that haven’t been delivered yet. This attack can be generalized even further, to isolating a large number of parties if a very small number of messages is sent in expectation (smaller than $O(nf)$). Then we can make a large number of nonfaulty parties output $0$ and a large number of nonfaulty parties output $1$ instead if we desire.</p>
+<p>There are also a few important facts to notice in our attack. First, we only use the number of messages sent as a proxy to the number of parties each party communicates with. More precisely, think of a communication graph, in which vertices correspond to parties and there is an edge between two parties if they communicate throughout a run of the protocol. This whole proof works as long as the number of edges is small, not the number of messages. In addition, as long as the communication graph is deterministic, we can isolate a party. After that, our attack should work even if the protocol is probabilistic (but with a deterministic communication graph).</p>
+<p>The keen-eyed among you might have noticed that if the protocol is fully deterministic, we actually didn’t need to simulate messages round-by-round. The adversary could have just run its simulation of $W_0$ and $W_1$ and sent messages accordingly. The stronger proof above generalizes to probabilistic protocols with deterministic communication graphs.</p>
+<p>Summing up, we actually got a stronger result: Any Crusader Broadcast protocol with a deterministic communication graph requires at least $\Omega(nf)$ communication edges, regardless of how many messages are sent, or if the content of the messages is probabilistic.</p>
+<h2 id="relationship-to-eclipse-attacks-in-blockchain-systems">Relationship to Eclipse Attacks in Blockchain Systems</h2>
+<p>The classic Dolev-Reischuk lower bound has been known for decades, but blockchain systems have been designed with linear communication costs per agreed upon value. One way we can understand this discrepancy is by noticing an important feature of the original Dolev-Reischuk lower bound: <strong>it uses silence</strong>. In the original attack, a party is isolated, and no messages are forwarded to it. By the definition of the consensus task it must output something regardless of whether it heard any message. All that is left to do is making sure that other parties output another value, and the attack succeeds. However, this definition of the consensus task doesn’t really make sense in the blockchain world. It’s hard to imagine a protocol in which nodes decide that some transaction took place if they didn’t hear anything. To that end, in this post we discussed Crusader Broadcast instead, in which parties are allowed to output $\bot$ (i.e. no decision) if they heard nothing.</p>
+<p>One type of attack researched in the blockchain literature is the <strong>eclipse attack</strong>. In such attacks, an attacker makes sure some node (or several nodes) only communicate with attacker nodes. During this step, the attacker utilizes the fact that the communication graph in many blockchain systems is very <em>static</em> and has very few edges (generally, a constant number of edges per node). Even worse, the attacker can influence the communication graph and make it so that certain nodes only talk to nodes controlled by the attacker.</p>
+<p>After that, the attacker filters messages to and from the isolated nodes to different ends. For example, it can publish a certain block to one part of the network, and a different block to a different part of the network. This attack is hard to execute, since mining two blocks in quick succession is extremely unlikely. Thinking about this difficulty in terms of the lower bound we discussed, this translates to a difficulty to simulate: it is hard for the adversary to “simulate” two different runs of the protocol with two different blocks being mined. In order to mitigate this difficulty many attacks have been suggested. For example, some attacks simply drop communication from certain parts of the network which is very easy to “simulate”. This helps raise the relative mining power of the attacker. More complicated attacks can publish blocks to only parts of the network. Those parts will then mine on top of those blocks, essentially using the eclipsed network’s mining power in order to “simulate” another run of the protocol. Many other types of concrete attacks use various tricks in order to essentially simulate the desired run of the protocol.</p>
+<p>In general, we hope that noticing the connections between Dolev-Reischuk style attacks and eclipse attacks can lead to a deeper theoretic understanding of eclipse attacks in the wild. This also suggests ways to mitigate eclipse attacks: either make it harder to simulate, have a probabilistic communication graph which cannot be influenced as easily by an attacker, or have a denser communication graph.</p>
+<p>Your thoughts on <a href="https://twitter.com/ittaia/status/1558894407843184640?s=21&amp;t=76KYIfKCmlPiP1gHX7ycbw">Twitter</a></p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ <a href="/tags#lowerbound">lowerbound</a>
+ 
+ <a href="/tags#research">research</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=A+new+Dolev-Reischuk+style+Lower+Bound&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2022-08-14-new-DR-LB%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2022-08-12-hehtlc/" data-toggle="tooltip" data-placement="top" title="He-HTLC - Revisiting Incentives in HTLC">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2022-08-17-secret-sharing-with-crash/" data-toggle="tooltip" data-placement="top" title="Polynomial Secret Sharing with Crash Failures">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

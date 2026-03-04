@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>The Lock-Commit Paradigm</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham, Kartik Nayak">
+ 
+ <meta name="description" content="In this post, we explore one of the most celebrated and widely used techniques for reaching consensus: the Lock-Commit paradigm. This approach is a key technique of DLS88, Lamport’s Paxos, and many subsequent protocols. Protocols like Raft, PBFT, Tendermint, SBFT, Casper FFG, HotStuff, etc., are all based on this paradigm. We exemplify the Lock-Commit paradigm with a simple single-shot synchronous protocol (with message delay at most $\Delta$) for uniform consensus...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="The Lock-Commit Paradigm">
+ <meta property="og:description" content="In this post, we explore one of the most celebrated and widely used techniques for reaching consensus: the Lock-Commit paradigm. This approach is a key technique of DLS88, Lamport’s Paxos, and many subsequent protocols. Protocols like Raft, PBFT, Tendermint, SBFT, Casper FFG, HotStuff, etc., are all based on this paradigm. We exemplify the Lock-Commit paradigm with a simple single-shot synchronous protocol (with message delay at most $\Delta$) for uniform consensus...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham, Kartik Nayak">
+ 
+ <meta property="og:article:published_time" content="2020-11-29T08:02:00-05:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2020-11-29-the-lock-commit-paradigm/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2020-11-29-the-lock-commit-paradigm/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="The Lock-Commit Paradigm">
+ <meta property="twitter:description" content="In this post, we explore one of the most celebrated and widely used techniques for reaching consensus: the Lock-Commit paradigm. This approach is a key technique of DLS88, Lamport’s Paxos, and many subsequent protocols. Protocols like Raft, PBFT, Tendermint, SBFT, Casper FFG, HotStuff, etc., are all based on this paradigm. We exemplify the Lock-Commit paradigm with a simple single-shot synchronous protocol (with message delay at most $\Delta$) for uniform consensus...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>The Lock-Commit Paradigm</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham, Kartik Nayak</strong><br>
+ 
+ <span class="post-meta">Posted on November 29, 2020</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>In this post, we explore one of the most celebrated and widely used techniques for reaching consensus: the <strong>Lock-Commit paradigm</strong>. This approach is a key technique of <a href="https://groups.csail.mit.edu/tds/papers/Lynch/jacm88.pdf">DLS88</a>, Lamport’s <a href="https://lamport.azurewebsites.net/pubs/lamport-paxos.pdf">Paxos</a>, and many subsequent protocols. Protocols like <a href="https://raft.github.io/">Raft</a>, <a href="http://pmg.csail.mit.edu/papers/osdi99.pdf">PBFT</a>, <a href="https://arxiv.org/pdf/1807.04938.pdf">Tendermint</a>, <a href="https://arxiv.org/pdf/1804.01626.pdf">SBFT</a>, <a href="https://arxiv.org/pdf/1710.09437.pdf">Casper FFG</a>, <a href="https://arxiv.org/pdf/1803.05069.pdf">HotStuff</a>, etc., are all based on this paradigm.</p>
+<p>We exemplify the <em>Lock-Commit paradigm</em> with a simple single-shot <a href="/2019-06-01-2019-5-31-models/">synchronous protocol</a> (with message delay at most $\Delta$) for <a href="/2019-06-27-defining-consensus/">uniform consensus</a> that is tolerant to $f$ <a href="/2020-09-13-synchronous-consensus-omission-faults/">omission</a> failures, given $2f&lt;n$.</p>
+<p>Related posts:</p>
+<ol>
+ <li>
+ <p>It is <a href="/2019-11-02-primary-backup-for-2-servers-and-omission-failures-is-impossible/">impossible to solve consensus</a> with $2f \geq n$ omission failures. As an exercise: extend this lower bound to show it is impossible to tolerate $k+2f \geq n$ for $k$ crash failures and $f$ omission failures.</p>
+ </li>
+ <li>
+ <p>Using the <a href="/2020-09-13-synchronous-consensus-omission-faults/">Commit-Notify paradigm</a> in synchrony, <em>non-uniform</em> consensus is possible for $t&lt;n/2$ <em>omission</em> failures (recall that for omision failures, non-uniform consensus means that faulty replicas may commit on incorrect values).</p>
+ </li>
+ <li>
+ <p>In synchrony, consensus is possible for $k$ <a href="/2019-10-31-primary-backup/">crash failures</a>, for any $k&lt;n$.</p>
+ </li>
+ <li>
+ <p>In a <a href="/2020-11-30-the-lock-commit-paradigm-multi-shot-and-mixed-faults/">follow-up post</a>, we extend the lock-commit paradigm to a multi-shot protocol that can tolerate both $f$ omission failures and $k$ <a href="/2019-06-07-modeling-the-adversary/">crash</a> failures given $k+2f&lt;n$.</p>
+ </li>
+ <li>
+ <p>Protocols in partial synchrony that use the lock-commit paradigm: <a href="https://decentralizedthoughts.github.io/2020-05-14-streamlet/">Streamlet</a>, <a href="https://decentralizedthoughts.github.io/2021-04-02-benign-hotstuff/">Benign Hotstuff</a>, <a href="https://decentralizedthoughts.github.io/2021-07-17-simplifying-raft-with-chaining/">Raft with Chaining</a>, <a href="https://decentralizedthoughts.github.io/2021-09-20-information-theoretic-hotstuff-it-hs-part-one/">Information Theoretic HotStuff</a>.</p>
+ </li>
+</ol>
+<h2 id="lock-commit-paradigm">Lock-Commit Paradigm</h2>
+<p>Consider the task of solving consensus in a system with <em>clients</em> and $n$ <em>replicas</em>. Clients send commands to the replicas and the goal of the replicacs (in the single shot case) is to decide on one command. In the <strong>Primary-Backup approach</strong>, the protocol progresses in <em>views</em>. In each view $v$, one designated replica is the <em>primary replica</em> and the other replicas are the <em>backup replicas</em> of this view. The primary of a view needs to <em>propose</em> a command and replica need to eventually <em>commit</em> (or decide) on a command. There is a <em>view change trigger</em> protocol that decides when to globally execute a <em>view change</em> protocol that increments the view.</p>
+<p>The main safety risk in Primary-Backup based consensus protocols is that a replica <em>commits</em> to a value and later a different replica commits to a different value. The only way this can happen is if a new primary in a new view proposes a different value. To guarantee this will not happen the <strong>Lock-Commit paradigm</strong> does two crucial things:</p>
+<ol>
+ <li>
+ <p><em>Lock a quorum before you Commit</em>. To commit a value $cmd$, the primary of view $v$ first makes sure there is a <strong>quorum</strong> of replicas that store a lock that consists of a <strong>lock-value</strong> $cmd$ and a <strong>lock-view</strong> $v$. This is typically done by having the primary <em>propose</em> the value $cmd$ and receive $n-f$ <em>acknowledgments</em> that the value $cmd$ is locked in view $v$.</p>
+ </li>
+ <li>
+ <p><em>Read a quorum before you Propose</em>. When a new primary starts a new view, it runs a <em>view change</em> protocol. In this protocol, the new primary of view $v$ needs to decide which value to propose (and eventually commit) in view $v$. The new Primary must read the locks of previous views from a <strong>quorum</strong> of replicas and must adopt the <em>lock-value</em> with the <strong>highest</strong> <em>lock-view</em> it sees.</p>
+ </li>
+</ol>
+<p>Intuitively, this approach is safe is because <em>any two quorum sets must have a non-empty intersection, hence if the primary proposes the lock-value with the highest lock-view then this value must be the the committed value</em> (see the proof below). In this post, we assume $n=2f+1$ and use majority quorums that consist of $n-f=f+1$ replicas.</p>
+<p>This Lock-Commit paradigm is the core of Paxos. It is extended to many settings:</p>
+<ol>
+ <li>
+ <p>Since Lock-Commit is based on <em>quorum intersection</em>, safety does not rely on any synchrony. Indeed unlike the <a href="https://decentralizedthoughts.github.io/2020-09-13-synchronous-consensus-omission-faults/">Commit-Notify</a> paradigm, the Lock-Commit paradigm is often used for safety in asynchrony (and partially synchrony).</p>
+ </li>
+ <li>
+ <p>The Lock-Commit paradigm guarantees <a href="/2019-06-27-defining-consensus/">uniform consensus</a> (so even omission-faulty replicas commit on the same value). In essence, it guarantees that a replica does not decide before the <em>system</em> is in a <a href="/2019-12-15-consensus-model-for-FLP/">committed</a> state.</p>
+ </li>
+ <li>
+ <p>The Lock-Commit paradigm can be extended to tolerate malicious adversaries. For $n&gt;2f$, by using <a href="/2019-11-10-authenticated-synchronous-bft/">signatures and synchrony</a>; and for $n&gt;3f$, by using a quorum system where every two sets intersect by at least $f+1$ replicas.</p>
+ </li>
+</ol>
+<p>Here is a Lock-Commit based (uniform) consensus protocol tolerating $f&lt;n/2$ omission faults for a single slot:</p>
+<h2 id="lock-commit-for-omission-failures">Lock-Commit for omission failures</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// pseudocode for Replica j
+log = [] // a log (of size 1) of committed values
+view = 1 // view number that indicates the current Primary
+lock-view = 0 // the highest view a propose was heard
+lock-value = null // the value associated with the highest lock
+start timer(1) // start timer for view 1 (for duration 8 Delta)
+while true:
+ // as primary 1: replica 1 and view is 1
+ on receiving first cmd from client and j == 1 and view == 1:
+ send ("propose", cmd, view) to all replicas
+ 
+ // as a backup replica 
+ on receiving ("propose", cmd, v) and v == view:
+ lock-view = v
+ lock-value = cmd
+ send ("lock", cmd, v) to the primary j
+ 
+ // as a primary: replica j and view is j
+ on receiving ("lock", cmd, view) from n-f distinct replicas and view == j:
+ // commit (after you know enough have locked)
+ log[0] = cmd
+ send ("commit", cmd) to all replicas
+ terminate
+ 
+ // as a replica: commit and terminate
+ on receiving ("commit", cmd):
+ log[0] = cmd
+ send ("commit", cmd) to all replicas
+ terminate
+</code></pre></div></div>
+<p>When does a replica move from one view to another? When it sees that the current primary is not making progress. This is the <strong>view change trigger</strong> protocol:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> on timer(i) expiring and log[0] == null and view == i; or
+ on receiving ("blame", i) from f+1 distinct replicas
+ send ("blame", i) to all replicas
+ on receiving ("blame", i) from n-f distinct and view &lt;= i:
+ // this will trigger a timer and a "highest lock message"
+ send ("view change", i+1) to all replicas (including self)
+</code></pre></div></div>
+<p>Note that the view change trigger protocol can be simplified and also altered to have a linear communication optimistic path. Assuming synchrony, we could for example, simply trigger a view change after each 8 message delays. The more elaborate option described above will allow us to generalize in later posts.</p>
+<p>What do the next primaries propose? To maintain safety, they must read from a quorum and use the lock-value with the highest lock-view. This is the essence of the <strong>view change</strong> protocol:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> // send your highest lock
+ on receiving ("view change", v) and view &lt; v:
+ view = v
+ // start timer for 8 Delta
+ start timer(v)
+ send ("highest lock", lock-value, lock-view, v) to replica v
+ 
+ // as the primary (you are replica j and view is j)
+ on receiving ("highest lock", l-val, l-view, j) from n-f distinct replicas and view == j:
+ if all l-val are null (all l-view are 0):
+ my-val = any value heard from the clients
+ otherwise:
+ my-val = l-val with the highest l-view
+ send ("propose", my-val, view) to all replicas
+</code></pre></div></div>
+<h3 id="argument-for-safety">Argument for Safety</h3>
+<p>The key intuition for safety is a quorum intersection argument between two quorums:
+$W$: A set of replicas who sent a lock message on the committed value (and are hence locked on it).
+$R$: A set of replicas who send their highest locks to a primary in any higher view.</p>
+<p>If $|W \cap R| \geq 1$ replica, then the committed value is always passed on to the next leader as a lock-value whose lock-view is maximal. This argument thus holds for all subsequent views and is formalized using induction in the following claim.</p>
+<p><strong>Claim:</strong> Let $v$ be the first view where some replica commits to some value $cmd$.
+Then, no primary will propose $cmd’ \neq cmd$ at any view $v’\geq v$.</p>
+<p><em>Proof:</em></p>
+<p>By induction on $v’ \geq v$. For view $v’=v$, this follows since the primary sends just one “propose” value per view. Assume the hypothesis holds for all views $\leq v’$ and consider the view change of primary $v’+1$ to view $v’+1$.</p>
+<p>Let $W$ be the set of $n-f$ distinct replicas that set $lock-view = v$ and sent $(“lock”, cmd, v)$ to the primary $v$ in view $v$.</p>
+<p>Let $R$ be the $n-f$ replicas that the primary $v’+1$ received their $(“highest$ $lock”, lock$-$val, lock$-$view, v’+1)$ for view $v’+1$.</p>
+<p>Since $W \cap R \neq \emptyset$, then the primary of $v’+1$ must hear from a member of $R$. 
+Fix some $a \in W \cap R$.
+By the definition of $R$ and from the induction hypothesis we know that for the view change to view $v’+1$, replica $a$’s lock-view is at least view $v$ and its lock-value must remain $cmd$. In addition, from the induction hypothesis, we know that no other member of $W$ can have a lock that has a lock-view that is at least $v$ with a lock-value $cmd’ \neq cmd$.</p>
+<p>Hence, during the view change of view $v’+1$, the value with the maximum view in $W$ must have the value $cmd$ and be with a view $\geq v$.</p>
+<p>Observe that this argument did not rely on synchrony.</p>
+<h3 id="argument-for-liveness">Argument for Liveness</h3>
+<p><strong>Claim:</strong> Let $v$ be the first view with a non-faulty primary. 
+Then, all non-faulty replicas will commit by the end of view $v$.</p>
+<p><em>Proof:</em></p>
+<p>Observe that in any view $&lt;v$, either some non-faulty commits and hence all non-faulty commit and terminate one message delay later; or otherwise, all non-faulty do not commit, and hence will send a “blame” and hence all non-faulty will send a “view change” and join the next view within one round trip.</p>
+<p>Observe that this argument requires synchrony: it uses the fact that the timers will expire and all start the next view within one message delay.</p>
+<p>If some non-faulty replicas have not decided before entering view $v$, then all non-faulty will enter view $v$ within one message delay. In view $v$, the non-faulty primary will gather $n-f$ distinct “lock” messages and will send a commit message that will arrive to all non-faulty replicas before their $timer(v)$ expires (assuming the timer is larger than 8 message delays and using the fact that they all started their timer with a gap of at most one message delay). Hence, even if all faulty replicas send a “blame” message, there will not be enough “blame” messages to form a “view change” message.</p>
+<p>Again observe the use of synchrony.</p>
+<h3 id="remarks">Remarks</h3>
+<ol>
+ <li>
+ <p>We did not fully specify how the clients send commands to the replicas. For simplicity, we can assume that clients broadcast their requests to all replicas. In practice, one can add a mechanism to track the primary and resend commands only to the new primary when there is a view change.</p>
+ </li>
+ <li>
+ <p>In this post, we do not talk about executing the commands (as discussed in a <a href="/2019-10-15-consensus-for-state-machine-replication/">state machine replication protocol</a>) or running multiple consensus instantces.</p>
+ </li>
+ <li>
+ <p>The only requirement for Safety is that $|W \cap R| \geq 1$ (honest) replica. Thus, while we consider using quorums of size $n-f = f+1$, the sizes are flexible and do not have to be symmetric. This is the idea behind <a href="https://arxiv.org/pdf/1608.06696v1.pdf">Flexible Paxos</a>.</p>
+ </li>
+</ol>
+<h3 id="acknowlegment">Acknowlegment</h3>
+<p>Many thanks to <a href="https://alinush.github.io/">Alin Tomescu</a> for valuable comments and insights!</p>
+<p>Please answer/discuss/comment/ask on <a href="https://twitter.com/ittaia/status/1339895006610542594?s=20">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#consensus101">consensus101</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=The+Lock-Commit+Paradigm&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2020-11-29-the-lock-commit-paradigm%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2020-11-19-bft-protocol-forensics/" data-toggle="tooltip" data-placement="top" title="BFT Protocol Forensics">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2020-11-30-the-lock-commit-paradigm-multi-shot-and-mixed-faults/" data-toggle="tooltip" data-placement="top" title="The Lock-Commit Paradigm: Multi-shot and Mixed Faults">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

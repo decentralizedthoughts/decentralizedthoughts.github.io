@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Asynchronous Agreement Part 4: Crusader Agreement and Binding Crusader Agreement</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham, Naama Ben-David, Sravya Yandamuri ">
+ 
+ <meta name="description" content="In this post we introduce a key building block in the Byzantine Model called Binding Crusader Agreement. We show how to use it in the next post. This is a simplified version extracted from our paper. In the three previous posts we (1) defined the problem and discussed the FLP theorem; (2) presented Ben-Or’s protocol for crash failures; and (3) a modern version for crash failures. Crusader Agreement (CA) We...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Asynchronous Agreement Part 4: Crusader Agreement and Binding Crusader Agreement">
+ <meta property="og:description" content="In this post we introduce a key building block in the Byzantine Model called Binding Crusader Agreement. We show how to use it in the next post. This is a simplified version extracted from our paper. In the three previous posts we (1) defined the problem and discussed the FLP theorem; (2) presented Ben-Or’s protocol for crash failures; and (3) a modern version for crash failures. Crusader Agreement (CA) We...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham, Naama Ben-David, Sravya Yandamuri ">
+ 
+ <meta property="og:article:published_time" content="2022-04-05T06:11:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2022-04-05-aa-part-four-CA-and-BCA/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2022-04-05-aa-part-four-CA-and-BCA/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Asynchronous Agreement Part 4: Crusader Agreement and Binding Crusader Agreement">
+ <meta property="twitter:description" content="In this post we introduce a key building block in the Byzantine Model called Binding Crusader Agreement. We show how to use it in the next post. This is a simplified version extracted from our paper. In the three previous posts we (1) defined the problem and discussed the FLP theorem; (2) presented Ben-Or’s protocol for crash failures; and (3) a modern version for crash failures. Crusader Agreement (CA) We...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Asynchronous Agreement Part 4: Crusader Agreement and Binding Crusader Agreement</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham, Naama Ben-David, Sravya Yandamuri </strong><br>
+ 
+ <span class="post-meta">Posted on April 5, 2022</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>In this post we introduce a key building block in the <em>Byzantine</em> Model called <strong>Binding Crusader Agreement</strong>. We show how to use it in the <a href="https://decentralizedthoughts.github.io/2022-04-05-aa-part-five-ABBA/">next post</a>. This is a simplified version extracted from our <a href="https://eprint.iacr.org/2022/711.pdf">paper</a>.</p>
+<p>In the three previous posts we (1) <a href="https://decentralizedthoughts.github.io/2022-03-30-asynchronous-agreement-part-one-defining-the-problem/">defined the problem</a> and discussed the <a href="https://decentralizedthoughts.github.io/2019-12-15-asynchrony-uncommitted-lower-bound/">FLP theorem</a>; (2) presented <a href="https://decentralizedthoughts.github.io/2022-03-30-asynchronous-agreement-part-two-ben-ors-protocol/">Ben-Or’s protocol</a> for crash failures; and (3) <a href="https://decentralizedthoughts.github.io/2022-03-30-asynchronous-agreement-part-three-a-modern-version-of-ben-ors-protocol/">a modern version</a> for crash failures.</p>
+<h2 id="crusader-agreement-ca">Crusader Agreement (CA)</h2>
+<p>We begin by recalling a useful agreement primitive called Crusader Agreement, first introduced by <a href="https://www.cs.huji.ac.il/~dolev/pubs/byz-strike-again.pdf">Dolev 1981</a> which we adopt to the asynchronous model following the <em>BV-broadcast</em> protocol of <a href="https://hal.archives-ouvertes.fr/hal-01176110/document">Mostefaoui, Hamouma, Raynal 2015</a>.</p>
+<p>Crusader agreement is similar to other agreement problems in that each party receives an input, and must eventually decide on an output. However, in crusader agreement, instead of requiring all non-faulty parties to decide the same value, the agreement property is weakened; non-faulty parties are allowed to decide a special value $\bot$ despite some others deciding a non-$\bot$ value.</p>
+<ul>
+ <li><strong>Weak Agreement</strong>: If two non-faulty parties output values $x$ and $y$, then either $x=y$ or one of the values is $\bot$.</li>
+ <li><strong>Validity</strong>: If all non-faulty parties have the same input, then this is the only possible output. Furthermore, if a non-faulty party outputs $x \neq \bot$, then $x$ was the input of some non-faulty party.</li>
+ <li><strong>Liveness</strong>: If all non-faulty parties start the protocol then all non-faulty parties eventually output a value.</li>
+</ul>
+<p>Here is a simple pseudocode for crusader agreement with $n$ parties that tolerates a malicious adversary that controls $f&lt;n/3$ parties:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CA for party i
+input: v (0 or 1)
+send &lt;echo1, v&gt; to all
+if didnt send &lt;echo1, 1-v&gt; and see f+1 &lt;echo1, 1-v&gt;
+ send &lt;echo1, 1-v&gt; to all
+if didnt send &lt;echo2, *&gt; and see n-f &lt;echo1, w&gt;
+ send &lt;echo2, w&gt;
+if see n-f &lt;echo2, u&gt; and n-f &lt;echo1, u&gt;
+ output(u)
+if see n-f &lt;echo1, 0&gt; and n-f &lt;echo1, 1&gt;
+ output(bot)
+</code></pre></div></div>
+<p>Proof of properties.</p>
+<p><em>Weak Agreement</em>: this follows from quorum intersection on echo2 messages. Since $n&gt;3f$ and each non-faulty party sends only one echo2 message, it cannot be that $n-f$ parties send <code class="language-plaintext highlighter-rouge">&lt;echo2,1&gt;</code> and $n-f$ parties send <code class="language-plaintext highlighter-rouge">&lt;echo2,0&gt;</code> because that would imply that at least $n-2f \geq f+1$ parties sent conflicting echo2 messages, but we assume there are only $f$ malicious parties.</p>
+<p><em>Validity</em>: if all non-faulty parties start with $x$ then no non-faulty will send <code class="language-plaintext highlighter-rouge">&lt;echo1, 1-x&gt;</code> because there can be at most $f$ malicious parties that send <code class="language-plaintext highlighter-rouge">&lt;echo1, 1-x&gt;</code>. In addition, all non-faulty parties will send <code class="language-plaintext highlighter-rouge">&lt;echo1, x&gt;</code>, hence all non-faulty parties will see at least $n-f$ <code class="language-plaintext highlighter-rouge">&lt;echo1, x&gt;</code> messages and send <code class="language-plaintext highlighter-rouge">&lt;echo2, x&gt;</code> within one communication round, hence all non-faulty parties will <code class="language-plaintext highlighter-rouge">output x</code> in one more round.</p>
+<p>Proving <em>Liveness</em> is done in 3 steps:</p>
+<p><strong>Claim 1</strong>: All non-faulty parties will eventualy send an echo2 message.
+<em>Proof</em>: Let $x$ be an input value that at least $f+1$ non-faulty parties have. Since there are only two possible input values and at least $2f+1$ non-faulty parties, such a value exists. So all non-faulty parties will send <code class="language-plaintext highlighter-rouge">&lt;echo1, x&gt;</code> after at most one communication round, hence a round later they will all send <code class="language-plaintext highlighter-rouge">&lt;echo2, x&gt;</code> if they have not sent <code class="language-plaintext highlighter-rouge">&lt;echo2, 1-x&gt;</code> earlier.</p>
+<p><strong>Claim 2</strong>: If non-faulty parties send both <code class="language-plaintext highlighter-rouge">&lt;echo2, 0&gt;</code> and <code class="language-plaintext highlighter-rouge">&lt;echo2, 1&gt;</code> then all non-faulty parties output a value.
+<em>Proof</em>: For a non-faulty party to send <code class="language-plaintext highlighter-rouge">&lt;echo2, u&gt;</code>, it must have seen at least $n-f$ <code class="language-plaintext highlighter-rouge">&lt;echo1, u&gt;</code> messages. Therefore, at least $n-2f\geq f+1$ non-faulty parties sent <code class="language-plaintext highlighter-rouge">&lt;echo1, u&gt;</code>. In the case specified by the claim, this is true for both $0$ and $1$. Since non-faulty parties send additional echo1 messages for any value they’ve seen at least $f+1$ times, all non-faulty parties will eventually send both <code class="language-plaintext highlighter-rouge">&lt;echo1, 0&gt;</code> and <code class="language-plaintext highlighter-rouge">&lt;echo1, 1&gt;</code>. Hence all non-faulty parties that do not output $v \neq \bot$ will eventually output $\bot$.</p>
+<p><strong>Claim 3</strong>: If all non-faulty parties send <code class="language-plaintext highlighter-rouge">&lt;echo2, u&gt;</code> for the same value $u$, then all non-faulty parties output a value.
+<em>Proof</em>: Clearly, in this case eventaully all of them will see at least $n-f$ <code class="language-plaintext highlighter-rouge">&lt;echo2, u&gt;</code> and hence output $u$ if they did not output $\bot$ earlier.</p>
+<h3 id="adding-a-termination-gadget">Adding a Termination Gadget</h3>
+<p>Note that as described, Crusader Agreement (and the similar <a href="https://hal.archives-ouvertes.fr/hal-01176110/document">BV-broadcast</a>) does not terminate; for Claim 2 to be correct, a party that outputs $x \neq \bot$ needs to continue running the protocol at least until it has sent both <code class="language-plaintext highlighter-rouge">&lt;echo1, 0&gt;</code> and <code class="language-plaintext highlighter-rouge">&lt;echo1, 1&gt;</code>.</p>
+<p>Hence even after outputting value $x \neq \bot$, a party is required to keep maintaining state and running the protocol in order to help others output a value. Let’s strengthen CA and obtain:</p>
+<ul>
+ <li><strong>Termination:</strong> If all non-faulty start the protocol then all non-faulty parties eventually Terminate.</li>
+</ul>
+<p>Without the Termination property, sequentially running $k$ instances requires maintaining $O(k \times n)$ local memory. With Termination, only the latest instance needs to be maintained, so local memory is bounded by just $O(n)$.</p>
+<p>Here is the psedocode for termination:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>if output(bot)
+ send &lt;output bot&gt; to all
+ Terminate
+if output(v)
+ send &lt;output v&gt; to all
+if see f+1 &lt;output v&gt; and did not output yet
+ output(v)
+if see n-f &lt;output v&gt;
+ Terminate
+if see &lt;output bot&gt; and you output(v) and you sent &lt;echo1,1&gt; and &lt;echo1,0&gt;
+ Terminate
+</code></pre></div></div>
+<p>There are two claims about CA + Termination Gadget:</p>
+<p><strong>Claim 4</strong>: The liveness property holds.
+<em>Proof</em>: As mentioned, Claim 2 requires all non-faulty parties to send echo1 for both values. So the only non-trivial case is when parties terminate after seeing $n-f$ <code class="language-plaintext highlighter-rouge">&lt;output v&gt;</code> messages. But in this case all non-faulty parties will see at least $n-2f \geq f+1$ <code class="language-plaintext highlighter-rouge">&lt;output v&gt;</code> and hence all non-faulty will output a value.</p>
+<p><strong>Claim 5</strong>: If all non-faulty parties output a value then eventually all non-faulty parties terminate.
+<em>Proof</em>: Note that trivially, parties that output $\bot$ terminate. Furthermore, if all non-faulty parties output $v$ then this is immediate. The non-trivial case is when some but not all non-faulty parties output $\bot$; we must show that parties that output $v \neq \bot$ also terminate in this case. Note that for a non-faulty party to output $\bot$, it must have seen at least $n-f$ echo1s for both values. As argued when showing liveness, this means that eventually all non-faulty parties will see $n-f$ echo1 for both values, hence the termination condition for $v$ will hold.</p>
+<h3 id="pipelining-the-termination-gadget">Pipelining the Termination Gadget</h3>
+<p>As we will show in the <a href="https://decentralizedthoughts.github.io/2022-04-05-aa-part-five-ABBA/">next post</a>, often multiple Crusader Agreement instances are executed in a sequence $CA_1,CA_2, \dots$.</p>
+<p>In this case we can send the <code class="language-plaintext highlighter-rouge">&lt;output x&gt;</code> message of instance $CA_j$ along with the first message of instance $CA_{j+1}$, saving a communication round. The <code class="language-plaintext highlighter-rouge">&lt;output x&gt;</code> message of instance $j$ can be used as a signal to garbage collect the previous instance.</p>
+<h2 id="binding-crusader-agreement-bca">Binding Crusader Agreement (BCA)</h2>
+<p>A more subtle property that Crusader Agreement (and BV-broadcast) lacks is a way to prevent the adversary from being able to pick the output value of a non-faulty party <em>after</em> seeing the output of other non-faulty parties. In particular, we would like to prevent the adversary from conducting the following attack when CA is used inside a randomized agreement algorithm: let the first non-faulty party (or first $f+1$ non-faulty parties) output $\bot$, then learn the coin value, then force the remaining non-faulty parties to output the value opposite of the coin.</p>
+<p>We call this additional property <strong>binding</strong>, since the adversary is bound to a specific output value from each crusader agreement instance.</p>
+<ul>
+ <li><strong>Binding:</strong> At the time at which the first non-faulty party outputs a value, there is a value $b$ such that no non-faulty party outputs the value $1−b$ in any extension of this execution.</li>
+</ul>
+<p>Here is a pseudocode for BCA with just three message types:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>BCA for party i
+input: v (0 or 1)
+//echo1
+send &lt;echo1, v&gt; to all
+if didnt send &lt;echo1, 1-v&gt; and see f+1 &lt;echo1, 1-v&gt;
+ send &lt;echo1, 1-v&gt; to all
+//echo2
+if didnt send &lt;echo2, *&gt; and see n-f &lt;echo1, w&gt;
+ send &lt;echo2, w&gt; to all
+if didnt send &lt;echo2, bot&gt; and see
+ n-f &lt;echo1, 0&gt; and n-f &lt;echo1, 1&gt;
+ send &lt;echo2, bot&gt; and &lt;echo3, bot&gt; to all
+//echo3
+if didnt send &lt;echo3, *&gt; and see n-f &lt;echo2, u&gt; and n-f &lt;echo1, u&gt;
+ send &lt;echo3, u&gt; to all
+//output condition
+wait for n-f &lt;echo3, *&gt; 
+ if see n-f with u, then output(u)
+ otherwise, if you sent &lt;echo2, bot&gt;, then output(bot)
+</code></pre></div></div>
+<p>Proof of properties:</p>
+<p>Note that this algorithm is very similar to the one for CA, but adds an echo3 message. Intuitively, this is where we get binding. An <code class="language-plaintext highlighter-rouge">&lt;echo3, u&gt;</code> message is sent in the same case in which we would output $u$ in the CA algorithm (for $u$ being any value, including $\bot$). If the BCA algorithm outputs $\bot$ then it would have output $\bot$ in the CA algorithm. The BCA algorithm outputs $u \neq \bot$ if it sees enough non-faulty parties that would have output $u$ in the CA algorithm. Therefore, the Weak Agreement and Validity properties of BCA follow from the same argument as in CA.</p>
+<p>For Liveness, again by the argument for CA, we know that all non-faulty parties send an echo3 message. If all of them send <code class="language-plaintext highlighter-rouge">&lt;echo3, u&gt;</code> for a non-$\bot$ value $u$, then clearly we have liveness. Otherwise, note that if a non-faulty sent <code class="language-plaintext highlighter-rouge">&lt;echo3, bot&gt;</code> then eventually all non-faulty will send echo1 for both 0 and 1, so eventually they will all send <code class="language-plaintext highlighter-rouge">&lt;echo2, bot&gt;</code> and output $\bot$ if they didn’t output before.</p>
+<p>The new addition is binding:</p>
+<p><em>Binding</em>: Consider the first non-faulty party that sees $n-f$ echo3 messages. There are two cases; if some non-faulty party sent a non-$\bot$ echo3 message then we have binding from the Weak Agreement property (recall that we have Weak Agreement on echo3 messages from the CA algorithm). Otherwise there are at least $f+1$ non-faulty parties that sent <code class="language-plaintext highlighter-rouge">&lt;echo3, bot&gt;</code>. This means that no other non-faulty party can see $n-f$ echo3 messages with a non-$\bot$ value, so $\bot$ is the only possible output, hence we have (trivially) binding for both 0 and 1.</p>
+<h3 id="termination-and-pipelining">Termination and Pipelining</h3>
+<p>Just as with CA, we add the same Termination Gadget mechanism for BCA and the same proof holds.</p>
+<p>Similarly, if multiple BCA instances are executed serially, then the <code class="language-plaintext highlighter-rouge">&lt;output&gt;</code> message can be pipelined in the same way.</p>
+<h2 id="message-complexity-of-ca-and-bca">Message complexity of CA and BCA</h2>
+<p>Observe that in CA each non-faulty party sends at most 3 messages (and just 2 if all non-faulty parties have the same input). In BCA each non-faulty party sends at most 4 messages (and just 3 if all non-faulty parties have the same input). Finally, the termination gadget adds one more message, but this message can be pipelined if instances of CA or BCA are run sequentially.</p>
+<p>So the total message complexity is $O(n^2)$, with low constants.</p>
+<p>In the next post we show how to use BCA for <a href="https://decentralizedthoughts.github.io/2022-04-05-aa-part-five-ABBA/">Asynchronous Byzantine Agreement</a>.</p>
+<p>Your thoughts and comments on <a href="https://twitter.com/ittaia/status/1511665005699248136?s=20&amp;t=gJEZwTvUN72KwbNBJ53eYQ">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#asynchrony">asynchrony</a>
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ <a href="/tags#research">research</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Asynchronous+Agreement+Part+4%3A+Crusader+Agreement+and+Binding+Crusader+Agreement&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2022-04-05-aa-part-four-CA-and-BCA%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2022-03-30-asynchronous-agreement-part-three-a-modern-version-of-ben-ors-protocol/" data-toggle="tooltip" data-placement="top" title="Asynchronous Agreement Part Three: a Modern version of Ben-Or's protocol">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2022-04-05-aa-part-five-ABBA/" data-toggle="tooltip" data-placement="top" title="Asynchronous Agreement Part 5: Binary Byzantine Agreement from a strong common coin">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Can we Obtain Privacy in a Private Proof-of-Stake Blockchain? Part-II</title>
+ 
+ 
+ <meta name="author" content="Chenghong Wang, Kartik Nayak">
+ 
+ <meta name="description" content="This is Part-II of a two-part post on privacy in private proof-of-stake blockchains. In Part-I, we explored attacks on existing private PoS approaches. In this post, we will discuss some ways to obtain privacy (at the expense of safety and/or liveness). A Three-Way Trade-Off between Safety, Liveness, and Privacy Madathil et al. had in fact demonstrated that theoretically, a PoS blockchain must forgo privacy to achieve safety and liveness. As...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Can we Obtain Privacy in a Private Proof-of-Stake Blockchain? Part-II">
+ <meta property="og:description" content="This is Part-II of a two-part post on privacy in private proof-of-stake blockchains. In Part-I, we explored attacks on existing private PoS approaches. In this post, we will discuss some ways to obtain privacy (at the expense of safety and/or liveness). A Three-Way Trade-Off between Safety, Liveness, and Privacy Madathil et al. had in fact demonstrated that theoretically, a PoS blockchain must forgo privacy to achieve safety and liveness. As...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Chenghong Wang, Kartik Nayak">
+ 
+ <meta property="og:article:published_time" content="2023-07-21T01:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2023-07-21-ppos2/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2023-07-21-ppos2/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Can we Obtain Privacy in a Private Proof-of-Stake Blockchain? Part-II">
+ <meta property="twitter:description" content="This is Part-II of a two-part post on privacy in private proof-of-stake blockchains. In Part-I, we explored attacks on existing private PoS approaches. In this post, we will discuss some ways to obtain privacy (at the expense of safety and/or liveness). A Three-Way Trade-Off between Safety, Liveness, and Privacy Madathil et al. had in fact demonstrated that theoretically, a PoS blockchain must forgo privacy to achieve safety and liveness. As...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Can we Obtain Privacy in a Private Proof-of-Stake Blockchain? Part-II</h1>
+ 
+ 
+ 
+ 
+ By <strong>Chenghong Wang, Kartik Nayak</strong><br>
+ 
+ <span class="post-meta">Posted on July 21, 2023</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>This is Part-II of a two-part post on privacy in private proof-of-stake blockchains. In <a href="https://decentralizedthoughts.github.io/2023-07-21-ppos1/">Part-I</a>, we explored attacks on existing private PoS approaches. In this post, we will discuss some ways to obtain privacy (at the expense of safety and/or liveness).</p>
+<h3 id="a-three-way-trade-off-between-safety-liveness-and-privacy">A Three-Way Trade-Off between Safety, Liveness, and Privacy</h3>
+<p><a href="https://eprint.iacr.org/2021/409.pdf">Madathil et al.</a> had in fact demonstrated that theoretically, a PoS blockchain must forgo privacy to achieve safety and liveness. As a result, designing a practical private PoS requires navigating the trade-offs between privacy, safety, and liveness. In the following, we explore potential solutions that involve trading off one dimension (i.e., safety or liveness) in exchange for privacy guarantees.</p>
+<h3 id="trading-off-safety-for-privacy">Trading-off safety for privacy</h3>
+<p><strong>Equal weights for every party.</strong> To achieve stake privacy, a straightforward method might involve allocating equal weight to every participant in the ledger rather than weighting them based on their stake. This approach would allow each party an equal chance to propose a block or be chosen as a member of the committee that decides the subsequent block. As per this, the stake would function exclusively as an account balance, used only for payment transactions, which can be adequately concealed through cryptographic primitives. However, this approach does not provide any safety against Sybil nodes. As a result, this naive strategy does not work. In essence, this method sacrifices the complete safety assurance in exchange for a strong privacy guarantee for each party’s stake.</p>
+<p><strong>Differentially-private stake distortion.</strong> On one side, we desire a scenario where the party’s chance of winning the block proposer election isn’t predominantly dependent on their true stake, promoting privacy. However, counterbalancing this, we still aspire to establish a mechanism where the winning odds are proportionate to each party’s stake, guaranteeing safety. A straightforward approach is for each party to employ a distorted stake as the input for running the leader election. Nevertheless, this distortion should concurrently fulfill two conditions:</p>
+<ol>
+ <li>The distortion should embody meaningful privacy semantics.</li>
+ <li>Distortion of stake could potentially result in an increased adversarial stake. Thus, the mechanism must guarantee a bounded increment in the adversarial stake.</li>
+</ol>
+<p>To achieve this, we now present a method that allows for a small, bounded trade-off in safety loss to obtain a reasonably strong and provable privacy guarantee. The general concept involves each party distorting their actual stake with differentially private (DP) noise and using the DP noisy stake for all subsequent ledger election purposes. Hence, the attacker can only infer DP distorted stake values by launching SIA attacks; thus, leaking only distorted stake values provides some privacy guarantees. By default, we add Laplace noises $\sim\mathsf{Lap}(\frac{\alpha}{\epsilon})$, where $\epsilon$ is the privacy parameter (smaller $\epsilon$ means better privacy) and $\alpha &gt; 0$ represents a distinguishing bound (larger $\alpha$ means better privacy). Note that by introducing a distinguishing bound $\alpha$, we permit an attacker to distinguish between a victim’s (unknown) stake $f_v$ and a value $x$ such that that the absolute difference $(f_v - x)$ is greater than $\alpha$.</p>
+<p>We stress that the noisy stake is solely employed for ledger maintenance tasks, such as electing leaders and sampling committees. When a party engages in other tasks, such as issuing payment transactions, their true stake is used. Nevertheless, as previously mentioned, cryptographic techniques are sufficient to conceal the stake during payment transactions.</p>
+<p>A downside of using distorted stake values for electing leaders and sampling committees is that adversarial stake can be higher than its true value. Consequently, this has a direct effect on the safety properties of the system. In particular, if the distorted stake $\tilde{f}$ is larger than the true stake $f$, then the adversary essentially gains $\tilde{f} - f$. However, since the DP noises are random variables with bounded variances, this ensures that such safety loss is also bounded. Furthermore, by establishing a specific safety objective, such as ensuring the post-distortion stake $\tilde{f}$ remains less than $\frac{1}{3}$, one can obtain a slack $\gamma \in (0,1/3)$, for example, using Chernoff inequalities, such that as long as $f &lt; \frac{1}{3} - \gamma$, there is an overwhelming probability that $\tilde{f}$ will be less than $\frac{1}{3}$.</p>
+<p>Additionally, this design offers flexibility in selecting the desired privacy level. For example, one could choose DP noises with a smaller variance (resulting in weaker privacy in DP) to maintain a smaller $\alpha$ (a better safety guarantee), and vice versa.</p>
+<p><strong>A case study on DP stake distortion.</strong> We now present a case study to better understand the safety-privacy trade-off obtained when using our stake distortion protocol on Ethereum 2.0. Specifically, we first plot privacy-safety curves in the following figure showing the best privacy (under the requirement of post-distortion adversarial stake to be smaller than $\frac{1}{3}$) attainable at a specified safety level (malicious tolerance).</p>
+<p><img src="https://hackmd.io/_uploads/BJ-dGDIuh.png" alt="drawing" width="500" /></p>
+<p>The tradeoff is pretty evident from the figure above; for instance, one can achieve better privacy with a larger $\alpha$ or a smaller $\epsilon$ when considering a relatively weaker safety (smaller malicious tolerance). Moreover, this property also provides flexibility to practitioners in fine-tuning the protocols. For instance, if a slashing mechanism is in place to minimize the malicious fraction, one might opt for better privacy by choosing a weaker safety.</p>
+<p>Next, we run stake distortion simulations to validate the privacy-safety curves. Specifically, we emulate the Ethereum 2.0 leader election protocol and adjust distortion parameters according to the privacy-safety curves. Following this, we perform simulated stake distortion over 10K rounds, aiming to identify any potential safety violations, i.e., if the post-distortion adversarial stake exceeds $\frac{1}{3}$. We sumarize the results in the following table</p>
+<table>
+ <thead>
+ <tr>
+ <th>Pre-distortion ACS</th>
+ <th>$(\epsilon, \alpha)$</th>
+ <th>Max Post-distortion ACS</th>
+ </tr>
+ </thead>
+ <tbody>
+ <tr>
+ <td>0.1</td>
+ <td>(0.5, 1214)</td>
+ <td>0.33082</td>
+ </tr>
+ <tr>
+ <td>0.15</td>
+ <td>(0.5, 963)</td>
+ <td>0.32952</td>
+ </tr>
+ <tr>
+ <td>0.2</td>
+ <td>(0.5, 701)</td>
+ <td>0.33055</td>
+ </tr>
+ <tr>
+ <td>0.25</td>
+ <td>(0.5, 438)</td>
+ <td>0.32858</td>
+ </tr>
+ <tr>
+ <td>0.3</td>
+ <td>(0.5, 175)</td>
+ <td>0.32309</td>
+ </tr>
+ </tbody>
+</table>
+<blockquote>
+ <p>AS: Adversial controlled stake</p>
+</blockquote>
+<p>The table indicates that, even under 10K stake distortions, not a single safety violation arises.</p>
+<h3 id="discussion">Discussion</h3>
+<p>In the previous section, we’ve explored potential solutions that trade-off safety for privacy without affecting liveness. It raises an intriguing question:</p>
+<p><strong><em>Can we trade off liveness for the sake of privacy?</em></strong></p>
+<p>While we have not argued these solutions formally in our work, we will share a few ideas that could be extended to effective solutions.</p>
+<p><strong>Disable chain growth.</strong> The basic premise of a stake inference attack involves an attacker observing whether their self-created transaction is confirmed on time. A direct countermeasure to mitigate SIA would be to halt chain growth, effectively eliminating the attacker’s ability to carry out SIA. While this approach ensures perfect privacy, it comes at the cost of completely sacrificing liveness.</p>
+<p><strong>Random delay for transaction proposal.</strong> We now propose a proof-of-concept mitigation strategy that incorporates random delays for the proposal of submitted transactions. In essence, when a leader is elected, they flip a biased coin for each received transaction and only include the transaction in the proposed block if the coin lands on heads. This process introduces uncertainty regarding the timing of transaction confirmations, making it difficult for attackers to execute SIA attacks. On the downside, this method can result in some transactions being delayed, indicating a trade-off in liveness. However, by adjusting the bias of the coin being flipped, one can control the extent of the liveness loss.</p>
+<p><strong>Acknowledgment.</strong> We would like to thank Ittai Abraham and Ashwin Machanavajjhala for their feedback on this post.</p>
+<p>Please post your comments on <a href="https://twitter.com/kartik1507/status/1683466272393101312">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ <a href="/tags#research">research</a>
+ 
+ <a href="/tags#privacy">privacy</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Can+we+Obtain+Privacy+in+a+Private+Proof-of-Stake+Blockchain%3F+Part-II&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2023-07-21-ppos2%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2023-07-21-ppos1/" data-toggle="tooltip" data-placement="top" title="Can we Obtain Privacy in a Private Proof-of-Stake Blockchain? Part-I">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2023-07-22-agreeemnt-on-a-core-set/" data-toggle="tooltip" data-placement="top" title="Asynchronous Agreement on a Core Set">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

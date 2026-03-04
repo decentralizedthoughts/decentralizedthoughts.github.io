@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Shoal++: High Throughput DAG-BFT Can Be Fast!</title>
+ 
+ 
+ <meta name="author" content="Balaji Arun, Zekun Li, Florian Suri-Payer, Sourav Das, Alexander Spiegelman">
+ 
+ <meta name="description" content="TL;DR: Shoal++ is a novel DAG-BFT system that supercharges Shoal to achieve near-optimal theoretical latency while preserving the high throughput and robustness of state-of-the-art certified DAG BFT protocols. We evaluated Shoal++ against state-of-the-art DAG BFT protocols, such as Bullshark and Shoal — as well as a concurrent DAG effort, Mysticeti (similar to Cordial Miners). Our results show that Shoal++ outperforms all of them, even in failure-free scenarios, reducing state-of-the-art latency...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Shoal++: High Throughput DAG-BFT Can Be Fast!">
+ <meta property="og:description" content="TL;DR: Shoal++ is a novel DAG-BFT system that supercharges Shoal to achieve near-optimal theoretical latency while preserving the high throughput and robustness of state-of-the-art certified DAG BFT protocols. We evaluated Shoal++ against state-of-the-art DAG BFT protocols, such as Bullshark and Shoal — as well as a concurrent DAG effort, Mysticeti (similar to Cordial Miners). Our results show that Shoal++ outperforms all of them, even in failure-free scenarios, reducing state-of-the-art latency...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Balaji Arun, Zekun Li, Florian Suri-Payer, Sourav Das, Alexander Spiegelman">
+ 
+ <meta property="og:article:published_time" content="2024-06-12T13:05:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2024-06-12-shoalpp/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2024-06-12-shoalpp/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Shoal++: High Throughput DAG-BFT Can Be Fast!">
+ <meta property="twitter:description" content="TL;DR: Shoal++ is a novel DAG-BFT system that supercharges Shoal to achieve near-optimal theoretical latency while preserving the high throughput and robustness of state-of-the-art certified DAG BFT protocols. We evaluated Shoal++ against state-of-the-art DAG BFT protocols, such as Bullshark and Shoal — as well as a concurrent DAG effort, Mysticeti (similar to Cordial Miners). Our results show that Shoal++ outperforms all of them, even in failure-free scenarios, reducing state-of-the-art latency...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Shoal++: High Throughput DAG-BFT Can Be Fast!</h1>
+ 
+ 
+ 
+ 
+ By <strong>Balaji Arun, Zekun Li, Florian Suri-Payer, Sourav Das, Alexander Spiegelman</strong><br>
+ 
+ <span class="post-meta">Posted on June 12, 2024</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p><strong>TL;DR</strong>: <a href="https://arxiv.org/pdf/2405.20488v1">Shoal++</a> is a novel DAG-BFT system that supercharges <a href="https://arxiv.org/abs/2306.03058">Shoal</a> to achieve near-optimal theoretical latency while preserving the high throughput and robustness of state-of-the-art certified DAG BFT protocols.</p>
+<p>We evaluated Shoal++ against state-of-the-art DAG BFT protocols, such as <a href="https://arxiv.org/abs/2201.05677">Bullshark</a> and <a href="https://arxiv.org/abs/2306.03058">Shoal</a> — as well as a concurrent DAG effort, <a href="https://arxiv.org/pdf/2310.14821">Mysticeti</a> (similar to <a href="https://arxiv.org/abs/2205.09174">Cordial Miners</a>). Our results show that Shoal++ outperforms all of them, even in failure-free scenarios, reducing state-of-the-art latency by up to 60% and achieving sub-second latency even at 100k tps throughput.</p>
+<h2 id="dag-bft-background">DAG-BFT Background</h2>
+<p>The core idea of DAG-BFT is to decouple consensus logic from data dissemination, which is done in parallel in an effort to fully utilize available system bandwidth. We explain the motivation and design of DAG-BFT protocols in two previous blog posts: <a href="https://decentralizedthoughts.github.io/2022-06-28-DAG-meets-BFT/">DAG Meets BFT</a> and <a href="https://medium.com/aptoslabs/shoal-how-we-reduce-bullshark-latency-on-the-aptos-blockchain-44a600d977a1">Shoal</a>.</p>
+<h3 id="dag-construction">DAG construction</h3>
+<p>Shoal++ follows the <em>certified DAG</em> structure proposed in <a href="https://arxiv.org/pdf/2105.11827">Narwhal</a>, which uses the round-based DAG first intreduced in <a href="https://arxiv.org/abs/1908.05156">Aleph</a>. Validators collaboratively proceed through a series of structured rounds, forming a DAG in the process. Each round consists of one node per validator (a proposal), each of which contains a set of transactions, and at least $n-f$ unique reference links (edges) to nodes of the preceding round. Each node is <em>certified</em> via a consisted broadcast before being added to the DAG.
+The figure below illustrates a Narwhal-based DAG construction.</p>
+<div style="text-align: center;">
+<img src="/uploads/spp1.png" alt="Narwhal-based DAG construction" width="500" />
+</div>
+<p> </p>
+<p>The consisted broadcast process to certify and add node to the DAG requires three steps, for a total of three message delays:</p>
+<ol>
+ <li>A validator broadcasts its node proposal</li>
+ <li>Other validators vote for the proposal, and the original validator aggregates a certificate consisting of 2f+1 signatures on the node hash.</li>
+ <li>The validator broadcasts its certified node, and recipients add the node to their local view of the DAG.</li>
+</ol>
+<p>The certification process, hence a certified DAG, guarantees three desirable properties:</p>
+<ol>
+ <li>It guarantees that Byzantine validators cannot equivocate, which simplifies the consensus logic</li>
+ <li>The DAG grows at network speed since a node with a certificate can be immediately added to the DAG even if its causal history is missing.</li>
+ <li>Fetching missing nodes is done off the critical path and is better load-balanced according to the certificate signers.</li>
+</ol>
+<h3 id="embedded-consensus">Embedded consensus</h3>
+<p>Modern DAG-based protocols leverage the structured DAG rounds to implicitly embed consensus: validators simply interpret their local view of the DAG, allowing them to reach consensus without exchanging additional messages. A more detailed description of state-of-the-art protocols, Bullshark and Shoal, can be found in the previous posts <a href="https://decentralizedthoughts.github.io/2022-06-28-DAG-meets-BFT/">DAG Meets BFT</a> and <a href="https://medium.com/aptoslabs/shoal-how-we-reduce-bullshark-latency-on-the-aptos-blockchain-44a600d977a1">Shoal</a>. We provide here a short overview of the Bullshark protocol.</p>
+<p>Every odd round in Bullshark has a pre-defined anchor node, which simulates a leader. The protocol first agrees on what anchors to commit and then orders their respective causal histories according to the committed order. There are two ways to commit an anchor:</p>
+<ol>
+ <li>An anchor in round r is <strong>directly committed</strong> if it gets $f+1$ votes, i.e., $f+1$ nodes in round $r+1$ link to it.</li>
+ <li>An anchor in round r is <strong>indirectly committed</strong> if the first (directly or indirectly) committed anchor in a round $r’ &gt; r$ has a path to it.</li>
+</ol>
+<p>A direct commit requires 2 DAG rounds to commit an anchor; indirect commitment require several more rounds. The figure below demonstrates the Bullshark commit rule. Validator 4 directly commits anchor A1 since it has $2=f+1$ votes in its local DAG. Validator 1 indirectly commits anchor A1 since the next (directly or indirectly) committed anchor has a path to A1.</p>
+<div style="text-align: center;">
+<img src="/uploads/spp2.png" alt="Bullshark commit rule" width="600" />
+</div>
+<p> </p>
+<h2 id="latency-breakdown">Latency breakdown</h2>
+<p>We measure transaction end-to-end (e2e) latency in a consensus system as the time between a validator first receiving the transaction and the time the transaction is committed (ordered+all data is available and log prefix is committed). In a DAG BFT system, this latency can be broken into three sequential phases:</p>
+<ol>
+ <li>Queuing latency: the time it takes for a transaction to be proposed, i.e., included in a broadcasted node.</li>
+ <li>Anchoring latency: the time it takes for a non-anchor node to be linked by an eventually committing anchor.</li>
+ <li>Anchor Commit latency: the time it takes to commit an anchor node.</li>
+</ol>
+<p>To aid in illustration of these phases we will use Bullshark as an example.</p>
+<p><strong>Queuing latency:</strong> It takes 3 message delays to certify and add a node to the DAG in Bullshark. Therefore, a validator proposes a new node every 3 message delays. As a result, under uniform distribution, a transaction submitted to a validator must wait, on average, 1.5 message delays before being proposed.</p>
+<p><strong>Anchoring latency:</strong> The Bullshark protocol has a pre-defined anchor in every odd round. The rest of the nodes are ordered as part of a committed anchor’s causal history, which leads to higher latency. Specifically, nodes in even rounds require at least an additional DAG round (resulting in an extra 3 message delays), and non-anchor nodes in odd rounds require at least two additional DAG rounds (resulting in an extra 6 message delays).</p>
+<p><strong>Anchor Commit latency:</strong> The Bullshark protocol requires 2 DAG rounds (6 message delays) to commit an anchor in the good case — one DAG round of certifying and broadcasting the anchor and another round for the voting nodes to become certified.</p>
+<h2 id="introducing-shoal">Introducing Shoal++</h2>
+<p>In Shoal++ we independently tackle each of the DAG BFT latency phases reducing the best case e2e latency to only 4.5 message delays, which is 7.5 message delays fewer than Bullshark. More formally,</p>
+<blockquote>
+ <p>During failure free synchronous network periods, the e2e average transaction latency is $4.5\delta$, where $\delta$ is the network messgae delay.</p>
+</blockquote>
+<p>We describe the key ideas below, while more practical consideration can be found in the <a href="https://arxiv.org/pdf/2405.20488v1">paper</a>.</p>
+<h3 id="fast-anchors">Fast anchors</h3>
+<p>Our first observation is that the direct Bullshark commit rule can be optimized in common-case scenarios. This perhaps comes as a surprise as Bullshark has been subject to multiple iterations and is running in a production system for over a year now. The idea is simple: rather than only commit upon observing $f+1$ certified nodes in round $r+1$ that link to an anchor (votes) in round $r$, Shoal++ also allows validators to commit anchors upon observing $2f+1$ (uncertified) node proposals.</p>
+<p>The safety argument is straightforward. Since there are at most 𝑓 Byzantine validators, receiving $2f+1$ uncertified nodes implies that $f+1$ of them will eventually be certified, and thus the direct commit rule is guaranteed to be fulfilled. This optimization reduces the direct commit latency in the good case from 6 to 4 message delays: 3 message delays to certify and add the anchor to the DAG and another delay to broadcast the uncertified nodes (the first step of the certification process). A similar idea was discussed in a previous <a href="https://decentralizedthoughts.github.io/2024-05-23-sailfish/">sailfish post</a>.</p>
+<h3 id="more-anchors">More anchors</h3>
+<p>The Shoal paper introduced anchor pipelining and discussed the theoretical concept of having multiple anchors per round. In Shoal++, we transform this idea into a practical solution to reduce anchoring latency. By treating all nodes as anchors, we can potentially save 3 message delays by eliminating anchoring latency entirely.</p>
+<p>In essence, the idea is to run a new Bullshark instance for each node, where each node serves as the instance’s first predefined anchor. Each Bullshark instance acts as a single-shot consensus mechanism to decide whether to commit or skip the associated node. Skipped nodes are committed as part of a committed anchor’s causal history, as before.</p>
+<p>The practical challenge is that increasing the number of anchors per round also raises the likelihood that one of them cannot be directly committed. Since all validators must follow the same deterministic order, an anchor that cannot be directly committed introduces higher latency for the subsequent anchors in the round. To address this issue, Shoal++ incorporates the anchor reputation mechanism from Shoal and introduces a round timeout. Specifically, it uses the reputation system to filter out nodes associated with crashed or extremely slow validators and employs a small round timeout to advance the DAG in a synchronized manner. This approach results in slightly slower DAG construction but significantly lowers end-to-end latency by eliminating anchoring latency for most nodes.</p>
+<h3 id="more-dags">More DAGs</h3>
+<p>Finally, Shoal++ minimizes queuing latency by operating multiple DAGs in parallel. These DAGs are staggered using a small offset, allowing waiting transactions that miss a round to be quickly included in the next DAG. Each DAG uses the same internal ordering logic, and the global ordering logic interleaves their outputs in a round-robin fashion. This approach reduces the average queuing latency from 1.5 to 0.5 message delays.</p>
+<h2 id="evaluation">Evaluation</h2>
+<p><strong>Experimental Setup</strong>
+We used Google Cloud to mimic the deployment of a globally decentralized network. Our testbed consists of 100 validators spread evenly across 10 regions in 6 continents around the world with machine specs similar to those used by production blockchains and qualifies as commodity grade. More details can be found in the <a href="https://arxiv.org/pdf/2405.20488v1">paper</a>.</p>
+<p><strong>Baselines</strong>
+We compare Shoal++ against three popular, high throughput DAG-BFT consensus protocols, Bullshark, Shoal, and Mysticeti, as well as one traditional low-latency traditional-style BFT protocol, <a href="https://arxiv.org/abs/2106.10362">Jolteon</a>. Bullshark and Shoal represent state-of-the-art certified DAG-based protocols, while Mysticeti (a practical implementation of the Cordial Miner protocol) is a concurrent work to Shoal++ proposing an uncertified design to reduce latency. Jolteon is a state-of-the-art leader-based BFT protocol, which improves Hotstuff latency by 33%. For Mysticeti, we run the publicly available source code referenced from the paper. We implemented the other protocols in our codebase. All protocols are written in Rust, utilizing the Tokio asynchronous runtime. All prototypes except Mysticeti persist consensus data to storage.</p>
+<p><strong>Results</strong>
+The graph below compares the protocol performance under the no-failure case. More experiments can be found in the <a href="https://arxiv.org/pdf/2405.20488v1">paper</a>. Each data point represents the 50 percentile with error bars representing the 25, and 75th percentiles. Shoal++ outperforms all protocols and achieves sub-second latency even at 100k tps throughput.</p>
+<div style="text-align: center;">
+<img src="/uploads/spp3.jpg" alt="Latency/Throughput plot" />
+</div>
+<p> </p>
+<h2 id="certified-vs-uncertified-dags">Certified VS Uncertified DAGs</h2>
+<p>A recent group of protocols propose the design of uncertified DAGs. Such constructions can, in theory, reduce latency but in practice they are prone to data fetching on the critical path. One notable example is Mysticeti (which implements a similar protocol to the one proposed in Cordial Miners; and with multiple anchors per round as proposed in Shoal). Specifically, they replace the certification process in each round with a best-effort broadcast, reducing the latency to add a node to the DAG to 1 message delay. The embedded consensus on top resembles PBFT.</p>
+<p>The main issue is that edges to uncertified, yet locally unavailable nodes cause fetching on the critical path. In other words, a node cannot be added to the DAG until all its casual history is locally available. This is because the DAG no longer has the proof of availability guarantee provided by the node certificates. In theory, such fetching can result in an additional 2 message delay in each round, while in practice it might be even worse since too much fetching creates bottlenecks in the system.</p>
+<p>The figure below illustrates the fetching issue in uncertified DAGs. Solid squares represent locally available nodes to validator 1, out of which the black squares represent its local DAG. In an uncertified DAG, validator 1 cannot advance to round 2 and broadcast node n’’ since node n’ cannot be added to the DAG yet. This is because node n has not yet been received.</p>
+<div style="text-align: center;">
+<img src="/uploads/spp4.png" alt="Uncertified DAG" width="400" />
+</div>
+<p> </p>
+<p>Note that validator 3 might be completely honest and yet suffer due to validator 4’s inability to disseminate its node, which in turn might be just a slow honest validator. A single byzantine validator, however, might completely destroy the protocol latency by sending its nodes to an arbitrary subset of validators. A similar effect can be caused by insatiable networks with a non-negligible probability of packet loss.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Shoal++ aims to demonstrate that certification is not the root cause of high latencies and that latency can be significantly reduced without sacrificing DAG BFT robustness. By incorporating three orthogonal latency optimizations on top of Shoal, Shoal++ manages to achieve near-optimal latency while maintaining high throughput and robustness, even under less favorable networking conditions.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ <a href="/tags#research">research</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Shoal%2B%2B%3A+High+Throughput+DAG-BFT+Can+Be+Fast%21&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2024-06-12-shoalpp%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2024-05-23-sailfish/" data-toggle="tooltip" data-placement="top" title="Sailfish: Improving the Latency of DAG-based BFT">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2024-08-08-vid/" data-toggle="tooltip" data-placement="top" title="What is Verifiable Information Dispersal?">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

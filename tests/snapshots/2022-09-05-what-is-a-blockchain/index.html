@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>What is a Blockchain?</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham">
+ 
+ <meta name="description" content="TL;DR: A blockchain is a trusted coordination mechanism. Of course, the answer depends on who you ask :-) My seven-word answer: A blockchain is a trusted coordination mechanism. What is your definition of a blockchain? Reply with your seven-word answer on Twitter. My answer to this question evolved over the years: from a more trust-oriented description: “a computer with trust” (inspired by Ben Horowitz) to adding an economic angle “trusted...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="What is a Blockchain?">
+ <meta property="og:description" content="TL;DR: A blockchain is a trusted coordination mechanism. Of course, the answer depends on who you ask :-) My seven-word answer: A blockchain is a trusted coordination mechanism. What is your definition of a blockchain? Reply with your seven-word answer on Twitter. My answer to this question evolved over the years: from a more trust-oriented description: “a computer with trust” (inspired by Ben Horowitz) to adding an economic angle “trusted...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham">
+ 
+ <meta property="og:article:published_time" content="2022-09-05T00:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2022-09-05-what-is-a-blockchain/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2022-09-05-what-is-a-blockchain/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="What is a Blockchain?">
+ <meta property="twitter:description" content="TL;DR: A blockchain is a trusted coordination mechanism. Of course, the answer depends on who you ask :-) My seven-word answer: A blockchain is a trusted coordination mechanism. What is your definition of a blockchain? Reply with your seven-word answer on Twitter. My answer to this question evolved over the years: from a more trust-oriented description: “a computer with trust” (inspired by Ben Horowitz) to adding an economic angle “trusted...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>What is a Blockchain?</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham</strong><br>
+ 
+ <span class="post-meta">Posted on September 5, 2022</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <h2 id="tldr-a-blockchain-is-a-trusted-coordination-mechanism">TL;DR: A blockchain is a trusted coordination mechanism.</h2>
+<p>Of course, the answer depends on who you ask :-)</p>
+<p>My seven-word answer: <strong>A blockchain is a trusted coordination mechanism</strong>.</p>
+<p>What is your definition of a blockchain? <a href="https://twitter.com/ittaia/status/1566870358837321731?s=46&amp;t=VDqZSRpxsraPaBX11I_JaA">Reply with your seven-word answer on Twitter</a>.</p>
+<p>My answer to this question evolved over the years: from a more trust-oriented description: “<em>a computer with trust</em>” (inspired by <a href="https://www.youtube.com/watch?v=l7QdIQVTly0">Ben Horowitz</a>) to adding an economic angle “<em>trusted coordination mechanism</em>” (inspired by <a href="https://www.ted.com/talks/yuval_noah_harari_what_explains_the_rise_of_humans/transcript?language=en&quot;">Yuval Noah Harari</a>).</p>
+<p>Other very similar answers: <a href="https://berkeley-defi.github.io/assets/material/lec2-dan-tech-intro.pdf">Dan Boneh’s</a> “<em>a blockchain provides coordination between many parties, when there is no single trusted party</em>”. <a href="https://a16z.com/2020/01/27/computers-that-make-commitments/">Chris Dixon’s</a> “<em>Blockchains are Computers That Can Make Commitments</em>”, <a href="https://continuations.com/post/671863718643105792/web3crypto-why-bother">Albert Wenger’s</a> <em>a blockchain is a database not controlled by a single entity</em>, and <a href="https://timroughgarden.github.io/fob21/l/l1.pdf">Tim Roughgarden’s</a> “<em>a programmable computer that lives in the sky, that is not owned by anyone and that anyone can use</em>” – which is a great metaphor! but slightly more than seven words :-).</p>
+<p>All these answers have a common theme, but let’s start with the origin of the word “blockchain”</p>
+<!---
+The idea that money is simply a trusted ledger (aka a blockchain) of all transactions goes back to [Narayana R. Kocherlakota 1996](https://researchdatabase.minneapolisfed.org/downloads/pr76f356g) iconic paper "Money is Memory".
+--->
+<h2 id="origin-of-the-word-blockchain">Origin of the word “Blockchain”</h2>
+<p>Emails from <a href="https://plan99.net/~mike/satoshi-emails/thread1.html">Satoshi</a> in 2009 mention “the block chain”. However, Satoshi’s emails and the <a href="https://bitcoin.org/bitcoin.pdf">Bitcoin whitepaper</a> do not use the word “blockchain”. There was some initial debate between using “block chain” vs “blockchain”, but by 2014, the official <a href="https://groups.google.com/g/bitcoin-documentation/c/D9aqm8uDQG0">Bitcoin forums</a> seem to have converged on using “blockchain”.</p>
+<p>So what does this “chain of blocks” do? The answer seems clear in <a href="https://www.metzdowd.com/pipermail/cryptography/2008-November/014849.html">Satoshi Nakamoto’s 2008</a> groundbreaking insight:</p>
+<blockquote>
+ <p>The proof-of-work chain is a solution to the Byzantine Generals’ Problem. I’ll try to rephrase it in that context. – Satoshi Nakamoto</p>
+</blockquote>
+<p>Similarly, <a href="https://www.metzdowd.com/pipermail/cryptography/2008-November/014848.html">Hal Finney, 2008</a> explained that Bitcoin is solving a very hard problem of building a global, massively decentralized database:</p>
+<blockquote>
+ <p>… bitcoin is two independent ideas: a way of …
+creating a globally consistent but decentralized database; and then using
+it for a system similar to Wei Dai’s b-money … Solving the
+global, massively decentralized database problem is arguably the harder
+part… – Hal Finney</p>
+</blockquote>
+<p>So how should we call this part of Bitcoin’s innovation? Vitalik Buterin’s 2013 <a href="https://ethereum.org/en/whitepaper/">Ethereum whitepaper</a> teases out <em>blockchain</em> as a generic term:</p>
+<blockquote>
+ <p>another - arguably more important - part of the Bitcoin experiment is the underlying <strong>blockchain technology</strong> as a tool of distributed consensus, and attention is rapidly starting to shift to this other aspect of Bitcoin</p>
+</blockquote>
+<h2 id="what-is-a-blockchain-in-more-than-seven-words">What is a Blockchain, in more than seven words?</h2>
+<p>How can a blockchain be a <strong>trusted coordination mechanism</strong>?</p>
+<p>Viewed through the lens of computer science and distributed computing, my answer is: a blockchain is a trusted coordination mechanism via:</p>
+<ol>
+ <li>Byzantine Fault Tolerant State Machine Replication (“trusted”); with</li>
+ <li>Openness and Auditability (“coordination”),</li>
+ <li>Incentives to provide guarantees (“mechanism”).</li>
+</ol>
+<h3 id="1-byzantine-fault-tolerant-state-machine-replication-trusted">1. Byzantine Fault Tolerant State Machine Replication (“trusted”)</h3>
+<p>A <em>trusted coordination mechanism</em> is a shorthand for the more academic definition of <strong>Byzantine Fault Tolerant State Machine Replication (BFT SMR)</strong>. The State Machine <em>paradigm</em> is covered by <a href="https://www.cs.cornell.edu/fbs/publications/ibmFault.sm.pdf">Fred Schneider’s 1990 tutorial</a> and goes back to Lamport’s seminal 1978 paper on <a href="https://lamport.azurewebsites.net/pubs/time-clocks.pdf">Time, Clocks, and the Ordering of Events in a Distributed System</a> (see page 562). The adaptation of the State Machine paradigm to Byzantine Fault tolerance and the emphasis on a <em>generic</em> service was pioneered by Barbara Liskov and her group at MIT with <a href="https://pmg.csail.mit.edu/papers/osdi99.pdf">PBFT</a> and <a href="http://www.sosp.org/2001/papers/rodrigues.pdf">BASE</a>. BASE advocates using <em>abstraction</em> and <em>generality</em> which is the conceptual precursor to the idea of a <em>blockchain computer</em>.</p>
+<p>The idea of replacing any ideal functionality (state machine) with a replicated service built on mathematical protocols to obtain trust (which includes security, and in some extensions, privacy) is at the <strong>core of cryptography</strong>. <a href="https://www.boazbarak.org/cs127spring16/chap17_sfe">Boaz Barak</a> says it best: “Cryptography is about replacing trust with mathematics”. This foundational idea is at the center of <a href="https://u.cs.biu.ac.il/~lindell/MPC-resources.html">Secure Multi Party Computation</a>.</p>
+<h3 id="2-openness-and-auditability-coordination">2. Openness and Auditability (“coordination”)</h3>
+<p>As Yuval Noah Harari writes in <a href="https://www.ynharari.com/topic/power-and-imagination/">Sapiens 2014</a>:</p>
+<blockquote>
+ <p>Fiction has enabled us not merely to imagine things, but to do so collectively. We can weave common myths …(which) give Sapiens the unprecedented ability to cooperate flexibly in large numbers</p>
+</blockquote>
+<p>Through this lens, trust in blockchains can be viewed as a common fiction that allows untrusting parties to coordinate on a common source of truth. How can such a system provide a trusted system for coordination? Technically, a Byzantine fault tolerant state machine provides this trusted coordination. But how can parties trust the state machine? And how can they guarantee access to such a system?</p>
+<p>Two properties of <em>permissionless blockchains</em> that allow such untrusted coordination are <strong>openness</strong> and <strong>auditability</strong>. These properties are not captured explicitly by traditional BFT SMR and aim at allowing untrusting parties to trust the system and hence enable them to coordinate.</p>
+<p>Conceptually, <em>Openness</em> can be viewed as the blockchain equivalent of the <a href="https://en.wikipedia.org/wiki/First_Amendment_to_the_United_States_Constitution">US First Amendment</a>. Technically it can be split into two parts. The first is that the set of validators (or block producers) is not fixed, but dynamic and open for participation. Often, a certain type of resource is required to become a validator, but minimal discrimination beyond this resource requirement. In Bitcoin to become a block producer (validator) all that is needed is the ability to compute proof-of-work puzzles. In several proof-of-stake systems, to become a block producer (validator) all that is needed is to stake some amount.</p>
+<p>The second part of <em>Openness</em> is about the execution engine (the state machine), which can again be split in two: (1) openness in writing: there is often minimal inherent discrimination as to who can submit a transaction; (2) openness in reading: there is minimal inherent discrimination in the ability to read the state of the ledger and verify the transitions of the state machine;</p>
+<p>Openness is not an absolute property, there are often various requirements to limit it or balance it with other values. Regulator pressure could in the future require a more limited form of openness. A recent example is the <a href="https://home.treasury.gov/news/press-releases/jy0916">US treasury sanctions</a> imposed on the tornado cash mixer, and the resulting debate on <a href="https://www.eff.org/deeplinks/2022/08/code-speech-and-tornado-cash-mixer">First Amendment rights</a> and <a href="https://mirror.xyz/haunventures.eth/E-iD-jqgD-WmqrZOjCnGjv6U-R_N5tUk8xPzxUHhQGc">Fourth Amendment rights</a>.</p>
+<p>Another important historical example of the limits of openness is that to update themselves, blockchains sometimes need to hard fork. As an example, <a href="https://freedom-to-tinker.com/2015/07/28/analyzing-the-2013-bitcoin-fork-centralized-decision-making-saved-the-day/">an early Bitcoin hard fork</a> inadvertently discriminated against some transactions and caused a perceived <a href="https://bitcointalk.org/index.php?topic=152348.0">double spend</a>. Another famous example is the Ethereum DAO hard fork that caused a form of <a href="https://blog.slock.it/hard-fork-specification-24b889e70703#.io9ej36yq">discrimination against a presumed attacker</a>.</p>
+<p><em>Auditability</em> can be viewed as a strengthening of the ability of external parties to read and in particular to <em>audit</em> the system: (1) verify there is no double spend (audit for consensus violations); (2) verify that the execution is valid (audit for execution violations); (3) verify that the data is available (audit for data availability violations). Buterin argues about the importance of allowing <a href="https://vitalik.ca/general/2021/05/23/scaling.html">low resource users to be able to audit a blockchain</a>.</p>
+<h3 id="3-incentives-to-provide-guarantees-mechanism">3. Incentives to provide guarantees (“mechanism”)</h3>
+<p>Finally, traditional cryptographic models in computer science assume a binary: <em>good guys / bad guys</em> view of the world. These models assume some fraction of parties are inherently honest and the remaining parties are controlled by a malicious adversary whose sole goal is to break the protocol guarantees.</p>
+<p>Arguably, the breakthrough in blockchain systems is going beyond this model and focus on a 
+<strong>Cryptoeconomic model</strong> where most parties are presumed to be motivated by rational preferences and incentives.</p>
+<p>As Buterin says in his 2019 <a href="https://youtu.be/GQR1xjQn5Pg">talk on Cryptoeconomics</a>:</p>
+<blockquote>
+ <p>What did Satoshi really invent? Satoshi invented <strong>Cryptoeconomics</strong>, the use of incentives to provide guarantees about applications.</p>
+</blockquote>
+<p>To provide a means for trusted coordination, blockchains need to provide <strong>incentives</strong>: (1) for the validators to operate the system (over the alternatives of doing other things, free riding, or misbehaving); (2) and for users to choose to use the system (over other alternatives of using other systems).</p>
+<p>Taking into account incentives and modeling parties as rational agents is a non-trivial difference between blockchains and the traditional Cryptographic model of assuming honest parties and a malicious adversary.</p>
+<p>Instead of assuming most parties are honest and will follow the consensus protocol to maintain safety and liveness, some blockchains explicitly offer incentives to <a href="https://medium.com/@VitalikButerin/minimal-slashing-conditions-20f0b500fc6c">maintain safety</a> and <a href="https://eth2book.info/altair/part2/incentives/inactivity#inactivity-leak">maintain liveness</a>.</p>
+<p>The use of punishment strategies to disincentivize unwanted behavior is particularly effective when the blockchain system has a native means to force parties to commit economic resources and suffer <strong>slashing</strong> events in case of misbehavior. This is the basis of <a href="https://ethereum.org/en/developers/docs/scaling/optimistic-rollups/">optimistic rollups</a> and the usability of fraud proofs.</p>
+<p>Another key aspect of blockchains is that as a limited resource, they need some way to decide which transactions to include. This is a classic resource allocation problem with limited supply. The cryptoeconomic solution is to have a mechanism that selects the transactions whose users are willing to pay the most. For example the Ethereum <a href="https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md">1559 transaction pricing mechanism</a> whose goal is to stabilize the fee market and price congestion. As a side effect, these mechanisms also allocate revenue to validators.</p>
+<p>Cryptoeconomics and incentive considerations appear in many surprising places across blockchain technologies, from <a href="https://decentralizedthoughts.github.io/2020-02-26-selfish-mining/">selfish mining</a> to the equilibrium between <em>staking and lending</em>.</p>
+<h4 id="what-is-a-blockchain-notable-posts-and-responses">What is a Blockchain? Notable posts and responses</h4>
+<p><strong>Chris Dixon</strong>: ability to coordinate people and capital at internet scale, with ownership embedded directly into the system. See <a href="https://x.com/cdixon/status/2019837259575607401?s=20">full blog post</a>.</p>
+<p><strong>Balaji Srinivasan</strong>: massively multiclient databases, where every user is a root user. See <a href="https://balajis.com/p/yes-you-may-need-a-blockchain">full blog post</a>.</p>
+<p><strong>Virgil Griffith</strong>: is an unprecedented arena for playing cooperative games. See <a href="https://medium.com/@virgilgr/ethereum-is-game-changing-technology-literally-d67e01a01cf8">full blog post</a>.</p>
+<p><strong>@artofkot</strong>: collusion resistant coordination tool. Check out the excellent <a href="https://artofkot.xyz/blog/why-blockchains">full blog post</a>.</p>
+<p><strong>@JoshaTobkin</strong>: a shared immutable ledger</p>
+<p><strong>@dfren_eth</strong>: blockchains are digital and political states.</p>
+<p><strong>@yossi_sheriff</strong>: a machine version of cultural trust capital</p>
+<h4 id="acknowledgments">Acknowledgments</h4>
+<p>Many thanks to Tim Roughgarden for insightful comments and suggestions.</p>
+<p>Your thoughts on <a href="https://twitter.com/ittaia/status/1566870358837321731?s=46&amp;t=VDqZSRpxsraPaBX11I_JaA">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#blockchain101">blockchain101</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=What+is+a+Blockchain%3F&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2022-09-05-what-is-a-blockchain%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2022-08-25-dining-cryptographers-additive/" data-toggle="tooltip" data-placement="top" title="Dining Cryptographers and the additivity of polynomial secret sharing">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2022-09-10-provable-broadcast/" data-toggle="tooltip" data-placement="top" title="Provable Broadcast">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

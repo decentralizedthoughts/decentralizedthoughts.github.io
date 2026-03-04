@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Dining Cryptographers and the additivity of polynomial secret sharing</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham">
+ 
+ <meta name="description" content="David Chaum’s dining cryptographer problem is a pioneering work on the foundations of privacy. It shows the amazing power of information-theoretic Secure Multi Party Computation. The original paper from 1988 is super accessible and fun to read. Many systems in the last 20 years for anonymity and privacy-preserving communication are based on the Dining Cryptographers problem. Herbivore, Dissent, Riposte, Blinder, and many others. Here is a modern version of the...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Dining Cryptographers and the additivity of polynomial secret sharing">
+ <meta property="og:description" content="David Chaum’s dining cryptographer problem is a pioneering work on the foundations of privacy. It shows the amazing power of information-theoretic Secure Multi Party Computation. The original paper from 1988 is super accessible and fun to read. Many systems in the last 20 years for anonymity and privacy-preserving communication are based on the Dining Cryptographers problem. Herbivore, Dissent, Riposte, Blinder, and many others. Here is a modern version of the...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham">
+ 
+ <meta property="og:article:published_time" content="2022-08-25T08:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2022-08-25-dining-cryptographers-additive/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2022-08-25-dining-cryptographers-additive/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Dining Cryptographers and the additivity of polynomial secret sharing">
+ <meta property="twitter:description" content="David Chaum’s dining cryptographer problem is a pioneering work on the foundations of privacy. It shows the amazing power of information-theoretic Secure Multi Party Computation. The original paper from 1988 is super accessible and fun to read. Many systems in the last 20 years for anonymity and privacy-preserving communication are based on the Dining Cryptographers problem. Herbivore, Dissent, Riposte, Blinder, and many others. Here is a modern version of the...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Dining Cryptographers and the additivity of polynomial secret sharing</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham</strong><br>
+ 
+ <span class="post-meta">Posted on August 25, 2022</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>David Chaum’s <a href="https://en.wikipedia.org/wiki/Dining_cryptographers_problem">dining cryptographer problem</a> is a pioneering work on the foundations of privacy. It shows the amazing power of information-theoretic Secure Multi Party Computation. The <a href="https://users.ece.cmu.edu/~adrian/731-sp04/readings/dcnets.html">original paper</a> from 1988 is super accessible and fun to read. Many systems in the last 20 years for anonymity and privacy-preserving communication are based on the Dining Cryptographers problem. <a href="https://www.cs.cornell.edu/people/egs/herbivore/documentation.html">Herbivore</a>, <a href="https://dedis.cs.yale.edu/dissent/">Dissent</a>, <a href="https://arxiv.org/pdf/1503.06115.pdf">Riposte</a>, <a href="https://eprint.iacr.org/2020/248.pdf">Blinder</a>, and many others.</p>
+<p>Here is a modern version of the story:</p>
+<blockquote>
+ <p>$n$ cryptographers get together and decide to order dinner online. The delivery person arrives with the food and says that the bill was paid <em>anonymously</em> and promises that: <em>the payer is either one of the cryptographers or the <a href="https://www.nsa.gov">NSA</a></em>.
+The cryptographers want to respect the anonymity of the bill payer, if it is one of the cryptographers - but they do want to learn <strong>one bit</strong>: is the payer the NSA or one of the cryptographers?</p>
+</blockquote>
+<p>Importantly, in case it’s one of the cryptographers, they don’t want to reveal who it is!</p>
+<p>Chaum’s protocol uses <a href="https://www1.cs.columbia.edu/~tal/4261/F19/secretsharingf19.pdf">additive secret sharing</a> which we will cover in later posts. Here we adapt Chaum’s protocol to use <a href="https://decentralizedthoughts.github.io/2020-07-17-polynomial-secret-sharing-and-the-lagrange-basis/">polynomial secret sharing</a> of our previous post.</p>
+<p>There are $n$ parties (cryptographers) who, while being <strong>honest</strong>, are naturally <strong>curious</strong>. Formally, we assume a <a href="https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/">passive</a> (aka honest-but-curious) adversary controlling $f&lt;n$ parties. Communication is lock-step (synchrony).</p>
+<p>Fix a finite field larger than $n$. For a secret $\alpha$, let $p(x)$ denote a <em>polynomial secret sharing</em> of $\alpha$, which has degree at most $n-1$ such that $p(0)=\alpha$ and all the remaining $n-1$ coefficients are chosen uniformly at random.</p>
+<p>Let $\ell_1,\dots,\ell_n$ be the Lagrange coefficients such that for any $p(1)=v_1,\dots,p(n)=v_n$ of a degree at most $n-1$ polynomial $p$:</p>
+\[p(0)= \sum_{1 \leq i \leq n} \ell_i v_i\]
+<p>These interpolation coefficients are fixed for all polynomials of a given degree. To emphasize: the $\mathbf{n}$ cryptographers use polynomials of degree at most $\mathbf{n{-}1}$.</p>
+<p>The cryptographers run the following two round protocol:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Each party i has an input s_i: either 0 or 1
+Global promise: at most one party has input 1
+Party i:
+Round 1:
+Randomly choose a_1,…,a_{n-1}
+Let p_i(x)=s_i + sum_{1&lt;=j&lt;n} (a_j x^j)
+For each j, send p_i(j) to party j
+Round 2:
+Given shares p_1(i),…,p_n(i)
+Let v_i = p_1(i)+,…,+p_n(i)
+Broadcast v_i to all parties
+End of round 2:
+Given shares v_1,…,v_n
+Output (l_1 * v_1)+…+(l_n * v_n)
+Where l_i are the Lagrange coefficients of eqn (1) above
+</code></pre></div></div>
+<p>Conceptually, the protocol is very simple: each cryptographer shares her secret bit using polynomial secret sharing, and then the parties jointly reconstruct the <em>sum</em> of all shares.</p>
+<p>Miraculously, in this protocol each party outputs the sum of the bits: $0$ if the NSA paid and $1$ if one of the cryptographers paid. Even more remarkably, no subset of cryptographers learns any additional information beyond this single bit!</p>
+<p>In particular, any subset of $f$ non-paying cryptographers has no information on which one of the remaining $n-f$ cryptographers is the one that paid.</p>
+<p>How do we define this property formally? How do we prove it’s correct?</p>
+<p>Not surprisingly, we will use the <a href="https://decentralizedthoughts.github.io/2020-07-17-polynomial-secret-sharing-and-the-lagrange-basis/">Validity and Hiding</a> properties of polynomial secret sharing, and use a powerful observation - that polynomial secret sharing is <strong>additive</strong>.</p>
+<h3 id="proof-of-validity---the-power-of-additivity">Proof of Validity - the power of additivity</h3>
+<p>We claim that the output of this protocol matches an ideal functionality that takes the inputs $s_1,\dots,s_n$ from all parties and outputs their sum $s= \sum s_i$.</p>
+<p>This follows from the additive nature of polynomial secret sharing. The one-to-one mapping $F(p_0, \dots,p_{n-1})=p(1),\dots, p(n)$ between the $n$ coefficients of a degree $n-1$ polynomial and its $n$ point evaluation is also an <em>isomorphism with regard to addition</em>: $F( \vec{p} )+F( \vec{q} ) = F(p_0+q_0, \dots, p_{n-1}+q_{n-1})= p(1)+q(1), \dots, p(n)+q(n)$. This follows directly from the additive nature of polynomials over a field.</p>
+<h3 id="proof-of-hiding---the-adversary-learns-nothing-other-than-the-output-of-the-ideal-functionality">Proof of Hiding - the adversary learns nothing other than the output of the ideal functionality</h3>
+<p>The adversary inevitably learns $s=s_1+\dots+s_n$. The non-trivial case arises when $f \leq n-2$ because for $f=n-1$, once $s$ is revealed, the adversary knows exactly who payed (even in the ideal world).</p>
+<p>For any $f\leq n-2$ we would like to say that the adversary controlling any subset $F \subset N= \lbrace 1,\dots,n \rbrace$ with $|F|=f$ learns nothing other than the sum $s$. Formally, for <em>any</em> $\lbrace s_i \rbrace_{i \in N \setminus F}$, other than the value of the sum $s$, the distribution of the view of the adversary is uniformly random.</p>
+<p>For the first round, this follows directly from the Hiding property for any $f&lt;n$ parties of each of the polynomial secret sharing.</p>
+<p>For the second round, the adversary learns $v_1,\dots,v_n$, which corresponds to the polynomial $p=p_1+\dots+p_n$. We again use the isomorphism of addition: for any choice of $\lbrace p_i \rbrace_{i \in F}$ for an adversary controlling the parties in $F$, while the first coefficient of $p$ is $s$, the remaining $n-1$ coefficients of $p$ are uniformly random. This follows because adding a uniformly random value to any known value results in a uniformly random value. Thus, round 2 is equivalent to a secret sharing of $s$ through a uniformly random polynomial $p$ generated by an honest dealer.</p>
+<h3 id="what-else-can-we-do-with-the-additivity-of-polynomial-secret-sharing">What else can we do with the additivity of polynomial secret sharing?</h3>
+<h4 id="unpredictable-randomness">Unpredictable randomness</h4>
+<p>A central application of polynomial secret sharing additivity is the generation of <strong>unpredictable randomness</strong>. By adding $f+1$ secret sharings of <em>uniformly random secrets</em>, we can guarantee that the adversary cannot predict the sum!</p>
+<p>This idea is a key ingredient to many <a href="https://arxiv.org/pdf/2102.09041.pdf">Distributed Key Generation protocols</a>, efficient <a href="https://eprint.iacr.org/2006/065.pdf">Randomized Consensus protocols</a>, and the core of <a href="https://eprint.iacr.org/2011/136.pdf">Secure Multi Party Computation</a>.</p>
+<h4 id="degree-reduction-for-mpc">Degree reduction for MPC</h4>
+<p>As we will explore in later posts, additivity and the linearity of interpolation are crucial enablers for building interactive MPC multiplication protocols from addition protocols - once addition and multiplication are both possible, the sky is the limit.</p>
+<p>While addition is possible, multiplication has the annoying property that the degree of the secret increases. The solution is to run a <em>degree reduction</em> protocol after each multiplication gate. The degree reduction is simply a protocol that uses the additively of polynomials to compute a linear combination using the Lagrange coefficients. So given a secret shared polynomial of degree $2f$, each party can share its share as a polynomial of degree $f$ and the linear combination (using the degree $2f$ Lagrange coefficients) produces a degree $f$ polynomial that shares the same secret as the original degree $2f$ one!</p>
+<h3 id="notes">Notes</h3>
+<p>There are many possible improvements to this basic scheme. Can we handle malicious cryptographers? Can we handle asynchrony in communication? What about denial of service? Can we scale to thousands or even millions of cryptographers? Can cryptographic protocols (signatures, zero knowledge proofs, etc) improve the performance and complexity? Many of the papers mentioned above have made significant advances on these challenges. We will cover some of this in future posts.</p>
+<h4 id="acknowledgements">Acknowledgements</h4>
+<p>Many thanks to <a href="https://thork.net">Thor Kamphefner</a> for insightful comments and suggestions.</p>
+<p>Your thoughts on <a href="https://twitter.com/ittaia/status/1562777337753587712?s=21&amp;t=dilr4XTgVUq0e5Q-10sRtg">Twitter</a></p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#cryptography">cryptography</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Dining+Cryptographers+and+the+additivity+of+polynomial+secret+sharing&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2022-08-25-dining-cryptographers-additive%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2022-08-24-BGW-secret-sharing/" data-toggle="tooltip" data-placement="top" title="The BGW Verifiable Secret Sharing Protocol">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2022-09-05-what-is-a-blockchain/" data-toggle="tooltip" data-placement="top" title="What is a Blockchain?">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

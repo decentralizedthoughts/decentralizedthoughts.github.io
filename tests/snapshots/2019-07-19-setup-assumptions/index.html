@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>The Trusted Setup Phase</title>
+ 
+ 
+ <meta name="author" content="{"name"=>"Decentralized Thinkers"}">
+ 
+ <meta name="description" content="co-authored with Avishay Yanai By failing to prepare, you are preparing to fail The Biblical World, 1919 When you want to understand a decentralized system, one of the first things you need to ask is: does it have a trusted setup phase? Here is a question: do Bitcoin and Ethereum have a trusted setup phase? Many protocols in distributed computing and cryptography require a trusted setup. A trusted setup is...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="The Trusted Setup Phase">
+ <meta property="og:description" content="co-authored with Avishay Yanai By failing to prepare, you are preparing to fail The Biblical World, 1919 When you want to understand a decentralized system, one of the first things you need to ask is: does it have a trusted setup phase? Here is a question: do Bitcoin and Ethereum have a trusted setup phase? Many protocols in distributed computing and cryptography require a trusted setup. A trusted setup is...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="{"name"=>"Decentralized Thinkers"}">
+ 
+ <meta property="og:article:published_time" content="2019-07-19T02:29:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2019-07-19-setup-assumptions/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2019-07-19-setup-assumptions/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="The Trusted Setup Phase">
+ <meta property="twitter:description" content="co-authored with Avishay Yanai By failing to prepare, you are preparing to fail The Biblical World, 1919 When you want to understand a decentralized system, one of the first things you need to ask is: does it have a trusted setup phase? Here is a question: do Bitcoin and Ethereum have a trusted setup phase? Many protocols in distributed computing and cryptography require a trusted setup. A trusted setup is...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>The Trusted Setup Phase</h1>
+ 
+ 
+ 
+ 
+ <span class="post-meta">Posted on July 19, 2019</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p align="center">
+ co-authored with <a href="https://www.yanai.io/">Avishay</a> <a href="https://twitter.com/AvishaiY">Yanai</a>
+</p>
+<blockquote>
+ <p>By failing to prepare, you are preparing to fail
+<cite> <a href="https://quoteinvestigator.com/2018/07/08/plan/">The Biblical World, 1919</a> </cite></p>
+</blockquote>
+<p>When you want to understand a decentralized system, one of the first things you need to ask is: <em>does it have a trusted setup phase?</em></p>
+<p>Here is a question: <a href="https://ittaiab.github.io/2019-07-18-do-bitcoin-and-ethereum-have-any-trusted-setup-assumptions/">do Bitcoin and Ethereum have a trusted setup phase?</a></p>
+<p>Many protocols in distributed computing and cryptography require a <strong>trusted setup</strong>. A trusted setup is a special case of a multi-phase protocol. We call the first phase the <em>setup phase</em> and the second phase the <em>main phase</em>. There are two properties that often distinguish a setup phase from the main phase:</p>
+<ol>
+ <li>
+ <p>Typically the main phase implements some repeated task. The setup phase is done once and enables repeating many instances of the main phase.</p>
+ </li>
+ <li>
+ <p>The setup phase is often <em>input-independent</em>, namely, it does not use the private inputs of the parties. Furthermore, sometimes the setup phase is even <em>function-independent</em>, meaning that the specific function that the parties wish to compute is irrelevant; the parties at this phase only know that they want to compute <em>some</em> function. As such, the setup and main phases are often called <em>offline</em> (or <em>preprocessing</em>) and <em>online</em> respectively (i.e. parties may run the offline phase when they realize that <em>in some later point in time</em> they will want to run some function on inputs they do not know yet).</p>
+ </li>
+</ol>
+<p>You can think of a setup phase as an ideal functionality run by a completely trusted entity, denoted $T$, that we take for granted. For instance, assuming Public-Key Infrastructure (PKI) means that we assume there is a completely trusted entity to which every party submits its own public encryption (and verification) key and that entity broadcasts those keys to all parties. 
+In this post, we will review some of the common types of trusted setup assumptions by looking at the ideal functionalities that they imply.</p>
+<p>One way to model that trusted entity follows:
+There is an initial set of parties $P_1,…,P_n$ who interact with the trusted entity $T$. The parties may send inputs $x_1,…,x_n$ to $T$ (where $x_i$ is $P_i$’s input), who in turn, runs some function $F(r, x_1,…,x_n)$ where $r$ is a uniformly random string, obtains outputs $y_1,…,y_n$ and hands $y_i$ to $P_i$. This process may be “reactive”, namely, it may repeat multiple times. As this already describes an idealized world, we always assume that the communication channels between the parties and the trusted entity are secure.</p>
+<p>In the following, we argue that most of those functionalities fall into one of out of the five categories below:</p>
+<ol>
+ <li><em>No setup</em>: 
+This is the simplest case, in which we don’t really use any trusted entity or any trusted setup. The minimal communication assumption is that parties have access to some type of communication medium. Often, though, “no setup” also refers to a setting where parties’ identities are globally known.</li>
+ <li><em>Pairwise setup</em>:
+Here we assume there is some set of initial parties $P_1,…,P_n$ and each two parties have a reliable communication channel between them. In particular, in the simplest pairwise setup assumption when party $P_i$ receives a message on the $(i,j)$ channel it knows that party $P_j$ sent this message.</li>
+ <li><em>Broadcast setup</em>: 
+We assume a setup whose implementation requires no secrets. The canonical example is a <a href="https://en.wikipedia.org/wiki/Public_key_infrastructure">PKI setup</a> that requires <a href="https://ittaiab.github.io/2019-06-27-defining-consensus/">broadcast</a> only to relay the public keys.</li>
+ <li><em>Partially public setup</em>: often called the <em>Common Reference String</em> (<a href="https://en.wikipedia.org/wiki/Common_reference_string_model">CRS</a>) model. Many cryptographic protocols leverage this setup for improved efficiency. A special case of this setup is a <a href="http://www.copenhagen-interpretation.com/home/cryptography/cryptographic-beacons">randomness beacon</a>.</li>
+ <li><em>Fully private setup</em>: often called the <em>offline phase</em> in the context of secure multiparty computation (MPC) protocols. Here, the setup phase computes a rather complex output that is party-dependant. For example, a phase that creates <a href="https://github.com/bristolcrypto/SPDZ-2">OT and multiplication triplets</a> in SPDZ-2.</li>
+</ol>
+<p>Let’s detail these five setup variants, give some examples and discuss their advantages and disadvantages. In the end, we will also discuss some potential alternatives for having a setup phase. We use $n$ to denote the number of parties engaged in a system and $f$ the number of ‘faulty’ (or Byzantine) parties (who may behave arbitrarily).</p>
+<h2 id="1-no-setup">1. No setup</h2>
+<p>If a protocol has no setup, then there is nothing to worry about. It’s easier to trust such protocols. On the other hand, there are inherent limitations.</p>
+<p>A setting with no setup has two main flavors.
+The first assumes <em>really nothing</em> on the knowledge of the parties and is sometimes called <a href="https://allquantor.at/blockchainbib/pdf/okun2008efficient.pdf"><em>anonymous channel model</em></a>
+The second assumes global knowledge of the identities of all parties, which is quite acceptable in many real world applications.
+Both flavors suffer from non-authenticated channels, meaning that the adversary can launch man-in-the-middle attacks arbitrarily.</p>
+<p>In traditional cryptography (where the adversary is polynomially-bounded), this type of model was first studied by <a href="https://www.cs.huji.ac.il/~dolev/pubs/nmc.pdf">Dolev, Dwork and Naor</a>, for specific tasks like non-malleable encryption and zero-knowledge and later generalized to arbitrary computations by <a href="https://eprint.iacr.org/2007/464.pdf">Barak et al</a>. (The latter assumes global identities.)</p>
+<p>Another line of research, in the anonymous model, is based on a more refined assumption on the adversarial power.
+Namely, the assumption limits the computational power of the adversary (e.g., hash rate) <em>compared to the computational power of the honest parties</em>. It was shown possible to construct a limited notion of PKI <em>from scratch</em> even in this slim model. For example see <a href="http://www.cs.yale.edu/publications/techreports/tr1332.pdf">Aspnes, Jackson and Krishnamurthy</a> and several approaches directly inspired by Bitcoin-type puzzles (see <a href="https://eprint.iacr.org/2014/857.pdf">Katz, Miller and Shi</a>, <a href="https://www.iacr.org/archive/crypto2015/92160235/92160235.pdf">Andrychowicz and Dziembowski</a>, and <a href="https://eprint.iacr.org/2016/991.pdf">Garay, Kiayias, Kiayias and Panagiotakos</a>).</p>
+<h2 id="2-pairwise-setup">2. Pairwise setup</h2>
+<p>Here, we assume that the communication channel between every pair of parties is authenticated.
+This is a classic assumption in distributed cryptography and distributed computing.
+The <a href="https://groups.csail.mit.edu/tds/papers/Lynch/FischerLynchMerritt-dc.pdf">Fisher, Lynch and Merritt 1985</a> lower bounds show that even weak forms of Byzantine Agreement are impossible when $n \leq 3f$ even given this setup, and even against a traditional polynomially-bounded adversary.</p>
+<p>For $n&gt;3f$, on the other hand, this setup allows perfect implementation of any functionality. This is the celebrated result of <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.116.2968&amp;rep=rep1&amp;type=pdf">Ben-Or, Goldwasser and Widgerson 1988</a> (see <a href="https://eprint.iacr.org/2011/136.pdf">Asharov and Lindell</a> for a full proof).</p>
+<h2 id="3-broadcast-setup">3. Broadcast setup</h2>
+<p><em>Broadcast</em> means that the security of the system wouldn’t be damaged even if the trusted entity is ‘transparent’, namely, all inputs/outputs it receives/sends and its random string are publicly known. 
+The canonical examples are protocols that use a trusted entity to <a href="https://ittaiab.github.io/2019-06-27-defining-consensus/">broadcast</a> the public keys of all parties.</p>
+<p>Having a PKI both improves the complexity of asynchronous Byzantine Agreement (for example, see <a href="https://eprint.iacr.org/2000/034.pdf">Cachin, Kursawe and Shoup</a>) and improves the fault tolerance to $n=2f+1$ for synchronous Byzantine Agreement (for example, see <a href="https://eprint.iacr.org/2006/065.pdf">Katz and Koo</a>).</p>
+<p>Note there is a risk of a circular argument: With a PKI setup it is possible to solve Byzantine agreement in the synchronous model for $n=2f+1$ and Byzantine broadcast for $n=f+1$ (see <a href="https://www.cs.huji.ac.il/~dolev/pubs/authenticated.pdf">Dolev and Strong</a>). But setting up a PKI requires <em>broadcast</em> which requires $n&gt;3f$ if there is no PKI (in the standard models).</p>
+<p>Advantages: an important advantage of a fully-public setup is its relative simplicity and reduced attack surface.</p>
+<p>Risks: failure of this setup often means equivocation. Giving different parties different keys may cause later protocols to fail.</p>
+<h2 id="4-partially-public-setup">4. Partially public setup</h2>
+<p><em>Partially public</em> means that the output from the trusted entity, $T$, is known to all parties, however it may be required the parties’ inputs $x_1,…,x_n$ and $T$’s random string, $r$, should be kept secret. 
+As an example, consider a system that continuously receives messages from users such that in some future time $t$ all messages should be revealed (at once). Such a system may use a trusted setup as follows: the function $F$ receives no inputs from the parties, and proceeds as follows: generate a key-pair $(sk,pk)$ for an encryption scheme, then generate a Rivest, Shamir and Wagner <a href="http://people.csail.mit.edu/rivest/RivestShamirWagner-timelock.pdf">time-lock-puzzle</a> $p$ that hides $sk$ until time $t$ arrives; finally, output to all parties the puzzle $p$ and the encryption key $pk$, which concludes the setup phase. 
+In the main phase, users can encrypt their messages using $pk$ and broadcast them. In addition, they begin to solve the puzzle so that in time $t$ they will obtain the decryption key $sk$, which allows them to decrypt all messages. Note that all outputs of the functionality $F$ are public to all parties, but the internal state of the trusted entity (namely, the random string by which the pair $(sk,pk)$ was generated) must kept secret.</p>
+<p>Having a trusted pre-computed procedure with secret values often provides significant benefits. The risk of these setups is that the properties of the system now depend on the <em>privacy</em> of the setup. It is much harder to detect information leaking during setup (an attacker that learns secrets can hide this knowledge).</p>
+<p>The advantage of requiring the setup to publish a common public value is that it’s relatively easy to ensure this property (relative to sending private values to parties). This model is often referred to as a <em>Common Reference String</em> (<a href="https://en.wikipedia.org/wiki/Common_reference_string_model">CRS</a>) model.
+Here we give two examples:</p>
+<ol>
+ <li>
+ <p>Setup for efficient Verifiable Secret Sharing –
+<a href="https://www.cypherpunks.ca/~iang/pubs/PolyCommit-AsiaCrypt.pdf">Kate, Zaverucha, and Goldberg</a> propose a scheme that requires a trusted setup to generate a random public generator $g$ and a secret key $\alpha$. The setup then broadcasts powers of the form $g^{(\alpha^i)}$. Using this setup one can obtain the most efficient <a href="https://eprint.iacr.org/2012/619">Asynchronous Verifiable Secret Sharing</a>.</p>
+ </li>
+ <li>
+ <p>Setup for efficient Zero-Knowledge –
+Several efficient Zero-Knowledge protocols require CRS setups. Often implementing these setups in a trusted manner requires some non-trivial <a href="http://u.cs.biu.ac.il/~lindell/MPC-resources.html">MPC</a> protocol. For example, see <a href="https://eprint.iacr.org/2017/1050">Bowe, Gabizon and Miers</a>. In fact just running an MPC protocol is not enough, often a whole <a href="https://z.cash/technology/paramgen/">setup ceremony</a> is necessary in order to establish public verifiability.</p>
+ </li>
+</ol>
+<h2 id="5-fully-private-setup">5. Fully private setup</h2>
+<p>This is the most general form of setup, in which even the outputs that the functionality hands to the parties should be kept secret from one another. Obviously, the big advantage here is that such setups allow running powerful protocols on top of them. As instantiation (or realization) of such setup functionalities are quite complex, they typically expose a larger attack surface.</p>
+<p>We focus here on two type of examples: Distributed Key Generation and Offline phases for Secure Multi-Party Computation.</p>
+<h3 id="distributed-key-generation-and-setup-for-threshold-signatures">Distributed Key Generation and setup for threshold signatures</h3>
+<p><a href="https://www.iacr.org/archive/eurocrypt2000/1807/18070209-new.pdf">Threshold</a> signatures <a href="https://www.iacr.org/archive/pkc2003/25670031/25670031.pdf">schemes</a> often provide benefits in terms of reduced word complexity and reduced total computation cost (see for example <a href="https://eprint.iacr.org/2000/034.pdf">here</a>). The problem with threshold signatures is that they require a setup.
+Setting up a threshold signature scheme is often referred to as a Distributed Key Generation (<a href="https://en.wikipedia.org/wiki/Distributed_key_generation">DKG</a>) setup.</p>
+<p>The DKG functionality receives just random bits from each party, generates an $(sk,pk)$ pair, outputs $pk$ to everyone and shares of $sk$ to the parties such that party $P_i$ receives $sk_i$, which must be kept secret from other parties.</p>
+<p>Risks: There are two things that can fail in such a setup, the first is that the secret is leaked when collusion reaches the threshold and the second is that some parties might receive incorrect shares. There are ways for a party to verify the validity of their shares, so the main risk is when parties are offline.</p>
+<h3 id="trusted-setup-for-secure-computation">Trusted setup for secure computation</h3>
+<p>Protocols for <a href="https://en.wikipedia.org/wiki/Secure_multi-party_computation">secure multiparty computation (MPC)</a> allows a set of $n$ parties $P_1,…,P_n$ to compute a circuit $C$ (Boolean or arithmetic) over their private inputs $x_1,…,x_n$, and reveal only the output $y=C(x_1,…,x_n)$ (suppose all parties should learn the same output). For instance, the circuit $C$ may compute the summation of all inputs.</p>
+<p>Modern MPC protocols are designed to work in an offline-online manner, where the offline serves as a setup phase, which is typically fully private. One prevalent example is a trusted setup that shares <em>multiplication triples</em> (also known as <em>Beaver triples</em>) to the parties. Specifically, the trusted setup hands random $a_i, b_i$ and $c_i$ to party $P_i$ such that $(a_1 + … + a_n)ֿ\cdot(b_1 + … + b_n)=(c_1 + … + c_n)$. 
+Then, in the main phase of the protocol (also known as the online phase) the parties share their inputs, namely, party $P_i$ shares its input $x’$ by sending $x’_j$ to party $P_j$ such that $x’_1 + … + x’_n = x’$. The parties now can compute any arithmetic operation over the shared values, that is, given a sharing of secret values $x$ and $y$, such that party $P_i$ holds $x_i$ and $y_i$ where $x_1+…+x_n=x$ and $y_1+…+y_n=y$, then the parties may perform the following procedures (we omit some details in the description below):</p>
+<ul>
+ <li><em>Opening</em> - Given a sharing $x_1,…,x_n$ the parties can obtain $x=x_1+…+x_n$.</li>
+ <li><em>Addition/subtraction</em> - The parties can compute a sharing of $z=x+y$ by having each party $P_i$ locally compute $z_i=x_i+y_i$. Obviously, it follows that $z_1+…+z_n = (x_1+…+x_n)+(y_1+…+y_n)$.</li>
+ <li><em>Scaling</em> - Given a value $c$ known to all parties, they can compute a sharing of $z=cx$ by having each party locally compute $z_i=cx_i$. Again, it follows that $z_1+…+z_n = (cx_1+…+cx_n) = c(x_1+…+x_n)=cx$.</li>
+ <li><em>Multiplication</em> - The parties can compute a sharing of $z=xy$ by <em>sacrificing</em> a single multiplication triple from the setup. For simplicity, denote a sharing $(x_1+…+x_n)$ by $[x]$. The parties have the sharings $[x]$, $[y]$ and the triple $[a],[b],[c]$ from the setup (remember that $c=ab$). The parties open the differences $[s]=[x]-[a]$ and $[t]=[y]-[b]$. These do not leak any information since the values $a$ and $b$ are chosen uniformly by the trusted setup, thus, the values $s$ and $t$ are uniform and do not reveal anything about $x$ and $y$. Then, the parties compute $[xy] = s[y] + t[x] + st - [c]$. This computation is composed of scaling and addition/subtraction only and can be computed locally by the parties to obtain a sharing of $[z]=[xy]$.</li>
+</ul>
+<p>Risks and advantages: As mentioned above, such a setup phase has a large attack surface. The output from the setup phase must be kept secret.
+That is, in the above procedure for multiplication, note that if some coalition of $t$ parties obtain the shares $a_1,…,a_n$ of all parties then they can learn the secret value $x$ by computing $[x]=[s]-[a]$. 
+Note that privacy is not the only concern in such setup phases: we must also make sure that the triples are correct!
+Namely, that $ab$ indeed equals $c$, since otherwise the output of the computation would not be correct. Protecting the triples from leakage and from being influenced by malicious parties is a hard task and therefore incurs a huge overhead to MPC protocols. On the other hand, given the output multiplication triples from the setup phase, the main phase of the protocol becomes super fast.</p>
+<h2 id="are-there-alternatives-to-trusted-setups">Are there alternatives to Trusted Setups?</h2>
+<p>Here we mention some potential alternatives:</p>
+<ol>
+ <li>A setup shifts considerable amount of trust from the online phase of the system to some historic setup phase. This introduces new risks and security holes. 
+One potential alternative is to have a never-ending setup phase. In such schemes there is a <em>continuously updatable CRS</em>. One recent example is <a href="https://eprint.iacr.org/2019/099.pdf">SONIC</a>.</li>
+ <li>Another approach is to have multiple setups generating multiple common reference strings.
+In this approach we only assume that <em>some</em> of them are done faithfully. See <a href="https://eprint.iacr.org/2006/407.pdf">Groth and Ostrovsky</a>.</li>
+</ol>
+<h2 id="acknowledgments">Acknowledgments</h2>
+<p>Special thanks to <a href="http://twitter.com/alinush407">Alin Tomescu</a> for reviewing this post.</p>
+<p>Please leave comments on <a href="https://twitter.com/ittaia/status/1151977685154971648?s=20">Twitter</a></p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#models">models</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=The+Trusted+Setup+Phase&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2019-07-19-setup-assumptions%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2019-07-18-do-bitcoin-and-ethereum-have-any-trusted-setup-assumptions/" data-toggle="tooltip" data-placement="top" title="Do Bitcoin and Ethereum have any trusted setup assumptions?">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2019-08-02-byzantine-agreement-is-impossible-for-$n-slash-leq-3-f$-is-the-adversary-can-easily-simulate/" data-toggle="tooltip" data-placement="top" title="Byzantine Agreement is Impossible for $n \leq 3 f$ if the Adversary can Simulate">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

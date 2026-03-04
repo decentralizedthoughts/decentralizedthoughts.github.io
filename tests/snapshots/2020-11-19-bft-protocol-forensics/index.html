@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>BFT Protocol Forensics</title>
+ 
+ 
+ <meta name="author" content="Peiyao Sheng, Gerui Wang, Kartik Nayak, Sreeram Kannan, Pramod Viswanath">
+ 
+ <meta name="description" content="An important property satisfied by any Byzantine fault tolerant consensus protocol is agreement, which requires non-faulty replicas to not decide on conflicting values. Depending on the network model, typical consensus protocols tolerate only a fraction of Byzantine replicas. In particular, under partial synchrony or asynchrony, no consensus protocol with $n$ replicas can tolerate more than $n/3$ Byzantine faults. If the number of Byzantine replicas exceed this number, the protocols do...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="BFT Protocol Forensics">
+ <meta property="og:description" content="An important property satisfied by any Byzantine fault tolerant consensus protocol is agreement, which requires non-faulty replicas to not decide on conflicting values. Depending on the network model, typical consensus protocols tolerate only a fraction of Byzantine replicas. In particular, under partial synchrony or asynchrony, no consensus protocol with $n$ replicas can tolerate more than $n/3$ Byzantine faults. If the number of Byzantine replicas exceed this number, the protocols do...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Peiyao Sheng, Gerui Wang, Kartik Nayak, Sreeram Kannan, Pramod Viswanath">
+ 
+ <meta property="og:article:published_time" content="2020-11-19T20:00:00-05:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2020-11-19-bft-protocol-forensics/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2020-11-19-bft-protocol-forensics/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="BFT Protocol Forensics">
+ <meta property="twitter:description" content="An important property satisfied by any Byzantine fault tolerant consensus protocol is agreement, which requires non-faulty replicas to not decide on conflicting values. Depending on the network model, typical consensus protocols tolerate only a fraction of Byzantine replicas. In particular, under partial synchrony or asynchrony, no consensus protocol with $n$ replicas can tolerate more than $n/3$ Byzantine faults. If the number of Byzantine replicas exceed this number, the protocols do...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>BFT Protocol Forensics</h1>
+ 
+ 
+ 
+ 
+ By <strong>Peiyao Sheng, Gerui Wang, Kartik Nayak, Sreeram Kannan, Pramod Viswanath</strong><br>
+ 
+ <span class="post-meta">Posted on November 19, 2020</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>An important property satisfied by any <a href="https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/">Byzantine fault tolerant consensus protocol</a> is agreement, which requires non-faulty replicas to not decide on conflicting values. Depending on the <a href="https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/">network model</a>, typical consensus protocols tolerate only a <a href="https://decentralizedthoughts.github.io/2019-06-17-the-threshold-adversary/">fraction of Byzantine replicas</a>. In particular, under partial synchrony or asynchrony, no consensus protocol with $n$ replicas <a href="https://decentralizedthoughts.github.io/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/">can tolerate more than $n/3$ Byzantine faults</a>. If the number of Byzantine replicas exceed this number, the protocols do not provide safety (or liveness).</p>
+<p>In a recent work called <a href="https://arxiv.org/pdf/2010.06785.pdf">BFT Protocol Forensics</a>, we focus on “the day after”: events after $\geq n/3$ Byzantine replicas have successfully mounted a safety attack. Specifically, we focus on <strong>providing forensic support to identify the replicas that acted maliciously</strong>. Any protocol with strong forensic support should ideally meet three goals:</p>
+<ul>
+ <li>Ability to identify as many replicas that act maliciously with an irrefutable cryptographic proof of culpability</li>
+ <li>Availability of the culpability proof with as many replicas (witnesses) as possible</li>
+ <li>Identification should be conducted as distributedly as possible, i.e., with little or no communication between replicas</li>
+</ul>
+<p>The notion of <em>accountability</em> was introduced in seminal works such as <a href="https://www.cis.upenn.edu/~ahae/papers/peerreview-sosp07.pdf">PeerReview</a>, and, more recently, the <a href="https://arxiv.org/abs/1710.09437">Casper</a> protocol was designed with accountability as a primary consideration. In our work, we show that many existing partially synchronous protocols and asynchronous protocols such as <a href="https://decentralizedthoughts.github.io/2019-06-23-what-is-the-difference-between/">PBFT, HotStuff</a>, and <a href="https://arxiv.org/abs/1811.01332">VABA</a> have strong forensic support. In particular, if $t &lt; n/3$ denotes the maximum number of Byzantine faults tolerated by the protocol, and there are $f &gt; t$ Byzantine faults in the system, then for all of these protocols,</p>
+<ul>
+ <li>we can identify $\geq t+1$ Byzantine faults,</li>
+ <li>where $2t+1-f$ honest replicas can act as witnesses,</li>
+ <li>and the proof can be obtained by communicating with just one of these witnesses.</li>
+</ul>
+<p>In this blog post, we focus on discussing forensic support for the <a href="https://arxiv.org/abs/1803.05069">HotStuff</a> protocol.</p>
+<h2 id="recap-on-hotstuff">Recap on HotStuff</h2>
+<p>The Basic HotStuff protocol proceeds in a sequence of views where each view adopts a 3-round voting mechanism: the leader proposes a value and all replicas participate in 3 rounds of voting. In each of these rounds, the leader collects $2t+1$ votes and aggregates them into a <em>quorum certificate</em>. The quorum certificates in 3 rounds are denoted by <em>prepareQC, precommitQC,</em> and <em>commitQC</em> respectively. These quorum certificates play an important role in the protocol as follows:</p>
+<ul>
+ <li>When a leader proposes, it needs to propose the value corresponding to the <em>highest</em> prepareQC it has received where <em>highest</em> prepareQC is a QC from the largest view.</li>
+ <li>When a replica receives a precommitQC for value $v$ in view $e$, it <em>locks</em> on the tuple of (view, value), i.e., $(e,v)$.</li>
+ <li>When a replica receives a proposal of value $v$, it votes only if it locks on $v$ except when the proposed prepareQC’s view is higher than its locked view.</li>
+ <li>At the end of each view, every replica reports its latest prepareQC to the next leader.</li>
+ <li>When a replica receives a commitQC, it commits on the value.</li>
+</ul>
+<h3 id="safety-within-a-view">Safety within a view</h3>
+<p>HotStuff ensures that an honest replica only votes once in any round of voting. Therefore, when the adversary does not corrupt more than $t$ replicas, there cannot be two conflicting commitQCs within a view, since two conflicting commitQCs indicate $t+1$ replicas vote for two conflicting values, which means $t+1$ replicas are corrupted.</p>
+<p>When the adversary corrupts $\geq t+1$ replicas, they can vote for two conflicting values, $v$ and $v’$. Let us split $2t$ honest replicas into two sets $P$ and $Q$. If the leader is corrupted, it can equivocate to replicas in $P$ and $Q$. As a result, replicas in $P$ vote for $v$ and replicas in $Q$ vote for $v’$. Two conflicting values thus both get $2t+1$ votes, which are enough to form two conflicting commitQCs.</p>
+<h3 id="safety-across-views">Safety across views</h3>
+<p>When the adversary does not corrupt more than $t$ replicas, HotStuff ensures safety across views by the use of <em>locks</em> and the <em>voting rule</em>. If a commitQC for value $v$ exists in view $e$, at least $2t+1$ replicas lock on $(e,v)$. In views higher than $e$, there could not be a prepareQC on values other than $v$, since such a quorum certificate means $t+1$ replicas (among $2t+1$ replicas) who lock on $(e,v)$ vote for value $v’\neq v$.</p>
+<p>When the adversary corrupts $\geq t+1$ replicas, these replicas can vote for a conflicting value $v’$ despite having a lock on $(e,v)$. Again, let us split $2t$ honest replicas into two sets $P$ and $Q$. Replicas in $P$ vote for value $v$ in view $e$ and also lock on it whereas replicas in $Q$ are not aware of value $v$ or the corresponding lock. Then in some higher view, a leader may propose an outdated prepareQC with a conflicting value $v’$. Replicas in $Q$ are not aware of the lock on $(e,v)$ so they can vote for $v’$ along with the $t+1$ corrupted replicas also vote for $v’$ (and violate the voting rule). As a result, the leader can collect $2t+1$ votes to form a prepareQC in the higher view. This prepareQC is sufficient to <em>unlock</em> any honest replica and subsequently replicas can commit a conflicting value.</p>
+<h2 id="forensic-support-for-hotstuff">Forensic Support for HotStuff</h2>
+<p>In the above examples of safety violation, we observe that the corrupted replicas must send certain messages in order to break safety: 1) to break safety within a view, corrupted replicas vote for two conflicting values in the view, 2) to break safety across views, they vote for a conflicting value despite having a lock (and prepareQC) on a different value (thus violating the voting rule). Those messages are signed by their secret keys hence can serve as irrefutable evidence of their misbehavior. In addition, no honest replica will vote twice within a view or violate the voting rule, therefore we will only hold corrupted replicas culpable.</p>
+<p>With the above intuition, we have a forensic protocol for HotStuff Byzantine Agreement protocol:</p>
+<ol>
+ <li>To identify disagreement and trigger the forensic protocol, two conflicting commitQCs need to be provided to the forensic protocol as input.</li>
+ <li>If two commitQCs are within a view, the replicas who vote for both commitQCs are corrupted replicas.</li>
+ <li>If two commitQCs are across views, we denote by commitQC<sub>1</sub> the lower one and commitQC<sub>2</sub> the higher one. We query all replicas for a prepareQC (denoted by prepareQC<sup>#</sup>) such that it is later than commit<sub>1</sub>, its value $v’$ conflicts with the value $v$ of commitQC<sub>1</sub>, and the previous prepareQC for $v’$ in the proposal is no later than commitQC<sub>1</sub>. The replicas who vote for commitQC<sub>1</sub> and prepareQC<sup>#</sup> are corrupted replicas.</li>
+</ol>
+<p>Recall that our goal was to (i) identify as many Byzantine replicas as possible, (ii) while having a large number of witnesses, and (iii) obtain the proof from querying as few witnesses as possible. There are $n=3t+1$ replicas in the system. In both of the cases, the process of identifying culpable Byzantine replicas involve performing appropriate quorum intersections: since two quorums of $2t+1$ replicas intersect in $t+1$ replicas, we are able to identify $\geq t+1$ Byzantine replicas. Who are the witnesses? For conflicting commits within a view, the commitQCs themselves can prove culpability. For conflicting commits across views, honest replicas having access to prepareQC<sup>#</sup> are witnesses. It turns out that the existence of commit<sub>2</sub> implies that $2t+1$ replicas should have received prepareQC<sup>#</sup>, out of which $f$ of them are Byzantine. The remaining $2t+1-f$ replicas can act as witnesses. This also implies that the forensic support holds only when $f &lt; 2t+1$; when the number of Byzantine replicas are higher, we may have no witnesses.</p>
+<p>The below figure shows an example attack which results in conflicting commits across views. In Figure1, $t+1$ red replicas are corrupted. An honest node $j$ commits $v$ in view $e$ on receiving commitQC<sub>1</sub>. The formation of commitQC<sub>1</sub> indicates blue replicas are locked on $(v,e)$. Some views later, a malicious leader proposes a different value $v’$ and sends the proposal to another set of honest replicas. According to the voting rule, green replicas will vote and a higher prepareQC<sup>#</sup> for $v’$ is formed. After two rounds of voting, $v’$ is committed by another honest replica $j$. In this example, red replicas are held accountable since they vote for both commitQC<sub>1</sub> and prepareQC<sup>#</sup>. And blue nodes have access to the evidence.</p>
+<figure class="image">
+ <img src="/uploads/forensics-attack.png" width="100%" />
+ <figcaption><center>Figure 1. An attack in action, where red nodes are held culpable for sending stale prepareQC during view change and blue nodes are witnesses. </center></figcaption>
+</figure>
+<h3 id="subtleties-and-implementation-details">Subtleties and implementation details</h3>
+<p>Observe that our constraint for prepareQC<sup>#</sup> was that it should be “later than commit<sub>1</sub>, its value $v’$ conflicts with the value $v$ of commitQC<sub>1</sub>, and the previous prepareQC for $v’$ in the proposal is no later than commitQC<sub>1</sub>”. This step identifies the <em>first time</em> a conflicting value received a prepareQC. Ensuring the “first time” constraint is important since after that, all honest parties can legitimately vote on the conflicting value (and they should not be held liable for it). It turns out that obtaining sufficient information to identify this constraint requires two witnesses for the Basic HotStuff protocol (Algorithm 2 <a href="https://arxiv.org/abs/1803.05069">here</a>). We incorporate a minor change to reduce this to one witness: including the view number of the prepareQC into votes and quorum certificates, denoted as $view_{qc}$. Hence, $view_{qc}$ can be derived from prepareQC<sup>#</sup> and we only need to check $view_{qc} \le e$, where $e$ is the view number of commitQC<sub>1</sub>. The chained HotStuff protocol (Algorithm 3 <a href="https://arxiv.org/abs/1803.05069">here</a>), for the purpose of maintaining all QCs on the chain, already incorporates such a change.</p>
+<h3 id="forensics-for-pbft-and-vaba">Forensics for PBFT and VABA</h3>
+<p>While we only discussed the forensic support for HotStuff, our <a href="https://arxiv.org/pdf/2010.06785.pdf">paper</a> also shows how to obtain it for <a href="http://pmg.csail.mit.edu/papers/osdi99.pdf">PBFT</a> and <a href="https://arxiv.org/abs/1811.01332">VABA</a>.</p>
+<h2 id="lower-bound-on-the-forensic-support-for-any-bft-protocol">Lower Bound on the Forensic Support for Any BFT Protocol</h2>
+<p>As we observed in the case of HotStuff, when the number of Byzantine replicas are $\geq 2t+1$, we cannot obtain any forensic support. An obvious question is whether this is related to our forensic protocol, or there is a fundamental limit. To address this, we show a lower bound relating the number of Byzantine replicas (denoted $d$) that can be identified by any forensic protocol, the number of faults (denoted $t$) that can be tolerated by the protocol to obtain consensus, and a bound on the actual number of faults (denoted $m$) even when all the transcripts from all replicas (including the Byzantine replicas) are available. We show the following result:</p>
+<blockquote>
+ <p>There does not exist a validated Byzantine agreement protocol with weak forensic support with parameters $n$, $t&lt;n/2$, $m \geq n−t$ and $d&gt;n−2t$.</p>
+</blockquote>
+<p>In particular, this implies that the result we obtain is tight. As another special case, when $n = 2t+1$, then all but one replica must go undetected.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#research">research</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=BFT+Protocol+Forensics&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2020-11-19-bft-protocol-forensics%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2020-11-01-ebb-and-flow-protocols-a-resolution-of-the-availability-finality-dilemma/" data-toggle="tooltip" data-placement="top" title="Resolving the Availability-Finality Dilemma">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2020-11-29-the-lock-commit-paradigm/" data-toggle="tooltip" data-placement="top" title="The Lock-Commit Paradigm">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

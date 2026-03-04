@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Reasoning about Distributed Protocols with Smart Casual Verification</title>
+ 
+ 
+ <meta name="author" content="Heidi Howard">
+ 
+ <meta name="description" content="Here at decentralized thoughts, we spend a lot of time reasoning about distributed protocols. Often, we focus on solving distributed consensus, personally it’s my favorite CS problem, but it’s also famously one of the most difficult and subtle problems in distributed computing. Reasoning about distributed algorithms is hard at the best of times, with state split across remote nodes, asynchrony, concurrency, and non-determinism in the order that events, such as...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Reasoning about Distributed Protocols with Smart Casual Verification">
+ <meta property="og:description" content="Here at decentralized thoughts, we spend a lot of time reasoning about distributed protocols. Often, we focus on solving distributed consensus, personally it’s my favorite CS problem, but it’s also famously one of the most difficult and subtle problems in distributed computing. Reasoning about distributed algorithms is hard at the best of times, with state split across remote nodes, asynchrony, concurrency, and non-determinism in the order that events, such as...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Heidi Howard">
+ 
+ <meta property="og:article:published_time" content="2025-05-23T05:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2025-05-23-smart-casual-verification/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2025-05-23-smart-casual-verification/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Reasoning about Distributed Protocols with Smart Casual Verification">
+ <meta property="twitter:description" content="Here at decentralized thoughts, we spend a lot of time reasoning about distributed protocols. Often, we focus on solving distributed consensus, personally it’s my favorite CS problem, but it’s also famously one of the most difficult and subtle problems in distributed computing. Reasoning about distributed algorithms is hard at the best of times, with state split across remote nodes, asynchrony, concurrency, and non-determinism in the order that events, such as...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Reasoning about Distributed Protocols with Smart Casual Verification</h1>
+ 
+ 
+ 
+ 
+ By <strong>Heidi Howard</strong><br>
+ 
+ <span class="post-meta">Posted on May 23, 2025</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>Here at <a href="https://decentralizedthoughts.github.io/">decentralized thoughts</a>, we spend a lot of time reasoning about distributed protocols. Often, we focus on solving <a href="https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/">distributed consensus</a>, personally it’s my favorite CS problem, but it’s also famously one of the most difficult and subtle problems in distributed computing. Reasoning about distributed algorithms is hard at the best of times, with state split across remote nodes, asynchrony, concurrency, and non-determinism in the order that events, such as message delivery, occur as well as failures, like nodes crashing, message loss, or even Byzantine attacks.</p>
+<h2 id="confidential-consortium-framework">Confidential Consortium Framework</h2>
+<p>This is exactly the problem we faced in the <a href="https://github.com/microsoft/CCF">Confidential Consortium Framework</a> (CCF). CCF is an open-source platform for developing trustworthy and reliable decentralized applications (<a href="https://www.vldb.org/pvldb/vol17/p225-howard.pdf">you can learn more about CCF in our VLDB paper</a>). CCF powers critical services and as such it is vital to build confidence in the correctness of CCF’s design and implementation. In particular, CCF has a custom distributed consensus protocol, including its own dynamic reconfiguration logic. CCF’s consensus logic, though based on the popular <a href="https://raft.github.io/raft.pdf">Raft</a> protocol has been sufficiently modified such that it is now based on an unproven algorithm. This is a common problem: the <a href="https://storage.googleapis.com/gweb-research2023-media/pubtools/4444.pdf">Chubby</a> authors similarly note that the additional requirements imposed by a real-world system over a vanilla <a href="https://lamport.azurewebsites.net/pubs/lamport-paxos.pdf">Paxos</a> implementation require significant changes. Moreover, distributed consensus protocols are notoriously hard to get right, and even well-known protocols, including <a href="https://ceres.cs.umd.edu/818/papers/pbft.pdf">PBFT</a>, <a href="https://www.cs.cmu.edu/~dga/papers/epaxos-sosp2013.pdf">Egalitarian Paxos</a>, and <a href="https://www.cs.cornell.edu/lorenzo/papers/kotla07Zyzzyva.pdf">Zyzzyva</a>, as well as the previously mentioned Raft and Chubby, have been found to contain subtle bugs.</p>
+<h2 id="smart-casual-verification">Smart Casual Verification</h2>
+<p>CCF already had an extensive suite of tests. Software testing (<em>“casual verification”</em>) is approachable, widely utilized, and flexible, however, it is challenging to achieve coverage of the edge cases, where many things go wrong simultaneously. Full formal verification, synthesizing an executable implementation from a formally proven specification, has been successfully applied to distributed systems, including consensus protocols, however such approaches require significant upfront investment in time and expertise. At the time of writing, CCF is 63 kLoC in C++ and it was not an option to rewrite CCF for the purpose of verification.</p>
+<p>We (the CCF team) opted for a different approach which we refer to as <em>“smart casual verification”</em>. Generally, smart casual refers to a style of dress that is neat and stylish, without the expense and discomfort associated with formal attire such as a business suit. Smart casual verification is therefore a pragmatic yet systematic approach to verification that combines the rigor of formal methods with the ease of use and flexibility of more casual methods. Smart casual verification combines systematic formal specification and techniques such as model checking with trace validation to tie the formal specification back to the real-world implementation.</p>
+<p>The full details of our adventures applying smart casual verification to CCF are outlined in <a href="https://www.usenix.org/conference/nsdi25/presentation/howard">our recent paper at NSDI 2025</a>. At a high-level, we used <a href="https://github.com/tlaplus">TLA+</a> to develop a formal model of our distributed consensus (and consistency) protocols. We were able to use TLC, one of the model checkers for TLA+, to both exhaustively search finite subsets of the state space and randomly explore the depths of the space. We were able to harness the existing “casual verification” to generate concrete traces from our implementation and check that behaviors exhibited by the implementation match what is described by our formal model. As a result, we found six bugs in our consensus protocols, five concerning safety and one regarding liveness. We were thus able to fix these before they caused issues in production.</p>
+<h2 id="specification--model-checking-in-tla">Specification &amp; model checking in TLA+</h2>
+<p>TLA+ was a natural choice of formal specification language for this effort. In fact, we were able to use <a href="https://github.com/ongardie/raft.tla">Raft’s original TLA+ specification</a> as a starting point. A TLA+ specification consists of a system’s safety and liveness properties and a description of the system as a state machine. The state machine’s main components are:</p>
+<ol>
+ <li>a collection of variables, representing the current state of a system,</li>
+ <li>a set of initials states, describing the starting values of the variables, and</li>
+ <li>a set of actions, defining the possible state transitions from the current values of the variables to the next values.</li>
+</ol>
+<p>TLA+ specifications can then be verified against their desired properties, for instance, in the case of Raft, the term of each node is monotonically increasing or there is at most one committed log entry per index. To describe a distributed system, like CCF, the variables are the local states of each node in the system and the collection of messages currently in flight. Each action models a node taking a single step within the protocol, updating its local state, and optionally adding to the collection of in-flight messages. Actions can either be initiated from a message receipt or by a node itself, for instance, a candidate stepping up as a leader. Like most TLA+ specifications, our specification has an infinite number of reachable states, there can be any number of nodes, a node can always increase its term, or a client can always send a new transaction. TLC checks properties by enumerating states therefore we needed to make the number of states finite. We tackled this in two ways. Firstly, we constrained the specification by limiting the number of client requests, number of configuration and number of terms. We can then check properties by (breath-first) exhaustive exploration of the set of reachable states. Whilst satisfying, this approach is time-consuming (we are talking days for larger numbers of client requests, configs and terms!). In particular, CCF continues to evolve so we wanted a lightweight way to check the spec inside the existing CI pipeline. For this purpose, we instead opted for simulation, weighted random exploration of the reachable states, which proved surprisingly effective at quickly finding property violations.</p>
+<h2 id="trace-validation">Trace Validation</h2>
+<p>Once we had a model describing our consensus algorithm, we were concerned that perhaps the implementation and specification did not line up. This concern was not unfounded, sometimes we found bugs in the specification which did not exist in the actual implementation and vice versa. Moreover, once we were certain that the implementation and specification were consistent, how could we be sure that this remained true as CCF evolves? In other words, how can we be sure that the specification and implementation are in sync?</p>
+<p>This is where <a href="https://arxiv.org/pdf/2404.16075">trace validation</a> entered the picture. We instrumented our implementation with some simple optional print statements to log the internal state of the nodes during key points in the consensus. Running the existing test harness thus produced a set of traces from the implementation. We used TLC to check that each trace matched a sequence of states described in the specification. If there is a 1:1 correspondence between the variables and actions in the traces and the specification, then this process is straightforward. Unfortunately, this was not the case for us, the trace and specification had different <em>“grains of atomicity”</em>. As we describe in <a href="https://www.usenix.org/conference/nsdi25/presentation/howard">our paper</a>, we were still able to make trace validation work for us. Like simulation, we were able to integrate trace validation to our CI pipeline to help us keep the implementation and specification in sync.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Smart casual verification is not without its limitations; it does not come with the same iron strong guarantees as rigorous formally verified implementations and requires more time investments than casual verification alone. However, it might still be worth considering adding smart causal verification to your verification wardrobe in your latest distributed systems project.</p>
+<p><strong>Learn more about our journey with smart casual verification in <a href="https://www.usenix.org/system/files/nsdi25-howard.pdf">“Smart Casual Verification of the Confidential Consortium Framework”</a> by Heidi Howard, Markus Kuppe, Edward Ashton, Amaury Chamayou and Natacha Crooks, presented last month at <a href="https://www.usenix.org/conference/nsdi25">NSDI 2025</a>.</strong></p>
+<p><em>Acknowledgements: Thank you to Markus Kuppe for his helpful feedback on this post.</em></p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ <a href="/tags#research">research</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Reasoning+about+Distributed+Protocols+with+Smart+Casual+Verification&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2025-05-23-smart-casual-verification%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2025-02-14-verifiable-MSM/" data-toggle="tooltip" data-placement="top" title="Verifiable Multi-Exponentiation and Multi-Scalar Multiplication (MSM)">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2025-06-18-simplex/" data-toggle="tooltip" data-placement="top" title="From Tendermint to Simplex">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

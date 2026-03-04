@@ -9,7 +9,7 @@ author: Kartik Nayak, Ittai Abraham, Ling Ren
 <span style="color:grey"> ![](https://github.githubassets.com/images/icons/emoji/unicode/23f0.png?v8) Post updated in March 2021</span>
 
 
-Different modeling assumptions under which we construct BFT protocols often make it hard to compare two protocols and understand their relative contributions. In this post we discuss *[synchronous](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/)* protocols in the *[authenticated](https://decentralizedthoughts.github.io/2019-07-18-setup-assumptions/)* model (assuming a PKI).
+Different modeling assumptions under which we construct BFT protocols often make it hard to compare two protocols and understand their relative contributions. In this post we discuss *[synchronous](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/)* protocols in the *[authenticated](https://decentralizedthoughts.github.io/2019-07-19-setup-assumptions/)* model (assuming a PKI).
 
 A protocol runs in the [synchronous model](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/) if it assumes a **bounded message delay**, i.e., all messages will arrive within a bounded delay of $\Delta$. A common strengthening of the synchronous model is *lock-step* synchrony, i.e., replicas execute the protocol in rounds in a synchronized manner. A message sent at the start of a round arrives by the end of the round.
 

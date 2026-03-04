@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>What about Validity?</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham and Christian Cachin">
+ 
+ <meta name="description" content="Perhaps the archetypical trilemma is consensus - it requires three properties: agreement, liveness, and validity. Getting any two is easy, but all three together is what makes consensus such a facinating problem that continues to create new challenges even after 40 years of research. A lot of research focuses on agreement and liveness properties. In this series of posts, we highlight some classic and some more recent research on validity...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="What about Validity?">
+ <meta property="og:description" content="Perhaps the archetypical trilemma is consensus - it requires three properties: agreement, liveness, and validity. Getting any two is easy, but all three together is what makes consensus such a facinating problem that continues to create new challenges even after 40 years of research. A lot of research focuses on agreement and liveness properties. In this series of posts, we highlight some classic and some more recent research on validity...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham and Christian Cachin">
+ 
+ <meta property="og:article:published_time" content="2022-12-12T04:00:00-05:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2022-12-12-what-about-validity/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2022-12-12-what-about-validity/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="What about Validity?">
+ <meta property="twitter:description" content="Perhaps the archetypical trilemma is consensus - it requires three properties: agreement, liveness, and validity. Getting any two is easy, but all three together is what makes consensus such a facinating problem that continues to create new challenges even after 40 years of research. A lot of research focuses on agreement and liveness properties. In this series of posts, we highlight some classic and some more recent research on validity...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>What about Validity?</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham and Christian Cachin</strong><br>
+ 
+ <span class="post-meta">Posted on December 12, 2022</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>Perhaps the archetypical <a href="https://twitter.com/el33th4xor/status/1191820205456023552?s=20&amp;t=RcutJw0wQUsTmrO0OXzpXw">trilemma</a> is <strong>consensus</strong> - it requires three properties: <strong>agreement</strong>, <strong>liveness</strong>, and <strong>validity</strong>. Getting any two is easy, but all three together is what makes consensus such a facinating problem that continues to create new challenges even after 40 years of research.</p>
+<p>A lot of research focuses on <em>agreement</em> and <em>liveness</em> properties. In this series of posts, we highlight some classic and some more recent research on <strong>validity</strong> in the context of consensus and blockchain protocols.</p>
+<h2 id="classic-validity-vs-external-validity">Classic validity vs External validity</h2>
+<p>The classic Byzantine agreement <strong>validity</strong> property:</p>
+<p><strong>Validity</strong>: <em>if all honest parties have the same value then this is the output value.</em></p>
+<p>Sometimes an even weaker property is required:</p>
+<p><strong>Weak Validity</strong>: <em>if all parties are honest and have the same value then this is the output value.</em></p>
+<p>In many contexts, these validity properties are too weak. In a state machine replication (blockchain) setting, it will almost always be the case that not all (honest) replicas see exactly the same set of client requests in exactly the same order.</p>
+<p>This led <a href="https://www.iacr.org/archive/crypto2001/21390524.pdf">Cachin, Kursawe, Petzold, and Shoup, 2001</a> to the notion of <strong>external validity</strong>, which intuitively limits the adversary from inventing non-existing values.</p>
+<p>In consensus with external validity, there is some validity check “callback function” (in the application, outside of the consensus protocol) that is guaranteed to be eventually true if it is true for any non-faulty party. The canonical example is to check the command is correctly signed by the client (or the owner of the digital asset).</p>
+<p>External validity is the standard for all authenticated blockchain protocols, and we will describe it in a later post (also see our post on <a href="https://decentralizedthoughts.github.io/2022-09-10-provable-broadcast/">provable broadcast</a>). In this post, we explore other directions for strengthening validity and why (in some sense) they lead to dead ends (or back to reductions to consensus with external validity).</p>
+<h2 id="strengthening-validity-without-external-mechanisms">Strengthening validity without external mechanisms</h2>
+<p>It is natural to try to obtain stronger validity properties when thinking of consensus as a <strong>voting protocol</strong> or when requiring stronger notions of <strong>fairness</strong> from consensus. One motivation is blockchain systems that aim to provide voting and fairness capabilities.</p>
+<h2 id="consensus-with-honest-input-validity">Consensus with honest input validity</h2>
+<p><a href="https://smartech.gatech.edu/bitstream/handle/1853/6776/GIT-CC-93-45.pdf">Neiger</a> in 1994 studied a variant of consensus that we call <strong>consensus with honest input validity</strong> which requires standard termination and agreement properties and a stronger validity property:</p>
+<p><strong>Honest Input Validity</strong>: <em>The output must be an input of some honest party.</em></p>
+<p>Note that Neiger called this problem <em>Strong Consensus</em> but we choose to use a more explicit name here to avoid overloading the term <em>strong</em>.</p>
+<h3 id="a-lower-bound-for-honest-input-validity-in-synchrony">A lower bound for honest input validity in synchrony</h3>
+<p><strong>Theorem [Neiger, 1994]</strong>: Consensus with honest input validity and $m$ possible input values cannot be solved in <em>synchrony</em> for $n \leq \max(3, m) f$ and a malicious adversary controlling $f$ parties.</p>
+<p><em>Proof idea</em>: $n \leq 3f$ is the <a href="https://decentralizedthoughts.github.io/2019-08-02-byzantine-agreement-is-impossible-for-$n-slash-leq-3-f$-is-the-adversary-can-easily-simulate/">standard FLM impossibility</a>.</p>
+<p>Neiger’s original proof was for deterministic protocols, here we present a modern version that covers even randomized protocols.</p>
+<p>Seeking a contradiction, assume $n=mf$ and $n &gt; 3f$. So there must be $m&gt;3$ possible input values. Assume with loss of generality that the possible input values are $1,\dots,m$. Partition the parties into sets of size $f$: $S_1,\dots,S_m$ and have parties in set $S_i$ start with input $i$.</p>
+<p>Consider two worlds. In world A, there are no malicious parties. If the protocol is deterministic then assume without loss of generality it outputs value 1. Even if the protocol is randomized, there must be some value, that with probability at least $1/m$ is the output in world A. Without loss of generality assume this is value 1.</p>
+<p>Consider world B, where the adversary corrupts parties in $S_1$ and acts as if they have input $1$. The honest parties in the protocol have no way to distinguish between world A and world B. So just as in world A, in world B the output will be $1$ (which is not an input of honest parties) with a probability of at least $1/m$.</p>
+<p>However, in world B the non-faulty parties have input values $2,\dots,m$, hence honest input validity is violated with probability at least $1/m$.</p>
+<h3 id="a-tight-upper-bound-for-honest-input-validity-in-synchrony">A tight upper bound for honest input validity in synchrony</h3>
+<p>Consensus with honest input validity in synchrony (for $m=3$ possible values assuming $n&gt;3f$ and for $m&gt;3$ possible values assuming $n&gt;mf$).</p>
+<p>We solve consensus with honest input validity via a reduction from gradecast and consensus with external validity:</p>
+<ol>
+ <li>In round 1, each party sends its input $v_i$ to all parties via <a href="https://decentralizedthoughts.github.io/2022-06-09-phase-king-via-gradecast/">gradecast</a>.</li>
+ <li>In round two, let $S_i$ be the set of grade 2 values. Let $v$ be the <a href="https://en.wikipedia.org/wiki/Mode_(statistics)">mode</a> (most frequent value), and break ties arbitrarily. Use $&lt;v,S_i&gt;$ as your proposal to a consensus protocol with external validity.</li>
+ <li>A proposal $&lt;v,S_i&gt;$ is valid if:
+ <ol>
+ <li>no party outside $S_i$ has grade 2; and</li>
+ <li>$|S_i|\geq n-f$; and</li>
+ <li>all parties in $S_i$ have grade at least 1; and</li>
+ <li>the mode of $S_i$ is $v$.</li>
+ </ol>
+ </li>
+</ol>
+<p><em>Proof idea</em>: When $n&gt;mf$, then at least one value held by non-faulty parties will appear at least $f+1$ times with grade 2, while any value held only by faulty parties will appear at most $f$ times.</p>
+<p>Due to the use of gradecast, even the malicious parties must use a valid input (or be ignored).</p>
+<p>Note that we are implicitly using $&lt;v,S_i&gt;$ and the 4 conditions above as an external validity condition.</p>
+<h4 id="a-lower-bound-for-honest-input-validity-in-asynchrony">A lower bound for honest input validity in asynchrony</h4>
+<p>In 2002 <a href="https://eprint.iacr.org/2002/085">Fitzi and Garay</a> extended this result to prove that solving asynchronous consensus with honest input validity in a domain with $m$ values is impossible for $n \leq max(3,m+1)f$:</p>
+<p><strong>Theorem [<a href="https://eprint.iacr.org/2002/085">Fitzi and Garay, 2002</a>]</strong>: Consensus with honest input validity and $m$ possible input values cannot be solved in <em>asynchrony</em> for $n \leq (m+1) f$ and a malicious adversary controlling $f$ parties.</p>
+<p><em>Proof idea</em>: consider $n=(m+1)f$ and partition the parties into sets of size $f$: $S_1,\dots,S_m,S_{m+1}$.</p>
+<p>In world A, there are no malicious parties, parties in $S_i$ for $i\leq m$, have input $i$, and parties in $S_{m+1}$ have input $m$ and are slow. Assuming the protocol is randomized then without loss of generality assume that with probability at least $1/m$, the output in world $1$ is value $1$.</p>
+<p>Consider world B, where the adversary corrupts parties in $S_1$ and acts as if they have input $1$. Just as in world A, parties in $S_{m+1}$ are slow. Due to indistinguishability, in world B, the output of honest parties will be $1$ (which is not an input of any honest parties) with a probability of at least $1/m$.</p>
+<h4 id="a-tight-upper-bound-for-honest-input-validity-in-asynchrony">A tight upper bound for honest input validity in asynchrony</h4>
+<p>Consensus with honest input validity in asynchrony for $m=2$ possible values assuming $n&gt;3f$ and for $m&gt;2$ possible values assuming $n&gt;(m+1)f$ is possible.</p>
+<p>Again it’s a reduction: from consensus with honest input validity to reliable broadcast and consensus with external validity.</p>
+<ol>
+ <li>In round 1, each party sends its input to all parties via <a href="https://decentralizedthoughts.github.io/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/">reliable broadcast</a>.</li>
+ <li>In round 2, each party waits for $n-f$ senders $S_i$, then takes the mode $v$ (most frequent value), breaking ties arbitrarily. Party $i$ uses $&lt;v,S_i&gt;$ as it’s proposal to an asynchronous consensus protocol with external validity.</li>
+ <li>A proposal $&lt;v,S_i&gt;$ becomes valid if:
+ <ol>
+ <li>$|S_i| \geq n-f$; and</li>
+ <li>all the Reliable Broadcasts in $S_i$ complete; and</li>
+ <li>the mode of $S_i$ is $v$.</li>
+ </ol>
+ </li>
+</ol>
+<p><em>Proof idea</em>: When $n&gt;(m+1)f$, then $n-f &gt; mf$. So it cannot be the case that all $m$ values of honest parties appear just $f$ times in any set of $n-f$ values. Hence there must exist at least one value from an honest party that appears at least $f+1$ times in any set of $n-f$.</p>
+<p>Values that are not input values of honest parties can appear at most $f$ times in any set of $n-f$ values. Hence the mode of any set of $n-f$ values will be an input value of an honest party.</p>
+<p>Due to the reliable broadcast, and the validity check, a valid input of any party, even a malicious party, must be a value of one of the honest parties.</p>
+<h3 id="honest-input-or-default-validity">Honest-input-or-default validity</h3>
+<p>One way to slightly relax validity with honest input validity is to allow a default value $\bot$ when not all honest parties have the same input.</p>
+<p><strong>Honest-Input-or-Default Validity</strong>: <em>If all honest have the same input then this must be the output value. Otherwise, the output must be an input of some honest party or a special value $\bot$.</em></p>
+<p>Note that <a href="https://www.distributedprogramming.net">Cachin, Guerraoui, Rodrigues, 2011</a> called this problem <em>Strong Validity</em> but we choose to use a more explicit name here to avoid overloading the term <em>strong</em>.</p>
+<p>Note that this variation does not suffer from stronger lower bounds than regular consensus. See exercise 5.11 in <a href="https://www.distributedprogramming.net">CGR11</a> for how to solve consensus with honest-input-or-default validity. In a nutshll, this is done again via a reduction to consensus with external validity (where the validity condition is that at least $f+1$ parties sent this input).</p>
+<h3 id="majority-validity-and-advantaged-validity">Majority validity and advantaged validity</h3>
+<p>In honest input validity, we want the output to be one of the honest inputs. So it’s okay that the output is 1 even if just one honest party has input 1 and all the other honest have input 0.</p>
+<p>In cases where we view consensus as a <strong>voting scheme</strong> this seems too weak. If all-but-one honest parties vote for 0 we would like 0 to be the output!</p>
+<p>The natural way to capture this is via a validity requirement, that the output must be the majority value of the <strong>honest</strong> parties’ inputs. More generally, for $m&gt;2$, the <a href="https://en.wikipedia.org/wiki/Mode_(statistics)">mode</a> of the <strong>honest</strong> parties inputs.</p>
+<p><strong>Majority Validity</strong>: <em>The output is the mode of the input of the *honest</em> parties. Note that for $m=2$, this is equivalent to saying that the output is the <em>majority</em> of the input values of the honest parties.*</p>
+<p>Majority consensus feels very hard to obtain, perhaps it’s impossible? How can we learn the mode of the honest parties if the malicious parties <strong>and</strong> asynchrony are colluding against us?</p>
+<p>Indeed, <a href="https://eprint.iacr.org/2002/085">Fitzi and Garay</a> prove that even a weaker validity requirement is <strong>impossible</strong> in asynchrony.</p>
+<p>Consider the requirement to output the unique mode only if it has <strong>at least $k$ honest votes more</strong> than the honest votes of any other value.</p>
+<p><strong>$k$-advantaged Validity</strong>: <em>If the unique mode of the honest parties has at least $k$ honest votes more than the number of honest votes for any other value, then this is the output.</em></p>
+<h4 id="impossibility-of-2f-advantaged-validity-in-asynchrony">Impossibility of $2f$-advantaged validity in asynchrony</h4>
+<p><strong>Theorem [Fitzi and Garay, 2002]</strong>: consensus with $2f$-advantaged Validity cannot be solved in asynchrony for any $n$ and any $f$ with a malicious adversary controlling $f$ parties, even for $m=2$.</p>
+<p><em>Proof idea</em>: suppose $G_1$ honest parties have the value 1 and $G_0$ honest parties have the value 0 and $|G_1|=|G_0|+2f$, but $f$ parties in $G_1$ are slow and the adversaries uses the value 0 as input for the $f$ malicious parties.</p>
+<p>So parties will hear $|G_1| -f$ parties with 1 and $|G_0|+f$ parties with 0. The protocol may be randomized, so without loss of generality assume the decision will be 0 with probability at least 1/2.</p>
+<p>A decision of 0 violates the $2f$-advantaged validity property.</p>
+<h4 id="a-tight-upper-bound-for-2f1-advantaged-validity-in-asynchrony">A tight upper bound for $2f+1$-advantaged validity in asynchrony</h4>
+<p>On the other hand, $2f+1$-advantaged validity can be solved using a slight variation of the protocol above for consensus with honest input validity.</p>
+<h3 id="relevance-of-k-advantaged-validity-to-voting-on-ordering">Relevance of $k$-advantaged validity to voting on ordering</h3>
+<p>Consider the following scenario: two clients send commands and the replicas want to decide which client sent the command first.</p>
+<p>Note that this is essentially a voting problem - each replica can cast a vote on the order and malicious replicas can lie without any natural way of being detected.</p>
+<p>This post discusses lower bounds that show that even for this simple binary decision, the best we can do is solve $2f+1$ advantaged consensus (see <a href="https://arxiv.org/abs/2112.06615">Cachin, Micic, Steinhauer, and Zanolini, 2021</a>).</p>
+<p>Note that for $n=3f+1$, the problem of $2f+1$ advantaged consensus is basically weak validity. This motivates looking at higher thresholds like $n&gt;4f$.</p>
+<p>Your thoughts on <a href="https://twitter.com/ittaia/status/1602310854510256128?s=20&amp;t=w9YoXZkVX71peaPS1UN62g">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ <a href="/tags#lowerbound">lowerbound</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=What+about+Validity%3F&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2022-12-12-what-about-validity%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2022-11-24-two-round-HS/" data-toggle="tooltip" data-placement="top" title="Two Round HotStuff">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2022-12-18-what-is-responsiveness/" data-toggle="tooltip" data-placement="top" title="What is Responsiveness?">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

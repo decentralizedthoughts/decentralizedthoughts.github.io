@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Asynchronous Agreement Part Two: Ben-Or's protocol</title>
+ 
+ 
+ <meta name="author" content="Ittai Abraham, Namma Ben-David, Sravya Yandamuri">
+ 
+ <meta name="description" content="We continue to explore the marvelous world of consensus in the Asynchronous model. In this post, we present Ben-Or’s classic protocol from 1983. In the next post, we will present a more modern version that is a simplified version from our paper. In the previous post we defined the problem of Asynchronous Agreement, so without further ado, here is Ben-Or’s protocol for Binary Asynchronous Agreement with $n=2f+1$ parties assuming the...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Asynchronous Agreement Part Two: Ben-Or's protocol">
+ <meta property="og:description" content="We continue to explore the marvelous world of consensus in the Asynchronous model. In this post, we present Ben-Or’s classic protocol from 1983. In the next post, we will present a more modern version that is a simplified version from our paper. In the previous post we defined the problem of Asynchronous Agreement, so without further ado, here is Ben-Or’s protocol for Binary Asynchronous Agreement with $n=2f+1$ parties assuming the...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham, Namma Ben-David, Sravya Yandamuri">
+ 
+ <meta property="og:article:published_time" content="2022-03-30T07:16:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2022-03-30-asynchronous-agreement-part-two-ben-ors-protocol/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2022-03-30-asynchronous-agreement-part-two-ben-ors-protocol/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Asynchronous Agreement Part Two: Ben-Or's protocol">
+ <meta property="twitter:description" content="We continue to explore the marvelous world of consensus in the Asynchronous model. In this post, we present Ben-Or’s classic protocol from 1983. In the next post, we will present a more modern version that is a simplified version from our paper. In the previous post we defined the problem of Asynchronous Agreement, so without further ado, here is Ben-Or’s protocol for Binary Asynchronous Agreement with $n=2f+1$ parties assuming the...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Asynchronous Agreement Part Two: Ben-Or's protocol</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham, Namma Ben-David, Sravya Yandamuri</strong><br>
+ 
+ <span class="post-meta">Posted on March 30, 2022</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>We continue to explore the marvelous world of consensus in the <a href="https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/">Asynchronous model</a>. In this post, we present Ben-Or’s classic <a href="https://homepage.cs.uiowa.edu/~ghosh/BenOr.pdf">protocol</a> from 1983. In the next post, we will present a <a href="https://decentralizedthoughts.github.io/2022-03-30-asynchronous-agreement-part-three-a-modern-version-of-ben-ors-protocol/">more modern version</a> that is a simplified version from our <a href="https://eprint.iacr.org/2022/711.pdf">paper</a>.</p>
+<p>In the <a href="https://decentralizedthoughts.github.io/2022-03-30-asynchronous-agreement-part-one-defining-the-problem/">previous post</a> we defined the problem of Asynchronous Agreement, so without further ado, here is Ben-Or’s protocol for Binary Asynchronous Agreement with $n=2f+1$ parties assuming the adversary can crash $f$ parties:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Ben-Or's Protocol for party i
+input: v (0 or 1)
+r:=1
+while true
+ send &lt;echo1, r, v&gt; to all
+ wait for f+1 &lt;echo1, r, *&gt;
+ if all have value w, then send &lt;echo2, r, w&gt; to all
+ otherwise send &lt;echo2, r, bot&gt; to all
+ wait for f+1 &lt;echo2, r, *&gt;
+ if all have the same non-bot value u, then decide(u)
+ if all have the value bot, then v:= coin()
+ otherwise, v:=u where u is a non-bot value from &lt;echo2, r, *&gt;
+ r++ 
+</code></pre></div></div>
+<p>Note that this protocol does not terminate when it decides. Adding a <em>termination gadget</em> that provides termination in the crash model is quite simple:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Termination Gadget for crash failures
+If receive &lt;decide u&gt;, then
+ decide(u) 
+If decide(u), then
+ send &lt;decide u&gt; to all
+ Terminate
+</code></pre></div></div>
+<p>Why does Ben-Or’s protocol work? The first thing to check is <strong>Weak Validity</strong> (if all are non-faulty and start with $b$ then all decide $b$). Indeed, if all parties have the same input $b$, and no party is faulty, then clearly all parties will send <code class="language-plaintext highlighter-rouge">&lt;echo1, 1, b&gt;</code>, hence will see $f+1$ <code class="language-plaintext highlighter-rouge">&lt;echo1, 1, b&gt;</code> message after one round, hence will send <code class="language-plaintext highlighter-rouge">&lt;echo2, 1, b&gt;</code>, hence will see $f+1$ <code class="language-plaintext highlighter-rouge">&lt;echo2, 1, b&gt;</code> message and decide (and terminate from the termination gadget).</p>
+<p>The next property to verify is <strong>Agreement</strong> (that no two parties decide on different values). This follows from two simple claims:</p>
+<p><em>Claim 1</em>: there cannot be <code class="language-plaintext highlighter-rouge">&lt;echo2, r, 0&gt;</code> and <code class="language-plaintext highlighter-rouge">&lt;echo2, r, 1&gt;</code>. This follows from quorum intersection, sending echo2 requires $f+1$ echo1 of the same value, but this would mean one party sent both <code class="language-plaintext highlighter-rouge">&lt;echo1, r, 0&gt;</code> and <code class="language-plaintext highlighter-rouge">&lt;echo1, r, 1&gt;</code> which is not possible.</p>
+<p><em>Claim 2</em>: if one party sees $f+1$ messages for <code class="language-plaintext highlighter-rouge">&lt;echo2, r, u&gt;</code> then all parties will see at least one message for <code class="language-plaintext highlighter-rouge">&lt;echo2, r, u&gt;</code>. This follows since at least one of the $f+1$ parties that sent <code class="language-plaintext highlighter-rouge">&lt;echo2, r, u&gt;</code> is non-faulty and again from quorum intersection.</p>
+<p>Combing both claims, we can now look at the first round $r$ in which a party decided value $u$, and conclude that any party that reaches the end of round $r$ will have $v=u$. We can now use the argument above for Weak Validity and prove that all non-faulty parties will decide $u$ by round $r+1$.</p>
+<p>Now for the hard part. Why does this protocol have <strong>Finite Expected Termination</strong>?</p>
+<p>It turns out that this is a non-trivial theorem for an adaptive adversary. It took over 15 years to realize via a rather complicated argument:</p>
+<p><strong><a href="https://ecommons.cornell.edu/bitstream/handle/1813/7336/98-1682.pdf?sequence=1&amp;isAllowed=y">Theorem: [Aguilera, Toueg 1998]</a></strong>: Ben-Or’s protocol with $n=2f+1$ parties has an Finite Expected Termination of $O(2^{2n})$.</p>
+<p>This leaves us in an unsatisfying state. While Ben-Or’s protocol is elegant, the proof for Finite Expected Termination is non-trivial and not easily taught in a standard class (or a short blog post). Is there a simpler proof? Maybe there is a reason for the complexity? Another concrete question is about efficiency: can we improve the $O(2^{2n})$ bound to a more natural $O(2^n)$ bound?</p>
+<p>More fundamentally, the question we ask is: how should we argue about the expected termination of Asynchronous protocols with an adaptive adversary? Is there a more general framework that can allow us to decompose the problem?</p>
+<p>We will answer this <a href="https://decentralizedthoughts.github.io/2022-03-30-asynchronous-agreement-part-three-a-modern-version-of-ben-ors-protocol/">in the next post</a>.</p>
+<p>Thoughts and comments on <a href="https://twitter.com/ittaia/status/1509211437306163202?s=20&amp;t=Ow_DBFvPTgVP6BQK4BIRLg">Twitter</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#asynchrony">asynchrony</a>
+ 
+ <a href="/tags#consensus101">consensus101</a>
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Asynchronous+Agreement+Part+Two%3A+Ben-Or%27s+protocol&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2022-03-30-asynchronous-agreement-part-two-ben-ors-protocol%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2022-03-30-asynchronous-agreement-part-one-defining-the-problem/" data-toggle="tooltip" data-placement="top" title="Asynchronous Agreement Part One: Defining the problem">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2022-03-30-asynchronous-agreement-part-three-a-modern-version-of-ben-ors-protocol/" data-toggle="tooltip" data-placement="top" title="Asynchronous Agreement Part Three: a Modern version of Ben-Or's protocol">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ {"name"=>"Decentralized Thinkers"}
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>
