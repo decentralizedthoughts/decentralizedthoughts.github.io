@@ -11,19 +11,36 @@ permissions:
 jobs:
   refresh:
     runs-on: ubuntu-latest
-    if: ${{ secrets.GA4_PROPERTY_ID != '' && (secrets.GA4_SERVICE_ACCOUNT_JSON != '' || secrets.GA4_ACCESS_TOKEN != '') }}
     steps:
       - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.1"
+      - name: Check GA configuration
+        id: ga-config
+        env:
+          GA4_PROPERTY_ID: ${{ secrets.GA4_PROPERTY_ID }}
+          GA4_SERVICE_ACCOUNT_JSON: ${{ secrets.GA4_SERVICE_ACCOUNT_JSON }}
+          GA4_ACCESS_TOKEN: ${{ secrets.GA4_ACCESS_TOKEN }}
+        run: |
+          if [ -z "$GA4_PROPERTY_ID" ]; then
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if [ -z "$GA4_SERVICE_ACCOUNT_JSON" ] && [ -z "$GA4_ACCESS_TOKEN" ]; then
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "configured=true" >> "$GITHUB_OUTPUT"
       - name: Refresh top pages
+        if: steps.ga-config.outputs.configured == 'true'
         env:
           GA4_PROPERTY_ID: ${{ secrets.GA4_PROPERTY_ID }}
           GA4_SERVICE_ACCOUNT_JSON: ${{ secrets.GA4_SERVICE_ACCOUNT_JSON }}
           GA4_ACCESS_TOKEN: ${{ secrets.GA4_ACCESS_TOKEN }}
         run: ruby tools/fetch_ga_top_pages.rb
       - name: Commit updated top pages
+        if: steps.ga-config.outputs.configured == 'true'
         run: |
           if git diff --quiet -- assets/data/top-pages.json; then
             exit 0
