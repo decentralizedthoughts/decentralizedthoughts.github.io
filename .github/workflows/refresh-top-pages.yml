@@ -1,0 +1,35 @@
+name: Refresh GA Top Pages
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 6 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    if: ${{ secrets.GA4_PROPERTY_ID != '' && (secrets.GA4_SERVICE_ACCOUNT_JSON != '' || secrets.GA4_ACCESS_TOKEN != '') }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.1"
+      - name: Refresh top pages
+        env:
+          GA4_PROPERTY_ID: ${{ secrets.GA4_PROPERTY_ID }}
+          GA4_SERVICE_ACCOUNT_JSON: ${{ secrets.GA4_SERVICE_ACCOUNT_JSON }}
+          GA4_ACCESS_TOKEN: ${{ secrets.GA4_ACCESS_TOKEN }}
+        run: ruby tools/fetch_ga_top_pages.rb
+      - name: Commit updated top pages
+        run: |
+          if git diff --quiet -- assets/data/top-pages.json; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/data/top-pages.json
+          git commit -m "Data: refresh GA top pages"
+          git push

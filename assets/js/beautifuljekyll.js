@@ -6,6 +6,8 @@ let BeautifulJekyllJS = {
   numImgs : null,
   searchData : null,
   searchPromise : null,
+  topPagesData : null,
+  topPagesPromise : null,
   searchSuggestions : [],
   recentSearchEntries : [],
   activeSearchIndex : -1,
@@ -172,6 +174,38 @@ let BeautifulJekyllJS = {
     return BeautifulJekyllJS.searchPromise;
   },
 
+  loadTopPages : function() {
+    if (BeautifulJekyllJS.topPagesData) {
+      return Promise.resolve(BeautifulJekyllJS.topPagesData);
+    }
+    if (BeautifulJekyllJS.topPagesPromise) {
+      return BeautifulJekyllJS.topPagesPromise;
+    }
+
+    const overlay = document.getElementById("beautifuljekyll-search-overlay");
+    if (!overlay || !overlay.dataset.topPagesJson) {
+      return Promise.resolve(null);
+    }
+
+    BeautifulJekyllJS.topPagesPromise = fetch(overlay.dataset.topPagesJson)
+      .then(function(response) {
+        if (!response.ok) {
+          throw new Error("Unable to load top pages");
+        }
+        return response.json();
+      })
+      .then(function(payload) {
+        BeautifulJekyllJS.topPagesData = payload;
+        return payload;
+      })
+      .catch(function() {
+        BeautifulJekyllJS.topPagesPromise = null;
+        return null;
+      });
+
+    return BeautifulJekyllJS.topPagesPromise;
+  },
+
   setSearchStatus : function(message) {
     const statusEl = document.getElementById("nav-search-status");
     if (!statusEl) {
@@ -257,12 +291,35 @@ let BeautifulJekyllJS = {
 
   renderRecentEntries : function() {
     const recentEl = document.getElementById("search-recent-posts");
+    const headingEl = document.getElementById("search-recent-heading");
     if (!recentEl) {
       return;
     }
 
     recentEl.innerHTML = "";
-    BeautifulJekyllJS.recentSearchEntries.forEach(function(entry) {
+    const topPages = BeautifulJekyllJS.topPagesData && Array.isArray(BeautifulJekyllJS.topPagesData.items) ?
+      BeautifulJekyllJS.topPagesData.items : [];
+    const source = topPages.length > 0 ? "ga4" : "fallback";
+    const entries = source === "ga4" ?
+      topPages.map(function(item) {
+        const match = BeautifulJekyllJS.searchData.find(function(entry) {
+          return entry.url === item.path || entry.url === item.path.replace(/\/$/, "");
+        });
+        return {
+          url: item.path,
+          views: item.views,
+          title: match ? match.title : item.path,
+          author: match ? match.author : "",
+          date: match ? match.date : ""
+        };
+      }) :
+      BeautifulJekyllJS.recentSearchEntries;
+
+    if (headingEl) {
+      headingEl.textContent = source === "ga4" ? "Top pages" : "Recent posts";
+    }
+
+    entries.forEach(function(entry) {
       const link = document.createElement("a");
       link.className = "search-recent-link";
       link.href = entry.url;
@@ -274,7 +331,9 @@ let BeautifulJekyllJS = {
 
       const meta = document.createElement("span");
       meta.className = "search-recent-meta";
-      meta.textContent = [entry.date, entry.author].filter(Boolean).join(" · ");
+      meta.textContent = source === "ga4" ?
+        [entry.views ? entry.views + " views" : "", entry.date].filter(Boolean).join(" · ") :
+        [entry.date, entry.author].filter(Boolean).join(" · ");
       link.appendChild(meta);
 
       recentEl.appendChild(link);
@@ -479,7 +538,7 @@ let BeautifulJekyllJS = {
       }
       $("body").addClass("overflow-hidden");
       BeautifulJekyllJS.setSearchStatus("Loading search index...");
-      BeautifulJekyllJS.loadSearchIndex()
+      Promise.all([BeautifulJekyllJS.loadSearchIndex(), BeautifulJekyllJS.loadTopPages()])
         .then(function() {
           BeautifulJekyllJS.renderSearchResults(searchInput.value);
         })
@@ -526,7 +585,7 @@ let BeautifulJekyllJS = {
         closeSearch();
       });
     }
-    BeautifulJekyllJS.loadSearchIndex().catch(function() {});
+    Promise.all([BeautifulJekyllJS.loadSearchIndex(), BeautifulJekyllJS.loadTopPages()]).catch(function() {});
     document.addEventListener("keydown", function(e) {
       if (e.key === "/" && !e.metaKey && !e.ctrlKey && !e.altKey && !overlay.contains(document.activeElement)) {
         const tag = document.activeElement && document.activeElement.tagName;
