@@ -275,8 +275,7 @@ let BeautifulJekyllJS = {
     const searchLink = document.getElementById("nav-search-link");
     const searchInput = document.getElementById("nav-search-input");
     const searchExit = document.getElementById("nav-search-exit");
-    const homeSearchInput = document.getElementById("home-search-input");
-    const homeSearchButton = document.getElementById("home-search-button");
+    const homeSearchTrigger = document.getElementById("home-search-trigger");
 
     if (!overlay || !searchLink || !searchInput || !searchExit) {
       return;
@@ -326,21 +325,9 @@ let BeautifulJekyllJS = {
         }
       }
     });
-    if (homeSearchInput && homeSearchButton) {
-      const openHomeSearch = function() {
-        openSearch(homeSearchInput.value);
-      };
-      homeSearchButton.addEventListener("click", function() {
-        openHomeSearch();
-      });
-      homeSearchInput.addEventListener("focus", function() {
-        openHomeSearch();
-      });
-      homeSearchInput.addEventListener("keydown", function(e) {
-        if (e.key === "Enter") {
-          e.preventDefault();
-          openHomeSearch();
-        }
+    if (homeSearchTrigger) {
+      homeSearchTrigger.addEventListener("click", function() {
+        openSearch();
       });
     }
     $(document).on('keyup', function(e) {
