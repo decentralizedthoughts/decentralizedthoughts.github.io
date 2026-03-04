@@ -8,18 +8,6 @@ layout: page
 {% assign date_format = site.date_format | default: "%B %-d, %Y" %}
 {% assign excerpt_length = site.excerpt_length | default: 50 %}
 
-{% if site.post_search %}
-<section class="home-search-panel">
-  <div class="home-search-copy">
-    <p class="home-search-eyebrow">Find a post quickly</p>
-    <button id="home-search-trigger" class="home-search-trigger" type="button" aria-label="Search the blog">
-      <span class="fa fa-search" aria-hidden="true"></span>
-      <span>Search posts, authors, and topics</span>
-    </button>
-  </div>
-</section>
-{% endif %}
-
 <div class="posts-list">
   {% for post in posts %}
   <article class="post-preview">

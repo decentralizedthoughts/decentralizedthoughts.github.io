@@ -7,6 +7,7 @@ let BeautifulJekyllJS = {
   searchData : null,
   searchPromise : null,
   searchSuggestions : [],
+  activeSearchIndex : -1,
 
   init : function() {
     setTimeout(BeautifulJekyllJS.initNavbar, 10);
@@ -141,6 +142,7 @@ let BeautifulJekyllJS = {
           const normalized = {
             title: entry.title || "",
             desc: entry.desc || "",
+            content: entry.content || "",
             author: entry.author || "",
             category: entry.category || "",
             url: entry.url || "",
@@ -149,6 +151,7 @@ let BeautifulJekyllJS = {
           normalized.searchText = [
             normalized.title,
             normalized.desc,
+            normalized.content,
             normalized.author,
             normalized.category,
             normalized.date
@@ -189,6 +192,14 @@ let BeautifulJekyllJS = {
           current.count += 1;
           counts.set(key, current);
         });
+
+      const author = (entry.author || "").trim();
+      if (author) {
+        const key = author.toLowerCase();
+        const current = counts.get(key) || { label: author, count: 0 };
+        current.count += 1;
+        counts.set(key, current);
+      }
     });
 
     const dynamic = Array.from(counts.values())
@@ -224,14 +235,39 @@ let BeautifulJekyllJS = {
   },
 
   highlightFirstSearchResult : function() {
-    document.querySelectorAll(".search-result-link.active").forEach(function(el) {
+    return BeautifulJekyllJS.highlightSearchResult(0);
+  },
+
+  highlightSearchResult : function(index) {
+    const results = Array.from(document.querySelectorAll(".search-result-link"));
+    results.forEach(function(el) {
       el.classList.remove("active");
     });
-    const firstResult = document.querySelector(".search-result-link");
-    if (firstResult) {
-      firstResult.classList.add("active");
+
+    if (results.length === 0) {
+      BeautifulJekyllJS.activeSearchIndex = -1;
+      return null;
     }
-    return firstResult;
+
+    const nextIndex = Math.max(0, Math.min(index, results.length - 1));
+    const result = results[nextIndex];
+    result.classList.add("active");
+    result.scrollIntoView({ block: "nearest" });
+    BeautifulJekyllJS.activeSearchIndex = nextIndex;
+    return result;
+  },
+
+  moveSearchSelection : function(direction) {
+    const results = document.querySelectorAll(".search-result-link");
+    if (results.length === 0) {
+      return null;
+    }
+
+    if (BeautifulJekyllJS.activeSearchIndex < 0) {
+      return BeautifulJekyllJS.highlightSearchResult(0);
+    }
+
+    return BeautifulJekyllJS.highlightSearchResult(BeautifulJekyllJS.activeSearchIndex + direction);
   },
 
   renderSearchResults : function(query) {
@@ -242,9 +278,10 @@ let BeautifulJekyllJS = {
 
     const normalizedQuery = query.trim().toLowerCase();
     resultsEl.innerHTML = "";
+    BeautifulJekyllJS.activeSearchIndex = -1;
 
     if (normalizedQuery.length < 2) {
-      BeautifulJekyllJS.setSearchStatus("Start typing or pick a topic below.");
+      BeautifulJekyllJS.setSearchStatus("Search by title, author, tag, or a phrase from the post.");
       BeautifulJekyllJS.renderSearchSuggestions();
       return;
     }
@@ -269,17 +306,23 @@ let BeautifulJekyllJS = {
         let score = 0;
         const title = entry.title.toLowerCase();
         const desc = entry.desc.toLowerCase();
+        const author = entry.author.toLowerCase();
+        const category = entry.category.toLowerCase();
+        const content = entry.content.toLowerCase();
         if (title === normalizedQuery) {
-          score += 100;
+          score += 120;
         }
         if (title.startsWith(normalizedQuery)) {
-          score += 40;
+          score += 60;
         }
         if (title.includes(normalizedQuery)) {
-          score += 20;
+          score += 30;
         }
-        score += tokens.filter(function(token) { return title.includes(token); }).length * 5;
-        score += tokens.filter(function(token) { return desc.includes(token); }).length * 2;
+        score += tokens.filter(function(token) { return title.includes(token); }).length * 12;
+        score += tokens.filter(function(token) { return author.includes(token); }).length * 8;
+        score += tokens.filter(function(token) { return category.includes(token); }).length * 6;
+        score += tokens.filter(function(token) { return desc.includes(token); }).length * 4;
+        score += tokens.filter(function(token) { return content.includes(token); }).length * 2;
 
         return { entry: entry, score: score };
       })
@@ -334,14 +377,15 @@ let BeautifulJekyllJS = {
     const searchLink = document.getElementById("nav-search-link");
     const searchInput = document.getElementById("nav-search-input");
     const searchExit = document.getElementById("nav-search-exit");
-    const homeSearchTrigger = document.getElementById("home-search-trigger");
+    const searchBackdrop = overlay ? overlay.querySelector("[data-search-close]") : null;
 
     if (!overlay || !searchLink || !searchInput || !searchExit) {
       return;
     }
 
     const openSearch = function(initialQuery) {
-      overlay.style.display = "block";
+      overlay.classList.add("search-visible");
+      overlay.setAttribute("aria-hidden", "false");
       if (typeof initialQuery === "string") {
         searchInput.value = initialQuery;
       }
@@ -361,7 +405,8 @@ let BeautifulJekyllJS = {
     };
 
     const closeSearch = function() {
-      overlay.style.display = "none";
+      overlay.classList.remove("search-visible");
+      overlay.setAttribute("aria-hidden", "true");
       $("body").removeClass("overflow-hidden");
     };
 
@@ -378,20 +423,28 @@ let BeautifulJekyllJS = {
     });
     searchInput.addEventListener("keydown", function(e) {
       if (e.key === "Enter") {
-        const firstResult = BeautifulJekyllJS.highlightFirstSearchResult();
-        if (firstResult) {
-          window.location.href = firstResult.href;
+        const activeResult = BeautifulJekyllJS.activeSearchIndex >= 0 ?
+          BeautifulJekyllJS.highlightSearchResult(BeautifulJekyllJS.activeSearchIndex) :
+          BeautifulJekyllJS.highlightFirstSearchResult();
+        if (activeResult) {
+          window.location.href = activeResult.href;
         }
+      } else if (e.key === "ArrowDown") {
+        e.preventDefault();
+        BeautifulJekyllJS.moveSearchSelection(1);
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        BeautifulJekyllJS.moveSearchSelection(-1);
       }
     });
-    if (homeSearchTrigger) {
-      homeSearchTrigger.addEventListener("click", function() {
-        openSearch();
+    if (searchBackdrop) {
+      searchBackdrop.addEventListener("click", function() {
+        closeSearch();
       });
     }
     BeautifulJekyllJS.loadSearchIndex().catch(function() {});
     document.addEventListener("keydown", function(e) {
-      if (e.key === "/" && !overlay.contains(document.activeElement)) {
+      if (e.key === "/" && !e.metaKey && !e.ctrlKey && !e.altKey && !overlay.contains(document.activeElement)) {
         const tag = document.activeElement && document.activeElement.tagName;
         if (tag === "INPUT" || tag === "TEXTAREA") {
           return;

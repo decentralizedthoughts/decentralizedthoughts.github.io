@@ -129,7 +129,7 @@
  <a class="nav-link" href="/course">Course</a>
  </li>
  <li class="nav-item">
- <a class="nav-link" id="nav-search-link" href="#" title="Search">
+ <a class="nav-link" id="nav-search-link" href="#" title="Search the blog">
  <span id="nav-search-icon" class="fa fa-search"></span>
  <span id="nav-search-text">Search</span>
  </a>
@@ -146,11 +146,23 @@
  </div>
  
 </nav>
-<div id="beautifuljekyll-search-overlay" data-search-json="/assets/data/searchcorpus.json">
- <div id="nav-search-exit" title="Exit search">✕</div>
- <input type="text" id="nav-search-input" placeholder="Search posts and pages" autocomplete="off">
- <p id="nav-search-status">Type at least 2 characters to search.</p>
+<div id="beautifuljekyll-search-overlay" data-search-json="/assets/data/searchcorpus.json" aria-hidden="true">
+ <div class="search-overlay-backdrop" data-search-close></div>
+ <div class="search-dialog" role="dialog" aria-modal="true" aria-labelledby="nav-search-heading">
+ <div class="search-dialog-header">
+ <p class="search-dialog-kicker">Search the archive</p>
+ <button id="nav-search-exit" type="button" title="Close search" aria-label="Close search">Close</button>
+ </div>
+ <label class="sr-only" id="nav-search-heading" for="nav-search-input">Search posts, authors, topics, and phrases</label>
+ <div class="search-input-shell">
+ <span class="fa fa-search" aria-hidden="true"></span>
+ <input type="text" id="nav-search-input" placeholder="Search posts, authors, topics, and phrases" autocomplete="off">
+ <span class="search-shortcut">/</span>
+ </div>
+ <p id="nav-search-status">Search by title, author, tag, or a phrase from the post.</p>
+ <div id="search-suggestions" aria-label="Suggested topics"></div>
  <ul id="search-results-container"></ul>
+ </div>
 </div>
  
 <header class="header-section ">
@@ -164,12 +176,6 @@
  <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
  
  
-<section class="home-search-panel">
- <button id="home-search-trigger" class="home-search-trigger" type="button" aria-label="Search the blog">
- <span class="fa fa-search" aria-hidden="true"></span>
- <span>Search the blog</span>
- </button>
-</section>
 <div class="posts-list">
  
  <article class="post-preview">
