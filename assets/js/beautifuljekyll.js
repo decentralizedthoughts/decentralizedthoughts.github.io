@@ -170,6 +170,17 @@ let BeautifulJekyllJS = {
     statusEl.textContent = message;
   },
 
+  highlightFirstSearchResult : function() {
+    document.querySelectorAll(".search-result-link.active").forEach(function(el) {
+      el.classList.remove("active");
+    });
+    const firstResult = document.querySelector(".search-result-link");
+    if (firstResult) {
+      firstResult.classList.add("active");
+    }
+    return firstResult;
+  },
+
   renderSearchResults : function(query) {
     const resultsEl = document.getElementById("search-results-container");
     if (!resultsEl) {
@@ -255,6 +266,8 @@ let BeautifulJekyllJS = {
       item.appendChild(link);
       resultsEl.appendChild(item);
     });
+
+    BeautifulJekyllJS.highlightFirstSearchResult();
   },
 
   initSearch : function() {
@@ -262,15 +275,22 @@ let BeautifulJekyllJS = {
     const searchLink = document.getElementById("nav-search-link");
     const searchInput = document.getElementById("nav-search-input");
     const searchExit = document.getElementById("nav-search-exit");
+    const homeSearchInput = document.getElementById("home-search-input");
+    const homeSearchButton = document.getElementById("home-search-button");
 
     if (!overlay || !searchLink || !searchInput || !searchExit) {
       return;
     }
 
-    const openSearch = function() {
+    const openSearch = function(initialQuery) {
       overlay.style.display = "block";
+      if (typeof initialQuery === "string") {
+        searchInput.value = initialQuery;
+      }
       searchInput.focus();
-      searchInput.select();
+      if (!searchInput.value) {
+        searchInput.select();
+      }
       $("body").addClass("overflow-hidden");
       BeautifulJekyllJS.setSearchStatus("Loading search index...");
       BeautifulJekyllJS.loadSearchIndex()
@@ -298,6 +318,31 @@ let BeautifulJekyllJS = {
     searchInput.addEventListener("input", function() {
       BeautifulJekyllJS.renderSearchResults(searchInput.value);
     });
+    searchInput.addEventListener("keydown", function(e) {
+      if (e.key === "Enter") {
+        const firstResult = BeautifulJekyllJS.highlightFirstSearchResult();
+        if (firstResult) {
+          window.location.href = firstResult.href;
+        }
+      }
+    });
+    if (homeSearchInput && homeSearchButton) {
+      const openHomeSearch = function() {
+        openSearch(homeSearchInput.value);
+      };
+      homeSearchButton.addEventListener("click", function() {
+        openHomeSearch();
+      });
+      homeSearchInput.addEventListener("focus", function() {
+        openHomeSearch();
+      });
+      homeSearchInput.addEventListener("keydown", function(e) {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          openHomeSearch();
+        }
+      });
+    }
     $(document).on('keyup', function(e) {
       if (e.key == "Escape") {
         closeSearch();
