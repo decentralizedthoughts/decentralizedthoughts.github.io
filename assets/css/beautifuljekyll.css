@@ -1152,12 +1152,32 @@ pre {
   min-height: 1.5rem;
 }
 
+#search-discovery {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 1.25rem;
+  margin-top: 1rem;
+}
+
+.search-discovery-group {
+  min-width: 0;
+}
+
+.search-discovery-heading {
+  margin: 0 0 0.55rem;
+  color: #6f7c84;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 #search-suggestions {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
   gap: 0.6rem;
-  margin: 1rem auto 0;
+  margin: 0;
 }
 
 .search-suggestion {
@@ -1175,6 +1195,46 @@ pre {
   border-color: rgba(0, 138, 255, 0.25);
   background: rgba(0, 138, 255, 0.06);
   color: var(--hover-col);
+}
+
+#search-recent-posts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.search-recent-link {
+  display: block;
+  padding: 0.75rem 0.85rem;
+  border: 0.0625rem solid rgba(19, 35, 47, 0.08);
+  border-radius: 0.875rem;
+  background: #fbfcfc;
+  transition: border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease;
+}
+
+.search-recent-link:hover,
+.search-recent-link:focus {
+  border-color: rgba(0, 138, 255, 0.25);
+  background: #fff;
+  box-shadow: 0 0.65rem 1.5rem rgba(17, 32, 39, 0.06);
+}
+
+.search-recent-title,
+.search-recent-meta {
+  display: block;
+}
+
+.search-recent-title {
+  font-size: 0.98rem;
+  font-weight: 700;
+}
+
+.search-recent-meta {
+  margin-top: 0.2rem;
+  color: #80919a;
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 #search-results-container a {
@@ -1233,6 +1293,14 @@ pre {
   letter-spacing: 0.04em;
 }
 
+.search-result-title mark,
+.search-result-desc mark {
+  background: rgba(255, 219, 92, 0.45);
+  color: inherit;
+  padding: 0 0.08em;
+  border-radius: 0.18rem;
+}
+
 .search-result-link.active {
   border-color: rgba(0, 138, 255, 0.32);
   box-shadow: 0 0 0 0.1875rem rgba(0, 138, 255, 0.09);
@@ -1271,6 +1339,11 @@ pre {
   .search-input-shell {
     gap: 0.7rem;
     padding: 0.8rem 0.85rem;
+  }
+
+  #search-discovery {
+    grid-template-columns: 1fr;
+    gap: 0.9rem;
   }
 
   #nav-search-input {

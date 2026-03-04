@@ -21,7 +21,8 @@ layout:
     "author": {{ post.author | default: site.author.name | default: site.author | jsonify }},
     "category": {{ entry_category | jsonify }},
     "url": {{ post.url | relative_url | jsonify }},
-    "date": {{ post.date | date: "%B %e, %Y" | default: "January 1, 1970" | jsonify }}
+    "date": {{ post.date | date: "%B %e, %Y" | default: "January 1, 1970" | jsonify }},
+    "timestamp": {{ post.date | date: "%s" | default: "0" | jsonify }}
   }
 {% endfor %}
 {% for page in site.html_pages %}
@@ -42,7 +43,8 @@ layout:
       "author": {{ page.author | default: site.author.name | default: site.author | jsonify }},
       "category": {{ entry_category | jsonify }},
       "url": {{ page.url | relative_url | jsonify }},
-      "date": {{ page.date | date: "%B %e, %Y" | default: "January 1, 1970" | jsonify }}
+      "date": {{ page.date | date: "%B %e, %Y" | default: "January 1, 1970" | jsonify }},
+      "timestamp": {{ page.date | date: "%s" | default: "0" | jsonify }}
     }
   {% endif %}
 {% endfor %}

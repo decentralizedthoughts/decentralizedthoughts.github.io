@@ -14,7 +14,16 @@
       <span class="search-shortcut">/</span>
     </div>
     <p id="nav-search-status">Search by title, author, tag, or a phrase from the post.</p>
-    <div id="search-suggestions" aria-label="Suggested topics"></div>
+    <div id="search-discovery">
+      <section class="search-discovery-group" aria-labelledby="search-popular-heading">
+        <p class="search-discovery-heading" id="search-popular-heading">Popular topics</p>
+        <div id="search-suggestions" aria-label="Popular topics"></div>
+      </section>
+      <section class="search-discovery-group" aria-labelledby="search-recent-heading">
+        <p class="search-discovery-heading" id="search-recent-heading">Recent posts</p>
+        <div id="search-recent-posts"></div>
+      </section>
+    </div>
     <ul id="search-results-container"></ul>
   </div>
 </div>

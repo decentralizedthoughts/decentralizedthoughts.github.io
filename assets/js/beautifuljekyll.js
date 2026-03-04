@@ -7,6 +7,7 @@ let BeautifulJekyllJS = {
   searchData : null,
   searchPromise : null,
   searchSuggestions : [],
+  recentSearchEntries : [],
   activeSearchIndex : -1,
 
   init : function() {
@@ -146,7 +147,8 @@ let BeautifulJekyllJS = {
             author: entry.author || "",
             category: entry.category || "",
             url: entry.url || "",
-            date: entry.date || ""
+            date: entry.date || "",
+            timestamp: parseInt(entry.timestamp || "0", 10) || 0
           };
           normalized.searchText = [
             normalized.title,
@@ -159,6 +161,7 @@ let BeautifulJekyllJS = {
           return normalized;
         });
         BeautifulJekyllJS.searchSuggestions = BeautifulJekyllJS.buildSearchSuggestions(BeautifulJekyllJS.searchData);
+        BeautifulJekyllJS.recentSearchEntries = BeautifulJekyllJS.buildRecentEntries(BeautifulJekyllJS.searchData);
         return BeautifulJekyllJS.searchData;
       })
       .catch(function(error) {
@@ -210,6 +213,74 @@ let BeautifulJekyllJS = {
     return Array.from(new Set(dynamic.concat(fallback))).slice(0, 8);
   },
 
+  buildRecentEntries : function(entries) {
+    return entries
+      .filter(function(entry) {
+        return entry.timestamp > 0 && entry.url && !entry.url.startsWith("/authors/");
+      })
+      .sort(function(a, b) {
+        return b.timestamp - a.timestamp;
+      })
+      .slice(0, 5);
+  },
+
+  escapeRegExp : function(value) {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  },
+
+  escapeHtml : function(value) {
+    return value
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  },
+
+  highlightSearchText : function(text, tokens) {
+    const safeText = BeautifulJekyllJS.escapeHtml(text || "");
+    if (!safeText || !tokens || tokens.length === 0) {
+      return safeText;
+    }
+
+    const pattern = tokens
+      .filter(Boolean)
+      .map(function(token) { return BeautifulJekyllJS.escapeRegExp(token); })
+      .join("|");
+
+    if (!pattern) {
+      return safeText;
+    }
+
+    return safeText.replace(new RegExp("(" + pattern + ")", "ig"), "<mark>$1</mark>");
+  },
+
+  renderRecentEntries : function() {
+    const recentEl = document.getElementById("search-recent-posts");
+    if (!recentEl) {
+      return;
+    }
+
+    recentEl.innerHTML = "";
+    BeautifulJekyllJS.recentSearchEntries.forEach(function(entry) {
+      const link = document.createElement("a");
+      link.className = "search-recent-link";
+      link.href = entry.url;
+
+      const title = document.createElement("span");
+      title.className = "search-recent-title";
+      title.textContent = entry.title || entry.url;
+      link.appendChild(title);
+
+      const meta = document.createElement("span");
+      meta.className = "search-recent-meta";
+      meta.textContent = [entry.date, entry.author].filter(Boolean).join(" · ");
+      link.appendChild(meta);
+
+      recentEl.appendChild(link);
+    });
+  },
+
   renderSearchSuggestions : function() {
     const suggestionsEl = document.getElementById("search-suggestions");
     if (!suggestionsEl) {
@@ -232,6 +303,8 @@ let BeautifulJekyllJS = {
       });
       suggestionsEl.appendChild(button);
     });
+
+    BeautifulJekyllJS.renderRecentEntries();
   },
 
   highlightFirstSearchResult : function() {
@@ -279,9 +352,13 @@ let BeautifulJekyllJS = {
     const normalizedQuery = query.trim().toLowerCase();
     resultsEl.innerHTML = "";
     BeautifulJekyllJS.activeSearchIndex = -1;
+    const discoveryEl = document.getElementById("search-discovery");
 
     if (normalizedQuery.length < 2) {
       BeautifulJekyllJS.setSearchStatus("Search by title, author, tag, or a phrase from the post.");
+      if (discoveryEl) {
+        discoveryEl.style.display = "grid";
+      }
       BeautifulJekyllJS.renderSearchSuggestions();
       return;
     }
@@ -294,6 +371,13 @@ let BeautifulJekyllJS = {
     const suggestionsEl = document.getElementById("search-suggestions");
     if (suggestionsEl) {
       suggestionsEl.innerHTML = "";
+    }
+    const recentEl = document.getElementById("search-recent-posts");
+    if (recentEl) {
+      recentEl.innerHTML = "";
+    }
+    if (discoveryEl) {
+      discoveryEl.style.display = "none";
     }
 
     const tokens = normalizedQuery.split(/\s+/).filter(Boolean);
@@ -347,13 +431,13 @@ let BeautifulJekyllJS = {
 
       const title = document.createElement("span");
       title.className = "search-result-title";
-      title.textContent = result.entry.title || result.entry.url;
+      title.innerHTML = BeautifulJekyllJS.highlightSearchText(result.entry.title || result.entry.url, tokens);
       link.appendChild(title);
 
       if (result.entry.desc) {
         const desc = document.createElement("span");
         desc.className = "search-result-desc";
-        desc.textContent = result.entry.desc;
+        desc.innerHTML = BeautifulJekyllJS.highlightSearchText(result.entry.desc, tokens);
         link.appendChild(desc);
       }
 
@@ -404,7 +488,7 @@ let BeautifulJekyllJS = {
         });
     };
 
-    const closeSearch = function() {
+      const closeSearch = function() {
       overlay.classList.remove("search-visible");
       overlay.setAttribute("aria-hidden", "true");
       $("body").removeClass("overflow-hidden");
