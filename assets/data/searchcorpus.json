@@ -2,23 +2,42 @@
 layout: 
 ---
 
-[ 
-{% for post in site.posts %} 
-{ 
-"title"    : "{% if post.title != "" %}{{ post.title | strip_html | escape }}{% else %}{{ post.excerpt | strip_html | escape | strip }}{%endif%}", 
-"desc"     : "{% if post.title != "" %}{{ post.title | strip_html | escape }}{% else %}{{ post.excerpt | strip_html | escape | strip }}{%endif%}", 
-"category" : "{{ post.tags | join: ', ' }}", 
-"url"      : "{{ site.baseurl }}{{ post.url | escape }}", 
-"date"     : "{{ post.date | date: "%B %e, %Y" | default: "January 1, 1970" }}" 
-}, 
-{% endfor %} 
-{% for page in site.html_pages %}{% if page.title != "{title}" and page.title != "404 - Page not found" %} 
-{ 
-"title"    : "{% if page.title != "" %}{{ page.title | strip_html | escape }}{% else %}{{ page.excerpt | strip_html | escape | strip }}{% endif %}", 
-"desc"     : "{% if page.title != "" %}{{ page.title | strip_html | escape }}{% else %}{{ page.excerpt | strip_html | escape | strip }}{% endif %}", 
-"category" : "{% if page.tags %}{{ page.tags | join: ', ' }}{% else %}page{% endif %}", 
-"url"      : "{{ site.baseurl }}{{ page.url }}", 
-"date"     : "{{ page.date | date: '%B %e, %Y' | default: "January 1, 1970" }}" 
-}{% unless forloop.last %},{% endunless %} 
-{% endif %}{% endfor %} 
+[
+{% assign first_entry = true %}
+{% for post in site.posts %}
+  {% assign entry_title = post.title | default: post.excerpt | strip_html | strip %}
+  {% assign entry_desc = post.subtitle | default: post.excerpt | default: post.title | strip_html | strip %}
+  {% assign entry_category = post.tags | join: ', ' %}
+  {% if entry_category == "" %}
+    {% assign entry_category = "post" %}
+  {% endif %}
+  {% unless first_entry %},{% endunless %}
+  {% assign first_entry = false %}
+  {
+    "title": {{ entry_title | jsonify }},
+    "desc": {{ entry_desc | jsonify }},
+    "category": {{ entry_category | jsonify }},
+    "url": {{ post.url | relative_url | jsonify }},
+    "date": {{ post.date | date: "%B %e, %Y" | default: "January 1, 1970" | jsonify }}
+  }
+{% endfor %}
+{% for page in site.html_pages %}
+  {% if page.title != "{title}" and page.title != "404 - Page not found" %}
+    {% assign entry_title = page.title | default: page.excerpt | strip_html | strip %}
+    {% assign entry_desc = page.subtitle | default: page.excerpt | default: page.title | strip_html | strip %}
+    {% assign entry_category = page.tags | join: ', ' %}
+    {% if entry_category == "" %}
+      {% assign entry_category = "page" %}
+    {% endif %}
+    {% unless first_entry %},{% endunless %}
+    {% assign first_entry = false %}
+    {
+      "title": {{ entry_title | jsonify }},
+      "desc": {{ entry_desc | jsonify }},
+      "category": {{ entry_category | jsonify }},
+      "url": {{ page.url | relative_url | jsonify }},
+      "date": {{ page.date | date: "%B %e, %Y" | default: "January 1, 1970" | jsonify }}
+    }
+  {% endif %}
+{% endfor %}
 ]

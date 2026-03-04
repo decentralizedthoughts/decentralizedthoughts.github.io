@@ -74,6 +74,7 @@ staticman:
 excerpt_length: 70
 feed_show_excerpt: true
 feed_show_tags: true
+post_search: true
 navbar-var-length: false
 date_format: "%B %-d, %Y"
 title-separator: "-"

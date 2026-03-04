@@ -1,19 +1,11 @@
 {% if site.post_search %}
 
-<div id="beautifuljekyll-search-overlay">
+<div id="beautifuljekyll-search-overlay" data-search-json="{{ '/assets/data/searchcorpus.json' | relative_url }}">
 
   <div id="nav-search-exit" title="Exit search">✕</div>
-  <input type="text" id="nav-search-input" placeholder="Search">
+  <input type="text" id="nav-search-input" placeholder="Search posts and pages" autocomplete="off">
+  <p id="nav-search-status">Type at least 2 characters to search.</p>
   <ul id="search-results-container"></ul>
-  
-  <script src="https://unpkg.com/simple-jekyll-search@latest/dest/simple-jekyll-search.min.js"></script>
-  <script>
-    SimpleJekyllSearch({
-      searchInput: document.getElementById('nav-search-input'),
-      resultsContainer: document.getElementById('search-results-container'),
-      json: '{{ site.baseurl }}/assets/data/searchcorpus.json' 
-    });
-  </script>
 </div>
 
 {% endif %}

@@ -4,6 +4,8 @@ let BeautifulJekyllJS = {
 
   bigImgEl : null,
   numImgs : null,
+  searchData : null,
+  searchPromise : null,
 
   init : function() {
     setTimeout(BeautifulJekyllJS.initNavbar, 10);
@@ -112,26 +114,193 @@ let BeautifulJekyllJS = {
     }
   },
 
-  initSearch : function() {
-    if (!document.getElementById("beautifuljekyll-search-overlay")) {
+  loadSearchIndex : function() {
+    if (BeautifulJekyllJS.searchData) {
+      return Promise.resolve(BeautifulJekyllJS.searchData);
+    }
+    if (BeautifulJekyllJS.searchPromise) {
+      return BeautifulJekyllJS.searchPromise;
+    }
+
+    const overlay = document.getElementById("beautifuljekyll-search-overlay");
+    if (!overlay) {
+      return Promise.resolve([]);
+    }
+
+    const jsonUrl = overlay.dataset.searchJson;
+    BeautifulJekyllJS.searchPromise = fetch(jsonUrl)
+      .then(function(response) {
+        if (!response.ok) {
+          throw new Error("Unable to load search index");
+        }
+        return response.json();
+      })
+      .then(function(entries) {
+        BeautifulJekyllJS.searchData = entries.map(function(entry) {
+          const normalized = {
+            title: entry.title || "",
+            desc: entry.desc || "",
+            category: entry.category || "",
+            url: entry.url || "",
+            date: entry.date || ""
+          };
+          normalized.searchText = [
+            normalized.title,
+            normalized.desc,
+            normalized.category,
+            normalized.date
+          ].join(" ").toLowerCase();
+          return normalized;
+        });
+        return BeautifulJekyllJS.searchData;
+      })
+      .catch(function(error) {
+        BeautifulJekyllJS.searchPromise = null;
+        throw error;
+      });
+
+    return BeautifulJekyllJS.searchPromise;
+  },
+
+  setSearchStatus : function(message) {
+    const statusEl = document.getElementById("nav-search-status");
+    if (!statusEl) {
+      return;
+    }
+    statusEl.textContent = message;
+  },
+
+  renderSearchResults : function(query) {
+    const resultsEl = document.getElementById("search-results-container");
+    if (!resultsEl) {
       return;
     }
 
+    const normalizedQuery = query.trim().toLowerCase();
+    resultsEl.innerHTML = "";
+
+    if (normalizedQuery.length < 2) {
+      BeautifulJekyllJS.setSearchStatus("Type at least 2 characters to search.");
+      return;
+    }
+
+    if (!BeautifulJekyllJS.searchData) {
+      BeautifulJekyllJS.setSearchStatus("Loading search index...");
+      return;
+    }
+
+    const tokens = normalizedQuery.split(/\s+/).filter(Boolean);
+    const scored = BeautifulJekyllJS.searchData
+      .map(function(entry) {
+        if (!tokens.every(function(token) { return entry.searchText.includes(token); })) {
+          return null;
+        }
+
+        let score = 0;
+        const title = entry.title.toLowerCase();
+        const desc = entry.desc.toLowerCase();
+        if (title === normalizedQuery) {
+          score += 100;
+        }
+        if (title.startsWith(normalizedQuery)) {
+          score += 40;
+        }
+        if (title.includes(normalizedQuery)) {
+          score += 20;
+        }
+        score += tokens.filter(function(token) { return title.includes(token); }).length * 5;
+        score += tokens.filter(function(token) { return desc.includes(token); }).length * 2;
+
+        return { entry: entry, score: score };
+      })
+      .filter(Boolean)
+      .sort(function(a, b) { return b.score - a.score; })
+      .slice(0, 12);
+
+    if (scored.length === 0) {
+      BeautifulJekyllJS.setSearchStatus('No results for "' + query.trim() + '".');
+      return;
+    }
+
+    BeautifulJekyllJS.setSearchStatus("Showing " + scored.length + " result" + (scored.length === 1 ? "" : "s") + ".");
+
+    scored.forEach(function(result) {
+      const item = document.createElement("li");
+      item.className = "search-result";
+
+      const link = document.createElement("a");
+      link.href = result.entry.url;
+      link.className = "search-result-link";
+
+      const title = document.createElement("span");
+      title.className = "search-result-title";
+      title.textContent = result.entry.title || result.entry.url;
+      link.appendChild(title);
+
+      if (result.entry.desc) {
+        const desc = document.createElement("span");
+        desc.className = "search-result-desc";
+        desc.textContent = result.entry.desc;
+        link.appendChild(desc);
+      }
+
+      const metaParts = [result.entry.date, result.entry.category].filter(Boolean);
+      if (metaParts.length > 0) {
+        const meta = document.createElement("span");
+        meta.className = "search-result-meta";
+        meta.textContent = metaParts.join(" · ");
+        link.appendChild(meta);
+      }
+
+      item.appendChild(link);
+      resultsEl.appendChild(item);
+    });
+  },
+
+  initSearch : function() {
+    const overlay = document.getElementById("beautifuljekyll-search-overlay");
+    const searchLink = document.getElementById("nav-search-link");
+    const searchInput = document.getElementById("nav-search-input");
+    const searchExit = document.getElementById("nav-search-exit");
+
+    if (!overlay || !searchLink || !searchInput || !searchExit) {
+      return;
+    }
+
+    const openSearch = function() {
+      overlay.style.display = "block";
+      searchInput.focus();
+      searchInput.select();
+      $("body").addClass("overflow-hidden");
+      BeautifulJekyllJS.setSearchStatus("Loading search index...");
+      BeautifulJekyllJS.loadSearchIndex()
+        .then(function() {
+          BeautifulJekyllJS.renderSearchResults(searchInput.value);
+        })
+        .catch(function() {
+          BeautifulJekyllJS.setSearchStatus("Search is temporarily unavailable.");
+        });
+    };
+
+    const closeSearch = function() {
+      overlay.style.display = "none";
+      $("body").removeClass("overflow-hidden");
+    };
+
     $("#nav-search-link").click(function(e) {
       e.preventDefault();
-      $("#beautifuljekyll-search-overlay").show();
-      $("#nav-search-input").focus().select();
-      $("body").addClass("overflow-hidden");
+      openSearch();
     });
     $("#nav-search-exit").click(function(e) {
       e.preventDefault();
-      $("#beautifuljekyll-search-overlay").hide();
-      $("body").removeClass("overflow-hidden");
+      closeSearch();
+    });
+    searchInput.addEventListener("input", function() {
+      BeautifulJekyllJS.renderSearchResults(searchInput.value);
     });
     $(document).on('keyup', function(e) {
       if (e.key == "Escape") {
-        $("#beautifuljekyll-search-overlay").hide();
-        $("body").removeClass("overflow-hidden");
+        closeSearch();
       }
     });
   }
