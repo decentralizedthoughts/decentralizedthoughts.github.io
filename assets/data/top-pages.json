@@ -1,34 +1,30 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-03-04T02:45:27Z",
+  "fetched_at": "2026-03-04T02:49:13Z",
   "items": [
     {
       "path": "/start-here/",
-      "views": 304
+      "views": 165
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 267
-    },
-    {
-      "path": "/2026-02-02-ps-cheat-sheet/",
-      "views": 169
-    },
-    {
-      "path": "/2019-06-01-2019-5-31-models/",
-      "views": 153
-    },
-    {
-      "path": "/2020-02-26-selfish-mining/",
-      "views": 135
+      "views": 120
     },
     {
       "path": "/2019-06-27-defining-consensus/",
-      "views": 133
+      "views": 84
     },
     {
-      "path": "/about-ittai/",
-      "views": 131
+      "path": "/2019-06-01-2019-5-31-models/",
+      "views": 83
+    },
+    {
+      "path": "/2020-09-14-broadcast-from-agreement-and-agreement-from-broadcast/",
+      "views": 57
+    },
+    {
+      "path": "/2024-05-07-decentralization-ethereum/",
+      "views": 44
     }
   ]
 }
