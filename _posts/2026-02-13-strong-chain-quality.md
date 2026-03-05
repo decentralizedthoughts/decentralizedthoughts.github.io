@@ -18,17 +18,16 @@ In essence, this property gives stakeholders the ability to have *virtual lanes*
 
 ## Chain Quality as a BFT Validity property 
 
-BFT protocols must satisfy [safety, liveness, and validity properties](https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/). A protocol that always outputs 0 satisfies both agreement (safety) and termination (liveness), but is useless in the sense that it performs no meaningful decision or computation. What's missing is *validity*. Modern blockchains typically require two critical in properties:
+BFT protocols must satisfy [safety, liveness, and validity properties](https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/). A protocol that always outputs 0 satisfies both agreement (safety) and termination (liveness), but is useless in the sense that it performs no meaningful decision or computation. What's missing is *validity*. Modern blockchains typically require two critical validity properties:
 
 1. [External Validity](https://www.iacr.org/archive/crypto2001/21390524.pdf): Typically means there is a deterministic binary function $isValid(B, state)$ that outputs true if the proposed block $B$ is valid based on the current $state$ of the state machine.
 2. [Chain Quality](https://eprint.iacr.org/2014/765.pdf): In any sufficiently long segment of the chain after GST, the fraction of blocks proposed by honest parties is proportional to their fraction of the total stake.
 
-In fact, many pre-blockchain BFT systems were based on a fixed-leader paradigm that implemented external validity but not chain quality. 
+Most pre-blockchain BFT systems were based on a fixed-leader paradigm that implemented external validity but not chain quality. Why is chain quality important for blockchains? 
 
 ## Chain Quality for blockchains
 
 One of Bitcoin's key innovations, now present in virtually every blockchain, is the introduction of an **in-protocol reward mechanism** for block proposers: newly minted tokens and transaction fees are granted to the party that successfully appends a block to the state machine. These rewards are specified in the state-transition function and reflected in the resulting system state.
-
 
 In traditional distributed computing, parties are split into *honest* and *malicious*. There is no need to reward honest parties for correct behavior; their honesty is assumed as part of the model. In the cryptoeconomic model, parties are modeled as *rational* actors, possibly with unknown utility functions, and the goal is to design incentives so that their profit-maximizing behavior aligns with the success of the protocol. Together with the in-protocol reward mechanism, this leads to the following idealized definition of Chain Quality:
 
@@ -36,7 +35,7 @@ In traditional distributed computing, parties are split into *honest* and *malic
 * **Chain Quality (CQ)**: A coalition that holds $X\%$ of the total stake has, after GST, probability $X\%$ of being the proposer of each block that enters the chain.
 
 
-A chain that deviates from chain quality may allow adversaries to accumulate an outsized portion of the stake, hence threatening the security of the protocol. 
+A chain that deviates from chain quality may allow coalitions to accumulate an outsized portion of the reward, hence disincentivizing stake accumulation and threatening the security of the protocol.
 
 Many modern blockchains satisfy, or aim to satisfy, this property. Some notable challenges:
 
@@ -123,6 +122,5 @@ This leads to a natural strengthening of Strong Chain Quality in the context of 
 Note that even getting at least $h - f$ honest parties in the output set is a type of censorship resistance property: the adversary cannot censor more than $f$ honest parties.
 
 Note that this is a stronger property than the standard definition of validity for ACS. After GST, the adversary cannot censor any honest party.
-
 
 
