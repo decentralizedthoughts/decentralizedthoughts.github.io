@@ -1,6 +1,6 @@
 ---
 title: Strong Chain Quality
-date: 2026-02-13 23:00:00 -05:00
+date: 2026-03-05 00:00:00 -05:00
 tags:
 - blockchain
 author: Ittai Abraham, Pranav Garimidi, Joachim Neu
@@ -122,4 +122,3 @@ This leads to a natural strengthening of Strong Chain Quality in the context of 
 Note that even getting at least $h - f$ honest parties in the output set is a type of censorship resistance property: the adversary cannot censor more than $f$ honest parties.
 
 Note that this is a stronger property than the standard definition of validity for ACS. After GST, the adversary cannot censor any honest party.
-
