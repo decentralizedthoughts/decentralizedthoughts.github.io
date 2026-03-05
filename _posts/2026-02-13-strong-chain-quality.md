@@ -93,13 +93,9 @@ While Strong Chain Quality dictates the fraction of blockspace that a coalition 
 
 
 
-
+---
 
 # Additional notes 
-
-
-<details>
-  <summary>Click to expand</summary>
 
 
 ## Strong Chain Quality vs Chain Quality
@@ -129,4 +125,4 @@ Note that even getting at least $h - f$ honest parties in the output set is a ty
 Note that this is a stronger property than the standard definition of validity for ACS. After GST, the adversary cannot censor any honest party.
 
 
-</details>
+
