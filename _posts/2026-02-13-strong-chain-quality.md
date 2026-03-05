@@ -35,7 +35,7 @@ In traditional distributed computing, parties are split into *honest* and *malic
 * **Chain Quality (CQ)**: A coalition that holds $X\%$ of the total stake has, after GST, probability $X\%$ of being the proposer of each block that enters the chain.
 
 
-A chain that deviates from chain quality may allow coalitions to accumulate an outsized portion of the reward, hence disincentivizing stake accumulation and threatening the security of the protocol.
+A chain that deviates from chain quality may allow coalitions to accumulate an outsized portion of the reward, hence disincentivizing honest behavior and threatening the security of the protocol.
 
 Many modern blockchains satisfy, or aim to satisfy, this property. Some notable challenges:
 
@@ -82,7 +82,7 @@ Obtaining SCQ post-GST requires guaranteeing that the proposer cannot censor the
 * **BFT vote**: A party only votes for a block if it contains all the inputs in its inclusion list.
 
 
-It is easy to check that this protocol satisfies post-GST SCQ, provides censorship resistance and is live for an honest leader. Adding pre-GST SCQ would also require waiting for a quorum of values or lists in each round. We will expand on this protocol and its generalizations in later posts.
+It is easy to check that this protocol sketch can be converted into a full protocol that satisfies post-GST SCQ, provides censorship resistance, and is live for an honest leader. Adding pre-GST SCQ would also require waiting for a quorum of values or lists in each round. We will expand on this protocol and its generalizations in later posts.
 
 
 ## Strong Chain Quality and ordering
@@ -122,5 +122,4 @@ This leads to a natural strengthening of Strong Chain Quality in the context of 
 Note that even getting at least $h - f$ honest parties in the output set is a type of censorship resistance property: the adversary cannot censor more than $f$ honest parties.
 
 Note that this is a stronger property than the standard definition of validity for ACS. After GST, the adversary cannot censor any honest party.
-
 
