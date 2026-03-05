@@ -1,6 +1,6 @@
 ---
 title: Strong Chain Quality
-date: 2026-02-14 00:00:00 -04:00
+date: 2026-02-13 23:00:00 -05:00
 tags:
 - blockchain
 author: Ittai Abraham, Pranav Garimidi, Joachim Neu
