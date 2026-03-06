@@ -73,7 +73,7 @@ Obtaining SCQ post-GST requires guaranteeing that the proposer cannot censor the
 * **BFT Proposal**: The leader receives these messages and includes in the block the *union* of all the inclusion lists that it received.
 * **BFT vote**: A party only votes for a block if it contains all the inputs in its inclusion list.
 
-It is easy to check that this protocol sketch can be converted into a full protocol that satisfies post-GST SCQ, provides censorship resistance, and is live for an honest leader. Adding pre-GST SCQ would also require waiting for a quorum of values or lists in each round. We will expand on this protocol and its generalizations in later posts.
+It is easy to check that this protocol sketch can be converted into a full protocol that satisfies post-GST SCQ, provides censorship resistance, and is live for an honest leader. Adding pre-GST SCQ would also require waiting for a quorum of values or lists in each round. See [DPasS](https://decentralizedthoughts.github.io/2025-12-12-dpaas/) for how this protocol is used for censorship resistance in the context of PBS. We will expand on this protocol and its generalizations in later posts.
 
 ## Strong Chain Quality and ordering
 
