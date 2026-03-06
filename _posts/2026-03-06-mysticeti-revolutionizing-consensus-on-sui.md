@@ -1,5 +1,5 @@
 ---
-title: Mysticeti: Revolutionizing Consensus on Sui
+title: "Mysticeti: Revolutionizing Consensus on Sui"
 date: 2026-03-06 00:00:00 -05:00
 unlisted: true
 sitemap: false
