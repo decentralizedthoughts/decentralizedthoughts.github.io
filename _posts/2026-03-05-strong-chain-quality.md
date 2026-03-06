@@ -31,27 +31,19 @@ One of Bitcoin's key innovations, now present in virtually every blockchain, is 
 
 In traditional distributed computing, parties are split into *honest* and *malicious*. There is no need to reward honest parties for correct behavior; their honesty is assumed as part of the model. In the cryptoeconomic model, parties are modeled as *rational* actors, possibly with unknown utility functions, and the goal is to design incentives so that their profit-maximizing behavior aligns with the success of the protocol. Together with the in-protocol reward mechanism, this leads to the following idealized definition of Chain Quality:
 
-
-* **Chain Quality (CQ)**: A coalition that holds $X\%$ of the total stake has, after GST, probability $X\%$ of being the proposer of each block that enters the chain.
-
+**Chain Quality (CQ)**:
+> A coalition that holds $X\%$ of the total stake has, after GST, probability $X\%$ of being the proposer of each block that enters the chain.
 
 A chain that deviates from chain quality may allow coalitions to accumulate an outsized portion of the reward, hence disincentivizing honest behavior and threatening the security of the protocol.
 
 Many modern blockchains satisfy, or aim to satisfy, this property. Some notable challenges:
-
-
 * [Eyal and Sirer, 2013](https://webee.technion.ac.il/people/ittay/publications/btcProcFC.pdf) famously showed that Bitcoin does not satisfy ideal CQ, see Eyal's post on [Blockchain Selfish Mining](https://decentralizedthoughts.github.io/2020-02-26-selfish-mining/) and Remark 4 and the discussion of p. 6--7 in [the Bitcoin Backbone paper](https://eprint.iacr.org/2014/765.pdf) for more. Also see this [follow up post](https://decentralizedthoughts.github.io/2022-03-07-colordag-from-always-almost-to-almost-always-50-percent-selfish-mining-resilience/) for research efforts like Fruitchain and Colordag towards obtaining ideal CQ in the PoW setting.
-
 * Obtaining Chain Quality for linear chains where each leader speaks once poses additional challenges. See recent works on [BG](https://arxiv.org/abs/2205.11652), Monad's [tail forking resistance](https://arxiv.org/abs/2502.20692) and [Carry](https://decentralizedthoughts.github.io/2025-09-27-carry-the-tail/).
 * Chain Quality is also challenging in the context of Ethereum's [LMD GHOST](https://eth2book.info/latest/part2/consensus/lmd_ghost/) protocol (there, CQ issues are often called "reorgs") in the [ebb-and-flow model](https://decentralizedthoughts.github.io/2020-11-01-ebb-and-flow-protocols-a-resolution-of-the-availability-finality-dilemma/). See [Goldfish](https://eprint.iacr.org/2022/1171.pdf) for a recent survey of problems and the way to fix them.
 
 In contrast, most modern proof-of-stake blockchains implement stake-weighted randomized leader rotation on PBFT-style protocols and therefore satisfy chain quality in a direct way.
 
-
-
-
 ## Strong Chain Quality 
-
 
 When blockspace is abundant, there is no need to give a single proposer monopoly power over the content of the entire block. Instead, blockspace can be divided among multiple parties for the same block. The following cryptoeconomic definition of Strong Chain Quality captures this idea:
 
@@ -70,7 +62,6 @@ The [MCP protocol](https://eprint.iacr.org/2025/1772.pdf) was proposed as a gadg
 
 [MCP](https://eprint.iacr.org/2025/1772.pdf) additionally shows how to obtain a stronger *hiding property* that essentially allows stakeholders to create *virtual private lanes* whose content is only revealed when the whole block is made public. We will expand on this aspect in future posts.
 
-
 ## Strong Chain Quality requires two more rounds, not just one
 
 Recent work has shown that Strong Chain Quality and censorship resistance [require two more rounds](https://eprint.iacr.org/2025/2136) (so the good case takes $5$ rounds for $3f+1$ and $4$ rounds for $5f+1$ BFT). We will expand on this result in later posts.
@@ -82,9 +73,7 @@ Obtaining SCQ post-GST requires guaranteeing that the proposer cannot censor the
 * **BFT Proposal**: The leader receives these messages and includes in the block the *union* of all the inclusion lists that it received.
 * **BFT vote**: A party only votes for a block if it contains all the inputs in its inclusion list.
 
-
 It is easy to check that this protocol sketch can be converted into a full protocol that satisfies post-GST SCQ, provides censorship resistance, and is live for an honest leader. Adding pre-GST SCQ would also require waiting for a quorum of values or lists in each round. We will expand on this protocol and its generalizations in later posts.
-
 
 ## Strong Chain Quality and ordering
 
@@ -92,25 +81,19 @@ While Strong Chain Quality dictates the fraction of blockspace that a coalition 
 
 
 
-
 ---
 
 # Additional notes 
-
 
 ## Strong Chain Quality vs Chain Quality
 
 Chain Quality is a long horizon proportionality property: over time, a coalition that holds $X\%$ of the stake obtains roughly $X\%$ of the blocks. Strong Chain Quality is an intra block proportionality property: in every block, a coalition that holds $X\%$ of the stake controls $X\%$ of the available blockspace. 
 
-
 Let $B$ be the fraction of the block that is allocated to a coalition that holds $X\%$ of the stake. Both properties imply that $E[B\mid CQ] = E[B\mid SCQ] = X$, but observe that $VAR[B\mid SCQ] = 0$ while $VAR[B\mid CQ] = X(1-X) \gg 0$. This reduced uncertainty could lead to a competitive advantage in markets where consistency in winning races is critical.
-
 
 ## Chain Quality in Asynchrony
 
-
 Chain Quality often appears in *asynchronous* BFT protocols, where random leader election is required for liveness. The asynchronous chain quality in [VABA](https://arxiv.org/pdf/1811.01332.pdf) protocols says that the probability the decided block is proposed by an honest party is proportional to $(h-f)/(n-f)$, where $h = n-f$ is the number of honest parties. With optimal resilience $n = 3f + 1$, this is roughly one half. This is shown to be [tight in asynchrony](https://arxiv.org/pdf/2011.04719.pdf). The Chain Quality definition [in the validity section above](#chain-quality-as-a-bft-validity-property) can be viewed as a strengthening of asynchronous chain quality to partial synchrony.
-
 
 ## Strong Chain Quality and Agreement on a Core Set
 
