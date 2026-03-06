@@ -5,6 +5,7 @@ layout:
 [
 {% assign first_entry = true %}
 {% for post in site.posts %}
+  {% if post.unlisted != true %}
   {% assign entry_title = post.title | default: post.excerpt | strip_html | strip %}
   {% assign entry_desc = post.subtitle | default: post.excerpt | default: post.title | strip_html | strip %}
   {% assign entry_content = post.content | strip_html | strip_newlines | strip | truncatewords: 80 %}
@@ -24,6 +25,7 @@ layout:
     "date": {{ post.date | date: "%B %e, %Y" | default: "January 1, 1970" | jsonify }},
     "timestamp": {{ post.date | date: "%s" | default: "0" | jsonify }}
   }
+  {% endif %}
 {% endfor %}
 {% for page in site.html_pages %}
   {% if page.title != "{title}" and page.title != "404 - Page not found" %}

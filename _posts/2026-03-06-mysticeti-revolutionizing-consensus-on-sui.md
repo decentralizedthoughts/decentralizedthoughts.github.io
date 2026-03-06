@@ -1,6 +1,11 @@
 ---
-title: 2026 03 07 Mysticeti Revolutionizing Consensus On Sui
-date: 2026-03-06 09:23:07.767000000 -05:00
+title: Mysticeti: Revolutionizing Consensus on Sui
+date: 2026-03-06 00:00:00 -05:00
+unlisted: true
+sitemap: false
+tags:
+- blockchain
+author: Lefteris Kokoris Kogias, Alberto Sonnino, George Danezis
 ---
 
 ---

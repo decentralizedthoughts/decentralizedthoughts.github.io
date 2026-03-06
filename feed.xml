@@ -14,7 +14,8 @@ layout:
     <link>{{ '/' | absolute_url }}</link>
     <atom:link href="{{ 'feed.xml' | absolute_url }}" rel="self" type="application/rss+xml" />
     {% assign excerpt_length = site.excerpt_length | default: 50 %}
-    {% for post in site.posts limit:20 %}
+    {% assign visible_posts = site.posts | where_exp: "post", "post.unlisted != true" %}
+    {% for post in visible_posts limit:20 %}
       <item>
         <title>{{ post.title | strip_html | xml_escape }}</title>
         {% if post.author %}
