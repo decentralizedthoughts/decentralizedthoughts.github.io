@@ -10,6 +10,7 @@ layout: page
 
 <div class="posts-list">
   {% for post in posts %}
+  {% if post.unlisted != true %}
   <article class="post-preview">
     {%- capture thumbnail -%}
       {% if post.thumbnail-img %}
@@ -68,6 +69,7 @@ layout: page
     </div>
     {% endif %}
    </article>
+  {% endif %}
   {% endfor %}
 </div>
 
