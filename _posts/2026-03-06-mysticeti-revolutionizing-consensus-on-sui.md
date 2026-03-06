@@ -38,7 +38,7 @@ Mysticeti introduces three key innovations to solve this:
 
 ### 1. Elimination of Explicit Block Certification
 
-In previous systems like [Bullshark](https://arxiv.org/abs/2201.05677), each block required individual certification before being shared, resulting in **3 rounds per block only for certification** as well as **$O(n)$ CPU cost per block for signature generation and verification**. Mysticeti goes without certification, which has multiple benefits:
+In previous systems like [Bullshark](https://arxiv.org/abs/2201.05677), each block required individual certification before being shared, resulting in **3 rounds per block only for certification** as well as **$O(n)$ CPU cost per block for signature generation and verification**. Mysticeti goes without certification, which allows for:
 
 - **Reduced CPU Load:** Validators no longer need to aggregate signatures to form and verify certificates. Instead, they simply sign their blocks and send them. Everyone else receives the block and verifies a single signature.
 
