@@ -55,7 +55,8 @@ In contrast, most modern proof-of-stake blockchains implement stake-weighted ran
 
 When blockspace is abundant, there is no need to give a single proposer monopoly power over the content of the entire block. Instead, blockspace can be divided among multiple parties for the same block. The following cryptoeconomic definition of Strong Chain Quality captures this idea:
 
-* **Strong Chain Quality**: A coalition that holds $X\%$ of the total stake has, after GST, control over $X\%$ of the blockspace *in each block*.
+**Strong Chain Quality**:
+> A coalition that holds $X\%$ of the total stake has, after GST, control over $X\%$ of the blockspace *in each block*.
 
 This idealized property implicitly leads to the abstraction of *virtual lanes*, where coalitions effectively control a dedicated fraction of blockspace within each block. From an economic perspective, owning a virtual lane corresponds to holding a productive asset that may yield fees and MEV revenue. Competition among external entities to acquire and maintain such lanes, through stake accumulation, creates sustained demand for the underlying L1 token. The greater the economic value that a given lane can generate, the stronger the incentives to compete for stake, and the more value accrues to the L1 stake that governs access to that blockspace.
 
@@ -117,7 +118,8 @@ While traditional agreement protocols focus on a single value, many applications
 
 This leads to a natural strengthening of Strong Chain Quality in the context of ACS to partial synchrony, where $h$ is the number of honest parties and $f = n - h$ is the number of Byzantine parties:
 
-* **Strong Chain Quality for ACS in partial synchrony**: Before GST, at least $h-f$ of the honest parties are included in the output set. After GST, all $h$ honest parties are included in the output set.
+**Strong Chain Quality for ACS in partial synchrony**:
+> Before GST, at least $h-f$ of the honest parties are included in the output set. After GST, all $h$ honest parties are included in the output set.
 
 Note that even getting at least $h - f$ honest parties in the output set is a type of censorship resistance property: the adversary cannot censor more than $f$ honest parties.
 
