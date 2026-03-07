@@ -73,15 +73,17 @@ This is no longer a classic agreement problem, as it introduces a timing constra
 ## Simultaneous agreement
 
 
-**Classic lower bound**: for up to $t$ crashes, any protocol solving agreement has an execution that requires at least $t+1$ rounds (see [Synchrony Uncommitted Lower Bound](https://decentralizedthoughts.github.io/2019-12-15-synchrony-uncommitted-lower-bound/) and [Early Stopping Lower Bounds](https://decentralizedthoughts.github.io/2024-01-28-early-stopping-lower-bounds/)).
+**Theorem for t+1 round lower bound**: for up to $t$ crashes, any protocol solving agreement has an execution that requires at least $t+1$ rounds (see [Synchrony Uncommitted Lower Bound](https://decentralizedthoughts.github.io/2019-12-15-synchrony-uncommitted-lower-bound/) and [Early Stopping Lower Bounds](https://decentralizedthoughts.github.io/2024-01-28-early-stopping-lower-bounds/)).
 
 *Simultaneous agreement with time $X$* (for a fixed parameter $X$) requires that in addition to being a standard agreement protocol, there is no execution in which some correct party decides at or before $X$ and some correct party decides after $X$.
 
-**Theorem**  
-For up to $t$ crashes, any protocol solving simultaneous agreement with time $X$ that has some execution that decides at or before $X$ must have $X \ge t+1$.
+Unfortunately, simultaneous agreement is strictly harder than standard agreement, showing that there is no early stopping protocol with simultaneous agreement. Essentially the best you can do is $X = t+1$:
 
 
-## Proof
+**Theorem for simultaneous agreement**: For up to $t$ crashes, any protocol solving simultaneous agreement with time $X$ that has some execution that decides at or before $X$ must have $X \ge t+1$.
+
+
+## Proof sketch
 
 Given a protocol $P$, define protocol $P'$ as follows: each party runs $P$, and when it decides in $P$ at round $r$, it outputs 0 iff $r \le X$, and outputs 1 otherwise. Seek a contradiction, and assume $X < t+1$ and there exists an execution in which $P'$ decides 0.
 
