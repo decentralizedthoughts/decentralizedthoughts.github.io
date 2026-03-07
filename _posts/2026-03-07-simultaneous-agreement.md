@@ -7,7 +7,6 @@ tags:
 author: Ittai Abraham
 unlisted: true
 sitemap: false
-permalink: /2026-03-08-simultaneous-agreement/
 ---
 
 Most modern blockchain protocols use [partial synchrony](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/) based BFT protocols that proceed in views. Each view has a designated leader. This naturally leads to the following design question:
