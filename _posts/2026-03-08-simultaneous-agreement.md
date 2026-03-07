@@ -1,6 +1,6 @@
 ---
 title: Synchronized Clocks, Fixed View Schedules, and Simultaneous Agreement
-date: 2026-03-08 00:59:27 +02:00
+date: 2026-03-08 00:59:27 -05:00
 tags:
 - consensus
 - lowerbound
