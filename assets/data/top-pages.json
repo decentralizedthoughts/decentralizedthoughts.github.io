@@ -1,10 +1,10 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-03-07T06:58:52Z",
+  "fetched_at": "2026-03-07T18:50:10Z",
   "items": [
     {
       "path": "/start-here/",
-      "views": 169
+      "views": 170
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
@@ -23,12 +23,12 @@
       "views": 56
     },
     {
-      "path": "/2026-02-02-ps-cheat-sheet/",
-      "views": 53
+      "path": "/2026-03-06-mysticeti-revolutionizing-consensus-on-sui/",
+      "views": 54
     },
     {
-      "path": "/2026-03-06-mysticeti-revolutionizing-consensus-on-sui/",
-      "views": 51
+      "path": "/2026-02-02-ps-cheat-sheet/",
+      "views": 53
     }
   ]
 }
