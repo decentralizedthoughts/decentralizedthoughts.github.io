@@ -1,34 +1,34 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-03-08T18:51:35Z",
+  "fetched_at": "2026-03-09T07:17:16Z",
   "items": [
     {
       "path": "/start-here/",
-      "views": 154
+      "views": 142
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 115
-    },
-    {
-      "path": "/2019-06-01-2019-5-31-models/",
-      "views": 73
-    },
-    {
-      "path": "/2019-06-27-defining-consensus/",
-      "views": 59
+      "views": 101
     },
     {
       "path": "/2026-03-06-mysticeti-revolutionizing-consensus-on-sui/",
-      "views": 59
+      "views": 70
+    },
+    {
+      "path": "/2019-06-01-2019-5-31-models/",
+      "views": 68
     },
     {
       "path": "/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/",
-      "views": 54
+      "views": 55
+    },
+    {
+      "path": "/2019-06-27-defining-consensus/",
+      "views": 51
     },
     {
       "path": "/2022-06-28-DAG-meets-BFT/",
-      "views": 48
+      "views": 50
     }
   ]
 }
