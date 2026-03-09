@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-03-09T07:17:16Z",
+  "fetched_at": "2026-03-09T19:09:43Z",
   "items": [
     {
       "path": "/start-here/",
@@ -8,7 +8,7 @@
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 101
+      "views": 102
     },
     {
       "path": "/2026-03-06-mysticeti-revolutionizing-consensus-on-sui/",
