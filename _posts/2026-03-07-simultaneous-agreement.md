@@ -9,7 +9,7 @@ unlisted: true
 sitemap: false
 ---
 
-Most modern blockchain protocols use [partial synchrony](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/) based BFT protocols that proceed in views. Each view has a designated leader. This naturally leads to the following design question:
+Most modern blockchain protocols use [partial synchrony](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/)-based BFT protocols that proceed in views. Each view has a designated leader. This naturally leads to the following design question:
 
 > How should parties synchronize the transition from view $i$ to view $i+1$?
 
@@ -19,34 +19,31 @@ Most modern blockchain protocols use [partial synchrony](https://decentralizedth
 * there are well-established protocols for keeping clocks synchronized (NTP/PTP), and modern NTP security has improved via NTS ([RFC 8915](https://www.rfc-editor.org/info/rfc8915)), with updated authentication guidance ([RFC 8573](https://www.rfc-editor.org/info/rfc8573));
 * modern cloud providers offer additional synchronization services and measurements (for example, [AWS](https://aws.amazon.com/blogs/compute/its-about-time-microsecond-accurate-clocks-on-amazon-ec2-instances/) and [Meta](https://engineering.fb.com/2022/11/21/production-engineering/precision-time-protocol-at-meta/)).
 
-Given this, assuming clock synchronization is very reasonable and opens two approaches to view synchronization:
+Given this, assuming clock synchronization is very reasonable, there are two approaches to view synchronization:
 
 1. **Fixed View Schedule (FVS)**
-
-    In an FVS design, the start and end times of view $i$ are fixed in advance.
-
+    In the FVS design, the start and end times of each view $i$ are fixed in advance.
     *Pros*:
       - parties are tightly synchronized on view boundaries;
       - view synchronization is straightforward to implement and reason about.
-
+      - future proposers know exactly when their views will start, allowing them to prepare better.
     *Cons*:
       - view length is fixed to accommodate worst-case events, which can lead to unnecessarily long good-case view latency.
+      - depends on good clock synchronization.
 
-2. **Optimistic Responsiveness (OR)**
-
-    In an optimistically responsive design (see [What is Responsiveness?](https://decentralizedthoughts.github.io/2022-12-18-what-is-responsiveness/) and [Optimistic Responsiveness](https://decentralizedthoughts.github.io/2020-06-12-optimal-optimistic-responsiveness/)), good-case views complete as quickly as the network allows.
-
+2. **Variable View Schedule (VVS)**
+    In VVS, the view length can change based on network conditions and faults (see [Fever](https://arxiv.org/abs/2301.09881) and [Lumiere](https://arxiv.org/abs/2311.08091)). For example, in an **optimistically responsive** design (see [What is Responsiveness?](https://decentralizedthoughts.github.io/2022-12-18-what-is-responsiveness/) and [Optimistic Responsiveness](https://decentralizedthoughts.github.io/2020-06-12-optimal-optimistic-responsiveness/)), good-case views complete as quickly as the network allows. Another example is protocols with a **fast path**, which can be viewed as taking additional latency advantages in particularly good conditions (for example, see [links here](https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/)). More generally, VVS designs aim to reduce latency in **good-case** events.
     *Pros*:
       - good-case view latency can be $O(\delta)$ and commit time as small as $3\delta$ (for optimal resilience, see [here](https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/)). Even in synchrony, these protocols can have $O(\delta)$ good-case view latency (see [here](https://decentralizedthoughts.github.io/2021-12-07-good-case-latency-of-rotating-leader-synchronous-bft/)).
-  
     *Cons*:
-      - parties may begin views with a gap of up to $\Delta$ (the maximum message delay);
-      - this gap increases timeout timers, which in turn increases worst-case view latency.
+      - parties may begin views with a **view gap** of up to $\Delta$ (the maximum message delay); this view gap increases timeout timers, which in turn increases worst-case view latency.
+      - not knowing exactly how many views there will be in a time frame makes it harder to implement fixed inflation rewards.
+      - makes it harder to reason about external events and oracles that update at fixed times.
 
 
-## The cryptoeconomic angle
+## Is the block proposer incentivized to have a short or long view length?
 
-The leader of a view has temporary monopoly power over what to propose and when to propose. Waiting close to the maximum allowed time is a strict best response, because more transactions and fees may arrive, and there is more time to construct a block with higher MEV opportunities. This means that even if a protocol allows faster good-case views, incentives may still push behavior toward the maximal view length. 
+The leader of a view has temporary monopoly power over what to propose and when to propose. Waiting close to the maximum allowed time is a strict best response, because more transactions and fees may arrive, and there is more time to construct a block with higher MEV opportunities. This means that even if a protocol allows faster good-case views, incentives may still push behavior toward the maximal view length. See [timing games](https://arxiv.org/abs/2510.25144) as a proposal to mitigate this issue.
 
 So fixed schedules are a very reasonable design choice, but can we still get good-case speedups with a fixed view schedule?
 
@@ -70,15 +67,16 @@ However, this is effectively solving the following problem:
 This is no longer a classic agreement problem, as it introduces a timing constraint. This is called **simultaneous agreement** in the literature, and it is strictly harder than standard agreement.
 
 
-## Simultaneous agreement
+## Simultaneous agreement or strong early stopping
+
+Regular agreement has a worst case of $t+1$ rounds, but in executions with just $f$ faults it can terminate in $f+2$ rounds. This is called **early stopping**; see the post on [$t+1$ lower bound](https://decentralizedthoughts.github.io/2019-12-15-synchrony-uncommitted-lower-bound/) and the post on [early stopping](https://decentralizedthoughts.github.io/2024-01-28-early-stopping-lower-bounds/).
 
 
-**Theorem for t+1 round lower bound**: for up to $t$ crashes, any protocol solving agreement has an execution that requires at least $t+1$ rounds (see [Synchrony Uncommitted Lower Bound](https://decentralizedthoughts.github.io/2019-12-15-synchrony-uncommitted-lower-bound/) and [Early Stopping Lower Bounds](https://decentralizedthoughts.github.io/2024-01-28-early-stopping-lower-bounds/)).
+But what if we want to also guarantee a *stronger notion of early stopping*: that all correct parties decide either at time $\le X$ or at time $>X$? This is the simultaneous agreement problem, for which we will show that early stopping can only work for $X \ge t+1$, even in executions with no faults.
 
-*Simultaneous agreement with time $X$* (for a fixed parameter $X$) requires that in addition to being a standard agreement protocol, there is no execution in which some correct party decides at or before $X$ and some correct party decides after $X$.
+*Simultaneous agreement with time $X$* (for a fixed parameter $X$) requires that in addition to being a standard agreement protocol, there is **no** execution in which some correct party decides at or before $X$ and some correct party decides after $X$.
 
-Unfortunately, simultaneous agreement is strictly harder than standard agreement, showing that there is no early stopping protocol with simultaneous agreement. Essentially the best you can do is $X = t+1$:
-
+The following theorem shows that there is no early stopping protocol with simultaneous agreement. It is even impossible to solve simultaneous agreement with $X < t+1$ just for failure-free executions. Essentially, any time you want a protocol that can decide by time $X$ in some execution, you must have $X \ge t+1$.
 
 **Theorem for simultaneous agreement**: For up to $t$ crashes, any protocol solving simultaneous agreement with time $X$ that has some execution that decides at or before $X$ must have $X \ge t+1$.
 
@@ -101,7 +99,7 @@ There are three cases:
 
 ## Conclusion
 
-It seems that fixed view schedules are incompatible with good-case speedups; at least the natural approach of simultaneous switching to an earlier start time in the next view if the previous view commits early in the good case is not possible. Obtaining view synchronization that benefits from the best of both worlds (fixed schedules and optimistic responsiveness) is an interesting open question.
+The natural approach of simultaneously switching to an early start time in the next view if the previous view commits early in the good case is not possible. There may be other ways to do this. Obtaining view synchronization that benefits from the best of both worlds (fixed schedules and taking advantage of good cases) is an interesting open question.
 
 
 
@@ -119,7 +117,7 @@ Simultaneous agreement was studied extensively in the 1980s and 1990s:
 
 ### Acknowledgements
 
-We would like to thank Gilad Stern, Karthik Nayak, Nusret Tas, Joachim Neu, and Pranav Garimidi for helpful discussions and feedback on this post.
+We would like to thank Gilad Stern, Kartik Nayak, Nusret Tas, Joachim Neu, and Pranav Garimidi for helpful discussions and feedback on this post.
 
 ---
 
