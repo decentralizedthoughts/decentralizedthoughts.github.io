@@ -1,30 +1,30 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-03-11T19:09:51Z",
+  "fetched_at": "2026-03-12T07:13:32Z",
   "items": [
     {
       "path": "/start-here/",
-      "views": 146
-    },
-    {
-      "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 102
+      "views": 149
     },
     {
       "path": "/2026-03-06-mysticeti-revolutionizing-consensus-on-sui/",
+      "views": 117
+    },
+    {
+      "path": "/2020-12-22-what-is-a-merkle-tree/",
       "views": 101
     },
     {
       "path": "/2019-06-01-2019-5-31-models/",
-      "views": 74
+      "views": 75
     },
     {
       "path": "/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/",
-      "views": 66
+      "views": 70
     },
     {
       "path": "/2021-10-29-consensus-cheat-sheet/",
-      "views": 65
+      "views": 63
     }
   ]
 }
