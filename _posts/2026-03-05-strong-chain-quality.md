@@ -12,7 +12,7 @@ author: Ittai Abraham, Pranav Garimidi, Joachim Neu
 For Nakamoto style chains, this is called *Ideal CQ* (see [here](https://eprint.iacr.org/2014/765.pdf)). Chain quality was sufficient for early generations of blockchains that had low throughput, but modern blockchains have much higher bandwidth and can commit many transactions within a single block. This motivates a stronger, more fine-grained notion that captures the division of blockspace inside each block, rather than only the fraction of blocks averaged over time. 
 
 We call it **Strong Chain Quality (SCQ)**:
-> Owning $3\%$ of the stake gives you inclusion rights over valid inputs of your choice up to $3\%$ of the blockspace ***in every block***. 
+> Owning $3\%$ of the stake guarantees inclusion of your valid inputs up to $3\%$ of the blockspace ***in every block***. 
 
 In essence, this property gives stakeholders the ability to have *virtual lanes* inside a high throughput blockchain guaranteeing them transaction inclusion. In this post we review the origins of CQ and SCQ and explain why SCQ is so useful.
 
@@ -48,7 +48,7 @@ In contrast, most modern proof-of-stake blockchains implement stake-weighted ran
 When blockspace is abundant, there is no need to give a single proposer monopoly power over the content of the entire block. Instead, blockspace can be divided among multiple parties for the same block. The following cryptoeconomic definition of Strong Chain Quality captures this idea:
 
 **Strong Chain Quality**:
-> A coalition that holds $X\%$ of the total stake has, after GST, inclusion rights over valid inputs of its choice up to $X\%$ of the blockspace *in each block*.
+> A coalition that holds $X\%$ of the total stake has, after GST, guaranteed inclusion of its valid inputs up to $X\%$ of the blockspace *in each block*.
 
 This idealized property implicitly leads to the abstraction of *virtual lanes*, where coalitions effectively control a dedicated fraction of blockspace within each block. From an economic perspective, owning a virtual lane corresponds to holding a productive asset that may yield fees and MEV revenue. Competition among external entities to acquire and maintain such lanes, through stake accumulation, creates sustained demand for the underlying L1 token. The greater the economic value that a given lane can generate, the stronger the incentives to compete for stake, and the more value accrues to the L1 stake that governs access to that blockspace.
 
@@ -89,7 +89,7 @@ Strong Chain Quality governs inclusion, but it does not by itself remove the "la
 
 ## Strong Chain Quality vs Chain Quality
 
-Chain Quality is a long horizon proportionality property: over time, a coalition that holds $X\%$ of the stake obtains roughly $X\%$ of the blocks. Strong Chain Quality is an intra block proportionality property: in every block, a coalition that holds $X\%$ of the stake has inclusion rights over valid inputs of its choice up to $X\%$ of the available blockspace. 
+Chain Quality is a long horizon proportionality property: over time, a coalition that holds $X\%$ of the stake obtains roughly $X\%$ of the blocks. Strong Chain Quality is an intra block proportionality property: in every block, a coalition that holds $X\%$ of the stake is guaranteed inclusion of its valid inputs up to $X\%$ of the available blockspace. 
 
 Let $B$ be the fraction of the block that is allocated to a coalition that holds $X\%$ of the stake. Both properties imply that $E[B\mid CQ] = E[B\mid SCQ] = X$, but observe that $VAR[B\mid SCQ] = 0$ while $VAR[B\mid CQ] = X(1-X) \gg 0$. This reduced uncertainty could lead to a competitive advantage in markets where consistency in winning races is critical.
 

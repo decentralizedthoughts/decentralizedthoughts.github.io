@@ -109,7 +109,7 @@ Note that since there is no explicit validity condition for $P'$, cases 1 and 2 
 
 ## Conclusion
 
-The natural approach of simultaneously switching to an early start time in the next view if the previous view commits early in the good case is not possible. There may be other ways to do this. Obtaining view synchronization that benefits from the best of both worlds (fixed schedules and taking advantage of good cases) is an interesting open question.
+The natural approach of simultaneously switching to an early start time in the next view if the previous view commits early in the good case is not possible. Switching to an early start time in a non-simultaneous manner means an additional $\Delta$ gap that then increases all other timeouts. Obtaining view synchronization that benefits from the best of both worlds (fixed schedules with no gaps and taking advantage of good cases) is an interesting open question.
 
 
 
@@ -127,7 +127,7 @@ Simultaneous agreement was studied extensively in the 1980s and 1990s:
 
 ### Acknowledgements
 
-We would like to thank Gilad Stern, Kartik Nayak, Nusret Tas, Joachim Neu, and Pranav Garimidi for helpful discussions and feedback on this post.
+We would like to thank Gilad Stern, Kartik Nayak, Nusret Tas, Joachim Neu, and Pranav Garimidi for insightful discussions and feedback on this post.
 
 ---
 
