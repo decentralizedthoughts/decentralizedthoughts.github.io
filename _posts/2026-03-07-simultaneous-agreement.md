@@ -129,4 +129,4 @@ We would like to thank Gilad Stern, Kartik Nayak, Nusret Tas, Joachim Neu, and P
 
 ---
 
-Please leave [comments on X]().
+Please leave [comments on X](https://x.com/ittaia/status/2032858696967946439?s=20).
