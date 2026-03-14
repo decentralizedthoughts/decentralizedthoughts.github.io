@@ -26,7 +26,7 @@ Since this protocol is supposed to work in the asynchronous model, these propert
 
 The high level idea:
 
-1. First, we force the leader to send just one value: we do this by requiring each party to *echo* just one message and wait for $n-f$ echo messages before *voting* for it. Since any two sets of $n-f$ must intersect by at least $f+1$ parties, it cannot be that two different non-faulty parties echo different values.
+1. First, we force the leader to send just one value: we do this by requiring each party to *echo* just one message and wait for $n-f$ echo messages before *voting* for it. Since any two sets of $n-f$ must intersect by at least $f+1$ parties, it cannot be that two different non-faulty parties vote different values.
 
 2. Second, we make sure that if a non-faulty *delivers* a value, then all non-faulty will. We do this by requiring a party to send just one vote after seeing either $n-f$ echo messages *or* after seeing $f+1$ votes. So if any party sees $n-f$ votes then all non-faulty will see $n-2f \geq f+1$ votes.
 
@@ -99,8 +99,7 @@ Prove correctness (or provide a counterexample) of the following optimization th
            deliver v
 
 
-**Acknowledgment.** We would like to thank [hemengjie](https://twitter.com/VfRy8lQUeL9t4y6) for fixing an error in the exercise. 
-
+**Acknowledgment.** We would like to thank [hemengjie](https://twitter.com/VfRy8lQUeL9t4y6) and [samlafer](https://x.com/samlafer) for fixing errors and providing valuable feedback.
 
 Please answer/discuss/comment/ask on [Twitter](https://twitter.com/ittaia/status/1307772031954546697?s=20). 
 
