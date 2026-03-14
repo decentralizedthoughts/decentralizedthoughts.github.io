@@ -9,14 +9,14 @@ author: Ittai Abraham, Pranav Garimidi, Joachim Neu
 **Chain Quality (CQ)** is a core blockchain property. Roughly speaking, it says:
 > Owning $3\%$ of the stake gives you control over $3\%$ of the blockspace ***over time***.
 
-For Nakamoto style chains, this is called *Ideal CQ* (see [here](https://eprint.iacr.org/2014/765.pdf)). Chain quality was sufficient for early generations of blockchains that had low throughput, but modern blockchains have much higher bandwidth and can commit many transactions within a single block. This motivates a stronger, more fine grained notion that captures the division of blockspace inside each block, rather than only the fraction of blocks averaged over time. 
+For Nakamoto style chains, this is called *Ideal CQ* (see [here](https://eprint.iacr.org/2014/765.pdf)). Chain quality was sufficient for early generations of blockchains that had low throughput, but modern blockchains have much higher bandwidth and can commit many transactions within a single block. This motivates a stronger, more fine-grained notion that captures the division of blockspace inside each block, rather than only the fraction of blocks averaged over time. 
 
 We call it **Strong Chain Quality (SCQ)**:
-> Owning $3\%$ of the stake gives you control over $3\%$ of the blockspace ***in every block***. 
+> Owning $3\%$ of the stake guarantees inclusion of your valid inputs up to $3\%$ of the blockspace ***in every block***. 
 
 In essence, this property gives stakeholders the ability to have *virtual lanes* inside a high throughput blockchain guaranteeing them transaction inclusion. In this post we review the origins of CQ and SCQ and explain why SCQ is so useful.
 
-## Chain Quality as a BFT Validity property 
+## Chain Quality as a BFT Validity Property
 
 BFT protocols must satisfy [safety, liveness, and validity properties](https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/). A protocol that always outputs 0 satisfies both agreement (safety) and termination (liveness), but is useless in the sense that it performs no meaningful decision or computation. What's missing is *validity*. Modern blockchains typically require two critical validity properties:
 
@@ -48,7 +48,7 @@ In contrast, most modern proof-of-stake blockchains implement stake-weighted ran
 When blockspace is abundant, there is no need to give a single proposer monopoly power over the content of the entire block. Instead, blockspace can be divided among multiple parties for the same block. The following cryptoeconomic definition of Strong Chain Quality captures this idea:
 
 **Strong Chain Quality**:
-> A coalition that holds $X\%$ of the total stake has, after GST, control over $X\%$ of the blockspace *in each block*.
+> A coalition that holds $X\%$ of the total stake has, after GST, guaranteed inclusion of its valid inputs up to $X\%$ of the blockspace *in each block*.
 
 This idealized property implicitly leads to the abstraction of *virtual lanes*, where coalitions effectively control a dedicated fraction of blockspace within each block. From an economic perspective, owning a virtual lane corresponds to holding a productive asset that may yield fees and MEV revenue. Competition among external entities to acquire and maintain such lanes, through stake accumulation, creates sustained demand for the underlying L1 token. The greater the economic value that a given lane can generate, the stronger the incentives to compete for stake, and the more value accrues to the L1 stake that governs access to that blockspace.
 
@@ -66,12 +66,12 @@ The [MCP protocol](https://eprint.iacr.org/2025/1772.pdf) was proposed as a gadg
 
 Recent work has shown that Strong Chain Quality and censorship resistance [require two more rounds](https://eprint.iacr.org/2025/2136) (so the good case takes $5$ rounds for $3f+1$ and $4$ rounds for $5f+1$ BFT). We will expand on this result in later posts.
 
-Obtaining SCQ post-GST requires guaranteeing that the proposer cannot censor the inputs of the stakeholders. This is achieved via a two round protocol with two small changes to almost any view based BFT protocol:
+Obtaining SCQ post-GST requires guaranteeing that the proposer cannot censor the inputs of the stakeholders. This is achieved via a two-round protocol with two small changes to almost any BFT protocol:
 
-* **Round 1**: Each party sends its certified input to all parties.
-* **Round 2**: Each party that receives a certified input from party $i$ adds $i$ to its *inclusion list*. It then sends its inclusion list to the leader, essentially committing that it will only accept blocks that contain all the inputs in this list. 
-* **BFT Proposal**: The leader receives these messages and includes in the block the *union* of all the inclusion lists that it received.
-* **BFT vote**: A party only votes for a block if it contains all the inputs in its inclusion list.
+* **Round 1**: Each party sends its valid input to all parties.
+* **Round 2**: Each party adds every unique valid input it received to its *inclusion list*, signs the list, and sends it to the leader.
+* **BFT Proposal**: The leader proposes a block.
+* **BFT vote**: A party only votes for a block if all the values in its inclusion list appear in the block and the block contains at most one valid input per party.
 
 It is easy to check that this protocol sketch can be converted into a full protocol that satisfies post-GST SCQ, provides censorship resistance, and is live for an honest leader. Adding pre-GST SCQ would also require waiting for a quorum of values or lists in each round. See [DPasS](https://decentralizedthoughts.github.io/2025-12-12-dpaas/) for how this protocol is used for censorship resistance in the context of PBS. We will expand on this protocol and its generalizations in later posts.
 
@@ -79,15 +79,17 @@ It is easy to check that this protocol sketch can be converted into a full proto
 
 While Strong Chain Quality dictates the fraction of blockspace that a coalition can control, it does not fully specify how transactions are *ordered*. SCQ can be interpreted as reserving space in a set for every staked node with no guarantees on how the transactions in that set are ordered. This opens a rich area of research into the design of transaction ordering mechanisms that can further enhance fairness and efficiency within the blockchain ecosystem. One promising approach is to order transactions according to priority fees. We will expand on the nuances of ordering in future posts. 
 
+## Strong Chain Quality and Last Look
 
+Strong Chain Quality governs inclusion, but it does not by itself remove the "last look" advantage of a proposer, which may still commit to its own content later than honest parties or abort that content at the last minute. We will expand on this in later posts.
 
 ---
 
-# Additional notes 
+# Additional notes
 
 ## Strong Chain Quality vs Chain Quality
 
-Chain Quality is a long horizon proportionality property: over time, a coalition that holds $X\%$ of the stake obtains roughly $X\%$ of the blocks. Strong Chain Quality is an intra block proportionality property: in every block, a coalition that holds $X\%$ of the stake controls $X\%$ of the available blockspace. 
+Chain Quality is a long horizon proportionality property: over time, a coalition that holds $X\%$ of the stake obtains roughly $X\%$ of the blocks. Strong Chain Quality is an intra block proportionality property: in every block, a coalition that holds $X\%$ of the stake is guaranteed inclusion of its valid inputs up to $X\%$ of the available blockspace. 
 
 Let $B$ be the fraction of the block that is allocated to a coalition that holds $X\%$ of the stake. Both properties imply that $E[B\mid CQ] = E[B\mid SCQ] = X$, but observe that $VAR[B\mid SCQ] = 0$ while $VAR[B\mid CQ] = X(1-X) \gg 0$. This reduced uncertainty could lead to a competitive advantage in markets where consistency in winning races is critical.
 
