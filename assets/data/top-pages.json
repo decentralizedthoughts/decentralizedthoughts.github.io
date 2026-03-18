@@ -1,26 +1,26 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-03-17T19:19:40Z",
+  "fetched_at": "2026-03-18T07:17:36Z",
   "items": [
     {
       "path": "/2026-03-06-mysticeti-revolutionizing-consensus-on-sui/",
-      "views": 135
+      "views": 147
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 123
+      "views": 132
     },
     {
       "path": "/start-here/",
-      "views": 115
+      "views": 109
     },
     {
       "path": "/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/",
-      "views": 89
+      "views": 99
     },
     {
-      "path": "/2020-02-26-selfish-mining/",
-      "views": 66
+      "path": "/2026-03-07-simultaneous-agreement/",
+      "views": 75
     }
   ]
 }
