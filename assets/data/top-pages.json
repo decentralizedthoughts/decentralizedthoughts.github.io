@@ -1,10 +1,10 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-03-20T07:13:51Z",
+  "fetched_at": "2026-03-20T19:06:04Z",
   "items": [
     {
       "path": "/2026-03-06-mysticeti-revolutionizing-consensus-on-sui/",
-      "views": 158
+      "views": 159
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
@@ -16,7 +16,7 @@
     },
     {
       "path": "/2026-03-07-simultaneous-agreement/",
-      "views": 94
+      "views": 97
     },
     {
       "path": "/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/",
