@@ -163,3 +163,6 @@ Even when the secret key is decentralized, one may worry that $2f+1$ servers may
 ### Notes
 
 1. A similar system is used by [Apple Private Cloud Compute](https://security.apple.com/blog/private-cloud-compute/) to implement single use credentials, that allows users to authorize valid requests without linking them to their user identifier. The Apple system uses [RSA blind signatures](https://www.rfc-editor.org/rfc/rfc9474.html) instead of BLS.
+
+
+Your thoughts and comments on [X](https://x.com/ittaia/status/2035438793428267109?s=20)
