@@ -1,14 +1,14 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-03-21T07:03:23Z",
+  "fetched_at": "2026-03-21T18:54:03Z",
   "items": [
     {
       "path": "/start-here/",
-      "views": 126
+      "views": 127
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 122
+      "views": 123
     },
     {
       "path": "/2026-03-06-mysticeti-revolutionizing-consensus-on-sui/",
