@@ -87,6 +87,11 @@ Strong Chain Quality governs inclusion, but it does not by itself remove the "la
 
 ---
 
+Your thoughts and comments on [X](https://x.com/ittaia/status/2036191286739226758?s=20).
+
+
+---
+
 # Additional notes
 
 ## Strong Chain Quality vs Chain Quality
@@ -110,4 +115,4 @@ This leads to a natural strengthening of Strong Chain Quality in the context of 
 
 Note that even getting at least $h - f$ honest parties in the output set is a type of censorship resistance property: the adversary cannot censor more than $f$ honest parties.
 
-Note that this is a stronger property than the standard definition of validity for ACS. After GST, the adversary cannot censor any honest party.
+This is a stronger property than the standard definition of validity for ACS. After GST, the adversary cannot censor any honest party.
