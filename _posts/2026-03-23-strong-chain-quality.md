@@ -1,6 +1,6 @@
 ---
 title: Strong Chain Quality
-date: 2026-03-05 00:00:00 -05:00
+date: 2026-03-23 00:00:00 -05:00
 tags:
 - blockchain
 author: Ittai Abraham, Pranav Garimidi, Joachim Neu
@@ -14,7 +14,9 @@ For Nakamoto style chains, this is called *Ideal CQ* (see [here](https://eprint.
 We call it **Strong Chain Quality (SCQ)**:
 > Owning $3\%$ of the stake guarantees inclusion of your valid inputs up to $3\%$ of the blockspace ***in every block***. 
 
-In essence, this property gives stakeholders the ability to have *virtual lanes* inside a high throughput blockchain guaranteeing them transaction inclusion. In this post we review the origins of CQ and SCQ and explain why SCQ is so useful.
+In essence, SCQ gives stakeholders the ability to have *virtual lanes* inside a high-throughput blockchain that guarantee transaction inclusion. Here, we review the origins of CQ and SCQ and explain why SCQ is so useful. 
+
+The core version of this Strong Chain Quality post appears on the [a16z Crypto research blog](https://a16zcrypto.com/posts/article/strong-chain-quality-for-blockspace-every-block/); the longer version here includes additional academic references and technical details.
 
 ## Chain Quality as a BFT Validity Property
 

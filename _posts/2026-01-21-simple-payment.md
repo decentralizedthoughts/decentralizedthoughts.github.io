@@ -21,7 +21,7 @@ Tokens are the coins of the system. Each token represents exactly one unit of va
 
 Each token is associated with a one-time signing key pair. When a token is spent, its key is permanently invalidated and never reused. The recipient receives a completely new token associated with a fresh public key.
 
-The bank does not maintain accounts or balances. Its only persistent state is a set of public keys that have already been spent, called the nullifier set. Spending a token means proving ownership of its key, adding that key to the nullifier set, and issuing a new signed key for the recipient.
+The bank does not maintain accounts or balances. Its only persistent state is a set of public keys that have already been spent, called the **nullifier set**. Spending a token means proving ownership of its key, adding that key to the nullifier set, and issuing a new signed key for the recipient.
 
 Formally, the bank maintains a set $N$ of spent public keys. Initially $N$ is empty.
 
