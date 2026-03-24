@@ -16,7 +16,7 @@ We call it **Strong Chain Quality (SCQ)**:
 
 In essence, SCQ gives stakeholders the ability to have *virtual lanes* inside a high-throughput blockchain that guarantee transaction inclusion. Here, we review the origins of CQ and SCQ and explain why SCQ is so useful. 
 
-The core version of this Strong Chain Quality post appears on the [a16z Crypto research blog](https://a16zcrypto.com/posts/article/strong-chain-quality-for-blockspace-every-block/); the longer version here includes additional academic references and technical details.
+A version of this post defining Strong Chain Quality appears on [a16zcrypto.com](https://a16zcrypto.com/posts/article/strong-chain-quality-for-blockspace-every-block/) (also see more from a16z crypto Research [here](https://a16zcrypto.com/posts/focus-areas/research/)). The version here includes additional academic references and technical details.
 
 ## Chain Quality as a BFT Validity Property
 
