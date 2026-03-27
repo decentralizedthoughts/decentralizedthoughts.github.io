@@ -1,22 +1,22 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-03-26T19:31:56Z",
+  "fetched_at": "2026-03-27T07:35:11Z",
   "items": [
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 136
+      "views": 134
     },
     {
       "path": "/start-here/",
-      "views": 116
+      "views": 120
     },
     {
       "path": "/2026-01-21-simple-payment/",
-      "views": 112
+      "views": 116
     },
     {
       "path": "/2026-03-07-simultaneous-agreement/",
-      "views": 109
+      "views": 110
     },
     {
       "path": "/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/",
@@ -24,11 +24,11 @@
     },
     {
       "path": "/2024-01-28-early-stopping-lower-bounds/",
-      "views": 62
+      "views": 65
     },
     {
-      "path": "/2026-03-06-mysticeti-revolutionizing-consensus-on-sui/",
-      "views": 60
+      "path": "/2019-06-27-defining-consensus/",
+      "views": 61
     }
   ]
 }
