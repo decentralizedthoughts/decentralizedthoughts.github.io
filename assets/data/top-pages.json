@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-03-27T07:35:11Z",
+  "fetched_at": "2026-03-27T19:11:35Z",
   "items": [
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
@@ -8,7 +8,7 @@
     },
     {
       "path": "/start-here/",
-      "views": 120
+      "views": 121
     },
     {
       "path": "/2026-01-21-simple-payment/",
@@ -16,7 +16,7 @@
     },
     {
       "path": "/2026-03-07-simultaneous-agreement/",
-      "views": 110
+      "views": 111
     },
     {
       "path": "/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/",
