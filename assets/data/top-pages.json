@@ -1,10 +1,10 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-03-29T07:19:08Z",
+  "fetched_at": "2026-03-29T19:02:04Z",
   "items": [
     {
       "path": "/start-here/",
-      "views": 129
+      "views": 130
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
@@ -20,7 +20,7 @@
     },
     {
       "path": "/2019-06-01-2019-5-31-models/",
-      "views": 75
+      "views": 74
     },
     {
       "path": "/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/",
