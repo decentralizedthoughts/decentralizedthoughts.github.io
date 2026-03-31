@@ -1,14 +1,14 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-03-31T07:44:27Z",
+  "fetched_at": "2026-03-31T19:18:51Z",
   "items": [
     {
       "path": "/start-here/",
-      "views": 123
+      "views": 124
     },
     {
       "path": "/2026-01-21-simple-payment/",
-      "views": 121
+      "views": 122
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
@@ -28,7 +28,7 @@
     },
     {
       "path": "/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/",
-      "views": 53
+      "views": 54
     }
   ]
 }
