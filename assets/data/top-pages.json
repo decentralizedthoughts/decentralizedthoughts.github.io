@@ -1,34 +1,34 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-04-02T19:15:03Z",
+  "fetched_at": "2026-04-03T07:37:04Z",
   "items": [
     {
       "path": "/2026-01-21-simple-payment/",
-      "views": 123
-    },
-    {
-      "path": "/start-here/",
-      "views": 123
+      "views": 124
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 113
+      "views": 109
+    },
+    {
+      "path": "/start-here/",
+      "views": 102
     },
     {
       "path": "/2019-06-01-2019-5-31-models/",
-      "views": 80
+      "views": 76
     },
     {
       "path": "/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/",
-      "views": 67
-    },
-    {
-      "path": "/2026-03-07-simultaneous-agreement/",
-      "views": 58
+      "views": 66
     },
     {
       "path": "/2026-03-23-strong-chain-quality/",
-      "views": 52
+      "views": 54
+    },
+    {
+      "path": "/2019-06-07-modeling-the-adversary/",
+      "views": 44
     }
   ]
 }
