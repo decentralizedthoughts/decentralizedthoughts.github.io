@@ -1,10 +1,10 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-04-03T07:37:04Z",
+  "fetched_at": "2026-04-03T19:05:32Z",
   "items": [
     {
       "path": "/2026-01-21-simple-payment/",
-      "views": 124
+      "views": 125
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
@@ -16,7 +16,7 @@
     },
     {
       "path": "/2019-06-01-2019-5-31-models/",
-      "views": 76
+      "views": 78
     },
     {
       "path": "/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/",
@@ -27,8 +27,8 @@
       "views": 54
     },
     {
-      "path": "/2019-06-07-modeling-the-adversary/",
-      "views": 44
+      "path": "/2019-12-22-dolev-strong/",
+      "views": 46
     }
   ]
 }
