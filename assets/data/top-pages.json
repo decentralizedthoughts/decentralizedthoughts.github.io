@@ -1,14 +1,18 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-04-08T19:39:22Z",
+  "fetched_at": "2026-04-09T07:54:43Z",
   "items": [
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 102
+      "views": 97
     },
     {
       "path": "/start-here/",
-      "views": 75
+      "views": 80
+    },
+    {
+      "path": "/2020-12-12-raft-liveness-full-omission/",
+      "views": 74
     },
     {
       "path": "/2019-06-01-2019-5-31-models/",
@@ -16,19 +20,15 @@
     },
     {
       "path": "/2019-12-22-dolev-strong/",
-      "views": 66
+      "views": 67
     },
     {
       "path": "/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/",
-      "views": 60
+      "views": 58
     },
     {
       "path": "/2022-03-30-asynchronous-agreement-part-two-ben-ors-protocol/",
-      "views": 52
-    },
-    {
-      "path": "/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/",
-      "views": 47
+      "views": 55
     }
   ]
 }
