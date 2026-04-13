@@ -1,34 +1,34 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-04-12T19:07:45Z",
+  "fetched_at": "2026-04-13T08:22:35Z",
   "items": [
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 109
+      "views": 116
     },
     {
       "path": "/2020-12-12-raft-liveness-full-omission/",
-      "views": 100
+      "views": 103
     },
     {
       "path": "/2019-12-22-dolev-strong/",
-      "views": 71
+      "views": 72
     },
     {
       "path": "/start-here/",
-      "views": 69
+      "views": 71
     },
     {
       "path": "/2019-06-01-2019-5-31-models/",
-      "views": 59
-    },
-    {
-      "path": "/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/",
-      "views": 54
+      "views": 65
     },
     {
       "path": "/2022-03-30-asynchronous-agreement-part-two-ben-ors-protocol/",
-      "views": 54
+      "views": 57
+    },
+    {
+      "path": "/2024-05-07-decentralization-ethereum/",
+      "views": 55
     }
   ]
 }
