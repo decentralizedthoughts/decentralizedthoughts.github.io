@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-04-13T08:22:35Z",
+  "fetched_at": "2026-04-13T19:38:22Z",
   "items": [
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
@@ -12,7 +12,7 @@
     },
     {
       "path": "/2019-12-22-dolev-strong/",
-      "views": 72
+      "views": 73
     },
     {
       "path": "/start-here/",
