@@ -1,29 +1,29 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-04-15T19:42:38Z",
+  "fetched_at": "2026-04-16T08:02:21Z",
   "items": [
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 115
+      "views": 114
     },
     {
       "path": "/2020-12-12-raft-liveness-full-omission/",
-      "views": 104
+      "views": 105
     },
     {
       "path": "/start-here/",
-      "views": 71
+      "views": 75
     },
     {
       "path": "/2019-12-22-dolev-strong/",
-      "views": 64
-    },
-    {
-      "path": "/2022-03-30-asynchronous-agreement-part-two-ben-ors-protocol/",
-      "views": 60
+      "views": 65
     },
     {
       "path": "/2019-06-01-2019-5-31-models/",
+      "views": 60
+    },
+    {
+      "path": "/2022-03-30-asynchronous-agreement-part-two-ben-ors-protocol/",
       "views": 59
     },
     {
