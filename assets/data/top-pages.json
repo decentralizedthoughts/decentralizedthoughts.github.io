@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-04-16T08:02:21Z",
+  "fetched_at": "2026-04-16T19:37:22Z",
   "items": [
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
@@ -8,7 +8,7 @@
     },
     {
       "path": "/2020-12-12-raft-liveness-full-omission/",
-      "views": 105
+      "views": 104
     },
     {
       "path": "/start-here/",
