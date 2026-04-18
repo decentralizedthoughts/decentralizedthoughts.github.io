@@ -1,10 +1,10 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-04-18T07:35:04Z",
+  "fetched_at": "2026-04-18T19:08:44Z",
   "items": [
     {
       "path": "/2022-03-30-asynchronous-agreement-part-two-ben-ors-protocol/",
-      "views": 138
+      "views": 141
     },
     {
       "path": "/2020-12-12-raft-liveness-full-omission/",
