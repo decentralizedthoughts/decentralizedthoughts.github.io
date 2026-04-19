@@ -1,30 +1,30 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-04-18T19:08:44Z",
+  "fetched_at": "2026-04-19T07:45:56Z",
   "items": [
     {
-      "path": "/2022-03-30-asynchronous-agreement-part-two-ben-ors-protocol/",
-      "views": 141
+      "path": "/2020-12-22-what-is-a-merkle-tree/",
+      "views": 115
     },
     {
       "path": "/2020-12-12-raft-liveness-full-omission/",
-      "views": 114
+      "views": 112
     },
     {
-      "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 113
+      "path": "/2022-03-30-asynchronous-agreement-part-two-ben-ors-protocol/",
+      "views": 108
     },
     {
       "path": "/start-here/",
-      "views": 80
-    },
-    {
-      "path": "/2024-05-07-decentralization-ethereum/",
-      "views": 60
+      "views": 82
     },
     {
       "path": "/2019-06-01-2019-5-31-models/",
-      "views": 56
+      "views": 61
+    },
+    {
+      "path": "/2024-05-07-decentralization-ethereum/",
+      "views": 55
     }
   ]
 }
