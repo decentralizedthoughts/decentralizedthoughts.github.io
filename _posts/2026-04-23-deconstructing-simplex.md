@@ -1,6 +1,6 @@
 ---
 title: Deconstructing Simplex
-date: 2026-04-23 04:00:00 -05:00
+date: 2026-04-23 00:00:00 -05:00
 tags:
 - consensus
 author: Ittai Abraham

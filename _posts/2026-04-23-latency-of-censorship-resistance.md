@@ -1,6 +1,6 @@
 ---
 title: Latency cost of censorship resistance
-date: 2026-04-23 05:00:00 -05:00
+date: 2026-04-23 01:00:00 -05:00
 tags:
 - consensus
 author: Ittai Abraham, Yuval Efron, and Ling Ren
