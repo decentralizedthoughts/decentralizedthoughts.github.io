@@ -89,4 +89,4 @@ For more details see our full version on the [latency cost of censorship resista
 ## Acknowledgments
 
 
-Your thoughts on [X](TBD).
+Your thoughts on X (link coming soon).
