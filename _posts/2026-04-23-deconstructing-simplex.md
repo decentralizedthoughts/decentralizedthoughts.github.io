@@ -228,4 +228,4 @@ How does GB differ from PBFT's Locked-Broadcast (LB)? First note that in LB ther
 
 Many thanks to Kartik and Joachim for insightful comments and suggestions.
 
-Your thoughts on [X](TBD).
+Your thoughts on [X](https://x.com/home).
