@@ -187,6 +187,171 @@
  
 <div class="posts-list">
  
+ 
+ <article class="post-preview">
+ <a href="/2021-09-30-distributed-consensus-made-simple-for-real-this-time/">
+ <h2 class="post-title">Distributed consensus made simple (for real this time!)</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on September 30, 2021, by <b>Chris Jensen, Heidi Howard</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Multi-Paxos is the de facto solution for deciding a log of commands to execute on a replicated state machine, yet it’s famously difficult to understand, motivating the switch to ‘simpler’ consensus protocols such as Raft. The conventional wisdom is that the best way to use Paxos (aka Synod, or single-shot Paxos), to decide a log of commands is to run many instances of it, where the $i^{th}$ instance decides the...
+ 
+ 
+ <a href="/2021-09-30-distributed-consensus-made-simple-for-real-this-time/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ <a href="/tags#consensus101">consensus101</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ 
+ 
+ <article class="post-preview">
+ <a href="/2021-09-29-the-round-complexity-of-reliable-broadcast/">
+ <h2 class="post-title">The round complexity of Reliable Broadcast</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on September 29, 2021, by <b>Ittai Abraham, Zhuolun Xiang, Ling Ren</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Reliable Broadcast is an important building block of many Asynchronous protocols. There is a broadcaster that has some input value, $v$, and a non-faulty party that terminates needs to output a value. Reliable Broadcast is defined via two properties:
+ 
+ 
+ <a href="/2021-09-29-the-round-complexity-of-reliable-broadcast/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#research">research</a>
+ 
+ <a href="/tags#lowerbound">lowerbound</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ 
+ 
+ <article class="post-preview">
+ <a href="/2021-09-20-optimal-communication-complexity-of-authenticated-byzantine-agreement/">
+ <h2 class="post-title">Optimal Communication Complexity of Authenticated Byzantine Agreement</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on September 20, 2021, by <b>Atsuki Momose, Ling Ren</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Communication complexity of Byzantine Agreement (BA) has been studied for decades. Dolev and Reischuk showed that quadratic communication is necessary for BA with perfect security, i.e., without error. Berman, Garay, and Perry showed that this lower bound is tight for the unauthenticated setting (without signatures) with $f < n/3$. However, for $f \ge n/3$, the best solution so far is still the Dolev-Strong protocol with cubic communication, so a linear...
+ 
+ 
+ <a href="/2021-09-20-optimal-communication-complexity-of-authenticated-byzantine-agreement/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#research">research</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ 
+ 
+ <article class="post-preview">
+ <a href="/2021-09-20-information-theoretic-hotstuff-it-hs-part-one/">
+ <h2 class="post-title">Information Theoretic HotStuff (IT-HS): Part One</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on September 20, 2021, by <b>Gilad Stern, Ittai Abraham</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ This post is the first of two on Information Theoretic HotStuff (IT-HS). Information Theoretic HotStuff is a Byzantine Consensus protocol in the partially synchronous model. It replaces all of HotStuff’s cryptographic signatures with simple information theoretic message passing techniques over authenticated channels. Information theoretic protocols are often easy to reason about, form a great introduction for learning the basics of consensus, have less of an attack surface, and highlight useful...
+ 
+ 
+ <a href="/2021-09-20-information-theoretic-hotstuff-it-hs-part-one/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#research">research</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ 
+ 
+ <article class="post-preview">
+ <a href="/2021-08-29-the-private-set-intersection-psi-protocol-of-the-apple-csam-detection-system/">
+ <h2 class="post-title">The Private Set Intersection (PSI) Protocol of the Apple CSAM Detection System</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on August 29, 2021, by <b>Benny Pinkas</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In this post, we will discuss the cryptographic construction used in Apple’s new system for detecting CSAM - Child Sexual Abuse Material. This cryptographic construction implements a new variant of PSI - Private Set Intersection. While a lot of attention has been paid to the broad implications of this system, the technical details of the PSI construction have not been highlighted, even though Apple published a detailed technical description of...
+ 
+ 
+ <a href="/2021-08-29-the-private-set-intersection-psi-protocol-of-the-apple-csam-detection-system/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#cryptography">cryptography</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ 
+ 
  <article class="post-preview">
  <a href="/2021-07-17-simplifying-raft-with-chaining/">
  <h2 class="post-title">Simplifying Raft with Chaining</h2>
@@ -221,6 +386,8 @@
  
  </article>
  
+ 
+ 
  <article class="post-preview">
  <a href="/2021-06-14-neither-non-equivocation-nor-transferability-alone-is-enough-for-tolerating-minority-corruptions-in-asynchrony/">
  <h2 class="post-title">Neither Non-equivocation nor Transferability alone is enough for tolerating minority corruptions in asynchrony</h2>
@@ -252,6 +419,8 @@
  </div>
  
  </article>
+ 
+ 
  
  <article class="post-preview">
  <a href="/2021-04-02-benign-hotstuff/">
@@ -287,6 +456,8 @@
  
  </article>
  
+ 
+ 
  <article class="post-preview">
  <a href="/2021-03-26-living-with-asynchrony-the-gather-protocol/">
  <h2 class="post-title">Living with Asynchrony: the Gather protocol</h2>
@@ -316,6 +487,8 @@
  </div>
  
  </article>
+ 
+ 
  
  <article class="post-preview">
  <a href="/2021-03-09-good-case-latency-of-byzantine-broadcast-the-synchronous-case/">
@@ -349,6 +522,8 @@
  
  </article>
  
+ 
+ 
  <article class="post-preview">
  <a href="/2021-03-03-2-round-bft-smr-with-n-equals-4-f-equals-1/">
  <h2 class="post-title">2-round BFT SMR with n=4, f=1</h2>
@@ -380,6 +555,8 @@
  </div>
  
  </article>
+ 
+ 
  
  <article class="post-preview">
  <a href="/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/">
@@ -413,6 +590,8 @@
  
  </article>
  
+ 
+ 
  <article class="post-preview">
  <a href="/2020-12-22-what-is-a-merkle-tree/">
  <h2 class="post-title">What is a Merkle Tree?</h2>
@@ -442,6 +621,8 @@
  </div>
  
  </article>
+ 
+ 
  
  <article class="post-preview">
  <a href="/2020-12-12-raft-liveness-full-omission/">
@@ -475,6 +656,8 @@
  
  </article>
  
+ 
+ 
  <article class="post-preview">
  <a href="/2020-12-08-a-simple-and-succinct-zero-knowledge-proof/">
  <h2 class="post-title">A Simple and Succinct Zero Knowledge Proof</h2>
@@ -504,6 +687,8 @@
  </div>
  
  </article>
+ 
+ 
  
  <article class="post-preview">
  <a href="/2020-11-30-the-lock-commit-paradigm-multi-shot-and-mixed-faults/">
@@ -535,6 +720,8 @@
  
  </article>
  
+ 
+ 
  <article class="post-preview">
  <a href="/2020-11-29-the-lock-commit-paradigm/">
  <h2 class="post-title">The Lock-Commit Paradigm</h2>
@@ -565,6 +752,8 @@
  
  </article>
  
+ 
+ 
  <article class="post-preview">
  <a href="/2020-11-19-bft-protocol-forensics/">
  <h2 class="post-title">BFT Protocol Forensics</h2>
@@ -594,6 +783,8 @@
  </div>
  
  </article>
+ 
+ 
  
  <article class="post-preview">
  <a href="/2020-11-01-ebb-and-flow-protocols-a-resolution-of-the-availability-finality-dilemma/">
@@ -628,6 +819,8 @@ Guest post by Joachim Neu, Ertem Nusret Tas, and David Tse
  
  </article>
  
+ 
+ 
  <article class="post-preview">
  <a href="/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/">
  <h2 class="post-title">Living with Asynchrony: Bracha's Reliable Broadcast</h2>
@@ -658,159 +851,6 @@ Guest post by Joachim Neu, Ertem Nusret Tas, and David Tse
  
  </article>
  
- <article class="post-preview">
- <a href="/2020-09-14-broadcast-from-agreement-and-agreement-from-broadcast/">
- <h2 class="post-title">Broadcast from Agreement and Agreement from Broadcast</h2>
- 
- </a>
- <p class="post-meta">
- Posted on September 14, 2020, by <b>Ittai Abraham, Kartik Nayak</b>
- </p>
- 
- <div class="post-entry-container">
- 
- <div class="post-entry">
- In this post, we highlight the connection between Broadcast and Agreement in the synchronous model.
- Broadcast and Agreement: How can you implement one from the other?
- 
- 
- <a href="/2020-09-14-broadcast-from-agreement-and-agreement-from-broadcast/" class="post-read-more">[Read&nbsp;More]</a>
- 
- </div>
- </div>
- 
- 
- <div class="blog-tags">
- Tags:
- 
- <a href="/tags#consensus101">consensus101</a>
- 
- </div>
- 
- </article>
- 
- <article class="post-preview">
- <a href="/2020-09-13-synchronous-consensus-omission-faults/">
- <h2 class="post-title">Commit-Notify Paradigm for Synchronous Consensus with Omission Faults</h2>
- 
- </a>
- <p class="post-meta">
- Posted on September 13, 2020, by <b>Kartik Nayak, Ittai Abraham</b>
- </p>
- 
- <div class="post-entry-container">
- 
- <div class="post-entry">
- We continue our series of posts on State Machine Replication (SMR). In this post, we move from consensus under crash failures to consensus under omission failures. We still keep the synchrony assumption.
- 
- 
- <a href="/2020-09-13-synchronous-consensus-omission-faults/" class="post-read-more">[Read&nbsp;More]</a>
- 
- </div>
- </div>
- 
- 
- <div class="blog-tags">
- Tags:
- 
- <a href="/tags#consensus">consensus</a>
- 
- <a href="/tags#SMR">SMR</a>
- 
- </div>
- 
- </article>
- 
- <article class="post-preview">
- <a href="/2020-08-28-what-is-a-cryptographic-hash-function/">
- <h2 class="post-title">What is a Cryptographic Hash Function?</h2>
- 
- </a>
- <p class="post-meta">
- Posted on August 28, 2020, by <b>Alin Tomescu</b>
- </p>
- 
- <div class="post-entry-container">
- 
- <div class="post-entry">
- If you ever tried to understand Bitcoin, you’ve probably banged your head against the wall trying to understand what is a cryptographic hash function?
-The goal of this post is to:
- 
- 
- <a href="/2020-08-28-what-is-a-cryptographic-hash-function/" class="post-read-more">[Read&nbsp;More]</a>
- 
- </div>
- </div>
- 
- 
- <div class="blog-tags">
- Tags:
- 
- <a href="/tags#cryptography101">cryptography101</a>
- 
- </div>
- 
- </article>
- 
- <article class="post-preview">
- <a href="/2020-07-26-private-set-intersection-2/">
- <h2 class="post-title">Private Set Intersection #2</h2>
- 
- </a>
- <p class="post-meta">
- Posted on July 26, 2020, by <b>Avishay Yanai</b>
- </p>
- 
- <div class="post-entry-container">
- 
- <div class="post-entry">
- In the first post on Private Set Intersection, I presented the problem of Private Set Intersection, its applications and the simple protocol of [KMRS14], that allows Alice and Bob to learn the intersection of their sets with the aid of an untrusted third party Steve who is assumed to not collude with Alice or with Bob.
- 
- 
- <a href="/2020-07-26-private-set-intersection-2/" class="post-read-more">[Read&nbsp;More]</a>
- 
- </div>
- </div>
- 
- 
- <div class="blog-tags">
- Tags:
- 
- <a href="/tags#cryptography">cryptography</a>
- 
- </div>
- 
- </article>
- 
- <article class="post-preview">
- <a href="/2020-07-17-polynomial-secret-sharing-and-the-lagrange-basis/">
- <h2 class="post-title">Polynomial Secret Sharing and the Lagrange Basis</h2>
- 
- </a>
- <p class="post-meta">
- Posted on July 17, 2020, by <b>Ittai Abraham, Alin Tomescu</b>
- </p>
- 
- <div class="post-entry-container">
- 
- <div class="post-entry">
- In this post, we highlight an amazing result: Shamir’s secret sharing scheme. This is one of the most powerful uses of polynomials over a finite field in distributed computing. Intuitively, this scheme allows a $Dealer$ to commit to a secret $s$ by splitting it into shares distributed to $n$ parties. The secret is hidden and requires a threshold of $f+1$ parties in order to be reconstructed, where $f < n$....
- 
- 
- <a href="/2020-07-17-polynomial-secret-sharing-and-the-lagrange-basis/" class="post-read-more">[Read&nbsp;More]</a>
- 
- </div>
- </div>
- 
- 
- <div class="blog-tags">
- Tags:
- 
- <a href="/tags#cryptography101">cryptography101</a>
- 
- </div>
- 
- </article>
  
 </div>
 <ul class="pager main-pager">

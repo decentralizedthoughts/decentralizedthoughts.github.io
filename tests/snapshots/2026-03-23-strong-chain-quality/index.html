@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Strong Chain Quality</title>
+ 
+ 
+ 
+ 
+ <meta name="author" content="Ittai Abraham, Pranav Garimidi, Joachim Neu">
+ 
+ <meta name="description" content="Chain Quality (CQ) is a core blockchain property. Roughly speaking, it says: Owning $3\%$ of the stake gives you inclusion rights over valid inputs of your choice in roughly $3\%$ of the blockspace over time. For Nakamoto style chains, this is called Ideal CQ (see here). Chain quality was sufficient for early generations of blockchains that had low throughput, but modern blockchains have much higher bandwidth and can commit many...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Strong Chain Quality">
+ <meta property="og:description" content="Chain Quality (CQ) is a core blockchain property. Roughly speaking, it says: Owning $3\%$ of the stake gives you inclusion rights over valid inputs of your choice in roughly $3\%$ of the blockspace over time. For Nakamoto style chains, this is called Ideal CQ (see here). Chain quality was sufficient for early generations of blockchains that had low throughput, but modern blockchains have much higher bandwidth and can commit many...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham, Pranav Garimidi, Joachim Neu">
+ 
+ <meta property="og:article:published_time" content="2026-03-23T01:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2026-03-23-strong-chain-quality/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2026-03-23-strong-chain-quality/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Strong Chain Quality">
+ <meta property="twitter:description" content="Chain Quality (CQ) is a core blockchain property. Roughly speaking, it says: Owning $3\%$ of the stake gives you inclusion rights over valid inputs of your choice in roughly $3\%$ of the blockspace over time. For Nakamoto style chains, this is called Ideal CQ (see here). Chain quality was sufficient for early generations of blockchains that had low throughput, but modern blockchains have much higher bandwidth and can commit many...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" id="nav-search-link" href="#" title="Search the blog">
+ <span id="nav-search-icon" class="fa fa-search"></span>
+ <span id="nav-search-text">Search</span>
+ </a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+<div id="beautifuljekyll-search-overlay" data-search-json="/assets/data/searchcorpus.json" data-top-pages-json="/assets/data/top-pages.json" aria-hidden="true">
+ <div class="search-overlay-backdrop" data-search-close></div>
+ <div class="search-dialog" role="dialog" aria-modal="true" aria-labelledby="nav-search-heading">
+ <div class="search-dialog-header">
+ <p class="search-dialog-kicker">Search the archive</p>
+ <button id="nav-search-exit" type="button" title="Close search" aria-label="Close search">Close</button>
+ </div>
+ <label class="sr-only" id="nav-search-heading" for="nav-search-input">Search posts, authors, topics, and phrases</label>
+ <div class="search-input-shell">
+ <span class="fa fa-search" aria-hidden="true"></span>
+ <input type="text" id="nav-search-input" placeholder="Search posts, authors, topics, and phrases" autocomplete="off">
+ <span class="search-shortcut">/</span>
+ </div>
+ <p id="nav-search-status">Search by title, author, tag, or a phrase from the post.</p>
+ <div id="search-discovery">
+ <section class="search-discovery-group" aria-labelledby="search-popular-heading">
+ <p class="search-discovery-heading" id="search-popular-heading">Popular topics</p>
+ <div id="search-suggestions" aria-label="Popular topics"></div>
+ </section>
+ <section class="search-discovery-group" aria-labelledby="search-recent-heading">
+ <p class="search-discovery-heading" id="search-recent-heading">Top pages</p>
+ <div id="search-recent-posts"></div>
+ </section>
+ </div>
+ <ul id="search-results-container"></ul>
+ </div>
+</div>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Strong Chain Quality</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham, Pranav Garimidi, Joachim Neu</strong><br>
+ 
+ <span class="post-meta">Posted on March 23, 2026</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p><strong>Chain Quality (CQ)</strong> is a core blockchain property. Roughly speaking, it says:</p>
+<blockquote>
+ <p>Owning $3\%$ of the stake gives you inclusion rights over valid inputs of your choice in roughly $3\%$ of the blockspace <strong><em>over time</em></strong>.</p>
+</blockquote>
+<p>For Nakamoto style chains, this is called <em>Ideal CQ</em> (see <a href="https://eprint.iacr.org/2014/765.pdf">here</a>). Chain quality was sufficient for early generations of blockchains that had low throughput, but modern blockchains have much higher bandwidth and can commit many transactions within a single block. This motivates a stronger, more fine-grained notion that captures the division of blockspace inside each block, rather than only the fraction of blocks averaged over time.</p>
+<p>We call it <strong>Strong Chain Quality (SCQ)</strong>:</p>
+<blockquote>
+ <p>Owning $3\%$ of the stake guarantees inclusion of your valid inputs up to $3\%$ of the blockspace <strong><em>in every block</em></strong>.</p>
+</blockquote>
+<p>In essence, SCQ gives stakeholders the ability to have <em>virtual lanes</em> inside a high-throughput blockchain that guarantee transaction inclusion. Here, we review the origins of CQ and SCQ and explain why SCQ is so useful.</p>
+<p>A version of this post defining Strong Chain Quality appears on <a href="https://a16zcrypto.com/posts/article/strong-chain-quality-for-blockspace-every-block/">a16zcrypto.com</a> (also see more from a16z crypto Research <a href="https://a16zcrypto.com/posts/focus-areas/research/">here</a>). The version here includes additional academic references and technical details.</p>
+<h2 id="chain-quality-as-a-bft-validity-property">Chain Quality as a BFT Validity Property</h2>
+<p>BFT protocols must satisfy <a href="https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/">safety, liveness, and validity properties</a>. A protocol that always outputs 0 satisfies both agreement (safety) and termination (liveness), but is useless in the sense that it performs no meaningful decision or computation. What’s missing is <em>validity</em>. Modern blockchains typically require two critical validity properties:</p>
+<ol>
+ <li><a href="https://www.iacr.org/archive/crypto2001/21390524.pdf">External Validity</a>: Typically means there is a deterministic binary function $isValid(B, state)$ that outputs true if the proposed block $B$ is valid based on the current $state$ of the state machine.</li>
+ <li><a href="https://eprint.iacr.org/2014/765.pdf">Chain Quality</a>: In any sufficiently long segment of the chain after GST, the fraction of blocks proposed by honest parties is proportional to their fraction of the total stake.</li>
+</ol>
+<p>Most pre-blockchain BFT systems were based on a fixed-leader paradigm that implemented external validity but not chain quality. Why is chain quality important for blockchains?</p>
+<h2 id="chain-quality-for-blockchains">Chain Quality for blockchains</h2>
+<p>One of Bitcoin’s key innovations, now present in virtually every blockchain, is the introduction of an <strong>in-protocol reward mechanism</strong> for block proposers: newly minted tokens and transaction fees are granted to the party that successfully appends a block to the state machine. These rewards are specified in the state-transition function and reflected in the resulting system state.</p>
+<p>In traditional distributed computing, parties are split into <em>honest</em> and <em>malicious</em>. There is no need to reward honest parties for correct behavior; their honesty is assumed as part of the model. In the cryptoeconomic model, parties are modeled as <em>rational</em> actors, possibly with unknown utility functions, and the goal is to design incentives so that their profit-maximizing behavior aligns with the success of the protocol. Together with the in-protocol reward mechanism, this leads to the following idealized definition of Chain Quality:</p>
+<p><strong>Chain Quality (CQ)</strong>:</p>
+<blockquote>
+ <p>A coalition that holds $X\%$ of the total stake has, after GST, probability $X\%$ of being the proposer of each block that enters the chain.</p>
+</blockquote>
+<p>A chain that deviates from chain quality may allow coalitions to accumulate an outsized portion of the reward, hence disincentivizing honest behavior and threatening the security of the protocol.</p>
+<p>Many modern blockchains satisfy, or aim to satisfy, this property. Some notable challenges:</p>
+<ul>
+ <li><a href="https://webee.technion.ac.il/people/ittay/publications/btcProcFC.pdf">Eyal and Sirer, 2013</a> famously showed that Bitcoin does not satisfy ideal CQ, see Eyal’s post on <a href="https://decentralizedthoughts.github.io/2020-02-26-selfish-mining/">Blockchain Selfish Mining</a> and Remark 4 and the discussion of p. 6–7 in <a href="https://eprint.iacr.org/2014/765.pdf">the Bitcoin Backbone paper</a> for more. Also see this <a href="https://decentralizedthoughts.github.io/2022-03-07-colordag-from-always-almost-to-almost-always-50-percent-selfish-mining-resilience/">follow up post</a> for research efforts like Fruitchain and Colordag towards obtaining ideal CQ in the PoW setting.</li>
+ <li>Obtaining Chain Quality for linear chains where each leader speaks once poses additional challenges. See recent works on <a href="https://arxiv.org/abs/2205.11652">BG</a>, Monad’s <a href="https://arxiv.org/abs/2502.20692">tail forking resistance</a> and <a href="https://decentralizedthoughts.github.io/2025-09-27-carry-the-tail/">Carry</a>.</li>
+ <li>Chain Quality is also challenging in the context of Ethereum’s <a href="https://eth2book.info/latest/part2/consensus/lmd_ghost/">LMD GHOST</a> protocol (there, CQ issues are often called “reorgs”) in the <a href="https://decentralizedthoughts.github.io/2020-11-01-ebb-and-flow-protocols-a-resolution-of-the-availability-finality-dilemma/">ebb-and-flow model</a>. See <a href="https://eprint.iacr.org/2022/1171.pdf">Goldfish</a> for a recent survey of problems and the way to fix them.</li>
+</ul>
+<p>In contrast, most modern proof-of-stake blockchains implement stake-weighted randomized leader rotation on PBFT-style protocols and therefore satisfy chain quality in a direct way.</p>
+<h2 id="strong-chain-quality">Strong Chain Quality</h2>
+<p>When blockspace is abundant, there is no need to give a single proposer monopoly power over the content of the entire block. Instead, blockspace can be divided among multiple parties for the same block. The following cryptoeconomic definition of Strong Chain Quality captures this idea:</p>
+<p><strong>Strong Chain Quality</strong>:</p>
+<blockquote>
+ <p>A coalition that holds $X\%$ of the total stake has, after GST, guaranteed inclusion of its valid inputs up to $X\%$ of the blockspace <em>in each block</em>.</p>
+</blockquote>
+<p>This idealized property implicitly leads to the abstraction of <em>virtual lanes</em>, where coalitions effectively control a dedicated fraction of blockspace within each block. From an economic perspective, owning a virtual lane corresponds to holding a productive asset that may yield fees and MEV revenue. Competition among external entities to acquire and maintain such lanes, through stake accumulation, creates sustained demand for the underlying L1 token. The greater the economic value that a given lane can generate, the stronger the incentives to compete for stake, and the more value accrues to the L1 stake that governs access to that blockspace.</p>
+<p>This abstraction allows for stronger notions of censorship resistance that are captured by the SCQ validity property of the protocol.</p>
+<h2 id="strong-chain-quality-and-censorship-resistance">Strong Chain Quality and Censorship Resistance</h2>
+<p><a href="https://arxiv.org/abs/2301.13321">Recent work</a> highlights the importance of censorship-resistant protocols that include all inputs from honest parties immediately rather than only eventually. SCQ can be viewed as an extension of this property to a setting with fixed block-capacity constraints. In practice, no protocol can satisfy the ideal notion of censorship resistance if there is more demand for transaction inclusion than available blockspace. SCQ addresses this limitation by not requiring that all honest transactions always be included, but rather giving all staked nodes a budget under which they are guaranteed transaction inclusion.</p>
+<p>The <a href="https://eprint.iacr.org/2025/1772.pdf">MCP protocol</a> was proposed as a gadget on top of existing PBFT-style consensus protocols to make them censorship resistant. This protocol additionally satisfies SCQ by assigning proposers blockspace pro rata based on stake (cf. Section 5.3 of <a href="https://eprint.iacr.org/2025/1772.pdf">MCP</a>). Existing <a href="https://decentralizedthoughts.github.io/2022-06-28-DAG-meets-BFT/">DAG-based BFT</a> protocols provide a way to implement a <a href="https://decentralizedthoughts.github.io/2025-08-08-DAGs/">multi-writer mempool</a> that also provides some level of censorship resistance. Standard implementations of these protocols fall short of strictly achieving SCQ because they allow leaders to selectively delay subsets of transactions. However, slight modifications to these protocols can allow them to regain SCQ (see recent results <a href="https://eprint.iacr.org/2026/126.pdf">here</a> and <a href="https://www.arxiv.org/pdf/2602.02892">here</a>). A related topic is <a href="https://ethresear.ch/t/fork-choice-enforced-inclusion-lists-focil-a-simple-committee-based-inclusion-list-proposal/19870">forced transaction inclusion</a> for reducing censorship (also see <a href="https://eips.ethereum.org/EIPS/eip-7805">EIP-7805</a>).</p>
+<p><a href="https://eprint.iacr.org/2025/1772.pdf">MCP</a> additionally shows how to obtain a stronger <em>hiding property</em> that essentially allows stakeholders to create <em>virtual private lanes</em> whose content is only revealed when the whole block is made public. We will expand on this aspect in future posts.</p>
+<h2 id="strong-chain-quality-requires-two-more-rounds-not-just-one">Strong Chain Quality requires two more rounds, not just one</h2>
+<p>Recent work has shown that Strong Chain Quality and censorship resistance <a href="https://eprint.iacr.org/2025/2136">require two more rounds</a> (so the good case takes $5$ rounds for $3f+1$ and $4$ rounds for $5f+1$ BFT). We will expand on this result in later posts.</p>
+<p>Obtaining SCQ post-GST requires guaranteeing that the proposer cannot censor the inputs of the stakeholders. This is achieved via a two-round protocol with two small changes to almost any BFT protocol:</p>
+<ul>
+ <li><strong>Round 1</strong>: Each party sends its valid input to all parties.</li>
+ <li><strong>Round 2</strong>: Each party adds every unique valid input it received to its <em>inclusion list</em>, signs the list, and sends it to the leader.</li>
+ <li><strong>BFT Proposal</strong>: The leader proposes a block.</li>
+ <li><strong>BFT vote</strong>: A party only votes for a block if all the values in its inclusion list appear in the block and the block contains at most one valid input per party.</li>
+</ul>
+<p>It is easy to check that this protocol sketch can be converted into a full protocol that satisfies post-GST SCQ, provides censorship resistance, and is live for an honest leader. Adding pre-GST SCQ would also require waiting for a quorum of values or lists in each round. See <a href="https://decentralizedthoughts.github.io/2025-12-12-dpaas/">DPasS</a> for how this protocol is used for censorship resistance in the context of PBS. We will expand on this protocol and its generalizations in later posts.</p>
+<h2 id="strong-chain-quality-and-ordering">Strong Chain Quality and ordering</h2>
+<p>While Strong Chain Quality dictates the fraction of blockspace that a coalition can control, it does not fully specify how transactions are <em>ordered</em>. SCQ can be interpreted as reserving space in a set for every staked node with no guarantees on how the transactions in that set are ordered. This opens a rich area of research into the design of transaction ordering mechanisms that can further enhance fairness and efficiency within the blockchain ecosystem. One promising approach is to order transactions according to priority fees. We will expand on the nuances of ordering in future posts.</p>
+<h2 id="strong-chain-quality-and-last-look">Strong Chain Quality and Last Look</h2>
+<p>Strong Chain Quality governs inclusion, but it does not by itself remove the “last look” advantage of a proposer, which may still commit to its own content later than honest parties or abort that content at the last minute. We will expand on this in later posts.</p>
+<hr />
+<p>Your thoughts and comments on <a href="https://x.com/ittaia/status/2036191286739226758?s=20">X</a>.</p>
+<hr />
+<h1 id="additional-notes">Additional notes</h1>
+<h2 id="strong-chain-quality-vs-chain-quality">Strong Chain Quality vs Chain Quality</h2>
+<p>Chain Quality is a long horizon proportionality property: over time, a coalition that holds $X\%$ of the stake obtains roughly $X\%$ of the blocks. Strong Chain Quality is an intra block proportionality property: in every block, a coalition that holds $X\%$ of the stake is guaranteed inclusion of its valid inputs up to $X\%$ of the available blockspace.</p>
+<p>Let $B$ be the fraction of the block that is allocated to a coalition that holds $X\%$ of the stake. Both properties imply that $E[B\mid CQ] = E[B\mid SCQ] = X$, but observe that $VAR[B\mid SCQ] = 0$ while $VAR[B\mid CQ] = X(1-X) \gg 0$. This reduced uncertainty could lead to a competitive advantage in markets where consistency in winning races is critical.</p>
+<h2 id="chain-quality-in-asynchrony">Chain Quality in Asynchrony</h2>
+<p>Chain Quality often appears in <em>asynchronous</em> BFT protocols, where random leader election is required for liveness. The asynchronous chain quality in <a href="https://arxiv.org/pdf/1811.01332.pdf">VABA</a> protocols says that the probability the decided block is proposed by an honest party is proportional to $(h-f)/(n-f)$, where $h = n-f$ is the number of honest parties. With optimal resilience $n = 3f + 1$, this is roughly one half. This is shown to be <a href="https://arxiv.org/pdf/2011.04719.pdf">tight in asynchrony</a>. The Chain Quality definition <a href="#chain-quality-as-a-bft-validity-property">in the validity section above</a> can be viewed as a strengthening of asynchronous chain quality to partial synchrony.</p>
+<h2 id="strong-chain-quality-and-agreement-on-a-core-set">Strong Chain Quality and Agreement on a Core Set</h2>
+<p>While traditional agreement protocols focus on a single value, many applications in asynchrony require agreement on a set of values. The canonical example is asynchronous secure multiparty computation, where parties must agree on the set of inputs to be used in the computation. In this context, we can view <em>Strong Chain Quality</em> as a property that guarantees that the fraction of values from honest parties is proportional to their fraction of the stake. This is indeed the standard definition of validity in the context of <a href="https://decentralizedthoughts.github.io/2023-07-22-agreeemnt-on-a-core-set/">Agreement on a Core Set</a> (ACS).</p>
+<p>This leads to a natural strengthening of Strong Chain Quality in the context of ACS to partial synchrony, where $h$ is the number of honest parties and $f = n - h$ is the number of Byzantine parties:</p>
+<p><strong>Strong Chain Quality for ACS in partial synchrony</strong>:</p>
+<blockquote>
+ <p>Before GST, at least $h-f$ of the honest parties are included in the output set. After GST, all $h$ honest parties are included in the output set.</p>
+</blockquote>
+<p>Note that even getting at least $h - f$ honest parties in the output set is a type of censorship resistance property: the adversary cannot censor more than $f$ honest parties.</p>
+<p>This is a stronger property than the standard definition of validity for ACS. After GST, the adversary cannot censor any honest party.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Strong+Chain+Quality&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2026-03-23-strong-chain-quality%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2026-03-07-simultaneous-agreement/" data-toggle="tooltip" data-placement="top" title="Synchronized Clocks, Fixed View Schedules, and Simultaneous Agreement">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2026-04-23-deconstructing-simplex/" data-toggle="tooltip" data-placement="top" title="Deconstructing Simplex">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ 
+ Decentralized Thinkers
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

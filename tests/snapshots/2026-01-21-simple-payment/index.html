@@ -221,7 +221,7 @@
 <h3 id="system-model-and-intuition">System Model and Intuition</h3>
 <p>Tokens are the coins of the system. Each token represents exactly one unit of value and consists of a fresh public key together with a bank signature on that key. Ownership of a token is defined by knowledge of the corresponding secret key.</p>
 <p>Each token is associated with a one-time signing key pair. When a token is spent, its key is permanently invalidated and never reused. The recipient receives a completely new token associated with a fresh public key.</p>
-<p>The bank does not maintain accounts or balances. Its only persistent state is a set of public keys that have already been spent, called the nullifier set. Spending a token means proving ownership of its key, adding that key to the nullifier set, and issuing a new signed key for the recipient.</p>
+<p>The bank does not maintain accounts or balances. Its only persistent state is a set of public keys that have already been spent, called the <strong>nullifier set</strong>. Spending a token means proving ownership of its key, adding that key to the nullifier set, and issuing a new signed key for the recipient.</p>
 <p>Formally, the bank maintains a set $N$ of spent public keys. Initially $N$ is empty.</p>
 <p>A token $T$ is a pair $(P, \sigma)$ where $P$ is a public key and $\sigma = \textsf{Sign}(s, P)$ is a digital signature of $P$ under the bank’s secret signing key $s$. So $\textsf{Verify}(PK, P,\sigma)=1$.</p>
 <p>A token $T=(P,\sigma)$ is <em>unspent</em> relative to a nullifier set $N$ if $P \notin N$.</p>
@@ -337,6 +337,7 @@
 <ol>
  <li>A similar system is used by <a href="https://security.apple.com/blog/private-cloud-compute/">Apple Private Cloud Compute</a> to implement single use credentials, that allows users to authorize valid requests without linking them to their user identifier. The Apple system uses <a href="https://www.rfc-editor.org/rfc/rfc9474.html">RSA blind signatures</a> instead of BLS.</li>
 </ol>
+<p>Your thoughts and comments on <a href="https://x.com/ittaia/status/2035438793428267109?s=20">X</a></p>
  </div>
  
  

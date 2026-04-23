@@ -221,7 +221,7 @@
 <p>The high level idea:</p>
 <ol>
  <li>
- <p>First, we force the leader to send just one value: we do this by requiring each party to <em>echo</em> just one message and wait for $n-f$ echo messages before <em>voting</em> for it. Since any two sets of $n-f$ must intersect by at least $f+1$ parties, it cannot be that two different non-faulty parties echo different values.</p>
+ <p>First, we force the leader to send just one value: we do this by requiring each party to <em>echo</em> just one message and wait for $n-f$ echo messages before <em>voting</em> for it. Since any two sets of $n-f$ must intersect by at least $f+1$ parties, it cannot be that two different non-faulty parties vote different values.</p>
  </li>
  <li>
  <p>Second, we make sure that if a non-faulty <em>delivers</em> a value, then all non-faulty will. We do this by requiring a party to send just one vote after seeing either $n-f$ echo messages <em>or</em> after seeing $f+1$ votes. So if any party sees $n-f$ votes then all non-faulty will see $n-2f \geq f+1$ votes.</p>
@@ -282,7 +282,7 @@
  on receiving &lt;echo, v&gt; from n-f distinct parties:
  deliver v
 </code></pre></div></div>
-<p><strong>Acknowledgment.</strong> We would like to thank <a href="https://twitter.com/VfRy8lQUeL9t4y6">hemengjie</a> for fixing an error in the exercise.</p>
+<p><strong>Acknowledgment.</strong> We would like to thank <a href="https://twitter.com/VfRy8lQUeL9t4y6">hemengjie</a> and <a href="https://x.com/samlafer">samlafer</a> for fixing errors and providing valuable feedback.</p>
 <p>Please answer/discuss/comment/ask on <a href="https://twitter.com/ittaia/status/1307772031954546697?s=20">Twitter</a>.</p>
  </div>
  

@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Deconstructing Simplex</title>
+ 
+ 
+ 
+ 
+ <meta name="author" content="Ittai Abraham">
+ 
+ <meta name="description" content="In a previous post we decomposed PBFT into an outer shell and an inner shell consisting of two building blocks: Locked-Broadcast (LB) and Recover-Max-Lock. Here we similarly decompose Simplex into an outer shell and an inner shell consisting of a single building block: Graded-Broadcast (GB). The model is partial synchrony with $f&amp;lt;n/3$ Byzantine failures, and the goal is single-shot provable consensus with external validity. Single-shot Provable Consensus with External Validity...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Deconstructing Simplex">
+ <meta property="og:description" content="In a previous post we decomposed PBFT into an outer shell and an inner shell consisting of two building blocks: Locked-Broadcast (LB) and Recover-Max-Lock. Here we similarly decompose Simplex into an outer shell and an inner shell consisting of a single building block: Graded-Broadcast (GB). The model is partial synchrony with $f&amp;lt;n/3$ Byzantine failures, and the goal is single-shot provable consensus with external validity. Single-shot Provable Consensus with External Validity...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham">
+ 
+ <meta property="og:article:published_time" content="2026-04-23T05:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2026-04-23-deconstructing-simplex/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2026-04-23-deconstructing-simplex/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Deconstructing Simplex">
+ <meta property="twitter:description" content="In a previous post we decomposed PBFT into an outer shell and an inner shell consisting of two building blocks: Locked-Broadcast (LB) and Recover-Max-Lock. Here we similarly decompose Simplex into an outer shell and an inner shell consisting of a single building block: Graded-Broadcast (GB). The model is partial synchrony with $f&amp;lt;n/3$ Byzantine failures, and the goal is single-shot provable consensus with external validity. Single-shot Provable Consensus with External Validity...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" id="nav-search-link" href="#" title="Search the blog">
+ <span id="nav-search-icon" class="fa fa-search"></span>
+ <span id="nav-search-text">Search</span>
+ </a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+<div id="beautifuljekyll-search-overlay" data-search-json="/assets/data/searchcorpus.json" data-top-pages-json="/assets/data/top-pages.json" aria-hidden="true">
+ <div class="search-overlay-backdrop" data-search-close></div>
+ <div class="search-dialog" role="dialog" aria-modal="true" aria-labelledby="nav-search-heading">
+ <div class="search-dialog-header">
+ <p class="search-dialog-kicker">Search the archive</p>
+ <button id="nav-search-exit" type="button" title="Close search" aria-label="Close search">Close</button>
+ </div>
+ <label class="sr-only" id="nav-search-heading" for="nav-search-input">Search posts, authors, topics, and phrases</label>
+ <div class="search-input-shell">
+ <span class="fa fa-search" aria-hidden="true"></span>
+ <input type="text" id="nav-search-input" placeholder="Search posts, authors, topics, and phrases" autocomplete="off">
+ <span class="search-shortcut">/</span>
+ </div>
+ <p id="nav-search-status">Search by title, author, tag, or a phrase from the post.</p>
+ <div id="search-discovery">
+ <section class="search-discovery-group" aria-labelledby="search-popular-heading">
+ <p class="search-discovery-heading" id="search-popular-heading">Popular topics</p>
+ <div id="search-suggestions" aria-label="Popular topics"></div>
+ </section>
+ <section class="search-discovery-group" aria-labelledby="search-recent-heading">
+ <p class="search-discovery-heading" id="search-recent-heading">Top pages</p>
+ <div id="search-recent-posts"></div>
+ </section>
+ </div>
+ <ul id="search-results-container"></ul>
+ </div>
+</div>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Deconstructing Simplex</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham</strong><br>
+ 
+ <span class="post-meta">Posted on April 23, 2026</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>In a <a href="https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/">previous post</a> we decomposed PBFT into an outer shell and an inner shell consisting of two building blocks: <em>Locked-Broadcast</em> (LB) and <em>Recover-Max-Lock</em>. Here we similarly decompose <a href="https://decentralizedthoughts.github.io/2025-06-18-simplex/">Simplex</a> into an outer shell and an inner shell consisting of a single building block: <strong>Graded-Broadcast</strong> (GB).</p>
+<p>The model is <a href="https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/">partial synchrony</a> with $f&lt;n/3$ <a href="https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/">Byzantine failures</a>, and the goal is <em>single-shot provable consensus with external validity</em>.</p>
+<h2 id="single-shot-provable-consensus-with-external-validity">Single-shot Provable Consensus with External Validity</h2>
+<p>There is some <em>External Validity</em> Boolean function ($EV_{\text{consensus}}$) that is provided to each party. $EV_{\text{consensus}}$ takes as input a value $val$ and a proof $proof$. If $EV_{\text{consensus}}(val, proof)=1$ we say that $val$ is <em>externally valid</em>. A simple example of external validity is a check that the value is signed by the client that controls the asset. External validity is based on the framework of <a href="https://www.iacr.org/archive/crypto2001/21390524.pdf">Cachin, Kursawe, Petzold, and Shoup, 2001</a>.</p>
+<p>In this setting, each party has one or more externally valid input values. There is a Boolean function to verify a commit certificate, $verify(cert)$. We say a commit certificate is <strong>valid</strong> if $verify(cert)=true$.</p>
+<p>The protocol has the following three properties:</p>
+<p><strong>Liveness</strong>: all honest parties eventually hold a valid commit certificate.</p>
+<p><strong>External Validity</strong>: the adversary cannot form a valid commit certificate whose value is not externally valid.</p>
+<p><strong>Provable Agreement</strong>: the adversary cannot form two valid commit certificates with different values.</p>
+<h2 id="deconstructing-simplex-into-an-inner-and-outer-protocol">Deconstructing Simplex into an Inner and Outer Protocol</h2>
+<p>The outer protocol:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>For view v, the primary of view v with input (val, val-proof):
+ if a certSet is not empty,
+ let p in certSet be the certificate of highest view w
+ let C be the set of skip certificates from skipSet for all views w &lt; y &lt; v
+ Graded-Broadcast (v, p.val, (p,C))
+ otherwise
+ let C be the set of skip certificates from skipSet for all views y &lt; v
+ Graded-Broadcast (v, val, (val-proof, C))
+</code></pre></div></div>
+<p>Using the following event handlers (certificates can arrive from Graded-Broadcast or forwarded):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>On first skip certificate for view v, add it to skipSet, and move to view v+1 (if not there yet)
+On first certificate for view v, add it to certSet, and move to view v+1 (if not there yet)
+On first strong certificate, decide and forward it
+</code></pre></div></div>
+<p>The <strong>Simplex voting rule</strong> is the external-validity function passed to Graded-Broadcast:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>For view v:
+ if receive (v, p.val, (p,C)) check that p is a valid certificate
+ and that C contains a valid skip certificate for each view p.view &lt; y &lt; v
+ if receive (v, val, (val-proof, C)) check that val-proof is a proof that val is valid
+ and that C contains a valid skip certificate for each view y &lt; v
+</code></pre></div></div>
+<p>In words, if the primary has a certificate, it proposes the value of the certificate together with skip certificates for all views between that certificate and the current view. If there are no certificates, it uses its own input together with skip certificates for all lower views.</p>
+<p>Intuitively, since a skip for view $y$ is a proof that no commit happened in view $y$, showing all the relevant skips proves that if any value was previously committed, then the proposed value must be that value.</p>
+<p>All that remains is to define the inner protocol <em>Graded-Broadcast</em>.</p>
+<h2 id="graded-broadcast">Graded-Broadcast</h2>
+<p>Graded-Broadcast is a non-trivial extension of classic (authenticated) <a href="https://decentralizedthoughts.github.io/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/">Reliable Broadcast</a> (with external validity) to partial synchrony. Recall that authenticated Reliable Broadcast with external validity provides <em>uniqueness</em>: all valid certificates have the same value; <em>totality</em>: if any honest party delivers a certificate then eventually all honest parties deliver it; <em>external validity</em>: if a certificate is valid then its value is externally valid; and <em>validity</em>: if the sender is honest then it obtains a certificate whose value is its input.</p>
+<p>An instance of Graded-Broadcast has a designated sender and an instance tag $v$. During the instance, a party may deliver three kinds of certificates:</p>
+<ol>
+ <li>a <strong>regular certificate</strong> for some value $x$ and tag $v$;</li>
+ <li>a <strong>strong certificate</strong> for some value $x$ and tag $v$; or</li>
+ <li>a <strong>skip certificate</strong> with tag $v$.</li>
+</ol>
+<p>A party may deliver one certificate and later deliver another, but delivering one certificate does not imply that any additional certificate will ever be delivered. When a party delivers a certificate, it does not yet know whether this will be the only certificate it ever delivers in that instance. In the outer protocol, a regular certificate plays the role of a certificate, a strong certificate plays the role of a commit certificate, and a skip certificate serves as proof that no commit certificate was formed in that view.</p>
+<p>The intended intuition is that Graded-Broadcast is to partial synchrony what gradecast is to synchrony. A strong certificate has grade 2, a regular certificate has grade 1, and a skip certificate has grade 0. Relative to Reliable Broadcast, the main change is that we strengthen liveness and weaken validity: unlike Reliable Broadcast, Graded-Broadcast always terminates by eventually delivering at least one certificate, but when the sender is honest and the network is still asynchronous, honest parties may deliver a skip certificate or a regular certificate instead of a strong certificate.</p>
+<p>Here are the properties of Graded-Broadcast:</p>
+<ol>
+ <li><strong>Liveness</strong>: At least one certificate is eventually delivered. However, unlike Reliable Broadcast, in Graded-Broadcast a party may asynchronously deliver more than one certificate. Moreover, after GST, all honest parties deliver their first certificate within $\Delta$ time of each other.</li>
+ <li><strong>Uniqueness</strong>: the adversary cannot produce two valid certificates with the same tag, each of which is either a regular certificate or a strong certificate, with different values.</li>
+ <li><strong>Totality</strong>: if any honest party delivers a certificate (strong, regular, or skip), then eventually all honest parties deliver it.</li>
+ <li><strong>Grade Safety</strong>: the adversary cannot produce both a valid strong certificate and a valid skip certificate with the same tag.</li>
+ <li><strong>External Validity</strong>: the adversary cannot produce a valid regular certificate or a valid strong certificate whose value is not externally valid.</li>
+ <li><strong>Strong Validity</strong>: if the sender is honest, $GST=0$, and all honest parties start within $\Delta$ time of each other, then all honest parties eventually deliver a strong certificate whose value is the sender’s input.</li>
+</ol>
+<p>The three new properties are liveness, grade safety, and strong validity. Liveness is what allows the outer protocol to always move on. Strong validity is the good-case guarantee that an honest sender under synchrony causes all honest parties to deliver grade 2. Grade safety is the key separation property: once grade 2 exists, grade 0 cannot.</p>
+<p>In particular, Uniqueness and Grade Safety together imply that if an honest party delivers a strong certificate for some value $x$, then the first non-skip certificate delivered by any honest party in that same instance also has value $x$.</p>
+<h3 id="implementing-graded-broadcast">Implementing Graded-Broadcast</h3>
+<p>We now extract Graded-Broadcast from the Simplex protocol of the <a href="https://decentralizedthoughts.github.io/2025-11-15-simplex-from-benign/">previous post</a>. In an instance with tag $v$, the designated sender has input <code class="language-plaintext highlighter-rouge">(x, proof)</code>. A proposal <code class="language-plaintext highlighter-rouge">&lt;Propose, v, x, proof&gt;</code> is <em>valid</em> if it passes the Simplex voting rule, which is the external-validity function supplied by the outer shell.</p>
+<p>In this implementation, a <strong>regular certificate</strong> for $x$ with tag $v$ consists of:</p>
+<ol>
+ <li>a valid proposal <code class="language-plaintext highlighter-rouge">&lt;Propose, v, x, proof&gt;</code> from the sender; and</li>
+ <li>$n-f$ distinct <code class="language-plaintext highlighter-rouge">&lt;Vote, v, x&gt;</code> messages.</li>
+</ol>
+<p>A <strong>strong certificate</strong> for $x$ with tag $v$ consists of:</p>
+<ol>
+ <li>a valid proposal <code class="language-plaintext highlighter-rouge">&lt;Propose, v, x, proof&gt;</code> from the sender; and</li>
+ <li>$n-f$ distinct <code class="language-plaintext highlighter-rouge">&lt;Final, v, x&gt;</code> messages.</li>
+</ol>
+<p>A <strong>skip certificate</strong> with tag $v$ consists of $n-f$ distinct <code class="language-plaintext highlighter-rouge">&lt;Vote, v, ⊥&gt;</code> messages.</p>
+<p>When a party forwards a certificate, it forwards the bundled signed messages that make up the certificate.</p>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Graded-Broadcast with tag v and designated sender Sender(v)
+and sender input (x, proof):
+1. Upon entering the instance:
+ Start a local timer T_v
+ Sender(v) sends &lt;Propose, v, x, proof&gt;
+2. Upon receiving the first valid &lt;Propose, v, x, proof&gt; from Sender(v):
+ Send &lt;Vote, v, x&gt;
+3. Upon receiving a valid regular certificate rc for x for the first time:
+ Deliver rc
+ Send rc to all
+ If T_v &lt; 3Δ:
+ Send &lt;Final, v, x&gt;
+4. Upon T_v = 3Δ and not yet sent Final:
+ Send &lt;Vote, v, ⊥&gt;
+5. Upon receiving a valid skip certificate sc for the first time:
+ Deliver sc
+ Send sc to all
+6. Upon receiving a valid strong certificate sc for x for the first time:
+ Deliver sc
+ Send sc to all
+</code></pre></div></div>
+<h3 id="proving-the-implementation">Proving the Implementation</h3>
+<p>We now prove that the implementation above satisfies the six Graded-Broadcast properties.</p>
+<h3 id="liveness">Liveness</h3>
+<p>If some honest party sends <code class="language-plaintext highlighter-rouge">&lt;Final, v, x&gt;</code>, then all honest parties will receive a regular certificate.</p>
+<p>Otherwise, no honest party sends <code class="language-plaintext highlighter-rouge">&lt;Final, v, x&gt;</code>. Then every honest party reaches time $T_v = 3\Delta$ and sends <code class="language-plaintext highlighter-rouge">&lt;Vote, v, ⊥&gt;</code>. Hence every honest party will see a skip certificate. Clearly after GST the gap is at most $\Delta$.</p>
+<h3 id="uniqueness">Uniqueness</h3>
+<p>Since a regular certificate requires $n-f$ <code class="language-plaintext highlighter-rouge">Vote</code> messages, no conflicting regular certificates can form. This implies no conflicting strong certificates can form.</p>
+<h3 id="totality">Totality</h3>
+<p>Follows from the fact that certificates are forwarded.</p>
+<h3 id="grade-safety">Grade Safety</h3>
+<p>Suppose for contradiction that the adversary produces both a valid strong certificate for $x$ and a valid skip certificate with tag $v$. Their two sets of $n-f$ messages intersect in some honest party.</p>
+<p>But an honest party never sends both <code class="language-plaintext highlighter-rouge">&lt;Final, v, x&gt;</code> and <code class="language-plaintext highlighter-rouge">&lt;Vote, v, ⊥&gt;</code>: it sends <code class="language-plaintext highlighter-rouge">&lt;Vote, v, ⊥&gt;</code> only if it has not yet sent <code class="language-plaintext highlighter-rouge">Final</code>. This is a contradiction.</p>
+<h3 id="external-validity">External Validity</h3>
+<p>Suppose the adversary produces a valid regular certificate for $x$. Among its $n-f$ votes, at least $n-2f \geq 1$ are from honest parties. An honest party sends <code class="language-plaintext highlighter-rouge">&lt;Vote, v, x&gt;</code> only after checking that the proposal <code class="language-plaintext highlighter-rouge">&lt;Propose, v, x, proof&gt;</code> is valid according to the Simplex voting rule. Therefore $x$ is externally valid.</p>
+<p>A valid strong certificate implies a valid regular certificate for the same value, as shown in the proof of Uniqueness. So the same argument applies to strong certificates as well.</p>
+<h3 id="strong-validity">Strong Validity</h3>
+<p>With $GST=0$, the honest sender broadcasts at time $t_s$; all honest parties start by $t_s + \Delta$ and receive the proposal by $t_s + \Delta$. By $t_s + 2\Delta$, every honest party has $n-f$ votes and delivers the regular certificate. Each honest party’s timer started no earlier than $t_s - \Delta$, so it fires no earlier than $t_s + 2\Delta$, strictly later because parties start <em>strictly</em> within $\Delta$ of each other. Thus every honest party delivers the regular certificate with $T_v &lt; 3\Delta$, sends <code class="language-plaintext highlighter-rouge">&lt;Final, v, x&gt;</code>, and by $t_s + 3\Delta$ delivers a strong certificate for $x$.</p>
+<h2 id="proving-the-outer-protocol">Proving the Outer Protocol</h2>
+<p>We now prove that the outer protocol satisfies the three provable consensus properties above. The proof uses only the fact that in view $v$ the protocol runs Graded-Broadcast with tag $v$ and with the Simplex voting rule as its external-validity function, together with the six properties of Graded-Broadcast.</p>
+<h3 id="claim-1-provable-agreement">Claim 1 (provable agreement)</h3>
+<p>Let $k$ be the first view with a valid commit certificate for value $x$. We show by induction that any honest party accepting a proposal in any view $v &gt; k$ accepts only $x$.</p>
+<p><em>Grade Safety</em> implies no valid skip certificate with tag $k$; <em>Uniqueness</em> implies every valid certificate with tag $k$ has value $x$. A fresh proposal in any view $v &gt; k$ requires a skip certificate for all views $y &lt; v$, which includes tag $k$: impossible. So any accepted proposal uses a certificate from some view $w &lt; v$; since $w &lt; k$ also requires a skip certificate for tag $k$, we have $w \geq k$. If $w = k$, <em>Uniqueness</em> gives value $x$; if $w &gt; k$, the induction hypothesis gives value $x$.</p>
+<p>Provable Agreement follows: any later commit certificate contains an honest <code class="language-plaintext highlighter-rouge">Final</code> sender, who voted only after accepting a proposal, hence for value $x$.</p>
+<h3 id="external-validity-1">External Validity</h3>
+<p>Any valid commit certificate is a valid strong certificate of some Graded-Broadcast instance. By the <em>External Validity</em> property of Graded-Broadcast, its value must be externally valid.</p>
+<h3 id="claim-2-liveness">Claim 2 (liveness)</h3>
+<p>All honest parties eventually hold a valid commit certificate.</p>
+<p>If any honest party delivers a strong certificate, <em>Totality</em> propagates it to all. Otherwise, consider the first post-GST view $v^+$ with an honest primary that starts after all earlier certificates have propagated. By the $\Delta$-gap part of <em>Liveness</em>, all honest parties enter $v^+$ within $\Delta$ of each other, satisfying <em>Strong Validity</em>’s premise.</p>
+<p>By <em>Liveness</em>, every earlier view delivered a certificate or skip certificate. The primary’s highest certificate from view $w$ (if any) is accompanied by skip certificates for all views $w &lt; y &lt; v^+$; if there is no certificate, skip certificates cover all views $y &lt; v^+$. In either case the proposal satisfies the Simplex voting rule at every honest party, so by <em>Strong Validity</em> all honest parties deliver a strong certificate in view $v^+$.</p>
+<p>Finally, since all honest parties start within $\Delta$ of each other, then even if the honest proposer starts $\Delta$ late, all honest parties will hold a strong certificate before their $3\Delta$ timer expires.</p>
+<h2 id="notes">Notes</h2>
+<p>There are multiple advantages for a modular decomposition of Simplex both in practice and in theory. In follow up posts we will show how to use this decomposition to obtain new protocols.</p>
+<p>How does GB differ from PBFT’s Locked-Broadcast (LB)? First note that in LB there is no notion of a skip certificate, just a lock certificate (similar to a certificate in GB). In both protocols the goal is to prove that the lock/certificate is safe in the sense that there is no higher view in which there could have been a commit:</p>
+<ol>
+ <li>In Simplex this is done by showing a skip certificate for every higher view.</li>
+ <li>For PBFT, this is done by showing the $n-f$ highest locks that are not higher than the proposal.</li>
+</ol>
+<h2 id="acknowledgments">Acknowledgments</h2>
+<p>Many thanks to Kartik and Joachim for insightful comments and suggestions.</p>
+<p>Your thoughts on <a href="https://x.com/home">X</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Deconstructing+Simplex&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2026-04-23-deconstructing-simplex%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2026-03-23-strong-chain-quality/" data-toggle="tooltip" data-placement="top" title="Strong Chain Quality">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2026-04-23-latency-of-censorship-resistance/" data-toggle="tooltip" data-placement="top" title="Latency cost of censorship resistance">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ 
+ Decentralized Thinkers
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

@@ -9,6 +9,77 @@
  <atom:link href="https://decentralizedthoughts.github.io/feed.xml" rel="self" type="application/rss+xml" />
  
  
+ 
+ <item>
+ <title>Latency cost of censorship resistance</title>
+ 
+ <dc:creator><![CDATA[ Ittai Abraham, Yuval Efron, and Ling Ren ]]></dc:creator>
+ 
+ <description>
+ 
+ This post covers our new lower bound on the latency cost of censorship resistance. In a traditional BFT protocol, the leader has two roles: (1) It constructs (and therefore holds) the input; and (2) It proposes the input. Many BFT protocols optimize for the good case when the leader is honest. For partial synchrony, with $n \leq 5f-2$ parties, the good-case latency is 3 rounds. The leader’s monopoly over both...
+ </description>
+ <pubDate>Thu, 23 Apr 2026 06:00:00 -0400</pubDate>
+ <link>https://decentralizedthoughts.github.io/2026-04-23-latency-of-censorship-resistance/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-04-23-latency-of-censorship-resistance/</guid>
+ </item>
+ 
+ <item>
+ <title>Deconstructing Simplex</title>
+ 
+ <dc:creator><![CDATA[ Ittai Abraham ]]></dc:creator>
+ 
+ <description>
+ 
+ In a previous post we decomposed PBFT into an outer shell and an inner shell consisting of two building blocks: Locked-Broadcast (LB) and Recover-Max-Lock. Here we similarly decompose Simplex into an outer shell and an inner shell consisting of a single building block: Graded-Broadcast (GB). The model is partial synchrony with $f&amp;lt;n/3$ Byzantine failures, and the goal is single-shot provable consensus with external validity. Single-shot Provable Consensus with External Validity...
+ </description>
+ <pubDate>Thu, 23 Apr 2026 05:00:00 -0400</pubDate>
+ <link>https://decentralizedthoughts.github.io/2026-04-23-deconstructing-simplex/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-04-23-deconstructing-simplex/</guid>
+ </item>
+ 
+ <item>
+ <title>Strong Chain Quality</title>
+ 
+ <dc:creator><![CDATA[ Ittai Abraham, Pranav Garimidi, Joachim Neu ]]></dc:creator>
+ 
+ <description>
+ 
+ Chain Quality (CQ) is a core blockchain property. Roughly speaking, it says: Owning $3\%$ of the stake gives you inclusion rights over valid inputs of your choice in roughly $3\%$ of the blockspace over time. For Nakamoto style chains, this is called Ideal CQ (see here). Chain quality was sufficient for early generations of blockchains that had low throughput, but modern blockchains have much higher bandwidth and can commit many...
+ </description>
+ <pubDate>Mon, 23 Mar 2026 01:00:00 -0400</pubDate>
+ <link>https://decentralizedthoughts.github.io/2026-03-23-strong-chain-quality/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-03-23-strong-chain-quality/</guid>
+ </item>
+ 
+ <item>
+ <title>Synchronized Clocks, Fixed View Schedules, and Simultaneous Agreement</title>
+ 
+ <dc:creator><![CDATA[ Ittai Abraham ]]></dc:creator>
+ 
+ <description>
+ 
+ Most modern blockchain protocols use partial synchrony-based BFT protocols that proceed in views. Each view has a designated block proposer (leader). This naturally leads to the following design question: How should parties synchronize the transition from view $i$ to view $i+1$? Dwork, Lynch, Stockmeyer, Consensus in the Presence of Partial Synchrony considered two models: one with synchronized clocks, and one with unbounded clock drift pre-GST. We argue that the former...
+ </description>
+ <pubDate>Sat, 07 Mar 2026 17:59:27 -0500</pubDate>
+ <link>https://decentralizedthoughts.github.io/2026-03-07-simultaneous-agreement/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-03-07-simultaneous-agreement/</guid>
+ </item>
+ 
+ <item>
+ <title>Mysticeti: Revolutionizing Consensus on Sui</title>
+ 
+ <dc:creator><![CDATA[ Lefteris Kokoris Kogias, Alberto Sonnino, George Danezis ]]></dc:creator>
+ 
+ <description>
+ 
+ TL;DR Mysticeti is a novel Byzantine consensus protocol deployed on the Sui blockchain that revolutionizes transaction processing. Eliminates explicit certification, reducing good-case latency to the theoretical minimum. Crash-fault masking, avoiding head-of-line blocking for pipelined rounds. 40% CPU usage reduction for consensus in production. 80% latency reduction compared to Bullshark on Sui Mainnet (from ~1.9s to ~400ms). Mysticeti is a novel Byzantine consensus protocol recently deployed on the Sui blockchain. It...
+ </description>
+ <pubDate>Fri, 06 Mar 2026 00:00:00 -0500</pubDate>
+ <link>https://decentralizedthoughts.github.io/2026-03-06-mysticeti-revolutionizing-consensus-on-sui/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-03-06-mysticeti-revolutionizing-consensus-on-sui/</guid>
+ </item>
+ 
  <item>
  <title>Beyond Latency and Communication Complexity - A Tutorial on the Pipes Model</title>
  
@@ -217,76 +288,6 @@
  <pubDate>Wed, 24 Sep 2025 10:30:00 -0400</pubDate>
  <link>https://decentralizedthoughts.github.io/2025-09-24-Kuplex/</link>
  <guid isPermaLink="true">https://decentralizedthoughts.github.io/2025-09-24-Kuplex/</guid>
- </item>
- 
- <item>
- <title>Agreement under omission failures: non-uniformity and weak validity</title>
- 
- <dc:creator><![CDATA[ Ittai Abraham and Gilad Stern ]]></dc:creator>
- 
- <description>
- 
- In this post, we study non-uniform agreement and weak validity under synchronous networks with general omission failures, where faulty parties may lose some or all incoming and outgoing messages. In this model, agreement, concerns only non-faulty parties. Omission-faulty parties may disagree, and validity is weak: the output must equal some party’s input. We present a protocol for $f &amp;lt; n$ omission faults that runs in $\min{f+1,n-1}$ rounds. We then show...
- </description>
- <pubDate>Tue, 12 Aug 2025 00:05:00 -0400</pubDate>
- <link>https://decentralizedthoughts.github.io/2025-08-12-non-uniform-weak-validity/</link>
- <guid isPermaLink="true">https://decentralizedthoughts.github.io/2025-08-12-non-uniform-weak-validity/</guid>
- </item>
- 
- <item>
- <title>What’s DAG got to do with it?</title>
- 
- <dc:creator><![CDATA[ Ittai Abraham, Neil Giridharan, and Kartik Nayak ]]></dc:creator>
- 
- <description>
- 
- Since 2018, blockchain research has seen a surge in DAG-based BFT protocols aimed at achieving higher throughput. These protocols trace back to Hashgraph, 2018, Aleph, 2019, the theoretical work of All You Need is DAG, 2021, and systems papers like Narwhal and Bullshark. In this post, we highlight six key aspects of this body of research: Separation of dispersal and consensus Liveness of dispersal in asynchrony and combining DACs Single-disperser...
- </description>
- <pubDate>Fri, 08 Aug 2025 00:00:00 -0400</pubDate>
- <link>https://decentralizedthoughts.github.io/2025-08-08-DAGs/</link>
- <guid isPermaLink="true">https://decentralizedthoughts.github.io/2025-08-08-DAGs/</guid>
- </item>
- 
- <item>
- <title>2-round BFT in Simplex style for n=5f-1</title>
- 
- <dc:creator><![CDATA[ Ittai Abraham and Ling Ren ]]></dc:creator>
- 
- <description>
- 
- In our previous post, we described a 2-round partially synchronous BFT protocol for $n = 5f+1$. In this follow-up post, we push the bound to $n = 5f-1$, achieving optimal 2-round commit in the Simplex style. We then extend the result to $n=3f+2p-1$ for $0&amp;lt;p\leq f$ that obtains liveness for $p$ Byzantine. This can be used to obtain a concurrent 2 round and 3 round protocol with the optimal fault...
- </description>
- <pubDate>Wed, 06 Aug 2025 00:00:00 -0400</pubDate>
- <link>https://decentralizedthoughts.github.io/2025-08-06-5fminus1-simplex/</link>
- <guid isPermaLink="true">https://decentralizedthoughts.github.io/2025-08-06-5fminus1-simplex/</guid>
- </item>
- 
- <item>
- <title>Graded dispersal with perfect security</title>
- 
- <dc:creator><![CDATA[ Ittai Abraham, Gilad Asharov, Anirudh Chandramouli ]]></dc:creator>
- 
- <description>
- 
- In a previous post we covered the basics of Asynchronous Verifiable Information Dispersal (AVID) and the classic AVID of Cachin and Tessaro, 2004. That protocol allows a sender to disperse a message of $O(n\log n)$ bits at a cost of just $O(n^2 \log^2 n)$ bits. However, It incurs a $O(\log n)$ storage overhead. It uses a cryptographic hash function, and obtains computational security. It’s natural to ask: Do VID protocols...
- </description>
- <pubDate>Fri, 01 Aug 2025 07:00:00 -0400</pubDate>
- <link>https://decentralizedthoughts.github.io/2025-08-01-graded-dispersal/</link>
- <guid isPermaLink="true">https://decentralizedthoughts.github.io/2025-08-01-graded-dispersal/</guid>
- </item>
- 
- <item>
- <title>Concurrent 2-round and 3-round Simplex-style BFT</title>
- 
- <dc:creator><![CDATA[ Ittai Abraham, Yuval Efron, Kartik Nayak, and Ling Ren ]]></dc:creator>
- 
- <description>
- 
- In the last two posts, we presented two partially synchronous BFT protocols in the Simplex-style: a 3-round protocol with $n\geq3f+1$ and a 2-round protocol with $n\geq 5f+1$. In this post, we describe a protocol that runs a 2-round commit rule and a 3-round commit rule concurrently. A new parameter $p$ ($0 \leq p \leq f$) is introduced, and the goal is to design protocols that have $n \geq 3f+2p+1$ parties...
- </description>
- <pubDate>Tue, 29 Jul 2025 00:00:00 -0400</pubDate>
- <link>https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/</link>
- <guid isPermaLink="true">https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/</guid>
  </item>
  
  </channel>
