@@ -1,22 +1,22 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-04-25T19:10:51Z",
+  "fetched_at": "2026-04-26T07:54:28Z",
   "items": [
     {
-      "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 123
-    },
-    {
       "path": "/2022-03-30-asynchronous-agreement-part-two-ben-ors-protocol/",
-      "views": 114
+      "views": 128
     },
     {
-      "path": "/2019-06-01-2019-5-31-models/",
-      "views": 71
+      "path": "/2020-12-22-what-is-a-merkle-tree/",
+      "views": 119
     },
     {
       "path": "/start-here/",
-      "views": 68
+      "views": 74
+    },
+    {
+      "path": "/2019-06-01-2019-5-31-models/",
+      "views": 70
     },
     {
       "path": "/2020-12-12-raft-liveness-full-omission/",
@@ -24,7 +24,7 @@
     },
     {
       "path": "/2024-05-07-decentralization-ethereum/",
-      "views": 57
+      "views": 52
     }
   ]
 }
