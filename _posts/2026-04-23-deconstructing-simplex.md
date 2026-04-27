@@ -35,41 +35,56 @@ The protocol has the following three properties:
 
 The outer protocol:
 
-```
-For view v, the primary of view v with input (val, val-proof):
+```text
+For view v, the primary of view v
+with input (val, val-proof):
 
-    if a certSet is not empty,
-        let p in certSet be the certificate of highest view w
-        let C be the set of skip certificates from skipSet for all views w < y < v
-        Graded-Broadcast (v, p.val, (p,C))
-    otherwise
-        let C be the set of skip certificates from skipSet for all views y < v
-        Graded-Broadcast (v, val, (val-proof, C))
+    if certSet is not empty:
+        let p be the certificate in certSet
+            with highest view w
+        let C be skip certificates from skipSet
+            for all views w < y < v
+        Graded-Broadcast(v, p.val, (p, C))
+
+    otherwise:
+        let C be skip certificates from skipSet
+            for all views y < v
+        Graded-Broadcast(v, val, (val-proof, C))
 
 ```
 
 Using the following event handlers (certificates can arrive from Graded-Broadcast or forwarded):
 
-```
-On first skip certificate for view v, add it to skipSet, and move to view v+1 (if not there yet)
+```text
+On first skip certificate for view v:
+    add it to skipSet
+    move to view v+1, if not there yet
 
-On first certificate for view v, add it to certSet, and move to view v+1 (if not there yet)
+On first certificate for view v:
+    add it to certSet
+    move to view v+1, if not there yet
 
-On first strong certificate, decide and forward it
+On first strong certificate:
+    decide
+    forward it
 ```
 
 
 
 
 The **Simplex voting rule** is the external-validity function passed to Graded-Broadcast:
-```
+```text
 For view v:
 
-    if receive (v, p.val, (p,C)) check that p is a valid certificate
-        and that C contains a valid skip certificate for each view p.view < y < v
+    if receive (v, p.val, (p, C)):
+        check p is a valid certificate
+        check C contains a valid skip certificate
+            for each view p.view < y < v
 
-    if receive (v, val, (val-proof, C)) check that val-proof is a proof that val is valid
-        and that C contains a valid skip certificate for each view y < v
+    if receive (v, val, (val-proof, C)):
+        check val-proof proves val is valid
+        check C contains a valid skip certificate
+            for each view y < v
 ``` 
 
 In words, if the primary has a certificate, it proposes the value of the certificate together with skip certificates for all views between that certificate and the current view. If there are no certificates, it uses its own input together with skip certificates for all lower views.
@@ -126,30 +141,36 @@ A **skip certificate** with tag $v$ consists of $n-f$ distinct `<Vote, v, ⊥>` 
 When a party forwards a certificate, it forwards the bundled signed messages that make up the certificate.
 
 ```text
-Graded-Broadcast with tag v and designated sender Sender(v)
-and sender input (x, proof):
+Graded-Broadcast with tag v
+and designated sender Sender(v)
+with sender input (x, proof):
 
 1. Upon entering the instance:
     Start a local timer T_v
     Sender(v) sends <Propose, v, x, proof>
 
-2. Upon receiving the first valid <Propose, v, x, proof> from Sender(v):
+2. Upon receiving the first valid
+   <Propose, v, x, proof> from Sender(v):
     Send <Vote, v, x>
 
-3. Upon receiving a valid regular certificate rc for x for the first time:
+3. Upon receiving a valid regular certificate rc
+   for x for the first time:
     Deliver rc
     Send rc to all
     If T_v < 3Δ:
         Send <Final, v, x>
 
-4. Upon T_v = 3Δ and not yet sent Final:
+4. Upon T_v = 3Δ
+   and not yet sent Final:
     Send <Vote, v, ⊥>
 
-5. Upon receiving a valid skip certificate sc for the first time:
+5. Upon receiving a valid skip certificate sc
+   for the first time:
     Deliver sc
     Send sc to all
 
-6. Upon receiving a valid strong certificate sc for x for the first time:
+6. Upon receiving a valid strong certificate sc
+   for x for the first time:
     Deliver sc
     Send sc to all
 ```
