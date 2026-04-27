@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-04-27T08:40:33Z",
+  "fetched_at": "2026-04-27T19:47:39Z",
   "items": [
     {
       "path": "/2022-03-30-asynchronous-agreement-part-two-ben-ors-protocol/",
@@ -12,7 +12,7 @@
     },
     {
       "path": "/2026-04-23-deconstructing-simplex/",
-      "views": 74
+      "views": 75
     },
     {
       "path": "/start-here/",
@@ -24,7 +24,7 @@
     },
     {
       "path": "/2020-12-12-raft-liveness-full-omission/",
-      "views": 55
+      "views": 56
     }
   ]
 }
