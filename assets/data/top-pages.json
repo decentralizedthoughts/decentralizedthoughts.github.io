@@ -1,18 +1,18 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-04-27T19:47:39Z",
+  "fetched_at": "2026-04-28T08:38:52Z",
   "items": [
     {
       "path": "/2022-03-30-asynchronous-agreement-part-two-ben-ors-protocol/",
-      "views": 125
+      "views": 111
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 113
+      "views": 106
     },
     {
       "path": "/2026-04-23-deconstructing-simplex/",
-      "views": 75
+      "views": 90
     },
     {
       "path": "/start-here/",
@@ -20,7 +20,7 @@
     },
     {
       "path": "/2019-06-01-2019-5-31-models/",
-      "views": 60
+      "views": 62
     },
     {
       "path": "/2020-12-12-raft-liveness-full-omission/",
