@@ -68,20 +68,20 @@ Note that in $W^+$, $p$ is failure-free, and in $W^-$, $E$ is the only witness t
 
 ## Proof Part 2: Crash Augmentation
 
-The 3-round lower bound uses two validity worlds with different crash sets of $t'=t-1$ parties. We construct $W^{--}$ from $W^-$ by crashing $p$ and then $t'-1$ non-$E$ parties one by one to obtain a set $C$ of crashed parties. We construct $W^{++}$ from $W^+$ by crashing $t'$ non-$C$ and non-$E$ parties one by one.
+The 3-round lower bound uses two validity worlds with different crash sets of $t'=t-1$ parties. We construct $W^{-,-}$ from $W^-$ by crashing $p$ and then $t'-1$ non-$E$ parties one by one to obtain a set $C$ of crashed parties. We construct $W^{+,+}$ from $W^+$ by crashing $t'$ non-$C$ and non-$E$ parties one by one.
 
 If crashing any such party in round 3 flips the decision, then we have a round 3 bivalent pair with non-$E$ pivot. This implies that a decision cannot be reached in round 4 because this round 3 pivot may have omission faults (decision cannot happen one round after a bivalent pivot).
 
 So the remaining case is that crashing any such party in round 3 does not flip the decision. In this case, we have the following two worlds:
 
-- **$W^{--}$**: crash a set of $t'$ validators that includes $p$. Decides $\bot$.
-- **$W^{++}$**: crash a different set of $t'$ validators. Decides $v$.
+- **$W^{-,-}$**: crash a set of $t'$ validators that includes $p$. Decides $\bot$.
+- **$W^{+,+}$**: crash a different set of $t'$ validators. Decides $v$.
 
 ## Proof Part 3: Three rounds are needed starting from round 3
 
-The [3-round lower bound](https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/) for Byzantine broadcast constructs 5 worlds. Two of them are the validity worlds $W^{--}$ and $W^{++}$ above. In all these worlds, $I$ is omission-faulted, so we have $t'=t-1$ faults to place. The other three worlds are essentially a mix of $W^{--}$ and $W^{++}$, obtained by a malicious $E$ and additional $t'-1$ Byzantine faults. So the total number of faults is $t$ ($t'-1=t-2$ plus one for $E$ and one for $I$); moreover, the number of parties is $n'=n-1$ as these worlds are obtained by crashing $I$.
+The [3-round lower bound](https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/) for Byzantine broadcast constructs 5 worlds. Two of them are the validity worlds $W^{-,-}$ and $W^{+,+}$ above. In all these worlds, $I$ is omission-faulted, so we have $t'=t-1$ faults to place. The other three worlds are essentially a mix of $W^{-,-}$ and $W^{+,+}$, obtained by a malicious $E$ and additional $t'-1$ Byzantine faults. So the total number of faults is $t$ ($t'-1=t-2$ plus one for $E$ and one for $I$); moreover, the number of parties is $n'=n-1$ as these worlds are obtained by crashing $I$.
 
-Since the 3-round lower bound shows that no decision can be reached in round 4 starting from $W^{--}$ and $W^{++}$, we have a contradiction to the good-case latency of 4.
+Since the 3-round lower bound shows that no decision can be reached in round 4 starting from $W^{-,-}$ and $W^{+,+}$, we have a contradiction to the good-case latency of 4.
 
 Finally, note that the 3-round lower bound requires $n' \leq 5t'-2$, which gives us $n-1 \leq 5(t-1)-2$, or $n \leq 5t-6$. For more details see our full version on the [latency cost of censorship resistance](https://eprint.iacr.org/2025/2136). 
 
