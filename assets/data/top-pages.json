@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-04-29T08:33:32Z",
+  "fetched_at": "2026-04-29T19:53:25Z",
   "items": [
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
@@ -20,7 +20,7 @@
     },
     {
       "path": "/2026-04-23-latency-of-censorship-resistance/",
-      "views": 64
+      "views": 66
     },
     {
       "path": "/2019-06-01-2019-5-31-models/",
