@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-04-29T19:53:25Z",
+  "fetched_at": "2026-04-30T08:35:50Z",
   "items": [
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
@@ -8,19 +8,19 @@
     },
     {
       "path": "/2022-03-30-asynchronous-agreement-part-two-ben-ors-protocol/",
-      "views": 110
+      "views": 120
     },
     {
       "path": "/2026-04-23-deconstructing-simplex/",
-      "views": 92
+      "views": 96
     },
     {
       "path": "/start-here/",
-      "views": 70
+      "views": 86
     },
     {
       "path": "/2026-04-23-latency-of-censorship-resistance/",
-      "views": 66
+      "views": 80
     },
     {
       "path": "/2019-06-01-2019-5-31-models/",
