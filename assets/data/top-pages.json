@@ -1,30 +1,30 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-05-05T19:51:45Z",
+  "fetched_at": "2026-05-06T20:00:17Z",
   "items": [
+    {
+      "path": "/2026-04-23-latency-of-censorship-resistance/",
+      "views": 106
+    },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
       "views": 105
     },
     {
       "path": "/2026-04-23-deconstructing-simplex/",
-      "views": 100
-    },
-    {
-      "path": "/2026-04-23-latency-of-censorship-resistance/",
-      "views": 98
+      "views": 101
     },
     {
       "path": "/start-here/",
-      "views": 88
+      "views": 101
     },
     {
       "path": "/2026-04-27-beyond-CR/",
-      "views": 77
+      "views": 80
     },
     {
       "path": "/2019-06-01-2019-5-31-models/",
-      "views": 54
+      "views": 50
     }
   ]
 }
