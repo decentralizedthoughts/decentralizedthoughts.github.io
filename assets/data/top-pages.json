@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-05-11T09:59:12Z",
+  "fetched_at": "2026-05-11T20:02:49Z",
   "items": [
     {
       "path": "/start-here/",
@@ -8,7 +8,7 @@
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 105
+      "views": 106
     },
     {
       "path": "/2026-04-27-beyond-CR/",
