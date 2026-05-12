@@ -1,18 +1,18 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-05-12T09:12:01Z",
+  "fetched_at": "2026-05-12T20:06:35Z",
   "items": [
     {
       "path": "/2019-08-16-byzantine-agreement-needs-quadratic-messages/",
-      "views": 257
+      "views": 266
     },
     {
       "path": "/2021-09-20-optimal-communication-complexity-of-authenticated-byzantine-agreement/",
-      "views": 125
+      "views": 132
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 107
+      "views": 108
     },
     {
       "path": "/start-here/",
