@@ -23,21 +23,27 @@ Given this, clock synchronization is a reasonable assumption, and there are two 
     In the FVS design, the start and end times of each view $i$ are fixed in advance.
 
     *Pros*:
+
       - parties are tightly synchronized on view boundaries;
       - view synchronization is straightforward to implement and reason about.
       - future proposers know exactly when their views will start, allowing them to prepare better.
+      - clients know exactly when to expect blocks and when to expect their transactions to be included, which is important for user experience and for external events that typically update at fixed times (for example, oracles).
 
     *Cons*:
+
       - view length is fixed to accommodate worst-case events, which can lead to unnecessarily long good-case view latency.
       - depends on good clock synchronization.
+
 
 2. **Variable View Schedule (VVS)**
     In VVS, the view length can change based on network conditions and faults (see [Fever](https://arxiv.org/abs/2301.09881) and [Lumiere](https://arxiv.org/abs/2311.08091)). For example, in an **optimistically responsive** design (see [What is Responsiveness?](https://decentralizedthoughts.github.io/2022-12-18-what-is-responsiveness/) and [Optimistic Responsiveness](https://decentralizedthoughts.github.io/2020-06-12-optimal-optimistic-responsiveness/)), good-case views complete as quickly as the network allows. Another example is protocols with a **fast path**, which can be viewed as taking additional latency advantages in particularly good conditions (for example, see [links here](https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/)). More generally, VVS designs aim to reduce latency in **good-case** events.
 
     *Pros*:
+
       - good-case view latency can be $O(\delta)$ and commit time as small as $3\delta$ (for optimal resilience, see [here](https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/)). Even in synchrony, these protocols can have $O(\delta)$ good-case view latency (see [here](https://decentralizedthoughts.github.io/2021-12-07-good-case-latency-of-rotating-leader-synchronous-bft/)).
 
     *Cons*:
+    
       - parties may begin views with a **view gap** of up to $\Delta$ (the maximum message delay); this view gap increases timeout timers, which in turn increases worst-case view latency.
       - not knowing exactly how many views there will be in a time frame makes it harder to implement fixed inflation rewards.
       - makes it harder to reason about external events and [oracles](https://en.wikipedia.org/wiki/Blockchain_oracle) that typically update at fixed times.
