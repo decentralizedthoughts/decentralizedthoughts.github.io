@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-05-13T20:08:07Z",
+  "fetched_at": "2026-05-14T08:50:05Z",
   "items": [
     {
       "path": "/2019-08-16-byzantine-agreement-needs-quadratic-messages/",
@@ -8,23 +8,23 @@
     },
     {
       "path": "/2021-09-20-optimal-communication-complexity-of-authenticated-byzantine-agreement/",
-      "views": 131
+      "views": 132
     },
     {
       "path": "/start-here/",
-      "views": 116
+      "views": 113
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 99
+      "views": 100
     },
     {
-      "path": "/2026-04-23-latency-of-censorship-resistance/",
-      "views": 49
+      "path": "/2019-06-01-2019-5-31-models/",
+      "views": 45
     },
     {
-      "path": "/2026-04-27-beyond-CR/",
-      "views": 46
+      "path": "/2020-02-26-selfish-mining/",
+      "views": 41
     }
   ]
 }
