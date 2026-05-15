@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-05-15T09:24:08Z",
+  "fetched_at": "2026-05-15T19:52:46Z",
   "items": [
     {
       "path": "/2019-08-16-byzantine-agreement-needs-quadratic-messages/",
@@ -24,7 +24,7 @@
     },
     {
       "path": "/2020-02-26-selfish-mining/",
-      "views": 43
+      "views": 44
     }
   ]
 }
