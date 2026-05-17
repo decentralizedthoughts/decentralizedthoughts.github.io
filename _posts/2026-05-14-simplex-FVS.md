@@ -27,8 +27,10 @@ In the language of [deconstructing Simplex](https://decentralizedthoughts.github
 
 ## Model
 
-There are $n\geq 3f+1$ parties, at most $f$ Byzantine. All protocol messages
-are signed. A certificate is a forwardable set of signed messages.
+There are $n\geq 3f+1$ parties, at most $f$
+[Byzantine](https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/).
+All protocol messages are signed. A certificate is a forwardable set of signed
+messages.
 
 The network model is
 [partial synchrony](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/).
@@ -45,8 +47,9 @@ public. The leader schedule is round robin.
 At scheduled action times, messages delivered by that time are processed
 before the scheduled action.
 
-Each honest party has an externally valid input that it may use as a fresh
-value. The goals are:
+Each honest party has an
+[externally valid](https://decentralizedthoughts.github.io/2026-04-23-deconstructing-simplex/#single-shot-provable-consensus-with-external-validity)
+input that it may use as a fresh value. The goals are:
 
 **Liveness.** Every honest party eventually obtains a valid decision certificate.
 
@@ -159,7 +162,7 @@ decision.
 
 All valid decision certificates have the same value.
 
-Proof. This is exactly the agreement argument for
+*Proof.* This is exactly the agreement argument for
 [Simplex](https://decentralizedthoughts.github.io/2025-11-15-simplex-from-benign/).
 The fixed view schedule changes when parties move, not the signing rules or
 proposal validity. The same quorum intersections give uniqueness of value and
@@ -173,7 +176,7 @@ In every view $v$ that starts after GST with an honest leader that has a valid
 proposal at $s_v$, every honest party decides by time $s_v+3\delta$, where
 $s_v=3v\Delta$ is the view start time.
 
-Proof. This is exactly the good leader latency argument for
+*Proof.* This is exactly the good leader latency argument for
 [Simplex](https://decentralizedthoughts.github.io/2025-11-15-simplex-from-benign/),
 once the honest leader has a valid proposal at $s_v$. The proposal reaches
 everyone by $s_v+\delta$, yielding $\mathrm{VC}_v(x)$ by $s_v+2\delta$ and
@@ -194,7 +197,7 @@ $$
 In particular, if view $w$ starts after GST, every honest party has such a
 certificate by $s_w+3\Delta$.
 
-Proof. Any honest vote sent in view $w$ is sent by time $s_w+\Delta$.
+*Proof.* Any honest vote sent in view $w$ is sent by time $s_w+\Delta$.
 At time $s_w+2\Delta$,
 either some honest party has $\mathrm{VC}_w(x)$ and broadcasts it, or no
 honest party has a value certificate and every honest party signs
@@ -218,3 +221,5 @@ certificate for every previous view by time $s_r$. Therefore the leader can
 form a valid proposal: it uses the highest previous value certificate if one
 exists, with skip certificates for all intervening views, and otherwise
 proposes a fresh value. Claim 2 then gives a decision.
+
+Your thoughts/comments [here](https://x.com/ittaia/status/2055245094014316941?s=20).
