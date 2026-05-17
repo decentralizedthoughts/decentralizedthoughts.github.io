@@ -14,7 +14,9 @@ In the FVS design, the start and end times of each view are fixed in advance;
 this requires synchronized clocks. We number protocol views starting at $1$,
 and view $v$ starts at time $3v\Delta$. After a view ends, parties no longer
 sign new messages for it, but certificates and decisions from that view may
-still be forwarded and processed in the background.
+still be forwarded and processed in the background. A two round version with
+views of length $2\Delta$ is
+[Fast Simplex FVS](https://decentralizedthoughts.github.io/2026-05-17-fast-simplex-fvs/).
 
 Simplex FVS keeps the exact same safety mechanism: quorum thresholds, certificate
 types, proposal rule, and agreement proof are unchanged. What changes is the

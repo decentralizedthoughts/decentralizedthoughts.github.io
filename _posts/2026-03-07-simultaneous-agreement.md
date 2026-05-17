@@ -20,7 +20,10 @@ Most modern blockchain protocols use [partial synchrony](https://decentralizedth
 Given this, clock synchronization is a reasonable assumption, and there are two approaches to view synchronization:
 
 1. **Fixed View Schedule (FVS)**
-    In the FVS design, the start and end times of each view $i$ are fixed in advance.
+    In the FVS design, the start and end times of each view $i$ are fixed in
+    advance. See [Simplex FVS](https://decentralizedthoughts.github.io/2026-05-14-simplex-FVS/)
+    and [Fast Simplex FVS](https://decentralizedthoughts.github.io/2026-05-17-fast-simplex-fvs/)
+    for examples of this design.
 
     *Pros*:
 

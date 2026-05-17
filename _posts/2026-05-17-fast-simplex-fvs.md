@@ -1,6 +1,6 @@
 ---
 title: Fast Simplex on a Fixed View Schedule
-date: 2026-05-17 04:00:00 -05:00
+date: 2026-05-17 00:00:00 -05:00
 tags:
 - consensus
 author: Ittai Abraham
