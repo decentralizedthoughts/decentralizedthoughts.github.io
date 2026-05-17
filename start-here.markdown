@@ -65,6 +65,8 @@ The Byzantine setting:
 - [Practical Byzantine Fault Tolerant Consensus (PBFT)](https://decentralizedthoughts.github.io/2025-02-14-PBFT/).
 - [Two Round HotStuff](https://decentralizedthoughts.github.io/2022-11-24-two-round-HS/) with SMR and accountability. 
 - [Information Theoretic HotStuff](https://decentralizedthoughts.github.io/2021-09-20-information-theoretic-hotstuff-it-hs-part-one/).
+- [Synchronized Clocks, Fixed View Schedules, and Simultaneous Agreement](https://decentralizedthoughts.github.io/2026-03-07-simultaneous-agreement/)
+  explains fixed view schedules and view synchronization with clocks.
 
 ## Simplex and variants
 
@@ -77,6 +79,10 @@ The Byzantine setting:
 - [Variants of Simplex with Reduced Bad-case Latency: C-Simplex and Kuplex](https://decentralizedthoughts.github.io/2025-09-24-Kuplex/)
 - [Concurrent 2-round and 3-round BFT protocols under granular synchrony](https://decentralizedthoughts.github.io/2026-01-24-two-round-ps/)
 - [Partial Synchrony variants](https://decentralizedthoughts.github.io/2025-12-19-cc-under-harsh-ps/).
+- [Deconstructing Simplex](https://decentralizedthoughts.github.io/2026-04-23-deconstructing-simplex/).
+- [From Simplex to Complex](https://decentralizedthoughts.github.io/2026-04-26-complex/).
+- [Simplex on a Fixed View Schedule](https://decentralizedthoughts.github.io/2026-05-14-simplex-FVS/).
+- [Fast Simplex on a Fixed View Schedule](https://decentralizedthoughts.github.io/2026-05-17-fast-simplex-fvs/).
 
 ## Asynchronous protocols
 
@@ -167,6 +173,9 @@ Lower bounds give us powerful tools to understand the fundamental limitations an
 - [Why BFT in partial synchrony and $3f+1$ needs three rounds](https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/)
 - Lower bounds on the *good case latency* - the number of rounds when the broadcaster is non-faulty and the network is synchronous: [a complete categorization](https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/)
 - The [good case latency of optimistically responsive rotating leader protocols](https://decentralizedthoughts.github.io/2021-12-07-good-case-latency-of-rotating-leader-synchronous-bft/) requires $2\Delta$.
+- [Latency cost of censorship resistance](https://decentralizedthoughts.github.io/2026-04-23-latency-of-censorship-resistance/)
+  shows that censorship resistance costs two additional rounds in partial
+  synchrony.
 
 
 
@@ -188,6 +197,12 @@ Lower bounds give us powerful tools to understand the fundamental limitations an
 - What are [blockchains useful for, really](https://decentralizedthoughts.github.io/2023-01-12-what-are-blockchains-useful-for-really/)?
 - What does [checkpointing a blockchain](/2019-09-13-dont-trust-checkpoint/) mean?
 - The simplest L2 solution is a [payment channel](/2019-10-25-payment-channels-are-just-a-two-person-bfs-smr-systems/).
+- [Strong Chain Quality](https://decentralizedthoughts.github.io/2026-03-23-strong-chain-quality/)
+  is a fine-grained censorship-resistance property for high-throughput
+  blockchains; see [here](https://decentralizedthoughts.github.io/2026-04-23-latency-of-censorship-resistance/)
+  for a matching latency lower bound.
+- [Beyond censorship resistance: hiding, simultaneous binding, and accountable last look](https://decentralizedthoughts.github.io/2026-04-27-beyond-CR/)
+  discusses additional properties needed for efficient on-chain markets.
 
 What is player replaceability? A series:
 - [Defining the problem and achieving a committee-based sub-quadratic communication protocol](https://decentralizedthoughts.github.io/2023-01-05-player-replaceability-I/)
@@ -234,6 +249,7 @@ Polynomial secret sharing is a base for deep connections between cryptography an
 - [HotStuff-1 and the Prefix Speculation Dilemma in BFT Consensus](https://decentralizedthoughts.github.io/2024-08-24-hotstuff1/).
 - [Carry: HotStuff Linearity with Tail-Forking-Resilience](https://decentralizedthoughts.github.io/2025-09-27-carry-the-tail/).
 - [Reasoning about Distributed Protocols with Smart Casual Verification](https://decentralizedthoughts.github.io/2025-05-23-smart-casual-verification/).
+- [Beyond Latency and Communication Complexity - A Tutorial on the Pipes Model](https://decentralizedthoughts.github.io/2026-02-13-pipes/).
 
 ### Systems and applications
 - Encrypted Blockchain Databases [part 1](/2020-07-10-encrypted-blockchain-databases-part-i/) and [part 2](/2020-07-10-encrypted-blockchain-databases-part-ii/).
@@ -253,3 +269,4 @@ Polynomial secret sharing is a base for deep connections between cryptography an
 - [Shoal++: High Throughput DAG-BFT Can Be Fast!](https://decentralizedthoughts.github.io/2024-06-12-shoalpp/).
 - [What's DAG got to do with it?](https://decentralizedthoughts.github.io/2025-08-08-DAGs/).
 - [Graded dispersal with perfect security](https://decentralizedthoughts.github.io/2025-08-01-graded-dispersal/).
+- [Mysticeti: Revolutionizing Consensus on Sui](https://decentralizedthoughts.github.io/2026-03-06-mysticeti-revolutionizing-consensus-on-sui/).
