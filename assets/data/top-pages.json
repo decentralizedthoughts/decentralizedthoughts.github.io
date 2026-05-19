@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-05-19T10:07:02Z",
+  "fetched_at": "2026-05-19T20:06:05Z",
   "items": [
     {
       "path": "/2019-08-16-byzantine-agreement-needs-quadratic-messages/",
@@ -12,7 +12,7 @@
     },
     {
       "path": "/start-here/",
-      "views": 119
+      "views": 120
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
@@ -20,11 +20,11 @@
     },
     {
       "path": "/2019-06-01-2019-5-31-models/",
-      "views": 65
+      "views": 68
     },
     {
       "path": "/course/",
-      "views": 49
+      "views": 50
     }
   ]
 }
