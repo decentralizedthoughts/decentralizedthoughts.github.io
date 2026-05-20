@@ -62,7 +62,7 @@ If a transaction involves shared objects, total ordering is required to resolve 
 2. **Ordering:** The consensus engine globally orders transactions (total order).
 3. **Execution:** Transactions are then executed in that determined order, updating the object versions.
 
-![Sui_Architecture](https://hackmd.io/_uploads/HyBPMP1yzl.png)
+![Sui_Architecture](/uploads/lutris.png)
 
 
 ## The Composition Challenge: Safety via Versioned Locking
