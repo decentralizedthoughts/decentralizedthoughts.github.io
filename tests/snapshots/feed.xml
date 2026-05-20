@@ -11,15 +11,85 @@
  
  
  <item>
+ <title>From Single-Shot Simplex to Chained Simplex</title>
+ 
+ <dc:creator><![CDATA[ Ittai Abraham, Joachim Neu ]]></dc:creator>
+ 
+ <description>
+ 
+ In this post we construct Chained Simplex from single-shot Simplex. The chained construction is a simple modification of the single-shot protocol and applies to any Simplex variant with the same inner certificate properties and outer proposal structure. See here for more generic constructions. We will use the decomposition from deconstructing Simplex to make the construction explicit. That post separates Simplex into: an inner protocol, which produces value certificates, decision certificates,...
+ </description>
+ <pubDate>Wed, 20 May 2026 02:00:00 -0400</pubDate>
+ <link>https://decentralizedthoughts.github.io/2026-05-20-from-single-shot-to-chained/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-05-20-from-single-shot-to-chained/</guid>
+ </item>
+ 
+ <item>
+ <title>Fast Simplex on a Fixed View Schedule</title>
+ 
+ <dc:creator><![CDATA[ Ittai Abraham ]]></dc:creator>
+ 
+ <description>
+ 
+ Simplex FVS uses fixed views of length $3\Delta$. This post gives a two round version with view length $2\Delta$, using the two round Simplex certificate structure. The price is the usual one for two round BFT: we use $n=5f+1$ parties. A view has only one leader proposal and one round of votes. If a later leader needs to skip the view, it does not wait for a skip vote sent...
+ </description>
+ <pubDate>Sun, 17 May 2026 01:00:00 -0400</pubDate>
+ <link>https://decentralizedthoughts.github.io/2026-05-17-fast-simplex-fvs/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-05-17-fast-simplex-fvs/</guid>
+ </item>
+ 
+ <item>
+ <title>Simplex on a Fixed View Schedule</title>
+ 
+ <dc:creator><![CDATA[ Ittai Abraham ]]></dc:creator>
+ 
+ <description>
+ 
+ This post gives a fixed view schedule version of Simplex, called Simplex FVS, with the advantages of a fixed view schedule discussed here. In the FVS design, the start and end times of each view are fixed in advance; this requires synchronized clocks. We number protocol views starting at $1$, and view $v$ starts at time $3v\Delta$. After a view ends, parties no longer sign new messages for it, but...
+ </description>
+ <pubDate>Thu, 14 May 2026 05:00:00 -0400</pubDate>
+ <link>https://decentralizedthoughts.github.io/2026-05-14-simplex-FVS/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-05-14-simplex-FVS/</guid>
+ </item>
+ 
+ <item>
+ <title>Beyond censorship resistance: hiding, simultaneous binding, and accountable last look</title>
+ 
+ <dc:creator><![CDATA[ Ittai Abraham, Pranav Garimidi, and Joachim Neu ]]></dc:creator>
+ 
+ <description>
+ 
+ In a previous post we introduced strong chain quality (SCQ), which provides a strong form of censorship resistance: honest parties’ transactions are included in proportion to their share of the validator set in every block. This post considers three additional properties needed for efficient on-chain markets: hiding, simultaneous binding (SB), and accountable last look (ALL). Hiding Hiding: No information about the contents of honest parties’ inputs is revealed to the...
+ </description>
+ <pubDate>Mon, 27 Apr 2026 05:00:00 -0400</pubDate>
+ <link>https://decentralizedthoughts.github.io/2026-04-27-beyond-CR/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-04-27-beyond-CR/</guid>
+ </item>
+ 
+ <item>
+ <title>From Simplex to Complex</title>
+ 
+ <dc:creator><![CDATA[ Ittai Abraham ]]></dc:creator>
+ 
+ <description>
+ 
+ Tendermint and Simplex are both leader-based BFT protocols for partial synchrony with optimal resilience and $3\delta$ good-case latency. There is a subtle tradeoff between them: In the optimistic responsive model, Simplex obtains a worst-case view latency of $3\Delta+\delta$ while Tendermint obtains a worst-case view latency of $4\Delta+\delta$. On the other hand, Tendermint requires only a bounded number of certificates to make progress in each view, while in Simplex the number...
+ </description>
+ <pubDate>Sun, 26 Apr 2026 05:00:00 -0400</pubDate>
+ <link>https://decentralizedthoughts.github.io/2026-04-26-complex/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-04-26-complex/</guid>
+ </item>
+ 
+ <item>
  <title>Latency cost of censorship resistance</title>
  
  <dc:creator><![CDATA[ Ittai Abraham, Yuval Efron, and Ling Ren ]]></dc:creator>
  
  <description>
  
- This post covers our new lower bound on the latency cost of censorship resistance. In a traditional BFT protocol, the leader has two roles: (1) It constructs (and therefore holds) the input; and (2) It proposes the input. Many BFT protocols optimize for the good case when the leader is honest. For partial synchrony, with $n \leq 5f-2$ parties, the good-case latency is 3 rounds. The leader’s monopoly over both...
+ This post covers our new lower bound on the latency cost of censorship resistance. In a traditional partial synchrony BFT protocol, the leader has two roles: (1) It constructs the input; and (2) It proposes the input. The natural validity property: Validity: if the leader is honest and the network is synchronous (GST=0), its input value is eventually decided by all honest parties. Moreover, it is natural to optimize for...
  </description>
- <pubDate>Thu, 23 Apr 2026 06:00:00 -0400</pubDate>
+ <pubDate>Thu, 23 Apr 2026 02:00:00 -0400</pubDate>
  <link>https://decentralizedthoughts.github.io/2026-04-23-latency-of-censorship-resistance/</link>
  <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-04-23-latency-of-censorship-resistance/</guid>
  </item>
@@ -33,7 +103,7 @@
  
  In a previous post we decomposed PBFT into an outer shell and an inner shell consisting of two building blocks: Locked-Broadcast (LB) and Recover-Max-Lock. Here we similarly decompose Simplex into an outer shell and an inner shell consisting of a single building block: Graded-Broadcast (GB). The model is partial synchrony with $f&amp;lt;n/3$ Byzantine failures, and the goal is single-shot provable consensus with external validity. Single-shot Provable Consensus with External Validity...
  </description>
- <pubDate>Thu, 23 Apr 2026 05:00:00 -0400</pubDate>
+ <pubDate>Thu, 23 Apr 2026 01:00:00 -0400</pubDate>
  <link>https://decentralizedthoughts.github.io/2026-04-23-deconstructing-simplex/</link>
  <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-04-23-deconstructing-simplex/</guid>
  </item>
@@ -218,76 +288,6 @@
  <pubDate>Sat, 22 Nov 2025 09:00:00 -0500</pubDate>
  <link>https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/</link>
  <guid isPermaLink="true">https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/</guid>
- </item>
- 
- <item>
- <title>From Benign Simplex to Byzantine Simplex</title>
- 
- <dc:creator><![CDATA[ Ittai Abraham ]]></dc:creator>
- 
- <description>
- 
- In this post we present a Simplex protocol that solves single shot consensus and is resilient to $f &amp;lt; n/3$ Byzantine failures, under partial synchrony. In a previous post we showed how to move from Tendermint to Simplex. In this post we show how to move from Benign Simplex to Simplex. Benign Simplex is resilient to $f&amp;lt;n/2$ omission failures in the same setting. Moving from omission failures to Byzantine failures...
- </description>
- <pubDate>Sat, 15 Nov 2025 04:30:00 -0500</pubDate>
- <link>https://decentralizedthoughts.github.io/2025-11-15-simplex-from-benign/</link>
- <guid isPermaLink="true">https://decentralizedthoughts.github.io/2025-11-15-simplex-from-benign/</guid>
- </item>
- 
- <item>
- <title>Benign Simplex</title>
- 
- <dc:creator><![CDATA[ Ittai Abraham ]]></dc:creator>
- 
- <description>
- 
- The goal of this post is to describe a single-shot consensus protocol that is resilient to f &amp;lt; n/2 omission failures, under partial synchrony. This protocol is inspired by the multi-shot Simplex for crash faults protocol and our earlier posts on Chained Raft, Benign HotStuff, and Log Paxos. Single-Shot Consensus Each party starts with an input value. We denote by $\bot$ a special value that is not an input value....
- </description>
- <pubDate>Sat, 08 Nov 2025 04:30:00 -0500</pubDate>
- <link>https://decentralizedthoughts.github.io/2025-11-08-benign-simplex/</link>
- <guid isPermaLink="true">https://decentralizedthoughts.github.io/2025-11-08-benign-simplex/</guid>
- </item>
- 
- <item>
- <title>Test your understanding of the basics of fault tolerant distributed computing</title>
- 
- <dc:creator><![CDATA[ Ittai Abraham ]]></dc:creator>
- 
- <description>
- 
- The goal of this post is to motivate you to learn the basics of distributed computing by providing a set of simple questions that test your understanding of the basic definitions. In 2025, LLM-based chatbots score 100 on this test, so that’s what you should aim for. The questions cover the standard models and fault assumptions you encounter in the first lectures of any distributed computing course. The first questions...
- </description>
- <pubDate>Wed, 22 Oct 2025 05:30:00 -0400</pubDate>
- <link>https://decentralizedthoughts.github.io/2025-10-22-quiz-basics/</link>
- <guid isPermaLink="true">https://decentralizedthoughts.github.io/2025-10-22-quiz-basics/</guid>
- </item>
- 
- <item>
- <title>Carry: HotStuff Linearity with Tail-Forking-Resilience</title>
- 
- <dc:creator><![CDATA[ Dakai Kang, Suyash Gupta, Dahlia Malkhi, Mohammad Sadoghi ]]></dc:creator>
- 
- <description>
- 
- The recently identified tail-forking attack shows how malicious leaders can degrade throughput by skipping over honest proposals in streamlined BFT protocols like HotStuff. To address this challenge, we introduce Carry, a lightweight mechanism that preserves HotStuff’s linearity while protecting against tail-forking. Carry also supports commits by honest-but-sluggish leaders whose messages are benignly delayed. Synopsis In a “streamlined” Byzantine Fault Tolerant (BFT) consensus approach, pioneered by HotStuff, the consensus protocol has...
- </description>
- <pubDate>Sat, 27 Sep 2025 21:30:00 -0400</pubDate>
- <link>https://decentralizedthoughts.github.io/2025-09-27-carry-the-tail/</link>
- <guid isPermaLink="true">https://decentralizedthoughts.github.io/2025-09-27-carry-the-tail/</guid>
- </item>
- 
- <item>
- <title>Variants of Simplex with Reduced Bad-case Latency: C-Simplex and Kuplex</title>
- 
- <dc:creator><![CDATA[ Ittai Abraham, Ling Ren ]]></dc:creator>
- 
- <description>
- 
- Consensus protocols often need to balance simplicity with performance. Simplex is a beautiful example of minimalistic design. In this post, we explore two variations of Simplex, one that improves view latency in silent views and another that improves view latency in the worst-case when the actual network delay $\delta$ is smaller than $\Delta$, the maximal delay after GST. Recall that Simplex has a view latency of $3\Delta+\delta$ in the worst-case,...
- </description>
- <pubDate>Wed, 24 Sep 2025 10:30:00 -0400</pubDate>
- <link>https://decentralizedthoughts.github.io/2025-09-24-Kuplex/</link>
- <guid isPermaLink="true">https://decentralizedthoughts.github.io/2025-09-24-Kuplex/</guid>
  </item>
  
  </channel>

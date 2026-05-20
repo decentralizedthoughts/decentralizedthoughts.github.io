@@ -13,7 +13,7 @@
  
  <meta name="author" content="Ittai Abraham, Yuval Efron, and Ling Ren">
  
- <meta name="description" content="This post covers our new lower bound on the latency cost of censorship resistance. In a traditional BFT protocol, the leader has two roles: (1) It constructs (and therefore holds) the input; and (2) It proposes the input. Many BFT protocols optimize for the good case when the leader is honest. For partial synchrony, with $n \leq 5f-2$ parties, the good-case latency is 3 rounds. The leader’s monopoly over both...">
+ <meta name="description" content="This post covers our new lower bound on the latency cost of censorship resistance. In a traditional partial synchrony BFT protocol, the leader has two roles: (1) It constructs the input; and (2) It proposes the input. The natural validity property: Validity: if the leader is honest and the network is synchronous (GST=0), its input value is eventually decided by all honest parties. Moreover, it is natural to optimize for...">
  
  
  
@@ -72,7 +72,7 @@
  
  <meta property="og:site_name" content="Decentralized Thoughts">
  <meta property="og:title" content="Latency cost of censorship resistance">
- <meta property="og:description" content="This post covers our new lower bound on the latency cost of censorship resistance. In a traditional BFT protocol, the leader has two roles: (1) It constructs (and therefore holds) the input; and (2) It proposes the input. Many BFT protocols optimize for the good case when the leader is honest. For partial synchrony, with $n \leq 5f-2$ parties, the good-case latency is 3 rounds. The leader’s monopoly over both...">
+ <meta property="og:description" content="This post covers our new lower bound on the latency cost of censorship resistance. In a traditional partial synchrony BFT protocol, the leader has two roles: (1) It constructs the input; and (2) It proposes the input. The natural validity property: Validity: if the leader is honest and the network is synchronous (GST=0), its input value is eventually decided by all honest parties. Moreover, it is natural to optimize for...">
  
  <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
  
@@ -81,7 +81,7 @@
  
  <meta property="og:article:author" content="Ittai Abraham, Yuval Efron, and Ling Ren">
  
- <meta property="og:article:published_time" content="2026-04-23T06:00:00-04:00">
+ <meta property="og:article:published_time" content="2026-04-23T02:00:00-04:00">
  <meta property="og:url" content="https://decentralizedthoughts.github.io/2026-04-23-latency-of-censorship-resistance/">
  <link rel="canonical" href="https://decentralizedthoughts.github.io/2026-04-23-latency-of-censorship-resistance/">
  
@@ -91,7 +91,7 @@
  <meta name="twitter:site" content="@ittaia">
  <meta name="twitter:creator" content="@ittaia">
  <meta property="twitter:title" content="Latency cost of censorship resistance">
- <meta property="twitter:description" content="This post covers our new lower bound on the latency cost of censorship resistance. In a traditional BFT protocol, the leader has two roles: (1) It constructs (and therefore holds) the input; and (2) It proposes the input. Many BFT protocols optimize for the good case when the leader is honest. For partial synchrony, with $n \leq 5f-2$ parties, the good-case latency is 3 rounds. The leader’s monopoly over both...">
+ <meta property="twitter:description" content="This post covers our new lower bound on the latency cost of censorship resistance. In a traditional partial synchrony BFT protocol, the leader has two roles: (1) It constructs the input; and (2) It proposes the input. The natural validity property: Validity: if the leader is honest and the network is synchronous (GST=0), its input value is eventually decided by all honest parties. Moreover, it is natural to optimize for...">
  
  <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
  
@@ -210,63 +210,63 @@
  
  
  <div class="blog-post">
- <p>This post covers our new lower bound on the <a href="https://eprint.iacr.org/2025/2136">latency cost of censorship resistance</a>. In a traditional BFT protocol, the <em>leader</em> has two roles: (1) It <em>constructs</em> (and therefore holds) the input; and (2) It <em>proposes</em> the input. Many BFT protocols optimize for the <em>good case</em> when the leader is honest. For <a href="https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/">partial synchrony</a>, with $n \leq 5f-2$ parties, the <a href="https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/">good-case latency is 3 rounds</a>.</p>
-<p>The leader’s <strong>monopoly</strong> over both construction and proposal of the input creates a <strong>censorship</strong> problem: A malicious leader can ignore client inputs and substitute its own choice. In blockchain systems this corresponds to validators excluding user transactions for profit (MEV). Censorship-resistant protocols break this monopoly by decoupling input construction and proposal: A <em>client</em>, the <em>input holder</em> $I$, holds the value to be committed, while a validator, the <em>expediter</em> $E$, drives the commit. The fault budget $f$ counts only validator faults; client faults are not charged against it. The traditional <a href="https://arxiv.org/abs/2102.07240">good-case latency</a> and validity desiderata now split in two:</p>
+ <p>This post covers our new lower bound on the <a href="https://eprint.iacr.org/2025/2136">latency cost of censorship resistance</a>. In a traditional <a href="https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/">partial synchrony</a> BFT protocol, the <em>leader</em> has two roles: (1) It <em>constructs</em> the input; and (2) It <em>proposes</em> the input. The natural validity property:</p>
+<ul>
+ <li><strong>Validity</strong>: if the leader is honest and the network is synchronous (GST=0), its input value is eventually decided by all honest parties.</li>
+</ul>
+<p>Moreover, it is natural to optimize for the <em>good-case latency</em>:</p>
+<ul>
+ <li><strong>Good-case latency</strong>: if the leader is honest and the network is synchronous (GST=0), all honest parties decide within $\ell$ rounds.</li>
+</ul>
+<p>When the number of faults is more than $n/5$, the <a href="https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/">good-case latency lower bound</a> proves that the best one can hope for is $\ell=3$ (because obtaining $\ell=2$ is impossible).</p>
+<p>The leader’s <strong>monopoly</strong> over both <em>construction</em> and <em>proposal</em> of the input creates a <strong>censorship</strong> problem: A malicious leader can ignore inputs from other parties (censor them). In blockchain systems this corresponds to validators excluding user transactions for profit (MEV). Censorship-resistant protocols break this monopoly by decoupling input construction and proposal: An <em>input</em> party $I$ holds the value to be committed, while another party, the <em>expediter</em> $E$, is in charge of driving a low-latency commit.</p>
+<p>So the traditional validity and good-case latency can be replaced by:</p>
 <ol>
- <li><strong>Censorship resistance</strong>: if $I$ is honest and the network is synchronous (GST=0), its value is eventually decided by all honest parties.</li>
- <li><strong>Good-case efficiency</strong>: if $E$ is honest and the network is synchronous (GST=0), all honest parties decide within $k$ rounds.</li>
+ <li><strong>Censorship resistance</strong>: if $I$ is honest and the network is synchronous (GST=0), $I$’s input value is eventually decided by all honest parties.</li>
+ <li><strong>Good-case latency</strong>: if $E$ is honest and the network is synchronous (GST=0), all honest parties decide within $k$ rounds.</li>
 </ol>
-<p>Naively, $k=4$ seems achievable: $I$ sends its value to $E$ in round 1, and an honest $E$ commits in 3 more rounds (the best we can do give the 3 round lower bound). But a malicious $E$ can claim it heard nothing and commit an empty value. The fix is for $I$ to broadcast its value to <em>all</em> parties so that $E$ cannot hide it, which takes an additional round. This suggests $k=5$, and we show this is tight.</p>
+<p>Naively, $k=4$ seems achievable: $I$ sends its value to $E$ in round 1, and an honest $E$ commits in 3 more rounds (the minimum, by the <a href="https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/">3-round lower bound</a> above). But a malicious $E$ can claim it heard nothing and commit an empty value. The <a href="https://decentralizedthoughts.github.io/2026-03-23-strong-chain-quality/">fix</a> is for $I$ to broadcast its value to <em>all</em> parties that then add this value to their <em>inclusion list</em>. Now $E$ cannot censor, but doing this takes an additional round. This suggests $k=5$, and we show this is tight (when the number of faults is more than $n/5$).</p>
 <blockquote>
  <p>In partial synchrony, the best achievable good-case latency is $k=5$ rounds, two more than standard BFT.</p>
 </blockquote>
-<p>The <a href="https://eprint.iacr.org/2025/1772">MCP protocol</a> of Garimidi, Neu, and Resnick achieves this bound. Our result shows the 2-round overhead is <em>inherent</em>: no censorship-resistant BFT protocol with $n \leq 5f-2$ can do better, regardless of design.</p>
 <h2 id="the-result-the-latency-cost-of-censorship-resistance">The result: the latency cost of censorship resistance</h2>
-<p><strong>Theorem</strong>: <em>Any protocol that solves consensus in partial synchrony for $n \leq 5f-6$ and satisfies censorship resistance requires good-case latency at least $5$ rounds.</em></p>
-<p>The threshold $n \leq 5f-6$ (vs. $n \leq 5f-2$ for standard BFT) reflects a structural cost of censorship resistance: the proof requires an extra validator $p$ as a round-2 pivot distinct from $E$. Partitioning the $n$ validators into $E$, $p$, and five groups of sizes $f-1, f-2, f-2, f-2, f-1$ gives $n = 2 + 2(f-1) + 3(f-2) = 5f-6$.</p>
-<p>Assume for contradiction that protocol $\Pi$ achieves censorship resistance with good-case latency $k = 4$: whenever the expediter $E$ is honest and GST $= 0$, all honest parties decide within $4$ rounds. We derive a contradiction. We rely on two prior results: the <a href="https://decentralizedthoughts.github.io/2024-01-28-early-stopping-lower-bounds/">AS-FFD technique</a> and the <a href="https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/">3-round lower bound</a> for Byzantine broadcast.</p>
-<h2 id="proof-part-1-the-expediter-is-not-the-round-2-pivot">Proof Part 1: The expediter is not the round-2 pivot</h2>
-<p>Part 1 sets GST $= 0$ throughout. Step 1 uses censorship resistance to trace the round-1 AS-FFD pivot to a validator $p \neq E$; Step 2 uses the expediter property to show the round-2 pivot is a message to $E$. Throughout, $I$ is a client sending only in round 1; its faults do not consume the validator fault budget. (Since $\Pi$ tolerates $f$ Byzantine validator faults, it tolerates crash and omission failures as special cases.)</p>
-<p>Two configurations are <strong>almost same (AS)</strong> if they agree on every party’s state except possibly one. They are <strong>failure-free different (FFD)</strong> if their failure-free extensions decide distinct values.</p>
-<p><strong>Initial AS-FFD pair.</strong> Consider the two initial configurations:</p>
+<p><strong>Theorem</strong>: <em>Any protocol satisfying censorship resistance that solves consensus in partial synchrony with $n \leq 5t-6$ and $t \geq 4$ requires good-case latency at least $5$ rounds.</em></p>
+<p>Assume for contradiction that protocol $\Pi$ achieves censorship resistance with good-case latency $k = 4$: whenever the expediter $E$ is honest and GST $= 0$, all honest parties decide within $4$ rounds. We derive a contradiction that relies on two prior results: the <a href="https://decentralizedthoughts.github.io/2024-01-28-early-stopping-lower-bounds/">AS-FFD technique</a> and the <a href="https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/">3-round lower bound</a> for Byzantine broadcast.</p>
+<h2 id="proof-part-1-reaching-round-3-with-e-as-a-pivot">Proof Part 1: reaching round 3 with $E$ as a pivot</h2>
+<p>Part 1 sets GST $= 0$ throughout. Two configurations are <strong>almost same (AS)</strong> if they agree on every party’s state except possibly one. They are <strong>failure-free different (FFD)</strong> if their failure-free extensions decide distinct values.</p>
+<p><strong>Round 1: the pivot is $I$.</strong> Assume $I$ holds input $v$ and consider the two initial configurations:</p>
 <ul>
- <li>$C_v$: $I$ holds input $v$; all others hold their default initial state.</li>
- <li>$C_\bot$: $I$ is absent (equivalently, has no input); all others hold the same state as in $C_v$.</li>
+ <li>$C_v$: $I$ is non-faulty.</li>
+ <li>$C_\bot$: $I$ crashes at the beginning of the execution and recovers at the beginning of round 2, holding input $\bot \neq v$.</li>
 </ul>
-<p>$C_v$ and $C_\bot$ are AS (they differ only in $I$’s state) and FFD: from $C_v$ the failure-free execution decides $v$ (by censorship resistance), and from $C_\bot$ it decides some $\bot \neq v$ (by liveness). The only party whose state differs is $I$, so $I$ is the <strong>initial pivot</strong>.</p>
-<p><strong>Step 1: tracing the pivot through round 1.</strong> Label $I$’s outgoing round-1 messages $m_1, \ldots, m_n$ to recipients $r_1, \ldots, r_n$ in any order. Let $\alpha^i$ be the execution where $I$ sends $m_1, \ldots, m_i$ and omits the remaining messages (but continues participating normally in later rounds). Since $\alpha^0$ corresponds to $C_\bot$ (decides $\bot$) and $\alpha^n$ corresponds to $C_v$ (decides $v$), there is a smallest $i^\star$ such that $\alpha^{i^\star}$ decides $v$ but $\alpha^{i^\star-1}$ decides $\bot$. Let $p = r_{i^\star}$.</p>
-<p>We claim $p \neq E$. Suppose $p = E$. Then $\alpha^{i^\star-1}$ has $I$ sending to all parties except $E$ (omitting only $m_{i^\star}$), yet decides $\bot$. Now consider an execution where $I$ is honest and sends to all $n$ parties, while $E$ is Byzantine and follows the same behavior as in $\alpha^{i^\star-1}$ (which $E$ can do faithfully, since it received nothing from $I$ there). Every honest party’s view is identical to $\alpha^{i^\star-1}$, so honest parties decide $\bot$. But $I$ is honest with input $v$, violating censorship resistance. Therefore $p \neq E$.</p>
-<p>Since $p \neq E$, party $E$ has the same round-1 state in both $\alpha^{i^\star-1}$ and $\alpha^{i^\star}$. The end-of-round-1 configurations form the <strong>round-1 AS-FFD</strong>, with $p$ as the sole differing party and $E$ in the same state in both executions.</p>
-<p><strong>Step 2: the round-2 pivot is a message to $E$.</strong> Unlike step 1, this is less of a step and more just an assumption we can make w.l.o.g. As otherwise, the proof is straightforward! Since $p$ is the sole differing party in the round-1 AS-FFD pair, the only round-2 messages that can differ between the two executions are sent by $p$.</p>
-<p>Consider the AS-FFD interpolation on $p$’s round-2 messages, placing $E$ last: start with $p$ sending to nobody (decides $\bot$) and introduce $p$’s round-2 messages one at a time. We claim $E$ is the first and only pivot.</p>
-<p>Suppose not: Prior to introducing it to $E$, after introducing $p$’s message to a party $q\neq E$, the decision flips from $\bot$ to $v$. Let $q \neq E$ be the first party whose receiving $p$’s message flips the decision to $v$. Now consider an execution where $I$ is honest <em>and</em> $E$ is honest. By censorship resistance, honest parties must decide $v$ regardless of $E$’s behavior, and by good case efficiency they must do so in 4 rounds. Note however that $q$ is a round-2 pivot. From this point, an argument similar to the one found in <a href="https://decentralizedthoughts.github.io/2024-01-28-early-stopping-lower-bounds/">AS-FFD technique</a> closes out the proof by contradicting good-case efficiency; we omit it from this writeup for brevity.</p>
-<p>Having established that $E$ is the sole pivot, and by setting $E$ last in the order, we obtain the following <strong>round-2 AS-FFD</strong> pair:</p>
+<p>We claim that if $k=4$ then $C_\bot$ cannot decide $v$ by round 4. If it did, since $I$ sent nothing in round 1, $E$ must have learned $v$ from other parties by the end of round 2 and would then drive a decision in only 2 more rounds, contradicting the 3-round lower bound for Byzantine broadcast. Therefore, $C_v$ and $C_\bot$ are AS and FFD. So $I$ is the <strong>initial pivot</strong>.</p>
+<p><strong>Round 2: the pivot is not $E$.</strong> Label $I$’s outgoing round 1 messages $m_1, \ldots, m_n$ to recipients $r_1, \ldots, r_n$, placing $E$ <em>last</em>. Let $\alpha^i$ be the execution where $I$ sends $m_1, \ldots, m_i$ and omits the remaining round 1 messages (but continues participating normally in later rounds). Since $\alpha^0$ is indistinguishable from $C_\bot$ through round 1 (both have $I$ sending nothing), so $\alpha^0$ also decides $\bot$; and $\alpha^n$ corresponds to $C_v$ (decides $v$), let $i^\star$ be the smallest index such that $\alpha^{i^\star}$ decides $v$ but $\alpha^{i^\star-1}$ decides $\bot$, and let $p = r_{i^\star}$.</p>
+<p>We claim $p \neq E$. Suppose $p = E$. Then $\alpha^{i^\star-1}$ has $I$ sending to all parties except $E$ (omitting only $m_{i^\star}$), yet decides $\bot$. Now consider an execution where $I$ is honest and sends to all $n$ parties, while $E$ is Byzantine and follows the same behavior as in $\alpha^{i^\star-1}$ (which $E$ can do faithfully, since it received nothing from $I$ there). Every honest party’s view is identical to $\alpha^{i^\star-1}$, so honest parties decide $\bot$. But $I$ is honest with input $v$, violating censorship resistance. Therefore, $p \neq E$.</p>
+<p>So we have found an omission fault for $I$ that makes $p$ the pivot of round 2. We now show that $E$ is the pivot of round 3.</p>
+<p><strong>Round 3: the pivot must be $E$.</strong> Consider the interpolation on $p$’s round 2 messages, again placing $E$ last: start with $p$ sending to nobody (decides $\bot$) and introduce $p$’s round 2 messages one at a time. We claim $E$ is the first and only pivot of round 3.</p>
+<p>Seeking a contradiction: Prior to introducing $p$’s message to $E$, assume that after introducing $p$’s message to a party $q\neq E$, the failure free decision flips from $\bot$ to $v$. At this point, the adversary has used three omission failures, so from the <a href="https://decentralizedthoughts.github.io/2024-01-28-early-stopping-lower-bounds/">$\min {f+2,t+1}$ early stopping</a> lower bound, by the early-stopping lower bound, $f=3$ crash faults require at least $f+2=5$ total rounds to decide, contradicting the good-case latency of $k=4$. So $E$ must be the only pivot of round 3.</p>
+<p>So we obtain the following <strong>AS-FFD</strong> pair:</p>
 <ul>
- <li><strong>World $W^-$</strong>: $I$ sent to $r_1, \ldots, r_{i^\star}$ and omitted to the remaining parties; $p$ omits its round-2 message to $E$, and has it delivered to all other parties. Failure-free decision: $\bot$.</li>
- <li><strong>World $W^+$</strong>: same, except $p$ sends its round-2 message to all parties, including $E$, with the rest being omitted. Failure-free decision: $v$.</li>
+ <li><strong>World $W^-$</strong>: $I$ sent to $r_1, \ldots, r_{i^\star}$ and omitted to the remaining parties; $p$ omits its round 2 message to $E$; all other round 1 and round 2 messages are delivered. We know that the decision in the failure-free extension of $W^-$ is $\bot$.</li>
+ <li><strong>World $W^+$</strong>: $I$ sent to $r_1, \ldots, r_{i^\star}$ and omitted to the remaining parties; all other round 1 and round 2 messages are delivered. We know that the decision in the failure-free extension of $W^+$ is $v$.</li>
 </ul>
 <p>Note that in $W^+$, $p$ is failure-free, and in $W^-$, $E$ is the only witness to $p$’s fault.</p>
-<h2 id="proof-part-2-replacing-failures-with-asynchrony">Proof Part 2: Replacing failures with asynchrony</h2>
-<p>The worlds $W^-$ and $W^+$ from Part 1 were constructed using one client fault ($I$’s selective sending in round 1) and one validator omission ($p$’s omission to $E$ in round 2). Since the $f$-fault budget counts only validator faults, $I$’s fault is free. And $p$’s validator omission can be replaced by asynchrony.</p>
-<p>Since $\Pi$ is a partial-synchrony protocol, messages can be delayed arbitrarily before GST. Set GST to occur after round 4. Then:</p>
+<h2 id="proof-part-2-crash-augmentation">Proof Part 2: Crash Augmentation</h2>
+<p>The 3-round lower bound uses two validity worlds with different crash sets of $t’=t-1$ parties. We construct $W^{-,-}$ from $W^-$ by crashing $p$ and then $t’-1$ non-$E$ parties one by one to obtain a set $C$ of crashed parties. We construct $W^{+,+}$ from $W^+$ by crashing $t’$ non-$C$ and non-$E$ parties one by one.</p>
+<p>If crashing any such party in round 3 flips the decision, then we have a round 3 bivalent pair with non-$E$ pivot. This implies that a decision cannot be reached in round 4 because this round 3 pivot may have omission faults (decision cannot happen one round after a bivalent pivot).</p>
+<p>So the remaining case is that crashing any such party in round 3 does not flip the decision. In this case, we have the following two worlds:</p>
 <ul>
- <li>
- <p><strong>$I$’s client fault costs nothing</strong>: $I$ sends only in round 1 (clients don’t participate further), so whether we model its selective sending as an omission or a crash is irrelevant to rounds 2 onward. Equivalently, let $I$ be honest but let its messages to parties outside ${r_1, \ldots, r_{i^\star}}$ arrive after GST. Since validators count only validator faults toward the threshold $f$, no validator is misled into thinking the fast-deciding path has been vacated.</p>
- </li>
- <li>
- <p><strong>In place of $p$’s omission</strong>: let $p$ be honest, but delay $p$’s round-2 message to $E$ until after round 4. From $E$’s perspective this is indistinguishable from $p$ having omitted the message. Every other validator received $p$’s message on time, so their views are consistent with a synchronous execution.</p>
- </li>
-</ul>
-<p>No validator faults are consumed. The full $f$-fault budget is available for Part 3.</p>
-<p><strong>Crash augmentation.</strong> The 3-round lower bound uses two validity worlds with different crash sets. We construct $W^{–}$ and $W^{++}$ independently. If crashing any validator flips the decision, we obtain a new initial AS-FFD pair; Parts 1 and 2 applied to it yield a new round-2 AS-FFD pair with the full fault budget, giving $k \geq 5$, a contradiction. So WLOG decisions are preserved under crashes.</p>
-<ul>
- <li><strong>$W^{–}$</strong>: crash a set $A$ of $f$ validators with $p \notin A$. Decides $\bot$.</li>
- <li><strong>$W^{++}$</strong>: crash $p$ and $f-1$ additional validators $\mathcal{E}’$ (disjoint from $p$), giving crash set $\mathsf{E} = {p} \cup \mathcal{E}’$ of size $f$. Decides $v$.</li>
+ <li><strong>$W^{-,-}$</strong>: crash a set of $t’$ validators that includes $p$. Decides $\bot$.</li>
+ <li><strong>$W^{+,+}$</strong>: crash a different set of $t’$ validators. Decides $v$.</li>
 </ul>
 <h2 id="proof-part-3-three-rounds-are-needed-starting-from-round-3">Proof Part 3: Three rounds are needed starting from round 3</h2>
-<p>The <a href="https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/">3-round lower bound</a> for Byzantine broadcast constructs a mixed world $M$ in which $E$ is Byzantine and proves a contradiction via two cases. In both cases $I$ remains omission-faulted (as a client, this consumes none of the $f$ validator faults), so $M$ may place $E$ as Byzantine and use $f-1$ additional crashes. If $M$ decides $v$: compare $M$ with $W^{–}$ (crash set $A$ of size $f$, decides $\bot$): $I$’s omission and $p$’s behavior in $M$ match $W^-$, making $M$ indistinguishable from $W^{–}$ to one side of the partition. If $M$ decides $\bot$: compare $M$ with $W^{++}$ (crash set $\mathsf{E}$ of size $f$, decides $v$): Byzantine-silent $p$ in $M$ matches the crash in $W^{++}$, making $M$ indistinguishable from $W^{++}$ to the other side. In both cases, $E$ first acts on its new information in round 3 (having received $p$’s message in round 2), so the 3-round lower bound implies parties cannot decide before round $3 + 2 = 5$. This contradicts $k = 4$. $\square$.</p>
-<p>For more details see our full version on the <a href="https://eprint.iacr.org/2025/2136">latency cost of censorship resistance</a>.</p>
+<p>The <a href="https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/">3-round lower bound</a> for Byzantine broadcast constructs 5 worlds. Two of them are the validity worlds $W^{-,-}$ and $W^{+,+}$ above. In all these worlds, $I$ is omission-faulted, so we have $t’=t-1$ faults to place. The other three worlds are essentially a mix of $W^{-,-}$ and $W^{+,+}$, obtained by a malicious $E$ and additional $t’-1$ Byzantine faults. So the total number of faults is $t$ ($t’-1=t-2$ plus one for $E$ and one for $I$); moreover, the number of parties is $n’=n-1$ as these worlds are obtained by crashing $I$.</p>
+<p>Since the 3-round lower bound shows that no decision can be reached in round 4 starting from $W^{-,-}$ and $W^{+,+}$, we have a contradiction to the good-case latency of 4.</p>
+<p>Finally, note that the 3-round lower bound requires $n’ \leq 5t’-2$, which gives us $n-1 \leq 5(t-1)-2$, or $n \leq 5t-6$. For more details see our full version on the <a href="https://eprint.iacr.org/2025/2136">latency cost of censorship resistance</a>.</p>
+<h2 id="notes">Notes</h2>
+<p>The fact that any protocol that provides censorship resistance requires some execution with good-case latency of at least $5$ rounds holds also for randomized protocols. By guessing the pivot in each round, the probability of reaching 5 rounds is at least $n^{-O(1)}$. This does not preclude the possibility of a randomized protocol that achieves expected good-case latency of $4+\epsilon$, which remains an open question.</p>
 <h2 id="acknowledgments">Acknowledgments</h2>
+<p>We thank Tim Roughgarden for suggesting the problem of the latency cost of censorship resistance and for his insightful feedback.</p>
 <p>Your thoughts on X (link coming soon).</p>
  </div>
  
@@ -304,6 +304,13 @@
  </a>
  </li>
  
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2026-04-26-complex/" data-toggle="tooltip" data-placement="top" title="From Simplex to Complex">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
  
  </ul>
  

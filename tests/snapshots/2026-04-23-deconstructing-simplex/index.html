@@ -81,7 +81,7 @@
  
  <meta property="og:article:author" content="Ittai Abraham">
  
- <meta property="og:article:published_time" content="2026-04-23T05:00:00-04:00">
+ <meta property="og:article:published_time" content="2026-04-23T01:00:00-04:00">
  <meta property="og:url" content="https://decentralizedthoughts.github.io/2026-04-23-deconstructing-simplex/">
  <link rel="canonical" href="https://decentralizedthoughts.github.io/2026-04-23-deconstructing-simplex/">
  
@@ -221,26 +221,40 @@
 <p><strong>Provable Agreement</strong>: the adversary cannot form two valid commit certificates with different values.</p>
 <h2 id="deconstructing-simplex-into-an-inner-and-outer-protocol">Deconstructing Simplex into an Inner and Outer Protocol</h2>
 <p>The outer protocol:</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>For view v, the primary of view v with input (val, val-proof):
- if a certSet is not empty,
- let p in certSet be the certificate of highest view w
- let C be the set of skip certificates from skipSet for all views w &lt; y &lt; v
- Graded-Broadcast (v, p.val, (p,C))
- otherwise
- let C be the set of skip certificates from skipSet for all views y &lt; v
- Graded-Broadcast (v, val, (val-proof, C))
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>For view v, the primary of view v
+with input (val, val-proof):
+ if certSet is not empty:
+ let p be the certificate in certSet
+ with highest view w
+ let C be skip certificates from skipSet
+ for all views w &lt; y &lt; v
+ Graded-Broadcast(v, p.val, (p, C))
+ otherwise:
+ let C be skip certificates from skipSet
+ for all views y &lt; v
+ Graded-Broadcast(v, val, (val-proof, C))
 </code></pre></div></div>
 <p>Using the following event handlers (certificates can arrive from Graded-Broadcast or forwarded):</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>On first skip certificate for view v, add it to skipSet, and move to view v+1 (if not there yet)
-On first certificate for view v, add it to certSet, and move to view v+1 (if not there yet)
-On first strong certificate, decide and forward it
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>On first skip certificate for view v:
+ add it to skipSet
+ move to view v+1, if not there yet
+On first certificate for view v:
+ add it to certSet
+ move to view v+1, if not there yet
+On first strong certificate:
+ decide
+ forward it
 </code></pre></div></div>
 <p>The <strong>Simplex voting rule</strong> is the external-validity function passed to Graded-Broadcast:</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>For view v:
- if receive (v, p.val, (p,C)) check that p is a valid certificate
- and that C contains a valid skip certificate for each view p.view &lt; y &lt; v
- if receive (v, val, (val-proof, C)) check that val-proof is a proof that val is valid
- and that C contains a valid skip certificate for each view y &lt; v
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>For view v:
+ if receive (v, p.val, (p, C)):
+ check p is a valid certificate
+ check C contains a valid skip certificate
+ for each view p.view &lt; y &lt; v
+ if receive (v, val, (val-proof, C)):
+ check val-proof proves val is valid
+ check C contains a valid skip certificate
+ for each view y &lt; v
 </code></pre></div></div>
 <p>In words, if the primary has a certificate, it proposes the value of the certificate together with skip certificates for all views between that certificate and the current view. If there are no certificates, it uses its own input together with skip certificates for all lower views.</p>
 <p>Intuitively, since a skip for view $y$ is a proof that no commit happened in view $y$, showing all the relevant skips proves that if any value was previously committed, then the proposed value must be that value.</p>
@@ -280,24 +294,30 @@ On first strong certificate, decide and forward it
 </ol>
 <p>A <strong>skip certificate</strong> with tag $v$ consists of $n-f$ distinct <code class="language-plaintext highlighter-rouge">&lt;Vote, v, ⊥&gt;</code> messages.</p>
 <p>When a party forwards a certificate, it forwards the bundled signed messages that make up the certificate.</p>
-<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Graded-Broadcast with tag v and designated sender Sender(v)
-and sender input (x, proof):
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Graded-Broadcast with tag v
+and designated sender Sender(v)
+with sender input (x, proof):
 1. Upon entering the instance:
  Start a local timer T_v
  Sender(v) sends &lt;Propose, v, x, proof&gt;
-2. Upon receiving the first valid &lt;Propose, v, x, proof&gt; from Sender(v):
+2. Upon receiving the first valid
+ &lt;Propose, v, x, proof&gt; from Sender(v):
  Send &lt;Vote, v, x&gt;
-3. Upon receiving a valid regular certificate rc for x for the first time:
+3. Upon receiving a valid regular certificate rc
+ for x for the first time:
  Deliver rc
  Send rc to all
  If T_v &lt; 3Δ:
  Send &lt;Final, v, x&gt;
-4. Upon T_v = 3Δ and not yet sent Final:
+4. Upon T_v = 3Δ
+ and not yet sent Final:
  Send &lt;Vote, v, ⊥&gt;
-5. Upon receiving a valid skip certificate sc for the first time:
+5. Upon receiving a valid skip certificate sc
+ for the first time:
  Deliver sc
  Send sc to all
-6. Upon receiving a valid strong certificate sc for x for the first time:
+6. Upon receiving a valid strong certificate sc
+ for x for the first time:
  Deliver sc
  Send sc to all
 </code></pre></div></div>
@@ -340,7 +360,7 @@ and sender input (x, proof):
 </ol>
 <h2 id="acknowledgments">Acknowledgments</h2>
 <p>Many thanks to Kartik and Joachim for insightful comments and suggestions.</p>
-<p>Your thoughts on <a href="https://x.com/home">X</a>.</p>
+<p>Your thoughts on <a href="https://x.com/ittaia/status/2048079690364080367?s=20">X</a>.</p>
  </div>
  
  <div class="blog-tags">

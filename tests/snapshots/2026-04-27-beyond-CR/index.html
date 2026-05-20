@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Beyond censorship resistance: hiding, simultaneous binding, and accountable last look</title>
+ 
+ 
+ 
+ 
+ <meta name="author" content="Ittai Abraham, Pranav Garimidi, and Joachim Neu">
+ 
+ <meta name="description" content="In a previous post we introduced strong chain quality (SCQ), which provides a strong form of censorship resistance: honest parties’ transactions are included in proportion to their share of the validator set in every block. This post considers three additional properties needed for efficient on-chain markets: hiding, simultaneous binding (SB), and accountable last look (ALL). Hiding Hiding: No information about the contents of honest parties’ inputs is revealed to the...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Beyond censorship resistance: hiding, simultaneous binding, and accountable last look">
+ <meta property="og:description" content="In a previous post we introduced strong chain quality (SCQ), which provides a strong form of censorship resistance: honest parties’ transactions are included in proportion to their share of the validator set in every block. This post considers three additional properties needed for efficient on-chain markets: hiding, simultaneous binding (SB), and accountable last look (ALL). Hiding Hiding: No information about the contents of honest parties’ inputs is revealed to the...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham, Pranav Garimidi, and Joachim Neu">
+ 
+ <meta property="og:article:published_time" content="2026-04-27T05:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2026-04-27-beyond-CR/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2026-04-27-beyond-CR/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Beyond censorship resistance: hiding, simultaneous binding, and accountable last look">
+ <meta property="twitter:description" content="In a previous post we introduced strong chain quality (SCQ), which provides a strong form of censorship resistance: honest parties’ transactions are included in proportion to their share of the validator set in every block. This post considers three additional properties needed for efficient on-chain markets: hiding, simultaneous binding (SB), and accountable last look (ALL). Hiding Hiding: No information about the contents of honest parties’ inputs is revealed to the...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" id="nav-search-link" href="#" title="Search the blog">
+ <span id="nav-search-icon" class="fa fa-search"></span>
+ <span id="nav-search-text">Search</span>
+ </a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+<div id="beautifuljekyll-search-overlay" data-search-json="/assets/data/searchcorpus.json" data-top-pages-json="/assets/data/top-pages.json" aria-hidden="true">
+ <div class="search-overlay-backdrop" data-search-close></div>
+ <div class="search-dialog" role="dialog" aria-modal="true" aria-labelledby="nav-search-heading">
+ <div class="search-dialog-header">
+ <p class="search-dialog-kicker">Search the archive</p>
+ <button id="nav-search-exit" type="button" title="Close search" aria-label="Close search">Close</button>
+ </div>
+ <label class="sr-only" id="nav-search-heading" for="nav-search-input">Search posts, authors, topics, and phrases</label>
+ <div class="search-input-shell">
+ <span class="fa fa-search" aria-hidden="true"></span>
+ <input type="text" id="nav-search-input" placeholder="Search posts, authors, topics, and phrases" autocomplete="off">
+ <span class="search-shortcut">/</span>
+ </div>
+ <p id="nav-search-status">Search by title, author, tag, or a phrase from the post.</p>
+ <div id="search-discovery">
+ <section class="search-discovery-group" aria-labelledby="search-popular-heading">
+ <p class="search-discovery-heading" id="search-popular-heading">Popular topics</p>
+ <div id="search-suggestions" aria-label="Popular topics"></div>
+ </section>
+ <section class="search-discovery-group" aria-labelledby="search-recent-heading">
+ <p class="search-discovery-heading" id="search-recent-heading">Top pages</p>
+ <div id="search-recent-posts"></div>
+ </section>
+ </div>
+ <ul id="search-results-container"></ul>
+ </div>
+</div>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Beyond censorship resistance: hiding, simultaneous binding, and accountable last look</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham, Pranav Garimidi, and Joachim Neu</strong><br>
+ 
+ <span class="post-meta">Posted on April 27, 2026</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>In a <a href="https://decentralizedthoughts.github.io/2026-03-23-strong-chain-quality/">previous post</a> we introduced <em>strong chain quality</em> (SCQ), which provides a strong form of censorship resistance: honest parties’ transactions are included in proportion to their share of the validator set in every block. This post considers three additional properties needed for efficient on-chain markets: <strong>hiding</strong>, <strong>simultaneous binding (SB)</strong>, and <strong>accountable last look (ALL)</strong>.</p>
+<h2 id="hiding">Hiding</h2>
+<p><strong>Hiding</strong>: No information about the contents of honest parties’ inputs is revealed to the adversary before the block is committed.</p>
+<p>Hiding can be implemented in different ways depending on what is already available. For general encrypted mempools, <a href="https://eprint.iacr.org/2025/1254">batched threshold encryption</a> is the leading approach (see also <a href="https://eprint.iacr.org/2026/674">Boneh et al. 2026</a> and <a href="https://eprint.iacr.org/2025/2032">TrX</a> and the secret sharing based approach <a href="https://eprint.iacr.org/2025/1772.pdf">in MCP</a>). With censorship resistance and <a href="https://decentralizedthoughts.github.io/2026-03-23-strong-chain-quality/">strong chain quality</a>, one can simply use <a href="https://en.wikipedia.org/wiki/Identity-based_encryption">identity-based encryption</a>. For a rigorous formal definition of hiding in the context of consensus, see <a href="https://arxiv.org/pdf/2509.23984v1">Definition 11 here</a>. We defer a more complete treatment of hiding at the BFT layer to future posts.</p>
+<p>Together, hiding and censorship resistance ensure that honest inputs are included and stay private until commit. But the adversary may still gain a timing advantage: it can observe more recent public information before deciding its own. Simultaneous binding addresses this.</p>
+<h2 id="simultaneous-binding-sb">Simultaneous Binding (SB)</h2>
+<p><strong>Simultaneous Binding (SB)</strong>: for every block $B$ there is a public binding time $t_B$ such that <em>all</em> parties must fix their inputs for $B$ at time $t_B$. Concretely, a sender $i$ <em>binds</em> to value $x$ once at least one honest party has acknowledged $x$ from $i$ before $t_B$. Since honest parties acknowledge at most one value per sender per block and only before $t_B$, this pins the sender’s input. If two honest parties acknowledge different values from the same sender, then the sender is Byzantine and is bound to $\bot$.</p>
+<p>Implementing SB requires synchronized clocks. Moreover, to get strict simultaneous binding one needs to assume all network delays are equal (lockstep).</p>
+<p>The natural implementation is a two-round protocol. In round 1, input holders broadcast their signed values. In round 2, honest parties send a signed acknowledgment for the first valid value they receive from each sender no later than the deadline $t_B$. A sender that collects $f+1$ acknowledgments holds a <em>certificate</em>, which is public evidence that at least one honest party has bound it, since at most $f$ parties can be Byzantine. These certificates, along with equivocation evidence, are then carried into inclusion lists and checked as part of the block’s validity rule.</p>
+<h2 id="accountable-last-look-all">Accountable Last Look (ALL)</h2>
+<p>Even with simultaneous binding, a malicious party colluding with a malicious proposer can arrange for its own bound transaction to be excluded from the block after the deadline $t_B$. Note that even with hiding, new external market information may arrive after $t_B$, giving the adversary conditions it could not have anticipated at binding time. This is the <strong>last look</strong> advantage: the adversary can condition the inclusion of its own bound transaction on market conditions observed at finalization, strictly later than the common deadline at which all honest parties were forced to bind. Last look is a well known asymmetry <a href="https://arxiv.org/abs/1806.04460">challenge in markets</a> (also see <a href="https://www.paradigm.xyz/2024/02/leaderless-auctions">leaderless auctions</a>).</p>
+<p>By the inherent <a href="https://decentralizedthoughts.github.io/2024-03-07-mobile-is-FLP/">bivalence of consensus</a>, some degree of last look is unavoidable: an adversarial proposer always retains the ability to steer which transactions enter the block. We will formally prove this in later posts.</p>
+<p>Instead, we make last look <em>accountable</em>. Accountable last look is formalized by two properties:</p>
+<p><strong>Slashable Bind-Then-Abort (SBTA)</strong>: if party $i$ binds to input $x_i$ for block $B$ but $B$ does not include $x_i$, honest parties can produce a publicly verifiable slashing proof against $i$.</p>
+<p>Note that the slashing proof is against the sender, not the proposer.</p>
+<p><strong>No Honest Slashing (NHS)</strong>: the adversary cannot produce a valid slashing proof against an honest party.</p>
+<p>The implementation builds on the $f+1$ certificates from the Bind phase. Because a certificate carries $f+1$ acknowledgments and at most $f$ parties are Byzantine, it contains at least one honest acknowledgment, which is evidence that the value is bound. If the committed block omits a certified value, that honest acknowledgment together with the block’s commit certificate is a publicly verifiable slashing proof, satisfying SBTA. NHS guarantees the adversary cannot fabricate such a proof against an honest sender; without it, parties would be reluctant to bind at all.</p>
+<p><strong>Note</strong>: NHS requires synchrony. Under weaker assumptions, an honest sender’s value might be acknowledged by an honest party (creating a binding) yet still fail to reach enough parties in time, leaving the honest sender exposed to a valid slashing proof. Under synchrony, an honest sender’s value is guaranteed to reach all honest parties before the deadline, which forces it into the block and rules out any false slashing.</p>
+<p>Putting it all together:</p>
+<blockquote>
+ <p><strong>Theorem</strong>: For $n \geq 3f+1$ parties under synchrony, any BFT protocol can be augmented to satisfy CR, SCQ, SB, and ALL by adding two extra rounds.</p>
+</blockquote>
+<h2 id="notes">Notes</h2>
+<ul>
+ <li>
+ <p>Since adding two extra rounds is <a href="https://decentralizedthoughts.github.io/2026-04-23-latency-of-censorship-resistance/">necessary for achieving censorship resistance</a>, the above theorem implies that achieving all four properties is essentially free once we have censorship resistance.</p>
+ </li>
+ <li>
+ <p>This post focused on <em>what</em> to include in the block, but not on the <em>order</em> of transactions within it. Transaction ordering will be the topic of future posts.</p>
+ </li>
+ <li>
+ <p>Obtaining the same properties under partial synchrony seems impossible. Whether a formal impossibility can be established, and what weaker guarantees are achievable, will also be explored in future posts.</p>
+ </li>
+ <li>
+ <p>We define properties that an <em>ideal</em> efficient market should have and how a <em>real</em> implementation can obtain some of them. Conceptually, we are using the lens of secure multi-party computation (MPC) to model market implementation, highlighting that just low-latency high-throughput state machine replication is not enough. This connection to MPC opens new research opportunities.</p>
+ </li>
+ <li>
+ <p>Very similar notions were suggested in the context of <a href="https://eprint.iacr.org/2025/2127">auctions on blockchains</a> by Alpos, Heimbach, Nayak, and Wadhwa.</p>
+ </li>
+</ul>
+<h3 id="acknowledgments">Acknowledgments</h3>
+<p>We thank <a href="https://x.com/SarishtW">Sarisht Wadhwa</a> for pointing out their work <a href="https://eprint.iacr.org/2025/2127">Censorship-Resistant Sealed-Bid Auctions on Blockchains</a>.</p>
+<p>Your thoughts on <a href="https://x.com/ittaia/status/2048829095300005936?s=20">X</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Beyond+censorship+resistance%3A+hiding%2C+simultaneous+binding%2C+and+accountable+last+look&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2026-04-27-beyond-CR%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2026-04-26-complex/" data-toggle="tooltip" data-placement="top" title="From Simplex to Complex">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2026-05-14-simplex-FVS/" data-toggle="tooltip" data-placement="top" title="Simplex on a Fixed View Schedule">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ 
+ Decentralized Thinkers
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

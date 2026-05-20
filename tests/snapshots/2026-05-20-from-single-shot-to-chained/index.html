@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>From Single-Shot Simplex to Chained Simplex</title>
+ 
+ 
+ 
+ 
+ <meta name="author" content="Ittai Abraham, Joachim Neu">
+ 
+ <meta name="description" content="In this post we construct Chained Simplex from single-shot Simplex. The chained construction is a simple modification of the single-shot protocol and applies to any Simplex variant with the same inner certificate properties and outer proposal structure. See here for more generic constructions. We will use the decomposition from deconstructing Simplex to make the construction explicit. That post separates Simplex into: an inner protocol, which produces value certificates, decision certificates,...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="From Single-Shot Simplex to Chained Simplex">
+ <meta property="og:description" content="In this post we construct Chained Simplex from single-shot Simplex. The chained construction is a simple modification of the single-shot protocol and applies to any Simplex variant with the same inner certificate properties and outer proposal structure. See here for more generic constructions. We will use the decomposition from deconstructing Simplex to make the construction explicit. That post separates Simplex into: an inner protocol, which produces value certificates, decision certificates,...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham, Joachim Neu">
+ 
+ <meta property="og:article:published_time" content="2026-05-20T02:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2026-05-20-from-single-shot-to-chained/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2026-05-20-from-single-shot-to-chained/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="From Single-Shot Simplex to Chained Simplex">
+ <meta property="twitter:description" content="In this post we construct Chained Simplex from single-shot Simplex. The chained construction is a simple modification of the single-shot protocol and applies to any Simplex variant with the same inner certificate properties and outer proposal structure. See here for more generic constructions. We will use the decomposition from deconstructing Simplex to make the construction explicit. That post separates Simplex into: an inner protocol, which produces value certificates, decision certificates,...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" id="nav-search-link" href="#" title="Search the blog">
+ <span id="nav-search-icon" class="fa fa-search"></span>
+ <span id="nav-search-text">Search</span>
+ </a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+<div id="beautifuljekyll-search-overlay" data-search-json="/assets/data/searchcorpus.json" data-top-pages-json="/assets/data/top-pages.json" aria-hidden="true">
+ <div class="search-overlay-backdrop" data-search-close></div>
+ <div class="search-dialog" role="dialog" aria-modal="true" aria-labelledby="nav-search-heading">
+ <div class="search-dialog-header">
+ <p class="search-dialog-kicker">Search the archive</p>
+ <button id="nav-search-exit" type="button" title="Close search" aria-label="Close search">Close</button>
+ </div>
+ <label class="sr-only" id="nav-search-heading" for="nav-search-input">Search posts, authors, topics, and phrases</label>
+ <div class="search-input-shell">
+ <span class="fa fa-search" aria-hidden="true"></span>
+ <input type="text" id="nav-search-input" placeholder="Search posts, authors, topics, and phrases" autocomplete="off">
+ <span class="search-shortcut">/</span>
+ </div>
+ <p id="nav-search-status">Search by title, author, tag, or a phrase from the post.</p>
+ <div id="search-discovery">
+ <section class="search-discovery-group" aria-labelledby="search-popular-heading">
+ <p class="search-discovery-heading" id="search-popular-heading">Popular topics</p>
+ <div id="search-suggestions" aria-label="Popular topics"></div>
+ </section>
+ <section class="search-discovery-group" aria-labelledby="search-recent-heading">
+ <p class="search-discovery-heading" id="search-recent-heading">Top pages</p>
+ <div id="search-recent-posts"></div>
+ </section>
+ </div>
+ <ul id="search-results-container"></ul>
+ </div>
+</div>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>From Single-Shot Simplex to Chained Simplex</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham, Joachim Neu</strong><br>
+ 
+ <span class="post-meta">Posted on May 20, 2026</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>In this post we construct <strong>Chained Simplex</strong> from
+<a href="https://decentralizedthoughts.github.io/2025-06-18-simplex/">single-shot Simplex</a>.
+The chained construction is a simple modification of the single-shot protocol
+and applies to any Simplex variant with the same
+inner certificate properties and outer proposal structure. See <a href="https://decentralizedthoughts.github.io/2022-11-19-from-single-shot-to-smr/">here</a> for more generic constructions.</p>
+<p>We will use the decomposition from
+<a href="https://decentralizedthoughts.github.io/2026-04-23-deconstructing-simplex/">deconstructing Simplex</a>
+to make the construction explicit. That post separates Simplex into:</p>
+<ol>
+ <li>an inner protocol, which produces value certificates, decision
+certificates, and skip certificates per view; and</li>
+ <li>an outer protocol, which forms proposals and tells honest parties which
+proposals to vote for.</li>
+</ol>
+<p>We keep the inner protocol unchanged and only slightly change the
+outer protocol.</p>
+<h2 id="the-inner-protocol">The Inner Protocol</h2>
+<p>In view $v$, the inner protocol may produce:</p>
+<ol>
+ <li>$\mathrm{VC}_v(x)$, a value certificate for $x$.</li>
+ <li>$\mathrm{DC}_v(x)$, a decision certificate for $x$.</li>
+ <li>$\mathrm{SC}_v$, a skip certificate for view $v$.</li>
+</ol>
+<p>We use the following properties of the inner protocol.</p>
+<p><strong>Same View Agreement.</strong> There are no two valid value certificates
+$\mathrm{VC}_v(x)$ and $\mathrm{VC}_v(y)$ with $x\neq y$.</p>
+<p><strong>Decision Implies Value.</strong> A valid $\mathrm{DC}_v(x)$ implies a valid
+$\mathrm{VC}_v(x)$.</p>
+<p><strong>Skip Decision Exclusion.</strong> There is no valid pair
+$\mathrm{DC}_v(x),\mathrm{SC}_v$.</p>
+<p>Every valid value certificate contains an honest vote for its value. Honest
+parties vote only after the outer protocol accepts the proposal for that value.</p>
+<p>Certificates are forwardable. After GST, if an honest party obtains a valid
+value, decision, or skip certificate, then every honest party eventually
+obtains it.</p>
+<p>After GST, in each entered view, some honest party eventually obtains either a
+valid value certificate or a valid skip certificate.</p>
+<p>In an honest leader good case, if the leader has a valid proposal, the view
+produces the corresponding decision certificate within the usual good case
+latency.</p>
+<h2 id="single-shot-simplex-outer-protocol">Single-Shot Simplex Outer Protocol</h2>
+<p>In single-shot Simplex, honest parties vote for a proposal in view $v$ in one
+of two cases.</p>
+<p>First, the proposal repeats the value from a previous value certificate and
+includes skip certificates for the intervening views:</p>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>value:
+ x
+vote when:
+ VC_w(x)
+ SC_{w+1}, ..., SC_{v-1}
+</code></pre></div></div>
+<p>where $0&lt;w&lt;v$.</p>
+<p>Second, the proposal uses a fresh value and includes skip certificates for the
+intervening views:</p>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>value:
+ x
+vote when:
+ x passes external validity
+ SC_1, ..., SC_{v-1}
+</code></pre></div></div>
+<p>Thus, a proposal either repeats a previous value, or starts from a fresh
+externally valid value.</p>
+<h2 id="chained-simplex-outer-protocol">Chained Simplex Outer Protocol</h2>
+<p>The chained outer protocol always uses a previous value certificate, and also
+checks a new block against the chain in that certificate.</p>
+<p>Values are chains. Write $C\preceq D$ when $C$ is a prefix of $D$. There is a
+public genesis chain $\bot_{\mathsf{gen}}$, with public value certificate
+$\mathrm{VC}_0(\bot_{\mathsf{gen}})$.</p>
+<p>The chain represents a <a href="https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/">state machine</a> execution. We assume an external
+application validity relation</p>
+\[C \xrightarrow{\mathrm{valid}} C\circ B,\]
+<p>meaning that block $B$ is valid relative to the state reached by $C$.</p>
+<p>For the first block, use $w=0$ and $C=\bot_{\mathsf{gen}}$. Honest parties
+vote for a proposal in view $v$ when:</p>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>value:
+ C^+ = C o B
+vote when:
+ VC_w(C)
+ SC_{w+1}, ..., SC_{v-1}
+ C -&gt; valid C o B
+</code></pre></div></div>
+<p>where $0\leq w&lt;v$.</p>
+<blockquote>
+ <p>The core change is small: the leader does not merely propose the certified
+value again. It uses the certified chain as a prefix and proposes one valid
+extension of it.</p>
+</blockquote>
+<p>If view $v$ produces $\mathrm{DC}_v(C^+)$, then $C^+$ is decided. If it
+produces only $\mathrm{VC}_v(C^+)$, then $C^+$ is not decided yet, but later
+views may extend it. If view $v$ produces $\mathrm{SC}_v$, then no new chain is
+decided in view $v$.</p>
+<h2 id="chained-simplex-properties">Chained Simplex Properties</h2>
+<p>A chain $C$ is decided if there is a valid decision certificate
+$\mathrm{DC}_v(C)$ for some view $v$.</p>
+<p>The chain protocol has the following properties.</p>
+<p><strong>Chain Agreement.</strong> If $\mathrm{DC}_i(C)$ and $\mathrm{DC}_j(D)$ are valid,
+then $C\preceq D$ or $D\preceq C$.</p>
+<p>We only require prefix agreement for decided chains. Value certificates without
+decisions need not become decided chains.</p>
+<p><strong>Chain Validity.</strong> If $\mathrm{VC}_v(C)$ is valid, then $C$ is valid from
+genesis: each block is externally valid after its prefix. Therefore, the same
+holds for every valid $\mathrm{DC}_v(C)$.</p>
+<p><strong>Chain Growth.</strong> After GST, if valid blocks remain available and honest
+leaders occur infinitely often, the height of decided chains grows without
+bound.</p>
+<h2 id="why-it-works">Why It Works</h2>
+<p><strong>Agreement.</strong> If $i=j$, then decision implies value and same view agreement
+give $C=D$. So it remains to show that if $\mathrm{DC}_i(C)$ and
+$\mathrm{VC}_j(D)$ are valid with $i&lt;j$, then $C\preceq D$.</p>
+<p>Since $\mathrm{VC}_j(D)$ contains an honest vote, $D$ came from an accepted
+chain proposal. Thus, $D=D^\prime\circ B$ for some predecessor certificate
+$\mathrm{VC}_w(D^\prime)$ and skips
+$\mathrm{SC}_{w+1},\ldots,\mathrm{SC}_{j-1}$.</p>
+<p>If $w=i$, then decision implies value and same view agreement give $C=D^\prime$,
+so $C\preceq D$. If $w&lt;i&lt;j$, then the proposal included $\mathrm{SC}_i$,
+contradicting $\mathrm{DC}_i(C)$ by skip decision exclusion. If $i&lt;w$, repeat
+the same argument with $\mathrm{VC}_w(D^\prime)$ in place of $\mathrm{VC}_j(D)$. The
+view number decreases, so this eventually proves $C\preceq D$.</p>
+<p>Chain agreement follows because every decision certificate implies a value
+certificate for the same chain.</p>
+<p><strong>Validity.</strong> We prove by induction on $v$ that every valid
+$\mathrm{VC}_v(E)$ has an externally valid chain. The genesis certificate is
+valid. For $v&gt;0$, a value certificate contains an honest vote, so its proposal
+was for $E=C\circ B$, used a valid predecessor $\mathrm{VC}_w(C)$ with
+$w&lt;v$, and checked $C \xrightarrow{\mathrm{valid}} C\circ B$. By induction,
+$C$ is valid, so $E$ is valid. A decision certificate implies a value
+certificate for the same chain.</p>
+<p><strong>Growth.</strong> Consider an honest leader in a post-GST view $v$ after it has
+obtained, for every earlier view, either a value certificate or a skip
+certificate. Let $w&lt;v$ be the highest view for which it has a value certificate
+$\mathrm{VC}_w(C)$. By the catch-up assumption, every view $y$ with $w&lt;y&lt;v$
+has either a value certificate or a skip certificate. Since $w$ is the highest
+view with a value certificate, all such views have skip certificates. If a
+valid next block is available, the chained outer protocol lets the leader
+propose $C\circ B$, and the good case gives a decision certificate for the
+extended chain.</p>
+<h2 id="takeaway">Takeaway</h2>
+<p>Chained Simplex uses the same inner protocol as single-shot Simplex. The only
+change is in the
+<a href="https://decentralizedthoughts.github.io/2026-04-23-deconstructing-simplex/">outer proposal rule</a>:
+each leader extends a certified chain by one valid block.</p>
+<p>This is why we often use a single-shot presentation: it isolates the core
+consensus mechanism, while chaining is just an outer-protocol change.</p>
+<p>Your thoughts on X.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=From+Single-Shot+Simplex+to+Chained+Simplex&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2026-05-20-from-single-shot-to-chained%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2026-05-17-fast-simplex-fvs/" data-toggle="tooltip" data-placement="top" title="Fast Simplex on a Fixed View Schedule">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2026-05-20-sui-lutris/" data-toggle="tooltip" data-placement="top" title="Lutris: Safe Composition of Broadcast and Consensus">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ 
+ Decentralized Thinkers
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

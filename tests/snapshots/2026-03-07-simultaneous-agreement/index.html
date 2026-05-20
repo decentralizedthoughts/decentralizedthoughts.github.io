@@ -224,12 +224,16 @@
 <ol>
  <li>
  <p><strong>Fixed View Schedule (FVS)</strong>
- In the FVS design, the start and end times of each view $i$ are fixed in advance.</p>
+ In the FVS design, the start and end times of each view $i$ are fixed in
+ advance. See <a href="https://decentralizedthoughts.github.io/2026-05-14-simplex-FVS/">Simplex FVS</a>
+ and <a href="https://decentralizedthoughts.github.io/2026-05-17-fast-simplex-fvs/">Fast Simplex FVS</a>
+ for examples of this design.</p>
  <p><em>Pros</em>:</p>
  <ul>
- <li>parties are tightly synchronized on view boundaries;</li>
+ <li>parties are tightly synchronized on view boundaries.</li>
  <li>view synchronization is straightforward to implement and reason about.</li>
  <li>future proposers know exactly when their views will start, allowing them to prepare better.</li>
+ <li>clients know exactly when to expect blocks and when to expect their transactions to be included, which is important for user experience and for external events that typically update at fixed times (for example, oracles).</li>
  </ul>
  <p><em>Cons</em>:</p>
  <ul>
@@ -239,7 +243,7 @@
  </li>
  <li>
  <p><strong>Variable View Schedule (VVS)</strong>
- In VVS, the view length can change based on network conditions and faults (see <a href="https://arxiv.org/abs/2301.09881">Fever</a> and <a href="https://arxiv.org/abs/2311.08091">Lumiere</a>). For example, in an <strong>optimistically responsive</strong> design (see <a href="https://decentralizedthoughts.github.io/2022-12-18-what-is-responsiveness/">What is Responsiveness?</a> and <a href="https://decentralizedthoughts.github.io/2020-06-12-optimal-optimistic-responsiveness/">Optimistic Responsiveness</a>), good-case views complete as quickly as the network allows. Another example is protocols with a <strong>fast path</strong>, which can be viewed as taking additional latency advantages in particularly good conditions (for example, see <a href="https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/">links here</a>). More generally, VVS designs aim to reduce latency in <strong>good-case</strong> events.</p>
+ In VVS, the view length can change based on network conditions and faults (see <a href="https://arxiv.org/abs/2301.09881">Fever</a> and <a href="https://arxiv.org/abs/2311.08091">Lumiere</a>). For example, in an <strong>optimistically responsive</strong> design (see <a href="https://decentralizedthoughts.github.io/2022-12-18-what-is-responsiveness/">What is Responsiveness?</a> and <a href="https://decentralizedthoughts.github.io/2020-06-12-optimal-optimistic-responsiveness/">Optimistic Responsiveness</a>), good-case views complete as quickly as the network allows. Another example is protocols with a <strong>fast path</strong>, which can be viewed as exploiting additional latency advantages in particularly good conditions (for example, see <a href="https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/">links here</a>). More generally, VVS designs aim to reduce latency in <strong>good-case</strong> events.</p>
  <p><em>Pros</em>:</p>
  <ul>
  <li>good-case view latency can be $O(\delta)$ and commit time as small as $3\delta$ (for optimal resilience, see <a href="https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/">here</a>). Even in synchrony, these protocols can have $O(\delta)$ good-case view latency (see <a href="https://decentralizedthoughts.github.io/2021-12-07-good-case-latency-of-rotating-leader-synchronous-bft/">here</a>).</li>
@@ -304,7 +308,14 @@
  <li><a href="https://www.sciencedirect.com/science/article/pii/0890540190900149/pdfft?isDTMRedir=true">Dwork, Moses, <em>Knowledge and common knowledge in a Byzantine environment: Crash failures</em></a></li>
  <li><a href="https://www.sciencedirect.com/science/article/pii/S0743731509000045/pdfft?isDTMRedir=true">Moses, Raynal, <em>Revisiting simultaneous consensus with crash failures</em></a></li>
 </ul>
-<h3 id="acknowledgements">Acknowledgements</h3>
+<p>Fixed view schedules in partial synchrony also appear in BFT protocols.
+Spiegelman uses this approach
+<a href="https://arxiv.org/abs/2002.06993">in Search for an Optimal Authenticated Byzantine Agreement</a>
+to obtain tight bounds for the optimistic synchronous part of the protocol.
+A fixed schedule style is also used by
+<a href="https://arxiv.org/abs/1805.03391">ACDNPRS18</a>
+to obtain subquadratic communication in partial synchrony.</p>
+<h3 id="acknowledgments">Acknowledgments</h3>
 <p>We would like to thank Gilad Stern, Kartik Nayak, Nusret Tas, Joachim Neu, and Pranav Garimidi for insightful discussions and feedback on this post.</p>
 <hr />
 <p>Please leave <a href="https://x.com/ittaia/status/2032858696967946439?s=20">comments on X</a>.</p>

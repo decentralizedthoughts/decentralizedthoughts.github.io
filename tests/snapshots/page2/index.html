@@ -189,6 +189,201 @@
  
  
  <article class="post-preview">
+ <a href="/2025-11-22-three-round-BFT/">
+ <h2 class="post-title">Why BFT Needs Three Rounds</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on November 22, 2025, by <b>Ittai Abraham and Kartik Nayak</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Many modern BFT protocols share a common structural pattern. PBFT uses preprepare and prepare. Tendermint uses prevote and precommit. CasperFFG and Simplex use notarization and finalization. HotStuff uses a QC on top of another QC.
+ 
+ 
+ <a href="/2025-11-22-three-round-BFT/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#lowerbound">lowerbound</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ 
+ 
+ <article class="post-preview">
+ <a href="/2025-11-15-simplex-from-benign/">
+ <h2 class="post-title">From Benign Simplex to Byzantine Simplex</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on November 15, 2025, by <b>Ittai Abraham</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In this post we present a Simplex protocol that solves single shot consensus and is resilient to $f < n/3$ Byzantine failures, under partial synchrony. In a previous post we showed how to move from Tendermint to Simplex.
+ 
+ 
+ <a href="/2025-11-15-simplex-from-benign/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#dist101">dist101</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ 
+ 
+ <article class="post-preview">
+ <a href="/2025-11-08-benign-simplex/">
+ <h2 class="post-title">Benign Simplex</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on November 8, 2025, by <b>Ittai Abraham</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ The goal of this post is to describe a single-shot consensus protocol that is resilient to f < n/2 omission failures, under partial synchrony.
+This protocol is inspired by the multi-shot Simplex for crash faults protocol and our earlier posts on Chained Raft, Benign HotStuff, and Log Paxos.
+ 
+ 
+ <a href="/2025-11-08-benign-simplex/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#dist101">dist101</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ 
+ 
+ <article class="post-preview">
+ <a href="/2025-10-22-quiz-basics/">
+ <h2 class="post-title">Test your understanding of the basics of fault tolerant distributed computing</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on October 22, 2025, by <b>Ittai Abraham</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ The goal of this post is to motivate you to learn the basics of distributed computing by providing a set of simple questions that test your understanding of the basic definitions. In 2025, LLM-based chatbots score 100 on this test, so that’s what you should aim for. The questions cover the standard models and fault assumptions you encounter in the first lectures of any distributed computing course.
+ 
+ 
+ <a href="/2025-10-22-quiz-basics/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#dist101">dist101</a>
+ 
+ <a href="/tags#models">models</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ 
+ 
+ <article class="post-preview">
+ <a href="/2025-09-27-carry-the-tail/">
+ <h2 class="post-title">Carry: HotStuff Linearity with Tail-Forking-Resilience</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on September 27, 2025, by <b>Dakai Kang, Suyash Gupta, Dahlia Malkhi, Mohammad Sadoghi</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ The recently identified tail-forking attack shows how malicious leaders can degrade throughput by skipping over honest proposals in streamlined BFT protocols like HotStuff. To address this challenge, we introduce Carry, a lightweight mechanism that preserves HotStuff’s linearity while protecting against tail-forking. Carry also supports commits by honest-but-sluggish leaders whose messages are benignly delayed.
+ 
+ 
+ <a href="/2025-09-27-carry-the-tail/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#BFT">BFT</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ 
+ 
+ <article class="post-preview">
+ <a href="/2025-09-24-Kuplex/">
+ <h2 class="post-title">Variants of Simplex with Reduced Bad-case Latency: C-Simplex and Kuplex</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on September 24, 2025, by <b>Ittai Abraham, Ling Ren</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Consensus protocols often need to balance simplicity with performance. Simplex is a beautiful example of minimalistic design. In this post, we explore two variations of Simplex, one that improves view latency in silent views and another that improves view latency in the worst-case when the actual network delay $\delta$ is smaller than $\Delta$, the maximal delay after GST.
+ 
+ 
+ <a href="/2025-09-24-Kuplex/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#BFT">BFT</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ 
+ 
+ <article class="post-preview">
  <a href="/2025-08-12-non-uniform-weak-validity/">
  <h2 class="post-title">Agreement under omission failures: non-uniformity and weak validity</h2>
  
@@ -641,206 +836,6 @@
  <a href="/tags#lowerbound">lowerbound</a>
  
  <a href="/tags#research">research</a>
- 
- </div>
- 
- </article>
- 
- 
- 
- <article class="post-preview">
- <a href="/2024-12-10-multi-world-vaba/">
- <h2 class="post-title">Multi-world Validated Asynchronous Byzantine Agreement</h2>
- 
- </a>
- <p class="post-meta">
- Posted on December 10, 2024, by <b>Ittai Abraham, Alexander Spiegelman</b>
- </p>
- 
- <div class="post-entry-container">
- 
- <div class="post-entry">
- In this post, we show how to solve Validated Asynchronous Byzantine Agreement using the multi-world VABA approach from Abraham, Malkhi, and Spiegelman 2018.
- 
- 
- <a href="/2024-12-10-multi-world-vaba/" class="post-read-more">[Read&nbsp;More]</a>
- 
- </div>
- </div>
- 
- 
- <div class="blog-tags">
- Tags:
- 
- <a href="/tags#research">research</a>
- 
- <a href="/tags#asynchrony">asynchrony</a>
- 
- </div>
- 
- </article>
- 
- 
- 
- <article class="post-preview">
- <a href="/2024-12-10-bind-and-rand/">
- <h2 class="post-title">Living with asynchrony and eventually reaching agreement by combining binding and randomness</h2>
- 
- </a>
- <p class="post-meta">
- Posted on December 10, 2024, by <b>Ittai Abraham, Gilad Stern</b>
- </p>
- 
- <div class="post-entry-container">
- 
- <div class="post-entry">
- The prevailing view on fault-tolerant agreement is that it is impossible in asynchrony for deterministic protocols, but adding randomization solves the problem. This statement is confusing in two aspects:
- 
- 
- <a href="/2024-12-10-bind-and-rand/" class="post-read-more">[Read&nbsp;More]</a>
- 
- </div>
- </div>
- 
- 
- <div class="blog-tags">
- Tags:
- 
- <a href="/tags#randomness">randomness</a>
- 
- <a href="/tags#asynchrony">asynchrony</a>
- 
- </div>
- 
- </article>
- 
- 
- 
- <article class="post-preview">
- <a href="/2024-09-15-divide-and-conquer/">
- <h2 class="post-title">Divide and Conquer in Distributed Computing - synchronous BFT with quadratic communication via recursive phase king</h2>
- 
- </a>
- <p class="post-meta">
- Posted on September 15, 2024, by <b>Ittai Abraham, Renas Bacho, and Gilad Stern</b>
- </p>
- 
- <div class="post-entry-container">
- 
- <div class="post-entry">
- The idea of decomposing a hard problem into easier problems is a fundamental algorithm design pattern in Computer Science. Divide and Conquer is used in so many domains: sorting, multiplication, and FFT, to mention a few. But what about distributed computing?
- 
- 
- <a href="/2024-09-15-divide-and-conquer/" class="post-read-more">[Read&nbsp;More]</a>
- 
- </div>
- </div>
- 
- 
- <div class="blog-tags">
- Tags:
- 
- <a href="/tags#consensus">consensus</a>
- 
- </div>
- 
- </article>
- 
- 
- 
- <article class="post-preview">
- <a href="/2024-08-24-hotstuff1/">
- <h2 class="post-title">HotStuff-1 and the Prefix Speculation Dilemma in BFT Consensus</h2>
- 
- </a>
- <p class="post-meta">
- Posted on August 24, 2024, by <b>Dakai Kang, Suyash Gupta, Dahlia Malkhi, Mohammad Sadoghi</b>
- </p>
- 
- <div class="post-entry-container">
- 
- <div class="post-entry">
- Several approaches aim to reduce the number of network hops to reach finality in BFT Consensus protocols through speculation. They differ in their methods and in their guarantees, yet they all face a common phenomenon referred to as the prefix speculation dilemma.
- 
- 
- <a href="/2024-08-24-hotstuff1/" class="post-read-more">[Read&nbsp;More]</a>
- 
- </div>
- </div>
- 
- 
- <div class="blog-tags">
- Tags:
- 
- <a href="/tags#consensus">consensus</a>
- 
- <a href="/tags#research">research</a>
- 
- </div>
- 
- </article>
- 
- 
- 
- <article class="post-preview">
- <a href="/2024-08-09-sap/">
- <h2 class="post-title">The SAP theorem for storing secret keys</h2>
- 
- </a>
- <p class="post-meta">
- Posted on August 9, 2024, by <b>Marwa Mouallem, Ittay Eyal, Ittai Abraham</b>
- </p>
- 
- <div class="post-entry-container">
- 
- <div class="post-entry">
- Public key cryptography (PKC) is a fundamental technology that is a key enabler to the Internet and the whole client-server paradigm. Without public key cryptography, the modern Internet economy, from cryptocurrencies to online banking and retail, would simply not exist.
- 
- 
- <a href="/2024-08-09-sap/" class="post-read-more">[Read&nbsp;More]</a>
- 
- </div>
- </div>
- 
- 
- <div class="blog-tags">
- Tags:
- 
- <a href="/tags#research">research</a>
- 
- <a href="/tags#lowerbound">lowerbound</a>
- 
- </div>
- 
- </article>
- 
- 
- 
- <article class="post-preview">
- <a href="/2024-08-08-vid/">
- <h2 class="post-title">What is Verifiable Information Dispersal?</h2>
- 
- </a>
- <p class="post-meta">
- Posted on August 8, 2024, by <b>Ittai Abraham, Kartik Nayak, Ling Ren, Gilad Stern</b>
- </p>
- 
- <div class="post-entry-container">
- 
- <div class="post-entry">
- Verifiable Information Dispersal (or VID) has its roots in the work of Michael Rabin, 1989 which introduced the notion of Information Dispersal (ID). Adding verifiability (referred to as binding in this post) to obtain VIDs was done by Garay, Gennaro, Jutla, and Rabin, 1998 (called SSRI). Cachin and Tessaro, 2004 introduced the notion of Asynchronous VID (or AVID). See LDDRVXG21 for the state-of-the-art.
- 
- 
- <a href="/2024-08-08-vid/" class="post-read-more">[Read&nbsp;More]</a>
- 
- </div>
- </div>
- 
- 
- <div class="blog-tags">
- Tags:
- 
- <a href="/tags#VID">VID</a>
  
  </div>
  

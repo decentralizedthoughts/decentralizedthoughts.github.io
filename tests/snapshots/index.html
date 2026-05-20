@@ -188,6 +188,178 @@
 <div class="posts-list">
  
  
+ 
+ 
+ <article class="post-preview">
+ <a href="/2026-05-20-from-single-shot-to-chained/">
+ <h2 class="post-title">From Single-Shot Simplex to Chained Simplex</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on May 20, 2026, by <b>Ittai Abraham, Joachim Neu</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In this post we construct Chained Simplex from
+single-shot Simplex.
+The chained construction is a simple modification of the single-shot protocol
+and applies to any Simplex variant with the same
+inner certificate properties and outer proposal structure. See here for more generic constructions.
+ 
+ 
+ <a href="/2026-05-20-from-single-shot-to-chained/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ 
+ 
+ <article class="post-preview">
+ <a href="/2026-05-17-fast-simplex-fvs/">
+ <h2 class="post-title">Fast Simplex on a Fixed View Schedule</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on May 17, 2026, by <b>Ittai Abraham</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Simplex FVS
+uses fixed views of length $3\Delta$. This post gives a two round version with
+view length $2\Delta$, using the
+two round Simplex
+certificate structure.
+ 
+ 
+ <a href="/2026-05-17-fast-simplex-fvs/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ 
+ 
+ <article class="post-preview">
+ <a href="/2026-05-14-simplex-FVS/">
+ <h2 class="post-title">Simplex on a Fixed View Schedule</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on May 14, 2026, by <b>Ittai Abraham</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ This post gives a fixed view schedule version of
+Simplex, called Simplex FVS, with the advantages of a fixed view schedule discussed
+here.
+ 
+ 
+ <a href="/2026-05-14-simplex-FVS/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ 
+ 
+ <article class="post-preview">
+ <a href="/2026-04-27-beyond-CR/">
+ <h2 class="post-title">Beyond censorship resistance: hiding, simultaneous binding, and accountable last look</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on April 27, 2026, by <b>Ittai Abraham, Pranav Garimidi, and Joachim Neu</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In a previous post we introduced strong chain quality (SCQ), which provides a strong form of censorship resistance: honest parties’ transactions are included in proportion to their share of the validator set in every block. This post considers three additional properties needed for efficient on-chain markets: hiding, simultaneous binding (SB), and accountable last look (ALL).
+ 
+ 
+ <a href="/2026-04-27-beyond-CR/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ 
+ 
+ <article class="post-preview">
+ <a href="/2026-04-26-complex/">
+ <h2 class="post-title">From Simplex to Complex</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on April 26, 2026, by <b>Ittai Abraham</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Tendermint and Simplex are both leader-based BFT protocols for partial synchrony with optimal resilience and $3\delta$ good-case latency. There is a subtle tradeoff between them:
+ 
+ 
+ <a href="/2026-04-26-complex/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ 
+ 
  <article class="post-preview">
  <a href="/2026-04-23-latency-of-censorship-resistance/">
  <h2 class="post-title">Latency cost of censorship resistance</h2>
@@ -200,7 +372,7 @@
  <div class="post-entry-container">
  
  <div class="post-entry">
- This post covers our new lower bound on the latency cost of censorship resistance. In a traditional BFT protocol, the leader has two roles: (1) It constructs (and therefore holds) the input; and (2) It proposes the input. Many BFT protocols optimize for the good case when the leader is honest. For partial synchrony, with $n \leq 5f-2$ parties, the good-case latency is 3 rounds.
+ This post covers our new lower bound on the latency cost of censorship resistance. In a traditional partial synchrony BFT protocol, the leader has two roles: (1) It constructs the input; and (2) It proposes the input. The natural validity property:
  
  
  <a href="/2026-04-23-latency-of-censorship-resistance/" class="post-read-more">[Read&nbsp;More]</a>
@@ -597,201 +769,6 @@
  Tags:
  
  <a href="/tags#blockchain">blockchain</a>
- 
- </div>
- 
- </article>
- 
- 
- 
- <article class="post-preview">
- <a href="/2025-11-22-three-round-BFT/">
- <h2 class="post-title">Why BFT Needs Three Rounds</h2>
- 
- </a>
- <p class="post-meta">
- Posted on November 22, 2025, by <b>Ittai Abraham and Kartik Nayak</b>
- </p>
- 
- <div class="post-entry-container">
- 
- <div class="post-entry">
- Many modern BFT protocols share a common structural pattern. PBFT uses preprepare and prepare. Tendermint uses prevote and precommit. CasperFFG and Simplex use notarization and finalization. HotStuff uses a QC on top of another QC.
- 
- 
- <a href="/2025-11-22-three-round-BFT/" class="post-read-more">[Read&nbsp;More]</a>
- 
- </div>
- </div>
- 
- 
- <div class="blog-tags">
- Tags:
- 
- <a href="/tags#lowerbound">lowerbound</a>
- 
- </div>
- 
- </article>
- 
- 
- 
- <article class="post-preview">
- <a href="/2025-11-15-simplex-from-benign/">
- <h2 class="post-title">From Benign Simplex to Byzantine Simplex</h2>
- 
- </a>
- <p class="post-meta">
- Posted on November 15, 2025, by <b>Ittai Abraham</b>
- </p>
- 
- <div class="post-entry-container">
- 
- <div class="post-entry">
- In this post we present a Simplex protocol that solves single shot consensus and is resilient to $f < n/3$ Byzantine failures, under partial synchrony. In a previous post we showed how to move from Tendermint to Simplex.
- 
- 
- <a href="/2025-11-15-simplex-from-benign/" class="post-read-more">[Read&nbsp;More]</a>
- 
- </div>
- </div>
- 
- 
- <div class="blog-tags">
- Tags:
- 
- <a href="/tags#dist101">dist101</a>
- 
- </div>
- 
- </article>
- 
- 
- 
- <article class="post-preview">
- <a href="/2025-11-08-benign-simplex/">
- <h2 class="post-title">Benign Simplex</h2>
- 
- </a>
- <p class="post-meta">
- Posted on November 8, 2025, by <b>Ittai Abraham</b>
- </p>
- 
- <div class="post-entry-container">
- 
- <div class="post-entry">
- The goal of this post is to describe a single-shot consensus protocol that is resilient to f < n/2 omission failures, under partial synchrony.
-This protocol is inspired by the multi-shot Simplex for crash faults protocol and our earlier posts on Chained Raft, Benign HotStuff, and Log Paxos.
- 
- 
- <a href="/2025-11-08-benign-simplex/" class="post-read-more">[Read&nbsp;More]</a>
- 
- </div>
- </div>
- 
- 
- <div class="blog-tags">
- Tags:
- 
- <a href="/tags#dist101">dist101</a>
- 
- </div>
- 
- </article>
- 
- 
- 
- <article class="post-preview">
- <a href="/2025-10-22-quiz-basics/">
- <h2 class="post-title">Test your understanding of the basics of fault tolerant distributed computing</h2>
- 
- </a>
- <p class="post-meta">
- Posted on October 22, 2025, by <b>Ittai Abraham</b>
- </p>
- 
- <div class="post-entry-container">
- 
- <div class="post-entry">
- The goal of this post is to motivate you to learn the basics of distributed computing by providing a set of simple questions that test your understanding of the basic definitions. In 2025, LLM-based chatbots score 100 on this test, so that’s what you should aim for. The questions cover the standard models and fault assumptions you encounter in the first lectures of any distributed computing course.
- 
- 
- <a href="/2025-10-22-quiz-basics/" class="post-read-more">[Read&nbsp;More]</a>
- 
- </div>
- </div>
- 
- 
- <div class="blog-tags">
- Tags:
- 
- <a href="/tags#dist101">dist101</a>
- 
- <a href="/tags#models">models</a>
- 
- </div>
- 
- </article>
- 
- 
- 
- <article class="post-preview">
- <a href="/2025-09-27-carry-the-tail/">
- <h2 class="post-title">Carry: HotStuff Linearity with Tail-Forking-Resilience</h2>
- 
- </a>
- <p class="post-meta">
- Posted on September 27, 2025, by <b>Dakai Kang, Suyash Gupta, Dahlia Malkhi, Mohammad Sadoghi</b>
- </p>
- 
- <div class="post-entry-container">
- 
- <div class="post-entry">
- The recently identified tail-forking attack shows how malicious leaders can degrade throughput by skipping over honest proposals in streamlined BFT protocols like HotStuff. To address this challenge, we introduce Carry, a lightweight mechanism that preserves HotStuff’s linearity while protecting against tail-forking. Carry also supports commits by honest-but-sluggish leaders whose messages are benignly delayed.
- 
- 
- <a href="/2025-09-27-carry-the-tail/" class="post-read-more">[Read&nbsp;More]</a>
- 
- </div>
- </div>
- 
- 
- <div class="blog-tags">
- Tags:
- 
- <a href="/tags#BFT">BFT</a>
- 
- </div>
- 
- </article>
- 
- 
- 
- <article class="post-preview">
- <a href="/2025-09-24-Kuplex/">
- <h2 class="post-title">Variants of Simplex with Reduced Bad-case Latency: C-Simplex and Kuplex</h2>
- 
- </a>
- <p class="post-meta">
- Posted on September 24, 2025, by <b>Ittai Abraham, Ling Ren</b>
- </p>
- 
- <div class="post-entry-container">
- 
- <div class="post-entry">
- Consensus protocols often need to balance simplicity with performance. Simplex is a beautiful example of minimalistic design. In this post, we explore two variations of Simplex, one that improves view latency in silent views and another that improves view latency in the worst-case when the actual network delay $\delta$ is smaller than $\Delta$, the maximal delay after GST.
- 
- 
- <a href="/2025-09-24-Kuplex/" class="post-read-more">[Read&nbsp;More]</a>
- 
- </div>
- </div>
- 
- 
- <div class="blog-tags">
- Tags:
- 
- <a href="/tags#BFT">BFT</a>
  
  </div>
  

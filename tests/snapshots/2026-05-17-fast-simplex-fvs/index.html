@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Fast Simplex on a Fixed View Schedule</title>
+ 
+ 
+ 
+ 
+ <meta name="author" content="Ittai Abraham">
+ 
+ <meta name="description" content="Simplex FVS uses fixed views of length $3\Delta$. This post gives a two round version with view length $2\Delta$, using the two round Simplex certificate structure. The price is the usual one for two round BFT: we use $n=5f+1$ parties. A view has only one leader proposal and one round of votes. If a later leader needs to skip the view, it does not wait for a skip vote sent...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Fast Simplex on a Fixed View Schedule">
+ <meta property="og:description" content="Simplex FVS uses fixed views of length $3\Delta$. This post gives a two round version with view length $2\Delta$, using the two round Simplex certificate structure. The price is the usual one for two round BFT: we use $n=5f+1$ parties. A view has only one leader proposal and one round of votes. If a later leader needs to skip the view, it does not wait for a skip vote sent...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham">
+ 
+ <meta property="og:article:published_time" content="2026-05-17T01:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2026-05-17-fast-simplex-fvs/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2026-05-17-fast-simplex-fvs/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Fast Simplex on a Fixed View Schedule">
+ <meta property="twitter:description" content="Simplex FVS uses fixed views of length $3\Delta$. This post gives a two round version with view length $2\Delta$, using the two round Simplex certificate structure. The price is the usual one for two round BFT: we use $n=5f+1$ parties. A view has only one leader proposal and one round of votes. If a later leader needs to skip the view, it does not wait for a skip vote sent...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" id="nav-search-link" href="#" title="Search the blog">
+ <span id="nav-search-icon" class="fa fa-search"></span>
+ <span id="nav-search-text">Search</span>
+ </a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+<div id="beautifuljekyll-search-overlay" data-search-json="/assets/data/searchcorpus.json" data-top-pages-json="/assets/data/top-pages.json" aria-hidden="true">
+ <div class="search-overlay-backdrop" data-search-close></div>
+ <div class="search-dialog" role="dialog" aria-modal="true" aria-labelledby="nav-search-heading">
+ <div class="search-dialog-header">
+ <p class="search-dialog-kicker">Search the archive</p>
+ <button id="nav-search-exit" type="button" title="Close search" aria-label="Close search">Close</button>
+ </div>
+ <label class="sr-only" id="nav-search-heading" for="nav-search-input">Search posts, authors, topics, and phrases</label>
+ <div class="search-input-shell">
+ <span class="fa fa-search" aria-hidden="true"></span>
+ <input type="text" id="nav-search-input" placeholder="Search posts, authors, topics, and phrases" autocomplete="off">
+ <span class="search-shortcut">/</span>
+ </div>
+ <p id="nav-search-status">Search by title, author, tag, or a phrase from the post.</p>
+ <div id="search-discovery">
+ <section class="search-discovery-group" aria-labelledby="search-popular-heading">
+ <p class="search-discovery-heading" id="search-popular-heading">Popular topics</p>
+ <div id="search-suggestions" aria-label="Popular topics"></div>
+ </section>
+ <section class="search-discovery-group" aria-labelledby="search-recent-heading">
+ <p class="search-discovery-heading" id="search-recent-heading">Top pages</p>
+ <div id="search-recent-posts"></div>
+ </section>
+ </div>
+ <ul id="search-results-container"></ul>
+ </div>
+</div>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Fast Simplex on a Fixed View Schedule</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham</strong><br>
+ 
+ <span class="post-meta">Posted on May 17, 2026</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p><a href="https://decentralizedthoughts.github.io/2026-05-14-simplex-FVS/">Simplex FVS</a>
+uses <a href="https://decentralizedthoughts.github.io/2026-03-07-simultaneous-agreement/">fixed views</a> of length $3\Delta$. This post gives a two round version with
+view length $2\Delta$, using the
+<a href="https://decentralizedthoughts.github.io/2025-07-18-two-round-Simplex/">two round Simplex</a>
+certificate structure.</p>
+<p>The price is the usual one for two round BFT: we use $n=5f+1$ parties. A view
+has only one leader proposal and one round of votes. If a later leader needs to
+skip the view, it does not wait for a skip vote sent at the boundary. It uses
+the two round Simplex no commit certificate: a vector of votes containing
+no small value certificate.</p>
+<h2 id="model">Model</h2>
+<p>There are</p>
+\[n=5f+1\]
+<p>parties, at most $f$
+<a href="https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/">Byzantine</a>.
+All protocol messages are signed. A certificate is a forwardable set of signed
+messages.</p>
+<p>The network is
+<a href="https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/">partially synchronous</a>.
+Before GST, message delay is unbounded. After GST, every message from one
+honest party to another is delivered within $\delta\leq\Delta$ of the later of
+GST and its send time.</p>
+<p>We assume synchronized clocks, so all honest parties use the same scheduled
+times for view starts and scheduled actions. The
+designated leader $\mathrm{Leader}(v)$ is public, and the leader schedule is
+round robin.</p>
+<p>At scheduled action times, messages delivered by that time are processed
+before the scheduled action.</p>
+<p>Values satisfy an
+<a href="https://decentralizedthoughts.github.io/2026-04-23-deconstructing-simplex/#single-shot-provable-consensus-with-external-validity">external validity</a>
+predicate. Honest leaders propose only valid values, and honest parties vote
+only for valid proposals. Each honest party has an externally valid input that
+it may use as a fresh value.</p>
+<p>The goals are:</p>
+<p><strong>Liveness.</strong> Every honest party eventually obtains a valid decision
+certificate.</p>
+<p><strong>Agreement.</strong> All valid decision certificates have the same value.</p>
+<p><strong>Validity.</strong> If a decision certificate is valid, then its value is externally
+valid.</p>
+<h2 id="certificates">Certificates</h2>
+<p>Let</p>
+\[Q=n-f=4f+1,\qquad C=n-3f=2f+1.\]
+<p>$Q$ is the decision threshold. $C$ is the value certificate threshold. The
+useful intersections are</p>
+\[Q+C-n=f+1
+\qquad\text{and}\qquad
+Q+Q-n=3f+1.\]
+<p>The view-$v$ messages are signed $\mathrm{Vote}(v,z)$ messages, where
+$z$ is either an externally valid value or $\bot$.</p>
+<p>The certificates are:</p>
+<ol>
+ <li>Decision: $\mathrm{DC}_v(x)$ is $Q$ signed $\mathrm{Vote}(v,x)$ messages for a
+non-$\bot$ value $x$. This is the decision certificate for $x$ in view $v$.</li>
+ <li>Value: $\mathrm{VC}_v(x)$ is $C$ signed $\mathrm{Vote}(v,x)$ messages for a
+non-$\bot$ value $x$. This is the value certificate for $x$ in view $v$.</li>
+ <li>Bottom: $\mathrm{BC}_v$ is $C$ signed $\mathrm{Vote}(v,\bot)$ messages.</li>
+ <li>No Commit: $\mathrm{NC}_v$ is $Q$ signed view-$v$ votes, with at most one vote per
+sender, such that no non-$\bot$ value appears at least $C$ times.</li>
+</ol>
+<p>A skip certificate for view $v$ is either $\mathrm{BC}_v$ or
+$\mathrm{NC}_v$.</p>
+<p>Each honest party signs at most one vote in a view. Whenever an honest party
+forms or receives a certificate, it broadcasts that certificate.</p>
+<h2 id="proposals">Proposals</h2>
+<p>A proposal message in view $v$ is</p>
+\[\langle\mathrm{Propose},v,x,w\rangle.\]
+<p>It may also include certificates.</p>
+<p>A valid proposal in view $v\geq 1$ is a proposal sent by
+$\mathrm{Leader}(v)$ for which $x$ is externally valid, all included
+certificates verify, and either $w=0$ or $0&lt;w&lt;v$.</p>
+<p>The case $w=0$ is a sentinel meaning that the proposal is fresh; there is no
+protocol view $0$.</p>
+<p>If $0&lt;w&lt;v$, then the proposal includes $\mathrm{VC}_w(x)$ and a skip
+certificate for every $w&lt;y&lt;v$.</p>
+<p>If $w=0$, then $x$ is fresh, and the proposal includes a skip certificate for
+every $0&lt;y&lt;v$.</p>
+<p>At time $s_v$, an honest leader sends a valid proposal with maximum $w$ among
+the valid proposals it can form from the certificates it has at that time. If
+it can form no valid proposal, it sends no proposal. If several values have
+certificates in the same maximal view, the leader may choose any one of them.</p>
+<h2 id="fast-simplex-fvs">Fast Simplex FVS</h2>
+<p>View $v$ starts at</p>
+\[s_v=2v\Delta.\]
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Fast Simplex FVS, view v:
+1. Leader proposal:
+ At time s_v, Leader(v) applies the leader side
+ proposal rule.
+2. Vote:
+ Upon delivering the first valid view v proposal
+ &lt;Propose, v, x, w&gt; at or before time s_v + Delta,
+ if no vote has been signed in v:
+ sign and broadcast &lt;Vote, v, x&gt;.
+3. Bottom vote:
+ At time s_v + Delta, if no vote has been signed in v:
+ sign and broadcast &lt;Vote, v, bot&gt;.
+4. Decide:
+ Upon having DC_v(x):
+ decide x.
+5. View boundary:
+ At time s_v + 2Delta:
+ enter view v+1.
+</code></pre></div></div>
+<p>After leaving a view, a party signs no new vote for that view. Certificate
+forwarding and decisions continue in the background. An honest party outputs
+only its first decision.</p>
+<h2 id="claim-1-decision-certificate-exclusion">Claim 1: Decision Certificate Exclusion</h2>
+<p>If $\mathrm{DC}_v(x)$ exists, then no $\mathrm{VC}_v(y)$ exists for
+$y\neq x$, and no skip certificate for view $v$ exists.</p>
+<p><em>Proof.</em> The decision certificate contains $Q=4f+1$ votes for $x$. At least
+$Q-f=3f+1$ of these votes are honest, and honest parties sign only one vote
+in a view. Hence at most $2f$ parties can vote for any other value or for
+$\bot$, so no $\mathrm{VC}_v(y)$ with $y\neq x$ and no $\mathrm{BC}_v$ can
+exist.</p>
+<p>Now consider a possible $\mathrm{NC}_v$. It contains $Q$ votes, and therefore
+intersects $\mathrm{DC}_v(x)$ in at least $Q+Q-n=3f+1$ parties. At most $f$
+of these parties are Byzantine, so the intersection contains at least
+$2f+1=C$ honest votes for $x$. Thus the $\mathrm{NC}_v$ vector would contain
+$C$ votes for $x$, contradicting the definition of $\mathrm{NC}_v$.</p>
+<h2 id="claim-2-agreement">Claim 2: Agreement</h2>
+<p>All valid decision certificates have the same value.</p>
+<p><em>Proof.</em> Two decision certificates in the same view intersect in at least
+$Q+Q-n=3f+1$ parties, including an honest party. Since an honest party signs
+only one vote in a view, same-view decision certificates have the same value.</p>
+<p>Now let $v$ be the earliest view with a valid decision certificate, and let
+that certificate be $\mathrm{DC}_v(x)$. By Claim 1, a later valid proposal
+cannot skip view $v$ and cannot use a conflicting value certificate from view
+$v$.</p>
+<p>If a later proposal uses a value certificate from a still later view $w&gt;v$,
+then that value certificate contains an honest vote in view $w$. That honest
+vote was for a valid proposal in view $w$, and by induction that proposal has
+value $x$. Thus every later value certificate, and therefore every later
+decision certificate, has value $x$.</p>
+<h2 id="claim-3-good-case-latency">Claim 3: Good Case Latency</h2>
+<p>In every view $v$ that starts after GST with an honest leader that has a valid
+proposal at $s_v$, every honest party decides by time $s_v+2\delta$, where
+$s_v=2v\Delta$ is the view start time.</p>
+<p><em>Proof.</em> The proposal reaches every honest party by $s_v+\delta$. All honest
+parties vote for it immediately. Their $Q=n-f$ honest votes reach every
+honest party by $s_v+2\delta$, giving every honest party
+$\mathrm{DC}_v(x)$.</p>
+<h2 id="claim-4-certificate-catch-up">Claim 4: Certificate Catch Up</h2>
+<p>This liveness statement is the reason the fixed view schedule can use view
+length $2\Delta$.</p>
+<p>For every view $w$, every honest party has either $\mathrm{VC}_w(x)$ for some
+non-$\bot$ value $x$ or a skip certificate for view $w$ by time</p>
+\[\max\{GST,s_w+\Delta\}+\delta .\]
+<p>In particular, if view $w$ starts after GST, every honest party has such a
+certificate by $s_w+2\Delta$, no later than the next view boundary.</p>
+<p><em>Proof.</em> By time $s_w+\Delta$, every honest party has signed exactly one
+view-$w$ vote: either a vote for a valid proposal or a vote for $\bot$. After
+GST, every honest party receives all of these honest votes within one delay.</p>
+<p>If some non-$\bot$ value $x$ appears in at least $C$ honest votes, then every
+honest party has $\mathrm{VC}_w(x)$. Otherwise, the $Q=n-f$ honest votes
+themselves form an $\mathrm{NC}_w$: they contain no non-$\bot$ value at
+threshold $C$.</p>
+<h2 id="combining-it-all">Combining It All</h2>
+<p>Fast Simplex FVS uses the view schedule $s_v=2v\Delta$ and satisfies
+liveness, agreement, and validity for $n=5f+1$ in authenticated partial
+synchrony.</p>
+<p>Agreement is Claim 2. Validity follows because a decision certificate contains
+an honest vote for an externally valid proposal.</p>
+<p>For liveness, choose a later view $r$ whose leader is honest, whose scheduled
+vote deadline is after GST, and whose previous views have caught up at every
+honest party by time $s_r$. Claim 4 gives this catch up for views whose vote
+deadline is after GST, and earlier views catch up after GST.</p>
+<p>Therefore, at time $s_r$, the honest leader can form a valid proposal: it uses
+the highest previous value certificate if one exists, with skip certificates
+for all intervening views, and otherwise proposes a fresh value. Claim 3 gives
+a decision by $s_r+2\delta$.</p>
+<h2 id="notes">Notes</h2>
+<ul>
+ <li>
+ <p>No commit certificate size in the normal case: The no commit certificate
+$\mathrm{NC}_v$ is naively linear size: it contains $Q=n-f$ signed votes and
+a check that no non-$\bot$ value appears $C=n-3f$ times. In many common
+executions this is not a problem. If the leader does not equivocate, then the
+view has only two vote values, the leader value $x$ and $\bot$, so ordinary
+multi signatures can compress $\mathrm{NC}_v$.</p>
+ </li>
+ <li>
+ <p>No commit certificate size in the worst case: The linear certificate is only needed for
+the malicious equivocation case, when many different values may appear in the
+same view. The signed proposals can be used to slash the leader. In that
+case, an implementation can either send the linear certificate, or use a
+SNARK whose public statement says that the committed vector contains $Q$
+valid signed view-$v$ votes, with at most one vote per sender, and no
+non-$\bot$ value reaches threshold $C$.</p>
+ </li>
+ <li>
+ <p>Getting $n=5f-1$: just as in the variable view schedule model, it is
+possible to get the
+<a href="https://decentralizedthoughts.github.io/2025-08-06-5fminus1-simplex/">two round good case in $5f-1$</a>
+by refining the certificate definitions. The decision threshold becomes
+$Q=n-f=4f-1$. A value certificate for $x$ is either the equivocation case,
+with $2f$ votes for $x$ from parties other than the leader after ignoring the
+equivocating leader, or the no equivocation case, with $2f-1$ votes for $x$
+and $2f$ votes for $\bot$. A bottom certificate is $2f+1$ votes for
+$\bot$. The fixed view schedule is unchanged; the proof only has to replace
+Claim 1 with the corresponding exclusion argument for these two value
+certificate forms.</p>
+ </li>
+ <li>
+ <p>Getting $2\Delta+\delta$ in the variable view schedule model: the
+<a href="https://decentralizedthoughts.github.io/2025-07-18-two-round-Simplex/">two round Simplex post</a>
+uses an extra bottom vote step to avoid sending the large no commit
+certificate. Namely, upon receiving $n-f$ view-$k$ votes with no value
+certificate inside, a party sends $\mathrm{Vote}(k,\bot)$; the resulting
+$\bot$ certificate forms one delay later. This gives a worst case bad view of
+$2\Delta+2\delta$.</p>
+ <p>To get $2\Delta+\delta$, define the same $\mathrm{NC}_k$ certificate used in
+this post: $n-f$ signed view-$k$ votes, with at most one vote per sender, and
+no value appearing $n-3f$ times. Then delete the extra bottom vote step and
+treat $\mathrm{NC}_k$ as another no commit certificate. The existing view
+change rule applies: after a party has sent a view-$k$ vote and receives
+$\mathrm{NC}_k$, it forwards $\mathrm{NC}_k$ and enters view $k+1$. Leaders
+may use $\mathrm{NC}_k$ exactly as they use a bottom certificate when
+proposing in later views. The price is that this no commit certificate is
+linear size, unless it is compressed with a SNARK.</p>
+ </li>
+</ul>
+<p>Your thoughts/comments here.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Fast+Simplex+on+a+Fixed+View+Schedule&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2026-05-17-fast-simplex-fvs%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2026-05-14-simplex-FVS/" data-toggle="tooltip" data-placement="top" title="Simplex on a Fixed View Schedule">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2026-05-20-from-single-shot-to-chained/" data-toggle="tooltip" data-placement="top" title="From Single-Shot Simplex to Chained Simplex">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ 
+ Decentralized Thinkers
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

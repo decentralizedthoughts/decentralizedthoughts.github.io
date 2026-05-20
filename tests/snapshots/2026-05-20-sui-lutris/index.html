@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Lutris: Safe Composition of Broadcast and Consensus</title>
+ 
+ 
+ 
+ 
+ <meta name="author" content="Lefteris Kokoris Kogias, Alberto Sonnino">
+ 
+ <meta name="description" content="TL;DR Lutris is a hybrid distributed system protocol that integrates Byzantine Consistent Broadcast with a BFT consensus DAG to minimize latency of specific types of transactions. Hybrid Consistency: Uses broadcast for single-writer operations and consensus for shared-state contention. Unified State Machine: Maintains linearizability across both paths via versioned object locking. Liveness Recovery: Solves the “eternal lock” problem of previous broadcast protocols using epoch-based reconfiguration. Hybrid Reconfiguration: Leverages the consensus path...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Lutris: Safe Composition of Broadcast and Consensus">
+ <meta property="og:description" content="TL;DR Lutris is a hybrid distributed system protocol that integrates Byzantine Consistent Broadcast with a BFT consensus DAG to minimize latency of specific types of transactions. Hybrid Consistency: Uses broadcast for single-writer operations and consensus for shared-state contention. Unified State Machine: Maintains linearizability across both paths via versioned object locking. Liveness Recovery: Solves the “eternal lock” problem of previous broadcast protocols using epoch-based reconfiguration. Hybrid Reconfiguration: Leverages the consensus path...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Lefteris Kokoris Kogias, Alberto Sonnino">
+ 
+ <meta property="og:article:published_time" content="2026-05-20T07:29:56-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2026-05-20-sui-lutris/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2026-05-20-sui-lutris/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Lutris: Safe Composition of Broadcast and Consensus">
+ <meta property="twitter:description" content="TL;DR Lutris is a hybrid distributed system protocol that integrates Byzantine Consistent Broadcast with a BFT consensus DAG to minimize latency of specific types of transactions. Hybrid Consistency: Uses broadcast for single-writer operations and consensus for shared-state contention. Unified State Machine: Maintains linearizability across both paths via versioned object locking. Liveness Recovery: Solves the “eternal lock” problem of previous broadcast protocols using epoch-based reconfiguration. Hybrid Reconfiguration: Leverages the consensus path...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" id="nav-search-link" href="#" title="Search the blog">
+ <span id="nav-search-icon" class="fa fa-search"></span>
+ <span id="nav-search-text">Search</span>
+ </a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+<div id="beautifuljekyll-search-overlay" data-search-json="/assets/data/searchcorpus.json" data-top-pages-json="/assets/data/top-pages.json" aria-hidden="true">
+ <div class="search-overlay-backdrop" data-search-close></div>
+ <div class="search-dialog" role="dialog" aria-modal="true" aria-labelledby="nav-search-heading">
+ <div class="search-dialog-header">
+ <p class="search-dialog-kicker">Search the archive</p>
+ <button id="nav-search-exit" type="button" title="Close search" aria-label="Close search">Close</button>
+ </div>
+ <label class="sr-only" id="nav-search-heading" for="nav-search-input">Search posts, authors, topics, and phrases</label>
+ <div class="search-input-shell">
+ <span class="fa fa-search" aria-hidden="true"></span>
+ <input type="text" id="nav-search-input" placeholder="Search posts, authors, topics, and phrases" autocomplete="off">
+ <span class="search-shortcut">/</span>
+ </div>
+ <p id="nav-search-status">Search by title, author, tag, or a phrase from the post.</p>
+ <div id="search-discovery">
+ <section class="search-discovery-group" aria-labelledby="search-popular-heading">
+ <p class="search-discovery-heading" id="search-popular-heading">Popular topics</p>
+ <div id="search-suggestions" aria-label="Popular topics"></div>
+ </section>
+ <section class="search-discovery-group" aria-labelledby="search-recent-heading">
+ <p class="search-discovery-heading" id="search-recent-heading">Top pages</p>
+ <div id="search-recent-posts"></div>
+ </section>
+ </div>
+ <ul id="search-results-container"></ul>
+ </div>
+</div>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Lutris: Safe Composition of Broadcast and Consensus</h1>
+ 
+ 
+ 
+ 
+ By <strong>Lefteris Kokoris Kogias, Alberto Sonnino</strong><br>
+ 
+ <span class="post-meta">Posted on May 20, 2026</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <hr />
+<blockquote>
+ <p><strong>TL;DR</strong> Lutris is a hybrid distributed system protocol that integrates Byzantine Consistent Broadcast with a BFT consensus DAG to minimize latency of specific types of transactions.</p>
+ <ul>
+ <li><strong>Hybrid Consistency:</strong> Uses broadcast for single-writer operations and consensus for shared-state contention.</li>
+ <li><strong>Unified State Machine:</strong> Maintains linearizability across both paths via versioned object locking.</li>
+ <li><strong>Liveness Recovery:</strong> Solves the “eternal lock” problem of previous broadcast protocols using epoch-based reconfiguration.</li>
+ <li><strong>Hybrid Reconfiguration:</strong> Leverages the consensus path to safely rotate the validator set of the broadcast path without service interruption.</li>
+ </ul>
+</blockquote>
+<hr />
+<p>In distributed systems, there is a fundamental trade-off between <strong>latency</strong> and <strong>ordering</strong>. Total ordering, via consensus, is <a href="https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/">expensive</a> and <a href="https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/">slow</a>, while partial ordering, via broadcast, is linear and fast but limited in expressivity.</p>
+<p><strong>Lutris</strong> is a distributed system protocol designed to bridge this gap. It avoids the “consensus-for-everything” approach and instead composes two distinct protocols: a <strong>Consistent Broadcast</strong> implementation for owned assets and a <strong>BFT Consensus</strong> (see <a href="https://decentralizedthoughts.github.io/2026-03-06-mysticeti-revolutionizing-consensus-on-sui/">Mysticeti</a>) for shared state.</p>
+<p>This post dissects how Lutris safely composes these protocols and solves the resulting liveness and reconfiguration challenges.</p>
+<h2 id="the-system-model-objects-and-versions">The System Model: Objects and Versions</h2>
+<p>To understand Lutris, start with its state model. Unlike the account-based model or the UTXO model, Lutris operates on <strong>Versioned Objects</strong>.</p>
+<ul>
+ <li>Every object has a unique ID and a version number $v$.</li>
+ <li>A transaction takes a set of input objects ${O_1(v_a), O_2(v_b), \ldots}$ and produces a set of output objects with strictly higher versions.</li>
+ <li><strong>Single-Writer Objects:</strong> Objects owned by a specific address. Only that address can sign transactions mutating them.</li>
+ <li><strong>Shared Objects:</strong> Objects that can be mutated by any user.</li>
+</ul>
+<p>This distinction allows Lutris to apply different consistency requirements to different transactions.</p>
+<h2 id="the-dual-path-architecture">The Dual-Path Architecture</h2>
+<p>Lutris routes transactions based on the contention level of their inputs.</p>
+<h3 id="1-the-broadcast-path-single-writer">1. The Broadcast Path (Single-Writer)</h3>
+<p>If a transaction involves only single-writer objects, it is <a href="https://decentralizedthoughts.github.io/2022-12-27-set-replication">causally independent of other transactions</a> (barring double-spends by the owner). Lutris treats this as a <strong>Byzantine Consistent Broadcast</strong> problem.</p>
+<ol>
+ <li><strong>Proposal:</strong> The user sends the transaction to validators.</li>
+ <li><strong>Locking:</strong> Each validator checks if the input object versions match the current state and are unlocked. If so, it locks the inputs and returns a signature.</li>
+ <li><strong>Certification:</strong> Once the user collects $2f+1$ signatures, a certificate is formed.</li>
+ <li><strong>Finality:</strong> This certificate is effectively the commit message. It allows the user to execute the transaction immediately without waiting for consensus.</li>
+</ol>
+<p>This path achieves the theoretical minimum latency ($1$ RTT).</p>
+<h3 id="2-the-consensus-path-shared-objects">2. The Consensus Path (Shared Objects)</h3>
+<p>If a transaction involves shared objects, total ordering is required to resolve race conditions.</p>
+<ol>
+ <li><strong>Submission:</strong> The user submits the transaction (or certificate) to the consensus engine.</li>
+ <li><strong>Ordering:</strong> The consensus engine globally orders transactions (total order).</li>
+ <li><strong>Execution:</strong> Transactions are then executed in that determined order, updating the object versions.</li>
+</ol>
+<p><img src="/uploads/lutris.png" alt="Sui_Architecture" /></p>
+<h2 id="the-composition-challenge-safety-via-versioned-locking">The Composition Challenge: Safety via Versioned Locking</h2>
+<p>The core innovation of Lutris is not running these two paths per se, but safely <strong>composing</strong> them. A naive implementation could allow a double-spend where one branch uses the broadcast path and another uses the consensus path.</p>
+<p>Lutris enforces safety via a <strong>Unified Locking Table</strong> residing on each validator.</p>
+<ul>
+ <li><strong>The Rule:</strong> A validator $V$ will only sign a transaction $T$ (or vote for a consensus block containing $T$) if the input objects $O(v)$ are currently unlocked at version $v$.</li>
+ <li><strong>The State Transition:</strong> Upon signing (or voting), the validator updates its local state to mark $O(v)$ as locked.</li>
+</ul>
+<p>Because both the broadcast path and the consensus path must acquire locks from the same local table, and because acquiring a lock requires $2f+1$ quorum participation, safety is guaranteed. A confirmed fast-path transaction effectively “burns” the input versions, making them invalid for any subsequent consensus transaction.</p>
+<h2 id="liveness-and-reconfiguration">Liveness and Reconfiguration</h2>
+<p>Previous broadcast-only systems suffered from a critical liveness issue: <strong>Equivocation Locking</strong>. If a malicious or buggy client attempts to double-spend an asset, the validators would lock their inputs indefinitely, freezing the funds forever.</p>
+<p>Lutris solves this by integrating <strong>Epoch-Based Reconfiguration</strong>.</p>
+<h3 id="the-unlock-mechanism">The “Unlock” Mechanism</h3>
+<p>At the end of every epoch (typically 24 hours), the system undergoes a reconfiguration protocol. This acts as a global “garbage collection” event for locks.</p>
+<p>First, validators stop signing new broadcast transactions and submit all pending certificates to the consensus engine. Once $2f+1$ validators have signaled that they are finished, the next consensus checkpoint becomes the final checkpoint for the epoch. It represents the canonical history of that epoch. Then, the system transitions to the new epoch and <strong>all locks on objects that were not consumed by a final certificate are released.</strong> This ensures that even if a client equivocates and locks their objects, the lock is only temporary. At the epoch boundary, the “uncommitted” lock is cleared, restoring liveness to the asset.</p>
+<h3 id="hybrid-reconfiguration">Hybrid Reconfiguration</h3>
+<p>The unique challenge Lutris solves is not just changing the committee, but determining <em>exactly which</em> transactions are finalized at epoch $E$ versus epoch $E+1$, given that broadcast transactions are asynchronous to consensus.</p>
+<p>Lutris solves this by using the consensus engine to enforce a hard boundary:</p>
+<ol>
+ <li><strong>Consensus as a Clock:</strong> The system uses the total ordering of the consensus path to reach agreement on the exact moment the epoch ends (the reconfiguration commit).</li>
+ <li><strong>State Snapshot:</strong> This commit creates a checkpoint containing the effects of all finalized broadcast transactions up to that moment.</li>
+ <li><strong>Safe Handover:</strong> The new committee of epoch $E+1$ is initialized using this checkpoint. This guarantees that no fast-path transaction from the old epoch can be replayed or double-spent in the new epoch, providing a provably safe reconfiguration for a system that otherwise lacks a global clock.</li>
+</ol>
+<h2 id="conclusion">Conclusion</h2>
+<p>Lutris demonstrates that one does not need to choose between the low latency of broadcast and the expressivity of consensus. By formally modeling the interaction between single-writer and shared state, Lutris allows the system to run at the speed of the network for the majority of traffic (payments, NFT transfers), while falling back to consensus speed only when strictly necessary.</p>
+<p>For the formal proofs of safety and liveness, refer to the <a href="https://arxiv.org/abs/2310.18042">Lutris paper</a> (Best Paper Award @ CCS 2024).</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ <a href="/tags#broadcast">broadcast</a>
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Lutris%3A+Safe+Composition+of+Broadcast+and+Consensus&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2026-05-20-sui-lutris%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2026-05-20-from-single-shot-to-chained/" data-toggle="tooltip" data-placement="top" title="From Single-Shot Simplex to Chained Simplex">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ 
+ Decentralized Thinkers
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

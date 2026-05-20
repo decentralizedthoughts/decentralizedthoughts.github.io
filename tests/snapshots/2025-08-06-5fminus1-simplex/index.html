@@ -214,29 +214,22 @@
 <p>We then extend the result to $n=3f+2p-1$ for $0&lt;p\leq f$ that obtains liveness for $p$ Byzantine. This can be used to obtain a <a href="https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/">concurrent 2 round and 3 round protocol</a> with the optimal fault tolerance.</p>
 <h2 id="intuition">Intuition</h2>
 <p>A party commits a value $x$ after receiving $n-f$ votes for $x$.<br />
-We consider what must happen so that all other honest parties eventually commit $x$ (safety), even if the committer experiences network asynchrony.</p>
+We want to understand what evidence remains for the other honest parties if some honest party commits $x$ and then becomes unavailable due to network asynchrony.</p>
 <p>Let $n = 5f-1$ where $f$ is the maximum number of Byzantine faults.</p>
 <ul>
  <li>$n-f = 4f-1$ votes are needed for commit.</li>
  <li>Among these, at least $n-2f = 3f-1$ are honest votes.</li>
  <li>Any other honest party waiting for $n-f$ votes will see at least $n-3f = 2f-1$ votes for $x$.</li>
- <li>
- <p>Two cases:</p>
- <ul>
- <li><strong>(No leader equivocation</strong>): If the leader does not equivocate, a commit implies that any other honest party receives at least $2f-1$ votes for $x$ and the rest of the votes are for $\bot$.
- <ul>
- <li>Define <strong>Special certificate for $x$</strong> as $2f-1$ votes for $x$ and $2f$ votes for $\bot$.</li>
- <li>Define <strong>Regular certificate for $x$</strong> as $2f$ votes for $x$.</li>
- </ul>
- </li>
- <li><strong>(With leader equivocation)</strong>: If a party detects leader equivocation, it ignores the leader’s vote and waits for one more vote. Then it will see at least $n-3f+1 = 2f$ votes for $x$, which form a regular cert for $x$
- <ul>
- <li>There are at most $2f-1$ non-$x$ votes, so the party favors $x$.</li>
- </ul>
- </li>
- </ul>
- </li>
 </ul>
+<p>This leads to two cases.</p>
+<ol>
+ <li>
+ <p>If the leader does not equivocate, then every honest party that did not vote for $x$ must vote for $\bot$. So another honest party sees at least $2f-1$ votes for $x$, and the remaining votes can be viewed as votes for $\bot$. This motivates a <strong>special certificate</strong> for $x$: $2f-1$ votes for $x$ together with $2f$ votes for $\bot$.</p>
+ </li>
+ <li>
+ <p>If the leader does equivocate, then a party that detects equivocation ignores the leader’s vote and waits for one more vote. Now it looks at $4f$ non-leader votes. Among them, at least $n-3f+1 = 2f$ are for $x$, while there can be at most $2f-1$ non-$x$ votes: at most $f$ honest parties may have received a conflicting proposal, and at most $f-1$ non-leader Byzantine parties may equivocate. So the party can favor $x$. This motivates a <strong>regular certificate</strong> for $x$: $2f$ votes for $x$.</p>
+ </li>
+</ol>
 <p>Define a <strong>skip certificate</strong> as $2f+1$ votes for $\bot$. A commit in a view implies at least $n-2f$ honest votes for some $x$, so a skip certificate cannot form in the same view.</p>
 <hr />
 <h2 id="two-round-simplex-protocol-for-n5f-1">Two-round Simplex protocol for $n=5f-1$</h2>
@@ -266,8 +259,8 @@ We consider what must happen so that all other honest parties eventually commit 
  Enter view k+1
 </code></pre></div></div>
 <h2 id="two-round-simplex-protocol-for-n3f2p-1-where-0pleq-f">Two-round Simplex protocol for $n=3f+2p-1$ where $0&lt;p\leq f$</h2>
-<p>Let’s extend this protocol to get safety for $f$ and liveness for $0&lt;p\leq f$. So a commit requires $3f+p-1$ votes and this means at least $2f+p+1$ honest votes. So waiting for $n-f$ votes gives at least $f+p-1$ honest votes. If there is an equivocation, a party can again wait for one more vote.</p>
-<p>This calls for three obvious generalizations to the protocol:</p>
+<p>We now extend the protocol to $n=3f+2p-1$, obtaining safety against $f$ Byzantine faults and liveness when at most $p$ parties are Byzantine. A commit now requires $n-p=3f+p-1$ votes, of which at least $2f+p-1$ are honest. Therefore, any other honest party waiting for $n-f$ votes sees at least $f+p-1$ votes for the committed value. If equivocation is detected, the party can again wait for one more vote.</p>
+<p>This leads to three natural changes to the protocol:</p>
 <p>A. <code class="language-plaintext highlighter-rouge">Cert(k, x)</code> is a collection of votes for $x \neq \bot$ in view $k$ sufficient to certify $x$:</p>
 <ul>
  <li>$f+p$ votes for $x$ (regular cert), or</li>
@@ -280,19 +273,20 @@ We consider what must happen so that all other honest parties eventually commit 
  Forward these votes;
  Terminate
 </code></pre></div></div>
-<p>Finally, to obtain a <a href="https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/">concurrent 2 round and 3 round protocol</a> with $n=3f+2p-1$, the quorum size for the 3-round path needs to be $n-(f+p-1)=2f+p$ (so that $2(2f+p)-n\geq f+1$).</p>
+<p>Finally, to obtain a <a href="https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/">concurrent 2 round and 3 round protocol</a> with $n=3f+2p-1$, the quorum size for the 3-round path needs to be $n-(f+p-1)=2f+p$ so that two such quorums intersect in at least $f+1$ parties.</p>
 <h2 id="proof-sketches">Proof Sketches</h2>
+<p>The proof sketches below refer to the generalized $n=3f+2p-1$ protocol above.</p>
 <p><strong>Lemma 1 (Safety)</strong>:
-If an honest party commits $x$ in view $k$, all honest will have a cert for $x$.</p>
+If an honest party commits $x$ in view $k$, all honest parties eventually obtain a cert for $x$.</p>
 <p><em>Proof sketch</em>: A commit requires $n-p = 3f+p-1$ votes for $x$, of which at least $2f+p-1$ are honest. Any other honest party gathering $n-f$ votes will see at least $f+p-1$ votes for $x$.</p>
 <p>If equivocation is detected, it waits for $n-f+1 = 3f+p$ votes and sees at least $f+p$ for $x$, which dominates any conflicting votes ($\le f+p-1$).</p>
-<p>If no equivocation is detected, it sees just $f+p-1$ votes for $x$ then the remaining $f+p$ votes are for $\bot$, so a special cert is formed, or $f+p$ votes or more arrive then a regular cert is formed.</p>
+<p>If no equivocation is detected, it sees exactly $f+p-1$ votes for $x$, then the remaining $f+p$ votes are for $\bot$, so a special cert is formed. If $f+p$ votes or more arrive for $x$, then a regular cert is formed.</p>
 <p><strong>Lemma 2 (No-commit detection)</strong>:<br />
 If no honest party commits in view $k$, all honest parties eventually see either a <code class="language-plaintext highlighter-rouge">Cert(k, x)</code> or a <code class="language-plaintext highlighter-rouge">Cert(k, bot)</code>.</p>
 <p><em>Proof sketch</em>: If a certificate for some $x$ exists, it is forwarded. If no certificate exists, by the fifth <code class="language-plaintext highlighter-rouge">Upon</code> rule all honest parties eventually vote $\bot$, forming a <code class="language-plaintext highlighter-rouge">Cert(k, bot)</code>.</p>
 <p><strong>Lemma 3 (Liveness)</strong>:<br />
 If the leader of some view $k$ is honest and GST has occurred, all honest parties commit in view $\le k$.</p>
-<p><em>Proof sketch</em>: If a commit already occurs in a prior view, the commit certificate is forwarded. Otherwise, all honest parties eventually vote for the honest leader in view $k$, producing $n-f$ votes and committing.</p>
+<p><em>Proof sketch</em>: If a commit already occurs in a prior view, the commit certificate is forwarded. Otherwise, all honest parties eventually vote for the honest leader in view $k$, producing $n-p$ votes and committing.</p>
 <h2 id="acknowledgments">Acknowledgments</h2>
 <p>This work is done in part during the authors’ visits to a16z Crypto Research. The authors thank Yuval Efron and Kartik Nayak for insightful discussions. We thank Brendan Kobayashi Chou, Andrew Lewis-Pye, Patrick O’Grady for spotting a liveness error in a previous version.</p>
 <p>Your thoughts/comments on <a href="https://x.com/ittaia/status/1954109234917883985">X</a>.</p>

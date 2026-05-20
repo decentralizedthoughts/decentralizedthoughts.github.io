@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>From Simplex to Complex</title>
+ 
+ 
+ 
+ 
+ <meta name="author" content="Ittai Abraham">
+ 
+ <meta name="description" content="Tendermint and Simplex are both leader-based BFT protocols for partial synchrony with optimal resilience and $3\delta$ good-case latency. There is a subtle tradeoff between them: In the optimistic responsive model, Simplex obtains a worst-case view latency of $3\Delta+\delta$ while Tendermint obtains a worst-case view latency of $4\Delta+\delta$. On the other hand, Tendermint requires only a bounded number of certificates to make progress in each view, while in Simplex the number...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="From Simplex to Complex">
+ <meta property="og:description" content="Tendermint and Simplex are both leader-based BFT protocols for partial synchrony with optimal resilience and $3\delta$ good-case latency. There is a subtle tradeoff between them: In the optimistic responsive model, Simplex obtains a worst-case view latency of $3\Delta+\delta$ while Tendermint obtains a worst-case view latency of $4\Delta+\delta$. On the other hand, Tendermint requires only a bounded number of certificates to make progress in each view, while in Simplex the number...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham">
+ 
+ <meta property="og:article:published_time" content="2026-04-26T05:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2026-04-26-complex/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2026-04-26-complex/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="From Simplex to Complex">
+ <meta property="twitter:description" content="Tendermint and Simplex are both leader-based BFT protocols for partial synchrony with optimal resilience and $3\delta$ good-case latency. There is a subtle tradeoff between them: In the optimistic responsive model, Simplex obtains a worst-case view latency of $3\Delta+\delta$ while Tendermint obtains a worst-case view latency of $4\Delta+\delta$. On the other hand, Tendermint requires only a bounded number of certificates to make progress in each view, while in Simplex the number...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" id="nav-search-link" href="#" title="Search the blog">
+ <span id="nav-search-icon" class="fa fa-search"></span>
+ <span id="nav-search-text">Search</span>
+ </a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+<div id="beautifuljekyll-search-overlay" data-search-json="/assets/data/searchcorpus.json" data-top-pages-json="/assets/data/top-pages.json" aria-hidden="true">
+ <div class="search-overlay-backdrop" data-search-close></div>
+ <div class="search-dialog" role="dialog" aria-modal="true" aria-labelledby="nav-search-heading">
+ <div class="search-dialog-header">
+ <p class="search-dialog-kicker">Search the archive</p>
+ <button id="nav-search-exit" type="button" title="Close search" aria-label="Close search">Close</button>
+ </div>
+ <label class="sr-only" id="nav-search-heading" for="nav-search-input">Search posts, authors, topics, and phrases</label>
+ <div class="search-input-shell">
+ <span class="fa fa-search" aria-hidden="true"></span>
+ <input type="text" id="nav-search-input" placeholder="Search posts, authors, topics, and phrases" autocomplete="off">
+ <span class="search-shortcut">/</span>
+ </div>
+ <p id="nav-search-status">Search by title, author, tag, or a phrase from the post.</p>
+ <div id="search-discovery">
+ <section class="search-discovery-group" aria-labelledby="search-popular-heading">
+ <p class="search-discovery-heading" id="search-popular-heading">Popular topics</p>
+ <div id="search-suggestions" aria-label="Popular topics"></div>
+ </section>
+ <section class="search-discovery-group" aria-labelledby="search-recent-heading">
+ <p class="search-discovery-heading" id="search-recent-heading">Top pages</p>
+ <div id="search-recent-posts"></div>
+ </section>
+ </div>
+ <ul id="search-results-container"></ul>
+ </div>
+</div>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>From Simplex to Complex</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham</strong><br>
+ 
+ <span class="post-meta">Posted on April 26, 2026</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p><a href="https://arxiv.org/abs/1807.04938">Tendermint</a> and <a href="https://simplex.blog">Simplex</a> are both leader-based BFT protocols for partial synchrony with optimal resilience and $3\delta$ good-case latency. There is a subtle tradeoff between them:</p>
+<ol>
+ <li>In the optimistic responsive model, Simplex obtains a worst-case view latency of $3\Delta+\delta$ while Tendermint obtains a worst-case view latency of $4\Delta+\delta$.</li>
+ <li>On the other hand, Tendermint requires only a bounded number of certificates to make progress in each view, while in Simplex the number of certificates may grow with the number of skipped views.</li>
+</ol>
+<p>It is natural to ask:</p>
+<blockquote>
+ <p>Is there a protocol that obtains the best of both Simplex and Tendermint?</p>
+</blockquote>
+<p>We show a modification of Simplex that makes it more like Tendermint. We call this protocol <strong>Complex</strong>.</p>
+<blockquote>
+ <p><strong>Complex</strong> obtains worst-case view latency of $3\Delta+\delta$ (as good as Simplex) and requires just a constant number of certificates (as good as Tendermint).</p>
+</blockquote>
+<p>We use the framework of <a href="https://decentralizedthoughts.github.io/2026-04-23-deconstructing-simplex/">our previous post on deconstructing Simplex</a> to similarly deconstruct Complex into an outer shell and an inner shell. This allows us to derive Complex with relatively few changes.</p>
+<p>The inner shell of Complex is similar to Simplex; in particular, it uses the same <em>Graded-Broadcast</em>. The outer shell of Complex is similar to Tendermint (and key based HotStuff) with a small Simplex-like modification. Finally, the external-validity rule of Graded-Broadcast is similar to Tendermint: vote only if the proposed lock is at least as large as yours.</p>
+<h2 id="complex-outer-shell">Complex outer shell</h2>
+<p>Each party maintains three sets: <code class="language-plaintext highlighter-rouge">lockSet</code> (lock certificates it directly delivered), <code class="language-plaintext highlighter-rouge">keySet</code> (all lock certificates it has seen, including forwarded ones), and <code class="language-plaintext highlighter-rouge">skipSet</code> (skip certificates it has delivered). Initially all three are empty.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>For view v, the primary of view v
+ with input (val, val-proof):
+ if keySet is not empty,
+ let p in keySet be the lock
+ certificate of highest view w
+ if w = v-1
+ Graded-Broadcast (v, p.val,
+ (p, ⊥))
+ otherwise (w &lt; v-1)
+ let s in skipSet be the skip
+ certificate for view v-1
+ Graded-Broadcast (v, p.val,
+ (p, s))
+ otherwise
+ if v &gt; 1
+ let s in skipSet be the skip
+ certificate for view v-1
+ Graded-Broadcast (v, val,
+ (val-proof, s))
+ otherwise (v = 1)
+ Graded-Broadcast (1, val,
+ (val-proof, ⊥))
+</code></pre></div></div>
+<p>Note that checking that the certificate in the proposal is at least as large as the party’s lock is the essence of Tendermint’s safety rule. The small modification is also requiring a skip certificate for view v-1 when the lock is from a lower view.</p>
+<p>Complex uses the following event handlers (certificates can arrive from Graded-Broadcast or be forwarded):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>On first skip certificate for view v,
+ add it to skipSet,
+ and move to view v+1
+On first lock certificate for view v,
+ add it to lockSet,
+ forward it to all parties,
+ and move to view v+1
+On first strong certificate,
+ decide and forward it
+On receiving a forwarded lock certificate
+ for the first time, add it to keySet
+</code></pre></div></div>
+<p>The <strong>Complex voting rule</strong> is the external-validity function passed to <a href="https://decentralizedthoughts.github.io/2026-04-23-deconstructing-simplex/">Graded-Broadcast</a>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>For view v:
+ if receive (v, p.val, (p,s))
+ check that p is a valid lock certificate
+ and that (p.view = v-1
+ or s is a valid skip certificate
+ for view v-1)
+ and that does not exist lock
+ in my lockSet with view r where
+ r &gt; p.view and r ≠ v-1
+ if receive (v, val, (val-proof, s))
+ check that val-proof is a proof
+ that val is valid
+ and that my lockSet is empty
+ and that s is a valid skip certificate
+ for view v-1 (or that v=1)
+</code></pre></div></div>
+<p>In words, the proposal must be justified by a lock certificate that is either from the previous view or from an earlier view with a skip certificate, and the proposed lock must be at least as recent as any lock in the party’s <code class="language-plaintext highlighter-rouge">lockSet</code> that is not from the previous view.</p>
+<p>Checking that the proposed lock is at least as recent as the party’s own lock (the maximality condition) is the essence of Tendermint’s safety rule. The small Simplex-like modification additionally requires a skip certificate for view $v-1$ when the proposed lock is from an earlier view, proving that no commit occurred in view $v-1$.</p>
+<p>Recall that the main reason for the additional $\Delta$ wait in Tendermint is the hidden lock problem. Complex overcomes this in a novel way:</p>
+<ol>
+ <li>If a hidden lock is from view $v-2$ or older, then it will be forwarded and seen, hence will not be hidden.</li>
+ <li>A lock in view $v-1$ may be hidden from the leader of view $v$, but that means the leader of view $v$ will hold a skip certificate for view $v-1$. The leader can use this skip certificate to unlock the holders of certificates from view $v-1$.</li>
+</ol>
+<h2 id="proving-complex">Proving Complex</h2>
+<p>We now prove that Complex implements single-shot provable consensus with external validity. The proof uses the six properties of <a href="https://decentralizedthoughts.github.io/2026-04-23-deconstructing-simplex/">Graded-Broadcast</a> together with the Complex voting rule and the outer-shell view-transition rule.</p>
+<p>In fact, we will prove the stronger accountable-safety property for Complex.</p>
+<h3 id="claim-1-accountable-safety">Claim 1 (accountable safety)</h3>
+<p>Complex satisfies Provable Agreement via the stronger <em>accountable safety</em> property: any safety violation implicates at least $f+1$ identifiable faulty parties, and since at most $f$ parties are Byzantine, no violation can occur.</p>
+<p>Let $k$ be the first view with a valid commit certificate for value $x$, and let $S_2$ be the $n-f$ parties that voted Final in Graded-Broadcast view $k$. If a valid lock certificate for value $x’ \neq x$ exists in any view $v \geq k$, then at least $f+1$ parties in $S_2$ demonstrably violated the Complex voting rule.</p>
+<p><em>Grade Safety</em> implies no skip certificate for view $k$ exists, and <em>Uniqueness</em> implies every valid lock certificate in view $k$ has value $x$. No lock for $x’ \neq x$ can form in view $k+1$ either: the only admissible proposal there uses a view-$k$ lock (no skip for view $k$ is available), which has value $x$ by <em>Uniqueness</em>.</p>
+<p>For the first view $v^- \geq k+2$ with a lock for $x’ \neq x$, let $L$ be its $n-f$ voters. Quorum intersection gives $|S_2 \cap L| \geq n-2f &gt; f$. Every $i \in S_2 \cap L$ holds a view-$k$ lock (value $x$) in its <code class="language-plaintext highlighter-rouge">lockSet</code> (a non-$(v^–1)$ lock since $v^- \geq k+2$) yet voted for a proposal with lock $q$ where $q.\text{view} &lt; k$ (every lock in views $[k, v^-)$ has value $x$ by the above). This violates the maximality condition of the Complex voting rule and is detectable from the commit certificate, the lock for $v^-$, and the proposal. Since $|S_2 \cap L| &gt; f$, at least $f+1$ violators are identified, and Provable Agreement follows.</p>
+<h3 id="external-validity">External Validity</h3>
+<p>Any valid commit certificate is a valid strong certificate of some Graded-Broadcast instance. By the <em>External Validity</em> property of Graded-Broadcast, its value must be externally valid.</p>
+<h3 id="claim-2-liveness">Claim 2 (liveness)</h3>
+<p>All honest parties eventually hold a valid commit certificate.</p>
+<p>If any honest party delivers a strong certificate, <em>Totality</em> propagates it to all. Otherwise, consider the first post-GST view $v^+$ with an honest leader that starts after all earlier certificates have propagated. By <em>Liveness</em>, every earlier view delivered a lock or skip certificate; by the $\Delta$-gap part of <em>Liveness</em>, all honest parties enter $v^+$ within $\Delta$ of each other, satisfying <em>Strong Validity</em>’s premise.</p>
+<p>If <code class="language-plaintext highlighter-rouge">keySet</code> is non-empty, the primary proposes its highest lock $p$ (view $w$) paired with $\bot$ if $w = v^+-1$, or the skip for view $v^+-1$ otherwise. If <code class="language-plaintext highlighter-rouge">keySet</code> is empty, it proposes its own externally valid input with the skip for view $v^+-1$ (or vacuously for $v^+ = 1$). In both cases the proposal satisfies the Complex voting rule: the skip condition holds by the above, and the maximality condition holds because all delivered lock certificates have propagated, so the primary’s highest lock in <code class="language-plaintext highlighter-rouge">keySet</code> dominates every non-$(v^+-1)$ lock in any honest party’s <code class="language-plaintext highlighter-rouge">lockSet</code> (or both are empty). By <em>Strong Validity</em>, all honest parties deliver a strong certificate in view $v^+$.</p>
+<h2 id="notes">Notes</h2>
+<ul>
+ <li>
+ <p>A party needs to store at most the two most recent lock certificates and the most recent skip certificate, so the number of certificates stored is constant. In contrast, in Simplex a party may need to store a lock certificate for every skipped view, which can grow with the number of skipped views.</p>
+ </li>
+ <li>
+ <p>Just like <a href="https://decentralizedthoughts.github.io/2025-09-24-Kuplex/">Kuplex</a> improves Simplex from $3\Delta+\delta$ to $2\Delta+2\delta$, one can devise <strong>Komplex</strong>, which also obtains worst-case view latency $2\Delta+2\delta$ and, like Complex, still requires only a constant number of certificates per view. We leave the details to a future post.</p>
+ </li>
+ <li>
+ <p>Similarly, there is a <a href="https://decentralizedthoughts.github.io/2025-07-18-two-round-Simplex/">Fast Simplex protocol</a> with a two-round good case. This can be transformed to a <strong>Fast Complex</strong> variant for $5f+1$, and will be explored in later posts.</p>
+ </li>
+</ul>
+<h2 id="acknowledgments">Acknowledgments</h2>
+<p>Many thanks to Kartik, Ling, Yuval and Jovan for insightful feedback on this post.</p>
+<p>Your thoughts on X (link coming soon).</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=From+Simplex+to+Complex&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2026-04-26-complex%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2026-04-23-latency-of-censorship-resistance/" data-toggle="tooltip" data-placement="top" title="Latency cost of censorship resistance">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2026-04-27-beyond-CR/" data-toggle="tooltip" data-placement="top" title="Beyond censorship resistance: hiding, simultaneous binding, and accountable last look">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ 
+ Decentralized Thinkers
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>
