@@ -154,12 +154,12 @@ bound.
 ## Why It Works
 
 **Agreement.** If $i=j$, then decision implies value and same view agreement
-give $C=D$. So it remains to show that if $\mathrm{DC}_i(C)$ and
-$\mathrm{VC}_j(D)$ are valid with $i<j$, then $C\preceq D$.
+give $C=D$. So it remains to show that if $\mathrm{DC}_{i}(C)$ and
+$\mathrm{VC}_{j}(D)$ are valid with $i<j$, then $C\preceq D$.
 
-Since $\mathrm{VC}_j(D)$ contains an honest vote, $D$ came from an accepted
+Since $\mathrm{VC}_{j}(D)$ contains an honest vote, $D$ came from an accepted
 chain proposal. Thus $D=D'\circ B$ for some predecessor certificate
-$\mathrm{VC}_w(D')$ and skips
+$\mathrm{VC}_{w}(D')$ and skips
 $\mathrm{SC}_{w+1},\ldots,\mathrm{SC}_{j-1}$.
 
 If $w=i$, then decision implies value and same view agreement give $C=D'$,
