@@ -93,4 +93,4 @@ The fact that any protocol that provides censorship resistance requires some exe
 
 We thank Tim Roughgarden for suggesting the problem of the latency cost of censorship resistance and for his insightful feedback.
 
-Your thoughts on [X](TBD).
+Your thoughts on X (link coming soon).
