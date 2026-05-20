@@ -7,8 +7,6 @@ tags:
 - consensus
 - broadcast
 - blockchain
-unlisted: true
-sitemap: false
 ---
 
 ---
