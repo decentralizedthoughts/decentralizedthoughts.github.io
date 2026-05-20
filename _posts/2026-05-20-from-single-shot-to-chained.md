@@ -96,7 +96,7 @@ checks a new block against the chain in that certificate.
 
 Values are chains. Write $C\preceq D$ when $C$ is a prefix of $D$. There is a
 public genesis chain $\bot_{\mathsf{gen}}$, with public value certificate
-$\mathrm{VC}_0(\bot_{\mathsf{gen}})$.
+$\mathrm{VC}&#95;0(\bot&#95;{\mathsf{gen}})$.
 
 The chain represents a [state machine](https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/) execution. We assume an external
 application validity relation
@@ -154,18 +154,18 @@ bound.
 ## Why It Works
 
 **Agreement.** If $i=j$, then decision implies value and same view agreement
-give $C=D$. So it remains to show that if $\mathrm{DC}_{i}(C)$ and
-$\mathrm{VC}_{j}(D)$ are valid with $i<j$, then $C\preceq D$.
+give $C=D$. So it remains to show that if $\mathrm{DC}_i(C)$ and
+$\mathrm{VC}_j(D)$ are valid with $i<j$, then $C\preceq D$.
 
-Since $\mathrm{VC}_{j} (D)$ contains an honest vote, $D$ came from an accepted
-chain proposal. Thus, $D = D' \circ B$ for some predecessor certificate
-$\mathrm{VC}_{w} (D')$ and skips
-$\mathrm{SC}_{w+1}, \ldots, \mathrm{SC}_{j-1}$.
+Since $\mathrm{VC}&#95;j(D)$ contains an honest vote, $D$ came from an accepted
+chain proposal. Thus, $D=D^\prime\circ B$ for some predecessor certificate
+$\mathrm{VC}&#95;w(D^\prime)$ and skips
+$\mathrm{SC}&#95;{w+1},\ldots,\mathrm{SC}&#95;{j-1}$.
 
-If $w=i$, then decision implies value and same view agreement give $C=D'$,
+If $w=i$, then decision implies value and same view agreement give $C=D^\prime$,
 so $C\preceq D$. If $w<i<j$, then the proposal included $\mathrm{SC}_i$,
 contradicting $\mathrm{DC}_i(C)$ by skip decision exclusion. If $i<w$, repeat
-the same argument with $\mathrm{VC}_w(D')$ in place of $\mathrm{VC}_j(D)$. The
+the same argument with $\mathrm{VC}&#95;w(D^\prime)$ in place of $\mathrm{VC}_j(D)$. The
 view number decreases, so this eventually proves $C\preceq D$.
 
 Chain agreement follows because every decision certificate implies a value
