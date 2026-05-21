@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-05-21T10:02:52Z",
+  "fetched_at": "2026-05-21T20:08:44Z",
   "items": [
     {
       "path": "/2019-08-16-byzantine-agreement-needs-quadratic-messages/",
@@ -8,7 +8,7 @@
     },
     {
       "path": "/2021-09-20-optimal-communication-complexity-of-authenticated-byzantine-agreement/",
-      "views": 129
+      "views": 130
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
@@ -20,7 +20,7 @@
     },
     {
       "path": "/2019-06-01-2019-5-31-models/",
-      "views": 89
+      "views": 90
     },
     {
       "path": "/2026-05-14-simplex-FVS/",
