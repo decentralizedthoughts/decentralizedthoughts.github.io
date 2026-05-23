@@ -62,7 +62,7 @@ latency.
 In single-shot Simplex, honest parties vote for a proposal in view $v$ in one
 of two cases.
 
-First, the proposal repeats the value from a previous value certificate and
+First, if the proposal repeats the value from a previous value certificate and
 includes skip certificates for the intervening views:
 
 ```text
@@ -75,7 +75,7 @@ vote when:
 
 where $0<w<v$.
 
-Second, the proposal uses a fresh value and includes skip certificates for the
+Second, if the proposal uses a fresh value and includes skip certificates for the
 intervening views:
 
 ```text
@@ -91,24 +91,13 @@ externally valid value.
 
 ## Chained Simplex Outer Protocol
 
-The chained outer protocol always uses a previous value certificate, and also
-checks a new block against the chain in that certificate.
+Here is the whole change: instead of re-proposing a certified value, the
+leader extends it by one valid block.
 
-Values are chains. Write $C\preceq D$ when $C$ is a prefix of $D$. There is a
-public genesis chain $\bot_{\mathsf{gen}}$, with public value certificate
-$\mathrm{VC}&#95;0(\bot&#95;{\mathsf{gen}})$.
-
-The chain represents a [state machine](https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/) execution. We assume an external
-application validity relation
-
-$$
-C \xrightarrow{\mathrm{valid}} C\circ B,
-$$
-
-meaning that block $B$ is valid relative to the state reached by $C$.
-
-For the first block, use $w=0$ and $C=\bot_{\mathsf{gen}}$. Honest parties
-vote for a proposal in view $v$ when:
+Values are now chains, so a value certificate represents a chain certificate.
+A proposal for view $v$ chooses an earlier chain
+certificate $\mathrm{VC}_w(C)$, proves that all intervening views between $w$ and $v$ were skipped,
+and proposes one valid extension $C^+=C\circ B$:
 
 ```text
 value:
@@ -121,9 +110,21 @@ vote when:
 
 where $0\leq w<v$.
 
-> The core change is small: the leader does not merely propose the certified
-> value again. It uses the certified chain as a prefix and proposes one valid
-> extension of it.
+For the first block, use the public genesis chain $\bot_{\mathsf{gen}}$ and
+its public certificate $\mathrm{VC}&#95;0(\bot&#95;{\mathsf{gen}})$.
+
+That is it. The certified chain is the prefix; the new block is checked against
+the state reached by that prefix.
+
+Write $C\preceq D$ when $C$ is a prefix of $D$. The chain represents a
+[state machine](https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/)
+execution. We assume an external application validity relation
+
+$$
+C \xrightarrow{\mathrm{valid}} C\circ B,
+$$
+
+meaning that block $B$ is valid relative to the state reached by $C$.
 
 If view $v$ produces $\mathrm{DC}_v(C^+)$, then $C^+$ is decided. If it
 produces only $\mathrm{VC}_v(C^+)$, then $C^+$ is not decided yet, but later
@@ -200,4 +201,4 @@ This is why we often use a single-shot presentation: it isolates the core
 consensus mechanism, while chaining is just an outer-protocol change.
 
 
-Your thoughts on X.
+Your thoughts on [X](https://x.com/ittaia/status/2058196711483269149?s=20).
