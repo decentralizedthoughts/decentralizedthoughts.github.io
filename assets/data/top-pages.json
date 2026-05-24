@@ -1,10 +1,10 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-05-23T19:37:17Z",
+  "fetched_at": "2026-05-24T08:44:01Z",
   "items": [
     {
       "path": "/2019-08-16-byzantine-agreement-needs-quadratic-messages/",
-      "views": 264
+      "views": 263
     },
     {
       "path": "/2021-09-20-optimal-communication-complexity-of-authenticated-byzantine-agreement/",
@@ -12,19 +12,23 @@
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 105
+      "views": 104
     },
     {
       "path": "/2019-06-01-2019-5-31-models/",
-      "views": 103
-    },
-    {
-      "path": "/start-here/",
       "views": 101
     },
     {
+      "path": "/start-here/",
+      "views": 99
+    },
+    {
       "path": "/2026-05-14-simplex-FVS/",
-      "views": 53
+      "views": 54
+    },
+    {
+      "path": "/2026-05-20-sui-lutris/",
+      "views": 50
     }
   ]
 }
