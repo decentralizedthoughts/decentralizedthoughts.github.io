@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-05-25T10:47:26Z",
+  "fetched_at": "2026-05-25T19:57:59Z",
   "items": [
     {
       "path": "/2019-08-16-byzantine-agreement-needs-quadratic-messages/",
@@ -20,7 +20,7 @@
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 96
+      "views": 97
     },
     {
       "path": "/2026-05-14-simplex-FVS/",
