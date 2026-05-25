@@ -67,11 +67,7 @@ w := 0       // the view this input came from
 4. Upon T_k = 3Δ and not yet sent Final:
     Send <Vote, k, ⊥>
 
-5. Upon receiving n−f <Vote, k, ⊥>:
-    Send n−f <Vote, k, ⊥>
-    Enter view k+1
-
-6. Upon receiving n−f <Final, k, x>:
+5. Upon receiving n−f <Final, k, x>:
     This is a decision certificate for x
     Send n−f <Final, k, x>
     Terminate
