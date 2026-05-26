@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-05-26T10:17:46Z",
+  "fetched_at": "2026-05-26T20:24:41Z",
   "items": [
     {
       "path": "/2019-06-01-2019-5-31-models/",
@@ -8,15 +8,15 @@
     },
     {
       "path": "/start-here/",
-      "views": 96
+      "views": 98
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 93
+      "views": 94
     },
     {
       "path": "/2026-05-20-from-single-shot-to-chained/",
-      "views": 65
+      "views": 66
     },
     {
       "path": "/2026-05-14-simplex-FVS/",
@@ -28,7 +28,7 @@
     },
     {
       "path": "/2020-08-28-what-is-a-cryptographic-hash-function/",
-      "views": 57
+      "views": 58
     }
   ]
 }
