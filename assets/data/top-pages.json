@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-05-28T10:33:20Z",
+  "fetched_at": "2026-05-28T20:36:29Z",
   "items": [
     {
       "path": "/2019-06-01-2019-5-31-models/",
@@ -8,11 +8,11 @@
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 78
+      "views": 79
     },
     {
       "path": "/start-here/",
-      "views": 78
+      "views": 79
     },
     {
       "path": "/2026-05-20-from-single-shot-to-chained/",
