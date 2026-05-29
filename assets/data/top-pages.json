@@ -1,34 +1,30 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-05-28T20:36:29Z",
+  "fetched_at": "2026-05-29T10:13:24Z",
   "items": [
     {
       "path": "/2019-06-01-2019-5-31-models/",
-      "views": 93
-    },
-    {
-      "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 79
+      "views": 103
     },
     {
       "path": "/start-here/",
-      "views": 79
+      "views": 91
+    },
+    {
+      "path": "/2020-12-22-what-is-a-merkle-tree/",
+      "views": 80
     },
     {
       "path": "/2026-05-20-from-single-shot-to-chained/",
-      "views": 71
+      "views": 74
     },
     {
       "path": "/2026-05-20-sui-lutris/",
-      "views": 65
+      "views": 67
     },
     {
       "path": "/2020-08-28-what-is-a-cryptographic-hash-function/",
       "views": 64
-    },
-    {
-      "path": "/2026-05-14-simplex-FVS/",
-      "views": 62
     }
   ]
 }
