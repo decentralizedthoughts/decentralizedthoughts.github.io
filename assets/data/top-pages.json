@@ -1,21 +1,21 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-05-29T20:37:34Z",
+  "fetched_at": "2026-05-30T08:39:58Z",
   "items": [
     {
-      "path": "/2019-06-01-2019-5-31-models/",
-      "views": 105
-    },
-    {
       "path": "/start-here/",
-      "views": 94
+      "views": 112
     },
     {
-      "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 80
+      "path": "/2019-06-01-2019-5-31-models/",
+      "views": 97
     },
     {
       "path": "/2026-05-20-from-single-shot-to-chained/",
+      "views": 79
+    },
+    {
+      "path": "/2020-12-22-what-is-a-merkle-tree/",
       "views": 75
     },
     {
@@ -24,7 +24,7 @@
     },
     {
       "path": "/2020-08-28-what-is-a-cryptographic-hash-function/",
-      "views": 64
+      "views": 62
     }
   ]
 }
