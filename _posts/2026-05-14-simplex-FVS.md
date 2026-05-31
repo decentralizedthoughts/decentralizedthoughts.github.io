@@ -9,6 +9,7 @@ author: Ittai Abraham
 This post gives a **fixed view schedule** version of
 [Simplex](https://decentralizedthoughts.github.io/2025-11-15-simplex-from-benign/), called **Simplex FVS**, with the advantages of a fixed view schedule discussed
 [here](https://decentralizedthoughts.github.io/2026-03-07-simultaneous-agreement/). 
+For a map of the surrounding Simplex line, see the [Simplex chapter](https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/).
 
 In the FVS design, the start and end times of each view are fixed in advance;
 this requires synchronized clocks. We number protocol views starting at $1$,
@@ -223,5 +224,7 @@ certificate for every previous view by time $s_r$. Therefore the leader can
 form a valid proposal: it uses the highest previous value certificate if one
 exists, with skip certificates for all intervening views, and otherwise
 proposes a fresh value. Claim 2 then gives a decision.
+
+*For the surrounding Simplex line and related background posts, see the [Simplex chapter](https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/).*
 
 Your thoughts/comments [here](https://x.com/ittaia/status/2055245094014316941?s=20).

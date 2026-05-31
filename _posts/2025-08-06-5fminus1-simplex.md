@@ -10,7 +10,7 @@ author: Ittai Abraham and Ling Ren
 In our [previous post](https://decentralizedthoughts.github.io/2025-07-18-two-round-Simplex/), we described a 2-round [partially synchronous](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/) BFT protocol for $n = 5f+1$. In this follow-up post, we **push the bound to $n = 5f-1$**, achieving [optimal 2-round commit](https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/) in the [Simplex style](https://decentralizedthoughts.github.io/2025-06-18-simplex/). 
 
 
-We then extend the result to $n=3f+2p-1$ for $0<p\leq f$ that obtains liveness for $p$ Byzantine. This can be used to obtain a [concurrent 2 round and 3 round protocol](https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/) with the optimal fault tolerance.
+We then extend the result to $n=3f+2p-1$ for $0<p\leq f$ that obtains liveness for $p$ Byzantine. This can be used to obtain a [concurrent 2 round and 3 round protocol](https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/) with the optimal fault tolerance. For a map of the surrounding Simplex line, see the [Simplex chapter](https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/).
 
 
 ## Intuition
@@ -127,6 +127,8 @@ If the leader of some view $k$ is honest and GST has occurred, all honest partie
 ## Acknowledgments
 
 This work is done in part during the authors' visits to a16z Crypto Research. The authors thank Yuval Efron and Kartik Nayak for insightful discussions. We thank Brendan Kobayashi Chou, Andrew Lewis-Pye, Patrick O'Grady for spotting a liveness error in a previous version. 
+
+*For the surrounding Simplex line and related background posts, see the [Simplex chapter](https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/).*
 
 
 Your thoughts/comments on [X](https://x.com/ittaia/status/1954109234917883985).

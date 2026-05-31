@@ -13,7 +13,7 @@
  
  <meta name="author" content="Ittai Abraham, Yuval Efron, Kartik Nayak, and Ling Ren">
  
- <meta name="description" content="In the last two posts, we presented two partially synchronous BFT protocols in the Simplex-style: a 3-round protocol with $n\geq3f+1$ and a 2-round protocol with $n\geq 5f+1$. In this post, we describe a protocol that runs a 2-round commit rule and a 3-round commit rule concurrently. A new parameter $p$ ($0 \leq p \leq f$) is introduced, and the goal is to design protocols that have $n \geq 3f+2p+1$ parties...">
+ <meta name="description" content="In the last two posts, we presented two partially synchronous BFT protocols in the Simplex-style: a 3-round protocol with $n\geq3f+1$ and a 2-round protocol with $n\geq 5f+1$. In this post, we describe a protocol that runs a 2-round commit rule and a 3-round commit rule concurrently. For a map of the surrounding Simplex line, see the Simplex chapter. A new parameter $p$ ($0 \leq p \leq f$) is introduced, and...">
  
  
  
@@ -72,7 +72,7 @@
  
  <meta property="og:site_name" content="Decentralized Thoughts">
  <meta property="og:title" content="Concurrent 2-round and 3-round Simplex-style BFT">
- <meta property="og:description" content="In the last two posts, we presented two partially synchronous BFT protocols in the Simplex-style: a 3-round protocol with $n\geq3f+1$ and a 2-round protocol with $n\geq 5f+1$. In this post, we describe a protocol that runs a 2-round commit rule and a 3-round commit rule concurrently. A new parameter $p$ ($0 \leq p \leq f$) is introduced, and the goal is to design protocols that have $n \geq 3f+2p+1$ parties...">
+ <meta property="og:description" content="In the last two posts, we presented two partially synchronous BFT protocols in the Simplex-style: a 3-round protocol with $n\geq3f+1$ and a 2-round protocol with $n\geq 5f+1$. In this post, we describe a protocol that runs a 2-round commit rule and a 3-round commit rule concurrently. For a map of the surrounding Simplex line, see the Simplex chapter. A new parameter $p$ ($0 \leq p \leq f$) is introduced, and...">
  
  <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
  
@@ -91,7 +91,7 @@
  <meta name="twitter:site" content="@ittaia">
  <meta name="twitter:creator" content="@ittaia">
  <meta property="twitter:title" content="Concurrent 2-round and 3-round Simplex-style BFT">
- <meta property="twitter:description" content="In the last two posts, we presented two partially synchronous BFT protocols in the Simplex-style: a 3-round protocol with $n\geq3f+1$ and a 2-round protocol with $n\geq 5f+1$. In this post, we describe a protocol that runs a 2-round commit rule and a 3-round commit rule concurrently. A new parameter $p$ ($0 \leq p \leq f$) is introduced, and the goal is to design protocols that have $n \geq 3f+2p+1$ parties...">
+ <meta property="twitter:description" content="In the last two posts, we presented two partially synchronous BFT protocols in the Simplex-style: a 3-round protocol with $n\geq3f+1$ and a 2-round protocol with $n\geq 5f+1$. In this post, we describe a protocol that runs a 2-round commit rule and a 3-round commit rule concurrently. For a map of the surrounding Simplex line, see the Simplex chapter. A new parameter $p$ ($0 \leq p \leq f$) is introduced, and...">
  
  <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
  
@@ -210,7 +210,7 @@
  
  
  <div class="blog-post">
- <p>In the last two posts, we presented two partially synchronous BFT protocols in the <a href="https://eprint.iacr.org/2023/463.pdf">Simplex-style</a>: a <a href="https://decentralizedthoughts.github.io/2025-06-18-simplex/">3-round protocol</a> with $n\geq3f+1$ and a <a href="https://decentralizedthoughts.github.io/2025-07-18-two-round-Simplex/">2-round protocol</a> with $n\geq 5f+1$. In this post, we describe a protocol that runs a 2-round commit rule and a 3-round commit rule concurrently.</p>
+ <p>In the last two posts, we presented two partially synchronous BFT protocols in the <a href="https://eprint.iacr.org/2023/463.pdf">Simplex-style</a>: a <a href="https://decentralizedthoughts.github.io/2025-06-18-simplex/">3-round protocol</a> with $n\geq3f+1$ and a <a href="https://decentralizedthoughts.github.io/2025-07-18-two-round-Simplex/">2-round protocol</a> with $n\geq 5f+1$. In this post, we describe a protocol that runs a 2-round commit rule and a 3-round commit rule concurrently. For a map of the surrounding Simplex line, see the <a href="https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/">Simplex chapter</a>.</p>
 <p>A new parameter $p$ ($0 \leq p \leq f$) is introduced, and the goal is to design protocols that have $n \geq 3f+2p+1$ parties and the following properties:</p>
 <ul>
  <li>Safety and liveness in the presence of $f$ Byzantine parties;</li>
@@ -331,6 +331,7 @@
 <p>If at most $f$ Byzantine then all honest will send final and commit in view $k$ in 3 rounds.</p>
 <h2 id="notes">Notes</h2>
 <p>In a <a href="https://decentralizedthoughts.github.io/2025-08-06-5fminus1-simplex/">follow-up post</a> we show how to get the optimal $n=3f+2p-1$.</p>
+<p>This post is one of the two-round good-case variants collected in the <a href="https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/">Simplex chapter</a>.</p>
 <h2 id="acknowledgments">Acknowledgments</h2>
 <p>This work was conducted while Yuval Efron was affiliated with a16z Crypto Research and the other authors were visiting. We would like to thank Quentin Kniep, Jakub Sliwinski, and Roger Wattenhofer for insightful discussions and feedback. We thank Brendan Kobayashi Chou, Andrew Lewis-Pye, Patrick O’Grady for spotting a liveness error in a previous version.</p>
 <p>We thank Eugen Zalinescu from nomadic labs for spotting an error in the safety proof sketch.</p>

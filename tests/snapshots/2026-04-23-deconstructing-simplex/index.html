@@ -13,7 +13,7 @@
  
  <meta name="author" content="Ittai Abraham">
  
- <meta name="description" content="In a previous post we decomposed PBFT into an outer shell and an inner shell consisting of two building blocks: Locked-Broadcast (LB) and Recover-Max-Lock. Here we similarly decompose Simplex into an outer shell and an inner shell consisting of a single building block: Graded-Broadcast (GB). The model is partial synchrony with $f&amp;lt;n/3$ Byzantine failures, and the goal is single-shot provable consensus with external validity. Single-shot Provable Consensus with External Validity...">
+ <meta name="description" content="In a previous post we decomposed PBFT into an outer shell and an inner shell consisting of two building blocks: Locked-Broadcast (LB) and Recover-Max-Lock. Here we similarly decompose Simplex into an outer shell and an inner shell consisting of a single building block: Graded-Broadcast (GB). For a map of the surrounding Simplex line, see the Simplex chapter. The model is partial synchrony with $f&amp;lt;n/3$ Byzantine failures, and the goal is...">
  
  
  
@@ -72,7 +72,7 @@
  
  <meta property="og:site_name" content="Decentralized Thoughts">
  <meta property="og:title" content="Deconstructing Simplex">
- <meta property="og:description" content="In a previous post we decomposed PBFT into an outer shell and an inner shell consisting of two building blocks: Locked-Broadcast (LB) and Recover-Max-Lock. Here we similarly decompose Simplex into an outer shell and an inner shell consisting of a single building block: Graded-Broadcast (GB). The model is partial synchrony with $f&amp;lt;n/3$ Byzantine failures, and the goal is single-shot provable consensus with external validity. Single-shot Provable Consensus with External Validity...">
+ <meta property="og:description" content="In a previous post we decomposed PBFT into an outer shell and an inner shell consisting of two building blocks: Locked-Broadcast (LB) and Recover-Max-Lock. Here we similarly decompose Simplex into an outer shell and an inner shell consisting of a single building block: Graded-Broadcast (GB). For a map of the surrounding Simplex line, see the Simplex chapter. The model is partial synchrony with $f&amp;lt;n/3$ Byzantine failures, and the goal is...">
  
  <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
  
@@ -91,7 +91,7 @@
  <meta name="twitter:site" content="@ittaia">
  <meta name="twitter:creator" content="@ittaia">
  <meta property="twitter:title" content="Deconstructing Simplex">
- <meta property="twitter:description" content="In a previous post we decomposed PBFT into an outer shell and an inner shell consisting of two building blocks: Locked-Broadcast (LB) and Recover-Max-Lock. Here we similarly decompose Simplex into an outer shell and an inner shell consisting of a single building block: Graded-Broadcast (GB). The model is partial synchrony with $f&amp;lt;n/3$ Byzantine failures, and the goal is single-shot provable consensus with external validity. Single-shot Provable Consensus with External Validity...">
+ <meta property="twitter:description" content="In a previous post we decomposed PBFT into an outer shell and an inner shell consisting of two building blocks: Locked-Broadcast (LB) and Recover-Max-Lock. Here we similarly decompose Simplex into an outer shell and an inner shell consisting of a single building block: Graded-Broadcast (GB). For a map of the surrounding Simplex line, see the Simplex chapter. The model is partial synchrony with $f&amp;lt;n/3$ Byzantine failures, and the goal is...">
  
  <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
  
@@ -210,7 +210,7 @@
  
  
  <div class="blog-post">
- <p>In a <a href="https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/">previous post</a> we decomposed PBFT into an outer shell and an inner shell consisting of two building blocks: <em>Locked-Broadcast</em> (LB) and <em>Recover-Max-Lock</em>. Here we similarly decompose <a href="https://decentralizedthoughts.github.io/2025-06-18-simplex/">Simplex</a> into an outer shell and an inner shell consisting of a single building block: <strong>Graded-Broadcast</strong> (GB).</p>
+ <p>In a <a href="https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/">previous post</a> we decomposed PBFT into an outer shell and an inner shell consisting of two building blocks: <em>Locked-Broadcast</em> (LB) and <em>Recover-Max-Lock</em>. Here we similarly decompose <a href="https://decentralizedthoughts.github.io/2025-06-18-simplex/">Simplex</a> into an outer shell and an inner shell consisting of a single building block: <strong>Graded-Broadcast</strong> (GB). For a map of the surrounding Simplex line, see the <a href="https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/">Simplex chapter</a>.</p>
 <p>The model is <a href="https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/">partial synchrony</a> with $f&lt;n/3$ <a href="https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/">Byzantine failures</a>, and the goal is <em>single-shot provable consensus with external validity</em>.</p>
 <h2 id="single-shot-provable-consensus-with-external-validity">Single-shot Provable Consensus with External Validity</h2>
 <p>There is some <em>External Validity</em> Boolean function ($EV_{\text{consensus}}$) that is provided to each party. $EV_{\text{consensus}}$ takes as input a value $val$ and a proof $proof$. If $EV_{\text{consensus}}(val, proof)=1$ we say that $val$ is <em>externally valid</em>. A simple example of external validity is a check that the value is signed by the client that controls the asset. External validity is based on the framework of <a href="https://www.iacr.org/archive/crypto2001/21390524.pdf">Cachin, Kursawe, Petzold, and Shoup, 2001</a>.</p>
@@ -358,6 +358,7 @@ with sender input (x, proof):
  <li>In Simplex this is done by showing a skip certificate for every higher view.</li>
  <li>For PBFT, this is done by showing the $n-f$ highest locks that are not higher than the proposal.</li>
 </ol>
+<p>For where this decomposition sits in the broader Simplex line, see the <a href="https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/">Simplex chapter</a>.</p>
 <h2 id="acknowledgments">Acknowledgments</h2>
 <p>Many thanks to Kartik and Joachim for insightful comments and suggestions.</p>
 <p>Your thoughts on <a href="https://x.com/ittaia/status/2048079690364080367?s=20">X</a>.</p>

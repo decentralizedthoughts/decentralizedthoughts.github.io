@@ -211,7 +211,7 @@
  
  <div class="blog-post">
  <p>In our <a href="https://decentralizedthoughts.github.io/2025-07-18-two-round-Simplex/">previous post</a>, we described a 2-round <a href="https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/">partially synchronous</a> BFT protocol for $n = 5f+1$. In this follow-up post, we <strong>push the bound to $n = 5f-1$</strong>, achieving <a href="https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/">optimal 2-round commit</a> in the <a href="https://decentralizedthoughts.github.io/2025-06-18-simplex/">Simplex style</a>.</p>
-<p>We then extend the result to $n=3f+2p-1$ for $0&lt;p\leq f$ that obtains liveness for $p$ Byzantine. This can be used to obtain a <a href="https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/">concurrent 2 round and 3 round protocol</a> with the optimal fault tolerance.</p>
+<p>We then extend the result to $n=3f+2p-1$ for $0&lt;p\leq f$ that obtains liveness for $p$ Byzantine. This can be used to obtain a <a href="https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/">concurrent 2 round and 3 round protocol</a> with the optimal fault tolerance. For a map of the surrounding Simplex line, see the <a href="https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/">Simplex chapter</a>.</p>
 <h2 id="intuition">Intuition</h2>
 <p>A party commits a value $x$ after receiving $n-f$ votes for $x$.<br />
 We want to understand what evidence remains for the other honest parties if some honest party commits $x$ and then becomes unavailable due to network asynchrony.</p>
@@ -289,6 +289,7 @@ If the leader of some view $k$ is honest and GST has occurred, all honest partie
 <p><em>Proof sketch</em>: If a commit already occurs in a prior view, the commit certificate is forwarded. Otherwise, all honest parties eventually vote for the honest leader in view $k$, producing $n-p$ votes and committing.</p>
 <h2 id="acknowledgments">Acknowledgments</h2>
 <p>This work is done in part during the authors’ visits to a16z Crypto Research. The authors thank Yuval Efron and Kartik Nayak for insightful discussions. We thank Brendan Kobayashi Chou, Andrew Lewis-Pye, Patrick O’Grady for spotting a liveness error in a previous version.</p>
+<p><em>For the surrounding Simplex line and related background posts, see the <a href="https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/">Simplex chapter</a>.</em></p>
 <p>Your thoughts/comments on <a href="https://x.com/ittaia/status/1954109234917883985">X</a>.</p>
  </div>
  

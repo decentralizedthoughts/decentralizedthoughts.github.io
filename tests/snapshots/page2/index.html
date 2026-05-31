@@ -189,6 +189,38 @@
  
  
  <article class="post-preview">
+ <a href="/2025-11-23-finality/">
+ <h2 class="post-title">Finality Is in the Eye of the Behodler</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on November 23, 2025, by <b>Ittai Abraham, Vitalik Buterin, and Luca Zanolini</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Finality is a belief that some things will not change in the future (are final). Finality in blockchains matters because it gives us confidence that transactions or protocol decisions, will remain permanent and immutable. This ability to commit is what makes Blockchains so powerful as a coordination mechanism.
+ 
+ 
+ <a href="/2025-11-23-finality/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ 
+ 
+ <article class="post-preview">
  <a href="/2025-11-22-three-round-BFT/">
  <h2 class="post-title">Why BFT Needs Three Rounds</h2>
  
@@ -232,7 +264,7 @@
  <div class="post-entry-container">
  
  <div class="post-entry">
- In this post we present a Simplex protocol that solves single shot consensus and is resilient to $f < n/3$ Byzantine failures, under partial synchrony. In a previous post we showed how to move from Tendermint to Simplex.
+ In this post we present a Simplex protocol that solves single shot consensus and is resilient to $f < n/3$ Byzantine failures, under partial synchrony. In a previous post we showed how to move from Tendermint to Simplex. For a map of the surrounding Simplex line, see the Simplex chapter.
  
  
  <a href="/2025-11-15-simplex-from-benign/" class="post-read-more">[Read&nbsp;More]</a>
@@ -266,6 +298,7 @@
  <div class="post-entry">
  The goal of this post is to describe a single-shot consensus protocol that is resilient to f < n/2 omission failures, under partial synchrony.
 This protocol is inspired by the multi-shot Simplex for crash faults protocol and our earlier posts on Chained Raft, Benign HotStuff, and Log Paxos.
+For a map of the surrounding Simplex line, see the Simplex chapter.
  
  
  <a href="/2025-11-08-benign-simplex/" class="post-read-more">[Read&nbsp;More]</a>
@@ -363,7 +396,7 @@ This protocol is inspired by the multi-shot Simplex for crash faults protocol an
  <div class="post-entry-container">
  
  <div class="post-entry">
- Consensus protocols often need to balance simplicity with performance. Simplex is a beautiful example of minimalistic design. In this post, we explore two variations of Simplex, one that improves view latency in silent views and another that improves view latency in the worst-case when the actual network delay $\delta$ is smaller than $\Delta$, the maximal delay after GST.
+ Consensus protocols often need to balance simplicity with performance. Simplex is a beautiful example of minimalistic design. In this post, we explore two variations of Simplex, one that improves view latency in silent views and another that improves view latency in the worst-case when the actual network delay $\delta$ is smaller than $\Delta$, the maximal delay after GST. For a map of the surrounding Simplex line, see the Simplex chapter....
  
  
  <a href="/2025-09-24-Kuplex/" class="post-read-more">[Read&nbsp;More]</a>
@@ -527,7 +560,7 @@ This protocol is inspired by the multi-shot Simplex for crash faults protocol an
  <div class="post-entry-container">
  
  <div class="post-entry">
- In the last two posts, we presented two partially synchronous BFT protocols in the Simplex-style: a 3-round protocol with $n\geq3f+1$ and a 2-round protocol with $n\geq 5f+1$. In this post, we describe a protocol that runs a 2-round commit rule and a 3-round commit rule concurrently.
+ In the last two posts, we presented two partially synchronous BFT protocols in the Simplex-style: a 3-round protocol with $n\geq3f+1$ and a 2-round protocol with $n\geq 5f+1$. In this post, we describe a protocol that runs a 2-round commit rule and a 3-round commit rule concurrently. For a map of the surrounding Simplex line, see the Simplex chapter.
  
  
  <a href="/2025-07-29-2-round-3-round-simplex/" class="post-read-more">[Read&nbsp;More]</a>
@@ -627,7 +660,7 @@ This protocol is inspired by the multi-shot Simplex for crash faults protocol an
  <div class="post-entry-container">
  
  <div class="post-entry">
- Simplex is a recent partially synchronous Byzantine Fault Tolerant (BFT) protocol that is gaining popularity. We take this opportunity to rehash several classic results in the Simplex style. The first post explained the key difference between Simplex and Tendermint. This second post is on 2-round BFT. The next post will explore protocols that integrate concurrent 2-round and 3-round paths.
+ Simplex is a recent partially synchronous Byzantine Fault Tolerant (BFT) protocol that is gaining popularity. We take this opportunity to rehash several classic results in the Simplex style. The first post explained the key difference between Simplex and Tendermint. This second post is on 2-round BFT. The next post will explore protocols that integrate concurrent 2-round and 3-round paths. For a map of the surrounding Simplex line, see the Simplex...
  
  
  <a href="/2025-07-18-two-round-Simplex/" class="post-read-more">[Read&nbsp;More]</a>
@@ -802,40 +835,6 @@ This protocol is inspired by the multi-shot Simplex for crash faults protocol an
  Tags:
  
  <a href="/tags#consensus">consensus</a>
- 
- </div>
- 
- </article>
- 
- 
- 
- <article class="post-preview">
- <a href="/2024-12-16-strong-adaptive-lower-bound/">
- <h2 class="post-title">Agreement against strongly adaptive adversaries needs quadratic communication</h2>
- 
- </a>
- <p class="post-meta">
- Posted on December 16, 2024, by <b>Ittai Abraham, Kartik Nayak, Ling Ren</b>
- </p>
- 
- <div class="post-entry-container">
- 
- <div class="post-entry">
- In this post, we prove a result of Abraham, Hubert Chan, Dolev, Nayak, Pass, Ren, Shi, 2019 showing that:
- 
- 
- <a href="/2024-12-16-strong-adaptive-lower-bound/" class="post-read-more">[Read&nbsp;More]</a>
- 
- </div>
- </div>
- 
- 
- <div class="blog-tags">
- Tags:
- 
- <a href="/tags#lowerbound">lowerbound</a>
- 
- <a href="/tags#research">research</a>
  
  </div>
  

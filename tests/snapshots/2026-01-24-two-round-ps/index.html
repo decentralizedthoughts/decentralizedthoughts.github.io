@@ -13,7 +13,7 @@
  
  <meta name="author" content="Ittai Abraham, Kartik Nayak, and Alejandro Ranchal-pedrosa">
  
- <meta name="description" content="Consensus protocols for $n=3f+1$ can tolerate $f$ Byzantine faults under partial synchrony. However, they also require a latency of 3 rounds in the good-case when the leader is non-faulty, and the system is synchronous. Can we get a protocol with better latency, or tolerate more faults, if we assume $n=3f+2p+1$? Better latency: If the actual number of Byzantine faults in an execution are fewer, then the protocol can commit faster....">
+ <meta name="description" content="Consensus protocols for $n=3f+1$ can tolerate $f$ Byzantine faults under partial synchrony. However, they also require a latency of 3 rounds in the good-case when the leader is non-faulty, and the system is synchronous. Can we get a protocol with better latency, or tolerate more faults, if we assume $n=3f+2p+1$? For a map of the surrounding Simplex line, see the Simplex chapter. Better latency: If the actual number of Byzantine...">
  
  
  
@@ -72,7 +72,7 @@
  
  <meta property="og:site_name" content="Decentralized Thoughts">
  <meta property="og:title" content="Concurrent 2-round and 3-round BFT protocols under granular synchrony">
- <meta property="og:description" content="Consensus protocols for $n=3f+1$ can tolerate $f$ Byzantine faults under partial synchrony. However, they also require a latency of 3 rounds in the good-case when the leader is non-faulty, and the system is synchronous. Can we get a protocol with better latency, or tolerate more faults, if we assume $n=3f+2p+1$? Better latency: If the actual number of Byzantine faults in an execution are fewer, then the protocol can commit faster....">
+ <meta property="og:description" content="Consensus protocols for $n=3f+1$ can tolerate $f$ Byzantine faults under partial synchrony. However, they also require a latency of 3 rounds in the good-case when the leader is non-faulty, and the system is synchronous. Can we get a protocol with better latency, or tolerate more faults, if we assume $n=3f+2p+1$? For a map of the surrounding Simplex line, see the Simplex chapter. Better latency: If the actual number of Byzantine...">
  
  <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
  
@@ -91,7 +91,7 @@
  <meta name="twitter:site" content="@ittaia">
  <meta name="twitter:creator" content="@ittaia">
  <meta property="twitter:title" content="Concurrent 2-round and 3-round BFT protocols under granular synchrony">
- <meta property="twitter:description" content="Consensus protocols for $n=3f+1$ can tolerate $f$ Byzantine faults under partial synchrony. However, they also require a latency of 3 rounds in the good-case when the leader is non-faulty, and the system is synchronous. Can we get a protocol with better latency, or tolerate more faults, if we assume $n=3f+2p+1$? Better latency: If the actual number of Byzantine faults in an execution are fewer, then the protocol can commit faster....">
+ <meta property="twitter:description" content="Consensus protocols for $n=3f+1$ can tolerate $f$ Byzantine faults under partial synchrony. However, they also require a latency of 3 rounds in the good-case when the leader is non-faulty, and the system is synchronous. Can we get a protocol with better latency, or tolerate more faults, if we assume $n=3f+2p+1$? For a map of the surrounding Simplex line, see the Simplex chapter. Better latency: If the actual number of Byzantine...">
  
  <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
  
@@ -211,6 +211,7 @@
  
  <div class="blog-post">
  <p>Consensus protocols for $n=3f+1$ can tolerate $f$ Byzantine faults under partial synchrony. However, they also require a latency of <a href="https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/">3 rounds in the good-case</a> when the leader is non-faulty, and the system is synchronous. <em>Can we get a protocol with better latency, or tolerate more faults, if we assume $n=3f+2p+1$?</em></p>
+<p>For a map of the surrounding Simplex line, see the <a href="https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/">Simplex chapter</a>.</p>
 <ol>
  <li>
  <p><strong>Better latency:</strong> If the actual number of Byzantine faults in an execution are fewer, then the protocol can commit faster. Starting with <a href="https://www.cs.cornell.edu/lorenzo/papers/fab.pdf">Fab</a> and <a href="https://dl.acm.org/doi/10.1145/1658357.1658358">Zyzzyva</a> (also see technical reports <a href="https://lpdwww.epfl.ch/upload/documents/publications/567931850DGV-feb-05.pdf">here</a> and <a href="https://lamport.azurewebsites.net/pubs/lower-bound.pdf">here</a>), later <a href="https://arxiv.org/pdf/1804.01626.pdf">SBFT</a>, and recently <a href="https://arxiv.org/pdf/2505.08771.pdf">KudzuBFT</a>, there is a line of protocols for $n = 3f + 2p + 1$ that can have a two round fast path when there are at most $p$ Byzantine faults, and a regular three round path when there are up to $f$ Byzantine faults, for $p\le f$. See <a href="https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/">our post on this topic</a>.</p>
@@ -296,6 +297,7 @@
 </ol>
 <h2 id="notes">Notes</h2>
 <p>We note that a similar change under the same granular synchrony assumption allows Hydrangea to operate under $n = 3f+2p+1$. Specifically, if there is a fast commit for $x$ with $n-p$ votes in a view, a subsequent leader will obtain a fast certificate for $x$ since, $n-p-f$ of these votes are honest, and by the granular synchrony assumption, the leader receives $\geq n-p-2f = f+p+1$ of these votes. A similar change applies to Alpenglow as well.</p>
+<p>This post belongs to the two-round Simplex-style line collected in the <a href="https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/">Simplex chapter</a>.</p>
 <h2 id="acknowledgments">Acknowledgments</h2>
 <p>We would like to thank our co-authors Yuval Efron and Ling Ren. We also thank Lefteris Kokoris-Kogias, Quentin Kniep, Kobi Sliwinski, and Roger Wattenhofer for discussions and insights on this topic.</p>
  </div>

@@ -6,6 +6,8 @@ author: Ittai Abraham, Kartik Nayak, and Alejandro Ranchal-pedrosa
 
 Consensus protocols for $n=3f+1$ can tolerate $f$ Byzantine faults under partial synchrony. However, they also require a latency of [3 rounds in the good-case](https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/) when the leader is non-faulty, and the system is synchronous. *Can we get a protocol with better latency, or tolerate more faults, if we assume $n=3f+2p+1$?*
 
+For a map of the surrounding Simplex line, see the [Simplex chapter](https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/).
+
 1. **Better latency:** If the actual number of Byzantine faults in an execution are fewer, then the protocol can commit faster. Starting with [Fab](https://www.cs.cornell.edu/lorenzo/papers/fab.pdf) and [Zyzzyva](https://dl.acm.org/doi/10.1145/1658357.1658358) (also see technical reports [here](https://lpdwww.epfl.ch/upload/documents/publications/567931850DGV-feb-05.pdf) and [here](https://lamport.azurewebsites.net/pubs/lower-bound.pdf)), later [SBFT](https://arxiv.org/pdf/1804.01626.pdf), and recently [KudzuBFT](https://arxiv.org/pdf/2505.08771.pdf), there is a line of protocols for $n = 3f + 2p + 1$ that can have a two round fast path when there are at most $p$ Byzantine faults, and a regular three round path when there are up to $f$ Byzantine faults, for $p\le f$. See [our post on this topic](https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/).
 
 2. **Tolerating more faults:** There are folklore constructions with $n = 3f+2c+1$ that can tolerate up to $f$ Byzantine faults *and* $c$ crash faults, which obtain a latency of 3 rounds in the good case.
@@ -131,6 +133,8 @@ There are currently three ways to get a 2-round good case with $p$ Byzantine and
 ## Notes
 
 We note that a similar change under the same granular synchrony assumption allows Hydrangea to operate under $n = 3f+2p+1$. Specifically, if there is a fast commit for $x$ with $n-p$ votes in a view, a subsequent leader will obtain a fast certificate for $x$ since, $n-p-f$ of these votes are honest, and by the granular synchrony assumption, the leader receives $\geq n-p-2f = f+p+1$ of these votes. A similar change applies to Alpenglow as well.
+
+This post belongs to the two-round Simplex-style line collected in the [Simplex chapter](https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/).
 
 ## Acknowledgments
 

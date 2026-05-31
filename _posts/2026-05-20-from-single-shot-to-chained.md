@@ -10,7 +10,7 @@ In this post we construct **Chained Simplex** from
 [single-shot Simplex](https://decentralizedthoughts.github.io/2025-06-18-simplex/).
 The chained construction is a simple modification of the single-shot protocol
 and applies to any Simplex variant with the same
-inner certificate properties and outer proposal structure. See [here](https://decentralizedthoughts.github.io/2022-11-19-from-single-shot-to-smr/) for more generic constructions.
+inner certificate properties and outer proposal structure. See [here](https://decentralizedthoughts.github.io/2022-11-19-from-single-shot-to-smr/) for more generic constructions. For a map of the surrounding Simplex line, see the [Simplex chapter](https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/).
 
 We will use the decomposition from
 [deconstructing Simplex](https://decentralizedthoughts.github.io/2026-04-23-deconstructing-simplex/)
@@ -199,6 +199,8 @@ each leader extends a certified chain by one valid block.
 
 This is why we often use a single-shot presentation: it isolates the core
 consensus mechanism, while chaining is just an outer-protocol change.
+
+*For the surrounding Simplex line and related background posts, see the [Simplex chapter](https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/).*
 
 
 Your thoughts on [X](https://x.com/ittaia/status/2058196711483269149?s=20).

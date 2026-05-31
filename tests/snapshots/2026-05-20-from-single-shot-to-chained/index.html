@@ -13,7 +13,7 @@
  
  <meta name="author" content="Ittai Abraham, Joachim Neu">
  
- <meta name="description" content="In this post we construct Chained Simplex from single-shot Simplex. The chained construction is a simple modification of the single-shot protocol and applies to any Simplex variant with the same inner certificate properties and outer proposal structure. See here for more generic constructions. We will use the decomposition from deconstructing Simplex to make the construction explicit. That post separates Simplex into: an inner protocol, which produces value certificates, decision certificates,...">
+ <meta name="description" content="In this post we construct Chained Simplex from single-shot Simplex. The chained construction is a simple modification of the single-shot protocol and applies to any Simplex variant with the same inner certificate properties and outer proposal structure. See here for more generic constructions. For a map of the surrounding Simplex line, see the Simplex chapter. We will use the decomposition from deconstructing Simplex to make the construction explicit. That post...">
  
  
  
@@ -72,7 +72,7 @@
  
  <meta property="og:site_name" content="Decentralized Thoughts">
  <meta property="og:title" content="From Single-Shot Simplex to Chained Simplex">
- <meta property="og:description" content="In this post we construct Chained Simplex from single-shot Simplex. The chained construction is a simple modification of the single-shot protocol and applies to any Simplex variant with the same inner certificate properties and outer proposal structure. See here for more generic constructions. We will use the decomposition from deconstructing Simplex to make the construction explicit. That post separates Simplex into: an inner protocol, which produces value certificates, decision certificates,...">
+ <meta property="og:description" content="In this post we construct Chained Simplex from single-shot Simplex. The chained construction is a simple modification of the single-shot protocol and applies to any Simplex variant with the same inner certificate properties and outer proposal structure. See here for more generic constructions. For a map of the surrounding Simplex line, see the Simplex chapter. We will use the decomposition from deconstructing Simplex to make the construction explicit. That post...">
  
  <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
  
@@ -91,7 +91,7 @@
  <meta name="twitter:site" content="@ittaia">
  <meta name="twitter:creator" content="@ittaia">
  <meta property="twitter:title" content="From Single-Shot Simplex to Chained Simplex">
- <meta property="twitter:description" content="In this post we construct Chained Simplex from single-shot Simplex. The chained construction is a simple modification of the single-shot protocol and applies to any Simplex variant with the same inner certificate properties and outer proposal structure. See here for more generic constructions. We will use the decomposition from deconstructing Simplex to make the construction explicit. That post separates Simplex into: an inner protocol, which produces value certificates, decision certificates,...">
+ <meta property="twitter:description" content="In this post we construct Chained Simplex from single-shot Simplex. The chained construction is a simple modification of the single-shot protocol and applies to any Simplex variant with the same inner certificate properties and outer proposal structure. See here for more generic constructions. For a map of the surrounding Simplex line, see the Simplex chapter. We will use the decomposition from deconstructing Simplex to make the construction explicit. That post...">
  
  <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
  
@@ -214,7 +214,7 @@
 <a href="https://decentralizedthoughts.github.io/2025-06-18-simplex/">single-shot Simplex</a>.
 The chained construction is a simple modification of the single-shot protocol
 and applies to any Simplex variant with the same
-inner certificate properties and outer proposal structure. See <a href="https://decentralizedthoughts.github.io/2022-11-19-from-single-shot-to-smr/">here</a> for more generic constructions.</p>
+inner certificate properties and outer proposal structure. See <a href="https://decentralizedthoughts.github.io/2022-11-19-from-single-shot-to-smr/">here</a> for more generic constructions. For a map of the surrounding Simplex line, see the <a href="https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/">Simplex chapter</a>.</p>
 <p>We will use the decomposition from
 <a href="https://decentralizedthoughts.github.io/2026-04-23-deconstructing-simplex/">deconstructing Simplex</a>
 to make the construction explicit. That post separates Simplex into:</p>
@@ -253,7 +253,7 @@ latency.</p>
 <h2 id="single-shot-simplex-outer-protocol">Single-Shot Simplex Outer Protocol</h2>
 <p>In single-shot Simplex, honest parties vote for a proposal in view $v$ in one
 of two cases.</p>
-<p>First, the proposal repeats the value from a previous value certificate and
+<p>First, if the proposal repeats the value from a previous value certificate and
 includes skip certificates for the intervening views:</p>
 <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>value:
  x
@@ -262,7 +262,7 @@ vote when:
  SC_{w+1}, ..., SC_{v-1}
 </code></pre></div></div>
 <p>where $0&lt;w&lt;v$.</p>
-<p>Second, the proposal uses a fresh value and includes skip certificates for the
+<p>Second, if the proposal uses a fresh value and includes skip certificates for the
 intervening views:</p>
 <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>value:
  x
@@ -273,17 +273,12 @@ vote when:
 <p>Thus, a proposal either repeats a previous value, or starts from a fresh
 externally valid value.</p>
 <h2 id="chained-simplex-outer-protocol">Chained Simplex Outer Protocol</h2>
-<p>The chained outer protocol always uses a previous value certificate, and also
-checks a new block against the chain in that certificate.</p>
-<p>Values are chains. Write $C\preceq D$ when $C$ is a prefix of $D$. There is a
-public genesis chain $\bot_{\mathsf{gen}}$, with public value certificate
-$\mathrm{VC}_0(\bot_{\mathsf{gen}})$.</p>
-<p>The chain represents a <a href="https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/">state machine</a> execution. We assume an external
-application validity relation</p>
-\[C \xrightarrow{\mathrm{valid}} C\circ B,\]
-<p>meaning that block $B$ is valid relative to the state reached by $C$.</p>
-<p>For the first block, use $w=0$ and $C=\bot_{\mathsf{gen}}$. Honest parties
-vote for a proposal in view $v$ when:</p>
+<p>Here is the whole change: instead of re-proposing a certified value, the
+leader extends it by one valid block.</p>
+<p>Values are now chains, so a value certificate represents a chain certificate.
+A proposal for view $v$ chooses an earlier chain
+certificate $\mathrm{VC}_w(C)$, proves that all intervening views between $w$ and $v$ were skipped,
+and proposes one valid extension $C^+=C\circ B$:</p>
 <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>value:
  C^+ = C o B
 vote when:
@@ -292,11 +287,15 @@ vote when:
  C -&gt; valid C o B
 </code></pre></div></div>
 <p>where $0\leq w&lt;v$.</p>
-<blockquote>
- <p>The core change is small: the leader does not merely propose the certified
-value again. It uses the certified chain as a prefix and proposes one valid
-extension of it.</p>
-</blockquote>
+<p>For the first block, use the public genesis chain $\bot_{\mathsf{gen}}$ and
+its public certificate $\mathrm{VC}_0(\bot_{\mathsf{gen}})$.</p>
+<p>That is it. The certified chain is the prefix; the new block is checked against
+the state reached by that prefix.</p>
+<p>Write $C\preceq D$ when $C$ is a prefix of $D$. The chain represents a
+<a href="https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/">state machine</a>
+execution. We assume an external application validity relation</p>
+\[C \xrightarrow{\mathrm{valid}} C\circ B,\]
+<p>meaning that block $B$ is valid relative to the state reached by $C$.</p>
 <p>If view $v$ produces $\mathrm{DC}_v(C^+)$, then $C^+$ is decided. If it
 produces only $\mathrm{VC}_v(C^+)$, then $C^+$ is not decided yet, but later
 views may extend it. If view $v$ produces $\mathrm{SC}_v$, then no new chain is
@@ -353,7 +352,8 @@ change is in the
 each leader extends a certified chain by one valid block.</p>
 <p>This is why we often use a single-shot presentation: it isolates the core
 consensus mechanism, while chaining is just an outer-protocol change.</p>
-<p>Your thoughts on X.</p>
+<p><em>For the surrounding Simplex line and related background posts, see the <a href="https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/">Simplex chapter</a>.</em></p>
+<p>Your thoughts on <a href="https://x.com/ittaia/status/2058196711483269149?s=20">X</a>.</p>
  </div>
  
  <div class="blog-tags">

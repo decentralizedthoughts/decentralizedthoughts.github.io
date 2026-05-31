@@ -13,7 +13,7 @@
  
  <meta name="author" content="Ittai Abraham">
  
- <meta name="description" content="In this post we present a Simplex protocol that solves single shot consensus and is resilient to $f &amp;lt; n/3$ Byzantine failures, under partial synchrony. In a previous post we showed how to move from Tendermint to Simplex. In this post we show how to move from Benign Simplex to Simplex. Benign Simplex is resilient to $f&amp;lt;n/2$ omission failures in the same setting. Moving from omission failures to Byzantine failures...">
+ <meta name="description" content="In this post we present a Simplex protocol that solves single shot consensus and is resilient to $f &amp;lt; n/3$ Byzantine failures, under partial synchrony. In a previous post we showed how to move from Tendermint to Simplex. For a map of the surrounding Simplex line, see the Simplex chapter. In this post we show how to move from Benign Simplex to Simplex. Benign Simplex is resilient to $f&amp;lt;n/2$ omission...">
  
  
  
@@ -72,7 +72,7 @@
  
  <meta property="og:site_name" content="Decentralized Thoughts">
  <meta property="og:title" content="From Benign Simplex to Byzantine Simplex">
- <meta property="og:description" content="In this post we present a Simplex protocol that solves single shot consensus and is resilient to $f &amp;lt; n/3$ Byzantine failures, under partial synchrony. In a previous post we showed how to move from Tendermint to Simplex. In this post we show how to move from Benign Simplex to Simplex. Benign Simplex is resilient to $f&amp;lt;n/2$ omission failures in the same setting. Moving from omission failures to Byzantine failures...">
+ <meta property="og:description" content="In this post we present a Simplex protocol that solves single shot consensus and is resilient to $f &amp;lt; n/3$ Byzantine failures, under partial synchrony. In a previous post we showed how to move from Tendermint to Simplex. For a map of the surrounding Simplex line, see the Simplex chapter. In this post we show how to move from Benign Simplex to Simplex. Benign Simplex is resilient to $f&amp;lt;n/2$ omission...">
  
  <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
  
@@ -91,7 +91,7 @@
  <meta name="twitter:site" content="@ittaia">
  <meta name="twitter:creator" content="@ittaia">
  <meta property="twitter:title" content="From Benign Simplex to Byzantine Simplex">
- <meta property="twitter:description" content="In this post we present a Simplex protocol that solves single shot consensus and is resilient to $f &amp;lt; n/3$ Byzantine failures, under partial synchrony. In a previous post we showed how to move from Tendermint to Simplex. In this post we show how to move from Benign Simplex to Simplex. Benign Simplex is resilient to $f&amp;lt;n/2$ omission failures in the same setting. Moving from omission failures to Byzantine failures...">
+ <meta property="twitter:description" content="In this post we present a Simplex protocol that solves single shot consensus and is resilient to $f &amp;lt; n/3$ Byzantine failures, under partial synchrony. In a previous post we showed how to move from Tendermint to Simplex. For a map of the surrounding Simplex line, see the Simplex chapter. In this post we show how to move from Benign Simplex to Simplex. Benign Simplex is resilient to $f&amp;lt;n/2$ omission...">
  
  <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
  
@@ -210,7 +210,7 @@
  
  
  <div class="blog-post">
- <p>In this post we present a <a href="https://simplex.blog">Simplex</a> protocol that solves single shot <a href="https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/">consensus</a> and is resilient to $f &lt; n/3$ <a href="https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/">Byzantine failures</a>, under <a href="https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/">partial synchrony</a>. In a previous post we showed how to move <a href="https://decentralizedthoughts.github.io/2025-06-18-simplex/">from Tendermint to Simplex</a>.</p>
+ <p>In this post we present a <a href="https://simplex.blog">Simplex</a> protocol that solves single shot <a href="https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/">consensus</a> and is resilient to $f &lt; n/3$ <a href="https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/">Byzantine failures</a>, under <a href="https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/">partial synchrony</a>. In a previous post we showed how to move <a href="https://decentralizedthoughts.github.io/2025-06-18-simplex/">from Tendermint to Simplex</a>. For a map of the surrounding Simplex line, see the <a href="https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/">Simplex chapter</a>.</p>
 <p>In this post we show how to move from <a href="https://decentralizedthoughts.github.io/2025-11-08-benign-simplex/">Benign Simplex</a> to Simplex. Benign Simplex is resilient to $f&lt;n/2$ omission failures in the same setting. Moving from omission failures to Byzantine failures requires three changes:</p>
 <ol>
  <li>To prevent the adversary from controlling more than $f$ parties, we add signatures to all messages. This prevents the adversary from forging incorrect proposals when the leader is honest or forge votes from honest voters.</li>
@@ -260,10 +260,7 @@ w := 0 // the view this input came from
  Enter view k+1
 4. Upon T_k = 3Δ and not yet sent Final:
  Send &lt;Vote, k, ⊥&gt;
-5. Upon receiving n−f &lt;Vote, k, ⊥&gt;:
- Send n−f &lt;Vote, k, ⊥&gt;
- Enter view k+1
-6. Upon receiving n−f &lt;Final, k, x&gt;:
+5. Upon receiving n−f &lt;Final, k, x&gt;:
  This is a decision certificate for x
  Send n−f &lt;Final, k, x&gt;
  Terminate
@@ -309,6 +306,7 @@ By Claim 5, there cannot be $n{-}f$ <code class="language-plaintext highlighter-
 <p>The decided value is externally valid (signed by a client).</p>
 <p><strong>Proof:</strong><br />
 Initially each <code class="language-plaintext highlighter-rouge">val</code> is externally valid and this is checked before voting. Later views only propagate existing <code class="language-plaintext highlighter-rouge">val</code> values through $n{-}f$ <code class="language-plaintext highlighter-rouge">Vote</code>, so by induction the decided value must be externally valid.</p>
+<p><em>For the surrounding Simplex line and related background posts, see the <a href="https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/">Simplex chapter</a>.</em></p>
 <p>Your thoughts on <a href="https://x.com/ittaia/status/1991596859295727824?s=20">X</a></p>
  </div>
  

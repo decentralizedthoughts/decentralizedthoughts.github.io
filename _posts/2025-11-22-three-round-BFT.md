@@ -85,6 +85,8 @@ In PBFT, in world $M$ the first leader would not reach $2/3$ of preprepares, so 
 
 * The proof in [[ANRZ21](https://arxiv.org/abs/2102.07240)] also takes care of protocols in which other parties send round 0 messages. Intuitively, this should not matter as they know nothing about the input. Indeed, adding this is a rather straightforward extension, and we removed it from this post for clarity of the main argument.
 
+* For how this lower bound motivates the two-round Simplex variants, see the [Simplex chapter](https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/).
+
 ### Acknowledgments
 
 Many thanks to our co-authors Ling Ren and Zhuolun Xiang. Thank you, Samuel Laferriere for inspiring us to write this post.  Thank you, Adan Irshead for the drawings.

@@ -11,6 +11,7 @@ uses [fixed views](https://decentralizedthoughts.github.io/2026-03-07-simultaneo
 view length $2\Delta$, using the
 [two round Simplex](https://decentralizedthoughts.github.io/2025-07-18-two-round-Simplex/)
 certificate structure.
+For a map of the surrounding Simplex line, see the [Simplex chapter](https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/).
 
 The price is the usual one for two round BFT: we use $n=5f+1$ parties. A view
 has only one leader proposal and one round of votes. If a later leader needs to
@@ -299,5 +300,7 @@ a decision by $s_r+2\delta$.
   may use $\mathrm{NC}_k$ exactly as they use a bottom certificate when
   proposing in later views. The price is that this no commit certificate is
   linear size, unless it is compressed with a SNARK.
+
+- For the broader fixed-view-schedule and two-round Simplex context, see the [Simplex chapter](https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/).
 
 Your thoughts/comments here.

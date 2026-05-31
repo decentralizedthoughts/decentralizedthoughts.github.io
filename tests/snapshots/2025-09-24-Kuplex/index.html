@@ -13,7 +13,7 @@
  
  <meta name="author" content="Ittai Abraham, Ling Ren">
  
- <meta name="description" content="Consensus protocols often need to balance simplicity with performance. Simplex is a beautiful example of minimalistic design. In this post, we explore two variations of Simplex, one that improves view latency in silent views and another that improves view latency in the worst-case when the actual network delay $\delta$ is smaller than $\Delta$, the maximal delay after GST. Recall that Simplex has a view latency of $3\Delta+\delta$ in the worst-case,...">
+ <meta name="description" content="Consensus protocols often need to balance simplicity with performance. Simplex is a beautiful example of minimalistic design. In this post, we explore two variations of Simplex, one that improves view latency in silent views and another that improves view latency in the worst-case when the actual network delay $\delta$ is smaller than $\Delta$, the maximal delay after GST. For a map of the surrounding Simplex line, see the Simplex chapter....">
  
  
  
@@ -72,7 +72,7 @@
  
  <meta property="og:site_name" content="Decentralized Thoughts">
  <meta property="og:title" content="Variants of Simplex with Reduced Bad-case Latency: C-Simplex and Kuplex">
- <meta property="og:description" content="Consensus protocols often need to balance simplicity with performance. Simplex is a beautiful example of minimalistic design. In this post, we explore two variations of Simplex, one that improves view latency in silent views and another that improves view latency in the worst-case when the actual network delay $\delta$ is smaller than $\Delta$, the maximal delay after GST. Recall that Simplex has a view latency of $3\Delta+\delta$ in the worst-case,...">
+ <meta property="og:description" content="Consensus protocols often need to balance simplicity with performance. Simplex is a beautiful example of minimalistic design. In this post, we explore two variations of Simplex, one that improves view latency in silent views and another that improves view latency in the worst-case when the actual network delay $\delta$ is smaller than $\Delta$, the maximal delay after GST. For a map of the surrounding Simplex line, see the Simplex chapter....">
  
  <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
  
@@ -91,7 +91,7 @@
  <meta name="twitter:site" content="@ittaia">
  <meta name="twitter:creator" content="@ittaia">
  <meta property="twitter:title" content="Variants of Simplex with Reduced Bad-case Latency: C-Simplex and Kuplex">
- <meta property="twitter:description" content="Consensus protocols often need to balance simplicity with performance. Simplex is a beautiful example of minimalistic design. In this post, we explore two variations of Simplex, one that improves view latency in silent views and another that improves view latency in the worst-case when the actual network delay $\delta$ is smaller than $\Delta$, the maximal delay after GST. Recall that Simplex has a view latency of $3\Delta+\delta$ in the worst-case,...">
+ <meta property="twitter:description" content="Consensus protocols often need to balance simplicity with performance. Simplex is a beautiful example of minimalistic design. In this post, we explore two variations of Simplex, one that improves view latency in silent views and another that improves view latency in the worst-case when the actual network delay $\delta$ is smaller than $\Delta$, the maximal delay after GST. For a map of the surrounding Simplex line, see the Simplex chapter....">
  
  <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
  
@@ -210,7 +210,7 @@
  
  
  <div class="blog-post">
- <p>Consensus protocols often need to balance simplicity with performance. <a href="https://simplex.blog">Simplex</a> is a beautiful example of minimalistic design. In this post, we explore two variations of Simplex, one that improves view latency in silent views and another that improves view latency in the worst-case when the actual network delay $\delta$ is smaller than $\Delta$, the maximal delay after GST.</p>
+ <p>Consensus protocols often need to balance simplicity with performance. <a href="https://simplex.blog">Simplex</a> is a beautiful example of minimalistic design. In this post, we explore two variations of Simplex, one that improves view latency in silent views and another that improves view latency in the worst-case when the actual network delay $\delta$ is smaller than $\Delta$, the maximal delay after GST. For a map of the surrounding Simplex line, see the <a href="https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/">Simplex chapter</a>.</p>
 <p>Recall that Simplex has a view latency of $3\Delta+\delta$ in the worst-case, including when the leader is silent.</p>
 <p>It is commonly believed that many real world failures are just crashes, so getting better latency when the leader is silent seems to be a good practical addition.</p>
 <p>The Simplex variant implemented by <a href="https://docs.rs/commonware-consensus/latest/commonware_consensus/simplex/index.html">commonware’s Module simplex</a> has such a simple addition. Here we extract that addition to a protocol we call <em>C-Simplex</em>. C-Simplex has a view latency of $3\Delta+\delta$ in the worst-case, and a view latency of $2\Delta+\delta$ when the leader is silent.</p>
@@ -346,7 +346,7 @@ C-Simplex
 <p>Hence a <code class="language-plaintext highlighter-rouge">FinalCert(k, x)</code> implies all honest will complete view $k$ with <code class="language-plaintext highlighter-rouge">Cert(k, x)</code> which implies univalency.</p>
 <p>Observe that in views with less than $f+1$ honest parties sending <code class="language-plaintext highlighter-rouge">(Final, k, x)</code>, there may be three certificates with different values.</p>
 <h3 id="conclusion">Conclusion</h3>
-<p>C-Simplex and Kuplex show that one can improve the performance of Simplex in the practical case of silent leaders with a minimal change, and in the case of actually small network delays with somewhat involved changes. These variants remain true to the Simplex design spirit while highlighting the design space between simplicity and performance.</p>
+<p>C-Simplex and Kuplex show that one can improve the performance of Simplex in the practical case of silent leaders with a minimal change, and in the case of actually small network delays with somewhat involved changes. These variants remain true to the Simplex design spirit while highlighting the design space between simplicity and performance. For the surrounding variants and background posts, see the <a href="https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/">Simplex chapter</a>.</p>
 <p>Your thoughts/comments on <a href="https://x.com/ittaia/status/1970981553116447118?s=20">X</a>.</p>
  </div>
  

@@ -98,4 +98,6 @@ Armed with this intuition, in the [next post](https://decentralizedthoughts.gith
 
 We thank Nibesh Shrestha and Samuel Laferriere for feedback on this post.
 
+*For the surrounding Simplex line and related background posts, see the [Simplex chapter](https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/).*
+
 Please leave comments on [X](https://x.com/kartik1507/status/1890808857456259516). 

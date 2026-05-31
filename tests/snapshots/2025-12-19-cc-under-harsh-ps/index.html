@@ -13,7 +13,7 @@
  
  <meta name="author" content="Ittai Abraham, Yuval Efron, Kartik Nayak, and Ling Ren">
  
- <meta name="description" content="In this post we observe three variants of Partial Synchrony (PS) and how they affect (or not) popular BFT protocols like PBFT, Tendermint, and especially the recent Simplex protocol. Many modern systems use the following definition of Partial Synchrony: Bounded Partial Synchrony (BPS): A message sent at time $t$ arrives by time at most $\max{t, GST}+\Delta$ This definition implicitly assumes that messages sent before $GST$ are delayed but not lost,...">
+ <meta name="description" content="In this post we observe three variants of Partial Synchrony (PS) and how they affect (or not) popular BFT protocols like PBFT, Tendermint, and especially the recent Simplex protocol. For a map of the surrounding Simplex line, see the Simplex chapter. Many modern systems use the following definition of Partial Synchrony: Bounded Partial Synchrony (BPS): A message sent at time $t$ arrives by time at most $\max{t, GST}+\Delta$ This definition...">
  
  
  
@@ -72,7 +72,7 @@
  
  <meta property="og:site_name" content="Decentralized Thoughts">
  <meta property="og:title" content="Partial Synchrony variants">
- <meta property="og:description" content="In this post we observe three variants of Partial Synchrony (PS) and how they affect (or not) popular BFT protocols like PBFT, Tendermint, and especially the recent Simplex protocol. Many modern systems use the following definition of Partial Synchrony: Bounded Partial Synchrony (BPS): A message sent at time $t$ arrives by time at most $\max{t, GST}+\Delta$ This definition implicitly assumes that messages sent before $GST$ are delayed but not lost,...">
+ <meta property="og:description" content="In this post we observe three variants of Partial Synchrony (PS) and how they affect (or not) popular BFT protocols like PBFT, Tendermint, and especially the recent Simplex protocol. For a map of the surrounding Simplex line, see the Simplex chapter. Many modern systems use the following definition of Partial Synchrony: Bounded Partial Synchrony (BPS): A message sent at time $t$ arrives by time at most $\max{t, GST}+\Delta$ This definition...">
  
  <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
  
@@ -91,7 +91,7 @@
  <meta name="twitter:site" content="@ittaia">
  <meta name="twitter:creator" content="@ittaia">
  <meta property="twitter:title" content="Partial Synchrony variants">
- <meta property="twitter:description" content="In this post we observe three variants of Partial Synchrony (PS) and how they affect (or not) popular BFT protocols like PBFT, Tendermint, and especially the recent Simplex protocol. Many modern systems use the following definition of Partial Synchrony: Bounded Partial Synchrony (BPS): A message sent at time $t$ arrives by time at most $\max{t, GST}+\Delta$ This definition implicitly assumes that messages sent before $GST$ are delayed but not lost,...">
+ <meta property="twitter:description" content="In this post we observe three variants of Partial Synchrony (PS) and how they affect (or not) popular BFT protocols like PBFT, Tendermint, and especially the recent Simplex protocol. For a map of the surrounding Simplex line, see the Simplex chapter. Many modern systems use the following definition of Partial Synchrony: Bounded Partial Synchrony (BPS): A message sent at time $t$ arrives by time at most $\max{t, GST}+\Delta$ This definition...">
  
  <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
  
@@ -211,6 +211,7 @@
  
  <div class="blog-post">
  <p>In this post we observe three variants of <strong>Partial Synchrony (PS)</strong> and how they affect (or not) popular BFT protocols like PBFT, Tendermint, and especially the recent <a href="https://decentralizedthoughts.github.io/2025-06-18-simplex/">Simplex</a> protocol.</p>
+<p>For a map of the surrounding Simplex line, see the <a href="https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/">Simplex chapter</a>.</p>
 <ol>
  <li>
  <p>Many modern systems use the following definition of <a href="https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/">Partial Synchrony</a>:</p>
@@ -258,6 +259,7 @@ Take <strong>Tendermint</strong> for example. Its communication complexity remai
  <li>LPS is not subsumed by asynchrony, whereas both UPS and BPS are.</li>
  <li>In UPS, let $X$ be the maximum delay of any message, then UPS at time $GST+X$ becomes BPS.</li>
  <li>In LPS, protocols can never reach a termination configuration where all non-faulty parties are in a state where they do not need to listen to messages.</li>
+ <li>For how this model distinction affects Simplex and Complex, see the <a href="https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/">Simplex chapter</a>.</li>
 </ul>
 <h2 id="epilogue">Epilogue</h2>
 <p>Should we design protocols in Partial Synchrony? Which model should be used: bounded, unbounded, or lossy? Regardless, it seems important to be explicit about which synchrony assumptions you use, since these assumptions have direct implications for communication complexity under recovery.</p>

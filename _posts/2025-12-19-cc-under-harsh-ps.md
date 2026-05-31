@@ -8,6 +8,8 @@ author: Ittai Abraham, Yuval Efron, Kartik Nayak, and Ling Ren
 
 In this post we observe three variants of **Partial Synchrony (PS)** and how they affect (or not) popular BFT protocols like PBFT, Tendermint, and especially the recent [Simplex](https://decentralizedthoughts.github.io/2025-06-18-simplex/) protocol.
 
+For a map of the surrounding Simplex line, see the [Simplex chapter](https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/).
+
 1. Many modern systems use the following definition of [Partial Synchrony](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/):
 
     > **Bounded Partial Synchrony (BPS)**: A message sent at time $t$ arrives by time at most $\max\{t, GST\}+\Delta$
@@ -69,6 +71,7 @@ Nevertheless, implementations of Simplex need to consider the possibility of unb
 * LPS is not subsumed by asynchrony, whereas both UPS and BPS are.
 * In UPS, let $X$ be the maximum delay of any message, then UPS at time $GST+X$ becomes BPS.
 * In LPS, protocols can never reach a termination configuration where all non-faulty parties are in a state where they do not need to listen to messages. 
+* For how this model distinction affects Simplex and Complex, see the [Simplex chapter](https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/).
 
 
 ## Epilogue

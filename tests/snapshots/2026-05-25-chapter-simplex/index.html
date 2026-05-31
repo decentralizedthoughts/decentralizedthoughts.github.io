@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Chapter: Simplex</title>
+ 
+ 
+ 
+ 
+ <meta name="author" content="Ittai Abraham">
+ 
+ <meta name="description" content="This post is a map of the Simplex line of posts on Decentralized Thoughts. It is meant to be read as a chapter: first the core Simplex idea, then some of the main ways to vary it. A salient property of Simplex is that parties leave a view only with a value certificate or a skip certificate. This is in contrast to protocols like PBFT, HotStuff, Casper, and Tendermint, where...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Chapter: Simplex">
+ <meta property="og:description" content="This post is a map of the Simplex line of posts on Decentralized Thoughts. It is meant to be read as a chapter: first the core Simplex idea, then some of the main ways to vary it. A salient property of Simplex is that parties leave a view only with a value certificate or a skip certificate. This is in contrast to protocols like PBFT, HotStuff, Casper, and Tendermint, where...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham">
+ 
+ <meta property="og:article:published_time" content="2026-05-25T05:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Chapter: Simplex">
+ <meta property="twitter:description" content="This post is a map of the Simplex line of posts on Decentralized Thoughts. It is meant to be read as a chapter: first the core Simplex idea, then some of the main ways to vary it. A salient property of Simplex is that parties leave a view only with a value certificate or a skip certificate. This is in contrast to protocols like PBFT, HotStuff, Casper, and Tendermint, where...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" id="nav-search-link" href="#" title="Search the blog">
+ <span id="nav-search-icon" class="fa fa-search"></span>
+ <span id="nav-search-text">Search</span>
+ </a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+<div id="beautifuljekyll-search-overlay" data-search-json="/assets/data/searchcorpus.json" data-top-pages-json="/assets/data/top-pages.json" aria-hidden="true">
+ <div class="search-overlay-backdrop" data-search-close></div>
+ <div class="search-dialog" role="dialog" aria-modal="true" aria-labelledby="nav-search-heading">
+ <div class="search-dialog-header">
+ <p class="search-dialog-kicker">Search the archive</p>
+ <button id="nav-search-exit" type="button" title="Close search" aria-label="Close search">Close</button>
+ </div>
+ <label class="sr-only" id="nav-search-heading" for="nav-search-input">Search posts, authors, topics, and phrases</label>
+ <div class="search-input-shell">
+ <span class="fa fa-search" aria-hidden="true"></span>
+ <input type="text" id="nav-search-input" placeholder="Search posts, authors, topics, and phrases" autocomplete="off">
+ <span class="search-shortcut">/</span>
+ </div>
+ <p id="nav-search-status">Search by title, author, tag, or a phrase from the post.</p>
+ <div id="search-discovery">
+ <section class="search-discovery-group" aria-labelledby="search-popular-heading">
+ <p class="search-discovery-heading" id="search-popular-heading">Popular topics</p>
+ <div id="search-suggestions" aria-label="Popular topics"></div>
+ </section>
+ <section class="search-discovery-group" aria-labelledby="search-recent-heading">
+ <p class="search-discovery-heading" id="search-recent-heading">Top pages</p>
+ <div id="search-recent-posts"></div>
+ </section>
+ </div>
+ <ul id="search-results-container"></ul>
+ </div>
+</div>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Chapter: Simplex</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham</strong><br>
+ 
+ <span class="post-meta">Posted on May 25, 2026</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>This post is a map of the
+<a href="https://eprint.iacr.org/2023/463">Simplex</a>
+line of posts on Decentralized Thoughts. It is meant to be read as a chapter:
+first the core Simplex idea, then some of the main ways to vary it.</p>
+<p>A salient property of Simplex is that parties leave a view
+only with a value certificate or a skip certificate. This is in contrast to
+protocols like PBFT, HotStuff, Casper, and Tendermint, where a view may end
+without an explicit certificate for that view.</p>
+<p>This insistence on explicit certificates for values and for skipped views
+gives a $3\delta$ good-case at $n=3f+1$ with a worst-case view latency of
+$3\Delta+\delta$. From there, the Simplex family splits along several axes:
+same resilience but better worst-case view latency, more validators for a two
+round good-case, fixed view schedules, and variants that control certificate
+growth.</p>
+<h2 id="the-core-simplex-idea">The Core Simplex Idea</h2>
+<p>If you are familiar with Tendermint, then
+<a href="https://decentralizedthoughts.github.io/2025-06-18-simplex/">from Tendermint to Simplex</a>
+is the best entry point.
+That post starts from a Tendermint style protocol and changes it into Simplex.
+The important change is having either a value certificate or a skip certificate for view $v$ and using the fact that a skip certificate for view $v$ proves that no decision certificate can form in that view.</p>
+<p>This is what removes the Tendermint leader wait. In Tendermint, a leader waits
+because some party may hold a hidden lock from the previous view. In Simplex, a proposal can instead include a value certificate from the highest relevant view and skip certificates for the intervening views. A party that verifies those
+certificates can vote without waiting for the leader to collect every hidden
+lock.</p>
+<p>The original sources around this point are:</p>
+<ul>
+ <li><a href="https://simplex.blog/">Simplex Consensus</a>, Ben Chan and Rafael Pass’s
+presentation of the protocol.</li>
+ <li><a href="https://eprint.iacr.org/2023/463">Simplex Consensus: A Simple and Fast Consensus Protocol</a>,
+the paper.</li>
+ <li><a href="https://eprint.iacr.org/2023/1916">Sing a Song of Simplex</a>, Victor Shoup’s
+follow up with DispersedSimplex, stable leaders, and implementation
+optimizations.</li>
+ <li><a href="https://docs.rs/commonware-consensus/latest/commonware_consensus/simplex/index.html">Commonware’s Simplex module</a>,
+an implementation oriented reference.</li>
+</ul>
+<p>Two later DT posts give a second path into the same protocol:
+<a href="https://decentralizedthoughts.github.io/2025-11-08-benign-simplex/">Benign Simplex</a>
+and
+<a href="https://decentralizedthoughts.github.io/2025-11-15-simplex-from-benign/">From Benign Simplex to Byzantine Simplex</a>.
+The benign post isolates the explicit <code class="language-plaintext highlighter-rouge">NoVote</code> message under omission
+failures: if enough parties report that they did not see a value in a view,
+then parties can skip that view. The Byzantine post turns this into signed
+bottom votes, Byzantine quorum intersection, external validity, and the exact
+Simplex skip property:</p>
+<blockquote>
+ <p>if a view has $n-f$ bottom votes, then no decision certificate can form in
+that view.</p>
+</blockquote>
+<p>This pair is useful because it makes the authenticated Simplex proof feel like
+a small change to a simpler omission failure protocol.</p>
+<p>The benign presentation also connects Simplex to earlier DT posts on
+<a href="https://decentralizedthoughts.github.io/2021-04-02-benign-hotstuff/">Benign HotStuff</a>,
+<a href="https://decentralizedthoughts.github.io/2021-07-17-simplifying-raft-with-chaining/">Chained Raft</a>,
+and
+<a href="https://decentralizedthoughts.github.io/2021-09-30-distributed-consensus-made-simple-for-real-this-time/">Log Paxos</a>.
+Those posts are not Simplex variants, but they explain the rotating leader and
+chain based viewpoint behind the benign construction.</p>
+<h2 id="the-modular-view">The Modular View</h2>
+<p><a href="https://decentralizedthoughts.github.io/2026-04-23-deconstructing-simplex/">Deconstructing Simplex</a>
+turns the protocol into two pieces:</p>
+<ol>
+ <li>an outer proposal rule that says when a proposal is valid based on previous value certificates and skip certificates;</li>
+ <li>an inner Graded Broadcast instance that produces a regular certificate, a
+strong certificate, or a skip certificate for each view.</li>
+</ol>
+<p>We will use this decomposition in the rest of the chapter. Many Simplex
+variants leave the outer proposal rule essentially unchanged and replace the inner
+certificate structure.</p>
+<p>The same decomposition also explains how to move from single-shot Simplex to a
+chained protocol.
+<a href="https://decentralizedthoughts.github.io/2026-05-20-from-single-shot-to-chained/">From Single-Shot Simplex to Chained Simplex</a>
+shows how to run the Simplex logic as a state machine replication protocol,
+where each decided block extends a previous decided prefix. The construction can be applied to Simplex variants that keep the same outer proposal
+structure and the same inner certificate properties. This is the bridge from the
+single-shot protocols in the chapter to blockchain style executions with a
+growing chain of blocks.</p>
+<p>The decomposition post also explains the relationship with the earlier DT post
+on
+<a href="https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/">PBFT via Locked Broadcast and Recover Max Lock</a>.
+PBFT style protocols prove safety by collecting enough locks. Simplex proves
+safety by showing skip certificates for the views that might otherwise hide a
+decision. The inner Graded Broadcast is also close in spirit to authenticated
+<a href="https://decentralizedthoughts.github.io/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/">Reliable Broadcast</a>
+with external validity, in the framework of
+<a href="https://www.iacr.org/archive/crypto2001/21390524.pdf">Cachin, Kursawe, Petzold, and Shoup</a>.</p>
+<h2 id="better-worst-case-view-latency-at-3f1">Better Worst-Case View Latency at $3f+1$</h2>
+<p>The first direction keeps the same authenticated $n=3f+1$ setting and tries to
+reduce worst case view latency.</p>
+<p><a href="https://decentralizedthoughts.github.io/2025-09-24-Kuplex/">C-Simplex and Kuplex</a>
+contains two variants:</p>
+<ul>
+ <li><strong>C-Simplex</strong> improves silent views. If the leader is silent, parties can
+send a bottom final message after $2\Delta$, so the silent view ends within
+$2\Delta+\delta$. The worst case view latency remains $3\Delta+\delta$.</li>
+ <li><strong>Kuplex</strong> improves the worst case view latency when the actual delay
+$\delta$ is much smaller than the timeout parameter $\Delta$. It uses an
+early negative vote and a second value vote, obtaining worst case view
+latency $2\Delta+2\delta$ and silent view latency $2\Delta+\delta$.</li>
+</ul>
+<p>These protocols are best understood as local changes to the Simplex inner protocol.</p>
+<p>This section is also where <a href="https://arxiv.org/abs/2505.08771">Kudzu</a> enters
+the picture. Kudzu is designed around a fast path and high throughput. The
+Kuplex post extracts the $3f+1$ view latency aspect into a Simplex style
+variant.</p>
+<h2 id="two-round-good-case-with-more-validators">Two Round Good Case With More Validators</h2>
+<p>The second direction asks for a different improvement: can an honest leader
+decide after one proposal and one vote round?</p>
+<p>At optimal resilience, the answer is no. The post
+<a href="https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/">Why BFT Needs Three Rounds</a>
+explains the lower bound: for $n\leq 5f-2$, Byzantine broadcast in partial
+synchrony needs at least three rounds in the good case. This is why PBFT,
+Tendermint, Casper FFG, HotStuff, and Simplex all have the familiar proposal
+plus two voting rounds at $n=3f+1$.</p>
+<p>The way around the lower bound is to use more validators.</p>
+<p><a href="https://decentralizedthoughts.github.io/2025-07-18-two-round-Simplex/">2-round BFT in Simplex style</a>
+gives the clean $n=5f+1$ version. A decision requires $n-f$ votes for one
+value. A small value certificate has size $n-3f$. If a party sees $n-f$ votes
+but no small value certificate, that collection proves that no decision
+certificate formed in the view; it can be used to produce a no commit (skip) certificate for that view.</p>
+<p>This is the same Simplex idea with different thresholds. The proposal rule
+still uses the highest previous value certificate and skip certificates for
+the intervening views. What changes is the per-view certificate arithmetic.</p>
+<p>The two round Simplex post also places the result in the older fast BFT line:
+<a href="https://www.cs.cornell.edu/lorenzo/papers/fab.pdf">FaB Paxos</a>,
+<a href="https://research.ibm.com/publications/optimistic-byzantine-agreement">Kursawe’s optimistic Byzantine agreement</a>,
+<a href="https://cacm.acm.org/research/zyzzyva-speculative-byzantine-fault-tolerance/">Zyzzyva</a>,
+and later fixes such as
+<a href="https://arxiv.org/abs/1804.01626">SBFT</a>. It also points to current Simplex
+like systems, including
+<a href="https://commonware.xyz/blogs/minimmit">Minimmit</a>,
+the <a href="https://arxiv.org/abs/2508.10862">Minimmit paper</a>,
+<a href="https://arxiv.org/abs/2503.15380">ChonkyBFT</a>, and
+<a href="https://dankradfeist.de/tempo/2025/12/31/minimmit-simple-fast-consensus.html">Tempo’s Minimmit post</a>.</p>
+<p>The next step is to combine the two round and three round paths.
+<a href="https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/">Concurrent 2-round and 3-round Simplex-style BFT</a>
+uses $n=3f+2p+1$. It keeps safety and liveness for $f$ Byzantine faults, gives
+a three round good case with $f$ Byzantine faults, and gives a two round good
+case when the execution has at most $p$ Byzantine faults. The key point is to
+order certificates first by view and then by fast before slow, and to complete
+each view with both the fast and slow certificates.</p>
+<p>The follow-up
+<a href="https://decentralizedthoughts.github.io/2025-08-06-5fminus1-simplex/">2-round BFT in Simplex style for $n=5f-1$</a>
+tightens the $5f+1$ threshold to $5f-1$. The trick is to treat leader
+equivocation as a separate case. If the leader does not equivocate, a special
+certificate combines votes for $x$ and votes for $\bot$. If the leader does
+equivocate, parties ignore the leader’s own vote and use only non-leader votes.
+The same idea extends the concurrent protocol to $n=3f+2p-1$.</p>
+<p>Other protocols in this neighborhood include
+<a href="https://arxiv.org/abs/2312.05869">Banyan</a>,
+<a href="https://arxiv.org/abs/2505.08771">Kudzu</a>,
+<a href="https://www.anza.xyz/blog/alpenglow-a-new-consensus-for-solana">Alpenglow</a>,
+and
+<a href="https://eprint.iacr.org/2025/1112">Hydrangea</a>. They make different choices
+about fast paths, fallback paths, leader equivocation, data dissemination, and
+mixed Byzantine and crash faults. The Simplex style posts are useful because
+they isolate the quorum arithmetic in a very small protocol.</p>
+<h3 id="granular-synchrony">Granular Synchrony</h3>
+<p>The post
+<a href="https://decentralizedthoughts.github.io/2026-01-24-two-round-ps/">Concurrent 2-round and 3-round BFT protocols under granular synchrony</a>
+belongs with the two round line. It asks how much timing structure is needed
+to get the $n=3f+2p+1$ numbers when the leader may equivocate.</p>
+<p>Under plain partial synchrony, the protocol must sometimes wait for $n-f$
+votes to know that a fast commit did not happen. If the leader cannot
+equivocate, or if granular synchrony bounds how many honest messages can be
+late to each recipient, then the protocol can wait for fewer votes and still
+infer that a fast certificate would have appeared. This gives another way to
+understand the relationship among the Simplex style concurrent protocol,
+Alpenglow, and Hydrangea.</p>
+<h2 id="fixed-view-schedules">Fixed View Schedules</h2>
+<p>The fixed view schedule direction starts with a different question. Modern
+systems often have good clocks, and fixed view boundaries are operationally
+attractive. Can Simplex run with predetermined view start times instead of
+event driven view advancement?</p>
+<p><a href="https://decentralizedthoughts.github.io/2026-03-07-simultaneous-agreement/">Synchronized Clocks, Fixed View Schedules, and Simultaneous Agreement</a>
+overviews the advantages and disadvantages of having a fixed view schedule.</p>
+<p><a href="https://decentralizedthoughts.github.io/2026-05-14-simplex-FVS/">Simplex on a Fixed View Schedule</a>
+shows how Simplex can be put on a fixed view schedule with view length
+$3\Delta$. A new catch up
+claim says that after GST, every previous view eventually yields either a
+value certificate or a skip certificate.</p>
+<p><a href="https://decentralizedthoughts.github.io/2026-05-17-fast-simplex-fvs/">Fast Simplex on a Fixed View Schedule</a>
+pushes this fixed view schedule line through the two round Simplex certificate
+structure. It uses $n=5f+1$ and view length $2\Delta$.</p>
+<h2 id="harsh-partial-synchrony-and-complex">Harsh Partial Synchrony and Complex</h2>
+<p>The post
+<a href="https://decentralizedthoughts.github.io/2025-12-19-cc-under-harsh-ps/">Partial Synchrony variants</a>
+explains a subtle cost of Simplex. In bounded partial synchrony, messages sent
+before GST are delayed but eventually arrive by $GST+\Delta$. In unbounded or
+lossy partial synchrony, old skip certificates may be delayed for an unbounded
+time or lost. This matters because a Simplex proposal may need skip
+certificates for many intervening views.</p>
+<p>That model distinction connects directly to
+<a href="https://decentralizedthoughts.github.io/2026-04-26-complex/">From Simplex to Complex</a>.
+Simplex has better worst case view latency than Tendermint, but it may need a
+growing number of certificates in a proposal. Tendermint keeps certificate
+state bounded, but pays an extra wait. Complex is the middle point: it keeps
+the Simplex view latency $3\Delta+\delta$ while requiring only a constant
+number of certificates per view.</p>
+<p>The way Complex does this is to keep the Simplex inner Graded Broadcast and
+change the outer proposal rule toward a Tendermint style lock rule. A proposal
+uses a recent lock certificate, and if the lock is not from the immediately
+previous view, it also includes a skip certificate for the previous view. This
+turns the long Simplex list of intervening skips into a constant size check.</p>
+<h2 id="reading-map">Reading Map</h2>
+<p>For the core Simplex path, read:</p>
+<ul>
+ <li><a href="https://decentralizedthoughts.github.io/2025-06-18-simplex/">From Tendermint to Simplex</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2021-04-02-benign-hotstuff/">Benign HotStuff</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2021-07-17-simplifying-raft-with-chaining/">Chained Raft</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2021-09-30-distributed-consensus-made-simple-for-real-this-time/">Log Paxos</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2025-11-08-benign-simplex/">Benign Simplex</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2025-11-15-simplex-from-benign/">From Benign Simplex to Byzantine Simplex</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2026-04-23-deconstructing-simplex/">Deconstructing Simplex</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2026-05-20-from-single-shot-to-chained/">From Single-Shot Simplex to Chained Simplex</a></li>
+</ul>
+<p>For background on partial synchrony BFT, read:</p>
+<ul>
+ <li><a href="https://decentralizedthoughts.github.io/2025-02-14-partial-synchrony-protocols/">Key Principles Underlying Partial Synchrony BFT</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2025-02-14-PBFT/">Practical Byzantine Fault Tolerant Consensus</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2020-11-29-the-lock-commit-paradigm/">The Lock-Commit Paradigm</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/">PBFT via Locked Broadcast and Recover Max Lock</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/">Reliable Broadcast</a></li>
+</ul>
+<p>For same resilience latency variants, read:</p>
+<ul>
+ <li><a href="https://decentralizedthoughts.github.io/2025-09-24-Kuplex/">C-Simplex and Kuplex</a></li>
+</ul>
+<p>For two round good case variants, read:</p>
+<ul>
+ <li><a href="https://decentralizedthoughts.github.io/2025-07-18-two-round-Simplex/">2-round BFT in Simplex style</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/">Concurrent 2-round and 3-round Simplex-style BFT</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2025-08-06-5fminus1-simplex/">2-round BFT in Simplex style for $n=5f-1$</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/">Why BFT Needs Three Rounds</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2026-01-24-two-round-ps/">Concurrent 2-round and 3-round BFT protocols under granular synchrony</a></li>
+</ul>
+<p>For fixed view schedules, read:</p>
+<ul>
+ <li><a href="https://decentralizedthoughts.github.io/2026-03-07-simultaneous-agreement/">Synchronized Clocks, Fixed View Schedules, and Simultaneous Agreement</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2026-05-14-simplex-FVS/">Simplex on a Fixed View Schedule</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2026-05-17-fast-simplex-fvs/">Fast Simplex on a Fixed View Schedule</a></li>
+</ul>
+<p>For harsh partial synchrony and certificate growth, read:</p>
+<ul>
+ <li><a href="https://decentralizedthoughts.github.io/2025-12-19-cc-under-harsh-ps/">Partial Synchrony variants</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2026-04-26-complex/">From Simplex to Complex</a></li>
+</ul>
+<p>For external Simplex and Simplex like resources, see:</p>
+<ul>
+ <li><a href="https://simplex.blog/">Simplex Consensus</a></li>
+ <li><a href="https://eprint.iacr.org/2023/463">Simplex Consensus paper</a></li>
+ <li><a href="https://eprint.iacr.org/2023/1916">Sing a Song of Simplex</a></li>
+ <li><a href="https://docs.rs/commonware-consensus/latest/commonware_consensus/simplex/index.html">Commonware Simplex</a></li>
+ <li><a href="https://arxiv.org/abs/1807.04938">Tendermint</a></li>
+ <li><a href="https://groups.csail.mit.edu/tds/papers/Lynch/jacm88.pdf">DLS partial synchrony</a></li>
+ <li><a href="https://www.cs.cornell.edu/lorenzo/papers/fab.pdf">FaB Paxos</a></li>
+ <li><a href="https://research.ibm.com/publications/optimistic-byzantine-agreement">Kursawe optimistic Byzantine agreement</a></li>
+ <li><a href="https://cacm.acm.org/research/zyzzyva-speculative-byzantine-fault-tolerance/">Zyzzyva</a></li>
+ <li><a href="https://arxiv.org/abs/1804.01626">SBFT</a></li>
+ <li><a href="https://arxiv.org/abs/2312.05869">Banyan</a></li>
+ <li><a href="https://arxiv.org/abs/2505.08771">Kudzu</a></li>
+ <li><a href="https://www.anza.xyz/blog/alpenglow-a-new-consensus-for-solana">Alpenglow</a></li>
+ <li><a href="https://commonware.xyz/blogs/minimmit">Minimmit</a></li>
+ <li><a href="https://arxiv.org/abs/2508.10862">Minimmit paper</a></li>
+ <li><a href="https://arxiv.org/abs/2503.15380">ChonkyBFT</a></li>
+ <li><a href="https://eprint.iacr.org/2025/1112">Hydrangea</a></li>
+</ul>
+<h2 id="acknowledgments">Acknowledgments</h2>
+<p>Thanks to Ling Ren, Kartik Nayak, Tim Roughgarden, Yuval Efron, Gilad Stern,
+Neil Giridharan, Andrew Lewis-Pye, Joachim Neu, Ertem Nusret Tas, and Alejandro
+Ranchal-Pedrosa for insightful discussions and feedback across the Simplex
+series and beyond.</p>
+<p>Your thoughts on X.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Chapter%3A+Simplex&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2026-05-25-chapter-simplex%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2026-05-20-sui-lutris/" data-toggle="tooltip" data-placement="top" title="Lutris: Safe Composition of Broadcast and Consensus">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ 
+ Decentralized Thinkers
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

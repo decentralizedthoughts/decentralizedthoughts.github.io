@@ -13,7 +13,7 @@
  
  <meta name="author" content="Ittai Abraham">
  
- <meta name="description" content="The goal of this post is to describe a single-shot consensus protocol that is resilient to f &amp;lt; n/2 omission failures, under partial synchrony. This protocol is inspired by the multi-shot Simplex for crash faults protocol and our earlier posts on Chained Raft, Benign HotStuff, and Log Paxos. Single-Shot Consensus Each party starts with an input value. We denote by $\bot$ a special value that is not an input value....">
+ <meta name="description" content="The goal of this post is to describe a single-shot consensus protocol that is resilient to f &amp;lt; n/2 omission failures, under partial synchrony. This protocol is inspired by the multi-shot Simplex for crash faults protocol and our earlier posts on Chained Raft, Benign HotStuff, and Log Paxos. For a map of the surrounding Simplex line, see the Simplex chapter. Single-Shot Consensus Each party starts with an input value. We...">
  
  
  
@@ -72,7 +72,7 @@
  
  <meta property="og:site_name" content="Decentralized Thoughts">
  <meta property="og:title" content="Benign Simplex">
- <meta property="og:description" content="The goal of this post is to describe a single-shot consensus protocol that is resilient to f &amp;lt; n/2 omission failures, under partial synchrony. This protocol is inspired by the multi-shot Simplex for crash faults protocol and our earlier posts on Chained Raft, Benign HotStuff, and Log Paxos. Single-Shot Consensus Each party starts with an input value. We denote by $\bot$ a special value that is not an input value....">
+ <meta property="og:description" content="The goal of this post is to describe a single-shot consensus protocol that is resilient to f &amp;lt; n/2 omission failures, under partial synchrony. This protocol is inspired by the multi-shot Simplex for crash faults protocol and our earlier posts on Chained Raft, Benign HotStuff, and Log Paxos. For a map of the surrounding Simplex line, see the Simplex chapter. Single-Shot Consensus Each party starts with an input value. We...">
  
  <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
  
@@ -91,7 +91,7 @@
  <meta name="twitter:site" content="@ittaia">
  <meta name="twitter:creator" content="@ittaia">
  <meta property="twitter:title" content="Benign Simplex">
- <meta property="twitter:description" content="The goal of this post is to describe a single-shot consensus protocol that is resilient to f &amp;lt; n/2 omission failures, under partial synchrony. This protocol is inspired by the multi-shot Simplex for crash faults protocol and our earlier posts on Chained Raft, Benign HotStuff, and Log Paxos. Single-Shot Consensus Each party starts with an input value. We denote by $\bot$ a special value that is not an input value....">
+ <meta property="twitter:description" content="The goal of this post is to describe a single-shot consensus protocol that is resilient to f &amp;lt; n/2 omission failures, under partial synchrony. This protocol is inspired by the multi-shot Simplex for crash faults protocol and our earlier posts on Chained Raft, Benign HotStuff, and Log Paxos. For a map of the surrounding Simplex line, see the Simplex chapter. Single-Shot Consensus Each party starts with an input value. We...">
  
  <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
  
@@ -211,7 +211,8 @@
  
  <div class="blog-post">
  <p>The goal of this post is to describe a <em>single-shot</em> <a href="https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/">consensus</a> protocol that is resilient to <em>f &lt; n/2</em> <a href="https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/">omission failures</a>, under <a href="https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/">partial synchrony</a>.
-This protocol is inspired by the multi-shot <a href="https://simplex.blog/crashfaults/">Simplex for crash faults</a> protocol and our earlier posts on <a href="https://decentralizedthoughts.github.io/2021-07-17-simplifying-raft-with-chaining/">Chained Raft</a>, <a href="https://decentralizedthoughts.github.io/2021-04-02-benign-hotstuff/">Benign HotStuff</a>, and <a href="https://decentralizedthoughts.github.io/2021-09-30-distributed-consensus-made-simple-for-real-this-time/">Log Paxos</a>.</p>
+This protocol is inspired by the multi-shot <a href="https://simplex.blog/crashfaults/">Simplex for crash faults</a> protocol and our earlier posts on <a href="https://decentralizedthoughts.github.io/2021-07-17-simplifying-raft-with-chaining/">Chained Raft</a>, <a href="https://decentralizedthoughts.github.io/2021-04-02-benign-hotstuff/">Benign HotStuff</a>, and <a href="https://decentralizedthoughts.github.io/2021-09-30-distributed-consensus-made-simple-for-real-this-time/">Log Paxos</a>.
+For a map of the surrounding Simplex line, see the <a href="https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/">Simplex chapter</a>.</p>
 <h2 id="single-shot-consensus">Single-Shot Consensus</h2>
 <p>Each party starts with an <em>input value</em>. We denote by $\bot$ a special value that is not an input value.</p>
 <ol>
@@ -284,6 +285,7 @@ Initially each <code class="language-plaintext highlighter-rouge">val</code> equ
  <li>The protocol does not always wait for $n - f$ to change views. Waiting for $n - f$ happens only when all observed messages are <code class="language-plaintext highlighter-rouge">NoVote</code>. A single <code class="language-plaintext highlighter-rouge">Vote</code> is sufficient to move forward, which reduces latency in the common case.</li>
  <li>The use of an explicit <code class="language-plaintext highlighter-rouge">NoVote</code> is a critical tool for better latency that is borrowed from Simplex and what makes this protocol different from many other Paxos based protocols.</li>
  <li>Open problem: is it possible to improve the worst case latency or obtain this latency with $O(n^2)$ message complexity?</li>
+ <li>This post is one entry in the Simplex line; for the surrounding posts and variants, see the <a href="https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/">Simplex chapter</a>.</li>
 </ol>
 <h2 id="acknowledgments">Acknowledgments</h2>
 <p>Many thanks to Kartik Nayak for insightful comments.</p>

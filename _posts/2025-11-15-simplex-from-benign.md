@@ -6,7 +6,7 @@ tags:
 author: Ittai Abraham
 ---
 
-In this post we present a [Simplex](https://simplex.blog)  protocol that solves single shot [consensus](https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/) and is resilient to $f < n/3$ [Byzantine failures](https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/), under [partial synchrony](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/). In a previous post we showed how to move [from Tendermint to Simplex](https://decentralizedthoughts.github.io/2025-06-18-simplex/).
+In this post we present a [Simplex](https://simplex.blog)  protocol that solves single shot [consensus](https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/) and is resilient to $f < n/3$ [Byzantine failures](https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/), under [partial synchrony](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/). In a previous post we showed how to move [from Tendermint to Simplex](https://decentralizedthoughts.github.io/2025-06-18-simplex/). For a map of the surrounding Simplex line, see the [Simplex chapter](https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/).
 
 In this post we show how to move from [Benign Simplex](https://decentralizedthoughts.github.io/2025-11-08-benign-simplex/) to Simplex. Benign Simplex is resilient to $f<n/2$ omission failures in the same setting. Moving from omission failures to Byzantine failures requires three changes:
 
@@ -152,6 +152,8 @@ The decided value is externally valid (signed by a client).
 
 **Proof:**  
 Initially each `val` is externally valid and this is checked before voting. Later views only propagate existing `val` values through $n{-}f$ `Vote`, so by induction the decided value must be externally valid.
+
+*For the surrounding Simplex line and related background posts, see the [Simplex chapter](https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/).*
 
 
 Your thoughts on [X](https://x.com/ittaia/status/1991596859295727824?s=20)

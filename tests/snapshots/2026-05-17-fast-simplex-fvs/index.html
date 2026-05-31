@@ -13,7 +13,7 @@
  
  <meta name="author" content="Ittai Abraham">
  
- <meta name="description" content="Simplex FVS uses fixed views of length $3\Delta$. This post gives a two round version with view length $2\Delta$, using the two round Simplex certificate structure. The price is the usual one for two round BFT: we use $n=5f+1$ parties. A view has only one leader proposal and one round of votes. If a later leader needs to skip the view, it does not wait for a skip vote sent...">
+ <meta name="description" content="Simplex FVS uses fixed views of length $3\Delta$. This post gives a two round version with view length $2\Delta$, using the two round Simplex certificate structure. For a map of the surrounding Simplex line, see the Simplex chapter. The price is the usual one for two round BFT: we use $n=5f+1$ parties. A view has only one leader proposal and one round of votes. If a later leader needs to...">
  
  
  
@@ -72,7 +72,7 @@
  
  <meta property="og:site_name" content="Decentralized Thoughts">
  <meta property="og:title" content="Fast Simplex on a Fixed View Schedule">
- <meta property="og:description" content="Simplex FVS uses fixed views of length $3\Delta$. This post gives a two round version with view length $2\Delta$, using the two round Simplex certificate structure. The price is the usual one for two round BFT: we use $n=5f+1$ parties. A view has only one leader proposal and one round of votes. If a later leader needs to skip the view, it does not wait for a skip vote sent...">
+ <meta property="og:description" content="Simplex FVS uses fixed views of length $3\Delta$. This post gives a two round version with view length $2\Delta$, using the two round Simplex certificate structure. For a map of the surrounding Simplex line, see the Simplex chapter. The price is the usual one for two round BFT: we use $n=5f+1$ parties. A view has only one leader proposal and one round of votes. If a later leader needs to...">
  
  <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
  
@@ -91,7 +91,7 @@
  <meta name="twitter:site" content="@ittaia">
  <meta name="twitter:creator" content="@ittaia">
  <meta property="twitter:title" content="Fast Simplex on a Fixed View Schedule">
- <meta property="twitter:description" content="Simplex FVS uses fixed views of length $3\Delta$. This post gives a two round version with view length $2\Delta$, using the two round Simplex certificate structure. The price is the usual one for two round BFT: we use $n=5f+1$ parties. A view has only one leader proposal and one round of votes. If a later leader needs to skip the view, it does not wait for a skip vote sent...">
+ <meta property="twitter:description" content="Simplex FVS uses fixed views of length $3\Delta$. This post gives a two round version with view length $2\Delta$, using the two round Simplex certificate structure. For a map of the surrounding Simplex line, see the Simplex chapter. The price is the usual one for two round BFT: we use $n=5f+1$ parties. A view has only one leader proposal and one round of votes. If a later leader needs to...">
  
  <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
  
@@ -214,7 +214,8 @@
 uses <a href="https://decentralizedthoughts.github.io/2026-03-07-simultaneous-agreement/">fixed views</a> of length $3\Delta$. This post gives a two round version with
 view length $2\Delta$, using the
 <a href="https://decentralizedthoughts.github.io/2025-07-18-two-round-Simplex/">two round Simplex</a>
-certificate structure.</p>
+certificate structure.
+For a map of the surrounding Simplex line, see the <a href="https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/">Simplex chapter</a>.</p>
 <p>The price is the usual one for two round BFT: we use $n=5f+1$ parties. A view
 has only one leader proposal and one round of votes. If a later leader needs to
 skip the view, it does not wait for a skip vote sent at the boundary. It uses
@@ -428,6 +429,9 @@ $\mathrm{NC}_k$, it forwards $\mathrm{NC}_k$ and enters view $k+1$. Leaders
 may use $\mathrm{NC}_k$ exactly as they use a bottom certificate when
 proposing in later views. The price is that this no commit certificate is
 linear size, unless it is compressed with a SNARK.</p>
+ </li>
+ <li>
+ <p>For the broader fixed-view-schedule and two-round Simplex context, see the <a href="https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/">Simplex chapter</a>.</p>
  </li>
 </ul>
 <p>Your thoughts/comments here.</p>

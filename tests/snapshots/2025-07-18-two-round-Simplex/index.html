@@ -13,7 +13,7 @@
  
  <meta name="author" content="Ittai Abraham, Yuval Efron, and Ling Ren">
  
- <meta name="description" content="Simplex is a recent partially synchronous Byzantine Fault Tolerant (BFT) protocol that is gaining popularity. We take this opportunity to rehash several classic results in the Simplex style. The first post explained the key difference between Simplex and Tendermint. This second post is on 2-round BFT. The next post will explore protocols that integrate concurrent 2-round and 3-round paths. Mainstream partially synchronous BFT protocols tolerate $f&amp;lt;n/3$ Byzantine faults and have...">
+ <meta name="description" content="Simplex is a recent partially synchronous Byzantine Fault Tolerant (BFT) protocol that is gaining popularity. We take this opportunity to rehash several classic results in the Simplex style. The first post explained the key difference between Simplex and Tendermint. This second post is on 2-round BFT. The next post will explore protocols that integrate concurrent 2-round and 3-round paths. For a map of the surrounding Simplex line, see the Simplex...">
  
  
  
@@ -72,7 +72,7 @@
  
  <meta property="og:site_name" content="Decentralized Thoughts">
  <meta property="og:title" content="2-round BFT in Simplex style">
- <meta property="og:description" content="Simplex is a recent partially synchronous Byzantine Fault Tolerant (BFT) protocol that is gaining popularity. We take this opportunity to rehash several classic results in the Simplex style. The first post explained the key difference between Simplex and Tendermint. This second post is on 2-round BFT. The next post will explore protocols that integrate concurrent 2-round and 3-round paths. Mainstream partially synchronous BFT protocols tolerate $f&amp;lt;n/3$ Byzantine faults and have...">
+ <meta property="og:description" content="Simplex is a recent partially synchronous Byzantine Fault Tolerant (BFT) protocol that is gaining popularity. We take this opportunity to rehash several classic results in the Simplex style. The first post explained the key difference between Simplex and Tendermint. This second post is on 2-round BFT. The next post will explore protocols that integrate concurrent 2-round and 3-round paths. For a map of the surrounding Simplex line, see the Simplex...">
  
  <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
  
@@ -91,7 +91,7 @@
  <meta name="twitter:site" content="@ittaia">
  <meta name="twitter:creator" content="@ittaia">
  <meta property="twitter:title" content="2-round BFT in Simplex style">
- <meta property="twitter:description" content="Simplex is a recent partially synchronous Byzantine Fault Tolerant (BFT) protocol that is gaining popularity. We take this opportunity to rehash several classic results in the Simplex style. The first post explained the key difference between Simplex and Tendermint. This second post is on 2-round BFT. The next post will explore protocols that integrate concurrent 2-round and 3-round paths. Mainstream partially synchronous BFT protocols tolerate $f&amp;lt;n/3$ Byzantine faults and have...">
+ <meta property="twitter:description" content="Simplex is a recent partially synchronous Byzantine Fault Tolerant (BFT) protocol that is gaining popularity. We take this opportunity to rehash several classic results in the Simplex style. The first post explained the key difference between Simplex and Tendermint. This second post is on 2-round BFT. The next post will explore protocols that integrate concurrent 2-round and 3-round paths. For a map of the surrounding Simplex line, see the Simplex...">
  
  <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
  
@@ -210,7 +210,7 @@
  
  
  <div class="blog-post">
- <p><a href="https://simplex.blog/">Simplex</a> is a recent partially synchronous Byzantine Fault Tolerant (BFT) protocol that is gaining popularity. We take this opportunity to rehash several classic results in the Simplex style. <a href="https://decentralizedthoughts.github.io/2025-06-18-simplex/">The first post</a> explained the key difference between Simplex and Tendermint. This second post is on 2-round BFT. The next post will explore protocols that integrate concurrent 2-round and 3-round paths.</p>
+ <p><a href="https://simplex.blog/">Simplex</a> is a recent partially synchronous Byzantine Fault Tolerant (BFT) protocol that is gaining popularity. We take this opportunity to rehash several classic results in the Simplex style. <a href="https://decentralizedthoughts.github.io/2025-06-18-simplex/">The first post</a> explained the key difference between Simplex and Tendermint. This second post is on 2-round BFT. The next post will explore protocols that integrate concurrent 2-round and 3-round paths. For a map of the surrounding Simplex line, see the <a href="https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/">Simplex chapter</a>.</p>
 <p>Mainstream partially synchronous BFT protocols tolerate $f&lt;n/3$ Byzantine faults and have <a href="https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/">3-round good case commit latency</a> under an honest leader. This latency can be reduced to 2 round good case, if we decrease the fault tolerance from &lt;33% to &lt;20% (see <a href="https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/">this post</a> for the proof that 20% is required).</p>
 <p>Recently, there has been renewed interest in 2-round partially synchronous BFT. In this post, we present a natural 2-round BFT protocol in the Simplex style. A very similar protocol is independently proposed by Commonware and called <a href="https://commonware.xyz/blogs/minimmit.html">Minimmit</a>, also see <a href="https://arxiv.org/pdf/2508.10862">Chou, Lewis-Pye, O’Grady 2025</a>. Also see ZKSync’s <a href="https://arxiv.org/abs/2503.15380?utm_source=chatgpt.com">ChonkyBFT</a> and Tempo’s <a href="https://dankradfeist.de/tempo/2025/12/31/minimmit-simple-fast-consensus.html">research post</a> on Minimint.</p>
 <h2 id="two-round-commit-intuition">Two-round commit intuition</h2>
@@ -264,6 +264,7 @@
 <p><em>Proof sketch</em>: If an honest party commits in view $&lt;k$, it forwards the $n-f$ votes that form a commit certificate, so all honest parties commit in view $&lt;k$. If no honest party commits in view $&lt;k$, then given synchrony after GST, all honest parties enter view $k$, vote for the honest leader (either by receiving the leader’s proposal or by seeing a certificate), and hence commit in that view.</p>
 <h3 id="acknowledgments">Acknowledgments</h3>
 <p>We thank Brendan Kobayashi Chou, Andrew Lewis-Pye, Patrick O’Grady for fixing a liveness error in a previous version and thank Kartik Nayak, Max Resnick, and Dan Boneh for valuable feedback. The work is done while Yuval Efron is affiliated with and the other authors are visiting a16z Crypto Research.</p>
+<p><em>For the surrounding Simplex line and related background posts, see the <a href="https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/">Simplex chapter</a>.</em></p>
 <p>Your thoughts/comments on <a href="https://x.com/ittaia/status/1946296784587776058">X</a>.</p>
  </div>
  

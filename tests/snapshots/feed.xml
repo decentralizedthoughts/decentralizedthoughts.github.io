@@ -11,13 +11,41 @@
  
  
  <item>
+ <title>Chapter: Simplex</title>
+ 
+ <dc:creator><![CDATA[ Ittai Abraham ]]></dc:creator>
+ 
+ <description>
+ 
+ This post is a map of the Simplex line of posts on Decentralized Thoughts. It is meant to be read as a chapter: first the core Simplex idea, then some of the main ways to vary it. A salient property of Simplex is that parties leave a view only with a value certificate or a skip certificate. This is in contrast to protocols like PBFT, HotStuff, Casper, and Tendermint, where...
+ </description>
+ <pubDate>Mon, 25 May 2026 05:00:00 -0400</pubDate>
+ <link>https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/</guid>
+ </item>
+ 
+ <item>
+ <title>Lutris: Safe Composition of Broadcast and Consensus</title>
+ 
+ <dc:creator><![CDATA[ Lefteris Kokoris Kogias, Alberto Sonnino ]]></dc:creator>
+ 
+ <description>
+ 
+ TL;DR Lutris is a hybrid distributed system protocol that integrates Byzantine Consistent Broadcast with a BFT consensus DAG to minimize latency of specific types of transactions. Hybrid Consistency: Uses broadcast for single-writer operations and consensus for shared-state contention. Unified State Machine: Maintains linearizability across both paths via versioned object locking. Liveness Recovery: Solves the “eternal lock” problem of previous broadcast protocols using epoch-based reconfiguration. Hybrid Reconfiguration: Leverages the consensus path...
+ </description>
+ <pubDate>Wed, 20 May 2026 07:29:56 -0400</pubDate>
+ <link>https://decentralizedthoughts.github.io/2026-05-20-sui-lutris/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-05-20-sui-lutris/</guid>
+ </item>
+ 
+ <item>
  <title>From Single-Shot Simplex to Chained Simplex</title>
  
  <dc:creator><![CDATA[ Ittai Abraham, Joachim Neu ]]></dc:creator>
  
  <description>
  
- In this post we construct Chained Simplex from single-shot Simplex. The chained construction is a simple modification of the single-shot protocol and applies to any Simplex variant with the same inner certificate properties and outer proposal structure. See here for more generic constructions. We will use the decomposition from deconstructing Simplex to make the construction explicit. That post separates Simplex into: an inner protocol, which produces value certificates, decision certificates,...
+ In this post we construct Chained Simplex from single-shot Simplex. The chained construction is a simple modification of the single-shot protocol and applies to any Simplex variant with the same inner certificate properties and outer proposal structure. See here for more generic constructions. For a map of the surrounding Simplex line, see the Simplex chapter. We will use the decomposition from deconstructing Simplex to make the construction explicit. That post...
  </description>
  <pubDate>Wed, 20 May 2026 02:00:00 -0400</pubDate>
  <link>https://decentralizedthoughts.github.io/2026-05-20-from-single-shot-to-chained/</link>
@@ -31,7 +59,7 @@
  
  <description>
  
- Simplex FVS uses fixed views of length $3\Delta$. This post gives a two round version with view length $2\Delta$, using the two round Simplex certificate structure. The price is the usual one for two round BFT: we use $n=5f+1$ parties. A view has only one leader proposal and one round of votes. If a later leader needs to skip the view, it does not wait for a skip vote sent...
+ Simplex FVS uses fixed views of length $3\Delta$. This post gives a two round version with view length $2\Delta$, using the two round Simplex certificate structure. For a map of the surrounding Simplex line, see the Simplex chapter. The price is the usual one for two round BFT: we use $n=5f+1$ parties. A view has only one leader proposal and one round of votes. If a later leader needs to...
  </description>
  <pubDate>Sun, 17 May 2026 01:00:00 -0400</pubDate>
  <link>https://decentralizedthoughts.github.io/2026-05-17-fast-simplex-fvs/</link>
@@ -45,7 +73,7 @@
  
  <description>
  
- This post gives a fixed view schedule version of Simplex, called Simplex FVS, with the advantages of a fixed view schedule discussed here. In the FVS design, the start and end times of each view are fixed in advance; this requires synchronized clocks. We number protocol views starting at $1$, and view $v$ starts at time $3v\Delta$. After a view ends, parties no longer sign new messages for it, but...
+ This post gives a fixed view schedule version of Simplex, called Simplex FVS, with the advantages of a fixed view schedule discussed here. For a map of the surrounding Simplex line, see the Simplex chapter. In the FVS design, the start and end times of each view are fixed in advance; this requires synchronized clocks. We number protocol views starting at $1$, and view $v$ starts at time $3v\Delta$. After...
  </description>
  <pubDate>Thu, 14 May 2026 05:00:00 -0400</pubDate>
  <link>https://decentralizedthoughts.github.io/2026-05-14-simplex-FVS/</link>
@@ -101,7 +129,7 @@
  
  <description>
  
- In a previous post we decomposed PBFT into an outer shell and an inner shell consisting of two building blocks: Locked-Broadcast (LB) and Recover-Max-Lock. Here we similarly decompose Simplex into an outer shell and an inner shell consisting of a single building block: Graded-Broadcast (GB). The model is partial synchrony with $f&amp;lt;n/3$ Byzantine failures, and the goal is single-shot provable consensus with external validity. Single-shot Provable Consensus with External Validity...
+ In a previous post we decomposed PBFT into an outer shell and an inner shell consisting of two building blocks: Locked-Broadcast (LB) and Recover-Max-Lock. Here we similarly decompose Simplex into an outer shell and an inner shell consisting of a single building block: Graded-Broadcast (GB). For a map of the surrounding Simplex line, see the Simplex chapter. The model is partial synchrony with $f&amp;lt;n/3$ Byzantine failures, and the goal is...
  </description>
  <pubDate>Thu, 23 Apr 2026 01:00:00 -0400</pubDate>
  <link>https://decentralizedthoughts.github.io/2026-04-23-deconstructing-simplex/</link>
@@ -185,7 +213,7 @@
  
  <description>
  
- Consensus protocols for $n=3f+1$ can tolerate $f$ Byzantine faults under partial synchrony. However, they also require a latency of 3 rounds in the good-case when the leader is non-faulty, and the system is synchronous. Can we get a protocol with better latency, or tolerate more faults, if we assume $n=3f+2p+1$? Better latency: If the actual number of Byzantine faults in an execution are fewer, then the protocol can commit faster....
+ Consensus protocols for $n=3f+1$ can tolerate $f$ Byzantine faults under partial synchrony. However, they also require a latency of 3 rounds in the good-case when the leader is non-faulty, and the system is synchronous. Can we get a protocol with better latency, or tolerate more faults, if we assume $n=3f+2p+1$? For a map of the surrounding Simplex line, see the Simplex chapter. Better latency: If the actual number of Byzantine...
  </description>
  <pubDate>Sat, 24 Jan 2026 01:00:00 -0500</pubDate>
  <link>https://decentralizedthoughts.github.io/2026-01-24-two-round-ps/</link>
@@ -227,7 +255,7 @@
  
  <description>
  
- In this post we observe three variants of Partial Synchrony (PS) and how they affect (or not) popular BFT protocols like PBFT, Tendermint, and especially the recent Simplex protocol. Many modern systems use the following definition of Partial Synchrony: Bounded Partial Synchrony (BPS): A message sent at time $t$ arrives by time at most $\max{t, GST}+\Delta$ This definition implicitly assumes that messages sent before $GST$ are delayed but not lost,...
+ In this post we observe three variants of Partial Synchrony (PS) and how they affect (or not) popular BFT protocols like PBFT, Tendermint, and especially the recent Simplex protocol. For a map of the surrounding Simplex line, see the Simplex chapter. Many modern systems use the following definition of Partial Synchrony: Bounded Partial Synchrony (BPS): A message sent at time $t$ arrives by time at most $\max{t, GST}+\Delta$ This definition...
  </description>
  <pubDate>Fri, 19 Dec 2025 23:00:00 -0500</pubDate>
  <link>https://decentralizedthoughts.github.io/2025-12-19-cc-under-harsh-ps/</link>
@@ -260,34 +288,6 @@
  <pubDate>Fri, 12 Dec 2025 06:00:00 -0500</pubDate>
  <link>https://decentralizedthoughts.github.io/2025-12-12-scalable-agreement/</link>
  <guid isPermaLink="true">https://decentralizedthoughts.github.io/2025-12-12-scalable-agreement/</guid>
- </item>
- 
- <item>
- <title>Finality Is in the Eye of the Behodler</title>
- 
- <dc:creator><![CDATA[ Ittai Abraham, Vitalik Buterin, and Luca Zanolini ]]></dc:creator>
- 
- <description>
- 
- Finality is a belief that some things will not change in the future (are final). Finality in blockchains matters because it gives us confidence that transactions or protocol decisions, will remain permanent and immutable. This ability to commit is what makes Blockchains so powerful as a coordination mechanism. Consider the following situations: You received coins in the genesis block of Ethereum You received bitcoins three months ago, and three months...
- </description>
- <pubDate>Sun, 23 Nov 2025 03:00:00 -0500</pubDate>
- <link>https://decentralizedthoughts.github.io/2025-11-23-finality/</link>
- <guid isPermaLink="true">https://decentralizedthoughts.github.io/2025-11-23-finality/</guid>
- </item>
- 
- <item>
- <title>Why BFT Needs Three Rounds</title>
- 
- <dc:creator><![CDATA[ Ittai Abraham and Kartik Nayak ]]></dc:creator>
- 
- <description>
- 
- Many modern BFT protocols share a common structural pattern. PBFT uses preprepare and prepare. Tendermint uses prevote and precommit. CasperFFG and Simplex use notarization and finalization. HotStuff uses a QC on top of another QC. Notice the pattern? Each of these protocols begins with a proposal followed by two voting rounds. This raises a natural question: Is one round of proposing followed by two rounds of voting actually necessary? This...
- </description>
- <pubDate>Sat, 22 Nov 2025 09:00:00 -0500</pubDate>
- <link>https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/</link>
- <guid isPermaLink="true">https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/</guid>
  </item>
  
  </channel>

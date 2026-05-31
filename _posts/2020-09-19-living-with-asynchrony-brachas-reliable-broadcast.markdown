@@ -81,6 +81,8 @@ The pseudo-code is simple:
 
 5. Christian Cachin has [excellent course notes](https://dcl.epfl.ch/site/_media/education/sdc_byzconsensus.pdf) on Byzantine Broadcasts and Randomized Consensus including Bracha's Reliable broadcast.
 
+6. This post is background for the Simplex chapter's discussion of Graded Broadcast and external validity; see the [Simplex chapter](https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/).
+
 ### Scratch your Brains!
 
 Prove correctness (or provide a counterexample) of the following optimization that simplifies Bracha's original protocol and saves a round!
@@ -101,5 +103,4 @@ Prove correctness (or provide a counterexample) of the following optimization th
 
 **Acknowledgment.** We would like to thank [hemengjie](https://twitter.com/VfRy8lQUeL9t4y6) and [samlafer](https://x.com/samlafer) for fixing errors and providing valuable feedback.
 
-Please answer/discuss/comment/ask on [Twitter](https://twitter.com/ittaia/status/1307772031954546697?s=20). 
-
+Please answer/discuss/comment/ask on [Twitter](https://twitter.com/ittaia/status/1307772031954546697?s=20).

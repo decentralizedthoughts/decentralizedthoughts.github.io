@@ -219,9 +219,10 @@ Lock-certificates can be reduced to a single signature by using threshold signat
 
 In later posts, we will show other view synchronization solutions, and HotStuff also provides responsiveness.
 
+The [Simplex chapter](https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/) uses this decomposition as background for comparing PBFT-style lock recovery with Simplex-style skip certificates.
+
 ## Acknowledgments
 
 Many thanks to Kartik Nayak for insightful comments.
 
 Your comments on [Twitter](https://twitter.com/ittaia/status/1599893500866088961?s=20&t=RUTyrxNgaIvudyiV5O5IAA).
-

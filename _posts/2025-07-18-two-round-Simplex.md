@@ -6,7 +6,7 @@ tags:
 author: Ittai Abraham, Yuval Efron, and Ling Ren
 ---
 
-[Simplex](https://simplex.blog/) is a recent partially synchronous Byzantine Fault Tolerant (BFT) protocol that is gaining popularity. We take this opportunity to rehash several classic results in the Simplex style. [The first post](https://decentralizedthoughts.github.io/2025-06-18-simplex/) explained the key difference between Simplex and Tendermint. This second post is on 2-round BFT. The next post will explore protocols that integrate concurrent 2-round and 3-round paths. 
+[Simplex](https://simplex.blog/) is a recent partially synchronous Byzantine Fault Tolerant (BFT) protocol that is gaining popularity. We take this opportunity to rehash several classic results in the Simplex style. [The first post](https://decentralizedthoughts.github.io/2025-06-18-simplex/) explained the key difference between Simplex and Tendermint. This second post is on 2-round BFT. The next post will explore protocols that integrate concurrent 2-round and 3-round paths. For a map of the surrounding Simplex line, see the [Simplex chapter](https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/).
 
 Mainstream partially synchronous BFT protocols tolerate $f<n/3$ Byzantine faults and have [3-round good case commit latency](https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/) under an honest leader. This latency can be reduced to 2 round good case, if we decrease the fault tolerance from <33% to <20% (see [this post](https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/) for the proof that 20% is required).
 
@@ -97,6 +97,8 @@ Safety is straightforward from Lemma 2. Liveness follows from the lemmas below.
 ### Acknowledgments
 
 We thank Brendan Kobayashi Chou, Andrew Lewis-Pye, Patrick O'Grady for fixing a liveness error in a previous version and thank Kartik Nayak, Max Resnick, and Dan Boneh for valuable feedback. The work is done while Yuval Efron is affiliated with and the other authors are visiting a16z Crypto Research. 
+
+*For the surrounding Simplex line and related background posts, see the [Simplex chapter](https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/).*
 
 
 

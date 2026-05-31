@@ -7,7 +7,7 @@ tags:
 author: Ittai Abraham, Yuval Efron, Kartik Nayak, and Ling Ren
 ---
 
-In the last two posts, we presented two partially synchronous BFT protocols in the [Simplex-style](https://eprint.iacr.org/2023/463.pdf): a [3-round protocol](https://decentralizedthoughts.github.io/2025-06-18-simplex/) with $n\geq3f+1$ and a [2-round protocol](https://decentralizedthoughts.github.io/2025-07-18-two-round-Simplex/) with $n\geq 5f+1$. In this post, we describe a protocol that runs a 2-round commit rule and a 3-round commit rule concurrently. 
+In the last two posts, we presented two partially synchronous BFT protocols in the [Simplex-style](https://eprint.iacr.org/2023/463.pdf): a [3-round protocol](https://decentralizedthoughts.github.io/2025-06-18-simplex/) with $n\geq3f+1$ and a [2-round protocol](https://decentralizedthoughts.github.io/2025-07-18-two-round-Simplex/) with $n\geq 5f+1$. In this post, we describe a protocol that runs a 2-round commit rule and a 3-round commit rule concurrently. For a map of the surrounding Simplex line, see the [Simplex chapter](https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/).
 
 A new parameter $p$ ($0 \leq p \leq f$) is introduced, and the goal is to design protocols that have $n \geq 3f+2p+1$ parties and the following properties:
 
@@ -226,11 +226,12 @@ If at most $f$ Byzantine then all honest will send final and commit in view $k$ 
 
 In a [follow-up post](https://decentralizedthoughts.github.io/2025-08-06-5fminus1-simplex/) we show how to get the optimal $n=3f+2p-1$.
 
+This post is one of the two-round good-case variants collected in the [Simplex chapter](https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/).
+
 ## Acknowledgments
 
 This work was conducted while Yuval Efron was affiliated with a16z Crypto Research and the other authors were visiting. We would like to thank Quentin Kniep, Jakub Sliwinski, and Roger Wattenhofer for insightful discussions and feedback. We thank Brendan Kobayashi Chou, Andrew Lewis-Pye, Patrick O'Grady for spotting a liveness error in a previous version. 
 
 We thank Eugen Zalinescu from nomadic labs for spotting an error in the safety proof sketch.
-
 
 Your thoughts/comments on [X](https://x.com/ittaia/status/1950642366483992880).

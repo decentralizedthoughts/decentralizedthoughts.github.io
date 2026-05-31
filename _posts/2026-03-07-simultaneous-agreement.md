@@ -137,6 +137,7 @@ A fixed schedule style is also used by
 [ACDNPRS18](https://arxiv.org/abs/1805.03391)
 to obtain subquadratic communication in partial synchrony.
 
+For the Simplex fixed-view-schedule variants that use this perspective, see the [Simplex chapter](https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/).
 
 ### Acknowledgments
 

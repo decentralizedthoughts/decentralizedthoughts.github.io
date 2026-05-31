@@ -7,7 +7,7 @@ author: Ittai Abraham
 ---
 
 
-In a [previous post](https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/) we decomposed PBFT into an outer shell and an inner shell consisting of two building blocks: *Locked-Broadcast* (LB) and *Recover-Max-Lock*. Here we similarly decompose [Simplex](https://decentralizedthoughts.github.io/2025-06-18-simplex/) into an outer shell and an inner shell consisting of a single building block: **Graded-Broadcast** (GB).
+In a [previous post](https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/) we decomposed PBFT into an outer shell and an inner shell consisting of two building blocks: *Locked-Broadcast* (LB) and *Recover-Max-Lock*. Here we similarly decompose [Simplex](https://decentralizedthoughts.github.io/2025-06-18-simplex/) into an outer shell and an inner shell consisting of a single building block: **Graded-Broadcast** (GB). For a map of the surrounding Simplex line, see the [Simplex chapter](https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/).
 
 
 
@@ -244,6 +244,8 @@ How does GB differ from PBFT's Locked-Broadcast (LB)? First note that in LB ther
 
 1. In Simplex this is done by showing a skip certificate for every higher view.
 2. For PBFT, this is done by showing the $n-f$ highest locks that are not higher than the proposal.
+
+For where this decomposition sits in the broader Simplex line, see the [Simplex chapter](https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/).
 
 ## Acknowledgments
 

@@ -318,6 +318,7 @@
 <p>Note that the path from $highestBlock$ to the genesis consists of a sub-path of un-committed blocks and a sub-path from the $commitMark$ to the genesis of committed blocks. During State Transfer, replicas can safely exchange the $commitMark$ and any missing blocks on this path.</p>
 <p>The <code class="language-plaintext highlighter-rouge">goto</code> message is used to synchronize the replicas. We could have the Primary send it every round but chose to optimize it away in the synchronized failure free steady state case.</p>
 <p>We describe Benign Hotstuff as a system for replicating a log, but the same can be used to implement any <a href="https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/">replicated state machine</a>.</p>
+<p>This post is also background for the benign path into the <a href="https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/">Simplex chapter</a>.</p>
 <p>Please answer/discuss/comment/ask on <a href="https://twitter.com/ittaia/status/1379061379899006984?s=20">Twitter</a>.</p>
  </div>
  

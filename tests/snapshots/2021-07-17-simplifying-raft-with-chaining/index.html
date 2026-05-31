@@ -292,6 +292,7 @@ Therefore, if term $t+1$ had a leader then $b$ will be present in the path from 
 <p>Benign HotStuff stores a term with every block whereas Chained Raft only tracks the term of the current head (using the last appended term).</p>
 <h3 id="conclusion">Conclusion</h3>
 <p>We have described Raft using append-only chains instead of mutable logs. Interestingly, Chained Raft and Raft are very similar protocols. Raft can be expressed naturally using chains as it already decides commands strictly in-order (unlike some other consensus protocols such as <a href="https://lamport.azurewebsites.net/pubs/paxos-simple.pdf">Multi-Paxos</a>).</p>
+<p>This post is also background for the benign and chained path through the <a href="https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/">Simplex chapter</a>.</p>
 <p>So, what do you think? Is Chained Raft simpler than the original Raft protocol? Would you be interested in seeing other log-based consensus algorithms such as <a href="https://lamport.azurewebsites.net/pubs/paxos-simple.pdf">Multi-Paxos</a> or <a href="https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/tr-2005-112.pdf">Fast Paxos</a> described using chains? Let us know your thoughts on <a href="https://twitter.com/heidiann360/status/1417516761180786698?s=20">twitter</a>.</p>
 <p><strong>Acknowledgment.</strong> We would like to thank Kartik Nayak for his feedback on this blog post.</p>
  </div>

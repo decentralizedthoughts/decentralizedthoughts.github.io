@@ -225,6 +225,7 @@
 </blockquote>
 <p>We use the framework of <a href="https://decentralizedthoughts.github.io/2026-04-23-deconstructing-simplex/">our previous post on deconstructing Simplex</a> to similarly deconstruct Complex into an outer shell and an inner shell. This allows us to derive Complex with relatively few changes.</p>
 <p>The inner shell of Complex is similar to Simplex; in particular, it uses the same <em>Graded-Broadcast</em>. The outer shell of Complex is similar to Tendermint (and key based HotStuff) with a small Simplex-like modification. Finally, the external-validity rule of Graded-Broadcast is similar to Tendermint: vote only if the proposed lock is at least as large as yours.</p>
+<p>For a map of the surrounding Simplex line, see the <a href="https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/">Simplex chapter</a>.</p>
 <h2 id="complex-outer-shell">Complex outer shell</h2>
 <p>Each party maintains three sets: <code class="language-plaintext highlighter-rouge">lockSet</code> (lock certificates it directly delivered), <code class="language-plaintext highlighter-rouge">keySet</code> (all lock certificates it has seen, including forwarded ones), and <code class="language-plaintext highlighter-rouge">skipSet</code> (skip certificates it has delivered). Initially all three are empty.</p>
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>For view v, the primary of view v
@@ -312,6 +313,9 @@ On receiving a forwarded lock certificate
  </li>
  <li>
  <p>Similarly, there is a <a href="https://decentralizedthoughts.github.io/2025-07-18-two-round-Simplex/">Fast Simplex protocol</a> with a two-round good case. This can be transformed to a <strong>Fast Complex</strong> variant for $5f+1$, and will be explored in later posts.</p>
+ </li>
+ <li>
+ <p>For the broader Simplex line around Complex, certificate growth, and latency variants, see the <a href="https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/">Simplex chapter</a>.</p>
  </li>
 </ul>
 <h2 id="acknowledgments">Acknowledgments</h2>

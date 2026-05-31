@@ -8,6 +8,7 @@ author: Ittai Abraham
 
 The goal of this post is to describe a *single-shot* [consensus](https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/) protocol that is resilient to *f < n/2* [omission failures](https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/), under [partial synchrony](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/).
 This protocol is inspired by the multi-shot [Simplex for crash faults](https://simplex.blog/crashfaults/) protocol and our earlier posts on [Chained Raft](https://decentralizedthoughts.github.io/2021-07-17-simplifying-raft-with-chaining/), [Benign HotStuff](https://decentralizedthoughts.github.io/2021-04-02-benign-hotstuff/), and [Log Paxos](https://decentralizedthoughts.github.io/2021-09-30-distributed-consensus-made-simple-for-real-this-time/).
+For a map of the surrounding Simplex line, see the [Simplex chapter](https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/).
 
 ## Single-Shot Consensus
 
@@ -130,6 +131,7 @@ Initially each `val` equals the party's input. Later views only propagate existi
 2. The protocol does not always wait for $n - f$ to change views. Waiting for $n - f$ happens only when all observed messages are `NoVote`. A single `Vote` is sufficient to move forward, which reduces latency in the common case.
 3. The use of an explicit `NoVote` is a critical tool for better latency that is borrowed from Simplex and what makes this protocol different from many other Paxos based protocols.
 4. Open problem: is it possible to improve the worst case latency or obtain this latency with $O(n^2)$ message complexity?
+5. This post is one entry in the Simplex line; for the surrounding posts and variants, see the [Simplex chapter](https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/).
 
 ## Acknowledgments
 
