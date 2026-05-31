@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-05-31T09:23:30Z",
+  "fetched_at": "2026-05-31T19:39:48Z",
   "items": [
     {
       "path": "/start-here/",
@@ -19,12 +19,12 @@
       "views": 78
     },
     {
-      "path": "/2026-05-20-sui-lutris/",
-      "views": 69
+      "path": "/2026-05-25-chapter-simplex/",
+      "views": 70
     },
     {
-      "path": "/2026-05-25-chapter-simplex/",
-      "views": 68
+      "path": "/2026-05-20-sui-lutris/",
+      "views": 69
     }
   ]
 }
