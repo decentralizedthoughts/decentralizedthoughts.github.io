@@ -1,26 +1,26 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-06-01T21:43:07Z",
+  "fetched_at": "2026-06-02T10:53:59Z",
   "items": [
     {
       "path": "/start-here/",
-      "views": 117
+      "views": 115
     },
     {
       "path": "/2026-05-25-chapter-simplex/",
-      "views": 94
-    },
-    {
-      "path": "/2019-06-01-2019-5-31-models/",
-      "views": 91
-    },
-    {
-      "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 82
+      "views": 104
     },
     {
       "path": "/2026-05-20-from-single-shot-to-chained/",
-      "views": 81
+      "views": 82
+    },
+    {
+      "path": "/2019-06-01-2019-5-31-models/",
+      "views": 76
+    },
+    {
+      "path": "/2020-12-22-what-is-a-merkle-tree/",
+      "views": 76
     },
     {
       "path": "/2026-05-20-sui-lutris/",
