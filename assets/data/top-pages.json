@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-06-03T11:22:08Z",
+  "fetched_at": "2026-06-03T21:29:03Z",
   "items": [
     {
       "path": "/2026-05-25-chapter-simplex/",
@@ -16,11 +16,11 @@
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 80
+      "views": 81
     },
     {
       "path": "/2019-06-01-2019-5-31-models/",
-      "views": 74
+      "views": 75
     },
     {
       "path": "/2026-05-20-sui-lutris/",
