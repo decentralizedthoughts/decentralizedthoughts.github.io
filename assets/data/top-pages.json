@@ -1,14 +1,14 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-06-04T10:11:37Z",
+  "fetched_at": "2026-06-04T20:23:47Z",
   "items": [
     {
       "path": "/2026-05-25-chapter-simplex/",
-      "views": 134
+      "views": 136
     },
     {
       "path": "/start-here/",
-      "views": 114
+      "views": 116
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
@@ -20,7 +20,7 @@
     },
     {
       "path": "/2020-08-28-what-is-a-cryptographic-hash-function/",
-      "views": 69
+      "views": 70
     },
     {
       "path": "/2019-06-01-2019-5-31-models/",
