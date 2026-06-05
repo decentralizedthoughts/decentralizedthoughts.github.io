@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Information-Theoretic Kuplex</title>
+ 
+ 
+ 
+ 
+ <meta name="author" content="Ittai Abraham, Sourav Das, Yuval Efron, Jovan Komatovic, Gilad Stern">
+ 
+ <meta name="description" content="Simplex is usually stated with signed quorums that anyone can forward and verify. Here we describe an information-theoretic version. Parties have authenticated point-to-point channels, but no signatures and no transferable quorums. Each party therefore acts only on quorums of messages it received directly. The motivation is practical as well as conceptual: avoiding signatures removes signature verification from the critical path. Threshold signatures and multi-signatures can reduce this overhead in signed...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Information-Theoretic Kuplex">
+ <meta property="og:description" content="Simplex is usually stated with signed quorums that anyone can forward and verify. Here we describe an information-theoretic version. Parties have authenticated point-to-point channels, but no signatures and no transferable quorums. Each party therefore acts only on quorums of messages it received directly. The motivation is practical as well as conceptual: avoiding signatures removes signature verification from the critical path. Threshold signatures and multi-signatures can reduce this overhead in signed...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham, Sourav Das, Yuval Efron, Jovan Komatovic, Gilad Stern">
+ 
+ <meta property="og:article:published_time" content="2026-06-05T05:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2026-06-05-IT-Kuplex/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2026-06-05-IT-Kuplex/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Information-Theoretic Kuplex">
+ <meta property="twitter:description" content="Simplex is usually stated with signed quorums that anyone can forward and verify. Here we describe an information-theoretic version. Parties have authenticated point-to-point channels, but no signatures and no transferable quorums. Each party therefore acts only on quorums of messages it received directly. The motivation is practical as well as conceptual: avoiding signatures removes signature verification from the critical path. Threshold signatures and multi-signatures can reduce this overhead in signed...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" id="nav-search-link" href="#" title="Search the blog">
+ <span id="nav-search-icon" class="fa fa-search"></span>
+ <span id="nav-search-text">Search</span>
+ </a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+<div id="beautifuljekyll-search-overlay" data-search-json="/assets/data/searchcorpus.json" data-top-pages-json="/assets/data/top-pages.json" aria-hidden="true">
+ <div class="search-overlay-backdrop" data-search-close></div>
+ <div class="search-dialog" role="dialog" aria-modal="true" aria-labelledby="nav-search-heading">
+ <div class="search-dialog-header">
+ <p class="search-dialog-kicker">Search the archive</p>
+ <button id="nav-search-exit" type="button" title="Close search" aria-label="Close search">Close</button>
+ </div>
+ <label class="sr-only" id="nav-search-heading" for="nav-search-input">Search posts, authors, topics, and phrases</label>
+ <div class="search-input-shell">
+ <span class="fa fa-search" aria-hidden="true"></span>
+ <input type="text" id="nav-search-input" placeholder="Search posts, authors, topics, and phrases" autocomplete="off">
+ <span class="search-shortcut">/</span>
+ </div>
+ <p id="nav-search-status">Search by title, author, tag, or a phrase from the post.</p>
+ <div id="search-discovery">
+ <section class="search-discovery-group" aria-labelledby="search-popular-heading">
+ <p class="search-discovery-heading" id="search-popular-heading">Popular topics</p>
+ <div id="search-suggestions" aria-label="Popular topics"></div>
+ </section>
+ <section class="search-discovery-group" aria-labelledby="search-recent-heading">
+ <p class="search-discovery-heading" id="search-recent-heading">Top pages</p>
+ <div id="search-recent-posts"></div>
+ </section>
+ </div>
+ <ul id="search-results-container"></ul>
+ </div>
+</div>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Information-Theoretic Kuplex</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham, Sourav Das, Yuval Efron, Jovan Komatovic, Gilad Stern</strong><br>
+ 
+ <span class="post-meta">Posted on June 5, 2026</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p><a href="https://decentralizedthoughts.github.io/2025-06-18-simplex/">Simplex</a> is
+usually stated with signed quorums that anyone can forward and verify. Here we
+describe an information-theoretic version. Parties have authenticated
+point-to-point channels, but no signatures and no transferable quorums. Each
+party therefore acts only on quorums of messages it received directly.</p>
+<p>The motivation is practical as well as conceptual: avoiding signatures removes
+signature verification from the critical path. Threshold signatures and
+multi-signatures can reduce this overhead in signed protocols, but
+their post-quantum variants currently come with substantial CPU, storage, and
+message-size costs.</p>
+<p>This follows the same information-theoretic direction as
+<a href="https://decentralizedthoughts.github.io/2021-09-20-information-theoretic-hotstuff-it-hs-part-one/">Information Theoretic HotStuff (IT-HS)</a>,
+but applies it to the Simplex/Kuplex view-exit structure.</p>
+<p><strong>Theorem:</strong> <em>IT-Kuplex is a signature-free BFT protocol with a robust
+good-case latency $3\delta$. At $3f+1$, it has a worst-case view latency of
+$3\Delta+2\delta$, and at $4f+1$ it improves to $3\Delta+\delta$.</em></p>
+<p>IT-Kuplex can be seen as a variant of the recent <a href="https://eprint.iacr.org/2026/355">Forget-IT</a> protocol. The main comparison points are:</p>
+<ul>
+ <li>Both protocols obtain a <em>robust</em> good-case latency $3\delta$ as defined in <a href="https://eprint.iacr.org/2026/355">Forget-IT</a>.</li>
+ <li>Forget-IT obtains constant storage. IT-Kuplex is based on <a href="https://decentralizedthoughts.github.io/2025-09-24-Kuplex/">Kuplex</a>, a latency-optimized <a href="https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/">Simplex</a> variant, and can therefore require unbounded skip quorums in extreme executions.</li>
+ <li>Forget-IT has a worst-case view latency of $4\Delta+3\delta$, while IT-Kuplex obtains $3\Delta+2\delta$ for $3f+1$ and $3\Delta+\delta$ for $4f+1$. One of the “$\Delta$ improvements” comes from the <em>aged quorum</em> technique that assumes clocks are synchronized.</li>
+</ul>
+<h2 id="the-view-entrance-gap-aged-quorums-and-robust-good-case-latency">The view entrance gap, aged quorums, and robust good-case latency</h2>
+<p>If a party enters a view as soon as it has a quorum of $n-f$ messages, then
+other parties might receive the $n-2f$ honest messages one delay later, and
+might enter only one delay after that when all honest messages arrive. This
+would create a <em>gap</em> of $2\Delta$.</p>
+<p>We reduce the gap back to $\Delta$ using the following technique, which relies
+on parties having <a href="https://decentralizedthoughts.github.io/2026-03-07-simultaneous-agreement/">synchronized clocks</a>.</p>
+<p>Each sender in a quorum includes the time at which it sent its message.</p>
+<blockquote>
+ <p>Define a quorum to be <strong>aged at time $t$</strong> if <em>all messages in the quorum have
+timestamps that are not later than $t-\Delta$</em>.</p>
+</blockquote>
+<p>Note that Byzantine parties may put arbitrary timestamps on their own messages.</p>
+<p>The <strong>view entrance gap</strong> of a view is the time between the first and last
+honest entrances to that view. With aged quorums the gap after GST is just
+$\Delta$. If an honest party holds an aged quorum at time $t$, then all the
+$n-2f$ honest parties in that quorum sent their messages no later than
+$t-\Delta$, hence all honest parties will receive those messages no later than
+time $t$. Hence all honest parties will send a message that will arrive at all
+other honest parties by time $t+\Delta$, forcing the gap to be at most
+$\Delta$.</p>
+<p>For robust good-case latency, the leader of view $v+1$ may have an aged quorum
+and be ready to propose while other parties may enter view $v+1$ up to $\Delta$
+later. To keep <strong>robust good-case latency</strong> at $3\delta$, a valid proposal can
+make parties send Vote$(v+1,1,x)$ and Final$(v+1,x)$ before they enter view
+$v+1$.</p>
+<h2 id="it-kuplex-with-3f1-parties">IT-Kuplex with $3f+1$ Parties</h2>
+<h3 id="definitions-and-quorums">Definitions and Quorums</h3>
+<p>In this section $n=3f+1$ and $Q=2f+1$.</p>
+<p>The messages in view $v$ are:</p>
+<ol>
+ <li>Vote$(v,g,x)$, the grade-$g$ value vote for a non-$\bot$ value $x$, where
+$g\in{1,2,3}$.</li>
+ <li>Bot$(v,g)$, the grade-$g$ bottom vote, where $g\in{1,2,3}$.</li>
+ <li>Final$(v,x)$, the final message for a non-$\bot$ value $x$.</li>
+</ol>
+<p>The quorums in view $v$ are:</p>
+<ol>
+ <li>$\mathrm{Q1}_v(x)$ is $Q$ Vote$(v,1,x)$ messages. It is used to send
+Final$(v,x)$.</li>
+ <li>$\mathrm{F}_v(x)$ is $Q$ Final$(v,x)$ messages. A party that has it
+decides $x$.</li>
+ <li>$\mathrm{W1}_v$ is $Q$ messages, each either Vote$(v,1,\cdot)$ or
+Bot$(v,1)$, in which no non-$\bot$ value appears at least $f+1$ times.
+After $T_v&gt;2\Delta$, it is used to send Bot$(v,2)$ when <code class="language-plaintext highlighter-rouge">final_lock(v)</code> is
+unset.</li>
+ <li>$\mathrm{Q2}_v(x)$ is $Q$ messages, each either Vote$(v,1,x)$ or
+Vote$(v,2,x)$. It is used to send Vote$(v,3,x)$.</li>
+ <li>$\mathrm{Q3}_v(x)$ is $Q$ Vote$(v,3,x)$ messages. It is used to leave view $v$.</li>
+ <li>$\mathrm{B2}_v$ is $Q$ Bot$(v,2)$ messages. It is the intermediate bottom
+quorum used to send Bot$(v,3)$ and clear <code class="language-plaintext highlighter-rouge">final_lock(v)</code>.</li>
+ <li>$\mathrm{B3}_v$ is $Q$ Bot$(v,3)$ messages. It is the bottom quorum
+used to leave view $v$ without a value.</li>
+</ol>
+<p>An honest party:</p>
+<ul>
+ <li>Sends at most one grade-1 message in a view: either Vote$(v,1,x)$ for one
+value $x$, or Bot$(v,1)$.</li>
+ <li>Sends Final$(v,x)$ and sets <code class="language-plaintext highlighter-rouge">final_lock(v) = x</code> only if it first sent
+Vote$(v,1,x)$, has not sent Bot$(v,2)$ or Bot$(v,3)$, and has not sent a
+grade-1 or grade-2 vote for any $y\neq x$.</li>
+ <li>While <code class="language-plaintext highlighter-rouge">final_lock(v) = x</code>, it sends no Bot$(v,2)$, no
+Bot$(v,3)$, and no grade-1 or grade-2 vote for any $y\neq x$.</li>
+</ul>
+<p>Notes:</p>
+<ul>
+ <li>Unlike grade-1 votes, a party may send grade-2 and grade-3 votes for
+several values.</li>
+ <li>Having <code class="language-plaintext highlighter-rouge">final_lock(v) = x</code> and learning that an honest party saw
+$\mathrm{Q2}_v(y)$ for some $y\neq x$ indicates that $x$ was not decided,
+and hence allows the party to set <code class="language-plaintext highlighter-rouge">final_lock(v) = ⊥</code>.</li>
+ <li>For proposals, honest leaders use aged quorums, while recipients validate
+using unaged quorums.</li>
+ <li>A valid proposal for view $v$ can make a party send Vote$(v,1,x)$,
+send Final$(v,x)$, and decide before it starts <code class="language-plaintext highlighter-rouge">T_v</code>. Bot$(v,1)$ and the
+$\mathrm{W1}_v$ timeout rule still wait for <code class="language-plaintext highlighter-rouge">T_v</code>.</li>
+ <li><code class="language-plaintext highlighter-rouge">final_lock(v)</code> is initially <code class="language-plaintext highlighter-rouge">⊥</code>.</li>
+ <li>Parties start with <code class="language-plaintext highlighter-rouge">view=0</code>. By convention, every party initially has aged
+$\mathrm{B3}_0$.</li>
+</ul>
+<h3 id="the-3f1-it-kuplex-protocol">The $3f+1$ IT-Kuplex Protocol</h3>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>3f+1 IT-Kuplex with view v and designated sender Leader(v):
+1. Upon first having aged Q3_{v-1}(x) or aged B3_{v-1}, if view &lt; v:
+ Set view = v
+ Start timer T_v
+ If this party is Leader(v):
+ Send &lt;Propose, v, x, w&gt; using aged proposal quorums
+2. Upon receiving the first &lt;Propose, v, x, w&gt; from Leader(v), keep it.
+ Upon having a kept proposal:
+ If all hold:
+ - view &lt; v, or (view = v and T_v &lt;= 2Δ)
+ - 0 &lt;= w &lt; v
+ - for every w &lt; y &lt; v: B3_y
+ - w = 0, or Q3_w(x)
+ - no &lt;Vote, v, 1, *&gt; sent
+ - no &lt;Bot, v, 1&gt; sent
+ - final_lock(v) = x or final_lock(v) = ⊥
+ Then Send &lt;Vote, v, 1, x&gt;
+3. Upon T_v = 2Δ and no &lt;Vote, v, 1, *&gt; sent:
+ Send &lt;Bot, v, 1&gt;
+4. Upon Q1_v(x), if all hold:
+ - sent &lt;Vote, v, 1, x&gt;
+ - no &lt;Final, v, *&gt; sent
+ - no &lt;Bot, v, 2&gt; sent
+ - no &lt;Bot, v, 3&gt; sent
+ - no &lt;Vote, v, *, y&gt; sent for y ≠ x
+ Send &lt;Final, v, x&gt;
+ Set final_lock(v) = x
+5. Upon B2_v or f+1 &lt;Bot, v, 3&gt; messages:
+ Set final_lock(v) = ⊥
+6. Upon f+1 &lt;Vote, v, *, x&gt;:
+ If no &lt;Vote, v, 2, x&gt; sent and
+ (final_lock(v) = x or final_lock(v) = ⊥):
+ Send &lt;Vote, v, 2, x&gt;
+7. Upon any of the following holding:
+ - f+1 &lt;Bot, v, *&gt; messages,
+ - T_v &gt; 2Δ and W1_v,
+ If no &lt;Bot, v, 2&gt; sent and final_lock(v) = ⊥,
+ Send &lt;Bot, v, 2&gt;
+8. Upon Q2_v(x), or f+1 &lt;Vote, v, 3, x&gt; messages:
+ If no &lt;Vote, v, 3, x&gt; sent, Send &lt;Vote, v, 3, x&gt;
+9. Upon B2_v, or f+1 &lt;Bot, v, 3&gt; messages:
+ If no &lt;Bot, v, 3&gt; sent and final_lock(v) = ⊥,
+ Send &lt;Bot, v, 3&gt;
+10. Upon F_v(x):
+ Decide x
+</code></pre></div></div>
+<h3 id="why-the-3f1-protocol-works">Why the $3f+1$ Protocol Works</h3>
+<h4 id="claim-1-validity">Claim 1: Validity</h4>
+<p>If an honest party has $\mathrm{F}_v(x)$, $\mathrm{Q2}_v(x)$, or
+$\mathrm{Q3}_v(x)$, then some honest party sent Vote$(v,1,x)$. If the leader
+is honest, then $x$ is the leader’s proposed value.</p>
+<p><strong>Proof.</strong> Byzantine parties alone cannot supply an
+$f+1$ trigger, so every honest grade-2 or grade-3 value vote traces back to
+an honest grade-1 vote for that value. If the leader is honest, the leader fixes the value of
+every honest grade-1 vote.</p>
+<h4 id="claim-2-safety-in-a-view">Claim 2: Safety in a view</h4>
+<p>A final quorum $\mathrm{F}_v(x)$ excludes every conflicting final quorum, value quorum, and bottom quorum in view $v$.</p>
+<p><strong>Proof.</strong> Let $H_x$ be the honest parties that sent Final$(v,x)$ inside the
+final quorum. Since the final quorum has size $Q$, $|H_x|\geq f+1$. We first
+show that no party in $H_x$ ever clears <code class="language-plaintext highlighter-rouge">final_lock(v) = x</code>.</p>
+<p>Before the first such unlock, parties in $H_x$ send no Bot$(v,2)$ and no
+Bot$(v,3)$. Thus a $\mathrm{B2}_v$ quorum cannot exist: it requires at least
+$f+1$ honest Bot$(v,2)$ messages, but there are at most $f$ honest
+parties outside $H_x$. Now consider the first honest sender of Bot$(v,3)$
+before such an unlock. It cannot be triggered by $f+1$ earlier Bot$(v,3)$
+messages, since Byzantine parties alone provide only $f$ of them, so it must
+be triggered by $\mathrm{B2}_v$, impossible. Hence no honest Bot$(v,3)$ is
+sent before the first unlock, and $f+1$ Bot$(v,3)$ messages cannot be
+received. The first unlock cannot occur.</p>
+<p>Thus every party in $H_x$ keeps its lock forever: it sends no Bot$(v,2)$, no
+Bot$(v,3)$, and no grade-1 or grade-2 vote for $y\neq x$.</p>
+<p>A conflicting $\mathrm{Q2}_v(y)$ quorum intersects $H_x$ in an honest party,
+impossible by the previous paragraph. For $\mathrm{Q3}_v(y)$, take the first
+honest sender of Vote$(v,3,y)$. That sender must have received
+$\mathrm{Q2}_v(y)$, because Byzantine parties alone cannot provide $f+1$
+earlier grade-3 votes. But $\mathrm{Q2}_v(y)$ cannot exist.</p>
+<p>Similarly, a $\mathrm{B2}_v$ quorum would intersect $H_x$ in an honest party
+that keeps its final lock, so $\mathrm{B2}_v$ cannot exist. The first honest
+sender of Bot$(v,3)$ therefore cannot be triggered by $\mathrm{B2}_v$, and
+cannot be triggered by $f+1$ earlier Bot$(v,3)$ messages without an honest
+predecessor. Thus
+$\mathrm{B3}_v$ cannot exist. Same-view final uniqueness follows because two
+final quorums intersect in an honest party, and an honest party sends at most
+one Final in a view.</p>
+<h4 id="claim-3-agreement">Claim 3: Agreement</h4>
+<p>No two final quorums, in the same view or in different views, can be for
+different values.</p>
+<p><strong>Proof sketch.</strong> Same-view agreement is Claim 2. For cross-view agreement,
+let $k$ be the first view with a final quorum $\mathrm{F}_k(x)$. Consider the
+first later honest grade-1 vote for $y\neq x$ in a view $r&gt;k$. It was sent
+after accepting a proposal $(r,y,w)$. If $w&lt;k$, the proposal requires
+$\mathrm{B3}_k$, contradicting Claim 2. If $w=k$, it requires
+$\mathrm{Q3}_k(y)$, again contradicting Claim 2. If $k&lt;w&lt;r$, the proposal
+requires $\mathrm{Q3}_w(y)$. By Claim 1, this quorum implies that some honest
+party sent Vote$(w,1,y)$. Since $k&lt;w&lt;r$, this contradicts the choice of $r$ as
+the first later view with an honest grade-1 vote for $y$. Hence no later
+conflicting final quorum can exist.</p>
+<h4 id="claim-4-totality">Claim 4: Totality</h4>
+<p>If an honest party sends Final$(v,x)$, every honest party eventually has
+$\mathrm{Q3}_v(x)$. If an honest party has $\mathrm{Q3}_v(x)$ or
+$\mathrm{B3}_v$, then every honest party eventually has the same kind of
+view-exiting quorum for view $v$.</p>
+<p><strong>Proof.</strong> If an honest party sends Final$(v,x)$, it had
+$\mathrm{Q1}_v(x)$, including $f+1$ honest grade-1 votes. Every honest party
+eventually receives those votes. A conflicting final lock would require a
+$\mathrm{Q1}_v(y)$ quorum for some $y\neq x$, impossible by quorum
+intersection. Hence every honest party sends Vote$(v,2,x)$. Then every honest
+party has $\mathrm{Q2}_v(x)$, sends Vote$(v,3,x)$, and has
+$\mathrm{Q3}_v(x)$.</p>
+<p>Now suppose an honest party has $\mathrm{Q3}_v(x)$ or $\mathrm{B3}_v$. The
+quorum contains at least $f+1$ honest messages of one form: Vote$(v,3,x)$ in
+the first case, Bot$(v,3)$ in the second. Every honest party eventually
+receives them. These messages trigger the same grade-3 message at every honest
+party; in the Bot$(v,3)$ case they first clear <code class="language-plaintext highlighter-rouge">final_lock(v)</code>. Hence all
+honest parties eventually have the same exit quorum.</p>
+<h4 id="claim-5-aged-catch-up-sets-viewv1-within-delta">Claim 5: Aged catch-up sets <code class="language-plaintext highlighter-rouge">view=v+1</code> within $\Delta$</h4>
+<p>After $\mathsf{GST}+\Delta$, whenever an honest party has an aged
+$\mathrm{Q3}<em>v(x)$ or $\mathrm{B3}_v$ at time $t$, all honest parties have the
+corresponding unaged quorum by $t+\delta$ and the corresponding aged quorum by
+$t+\Delta$. Thus any honest party with <code class="language-plaintext highlighter-rouge">view &lt; v+1</code> can set <code class="language-plaintext highlighter-rouge">view=v+1</code> and
+start $T</em>{v+1}$ by $t+\Delta$.</p>
+<p><strong>Proof.</strong> Let $t\geq\mathsf{GST}+\Delta$ be a time at which an honest party
+has an aged $\mathrm{Q3}_v(x)$. The aged quorum contains $f+1$ honest
+grade-3 votes sent by time $t-\Delta$. Every honest party receives them by
+time $t$, sends Vote$(v,3,x)$ by time $t$, and has a quorum of honest grade-3
+votes by time $t+\delta$. Hence it has an aged $\mathrm{Q3}_v(x)$ by time
+$t+\Delta$. An honest leader of view $v+1$ has the unaged quorum by time
+$t+\delta$.</p>
+<p>For $\mathrm{B3}_v$, the aged quorum contains $f+1$ honest Bot$(v,3)$
+messages sent by time $t-\Delta$. Every honest party receives them by time
+$t$, clears <code class="language-plaintext highlighter-rouge">final_lock(v)</code>, sends Bot$(v,3)$ by time $t$, and has a quorum of
+honest Bot$(v,3)$ messages by time $t+\delta$. Hence it has an aged
+$\mathrm{B3}_v$ by time $t+\Delta$, and an honest leader of view $v+1$ has the
+unaged quorum by time $t+\delta$.</p>
+<p>A valid proposal may make a party send Vote$(v+1,1,x)$ and Final$(v+1,x)$
+earlier. Those messages do not set <code class="language-plaintext highlighter-rouge">view=v+1</code> or start $T_{v+1}$.</p>
+<h4 id="claim-6-worst-case-view-latency-is-3delta2delta">Claim 6: Worst-case view latency is $3\Delta+2\delta$</h4>
+<p>Every post-GST view has an aged view-exiting quorum by time
+$t_{\mathsf{start}}+3\Delta+2\delta$, where $t_{\mathsf{start}}$ is the latest
+time at which an honest party sets <code class="language-plaintext highlighter-rouge">view=v</code> and starts $T_v$.</p>
+<p><strong>Proof.</strong> Let</p>
+\[T=t_{\mathsf{start}}+2\Delta+\delta.\]
+<p>If an aged view-exiting quorum already exists by time $T+\Delta+\delta$, we
+are done. If some honest party sets <code class="language-plaintext highlighter-rouge">view &gt; v</code> before its grade-1 timeout in
+view $v$, then it already has an aged view-exiting quorum for $v$ before
+$t_{\mathsf{start}}+2\Delta$; Claim 5 gives every honest party an aged
+view-exiting quorum by the claimed bound. So assume no honest party sets
+<code class="language-plaintext highlighter-rouge">view &gt; v</code> before its grade-1 timeout.
+By time $t_{\mathsf{start}}+2\Delta$, every honest party has sent one grade-1
+message, either Vote$(v,1,\cdot)$ or Bot$(v,1)$. By time $T$, every honest
+party has received all honest grade-1 messages.</p>
+<p>If at least $f+1$ honest grade-1 messages are Vote$(v,1,x)$, then $x$ is
+unique. Every honest party receives those $f+1$ honest votes by time $T$. A
+conflicting Final would require a $\mathrm{Q1}_v(y)$ quorum for some
+$y\neq x$, which cannot coexist with those honest votes. Hence every honest
+party sends Vote$(v,2,x)$ by time $T$. Every honest party has a quorum of
+honest grade-2 votes by time $T+\delta$, sends Vote$(v,3,x)$, and has an aged
+$\mathrm{Q3}_v(x)$ by time $T+\Delta+\delta$.</p>
+<p>Otherwise, the honest grade-1 messages form $\mathrm{W1}_v$ at every honest
+party by time $T$. No final lock can exist, so every honest party sends
+Bot$(v,2)$. Every honest party has a quorum of honest Bot$(v,2)$ messages by
+time $T+\delta$, sends Bot$(v,3)$, and has an aged $\mathrm{B3}_v$ by time
+$T+\Delta+\delta$.</p>
+<p>Since $T+\Delta+\delta=t_{\mathsf{start}}+3\Delta+2\delta$, the claim follows.</p>
+<h4 id="claim-7-robust-good-case-latency-is-3delta">Claim 7: Robust good-case latency is $3\delta$</h4>
+<p>If an honest leader sets <code class="language-plaintext highlighter-rouge">view=v</code> after GST at time $t$ and sends its proposal,
+then all honest parties decide by $t+3\delta$.</p>
+<p><strong>Proof.</strong> The leader’s proposal quorums are aged at the leader by time $t$.
+By Claim 5, every honest party has those quorums unaged by time $t+\delta$.
+The proposal also arrives by time $t+\delta$.</p>
+<p>Thus every honest party can validate the proposal by time $t+\delta$. If it
+has <code class="language-plaintext highlighter-rouge">view &lt; v</code>, the proposal can make it send Vote$(v,1,x)$ before $T_v$
+starts. If it has <code class="language-plaintext highlighter-rouge">view=v</code>, then Claim 5 gives timer value at most
+$\Delta+\delta\leq 2\Delta$. In either case, the grade-1 voting rule passes.
+After sending Vote$(v,1,x)$, an honest party can still send Final$(v,x)$ after
+the cutoff, provided it has not sent Bot$(v,2)$, Bot$(v,3)$, or a grade-1 or
+grade-2 vote for $y\neq x$.
+Every $Q$-sized grade-1 quorum contains at least $Q-f=f+1$ honest messages,
+and in this execution all honest grade-1 messages are Vote$(v,1,x)$. Thus
+$\mathrm{W1}_v$ cannot exist, so the $\mathrm{W1}_v$ rule cannot make it send
+Bot$(v,2)$.</p>
+<p>Thus the proof does not wait for every party to start <code class="language-plaintext highlighter-rouge">T_v</code>: honest parties
+send Vote$(v,1,x)$ by $t+\delta$, send Final$(v,x)$ by $t+2\delta$, and
+decide by $t+3\delta$.</p>
+<p>The honest-leader execution inside the view does not wait for a timeout or an
+aged quorum. The timeout forces a view-exiting quorum in the worst case.</p>
+<h4 id="why-grade-2-is-not-enough-for-3f1">Why Grade 2 Is Not Enough for $3f+1$</h4>
+<p>Leaving on aged $\mathrm{Q2}$ would fail because $\mathrm{Q2}$ does not have
+totality. For example, one honest party may send Final$(v,x)$ and become
+locked against Vote$(v,2,y)$ for $y\neq x$, while another honest party has
+$\mathrm{Q2}_v(y)$. The other honest parties may not have
+$\mathrm{Q2}_v(y)$.</p>
+<p>Grade 3 adds one message delay. On the bottom path, $\mathrm{B2}_v$ contains
+only $f+1$ honest Bot$(v,2)$ messages, which is not enough to unlock honest
+parties. The grade-3 step turns this into $f+1$ honest Bot$(v,3)$ messages,
+which are a proof that unlocking is safe.</p>
+<p>This extra grade gives worst-case view latency $3\Delta+2\delta$ at $3f+1$.
+At $4f+1$, a $Q$-quorum contains $M=2f+1$ honest grade-2 messages, enough to
+prove that any conflicting final lock cannot still lead to a decision, and
+hence that unlocking is safe.
+Thus the protocol can leave on aged $\mathrm{V2}$ or $\mathrm{B2}$ without a
+grade-3 round, removing one $\delta$ term.</p>
+<h2 id="it-kuplex-with-4f1-parties">IT-Kuplex with $4f+1$ Parties</h2>
+<p>Now assume $n=4f+1$, $Q=3f+1$, and $M=2f+1$. Then</p>
+\[Q+M-n=f+1.\]
+<p>Also, every $Q$-quorum contains at least $Q-f=M$ honest messages. These are
+the quorum facts that let the protocol remove the grade-3 echo from the
+$3f+1$ protocol.</p>
+<h3 id="protocol-delta">Protocol Delta</h3>
+<p>Use the $3f+1$ protocol with these changes.</p>
+<ol>
+ <li>Delete grade 3: no Vote$(v,3,x)$, no Bot$(v,3)$, no $\mathrm{Q3}$, and no
+$\mathrm{B3}$.</li>
+ <li>The view-exiting and proposal quorums are now $\mathrm{V2}_v(x)$, a
+$Q$-quorum of Vote$(v,2,x)$ messages, and $\mathrm{B2}_v$, a $Q$-quorum of
+Bot$(v,2)$ messages. The initial aged quorum is $\mathrm{B2}_0$.</li>
+ <li>The proposal rule uses $\mathrm{V2}_w(x)$ and $\mathrm{B2}_y$ instead of
+$\mathrm{Q3}_w(x)$ and $\mathrm{B3}_y$; it has no
+<code class="language-plaintext highlighter-rouge">final_lock(v) = x or final_lock(v) = ⊥</code> guard.</li>
+ <li>Let $\mathrm{M1}_v(x)$ be $M$ Vote$(v,1,x)$ messages, and let
+$\mathrm{W1}_v$ be $Q$ grade-1 messages in which no value appears at least
+$M$ times.</li>
+ <li>Let $\mathrm{U2}_v(x)$ be $M$ messages, each either Vote$(v,2,y)$ for some
+$y\neq x$, or Bot$(v,2)$. A party with <code class="language-plaintext highlighter-rouge">final_lock(v) = x</code> clears the lock on
+$\mathrm{U2}_v(x)$.</li>
+ <li><code class="language-plaintext highlighter-rouge">final_lock(v)</code> is unset until the party sends Final$(v,x)$, and is then
+set to $x$. While <code class="language-plaintext highlighter-rouge">final_lock(v) = x</code>, the party sends no Bot$(v,2)$ and no
+Vote$(v,2,y)$ for $y\neq x$; Vote$(v,2,x)$ remains allowed.</li>
+ <li>A party sends Vote$(v,2,x)$ on $\mathrm{M1}_v(x)$ or on $f+1$
+Vote$(v,2,x)$ messages, if it is unlocked or locked on $x$.</li>
+ <li>A party sends Bot$(v,2)$ on $f+1$ Bot$(v,1)$ messages, on timeout with
+$\mathrm{W1}_v$, or on $f+1$ Bot$(v,2)$ messages, if it is unlocked.</li>
+ <li>A party decides on $\mathrm{F}_v(x)$ as before. After setting <code class="language-plaintext highlighter-rouge">view &gt; v</code>,
+it still runs the unlock, grade-2, and decision rules for view $v$.</li>
+</ol>
+<p>A valid proposal can make a party send Vote$(v,1,x)$ and Final$(v,x)$ before
+it starts <code class="language-plaintext highlighter-rouge">T_v</code>.</p>
+<h3 id="proof-delta">Proof Delta</h3>
+<p>Value origin is unchanged. A final quorum contains an honest Final$(v,x)$
+sender, and every honest Vote$(v,2,x)$ traces back to an honest Vote$(v,1,x)$.</p>
+<p>For same-view safety, suppose $\mathrm{F}_v(x)$ exists. Let $H_x$ be the
+honest parties that sent Final$(v,x)$; then $|H_x|\geq M$. Before the first
+unlock by a party in $H_x$, a $\mathrm{U2}_v(x)$ proof can contain honest
+messages only from outside $H_x$, and there are at most $f$ such parties.
+Together with the $f$ Byzantine parties this is fewer than $M$ messages, so
+the first unlock cannot occur. Thus the parties in $H_x$ never send
+Bot$(v,2)$ or Vote$(v,2,y)$ for $y\neq x$, which excludes every conflicting
+$\mathrm{V2}_v(y)$ and $\mathrm{B2}_v$.</p>
+<p>Cross-view agreement is the same minimal-later-view argument as before, with
+$\mathrm{V2}$ replacing $\mathrm{Q3}$ and $\mathrm{B2}$ replacing
+$\mathrm{B3}$.</p>
+<p>Totality is where $4f+1$ saves a grade. If an honest party sends Final$(v,x)$,
+then its $\mathrm{Q1}_v(x)$ contains $M$ honest Vote$(v,1,x)$ messages; every
+honest party eventually receives them. A conflicting lock would require
+$\mathrm{Q1}_v(y)$ for some $y\neq x$, impossible by intersection, so every
+honest party sends Vote$(v,2,x)$. If an honest party has $\mathrm{V2}_v(x)$ or
+$\mathrm{B2}_v$, that quorum contains $M$ honest grade-2 messages. Those
+messages unlock any conflicting honest lock and make every honest party send
+the matching grade-2 message.</p>
+<p>After $\mathsf{GST}+\Delta$, an aged $\mathrm{V2}<em>v(x)$ or $\mathrm{B2}_v$ at
+time $t$ contains $M$ honest grade-2 messages sent by time $t-\Delta$. Every
+honest party receives them by time $t$, unlocks if needed, and sends the
+matching grade-2 message by time $t$. Hence every honest party has the same
+unaged exit quorum by $t+\delta$ and the same aged exit quorum by $t+\Delta$.
+Future-view Vote and Final messages may arrive earlier, but they do not set
+<code class="language-plaintext highlighter-rouge">view=v+1</code> or start $T</em>{v+1}$.</p>
+<p>For worst-case latency, let $t_{\mathsf{start}}$ be the latest time an honest
+party sets <code class="language-plaintext highlighter-rouge">view=v</code> and starts $T_v$. If an aged exit quorum already exists, the
+aged catch-up argument applies. Otherwise, by
+$t_{\mathsf{start}}+2\Delta+\delta$ every honest party has all honest grade-1
+messages. If $M$ honest grade-1 messages are Vote$(v,1,x)$, every honest party
+sends Vote$(v,2,x)$. Otherwise every honest party has $\mathrm{W1}_v$ and no
+final lock can exist, so every honest party sends Bot$(v,2)$. The exit quorum
+is aged one $\Delta$ later, so the worst-case view latency is
+$3\Delta+\delta$.</p>
+<p>The honest-leader good case is unchanged: the proposal arrives and validates by
+$t+\delta$, honest parties send Vote$(v,1,x)$ by $t+\delta$, send
+Final$(v,x)$ by $t+2\delta$, and decide by $t+3\delta$.</p>
+<h2 id="relation-to-simplex">Relation to Simplex</h2>
+<p>These protocols fit the decomposition in
+<a href="https://decentralizedthoughts.github.io/2026-04-23-deconstructing-simplex/">Deconstructing Simplex</a>
+and the broader <a href="https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/">Simplex chapter</a>:
+the outer proposal rule is unchanged, and each view runs an
+information-theoretic IT-Kuplex instance instead of signed Graded Broadcast.
+The only interface change is that quorums are directly received, so the
+$3f+1$ value and bottom quorums are $\mathrm{Q3}$ and $\mathrm{B3}$, while the
+$4f+1$ quorums are $\mathrm{V2}$ and $\mathrm{B2}$. Parties advance only on
+aged value or bottom quorums; a future-view proposal can be buffered and then
+validated once the required unaged quorums arrive.</p>
+<h2 id="notes">Notes</h2>
+<ul>
+ <li><a href="https://decentralizedthoughts.github.io/2021-09-20-information-theoretic-hotstuff-it-hs-part-one/">Information Theoretic HotStuff (IT-HS)</a>
+is an earlier signature-free treatment of a HotStuff-style protocol. IT-HS
+replaces signed certificates with authenticated message passing and boosting.
+IT-Kuplex uses the same information-theoretic lens, but starts from
+Simplex/Kuplex and uses aged quorums to keep the post-GST view entrance gap
+to one $\Delta$.</li>
+</ul>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Information-Theoretic+Kuplex&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2026-06-05-IT-Kuplex%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2026-05-25-chapter-simplex/" data-toggle="tooltip" data-placement="top" title="Chapter: Simplex">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ 
+ Decentralized Thinkers
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

@@ -127,6 +127,13 @@ the picture. Kudzu is designed around a fast path and high throughput. The
 Kuplex post extracts the $3f+1$ view latency aspect into a Simplex style
 variant.
 
+[Information-Theoretic Kuplex](https://decentralizedthoughts.github.io/2026-06-05-IT-Kuplex/)
+takes this same view-latency direction without signatures. Quorums are no
+longer transferable certificates, so parties act only on messages they receive
+directly. The post uses aged quorums to recover a one-$\Delta$ view entrance
+gap after GST, obtaining robust $3\delta$ good-case latency, worst-case view
+latency $3\Delta+2\delta$ at $n=3f+1$, and $3\Delta+\delta$ at $n=4f+1$.
+
 ## Two Round Good Case With More Validators
 
 The second direction asks for a different improvement: can an honest leader
@@ -273,6 +280,7 @@ For background on partial synchrony BFT, read:
 For same resilience latency variants, read:
 
 * [C-Simplex and Kuplex](https://decentralizedthoughts.github.io/2025-09-24-Kuplex/)
+* [Information-Theoretic Kuplex](https://decentralizedthoughts.github.io/2026-06-05-IT-Kuplex/)
 
 For two round good case variants, read:
 

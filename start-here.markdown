@@ -77,6 +77,7 @@ The Byzantine setting:
 - [2-round BFT in Simplex style for n=5f-1](https://decentralizedthoughts.github.io/2025-08-06-5fminus1-simplex/)
 - [Concurrent 2-round and 3-round Simplex-style BFT](https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/)
 - [Variants of Simplex with Reduced Bad-case Latency: C-Simplex and Kuplex](https://decentralizedthoughts.github.io/2025-09-24-Kuplex/)
+- [Information-Theoretic Kuplex](https://decentralizedthoughts.github.io/2026-06-05-IT-Kuplex/)
 - [Concurrent 2-round and 3-round BFT protocols under granular synchrony](https://decentralizedthoughts.github.io/2026-01-24-two-round-ps/)
 - [Partial Synchrony variants](https://decentralizedthoughts.github.io/2025-12-19-cc-under-harsh-ps/).
 - [Deconstructing Simplex](https://decentralizedthoughts.github.io/2026-04-23-deconstructing-simplex/).

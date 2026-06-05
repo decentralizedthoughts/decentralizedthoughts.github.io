@@ -11,6 +11,20 @@
  
  
  <item>
+ <title>Information-Theoretic Kuplex</title>
+ 
+ <dc:creator><![CDATA[ Ittai Abraham, Sourav Das, Yuval Efron, Jovan Komatovic, Gilad Stern ]]></dc:creator>
+ 
+ <description>
+ 
+ Simplex is usually stated with signed quorums that anyone can forward and verify. Here we describe an information-theoretic version. Parties have authenticated point-to-point channels, but no signatures and no transferable quorums. Each party therefore acts only on quorums of messages it received directly. The motivation is practical as well as conceptual: avoiding signatures removes signature verification from the critical path. Threshold signatures and multi-signatures can reduce this overhead in signed...
+ </description>
+ <pubDate>Fri, 05 Jun 2026 05:00:00 -0400</pubDate>
+ <link>https://decentralizedthoughts.github.io/2026-06-05-IT-Kuplex/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-06-05-IT-Kuplex/</guid>
+ </item>
+ 
+ <item>
  <title>Chapter: Simplex</title>
  
  <dc:creator><![CDATA[ Ittai Abraham ]]></dc:creator>
@@ -274,20 +288,6 @@
  <pubDate>Fri, 12 Dec 2025 07:00:00 -0500</pubDate>
  <link>https://decentralizedthoughts.github.io/2025-12-12-dpaas/</link>
  <guid isPermaLink="true">https://decentralizedthoughts.github.io/2025-12-12-dpaas/</guid>
- </item>
- 
- <item>
- <title>Scalable Agreement - Near Linear Communication and Constant Expected Time</title>
- 
- <dc:creator><![CDATA[ Ittai Abraham ]]></dc:creator>
- 
- <description>
- 
- Agreement needs quadratic communication and linear time in the worst case. Scalable Agreement aims for near linear communication and constant time in expectation. In this post, we show scalable agreement against a weak adaptive adversary that can cause omission failures. This will be the basis for the Byzantine case that we will explore in future posts. This post can be seen as followup to the posts that solve binary consensus...
- </description>
- <pubDate>Fri, 12 Dec 2025 06:00:00 -0500</pubDate>
- <link>https://decentralizedthoughts.github.io/2025-12-12-scalable-agreement/</link>
- <guid isPermaLink="true">https://decentralizedthoughts.github.io/2025-12-12-scalable-agreement/</guid>
  </item>
  
  </channel>
