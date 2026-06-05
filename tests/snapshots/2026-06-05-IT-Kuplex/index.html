@@ -572,11 +572,13 @@ honest party sends Vote$(v,2,x)$. If an honest party has $\mathrm{V2}_v(x)$ or
 $\mathrm{B2}_v$, that quorum contains $M$ honest grade-2 messages. Those
 messages unlock any conflicting honest lock and make every honest party send
 the matching grade-2 message.</p>
-<p>After $\mathsf{GST}+\Delta$, an aged $\mathrm{V2}<em>v(x)$ or $\mathrm{B2}_v$ at
-time $t$ contains $M$ honest grade-2 messages sent by time $t-\Delta$. Every
-honest party receives them by time $t$, unlocks if needed, and sends the
-matching grade-2 message by time $t$. Hence every honest party has the same
-unaged exit quorum by $t+\delta$ and the same aged exit quorum by $t+\Delta$.
+<p>Consider any time $t$ satisfying</p>
+\[t\geq \mathsf{GST}+\Delta.\]
+<p>An aged $\mathrm{V2}<em>v(x)$ or $\mathrm{B2}_v$ at time $t$ contains $M$ honest
+grade-2 messages sent by time $t-\Delta$. Every honest party receives them by
+time $t$, unlocks if needed, and sends the matching grade-2 message by time
+$t$. Hence every honest party has the same unaged exit quorum by $t+\delta$
+and the same aged exit quorum by $t+\Delta$.
 Future-view Vote and Final messages may arrive earlier, but they do not set
 <code class="language-plaintext highlighter-rouge">view=v+1</code> or start $T</em>{v+1}$.</p>
 <p>For worst-case latency, let $t_{\mathsf{start}}$ be the latest time an honest
@@ -610,6 +612,8 @@ replaces signed certificates with authenticated message passing and boosting.
 IT-Kuplex uses the same information-theoretic lens, but starts from
 Simplex/Kuplex and uses aged quorums to keep the post-GST view entrance gap
 to one $\Delta$.</li>
+ <li>For discussion, see the
+<a href="https://x.com/ittaia/status/2063020077491143037?s=20">announcement thread</a>.</li>
 </ul>
  </div>
  
