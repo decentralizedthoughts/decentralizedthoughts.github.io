@@ -1,10 +1,10 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-06-05T10:15:27Z",
+  "fetched_at": "2026-06-05T20:11:42Z",
   "items": [
     {
       "path": "/2026-05-25-chapter-simplex/",
-      "views": 151
+      "views": 152
     },
     {
       "path": "/start-here/",
@@ -12,7 +12,7 @@
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 82
+      "views": 84
     },
     {
       "path": "/2026-05-20-from-single-shot-to-chained/",
@@ -24,7 +24,7 @@
     },
     {
       "path": "/2019-06-27-defining-consensus/",
-      "views": 54
+      "views": 55
     }
   ]
 }
