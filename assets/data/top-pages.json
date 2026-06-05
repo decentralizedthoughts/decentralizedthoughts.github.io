@@ -1,18 +1,18 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-06-04T20:23:47Z",
+  "fetched_at": "2026-06-05T10:15:27Z",
   "items": [
     {
       "path": "/2026-05-25-chapter-simplex/",
-      "views": 136
+      "views": 151
     },
     {
       "path": "/start-here/",
-      "views": 116
+      "views": 112
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 80
+      "views": 82
     },
     {
       "path": "/2026-05-20-from-single-shot-to-chained/",
@@ -20,11 +20,11 @@
     },
     {
       "path": "/2020-08-28-what-is-a-cryptographic-hash-function/",
-      "views": 70
+      "views": 68
     },
     {
-      "path": "/2019-06-01-2019-5-31-models/",
-      "views": 59
+      "path": "/2019-06-27-defining-consensus/",
+      "views": 54
     }
   ]
 }
