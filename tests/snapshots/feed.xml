@@ -143,7 +143,7 @@
  
  <description>
  
- In a previous post we decomposed PBFT into an outer shell and an inner shell consisting of two building blocks: Locked-Broadcast (LB) and Recover-Max-Lock. Here we similarly decompose Simplex into an outer shell and an inner shell consisting of a single building block: Graded-Broadcast (GB). For a map of the surrounding Simplex line, see the Simplex chapter. The model is partial synchrony with $f&amp;lt;n/3$ Byzantine failures, and the goal is...
+ In a previous post we decomposed PBFT into an outer shell and an inner shell consisting of two building blocks: Locked-Broadcast (LB) and Recover-Max-Lock. Here we similarly decompose Simplex into an outer shell and an inner shell consisting of a single building block: Certifying Graded Broadcast (CGB). For a map of the surrounding Simplex line, see the Simplex chapter. The model is partial synchrony with $f&amp;lt;n/3$ Byzantine failures, and the...
  </description>
  <pubDate>Thu, 23 Apr 2026 01:00:00 -0400</pubDate>
  <link>https://decentralizedthoughts.github.io/2026-04-23-deconstructing-simplex/</link>

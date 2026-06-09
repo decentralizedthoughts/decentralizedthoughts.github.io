@@ -224,7 +224,11 @@
  <p><strong>Complex</strong> obtains worst-case view latency of $3\Delta+\delta$ (as good as Simplex) and requires just a constant number of certificates (as good as Tendermint).</p>
 </blockquote>
 <p>We use the framework of <a href="https://decentralizedthoughts.github.io/2026-04-23-deconstructing-simplex/">our previous post on deconstructing Simplex</a> to similarly deconstruct Complex into an outer shell and an inner shell. This allows us to derive Complex with relatively few changes.</p>
-<p>The inner shell of Complex is similar to Simplex; in particular, it uses the same <em>Graded-Broadcast</em>. The outer shell of Complex is similar to Tendermint (and key based HotStuff) with a small Simplex-like modification. Finally, the external-validity rule of Graded-Broadcast is similar to Tendermint: vote only if the proposed lock is at least as large as yours.</p>
+<p>The inner shell of Complex is similar to Simplex; in particular, it uses the
+same <em>Certifying Graded Broadcast</em> (CGB). The outer shell of Complex is similar
+to Tendermint (and key based HotStuff) with a small Simplex-like modification.
+Finally, the external-validity rule of CGB is similar to Tendermint: vote only
+if the proposed lock is at least as large as yours.</p>
 <p>For a map of the surrounding Simplex line, see the <a href="https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/">Simplex chapter</a>.</p>
 <h2 id="complex-outer-shell">Complex outer shell</h2>
 <p>Each party maintains three sets: <code class="language-plaintext highlighter-rouge">lockSet</code> (lock certificates it directly delivered), <code class="language-plaintext highlighter-rouge">keySet</code> (all lock certificates it has seen, including forwarded ones), and <code class="language-plaintext highlighter-rouge">skipSet</code> (skip certificates it has delivered). Initially all three are empty.</p>
@@ -234,25 +238,26 @@
  let p in keySet be the lock
  certificate of highest view w
  if w = v-1
- Graded-Broadcast (v, p.val,
+ CGB(v, p.val,
  (p, ⊥))
  otherwise (w &lt; v-1)
  let s in skipSet be the skip
  certificate for view v-1
- Graded-Broadcast (v, p.val,
+ CGB(v, p.val,
  (p, s))
  otherwise
  if v &gt; 1
  let s in skipSet be the skip
  certificate for view v-1
- Graded-Broadcast (v, val,
+ CGB(v, val,
  (val-proof, s))
  otherwise (v = 1)
- Graded-Broadcast (1, val,
+ CGB(1, val,
  (val-proof, ⊥))
 </code></pre></div></div>
 <p>Note that checking that the certificate in the proposal is at least as large as the party’s lock is the essence of Tendermint’s safety rule. The small modification is also requiring a skip certificate for view v-1 when the lock is from a lower view.</p>
-<p>Complex uses the following event handlers (certificates can arrive from Graded-Broadcast or be forwarded):</p>
+<p>Complex uses the following event handlers (certificates can arrive from CGB or
+be forwarded):</p>
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>On first skip certificate for view v,
  add it to skipSet,
  and move to view v+1
@@ -265,7 +270,8 @@ On first strong certificate,
 On receiving a forwarded lock certificate
  for the first time, add it to keySet
 </code></pre></div></div>
-<p>The <strong>Complex voting rule</strong> is the external-validity function passed to <a href="https://decentralizedthoughts.github.io/2026-04-23-deconstructing-simplex/">Graded-Broadcast</a>:</p>
+<p>The <strong>Complex voting rule</strong> is the external-validity function passed to
+<a href="https://decentralizedthoughts.github.io/2026-04-23-deconstructing-simplex/">Certifying Graded Broadcast</a>:</p>
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>For view v:
  if receive (v, p.val, (p,s))
  check that p is a valid lock certificate
@@ -290,19 +296,58 @@ On receiving a forwarded lock certificate
  <li>A lock in view $v-1$ may be hidden from the leader of view $v$, but that means the leader of view $v$ will hold a skip certificate for view $v-1$. The leader can use this skip certificate to unlock the holders of certificates from view $v-1$.</li>
 </ol>
 <h2 id="proving-complex">Proving Complex</h2>
-<p>We now prove that Complex implements single-shot provable consensus with external validity. The proof uses the six properties of <a href="https://decentralizedthoughts.github.io/2026-04-23-deconstructing-simplex/">Graded-Broadcast</a> together with the Complex voting rule and the outer-shell view-transition rule.</p>
+<p>We now prove that Complex implements single-shot provable consensus with
+external validity. The proof uses the five properties of
+<a href="https://decentralizedthoughts.github.io/2026-04-23-deconstructing-simplex/">Certifying Graded Broadcast</a>
+together with the Complex voting rule and the outer-shell view-transition rule.</p>
 <p>In fact, we will prove the stronger accountable-safety property for Complex.</p>
 <h3 id="claim-1-accountable-safety">Claim 1 (accountable safety)</h3>
 <p>Complex satisfies Provable Agreement via the stronger <em>accountable safety</em> property: any safety violation implicates at least $f+1$ identifiable faulty parties, and since at most $f$ parties are Byzantine, no violation can occur.</p>
-<p>Let $k$ be the first view with a valid commit certificate for value $x$, and let $S_2$ be the $n-f$ parties that voted Final in Graded-Broadcast view $k$. If a valid lock certificate for value $x’ \neq x$ exists in any view $v \geq k$, then at least $f+1$ parties in $S_2$ demonstrably violated the Complex voting rule.</p>
-<p><em>Grade Safety</em> implies no skip certificate for view $k$ exists, and <em>Uniqueness</em> implies every valid lock certificate in view $k$ has value $x$. No lock for $x’ \neq x$ can form in view $k+1$ either: the only admissible proposal there uses a view-$k$ lock (no skip for view $k$ is available), which has value $x$ by <em>Uniqueness</em>.</p>
-<p>For the first view $v^- \geq k+2$ with a lock for $x’ \neq x$, let $L$ be its $n-f$ voters. Quorum intersection gives $|S_2 \cap L| \geq n-2f &gt; f$. Every $i \in S_2 \cap L$ holds a view-$k$ lock (value $x$) in its <code class="language-plaintext highlighter-rouge">lockSet</code> (a non-$(v^–1)$ lock since $v^- \geq k+2$) yet voted for a proposal with lock $q$ where $q.\text{view} &lt; k$ (every lock in views $[k, v^-)$ has value $x$ by the above). This violates the maximality condition of the Complex voting rule and is detectable from the commit certificate, the lock for $v^-$, and the proposal. Since $|S_2 \cap L| &gt; f$, at least $f+1$ violators are identified, and Provable Agreement follows.</p>
+<p>Let $k$ be the first view with a valid commit certificate for value $x$, and
+let $S_2$ be the $n-f$ parties that voted Final in
+CGB view $k$. If a valid lock certificate for value $x’ \neq x$ exists in any
+view $v \geq k$, then at least $f+1$ parties in $S_2$ demonstrably violated the
+Complex voting rule.</p>
+<p><em>Strong-Grade Safety</em> implies no skip certificate for view $k$ exists, and no
+valid lock certificate in view $k$ has value different from $x$. No lock for
+$x’ \neq x$ can form in view $k+1$ either: any admissible proposal either uses
+a view-$k$ lock, which has value $x$ by <em>Strong-Grade Safety</em>, or requires a
+skip certificate for view $k$, which <em>Strong-Grade Safety</em> excludes.</p>
+<p>For the first view $v^- \geq k+2$ with a lock for $x’ \neq x$, let $L$ be its
+$n-f$ voters. Quorum intersection gives $|S_2 \cap L| \geq n-2f &gt; f$. Every
+$i \in S_2 \cap L$ holds a view-$k$ lock (value $x$) in its <code class="language-plaintext highlighter-rouge">lockSet</code> (a
+non-$(v^–1)$ lock since $v^- \geq k+2$). Since every lock in views
+$[k, v^-)$ has value $x$ by the choice of $v^-$, the conflicting proposal must
+be either fresh or justified by a lock $q$ with $q.\text{view}&lt;k$. In either
+case, each party in $S_2 \cap L$ violated the Complex voting rule: a fresh
+proposal violates the <code class="language-plaintext highlighter-rouge">lockSet</code>-empty check, and a proposal justified by
+$q.\text{view}&lt;k$ violates the maximality condition. The violation is
+detectable from the commit certificate, the lock for $v^-$, and the proposal.
+Since $|S_2 \cap L| &gt; f$, at least $f+1$ violators are identified, and
+Provable Agreement follows.</p>
 <h3 id="external-validity">External Validity</h3>
-<p>Any valid commit certificate is a valid strong certificate of some Graded-Broadcast instance. By the <em>External Validity</em> property of Graded-Broadcast, its value must be externally valid.</p>
+<p>Any valid commit certificate is a valid strong certificate of some CGB instance.
+By the <em>External Validity</em> property of CGB, its value must be externally valid.</p>
 <h3 id="claim-2-liveness">Claim 2 (liveness)</h3>
 <p>All honest parties eventually hold a valid commit certificate.</p>
-<p>If any honest party delivers a strong certificate, <em>Totality</em> propagates it to all. Otherwise, consider the first post-GST view $v^+$ with an honest leader that starts after all earlier certificates have propagated. By <em>Liveness</em>, every earlier view delivered a lock or skip certificate; by the $\Delta$-gap part of <em>Liveness</em>, all honest parties enter $v^+$ within $\Delta$ of each other, satisfying <em>Strong Validity</em>’s premise.</p>
-<p>If <code class="language-plaintext highlighter-rouge">keySet</code> is non-empty, the primary proposes its highest lock $p$ (view $w$) paired with $\bot$ if $w = v^+-1$, or the skip for view $v^+-1$ otherwise. If <code class="language-plaintext highlighter-rouge">keySet</code> is empty, it proposes its own externally valid input with the skip for view $v^+-1$ (or vacuously for $v^+ = 1$). In both cases the proposal satisfies the Complex voting rule: the skip condition holds by the above, and the maximality condition holds because all delivered lock certificates have propagated, so the primary’s highest lock in <code class="language-plaintext highlighter-rouge">keySet</code> dominates every non-$(v^+-1)$ lock in any honest party’s <code class="language-plaintext highlighter-rouge">lockSet</code> (or both are empty). By <em>Strong Validity</em>, all honest parties deliver a strong certificate in view $v^+$.</p>
+<p>If any honest party delivers a strong certificate, <em>Certificate Totality</em>
+propagates it to all. Otherwise, consider the first post-GST view $v^+$ with an
+honest leader that starts after all earlier certificates have propagated. By
+<em>Certificate Liveness</em>, every earlier view delivered a lock or skip
+certificate. Since all earlier certificates have propagated, the leader has all
+delivered locks and skips. By the $\Delta$-gap part of <em>Certificate Liveness</em>,
+all honest parties enter $v^+$ within $\Delta$ of each other. Thus the premise
+of <em>Synchronous Strong Validity</em> holds.</p>
+<p>If <code class="language-plaintext highlighter-rouge">keySet</code> is non-empty, the primary proposes its highest lock $p$ (view $w$)
+paired with $\bot$ if $w = v^+-1$, or the skip for view $v^+-1$ otherwise. If
+<code class="language-plaintext highlighter-rouge">keySet</code> is empty, it proposes its own externally valid input with the skip for
+view $v^+-1$ (or vacuously for $v^+ = 1$). In both cases the proposal satisfies
+the Complex voting rule: the skip condition holds by the above, and the
+maximality condition holds because all delivered lock certificates have
+propagated, so the primary’s highest lock in <code class="language-plaintext highlighter-rouge">keySet</code> dominates every
+non-$(v^+-1)$ lock in any honest party’s <code class="language-plaintext highlighter-rouge">lockSet</code> (or both are empty). By
+<em>Synchronous Strong Validity</em>, all honest parties deliver a strong certificate
+in view $v^+$.</p>
 <h2 id="notes">Notes</h2>
 <ul>
  <li>

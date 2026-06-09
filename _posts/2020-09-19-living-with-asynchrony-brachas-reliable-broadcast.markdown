@@ -81,7 +81,9 @@ The pseudo-code is simple:
 
 5. Christian Cachin has [excellent course notes](https://dcl.epfl.ch/site/_media/education/sdc_byzconsensus.pdf) on Byzantine Broadcasts and Randomized Consensus including Bracha's Reliable broadcast.
 
-6. This post is background for the Simplex chapter's discussion of Graded Broadcast and external validity; see the [Simplex chapter](https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/).
+6. This post is background for the Simplex chapter's discussion of
+   Certifying Graded Broadcast (CGB) and external validity; see the
+   [Simplex chapter](https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/).
 
 ### Scratch your Brains!
 

@@ -78,8 +78,8 @@ chain based viewpoint behind the benign construction.
 turns the protocol into two pieces:
 
 1. an outer proposal rule that says when a proposal is valid based on previous value certificates and skip certificates;
-2. an inner Graded Broadcast instance that produces a regular certificate, a
-   strong certificate, or a skip certificate for each view.
+2. an inner Certifying Graded Broadcast (CGB) instance that produces a regular
+   certificate, a strong certificate, or a skip certificate for each view.
 
 We will use this decomposition in the rest of the chapter. Many Simplex
 variants leave the outer proposal rule essentially unchanged and replace the inner
@@ -99,7 +99,8 @@ on
 [PBFT via Locked Broadcast and Recover Max Lock](https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/).
 PBFT style protocols prove safety by collecting enough locks. Simplex proves
 safety by showing skip certificates for the views that might otherwise hide a
-decision. The inner Graded Broadcast is also close in spirit to authenticated
+decision. The inner CGB building block is also close
+in spirit to authenticated
 [Reliable Broadcast](https://decentralizedthoughts.github.io/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/)
 with external validity, in the framework of
 [Cachin, Kursawe, Petzold, and Shoup](https://www.iacr.org/archive/crypto2001/21390524.pdf).
@@ -249,11 +250,11 @@ state bounded, but pays an extra wait. Complex is the middle point: it keeps
 the Simplex view latency $3\Delta+\delta$ while requiring only a constant
 number of certificates per view.
 
-The way Complex does this is to keep the Simplex inner Graded Broadcast and
-change the outer proposal rule toward a Tendermint style lock rule. A proposal
-uses a recent lock certificate, and if the lock is not from the immediately
-previous view, it also includes a skip certificate for the previous view. This
-turns the long Simplex list of intervening skips into a constant size check.
+The way Complex does this is to keep the Simplex inner CGB and change the
+outer proposal rule toward a Tendermint style lock rule. A proposal uses a
+recent lock certificate, and if the lock is not from the immediately previous
+view, it also includes a skip certificate for the previous view. This turns the
+long Simplex list of intervening skips into a constant size check.
 
 
 ## Reading Map
