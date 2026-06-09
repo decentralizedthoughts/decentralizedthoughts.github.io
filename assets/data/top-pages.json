@@ -1,10 +1,10 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-06-08T20:31:56Z",
+  "fetched_at": "2026-06-09T10:02:25Z",
   "items": [
     {
       "path": "/2026-05-25-chapter-simplex/",
-      "views": 168
+      "views": 176
     },
     {
       "path": "/2022-03-30-asynchronous-agreement-part-two-ben-ors-protocol/",
@@ -12,19 +12,19 @@
     },
     {
       "path": "/start-here/",
-      "views": 122
+      "views": 119
     },
     {
       "path": "/2026-06-05-IT-Kuplex/",
-      "views": 100
+      "views": 118
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 86
+      "views": 85
     },
     {
       "path": "/2019-06-01-2019-5-31-models/",
-      "views": 56
+      "views": 57
     }
   ]
 }
