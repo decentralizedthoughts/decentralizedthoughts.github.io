@@ -29,7 +29,7 @@ A token $T$ is a pair $(P, \sigma)$ where $P$ is a public key and $\sigma = \tex
 
 A token $T=(P,\sigma)$ is *unspent* relative to a nullifier set $N$ if $P \notin N$.
 
-### Payment protocol
+### Payment protocol: interactive, linkable, and with a central bank
 
 Suppose Alice has a signing key $sk_a$ with associated public key $PK_a$ (i.e., a **signing key pair**) and a token $(PK_a, \sigma_a)$ and wants to pay Bob: 
 
@@ -44,7 +44,7 @@ Suppose Alice has a signing key $sk_a$ with associated public key $PK_a$ (i.e., 
     
     If all hold:
     * Mark the token as spent by adding $PK_a$ to $N$
-    * Issue a new token for Bob by computing $\sigma_b \leftarrow \textsf{Sign}(s, PK_b)$ and output $\sigma_b$.
+    * Issue a new token for Bob by computing $\sigma_b \leftarrow \textsf{Sign}(s, PK_b)$ and publishing $\sigma_b$.
 
 
 The scheme satisfies the following properties, assuming secure digital signatures and computationally-bounded adversaries:
@@ -86,10 +86,11 @@ Here is a version of the payment protocol that is based on [provable broadcast](
     * The transaction is authorized: $\textsf{Verify}(PK_a,((PK_a,\sigma_a), PK_b),\tau_a)=1$
     * The token is issued by the bank: $\textsf{Verify}(PK, PK_a,\sigma_a)=1$
     * The token is unspent: $PK_a \notin N_i$
-    If all hold, server $i$ adds $PK_a$ to $N_i$ and computes a signature share $\sigma_{i} \leftarrow \textsf{Sign}(s_i, PK_b)$ and outputs $\sigma_{i}$.
-5. Any party (in particular, Bob) seeing at least $2f+1$ valid signature shares on $PK_b$ from distinct servers combines them to form $\sigma = \textsf{Sign}(s, PK_b)$, a signature under the key $s$. This creates a new token $(PK_b, \sigma_b)$.
 
-Since $n=3f+1$, any two sets of $2f+1$ servers intersect in at least one honest server, and an honest server will not sign two different spend requests for the same $PK_a$. In other words, two conflicting transactions cannot both obtain a valid quorum certificate $\sigma$.
+    If all hold, server $i$ adds $PK_a$ to $N_i$, computes a signature share $\sigma_{i} \leftarrow \textsf{Sign}(s_i, PK_b)$, and publishes $\sigma_{i}$.
+5. Any party (in particular, Bob) seeing at least $2f+1$ valid signature shares on $PK_b$ from distinct servers combines them to form $\sigma_b = \textsf{Sign}(s, PK_b)$, a signature under the key $s$. This creates a new token $(PK_b, \sigma_b)$.
+
+Since $n=3f+1$, any two sets of $2f+1$ servers intersect in at least one honest server, and an honest server will not sign two different spend requests for the same $PK_a$. In other words, two conflicting transactions cannot both obtain a valid token signature.
 
 We can now replace the assumption that the bank is honest with the assumption that at most $f$ of the servers implementing the bank are malicious.
 
@@ -100,7 +101,7 @@ We can now replace the assumption that the bank is honest with the assumption th
 4. **Liveness**: If an honest user holding a valid unspent token initiates a payment, the payment completes successfully.
 5. **Conservation of Value**: The number of valid unspent tokens in the system is invariant over time.
 
-Note that the No Double Spend holds since we require $2f+1$ signatures of nullification.
+Note that No Double Spend holds because any successful spend requires $2f+1$ signature shares for the new token, and any two such sets intersect in at least one honest server that records $PK_a$ and will not sign two conflicting spends of the same token.
 
 
 
@@ -109,7 +110,7 @@ Note that the No Double Spend holds since we require $2f+1$ signatures of nullif
 
 To hide the transaction graph from the bank in the centralized setting, we can use [blind signatures](https://decentralizedthoughts.github.io/2026-01-21-blind-and-threshold/), which hide the message being signed from the signer.
 
-The idea is to have Bob hide his public key $PK_b$ from the bank when Alice requests a signature on it. This can be achieved using a blinding function $\textsf{Blind}(PK_b, r)$ that takes as input the public key $PK_b$ and a random blinding factor $r$, producing a blinded public key $PK'_b$. There is also an unblinding function $\textsf{Unblind}(\sigma', r)$ that takes as input a signature $\sigma'$ on the blinded public key and the blinding factor $r$, producing a valid signature $\sigma_b$ on the original public key $PK_b$.
+The idea is to have Bob hide his public key $PK_b$ from the bank when Alice requests a signature on it. This can be achieved using a blinding function $\textsf{Blind}(PK_b, r)$ that takes as input the public key $PK_b$ and a random blinding factor $r$, producing a blinded public key $PK_b^\prime$. There is also an unblinding function $\textsf{Unblind}(\sigma^\prime, r)$ that takes as input a signature $\sigma^\prime$ on the blinded public key and the blinding factor $r$, producing a valid signature $\sigma_b$ on the original public key $PK_b$.
 
 The blinding process ensures that the bank cannot see the actual public key being signed, thus hiding the recipient. This yields unlinkability: when the token is later used, the adversary cannot know from which previous transaction this token was generated.
 
@@ -121,20 +122,22 @@ This protocol is almost identical to the basic payment protocol described above.
 
 We restate the full protocol below to keep this section self-contained.
 
-### Modified Payment Protocol (Blind Signatures)
+### Payment Protocol using blind signatures: interactive, unlinkable, and with a central bank
 
 1. Bob samples a signing key pair $(sk_b, PK_b)$.
-2. Bob blinds $PK_b$ using a blinding factor $r$, producing a blinded public key $PK'_b = \textsf{Blind}(PK_b, r)$.
-3. Bob sends $PK'_b$ to Alice.
-4. Alice proves ownership of the token by signing the transaction $((PK_a,\sigma_a), PK'_b)$ using her signing key $sk_a$, producing a signature $\tau_a \leftarrow \textsf{Sign}(sk_a,(PK_a,\sigma_a), PK'_b)$.
-5. Alice sends $((PK_a,\sigma_a), PK'_b, \tau_a)$ to the bank.
+2. Bob blinds $PK_b$ using a blinding factor $r$, producing a blinded public key $PK_b^\prime = \textsf{Blind}(PK_b, r)$.
+3. Bob sends $PK_b^\prime$ to Alice.
+4. Alice proves ownership of the token by signing the transaction $((PK_a,\sigma_a), PK_b^\prime)$ using her signing key $sk_a$, producing a signature $\tau_a \leftarrow \textsf{Sign}(sk_a,(PK_a,\sigma_a), PK_b^\prime)$.
+5. Alice sends $((PK_a,\sigma_a), PK_b^\prime, \tau_a)$ to the bank.
 6. The bank checks:
-    * $\textsf{Verify}(PK_a,((PK_a,\sigma_a), PK'_b),\tau_a)=1$
+    * $\textsf{Verify}(PK_a,((PK_a,\sigma_a), PK_b^\prime),\tau_a)=1$
     * $\textsf{Verify}(PK, PK_a,\sigma_a)=1$
     * $PK_a \notin N$
+
     The authorization signature binds Alice to the blinded public key, preventing substitution of a different recipient after unblinding.
-    If all hold, the bank adds $PK_a$ to $N$ and computes a signature $\sigma_B \leftarrow \textsf{Sign}(s, PK'_b)$ on the blinded public key.
-7. Bob receives $\sigma_B$ and unblinds it using the blinding factor $r$, producing $\sigma_b = \textsf{Unblind}(\sigma_B, r)$, which is a valid signature on his original public key $PK_b$.
+
+    If all hold, the bank adds $PK_a$ to $N$ and publishes a blinded signature $\sigma_b^\prime \leftarrow \textsf{Sign}(s, PK_b^\prime)$.
+7. Bob receives $\sigma_b^\prime$ and unblinds it using the blinding factor $r$, producing $\sigma_b = \textsf{Unblind}(\sigma_b^\prime, r)$, which is a valid signature on his original public key $PK_b$.
 
 
 In addition to *Token Unforgeability*,  *Authorization Unforgeability*, *No Double Spend*, *Liveness*, and *Conservation of Value*, this scheme obtains a new property under the assumption that the blind signature scheme is unforgeable and blind:
@@ -153,7 +156,7 @@ The scheme also does not hide payment timing, payment volume, or the total numbe
 
 ## Unlinkability in a Decentralized Bank
 
-The blind signature approach can be adapted to the decentralized bank setting by a [threshold signature](https://decentralizedthoughts.github.io/2026-01-21-blind-and-threshold/) on the blinded public key $PK'_b$. The structure of the protocol is otherwise unchanged.
+The blind signature approach can be adapted to the decentralized bank setting by a [threshold signature](https://decentralizedthoughts.github.io/2026-01-21-blind-and-threshold/) on the blinded public key $PK_b^\prime$. The structure of the protocol is otherwise unchanged.
 
 
 ### Privacy Properties that depend on non-collusion
