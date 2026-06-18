@@ -224,13 +224,13 @@ message-size costs.</p>
 <a href="https://decentralizedthoughts.github.io/2021-09-20-information-theoretic-hotstuff-it-hs-part-one/">Information Theoretic HotStuff (IT-HS)</a>,
 but applies it to the Simplex/Kuplex view-exit structure.</p>
 <p><strong>Theorem:</strong> <em>IT-Kuplex is a signature-free BFT protocol with a robust
-good-case latency $3\delta$. At $3f+1$, it has a worst-case view latency of
-$3\Delta+2\delta$, and at $4f+1$ it improves to $3\Delta+\delta$.</em></p>
+good-case latency $3\delta$. For $n&gt;3f$, it has a worst-case view latency of
+$3\Delta+2\delta$, and for $n&gt;4f$ it improves to $3\Delta+\delta$.</em></p>
 <p>IT-Kuplex can be seen as a variant of the recent <a href="https://eprint.iacr.org/2026/355">Forget-IT</a> protocol. The main comparison points are:</p>
 <ul>
  <li>Both protocols obtain a <em>robust</em> good-case latency $3\delta$ as defined in <a href="https://eprint.iacr.org/2026/355">Forget-IT</a>.</li>
  <li>Forget-IT obtains constant storage. IT-Kuplex is based on <a href="https://decentralizedthoughts.github.io/2025-09-24-Kuplex/">Kuplex</a>, a latency-optimized <a href="https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/">Simplex</a> variant, and can therefore require unbounded skip quorums in extreme executions.</li>
- <li>Forget-IT has a worst-case view latency of $4\Delta+3\delta$, while IT-Kuplex obtains $3\Delta+2\delta$ for $3f+1$ and $3\Delta+\delta$ for $4f+1$. One of the “$\Delta$ improvements” comes from the <em>aged quorum</em> technique that assumes clocks are synchronized.</li>
+ <li>Forget-IT has a worst-case view latency of $4\Delta+3\delta$, while IT-Kuplex obtains $3\Delta+2\delta$ for $n&gt;3f$ and $3\Delta+\delta$ for $n&gt;4f$. One of the “$\Delta$ improvements” comes from the <em>aged quorum</em> technique that assumes clocks are synchronized.</li>
 </ul>
 <h2 id="the-view-entrance-gap-aged-quorums-and-robust-good-case-latency">The view entrance gap, aged quorums, and robust good-case latency</h2>
 <p>If a party enters a view as soon as it has a quorum of $n-f$ messages, then
@@ -258,9 +258,9 @@ and be ready to propose while other parties may enter view $v+1$ up to $\Delta$
 later. To keep <strong>robust good-case latency</strong> at $3\delta$, a valid proposal can
 make parties send Vote$(v+1,1,x)$ and Final$(v+1,x)$ before they enter view
 $v+1$.</p>
-<h2 id="it-kuplex-with-3f1-parties">IT-Kuplex with $3f+1$ Parties</h2>
+<h2 id="it-kuplex-with-n3f-parties">IT-Kuplex with $n&gt;3f$ Parties</h2>
 <h3 id="definitions-and-quorums">Definitions and Quorums</h3>
-<p>In this section $n=3f+1$ and $Q=2f+1$.</p>
+<p>In this section $n&gt;3f$ and $Q=n-f$.</p>
 <p>The messages in view $v$ are:</p>
 <ol>
  <li>Vote$(v,g,x)$, the grade-$g$ value vote for a non-$\bot$ value $x$, where
@@ -275,7 +275,7 @@ Final$(v,x)$.</li>
  <li>$\mathrm{F}_v(x)$ is $Q$ Final$(v,x)$ messages. A party that has it
 decides $x$.</li>
  <li>$\mathrm{W1}_v$ is $Q$ messages, each either Vote$(v,1,\cdot)$ or
-Bot$(v,1)$, in which no non-$\bot$ value appears at least $f+1$ times.
+Bot$(v,1)$, in which no non-$\bot$ value appears at least $n-2f$ times.
 After $T_v&gt;2\Delta$, it is used to send Bot$(v,2)$ when <code class="language-plaintext highlighter-rouge">final_lock(v)</code> is
 unset.</li>
  <li>$\mathrm{Q2}_v(x)$ is $Q$ messages, each either Vote$(v,1,x)$ or
@@ -312,8 +312,8 @@ $\mathrm{W1}_v$ timeout rule still wait for <code class="language-plaintext high
  <li>Parties start with <code class="language-plaintext highlighter-rouge">view=0</code>. By convention, every party initially has aged
 $\mathrm{B3}_0$.</li>
 </ul>
-<h3 id="the-3f1-it-kuplex-protocol">The $3f+1$ IT-Kuplex Protocol</h3>
-<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>3f+1 IT-Kuplex with view v and designated sender Leader(v):
+<h3 id="the-n3f-it-kuplex-protocol">The $n&gt;3f$ IT-Kuplex Protocol</h3>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>n&gt;3f IT-Kuplex with view v and designated sender Leader(v):
 1. Upon first having aged Q3_{v-1}(x) or aged B3_{v-1}, if view &lt; v:
  Set view = v
  Start timer T_v
@@ -359,7 +359,7 @@ $\mathrm{B3}_0$.</li>
 10. Upon F_v(x):
  Decide x
 </code></pre></div></div>
-<h3 id="why-the-3f1-protocol-works">Why the $3f+1$ Protocol Works</h3>
+<h3 id="why-the-n3f-protocol-works">Why the $n&gt;3f$ Protocol Works</h3>
 <h4 id="claim-1-validity">Claim 1: Validity</h4>
 <p>If an honest party has $\mathrm{F}_v(x)$, $\mathrm{Q2}_v(x)$, or
 $\mathrm{Q3}_v(x)$, then some honest party sent Vote$(v,1,x)$. If the leader
@@ -371,11 +371,11 @@ every honest grade-1 vote.</p>
 <h4 id="claim-2-safety-in-a-view">Claim 2: Safety in a view</h4>
 <p>A final quorum $\mathrm{F}_v(x)$ excludes every conflicting final quorum, value quorum, and bottom quorum in view $v$.</p>
 <p><strong>Proof.</strong> Let $H_x$ be the honest parties that sent Final$(v,x)$ inside the
-final quorum. Since the final quorum has size $Q$, $|H_x|\geq f+1$. We first
+final quorum. Since the final quorum has size $Q$, $|H_x|\geq n-2f$. We first
 show that no party in $H_x$ ever clears <code class="language-plaintext highlighter-rouge">final_lock(v) = x</code>.</p>
 <p>Before the first such unlock, parties in $H_x$ send no Bot$(v,2)$ and no
 Bot$(v,3)$. Thus a $\mathrm{B2}_v$ quorum cannot exist: it requires at least
-$f+1$ honest Bot$(v,2)$ messages, but there are at most $f$ honest
+$n-2f$ honest Bot$(v,2)$ messages, but there are at most $f$ honest
 parties outside $H_x$. Now consider the first honest sender of Bot$(v,3)$
 before such an unlock. It cannot be triggered by $f+1$ earlier Bot$(v,3)$
 messages, since Byzantine parties alone provide only $f$ of them, so it must
@@ -384,8 +384,9 @@ sent before the first unlock, and $f+1$ Bot$(v,3)$ messages cannot be
 received. The first unlock cannot occur.</p>
 <p>Thus every party in $H_x$ keeps its lock forever: it sends no Bot$(v,2)$, no
 Bot$(v,3)$, and no grade-1 or grade-2 vote for $y\neq x$.</p>
-<p>A conflicting $\mathrm{Q2}_v(y)$ quorum intersects $H_x$ in an honest party,
-impossible by the previous paragraph. For $\mathrm{Q3}_v(y)$, take the first
+<p>A conflicting $\mathrm{Q2}_v(y)$ quorum intersects $H_x$ in an honest party
+because $Q+|H_x|&gt;n$, impossible by the previous paragraph. For
+$\mathrm{Q3}_v(y)$, take the first
 honest sender of Vote$(v,3,y)$. That sender must have received
 $\mathrm{Q2}_v(y)$, because Byzantine parties alone cannot provide $f+1$
 earlier grade-3 votes. But $\mathrm{Q2}_v(y)$ cannot exist.</p>
@@ -395,8 +396,8 @@ sender of Bot$(v,3)$ therefore cannot be triggered by $\mathrm{B2}_v$, and
 cannot be triggered by $f+1$ earlier Bot$(v,3)$ messages without an honest
 predecessor. Thus
 $\mathrm{B3}_v$ cannot exist. Same-view final uniqueness follows because two
-final quorums intersect in an honest party, and an honest party sends at most
-one Final in a view.</p>
+final quorums intersect in more than $f$ parties, and hence in an honest
+party; an honest party sends at most one Final in a view.</p>
 <h4 id="claim-3-agreement">Claim 3: Agreement</h4>
 <p>No two final quorums, in the same view or in different views, can be for
 different values.</p>
@@ -416,32 +417,37 @@ $\mathrm{Q3}_v(x)$. If an honest party has $\mathrm{Q3}_v(x)$ or
 $\mathrm{B3}_v$, then every honest party eventually has the same kind of
 view-exiting quorum for view $v$.</p>
 <p><strong>Proof.</strong> If an honest party sends Final$(v,x)$, it had
-$\mathrm{Q1}_v(x)$, including $f+1$ honest grade-1 votes. Every honest party
+$\mathrm{Q1}_v(x)$, including $n-2f$ honest grade-1 votes. Every honest party
 eventually receives those votes. A conflicting final lock would require a
 $\mathrm{Q1}_v(y)$ quorum for some $y\neq x$, impossible by quorum
 intersection. Hence every honest party sends Vote$(v,2,x)$. Then every honest
 party has $\mathrm{Q2}_v(x)$, sends Vote$(v,3,x)$, and has
 $\mathrm{Q3}_v(x)$.</p>
 <p>Now suppose an honest party has $\mathrm{Q3}_v(x)$ or $\mathrm{B3}_v$. The
-quorum contains at least $f+1$ honest messages of one form: Vote$(v,3,x)$ in
-the first case, Bot$(v,3)$ in the second. Every honest party eventually
-receives them. These messages trigger the same grade-3 message at every honest
-party; in the Bot$(v,3)$ case they first clear <code class="language-plaintext highlighter-rouge">final_lock(v)</code>. Hence all
-honest parties eventually have the same exit quorum.</p>
+quorum contains at least $n-2f$ honest messages of one form: Vote$(v,3,x)$ in
+the first case, Bot$(v,3)$ in the second. Since $n&gt;3f$, this is at least
+$f+1$. Every honest party eventually receives them. These messages trigger the
+same grade-3 message at every honest party; in the Bot$(v,3)$ case they first
+clear <code class="language-plaintext highlighter-rouge">final_lock(v)</code>. Hence all honest parties eventually have the same exit
+quorum.</p>
 <h4 id="claim-5-aged-catch-up-sets-viewv1-within-delta">Claim 5: Aged catch-up sets <code class="language-plaintext highlighter-rouge">view=v+1</code> within $\Delta$</h4>
-<p>After $\mathsf{GST}+\Delta$, whenever an honest party has an aged
-$\mathrm{Q3}<em>v(x)$ or $\mathrm{B3}_v$ at time $t$, all honest parties have the
-corresponding unaged quorum by $t+\delta$ and the corresponding aged quorum by
-$t+\Delta$. Thus any honest party with <code class="language-plaintext highlighter-rouge">view &lt; v+1</code> can set <code class="language-plaintext highlighter-rouge">view=v+1</code> and
-start $T</em>{v+1}$ by $t+\Delta$.</p>
+<p>After $\mathsf{GST}+\Delta$, aged exit quorums catch up within one network
+delay.</p>
+<p>If an honest party has an aged $\mathrm{Q3}_v(x)$ at time $t$, all honest
+parties have the corresponding unaged quorum by $t+\delta$ and the
+corresponding aged quorum by $t+\Delta$.</p>
+<p>The same bounds hold if an honest party has an aged $\mathrm{B3}_v$ at time
+$t$.</p>
+<p>Thus any honest party with <code class="language-plaintext highlighter-rouge">view &lt; v+1</code> can set <code class="language-plaintext highlighter-rouge">view=v+1</code> and start
+$T_{v+1}$ by $t+\Delta$.</p>
 <p><strong>Proof.</strong> Let $t\geq\mathsf{GST}+\Delta$ be a time at which an honest party
-has an aged $\mathrm{Q3}_v(x)$. The aged quorum contains $f+1$ honest
+has an aged $\mathrm{Q3}_v(x)$. The aged quorum contains $n-2f$ honest
 grade-3 votes sent by time $t-\Delta$. Every honest party receives them by
 time $t$, sends Vote$(v,3,x)$ by time $t$, and has a quorum of honest grade-3
 votes by time $t+\delta$. Hence it has an aged $\mathrm{Q3}_v(x)$ by time
 $t+\Delta$. An honest leader of view $v+1$ has the unaged quorum by time
 $t+\delta$.</p>
-<p>For $\mathrm{B3}_v$, the aged quorum contains $f+1$ honest Bot$(v,3)$
+<p>For $\mathrm{B3}_v$, the aged quorum contains $n-2f$ honest Bot$(v,3)$
 messages sent by time $t-\Delta$. Every honest party receives them by time
 $t$, clears <code class="language-plaintext highlighter-rouge">final_lock(v)</code>, sends Bot$(v,3)$ by time $t$, and has a quorum of
 honest Bot$(v,3)$ messages by time $t+\delta$. Hence it has an aged
@@ -464,8 +470,8 @@ view-exiting quorum by the claimed bound. So assume no honest party sets
 By time $t_{\mathsf{start}}+2\Delta$, every honest party has sent one grade-1
 message, either Vote$(v,1,\cdot)$ or Bot$(v,1)$. By time $T$, every honest
 party has received all honest grade-1 messages.</p>
-<p>If at least $f+1$ honest grade-1 messages are Vote$(v,1,x)$, then $x$ is
-unique. Every honest party receives those $f+1$ honest votes by time $T$. A
+<p>If at least $n-2f$ honest grade-1 messages are Vote$(v,1,x)$, then $x$ is
+unique. Every honest party receives those $n-2f$ honest votes by time $T$. A
 conflicting Final would require a $\mathrm{Q1}_v(y)$ quorum for some
 $y\neq x$, which cannot coexist with those honest votes. Hence every honest
 party sends Vote$(v,2,x)$ by time $T$. Every honest party has a quorum of
@@ -490,7 +496,7 @@ $\Delta+\delta\leq 2\Delta$. In either case, the grade-1 voting rule passes.
 After sending Vote$(v,1,x)$, an honest party can still send Final$(v,x)$ after
 the cutoff, provided it has not sent Bot$(v,2)$, Bot$(v,3)$, or a grade-1 or
 grade-2 vote for $y\neq x$.
-Every $Q$-sized grade-1 quorum contains at least $Q-f=f+1$ honest messages,
+Every $Q$-sized grade-1 quorum contains at least $Q-f=n-2f$ honest messages,
 and in this execution all honest grade-1 messages are Vote$(v,1,x)$. Thus
 $\mathrm{W1}_v$ cannot exist, so the $\mathrm{W1}_v$ rule cannot make it send
 Bot$(v,2)$.</p>
@@ -499,30 +505,30 @@ send Vote$(v,1,x)$ by $t+\delta$, send Final$(v,x)$ by $t+2\delta$, and
 decide by $t+3\delta$.</p>
 <p>The honest-leader execution inside the view does not wait for a timeout or an
 aged quorum. The timeout forces a view-exiting quorum in the worst case.</p>
-<h4 id="why-grade-2-is-not-enough-for-3f1">Why Grade 2 Is Not Enough for $3f+1$</h4>
+<h4 id="why-grade-2-is-not-enough-for-n3f">Why Grade 2 Is Not Enough for $n&gt;3f$</h4>
 <p>Leaving on aged $\mathrm{Q2}$ would fail because $\mathrm{Q2}$ does not have
 totality. For example, one honest party may send Final$(v,x)$ and become
 locked against Vote$(v,2,y)$ for $y\neq x$, while another honest party has
 $\mathrm{Q2}_v(y)$. The other honest parties may not have
 $\mathrm{Q2}_v(y)$.</p>
 <p>Grade 3 adds one message delay. On the bottom path, $\mathrm{B2}_v$ contains
-only $f+1$ honest Bot$(v,2)$ messages, which is not enough to unlock honest
-parties. The grade-3 step turns this into $f+1$ honest Bot$(v,3)$ messages,
-which are a proof that unlocking is safe.</p>
-<p>This extra grade gives worst-case view latency $3\Delta+2\delta$ at $3f+1$.
-At $4f+1$, a $Q$-quorum contains $M=2f+1$ honest grade-2 messages, enough to
-prove that any conflicting final lock cannot still lead to a decision, and
-hence that unlocking is safe.
+only $n-2f$ honest Bot$(v,2)$ messages, which may be too few to unlock honest
+parties at this resilience. The grade-3 step yields at least $f+1$ honest
+Bot$(v,3)$ messages, which are a proof that unlocking is safe.</p>
+<p>This extra grade gives worst-case view latency $3\Delta+2\delta$ at the
+$n&gt;3f$ resilience threshold. At $n&gt;4f$, a $Q$-quorum contains
+$M=n-2f&gt;2f$ honest grade-2 messages, enough to prove that any conflicting
+final lock cannot still lead to a decision, and hence that unlocking is safe.
 Thus the protocol can leave on aged $\mathrm{V2}$ or $\mathrm{B2}$ without a
 grade-3 round, removing one $\delta$ term.</p>
-<h2 id="it-kuplex-with-4f1-parties">IT-Kuplex with $4f+1$ Parties</h2>
-<p>Now assume $n=4f+1$, $Q=3f+1$, and $M=2f+1$. Then</p>
-\[Q+M-n=f+1.\]
+<h2 id="it-kuplex-with-n4f-parties">IT-Kuplex with $n&gt;4f$ Parties</h2>
+<p>Now assume $n&gt;4f$, $Q=n-f$, and $M=n-2f$. Then</p>
+\[Q+M-n=n-3f&gt;f.\]
 <p>Also, every $Q$-quorum contains at least $Q-f=M$ honest messages. These are
 the quorum facts that let the protocol remove the grade-3 echo from the
-$3f+1$ protocol.</p>
+$n&gt;3f$ protocol.</p>
 <h3 id="protocol-delta">Protocol Delta</h3>
-<p>Use the $3f+1$ protocol with these changes.</p>
+<p>Use the $n&gt;3f$ protocol with these changes.</p>
 <ol>
  <li>Delete grade 3: no Vote$(v,3,x)$, no Bot$(v,3)$, no $\mathrm{Q3}$, and no
 $\mathrm{B3}$.</li>
@@ -564,7 +570,7 @@ $\mathrm{V2}_v(y)$ and $\mathrm{B2}_v$.</p>
 <p>Cross-view agreement is the same minimal-later-view argument as before, with
 $\mathrm{V2}$ replacing $\mathrm{Q3}$ and $\mathrm{B2}$ replacing
 $\mathrm{B3}$.</p>
-<p>Totality is where $4f+1$ saves a grade. If an honest party sends Final$(v,x)$,
+<p>Totality is where $n&gt;4f$ saves a grade. If an honest party sends Final$(v,x)$,
 then its $\mathrm{Q1}_v(x)$ contains $M$ honest Vote$(v,1,x)$ messages; every
 honest party eventually receives them. A conflicting lock would require
 $\mathrm{Q1}_v(y)$ for some $y\neq x$, impossible by intersection, so every
@@ -574,13 +580,14 @@ messages unlock any conflicting honest lock and make every honest party send
 the matching grade-2 message.</p>
 <p>Consider any time $t$ satisfying</p>
 \[t\geq \mathsf{GST}+\Delta.\]
-<p>An aged $\mathrm{V2}<em>v(x)$ or $\mathrm{B2}_v$ at time $t$ contains $M$ honest
-grade-2 messages sent by time $t-\Delta$. Every honest party receives them by
-time $t$, unlocks if needed, and sends the matching grade-2 message by time
-$t$. Hence every honest party has the same unaged exit quorum by $t+\delta$
-and the same aged exit quorum by $t+\Delta$.
-Future-view Vote and Final messages may arrive earlier, but they do not set
-<code class="language-plaintext highlighter-rouge">view=v+1</code> or start $T</em>{v+1}$.</p>
+<p>An aged $\mathrm{V2}_v(x)$ at time $t$ contains $M$ honest grade-2 messages
+sent by time $t-\Delta$. Every honest party receives them by time $t$, unlocks
+if needed, and sends the matching grade-2 message by time $t$.</p>
+<p>The same argument applies to an aged $\mathrm{B2}_v$ at time $t$.</p>
+<p>Hence every honest party has the same unaged exit quorum by $t+\delta$ and the
+same aged exit quorum by $t+\Delta$.</p>
+<p>Future-view Vote and Final messages may arrive earlier, but they do not set
+<code class="language-plaintext highlighter-rouge">view=v+1</code> or start $T_{v+1}$.</p>
 <p>For worst-case latency, let $t_{\mathsf{start}}$ be the latest time an honest
 party sets <code class="language-plaintext highlighter-rouge">view=v</code> and starts $T_v$. If an aged exit quorum already exists, the
 aged catch-up argument applies. Otherwise, by
@@ -601,8 +608,8 @@ the outer proposal rule is unchanged, and each view runs an
 information-theoretic IT-Kuplex instance instead of signed
 Certifying Graded Broadcast.
 The only interface change is that quorums are directly received, so the
-$3f+1$ value and bottom quorums are $\mathrm{Q3}$ and $\mathrm{B3}$, while the
-$4f+1$ quorums are $\mathrm{V2}$ and $\mathrm{B2}$. Parties advance only on
+$n&gt;3f$ value and bottom quorums are $\mathrm{Q3}$ and $\mathrm{B3}$, while the
+$n&gt;4f$ quorums are $\mathrm{V2}$ and $\mathrm{B2}$. Parties advance only on
 aged value or bottom quorums; a future-view proposal can be buffered and then
 validated once the required unaged quorums arrive.</p>
 <h2 id="notes">Notes</h2>
@@ -614,6 +621,11 @@ IT-Kuplex uses the same information-theoretic lens, but starts from
 Simplex/Kuplex and uses aged quorums to keep the post-GST view entrance gap
 to one $\Delta$.</li>
 </ul>
+<h2 id="acknowledgments">Acknowledgments</h2>
+<p>Many thanks to <a href="https://x.com/giuliano_losa">Giuliano Losa</a> for
+<a href="https://www.losa.fr/blog/how-forget-it-commits-in-three-steps/">insightful comments</a>,
+and for pointing out the rendering issue and the quorum thresholds for the
+general $n$ formulation.</p>
 <p>Your thoughts/comments on <a href="https://x.com/ittaia/status/2063020077491143037?s=20">X</a>.</p>
  </div>
  
