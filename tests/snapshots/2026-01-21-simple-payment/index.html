@@ -225,7 +225,7 @@
 <p>Formally, the bank maintains a set $N$ of spent public keys. Initially $N$ is empty.</p>
 <p>A token $T$ is a pair $(P, \sigma)$ where $P$ is a public key and $\sigma = \textsf{Sign}(s, P)$ is a digital signature of $P$ under the bank’s secret signing key $s$. So $\textsf{Verify}(PK, P,\sigma)=1$.</p>
 <p>A token $T=(P,\sigma)$ is <em>unspent</em> relative to a nullifier set $N$ if $P \notin N$.</p>
-<h3 id="payment-protocol">Payment protocol</h3>
+<h3 id="payment-protocol-interactive-linkable-and-with-a-central-bank">Payment protocol: interactive, linkable, and with a central bank</h3>
 <p>Suppose Alice has a signing key $sk_a$ with associated public key $PK_a$ (i.e., a <strong>signing key pair</strong>) and a token $(PK_a, \sigma_a)$ and wants to pay Bob:</p>
 <ol>
  <li>Bob samples a new signing key pair $(sk_b, PK_b)$ and sends $PK_b$ to Alice.</li>
@@ -241,7 +241,7 @@
  <p>If all hold:</p>
  <ul>
  <li>Mark the token as spent by adding $PK_a$ to $N$</li>
- <li>Issue a new token for Bob by computing $\sigma_b \leftarrow \textsf{Sign}(s, PK_b)$ and output $\sigma_b$.</li>
+ <li>Issue a new token for Bob by computing $\sigma_b \leftarrow \textsf{Sign}(s, PK_b)$ and publishing $\sigma_b$.</li>
  </ul>
  </li>
 </ol>
@@ -276,13 +276,13 @@
  <ul>
  <li>The transaction is authorized: $\textsf{Verify}(PK_a,((PK_a,\sigma_a), PK_b),\tau_a)=1$</li>
  <li>The token is issued by the bank: $\textsf{Verify}(PK, PK_a,\sigma_a)=1$</li>
- <li>The token is unspent: $PK_a \notin N_i$
- If all hold, server $i$ adds $PK_a$ to $N_i$ and computes a signature share $\sigma_{i} \leftarrow \textsf{Sign}(s_i, PK_b)$ and outputs $\sigma_{i}$.</li>
+ <li>The token is unspent: $PK_a \notin N_i$</li>
  </ul>
+ <p>If all hold, server $i$ adds $PK_a$ to $N_i$, computes a signature share $\sigma_{i} \leftarrow \textsf{Sign}(s_i, PK_b)$, and publishes $\sigma_{i}$.</p>
  </li>
- <li>Any party (in particular, Bob) seeing at least $2f+1$ valid signature shares on $PK_b$ from distinct servers combines them to form $\sigma = \textsf{Sign}(s, PK_b)$, a signature under the key $s$. This creates a new token $(PK_b, \sigma_b)$.</li>
+ <li>Any party (in particular, Bob) seeing at least $2f+1$ valid signature shares on $PK_b$ from distinct servers combines them to form $\sigma_b = \textsf{Sign}(s, PK_b)$, a signature under the key $s$. This creates a new token $(PK_b, \sigma_b)$.</li>
 </ol>
-<p>Since $n=3f+1$, any two sets of $2f+1$ servers intersect in at least one honest server, and an honest server will not sign two different spend requests for the same $PK_a$. In other words, two conflicting transactions cannot both obtain a valid quorum certificate $\sigma$.</p>
+<p>Since $n=3f+1$, any two sets of $2f+1$ servers intersect in at least one honest server, and an honest server will not sign two different spend requests for the same $PK_a$. In other words, two conflicting transactions cannot both obtain a valid token signature.</p>
 <p>We can now replace the assumption that the bank is honest with the assumption that at most $f$ of the servers implementing the bank are malicious.</p>
 <ol>
  <li><strong>Unforgeability</strong>: No adversary can create a valid token $(P,\sigma)$ such that $\textsf{Verify}(PK, P,\sigma)=1$ unless at least $2f+1$ servers previously signed $P$ with their shares of the bank key $s$.</li>
@@ -291,10 +291,10 @@
  <li><strong>Liveness</strong>: If an honest user holding a valid unspent token initiates a payment, the payment completes successfully.</li>
  <li><strong>Conservation of Value</strong>: The number of valid unspent tokens in the system is invariant over time.</li>
 </ol>
-<p>Note that the No Double Spend holds since we require $2f+1$ signatures of nullification.</p>
+<p>Note that No Double Spend holds because any successful spend requires $2f+1$ signature shares for the new token, and any two such sets intersect in at least one honest server that records $PK_a$ and will not sign two conflicting spends of the same token.</p>
 <h2 id="hiding-the-transaction-graph-with-a-single-bank">Hiding the Transaction Graph with a single bank</h2>
 <p>To hide the transaction graph from the bank in the centralized setting, we can use <a href="https://decentralizedthoughts.github.io/2026-01-21-blind-and-threshold/">blind signatures</a>, which hide the message being signed from the signer.</p>
-<p>The idea is to have Bob hide his public key $PK_b$ from the bank when Alice requests a signature on it. This can be achieved using a blinding function $\textsf{Blind}(PK_b, r)$ that takes as input the public key $PK_b$ and a random blinding factor $r$, producing a blinded public key $PK’_b$. There is also an unblinding function $\textsf{Unblind}(\sigma’, r)$ that takes as input a signature $\sigma’$ on the blinded public key and the blinding factor $r$, producing a valid signature $\sigma_b$ on the original public key $PK_b$.</p>
+<p>The idea is to have Bob hide his public key $PK_b$ from the bank when Alice requests a signature on it. This can be achieved using a blinding function $\textsf{Blind}(PK_b, r)$ that takes as input the public key $PK_b$ and a random blinding factor $r$, producing a blinded public key $PK_b^\prime$. There is also an unblinding function $\textsf{Unblind}(\sigma^\prime, r)$ that takes as input a signature $\sigma^\prime$ on the blinded public key and the blinding factor $r$, producing a valid signature $\sigma_b$ on the original public key $PK_b$.</p>
 <p>The blinding process ensures that the bank cannot see the actual public key being signed, thus hiding the recipient. This yields unlinkability: when the token is later used, the adversary cannot know from which previous transaction this token was generated.</p>
 <p>This protocol is almost identical to the basic payment protocol described above. The key differences are:</p>
 <ul>
@@ -303,23 +303,23 @@
  <li>The bank signs a blinded public key rather than the public key itself.</li>
 </ul>
 <p>We restate the full protocol below to keep this section self-contained.</p>
-<h3 id="modified-payment-protocol-blind-signatures">Modified Payment Protocol (Blind Signatures)</h3>
+<h3 id="payment-protocol-using-blind-signatures-interactive-unlinkable-and-with-a-central-bank">Payment Protocol using blind signatures: interactive, unlinkable, and with a central bank</h3>
 <ol>
  <li>Bob samples a signing key pair $(sk_b, PK_b)$.</li>
- <li>Bob blinds $PK_b$ using a blinding factor $r$, producing a blinded public key $PK’_b = \textsf{Blind}(PK_b, r)$.</li>
- <li>Bob sends $PK’_b$ to Alice.</li>
- <li>Alice proves ownership of the token by signing the transaction $((PK_a,\sigma_a), PK’_b)$ using her signing key $sk_a$, producing a signature $\tau_a \leftarrow \textsf{Sign}(sk_a,(PK_a,\sigma_a), PK’_b)$.</li>
- <li>Alice sends $((PK_a,\sigma_a), PK’_b, \tau_a)$ to the bank.</li>
+ <li>Bob blinds $PK_b$ using a blinding factor $r$, producing a blinded public key $PK_b^\prime = \textsf{Blind}(PK_b, r)$.</li>
+ <li>Bob sends $PK_b^\prime$ to Alice.</li>
+ <li>Alice proves ownership of the token by signing the transaction $((PK_a,\sigma_a), PK_b^\prime)$ using her signing key $sk_a$, producing a signature $\tau_a \leftarrow \textsf{Sign}(sk_a,(PK_a,\sigma_a), PK_b^\prime)$.</li>
+ <li>Alice sends $((PK_a,\sigma_a), PK_b^\prime, \tau_a)$ to the bank.</li>
  <li>The bank checks:
  <ul>
- <li>$\textsf{Verify}(PK_a,((PK_a,\sigma_a), PK’_b),\tau_a)=1$</li>
+ <li>$\textsf{Verify}(PK_a,((PK_a,\sigma_a), PK_b^\prime),\tau_a)=1$</li>
  <li>$\textsf{Verify}(PK, PK_a,\sigma_a)=1$</li>
- <li>$PK_a \notin N$
- The authorization signature binds Alice to the blinded public key, preventing substitution of a different recipient after unblinding.
- If all hold, the bank adds $PK_a$ to $N$ and computes a signature $\sigma_B \leftarrow \textsf{Sign}(s, PK’_b)$ on the blinded public key.</li>
+ <li>$PK_a \notin N$</li>
  </ul>
+ <p>The authorization signature binds Alice to the blinded public key, preventing substitution of a different recipient after unblinding.</p>
+ <p>If all hold, the bank adds $PK_a$ to $N$ and publishes a blinded signature $\sigma_b^\prime \leftarrow \textsf{Sign}(s, PK_b^\prime)$.</p>
  </li>
- <li>Bob receives $\sigma_B$ and unblinds it using the blinding factor $r$, producing $\sigma_b = \textsf{Unblind}(\sigma_B, r)$, which is a valid signature on his original public key $PK_b$.</li>
+ <li>Bob receives $\sigma_b^\prime$ and unblinds it using the blinding factor $r$, producing $\sigma_b = \textsf{Unblind}(\sigma_b^\prime, r)$, which is a valid signature on his original public key $PK_b$.</li>
 </ol>
 <p>In addition to <em>Token Unforgeability</em>, <em>Authorization Unforgeability</em>, <em>No Double Spend</em>, <em>Liveness</em>, and <em>Conservation of Value</em>, this scheme obtains a new property under the assumption that the blind signature scheme is unforgeable and blind:</p>
 <ul>
@@ -330,7 +330,7 @@
 <p>The scheme does not hide the identity of the transaction initiator from the bank. Achieving payer anonymity requires additional mechanisms such as anonymous communication channels that will be explored in future posts.</p>
 <p>The scheme also does not hide payment timing, payment volume, or the total number of payments in the system. Addressing these forms of metadata leakage requires additional mechanisms that will be explored in future posts.</p>
 <h2 id="unlinkability-in-a-decentralized-bank">Unlinkability in a Decentralized Bank</h2>
-<p>The blind signature approach can be adapted to the decentralized bank setting by a <a href="https://decentralizedthoughts.github.io/2026-01-21-blind-and-threshold/">threshold signature</a> on the blinded public key $PK’_b$. The structure of the protocol is otherwise unchanged.</p>
+<p>The blind signature approach can be adapted to the decentralized bank setting by a <a href="https://decentralizedthoughts.github.io/2026-01-21-blind-and-threshold/">threshold signature</a> on the blinded public key $PK_b^\prime$. The structure of the protocol is otherwise unchanged.</p>
 <h3 id="privacy-properties-that-depend-on-non-collusion">Privacy Properties that depend on non-collusion</h3>
 <p>Even when the secret key is decentralized, one may worry that $2f+1$ servers may collude and secretly mint more coins. In future posts we will see how to prevent that from happening (using SNARKs).</p>
 <h3 id="notes">Notes</h3>

@@ -62,7 +62,7 @@ The computational power of the adversary:
 ## 3. Adaptivity
 
 <p align="center">
- <img src="/uploads/adaptiv.jpeg" width="512" title="Types">
+ <img src="/uploads/adaptiv.png" width="512" title="Types">
 </p>
 
 Adaptivity is the ability of the adversary to corrupt dynamically based on information the adversary learns during the execution. 
