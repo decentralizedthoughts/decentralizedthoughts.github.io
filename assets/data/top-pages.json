@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-06-23T10:02:10Z",
+  "fetched_at": "2026-06-23T20:21:03Z",
   "items": [
     {
       "path": "/2022-03-30-asynchronous-agreement-part-two-ben-ors-protocol/",
@@ -8,23 +8,23 @@
     },
     {
       "path": "/start-here/",
-      "views": 147
+      "views": 149
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 105
+      "views": 106
     },
     {
       "path": "/2026-06-05-IT-Kuplex/",
-      "views": 54
+      "views": 55
     },
     {
       "path": "/2020-02-26-selfish-mining/",
-      "views": 50
+      "views": 51
     },
     {
       "path": "/2026-05-25-chapter-simplex/",
-      "views": 47
+      "views": 49
     }
   ]
 }
