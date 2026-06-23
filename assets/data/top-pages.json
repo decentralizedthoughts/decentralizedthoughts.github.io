@@ -1,30 +1,30 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-06-22T21:12:22Z",
+  "fetched_at": "2026-06-23T10:02:10Z",
   "items": [
     {
       "path": "/2022-03-30-asynchronous-agreement-part-two-ben-ors-protocol/",
-      "views": 182
+      "views": 183
     },
     {
       "path": "/start-here/",
-      "views": 105
+      "views": 147
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 98
+      "views": 105
     },
     {
       "path": "/2026-06-05-IT-Kuplex/",
-      "views": 69
+      "views": 54
+    },
+    {
+      "path": "/2020-02-26-selfish-mining/",
+      "views": 50
     },
     {
       "path": "/2026-05-25-chapter-simplex/",
-      "views": 49
-    },
-    {
-      "path": "/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/",
-      "views": 46
+      "views": 47
     }
   ]
 }
