@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-06-25T09:43:45Z",
+  "fetched_at": "2026-06-25T20:21:21Z",
   "items": [
     {
       "path": "/start-here/",
@@ -8,7 +8,7 @@
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 114
+      "views": 116
     },
     {
       "path": "/2022-03-30-asynchronous-agreement-part-two-ben-ors-protocol/",
@@ -24,7 +24,7 @@
     },
     {
       "path": "/2026-05-25-chapter-simplex/",
-      "views": 45
+      "views": 46
     }
   ]
 }
