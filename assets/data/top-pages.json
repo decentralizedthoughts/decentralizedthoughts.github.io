@@ -1,10 +1,10 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-06-25T20:21:21Z",
+  "fetched_at": "2026-06-26T09:51:32Z",
   "items": [
     {
       "path": "/start-here/",
-      "views": 157
+      "views": 159
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
@@ -12,18 +12,18 @@
     },
     {
       "path": "/2022-03-30-asynchronous-agreement-part-two-ben-ors-protocol/",
-      "views": 112
+      "views": 111
     },
     {
       "path": "/2020-02-26-selfish-mining/",
-      "views": 55
+      "views": 58
+    },
+    {
+      "path": "/2019-12-22-dolev-strong/",
+      "views": 52
     },
     {
       "path": "/2026-06-05-IT-Kuplex/",
-      "views": 48
-    },
-    {
-      "path": "/2026-05-25-chapter-simplex/",
       "views": 46
     }
   ]
