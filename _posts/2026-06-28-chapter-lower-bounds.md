@@ -74,6 +74,16 @@ asynchrony. In a related direction, TEEs without persistent state do not escape
 the Byzantine threshold in partial synchrony:
 [$3f+1$ is needed in Partial Synchrony even against a Rollback adversary](https://decentralizedthoughts.github.io/2023-06-26-dls-meets-rollback/).
 
+At a glance:
+
+| Barrier | Adversary picture | What changes the conclusion |
+|---|---|---|
+| [CAP](https://decentralizedthoughts.github.io/2023-07-09-CAP-two-servers-in-psynch/) | split the replicas or resources into two plausible worlds | a non-faulty majority, or bounded timing assumptions |
+| [Byzantine split brain](https://decentralizedthoughts.github.io/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/) | split the honest parties into two sides, with Byzantine parties bridging the views | an honest $>2/3$ majority |
+| [Unauthenticated Byzantine agreement](https://decentralizedthoughts.github.io/2019-08-02-byzantine-agreement-is-impossible-for-%24n-slash-leq-3-f%24-is-the-adversary-can-easily-simulate/) | simulate parties from another execution | non-simulatable identities, such as a PKI |
+| [Non-equivocation or transferability alone](https://decentralizedthoughts.github.io/2021-06-14-neither-non-equivocation-nor-transferability-alone-is-enough-for-tolerating-minority-corruptions-in-asynchrony/) | give the protocol one property but not the other | a mechanism that provides both properties together |
+| [Rollback attacks](https://decentralizedthoughts.github.io/2023-06-26-dls-meets-rollback/) | erase the memory that would have carried safety forward | persistent state, or the usual $3f+1$ threshold |
+
 ## Communication
 
 The next question is how many messages agreement needs.
@@ -93,12 +103,22 @@ the target is Byzantine Crusader Broadcast rather than agreement.
 Randomization does not automatically remove this barrier. The post
 [Agreement against strongly adaptive adversaries needs quadratic communication](https://decentralizedthoughts.github.io/2024-12-16-strong-adaptive-lower-bound/)
 extends the message lower bound to randomized protocols against a strongly
-adaptive omission adversary. The adversary waits to see who sends a message to
-the party it wants to isolate, corrupts that sender, and prevents that message
-from being delivered.
+adaptive omission adversary that can claw back in-flight messages from newly
+corrupted parties. The adversary waits to see who sends a message to the party
+it wants to isolate, corrupts that sender, and then claws back the
+still-undelivered message. This claw-back ability is the mathematical property
+that makes the lower bound go through.
 
 The takeaway is that subquadratic agreement requires both randomization and a
 weaker adversary.
+
+At a glance:
+
+| Lower bound | Adversary recipe | Moral |
+|---|---|---|
+| [Dolev-Reischuk](https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/) | isolate one party | agreement needs enough messages to reach everyone |
+| [DR for Crusader Broadcast](https://decentralizedthoughts.github.io/2022-08-14-new-DR-LB/) | reuse isolation for a weaker broadcast task | the same isolation argument applies beyond agreement |
+| [DR for strongly adaptive randomized agreement](https://decentralizedthoughts.github.io/2024-12-16-strong-adaptive-lower-bound/) | corrupt senders after seeing them and claw back in-flight messages | randomness is not enough against adaptive with claw-back power |
 
 ## Rounds and Infinite Executions
 
@@ -155,20 +175,15 @@ parties to agree not only on a value, but also on which side of a time
 threshold they decide. That is simultaneous agreement, and it has the same
 $t+1$ barrier.
 
-## Broadcast Round Complexity
+At a glance:
 
-Broadcast has its own round lower bounds.
-[The round complexity of Reliable Broadcast](https://decentralizedthoughts.github.io/2021-09-29-the-round-complexity-of-reliable-broadcast/)
-asks how quickly reliable broadcast can terminate once we measure asynchrony
-by causal message chains rather than real time.
-
-The clean split is between authenticated and unauthenticated settings. With a
-PKI, two-round good-case reliable broadcast is possible at $n\geq 3f+1$.
-Without a PKI, the same good case needs $n\geq 4f$, and this is tight:
-unauthenticated reliable broadcast at $n\leq 4f-1$ cannot have a two-round
-good case. The bad case has its own price: if the broadcaster is faulty, making all
-honest parties output one round after any honest party outputs runs into a
-$5f-2$ style barrier.
+| Setting | What the adversary preserves | Resulting barrier |
+|---|---|---|
+| [Synchronous consensus](https://decentralizedthoughts.github.io/2019-12-15-synchrony-uncommitted-lower-bound/) | an uncommitted configuration | $t+1$ rounds |
+| [Asynchronous consensus](https://decentralizedthoughts.github.io/2019-12-15-asynchrony-uncommitted-lower-bound/) | an uncommitted configuration | an infinite execution |
+| [Mobile crash in synchrony](https://decentralizedthoughts.github.io/2024-03-07-mobile-is-FLP/) | a pivotal configuration | infinite executions again |
+| [Early stopping](https://decentralizedthoughts.github.io/2024-01-28-early-stopping-lower-bounds/) | a pair of AS-FFD configurations | even good executions may need two more rounds |
+| [Simultaneous agreement](https://decentralizedthoughts.github.io/2026-03-07-simultaneous-agreement/) | disagreement about which side of a time threshold was crossed | the $t+1$ barrier returns |
 
 ## Good Case Latency
 
@@ -181,8 +196,16 @@ The broad map is
 [Good-case Latency of Byzantine Broadcast: a Complete Categorization](https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/),
 with the corresponding paper
 [Good-case Latency of Byzantine Broadcast: A Complete Categorization](https://arxiv.org/abs/2102.07240).
-The post separates synchrony, partial synchrony, and asynchrony, and gives
-tight thresholds for two-round good-case protocols.
+The post separates synchrony, partial synchrony, and asynchrony. It is not
+one lower bound, but a collection of tight bounds across several regimes.
+
+A related post,
+[The round complexity of Reliable Broadcast](https://decentralizedthoughts.github.io/2021-09-29-the-round-complexity-of-reliable-broadcast/),
+asks the same kind of question for reliable broadcast, measuring asynchrony by
+causal message chains rather than real time. There the clean split is between
+authenticated and unauthenticated settings: two-round good-case reliable
+broadcast is possible at $n\geq 3f+1$ with a PKI, while without a PKI the same
+good case needs $n\geq 4f$.
 
 For synchrony, read
 [Good-case Latency of Byzantine Broadcast: the Synchronous Case](https://decentralizedthoughts.github.io/2021-03-09-good-case-latency-of-byzantine-broadcast-the-synchronous-case/).
@@ -207,6 +230,22 @@ The related responsiveness lower bound is
 Optimistic responsiveness is powerful, but it does not make the adversary's
 view gap disappear for free.
 
+At a glance:
+
+| Setting | Best possible latency or lower-bound tradeoff | What changes the conclusion |
+|---|---|---|
+| [Asynchronous reliable broadcast, authenticated](https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/) | tight 2-round good case | this is reliable broadcast, not partial-synchronous BFT SMR |
+| [Unauthenticated reliable broadcast](https://decentralizedthoughts.github.io/2021-09-29-the-round-complexity-of-reliable-broadcast/) | 2-round good case iff $n\geq 4f$; one-round bad-case catch-up for $f\geq 3$ needs $n\geq 5f-1$ | signatures reduce the threshold to $n\geq 3f+1$ |
+| [Partial synchrony, $n\leq 5f-2$](https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/) | at least 3 good-case rounds | more validators, stronger timing, or a weaker target |
+| [Partial synchrony, $n\geq 5f-1$](https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/) | tight 2-round good case | dropping below $5f-1$ brings back the 3-round lower bound |
+| [Synchrony, $0<f<n/3$](https://decentralizedthoughts.github.io/2021-03-09-good-case-latency-of-byzantine-broadcast-the-synchronous-case/) | tight $2\delta$ | at $f=n/3$ the bound jumps to $\Delta+\delta$ |
+| [Synchrony, $f=n/3$](https://decentralizedthoughts.github.io/2021-03-09-good-case-latency-of-byzantine-broadcast-the-synchronous-case/) | tight $\Delta+\delta$ | below this threshold, two actual-delay rounds suffice |
+| [Synchrony, $n/3<f<n/2$](https://decentralizedthoughts.github.io/2021-03-09-good-case-latency-of-byzantine-broadcast-the-synchronous-case/) | tight $\Delta+\delta$ with synchronized start; tight $\Delta+1.5\delta$ with unsynchronized start | clock synchronization changes the exact optimum |
+| [Synchrony, $n/2\leq f<n$](https://decentralizedthoughts.github.io/2021-03-09-good-case-latency-of-byzantine-broadcast-the-synchronous-case/) | known lower bound $\lfloor n/(n-f)\rfloor\Delta$ and $O(n/(n-f))\Delta$ upper bound | reducing the fault fraction moves back to the tight $f<n/2$ regimes |
+| [Rotating-leader synchrony](https://decentralizedthoughts.github.io/2021-12-07-good-case-latency-of-rotating-leader-synchronous-bft/) | single-slot responsive rotation needs $2\Delta-O(\delta)$ and is matched by $2\Delta+O(\delta)$ | stable leaders or pipelining change the latency target |
+| [Optimistic responsiveness with a fault-tolerant fast path](https://decentralizedthoughts.github.io/2020-06-12-optimal-optimistic-responsiveness/) | responsive $O(\delta)$ commit forces synchronous fallback at least $2\Delta-O(\delta)$ | a zero-fault optimistic path avoids this tradeoff |
+| [Optimistic responsiveness with a zero-fault fast path](https://decentralizedthoughts.github.io/2020-06-12-optimal-optimistic-responsiveness/) | $\Delta$ synchronous latency is possible | the optimistic condition no longer tolerates even one fault |
+
 ## Validity and Censorship Resistance
 
 Many lower bounds become sharper once validity is made more explicit.
@@ -225,13 +264,25 @@ it. Censorship resistance separates these roles: an input holder has the
 value, while an expediter drives the protocol. The post
 [Latency cost of censorship resistance](https://decentralizedthoughts.github.io/2026-04-23-latency-of-censorship-resistance/)
 shows that this separation costs two rounds in partial synchrony. For
-$n\leq 5f-6$, a censorship resistant protocol cannot have good case latency
-below five rounds.
+$n\leq 5t-6$ and $t\geq 4$, a censorship resistant protocol cannot have good
+case latency below five rounds.
 
 The natural follow up is
 [Beyond censorship resistance: hiding, simultaneous binding, and accountable last look](https://decentralizedthoughts.github.io/2026-04-27-beyond-CR/).
-That post is more about goals than lower bounds, but the lower bounds in this
-section explain why those goals need extra rounds or extra assumptions.
+That post is more about goals than lower bounds: once censorship resistance is
+paid for, hiding, simultaneous binding, and last-look protection can be added
+under synchrony with the same two extra rounds.
+
+At a glance:
+
+| Property | Bound or tight point | What changes the conclusion |
+|---|---|---|
+| [Honest input validity, synchrony](https://decentralizedthoughts.github.io/2022-12-12-what-about-validity/) | impossible for $n\leq \max(3,m)f$ with $m$ input values | above the threshold, gradecast reduces the problem to external validity |
+| [Honest input validity, asynchrony](https://decentralizedthoughts.github.io/2022-12-12-what-about-validity/) | impossible for $n\leq (m+1)f$ | above the threshold, reliable broadcast plus external validity is enough |
+| [Honest-input-or-default validity](https://decentralizedthoughts.github.io/2022-12-12-what-about-validity/) | no stronger lower bound than ordinary consensus | allowing $\bot$ lets the property reduce back to external validity |
+| [Majority / $k$-advantaged validity](https://decentralizedthoughts.github.io/2022-12-12-what-about-validity/) | $2f$-advantaged validity is impossible in asynchrony for any $n/f$, even binary | $2f+1$-advantaged validity is achievable |
+| [Censorship resistance in partial synchrony](https://decentralizedthoughts.github.io/2026-04-23-latency-of-censorship-resistance/) | at least 5 good-case rounds for $n\leq 5t-6$ and $t\geq 4$ | ordinary leader-based BFT can stop at 3; separating input holder $I$ from expediter $E$ costs two rounds |
+| [CR + SCQ + hiding + simultaneous binding + accountable last look](https://decentralizedthoughts.github.io/2026-04-27-beyond-CR/) | under synchrony and $n\geq 3f+1$, any BFT protocol can be augmented with two extra rounds | the three market protections are needed together: hiding, simultaneous binding, and last-look protection |
 
 ## Privacy and Secret State
 
@@ -253,6 +304,14 @@ is the secret key analogue of CAP. If a system wants secret availability and
 secret privacy under partitions, it must pay with another assumption or give
 up one of the properties.
 
+At a glance:
+
+| Object being protected | Adversary goal | Lower-bound shape |
+|---|---|---|
+| [Agreement value](https://decentralizedthoughts.github.io/2019-12-15-consensus-model-for-FLP/) | make honest parties decide differently | split worlds and pivots |
+| [VSS or MPC secret](https://decentralizedthoughts.github.io/2020-07-15-asynchronous-fault-tolerant-computation-with-optimal-resilience/) | learn before reconstruction is safe | privacy hybrids |
+| [Stored secret key](https://decentralizedthoughts.github.io/2024-08-09-sap/) | keep availability and privacy through partitions | SAP-style CAP tradeoff |
+
 ## Liveness Attacks
 
 Lower bounds are not always about agreement. Some are about progress.
@@ -266,6 +325,15 @@ This is a useful reminder for partially synchronous BFT as well. A safety
 proof does not automatically give a liveness proof. In protocols like Simplex,
 Complex, Kuplex, and fixed view schedule variants, the liveness argument has
 to explain exactly why some future leader can form a valid proposal.
+
+At a glance:
+
+| Safety proof says | Liveness proof must also show |
+|---|---|
+| [old decisions cannot conflict](https://decentralizedthoughts.github.io/2020-12-12-raft-liveness-full-omission/) | a new leader can still find usable support |
+| [old locks remain safe](https://decentralizedthoughts.github.io/2020-12-12-raft-liveness-full-omission/) | old evidence can be found, relayed, or bypassed |
+| [view change preserves safety](https://decentralizedthoughts.github.io/2020-12-12-raft-liveness-full-omission/) | some view change eventually produces a valid proposal |
+| [omission faults do not break agreement](https://decentralizedthoughts.github.io/2020-12-12-raft-liveness-full-omission/) | omission faults cannot starve every leader forever |
 
 ## Proof Techniques
 
@@ -293,6 +361,17 @@ execution. This is the proof style behind many good-case latency lower bounds.
 **Privacy hybrids.** Change one party's secret or one share at a time while
 preserving what the adversary can see. This is the natural language of privacy
 and secret state lower bounds.
+
+At a glance:
+
+| Technique | Adversary move | Where to read |
+|---|---|---|
+| Split brain | make two sides see different legal executions | [CAP](https://decentralizedthoughts.github.io/2023-07-09-CAP-two-servers-in-psynch/), [DLS](https://decentralizedthoughts.github.io/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/) |
+| Simulation | make Byzantine parties imitate another world | [FLM](https://decentralizedthoughts.github.io/2019-08-02-byzantine-agreement-is-impossible-for-%24n-slash-leq-3-f%24-is-the-adversary-can-easily-simulate/), [Crusader Agreement](https://decentralizedthoughts.github.io/2021-10-04-crusader-agreement-with-dollars-slash-leq-1-slash-3%24-error-is-impossible-for-%24n-slash-leq-3f%24-if-the-adversary-can-simulate/) |
+| Isolation | keep one party below the evidence threshold | [Dolev-Reischuk](https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/), [strong adaptivity](https://decentralizedthoughts.github.io/2024-12-16-strong-adaptive-lower-bound/) |
+| Bivalence and pivots | move the critical difference forward | [FLP model](https://decentralizedthoughts.github.io/2019-12-15-consensus-model-for-FLP/), [synchronous $t+1$](https://decentralizedthoughts.github.io/2019-12-15-synchrony-uncommitted-lower-bound/), [early stopping](https://decentralizedthoughts.github.io/2024-01-28-early-stopping-lower-bounds/) |
+| Validity worlds | force 0 in one world and 1 in another | [good-case latency](https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/), [three-round BFT](https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/) |
+| Privacy hybrids | change one secret or share at a time | [asynchronous MPC](https://decentralizedthoughts.github.io/2020-07-15-asynchronous-fault-tolerant-computation-with-optimal-resilience/), [SAP](https://decentralizedthoughts.github.io/2024-08-09-sap/) |
 
 ## Reading Map
 
@@ -323,13 +402,10 @@ For rounds and infinite executions, read:
 * [Early Stopping, Same but Different](https://decentralizedthoughts.github.io/2024-01-28-early-stopping-lower-bounds/)
 * [Synchronized Clocks, Fixed View Schedules, and Simultaneous Agreement](https://decentralizedthoughts.github.io/2026-03-07-simultaneous-agreement/)
 
-For broadcast round complexity, read:
-
-* [The round complexity of Reliable Broadcast](https://decentralizedthoughts.github.io/2021-09-29-the-round-complexity-of-reliable-broadcast/)
-
 For good case latency, read:
 
 * [Good-case Latency of Byzantine Broadcast: a Complete Categorization](https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/)
+* [The round complexity of Reliable Broadcast](https://decentralizedthoughts.github.io/2021-09-29-the-round-complexity-of-reliable-broadcast/)
 * [Good-case Latency of Byzantine Broadcast: the Synchronous Case](https://decentralizedthoughts.github.io/2021-03-09-good-case-latency-of-byzantine-broadcast-the-synchronous-case/)
 * [Good-case Latency of Rotating Leader Synchronous BFT](https://decentralizedthoughts.github.io/2021-12-07-good-case-latency-of-rotating-leader-synchronous-bft/)
 * [Why BFT Needs Three Rounds](https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/)
