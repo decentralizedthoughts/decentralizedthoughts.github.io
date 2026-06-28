@@ -663,33 +663,9 @@ adversary to prevent a stable leader from getting the messages it needs.</p>
 proof does not automatically give a liveness proof. In protocols like Simplex,
 Complex, Kuplex, and fixed view schedule variants, the liveness argument has
 to explain exactly why some future leader can form a valid proposal.</p>
-<p>At a glance:</p>
-<table>
- <thead>
- <tr>
- <th>Safety proof says</th>
- <th>Liveness proof must also show</th>
- </tr>
- </thead>
- <tbody>
- <tr>
- <td><a href="https://decentralizedthoughts.github.io/2020-12-12-raft-liveness-full-omission/">old decisions cannot conflict</a></td>
- <td>a new leader can still find usable support</td>
- </tr>
- <tr>
- <td><a href="https://decentralizedthoughts.github.io/2020-12-12-raft-liveness-full-omission/">old locks remain safe</a></td>
- <td>old evidence can be found, relayed, or bypassed</td>
- </tr>
- <tr>
- <td><a href="https://decentralizedthoughts.github.io/2020-12-12-raft-liveness-full-omission/">view change preserves safety</a></td>
- <td>some view change eventually produces a valid proposal</td>
- </tr>
- <tr>
- <td><a href="https://decentralizedthoughts.github.io/2020-12-12-raft-liveness-full-omission/">omission faults do not break agreement</a></td>
- <td>omission faults cannot starve every leader forever</td>
- </tr>
- </tbody>
-</table>
+<p>One-line takeaway: safety says old decisions cannot conflict; liveness must
+also show that some future leader can still collect enough usable evidence to
+make progress.</p>
 <h2 id="proof-techniques">Proof Techniques</h2>
 <p>It is useful to read the posts not only by result, but also by technique.</p>
 <p><strong>Split brain.</strong> Partition the parties so that two sides see different legal

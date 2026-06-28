@@ -326,14 +326,9 @@ proof does not automatically give a liveness proof. In protocols like Simplex,
 Complex, Kuplex, and fixed view schedule variants, the liveness argument has
 to explain exactly why some future leader can form a valid proposal.
 
-At a glance:
-
-| Safety proof says | Liveness proof must also show |
-|---|---|
-| [old decisions cannot conflict](https://decentralizedthoughts.github.io/2020-12-12-raft-liveness-full-omission/) | a new leader can still find usable support |
-| [old locks remain safe](https://decentralizedthoughts.github.io/2020-12-12-raft-liveness-full-omission/) | old evidence can be found, relayed, or bypassed |
-| [view change preserves safety](https://decentralizedthoughts.github.io/2020-12-12-raft-liveness-full-omission/) | some view change eventually produces a valid proposal |
-| [omission faults do not break agreement](https://decentralizedthoughts.github.io/2020-12-12-raft-liveness-full-omission/) | omission faults cannot starve every leader forever |
+One-line takeaway: safety says old decisions cannot conflict; liveness must
+also show that some future leader can still collect enough usable evidence to
+make progress.
 
 ## Proof Techniques
 
