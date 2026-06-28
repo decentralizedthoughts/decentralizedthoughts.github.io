@@ -232,9 +232,9 @@ view gap disappear for free.
 
 At a glance:
 
-| Setting | Best possible latency or lower-bound tradeoff | What changes the conclusion |
+| Setting | Best latency / tradeoff | What changes it |
 |---|---|---|
-| [Asynchronous reliable broadcast, authenticated](https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/) | tight 2-round good case | this is reliable broadcast, not partial-synchronous BFT SMR |
+| [Authenticated async reliable broadcast](https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/) | tight 2-round good case | this is reliable broadcast, not partial-synchronous BFT SMR |
 | [Unauthenticated reliable broadcast](https://decentralizedthoughts.github.io/2021-09-29-the-round-complexity-of-reliable-broadcast/) | 2-round good case iff $n\geq 4f$; one-round bad-case catch-up for $f\geq 3$ needs $n\geq 5f-1$ | signatures reduce the threshold to $n\geq 3f+1$ |
 | [Partial synchrony, $n\leq 5f-2$](https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/) | at least 3 good-case rounds | more validators, stronger timing, or a weaker target |
 | [Partial synchrony, $n\geq 5f-1$](https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/) | tight 2-round good case | dropping below $5f-1$ brings back the 3-round lower bound |
@@ -242,9 +242,9 @@ At a glance:
 | [Synchrony, $f=n/3$](https://decentralizedthoughts.github.io/2021-03-09-good-case-latency-of-byzantine-broadcast-the-synchronous-case/) | tight $\Delta+\delta$ | below this threshold, two actual-delay rounds suffice |
 | [Synchrony, $n/3<f<n/2$](https://decentralizedthoughts.github.io/2021-03-09-good-case-latency-of-byzantine-broadcast-the-synchronous-case/) | tight $\Delta+\delta$ with synchronized start; tight $\Delta+1.5\delta$ with unsynchronized start | clock synchronization changes the exact optimum |
 | [Synchrony, $n/2\leq f<n$](https://decentralizedthoughts.github.io/2021-03-09-good-case-latency-of-byzantine-broadcast-the-synchronous-case/) | known lower bound $\lfloor n/(n-f)\rfloor\Delta$ and $O(n/(n-f))\Delta$ upper bound | reducing the fault fraction moves back to the tight $f<n/2$ regimes |
-| [Rotating-leader synchrony](https://decentralizedthoughts.github.io/2021-12-07-good-case-latency-of-rotating-leader-synchronous-bft/) | single-slot responsive rotation needs $2\Delta-O(\delta)$ and is matched by $2\Delta+O(\delta)$ | stable leaders or pipelining change the latency target |
-| [Optimistic responsiveness with a fault-tolerant fast path](https://decentralizedthoughts.github.io/2020-06-12-optimal-optimistic-responsiveness/) | responsive $O(\delta)$ commit forces synchronous fallback at least $2\Delta-O(\delta)$ | a zero-fault optimistic path avoids this tradeoff |
-| [Optimistic responsiveness with a zero-fault fast path](https://decentralizedthoughts.github.io/2020-06-12-optimal-optimistic-responsiveness/) | $\Delta$ synchronous latency is possible | the optimistic condition no longer tolerates even one fault |
+| [Rotating leaders](https://decentralizedthoughts.github.io/2021-12-07-good-case-latency-of-rotating-leader-synchronous-bft/) | single-slot responsive rotation needs $2\Delta-O(\delta)$ and is matched by $2\Delta+O(\delta)$ | stable leaders or pipelining change the latency target |
+| [Fault-tolerant responsive fast path](https://decentralizedthoughts.github.io/2020-06-12-optimal-optimistic-responsiveness/) | responsive $O(\delta)$ commit forces synchronous fallback at least $2\Delta-O(\delta)$ | a zero-fault optimistic path avoids this tradeoff |
+| [Zero-fault responsive fast path](https://decentralizedthoughts.github.io/2020-06-12-optimal-optimistic-responsiveness/) | $\Delta$ synchronous latency is possible | the optimistic condition no longer tolerates even one fault |
 
 ## Validity and Censorship Resistance
 

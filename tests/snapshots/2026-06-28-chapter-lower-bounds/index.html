@@ -484,13 +484,13 @@ view gap disappear for free.</p>
  <thead>
  <tr>
  <th>Setting</th>
- <th>Best possible latency or lower-bound tradeoff</th>
- <th>What changes the conclusion</th>
+ <th>Best latency / tradeoff</th>
+ <th>What changes it</th>
  </tr>
  </thead>
  <tbody>
  <tr>
- <td><a href="https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/">Asynchronous reliable broadcast, authenticated</a></td>
+ <td><a href="https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/">Authenticated async reliable broadcast</a></td>
  <td>tight 2-round good case</td>
  <td>this is reliable broadcast, not partial-synchronous BFT SMR</td>
  </tr>
@@ -530,17 +530,17 @@ view gap disappear for free.</p>
  <td>reducing the fault fraction moves back to the tight $f&lt;n/2$ regimes</td>
  </tr>
  <tr>
- <td><a href="https://decentralizedthoughts.github.io/2021-12-07-good-case-latency-of-rotating-leader-synchronous-bft/">Rotating-leader synchrony</a></td>
+ <td><a href="https://decentralizedthoughts.github.io/2021-12-07-good-case-latency-of-rotating-leader-synchronous-bft/">Rotating leaders</a></td>
  <td>single-slot responsive rotation needs $2\Delta-O(\delta)$ and is matched by $2\Delta+O(\delta)$</td>
  <td>stable leaders or pipelining change the latency target</td>
  </tr>
  <tr>
- <td><a href="https://decentralizedthoughts.github.io/2020-06-12-optimal-optimistic-responsiveness/">Optimistic responsiveness with a fault-tolerant fast path</a></td>
+ <td><a href="https://decentralizedthoughts.github.io/2020-06-12-optimal-optimistic-responsiveness/">Fault-tolerant responsive fast path</a></td>
  <td>responsive $O(\delta)$ commit forces synchronous fallback at least $2\Delta-O(\delta)$</td>
  <td>a zero-fault optimistic path avoids this tradeoff</td>
  </tr>
  <tr>
- <td><a href="https://decentralizedthoughts.github.io/2020-06-12-optimal-optimistic-responsiveness/">Optimistic responsiveness with a zero-fault fast path</a></td>
+ <td><a href="https://decentralizedthoughts.github.io/2020-06-12-optimal-optimistic-responsiveness/">Zero-fault responsive fast path</a></td>
  <td>$\Delta$ synchronous latency is possible</td>
  <td>the optimistic condition no longer tolerates even one fault</td>
  </tr>
