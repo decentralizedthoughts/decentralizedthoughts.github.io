@@ -1,30 +1,30 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-06-27T19:42:58Z",
+  "fetched_at": "2026-06-28T09:32:16Z",
   "items": [
     {
       "path": "/start-here/",
-      "views": 164
+      "views": 163
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 113
+      "views": 103
+    },
+    {
+      "path": "/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/",
+      "views": 99
+    },
+    {
+      "path": "/2022-04-05-aa-part-five-ABBA/",
+      "views": 98
     },
     {
       "path": "/2022-03-30-asynchronous-agreement-part-two-ben-ors-protocol/",
-      "views": 96
-    },
-    {
-      "path": "/2020-02-26-selfish-mining/",
-      "views": 60
+      "views": 88
     },
     {
       "path": "/2019-12-22-dolev-strong/",
-      "views": 54
-    },
-    {
-      "path": "/2019-06-01-2019-5-31-models/",
-      "views": 44
+      "views": 85
     }
   ]
 }
