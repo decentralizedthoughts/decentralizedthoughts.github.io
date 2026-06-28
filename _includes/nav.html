@@ -1,3 +1,12 @@
+{%- assign chapter_posts = site.posts | sort: "date" -%}
+{%- assign has_chapters = false -%}
+{%- for post in chapter_posts -%}
+  {%- assign chapter_prefix = post.title | slice: 0, 8 -%}
+  {%- if chapter_prefix == "Chapter:" -%}
+    {%- assign has_chapters = true -%}
+  {%- endif -%}
+{%- endfor -%}
+
 <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom {% if page.nav-short %}top-nav-short-permanent{% else %}top-nav-regular{% endif %}">
 
   {%- if site.title-img -%}
@@ -27,6 +36,20 @@
         {% else %}
           <li class="nav-item">
             <a class="nav-link" href="{{ link[1] | relative_url }}">{{ link[0] }}</a>
+          </li>
+        {%- endif -%}
+        {%- if link[0] == "Start Here" and has_chapters -%}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarChaptersDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Chapters</a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarChaptersDropdown">
+              {%- for chapter in chapter_posts -%}
+                {%- assign chapter_prefix = chapter.title | slice: 0, 8 -%}
+                {%- if chapter_prefix == "Chapter:" -%}
+                  {%- assign chapter_label = chapter.title | remove_first: "Chapter:" | strip -%}
+                  <a class="dropdown-item" href="{{ chapter.url | relative_url }}">{{ chapter_label }}</a>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
           </li>
         {%- endif -%}
       {%- endfor -%}

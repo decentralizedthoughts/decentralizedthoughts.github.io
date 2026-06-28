@@ -11,6 +11,20 @@
  
  
  <item>
+ <title>Chapter: Lower Bounds</title>
+ 
+ <dc:creator><![CDATA[ Ittai Abraham ]]></dc:creator>
+ 
+ <description>
+ 
+ This post is a map of the lower-bound posts on Decentralized Thoughts. The Start Here page already lists many of these results by topic, and the lowerbound tag lists the posts themselves. Here we turn that list into a chapter: first the main fault-threshold barriers, then communication, round complexity, latency, validity, privacy, and liveness. In distributed computing, an upper bound is often a condition and a protocol for the honest...
+ </description>
+ <pubDate>Sun, 28 Jun 2026 05:00:00 -0400</pubDate>
+ <link>https://decentralizedthoughts.github.io/2026-06-28-chapter-lower-bounds/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-06-28-chapter-lower-bounds/</guid>
+ </item>
+ 
+ <item>
  <title>Information-Theoretic Kuplex</title>
  
  <dc:creator><![CDATA[ Ittai Abraham, Sourav Das, Yuval Efron, Jovan Komatovic, Gilad Stern ]]></dc:creator>
@@ -274,20 +288,6 @@
  <pubDate>Fri, 19 Dec 2025 23:00:00 -0500</pubDate>
  <link>https://decentralizedthoughts.github.io/2025-12-19-cc-under-harsh-ps/</link>
  <guid isPermaLink="true">https://decentralizedthoughts.github.io/2025-12-19-cc-under-harsh-ps/</guid>
- </item>
- 
- <item>
- <title>DPaaS - Improving Decentralization by Removing Relays in Ethereum PBS</title>
- 
- <dc:creator><![CDATA[ Chenyang Liu, Ittai Abraham, Matthew Lentz, Kartik Nayak ]]></dc:creator>
- 
- <description>
- 
- In this blog post, we will explain the core ideas of Decentralized Proposer-as-a-Service (DPaaS), a side-car protocol that removes centralized and unconditionally trusted relays in current Ethereum Proposer-Builder Separation (PBS). The full paper is on the eprint. PBS and MEV-Boost Proposer-Builder Separation (PBS) was proposed to mitigate the validator centralization brought by the inequality of mining MEV. PBS is inherently a trade between the proposer and builder, requiring fair exchange...
- </description>
- <pubDate>Fri, 12 Dec 2025 07:00:00 -0500</pubDate>
- <link>https://decentralizedthoughts.github.io/2025-12-12-dpaas/</link>
- <guid isPermaLink="true">https://decentralizedthoughts.github.io/2025-12-12-dpaas/</guid>
  </item>
  
  </channel>

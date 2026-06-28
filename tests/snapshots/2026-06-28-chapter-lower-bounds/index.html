@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Chapter: Lower Bounds</title>
+ 
+ 
+ 
+ 
+ <meta name="author" content="Ittai Abraham">
+ 
+ <meta name="description" content="This post is a map of the lower-bound posts on Decentralized Thoughts. The Start Here page already lists many of these results by topic, and the lowerbound tag lists the posts themselves. Here we turn that list into a chapter: first the main fault-threshold barriers, then communication, round complexity, latency, validity, privacy, and liveness. In distributed computing, an upper bound is often a condition and a protocol for the honest...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Chapter: Lower Bounds">
+ <meta property="og:description" content="This post is a map of the lower-bound posts on Decentralized Thoughts. The Start Here page already lists many of these results by topic, and the lowerbound tag lists the posts themselves. Here we turn that list into a chapter: first the main fault-threshold barriers, then communication, round complexity, latency, validity, privacy, and liveness. In distributed computing, an upper bound is often a condition and a protocol for the honest...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham">
+ 
+ <meta property="og:article:published_time" content="2026-06-28T05:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2026-06-28-chapter-lower-bounds/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2026-06-28-chapter-lower-bounds/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Chapter: Lower Bounds">
+ <meta property="twitter:description" content="This post is a map of the lower-bound posts on Decentralized Thoughts. The Start Here page already lists many of these results by topic, and the lowerbound tag lists the posts themselves. Here we turn that list into a chapter: first the main fault-threshold barriers, then communication, round complexity, latency, validity, privacy, and liveness. In distributed computing, an upper bound is often a condition and a protocol for the honest...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li><li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarChaptersDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Chapters</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarChaptersDropdown"><a class="dropdown-item" href="/2026-05-25-chapter-simplex/">Simplex</a><a class="dropdown-item" href="/2026-06-28-chapter-lower-bounds/">Lower Bounds</a></div>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" id="nav-search-link" href="#" title="Search the blog">
+ <span id="nav-search-icon" class="fa fa-search"></span>
+ <span id="nav-search-text">Search</span>
+ </a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+<div id="beautifuljekyll-search-overlay" data-search-json="/assets/data/searchcorpus.json" data-top-pages-json="/assets/data/top-pages.json" aria-hidden="true">
+ <div class="search-overlay-backdrop" data-search-close></div>
+ <div class="search-dialog" role="dialog" aria-modal="true" aria-labelledby="nav-search-heading">
+ <div class="search-dialog-header">
+ <p class="search-dialog-kicker">Search the archive</p>
+ <button id="nav-search-exit" type="button" title="Close search" aria-label="Close search">Close</button>
+ </div>
+ <label class="sr-only" id="nav-search-heading" for="nav-search-input">Search posts, authors, topics, and phrases</label>
+ <div class="search-input-shell">
+ <span class="fa fa-search" aria-hidden="true"></span>
+ <input type="text" id="nav-search-input" placeholder="Search posts, authors, topics, and phrases" autocomplete="off">
+ <span class="search-shortcut">/</span>
+ </div>
+ <p id="nav-search-status">Search by title, author, tag, or a phrase from the post.</p>
+ <div id="search-discovery">
+ <section class="search-discovery-group" aria-labelledby="search-popular-heading">
+ <p class="search-discovery-heading" id="search-popular-heading">Popular topics</p>
+ <div id="search-suggestions" aria-label="Popular topics"></div>
+ </section>
+ <section class="search-discovery-group" aria-labelledby="search-recent-heading">
+ <p class="search-discovery-heading" id="search-recent-heading">Top pages</p>
+ <div id="search-recent-posts"></div>
+ </section>
+ </div>
+ <ul id="search-results-container"></ul>
+ </div>
+</div>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Chapter: Lower Bounds</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham</strong><br>
+ 
+ <span class="post-meta">Posted on June 28, 2026</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>This post is a map of the lower-bound posts on Decentralized Thoughts.
+The <a href="https://decentralizedthoughts.github.io/start-here/">Start Here</a>
+page already lists many of these results by topic, and the
+<a href="https://decentralizedthoughts.github.io/tags/#lowerbound">lowerbound tag</a>
+lists the posts themselves. Here we turn that list into a chapter: first the
+main fault-threshold barriers, then communication, round complexity, latency,
+validity, privacy, and liveness.</p>
+<p>In distributed computing, an upper bound is often a condition and a <em>protocol
+for the honest parties</em>. Under that condition, the protocol lets the honest
+parties satisfy the target property against any adversary. A useful way to
+think about lower bounds is this:</p>
+<blockquote>
+ <p>A lower bound is a condition and a <em>protocol for the adversary</em>. Under that
+condition, the protocol lets the adversary violate the target property of
+any honest-party protocol.</p>
+</blockquote>
+<p>This symmetry is the beauty of lower bounds. They are not only abstract
+statements about what is impossible; they often give an explicit adversarial
+strategy. A proof is often a recipe: assume all but one of the desired
+properties, then show that the adversary can break the last one.</p>
+<h2 id="fault-thresholds">Fault Thresholds</h2>
+<p>The most basic question is how many faults a system can tolerate.</p>
+<p>The first answer is the familiar majority barrier. In state machine
+replication, a 50-50 split forces a choice: keep safety, or keep liveness, but
+not both. This is the message of the
+<a href="https://decentralizedthoughts.github.io/2023-07-09-CAP-two-servers-in-psynch/">CAP theorem for partial synchrony</a>.
+The same majority barrier appears even in lock step synchrony with omission
+faults:
+<a href="https://decentralizedthoughts.github.io/2019-11-02-primary-backup-for-2-servers-and-omission-failures-is-impossible/">State Machine Replication for Two Servers and One Omission Failure is Impossible</a>.
+The post
+<a href="https://decentralizedthoughts.github.io/2024-01-30-between-crash-and-omission/">In between Crash and Omission failures</a>
+sharpens this picture by looking at weaker omission models.</p>
+<p>There is also a permissionless version of the same obstruction:
+<a href="https://decentralizedthoughts.github.io/2022-03-03-blockchain-resource-pools-and-a-cap-esque-impossibility-result/">Blockchain Resource Pools and a CAP-esque Impossibility Result</a>.
+The language is different, but the adversary is again exploiting a split in
+available resources.</p>
+<p>The next barrier concerns Byzantine faults. In partial synchrony,
+<a href="https://groups.csail.mit.edu/tds/papers/Lynch/jacm88.pdf">Dwork, Lynch, and Stockmeyer</a>
+showed that Byzantine agreement needs $n&gt;3f$. The DT post
+<a href="https://decentralizedthoughts.github.io/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/">Byzantine Agreement is impossible for $n\leq 3f$ under partial synchrony</a>
+gives the split brain proof in blog form.</p>
+<p>The unauthenticated version has the same threshold for a different reason, and
+the lower bound holds even in synchrony.
+The
+<a href="https://groups.csail.mit.edu/tds/papers/Lynch/FischerLynchMerritt-dc.pdf">Fischer, Lynch, and Merritt</a>
+simulation lower bound says that without a PKI, or more generally when the
+adversary can simulate parties, Byzantine agreement requires $n&gt;3f$. See
+<a href="https://decentralizedthoughts.github.io/2019-08-02-byzantine-agreement-is-impossible-for-%24n-slash-leq-3-f%24-is-the-adversary-can-easily-simulate/">Byzantine Agreement is Impossible for $n\leq 3f$ if the Adversary can Simulate</a>.
+The same simulation idea can be strengthened to rule out even
+<a href="https://decentralizedthoughts.github.io/2021-10-04-crusader-agreement-with-dollars-slash-leq-1-slash-3%24-error-is-impossible-for-%24n-slash-leq-3f%24-if-the-adversary-can-simulate/">Crusader Agreement with $\leq 1/3$ Error</a>
+at $n\leq 3f$.</p>
+<p>Cryptographic or hardware restrictions can help, but only if they give the
+right property. The post
+<a href="https://decentralizedthoughts.github.io/2021-06-14-neither-non-equivocation-nor-transferability-alone-is-enough-for-tolerating-minority-corruptions-in-asynchrony/">Neither Non-equivocation nor Transferability alone is enough</a>
+explains why each property alone is insufficient for minority corruptions in
+asynchrony. In a related direction, TEEs without persistent state do not escape
+the Byzantine threshold in partial synchrony:
+<a href="https://decentralizedthoughts.github.io/2023-06-26-dls-meets-rollback/">$3f+1$ is needed in Partial Synchrony even against a Rollback adversary</a>.</p>
+<h2 id="communication">Communication</h2>
+<p>The next question is how many messages agreement needs.</p>
+<p>The classic answer is the
+<a href="https://www.cs.huji.ac.il/~dolev/pubs/p132-dolev.pdf">Dolev-Reischuk</a>
+lower bound: deterministic Byzantine agreement needs quadratically many
+messages in the worst case. The DT post
+<a href="https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/">The Dolev and Reischuk Lower Bound</a>
+gives the main isolation argument. If too few messages are sent, the adversary
+can isolate a party and make it unable to tell which decision is required.</p>
+<p>The same isolation template can be reused for other primitives. In
+<a href="https://decentralizedthoughts.github.io/2022-08-14-new-DR-LB/">A new Dolev-Reischuk style Lower Bound</a>,
+the target is Byzantine Crusader Broadcast rather than agreement.</p>
+<p>Randomization does not automatically remove this barrier. The post
+<a href="https://decentralizedthoughts.github.io/2024-12-16-strong-adaptive-lower-bound/">Agreement against strongly adaptive adversaries needs quadratic communication</a>
+extends the message lower bound to randomized protocols against a strongly
+adaptive omission adversary. The adversary waits to see who sends a message to
+the party it wants to isolate, corrupts that sender, and prevents that message
+from being delivered.</p>
+<p>The takeaway is that subquadratic agreement requires both randomization and a
+weaker adversary.</p>
+<h2 id="rounds-and-infinite-executions">Rounds and Infinite Executions</h2>
+<p>The next natural question is how many rounds agreement or other tasks need.</p>
+<p>The introductory post is
+<a href="https://decentralizedthoughts.github.io/2019-12-15-consensus-model-for-FLP/">Consensus Lower Bounds via Uncommitted Configurations</a>.
+It sets up the language of committed and uncommitted configurations (univalent
+and bivalent). A configuration is uncommitted when the adversary can force at
+least two futures with different decision values.</p>
+<p>In synchrony, this gives the classic $t+1$ round lower bound:
+<a href="https://decentralizedthoughts.github.io/2019-12-15-synchrony-uncommitted-lower-bound/">Synchronous Consensus Lower Bound via Uncommitted Configurations</a>.
+Even with crash faults, an adversary can spend one crash per round and keep
+the execution uncommitted. Note that this $t+1$ round lower bound holds even
+for randomized protocols.</p>
+<p>In asynchrony, the same idea gives FLP:
+<a href="https://decentralizedthoughts.github.io/2019-12-15-asynchrony-uncommitted-lower-bound/">The FLP Impossibility</a>.
+The original paper is
+<a href="https://groups.csail.mit.edu/tds/papers/Lynch/jacm85.pdf">Fischer, Lynch, and Paterson</a>.
+The real implication is that:</p>
+<blockquote>
+ <p>Every protocol solving consensus in asynchrony (even randomized ones) must
+have an infinite execution even against one crash fault.</p>
+</blockquote>
+<p>This statement also implies the weaker statement that has been more commonly
+quoted:</p>
+<blockquote>
+ <p>Deterministic consensus in asynchrony is impossible even against one crash
+fault.</p>
+</blockquote>
+<p>But note that the infinite execution statement is stronger: it applies to
+randomized protocols, and it applies to any protocol that solves consensus, not
+just deterministic ones.</p>
+<p>The post
+<a href="https://decentralizedthoughts.github.io/2024-03-07-mobile-is-FLP/">Consensus with One Mobile Crash in Synchrony or One Crash in Asynchrony Has Infinite Executions</a>
+puts FLP and the Santoro-Widmayer mobile crash lower bound into one view. The
+proof tracks a pivot configuration and moves the pivot forward. The post also
+offers a simpler, more modern proof of the FLP theorem.</p>
+<p>Finally,
+<a href="https://decentralizedthoughts.github.io/2024-01-28-early-stopping-lower-bounds/">Early Stopping, Same but Different</a>
+asks what happens when the actual number of failures is smaller than the
+maximum number the protocol tolerates. The lower bound is still a pivot
+argument, but now the question is how soon the protocol can decide in
+executions with few or no failures.</p>
+<p>This is also the right place to read
+<a href="https://decentralizedthoughts.github.io/2026-03-07-simultaneous-agreement/">Synchronized Clocks, Fixed View Schedules, and Simultaneous Agreement</a>.
+Trying to let a fixed view schedule jump early after a fast good case forces
+parties to agree not only on a value, but also on which side of a time
+threshold they decide. That is simultaneous agreement, and it has the same
+$t+1$ barrier.</p>
+<h2 id="broadcast-round-complexity">Broadcast Round Complexity</h2>
+<p>Broadcast has its own round lower bounds.
+<a href="https://decentralizedthoughts.github.io/2021-09-29-the-round-complexity-of-reliable-broadcast/">The round complexity of Reliable Broadcast</a>
+asks how quickly reliable broadcast can terminate once we measure asynchrony
+by causal message chains rather than real time.</p>
+<p>The clean split is between authenticated and unauthenticated settings. With a
+PKI, two-round good-case reliable broadcast is possible at $n\geq 3f+1$.
+Without a PKI, the same good case needs $n\geq 4f$, and this is tight:
+unauthenticated reliable broadcast at $n\leq 4f-1$ cannot have a two-round
+good case. The bad case has its own price: if the broadcaster is faulty, making all
+honest parties output one round after any honest party outputs runs into a
+$5f-2$ style barrier.</p>
+<h2 id="good-case-latency">Good Case Latency</h2>
+<p>Good case latency lower bounds ask a more refined question:</p>
+<blockquote>
+ <p>If the leader is honest and the network is synchronous, how quickly can all
+honest parties decide?</p>
+</blockquote>
+<p>The broad map is
+<a href="https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/">Good-case Latency of Byzantine Broadcast: a Complete Categorization</a>,
+with the corresponding paper
+<a href="https://arxiv.org/abs/2102.07240">Good-case Latency of Byzantine Broadcast: A Complete Categorization</a>.
+The post separates synchrony, partial synchrony, and asynchrony, and gives
+tight thresholds for two-round good-case protocols.</p>
+<p>For synchrony, read
+<a href="https://decentralizedthoughts.github.io/2021-03-09-good-case-latency-of-byzantine-broadcast-the-synchronous-case/">Good-case Latency of Byzantine Broadcast: the Synchronous Case</a>.
+The main theme is equivocation detection. Depending on the exact resilience
+regime, the best latency is not always an integer number of full delay bounds.</p>
+<p>For rotating leaders in synchrony, read
+<a href="https://decentralizedthoughts.github.io/2021-12-07-good-case-latency-of-rotating-leader-synchronous-bft/">Good-case Latency of Rotating Leader Synchronous BFT</a>.
+It explains why, when leaders rotate and propose responsively, a single slot
+cannot beat the $2\Delta$ barrier.</p>
+<p>For partial synchrony, there is an especially important lower bound:
+<a href="https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/">Why BFT Needs Three Rounds</a>.
+For $n\leq 5f-2$, a Byzantine broadcast protocol in partial synchrony needs at
+least three rounds in the good case. This is why PBFT, Tendermint, HotStuff,
+Casper FFG, and Simplex all have the proposal plus two voting round pattern at
+optimal resilience. Two-round good-case protocols need more validators, a
+different timing assumption, or a weaker target.</p>
+<p>The related responsiveness lower bound is
+<a href="https://decentralizedthoughts.github.io/2020-06-12-optimal-optimistic-responsiveness/">On the Optimality of Optimistic Responsiveness</a>.
+Optimistic responsiveness is powerful, but it does not make the adversary’s
+view gap disappear for free.</p>
+<h2 id="validity-and-censorship-resistance">Validity and Censorship Resistance</h2>
+<p>Many lower bounds become sharper once validity is made more explicit.</p>
+<p>The starting point is
+<a href="https://decentralizedthoughts.github.io/2022-12-12-what-about-validity/">What about Validity?</a>.
+Classic validity is weak for blockchain protocols, where values are usually
+client requests or application states. External validity solves one problem:
+the protocol can check that a proposed value is valid without requiring all
+honest parties to start with the same input. Stronger validity notions, such
+as honest input validity or majority validity, create new lower bounds.</p>
+<p>Censorship resistance changes the good case latency problem. In a traditional
+leader based BFT protocol, the leader both constructs the input and proposes
+it. Censorship resistance separates these roles: an input holder has the
+value, while an expediter drives the protocol. The post
+<a href="https://decentralizedthoughts.github.io/2026-04-23-latency-of-censorship-resistance/">Latency cost of censorship resistance</a>
+shows that this separation costs two rounds in partial synchrony. For
+$n\leq 5f-6$, a censorship resistant protocol cannot have good case latency
+below five rounds.</p>
+<p>The natural follow up is
+<a href="https://decentralizedthoughts.github.io/2026-04-27-beyond-CR/">Beyond censorship resistance: hiding, simultaneous binding, and accountable last look</a>.
+That post is more about goals than lower bounds, but the lower bounds in this
+section explain why those goals need extra rounds or extra assumptions.</p>
+<h2 id="privacy-and-secret-state">Privacy and Secret State</h2>
+<p>Privacy lower bounds are different from agreement lower bounds because the
+adversary is not only trying to split decisions. It is also trying to learn or
+expose a secret before the protocol has enough agreement about who is allowed
+to know it.</p>
+<p>The post
+<a href="https://decentralizedthoughts.github.io/2020-07-15-asynchronous-fault-tolerant-computation-with-optimal-resilience/">Asynchronous Fault Tolerant Computation with Optimal Resilience</a>
+explains the Ben-Or, Kelmer, Rabin lower bound: asynchronous verifiable secret
+sharing with perfect security has a nonzero probability of nontermination
+when $n/4\leq f&lt;n/3$. This is why perfectly secure asynchronous MPC has the
+familiar $n&gt;4f$ threshold.</p>
+<p>The post
+<a href="https://decentralizedthoughts.github.io/2024-08-09-sap/">The SAP theorem for storing secret keys</a>
+is the secret key analogue of CAP. If a system wants secret availability and
+secret privacy under partitions, it must pay with another assumption or give
+up one of the properties.</p>
+<h2 id="liveness-attacks">Liveness Attacks</h2>
+<p>Lower bounds are not always about agreement. Some are about progress.</p>
+<p><a href="https://decentralizedthoughts.github.io/2020-12-12-raft-liveness-full-omission/">Raft does not Guarantee Liveness in the face of Network Faults</a>
+shows that omission faults can keep Raft from making progress. The issue is
+not safety; it is that the leader election and message pattern allow the
+adversary to prevent a stable leader from getting the messages it needs.</p>
+<p>This is a useful reminder for partially synchronous BFT as well. A safety
+proof does not automatically give a liveness proof. In protocols like Simplex,
+Complex, Kuplex, and fixed view schedule variants, the liveness argument has
+to explain exactly why some future leader can form a valid proposal.</p>
+<h2 id="proof-techniques">Proof Techniques</h2>
+<p>It is useful to read the posts not only by result, but also by technique.</p>
+<p><strong>Split brain.</strong> Partition the parties so that two sides see different legal
+executions. This is the core of CAP, DLS, and many partial synchrony
+threshold lower bounds.</p>
+<p><strong>Simulation.</strong> Let Byzantine parties imitate honest parties from other
+executions. This is the FLM technique and also appears in Crusader Agreement
+lower bounds.</p>
+<p><strong>Isolation.</strong> Keep one party from receiving enough messages. This is the
+Dolev-Reischuk template and its strongly adaptive variants.</p>
+<p><strong>Bivalence and pivots.</strong> Keep the execution uncommitted by moving one
+critical difference forward. This is the FLP line, the synchronous $t+1$
+round lower bound, early stopping, and simultaneous agreement.</p>
+<p><strong>Validity worlds.</strong> Build one execution where validity forces value $0$ and
+another where validity forces value $1$, then connect them through a mixed
+execution. This is the proof style behind many good-case latency lower bounds.</p>
+<p><strong>Privacy hybrids.</strong> Change one party’s secret or one share at a time while
+preserving what the adversary can see. This is the natural language of privacy
+and secret state lower bounds.</p>
+<h2 id="reading-map">Reading Map</h2>
+<p>For fault thresholds, read:</p>
+<ul>
+ <li><a href="https://decentralizedthoughts.github.io/2023-07-09-CAP-two-servers-in-psynch/">The CAP theorem for partial synchrony</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2019-11-02-primary-backup-for-2-servers-and-omission-failures-is-impossible/">State Machine Replication for Two Servers and One Omission Failure is Impossible</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2024-01-30-between-crash-and-omission/">In between Crash and Omission failures</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2022-03-03-blockchain-resource-pools-and-a-cap-esque-impossibility-result/">Blockchain Resource Pools and a CAP-esque Impossibility Result</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/">Byzantine Agreement is impossible for $n\leq 3f$ under partial synchrony</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2019-08-02-byzantine-agreement-is-impossible-for-%24n-slash-leq-3-f%24-is-the-adversary-can-easily-simulate/">Byzantine Agreement is Impossible for $n\leq 3f$ if the Adversary can Simulate</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2021-10-04-crusader-agreement-with-dollars-slash-leq-1-slash-3%24-error-is-impossible-for-%24n-slash-leq-3f%24-if-the-adversary-can-simulate/">Crusader Agreement with $\leq 1/3$ Error is Impossible for $n\leq 3f$</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2021-06-14-neither-non-equivocation-nor-transferability-alone-is-enough-for-tolerating-minority-corruptions-in-asynchrony/">Neither Non-equivocation nor Transferability alone is enough</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2023-06-26-dls-meets-rollback/">$3f+1$ is needed in Partial Synchrony even against a Rollback adversary</a></li>
+</ul>
+<p>For communication lower bounds, read:</p>
+<ul>
+ <li><a href="https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/">The Dolev and Reischuk Lower Bound</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2022-08-14-new-DR-LB/">A new Dolev-Reischuk style Lower Bound</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2024-12-16-strong-adaptive-lower-bound/">Agreement against strongly adaptive adversaries needs quadratic communication</a></li>
+</ul>
+<p>For rounds and infinite executions, read:</p>
+<ul>
+ <li><a href="https://decentralizedthoughts.github.io/2019-12-15-consensus-model-for-FLP/">Consensus Lower Bounds via Uncommitted Configurations</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2019-12-15-synchrony-uncommitted-lower-bound/">Synchronous Consensus Lower Bound via Uncommitted Configurations</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2019-12-15-asynchrony-uncommitted-lower-bound/">The FLP Impossibility</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2024-03-07-mobile-is-FLP/">Consensus with One Mobile Crash in Synchrony or One Crash in Asynchrony Has Infinite Executions</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2024-01-28-early-stopping-lower-bounds/">Early Stopping, Same but Different</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2026-03-07-simultaneous-agreement/">Synchronized Clocks, Fixed View Schedules, and Simultaneous Agreement</a></li>
+</ul>
+<p>For broadcast round complexity, read:</p>
+<ul>
+ <li><a href="https://decentralizedthoughts.github.io/2021-09-29-the-round-complexity-of-reliable-broadcast/">The round complexity of Reliable Broadcast</a></li>
+</ul>
+<p>For good case latency, read:</p>
+<ul>
+ <li><a href="https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/">Good-case Latency of Byzantine Broadcast: a Complete Categorization</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2021-03-09-good-case-latency-of-byzantine-broadcast-the-synchronous-case/">Good-case Latency of Byzantine Broadcast: the Synchronous Case</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2021-12-07-good-case-latency-of-rotating-leader-synchronous-bft/">Good-case Latency of Rotating Leader Synchronous BFT</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/">Why BFT Needs Three Rounds</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2020-06-12-optimal-optimistic-responsiveness/">On the Optimality of Optimistic Responsiveness</a></li>
+</ul>
+<p>For validity and censorship resistance, read:</p>
+<ul>
+ <li><a href="https://decentralizedthoughts.github.io/2022-12-12-what-about-validity/">What about Validity?</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2026-04-23-latency-of-censorship-resistance/">Latency cost of censorship resistance</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2026-04-27-beyond-CR/">Beyond censorship resistance</a></li>
+</ul>
+<p>For privacy and secret state, read:</p>
+<ul>
+ <li><a href="https://decentralizedthoughts.github.io/2020-07-15-asynchronous-fault-tolerant-computation-with-optimal-resilience/">Asynchronous Fault Tolerant Computation with Optimal Resilience</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2024-08-09-sap/">The SAP theorem for storing secret keys</a></li>
+</ul>
+<p>For liveness attacks, read:</p>
+<ul>
+ <li><a href="https://decentralizedthoughts.github.io/2020-12-12-raft-liveness-full-omission/">Raft does not Guarantee Liveness in the face of Network Faults</a></li>
+</ul>
+<p>For classic external papers, read:</p>
+<ul>
+ <li><a href="https://groups.csail.mit.edu/tds/papers/Lynch/jacm88.pdf">Dwork, Lynch, Stockmeyer: Consensus in the Presence of Partial Synchrony</a></li>
+ <li><a href="https://groups.csail.mit.edu/tds/papers/Lynch/jacm85.pdf">Fischer, Lynch, Paterson: Impossibility of Distributed Consensus with One Faulty Process</a></li>
+ <li><a href="https://groups.csail.mit.edu/tds/papers/Lynch/FischerLynchMerritt-dc.pdf">Fischer, Lynch, Merritt: Easy Impossibility Proofs for Distributed Consensus Problems</a></li>
+ <li><a href="https://www.cs.huji.ac.il/~dolev/pubs/p132-dolev.pdf">Dolev and Reischuk: Bounds on Information Exchange for Byzantine Agreement</a></li>
+ <li><a href="https://arxiv.org/abs/2006.16686">Ben-Or, Kelmer, Rabin: Asynchronous Secure Computations with Optimal Resilience</a></li>
+ <li><a href="https://arxiv.org/abs/2102.07240">Good-case Latency of Byzantine Broadcast: A Complete Categorization</a></li>
+</ul>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ <a href="/tags#lowerbound">lowerbound</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Chapter%3A+Lower+Bounds&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2026-06-28-chapter-lower-bounds%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2026-06-05-IT-Kuplex/" data-toggle="tooltip" data-placement="top" title="Information-Theoretic Kuplex">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ 
+ Decentralized Thinkers
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>
