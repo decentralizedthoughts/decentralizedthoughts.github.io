@@ -1,30 +1,30 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-06-29T20:15:19Z",
+  "fetched_at": "2026-06-30T09:59:57Z",
   "items": [
     {
-      "path": "/start-here/",
-      "views": 159
-    },
-    {
       "path": "/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/",
-      "views": 131
+      "views": 179
     },
     {
-      "path": "/2022-04-05-aa-part-five-ABBA/",
-      "views": 117
-    },
-    {
-      "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 107
+      "path": "/start-here/",
+      "views": 144
     },
     {
       "path": "/2019-12-22-dolev-strong/",
-      "views": 100
+      "views": 139
     },
     {
-      "path": "/2019-06-07-modeling-the-adversary/",
-      "views": 63
+      "path": "/2022-04-05-aa-part-five-ABBA/",
+      "views": 130
+    },
+    {
+      "path": "/2020-12-22-what-is-a-merkle-tree/",
+      "views": 111
+    },
+    {
+      "path": "/2020-02-26-selfish-mining/",
+      "views": 66
     }
   ]
 }
