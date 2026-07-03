@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-07-02T19:50:27Z",
+  "fetched_at": "2026-07-03T09:34:00Z",
   "items": [
     {
       "path": "/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/",
@@ -12,11 +12,11 @@
     },
     {
       "path": "/start-here/",
-      "views": 150
+      "views": 155
     },
     {
       "path": "/2022-04-05-aa-part-five-ABBA/",
-      "views": 136
+      "views": 135
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
@@ -24,7 +24,7 @@
     },
     {
       "path": "/2019-08-16-byzantine-agreement-needs-quadratic-messages/",
-      "views": 76
+      "views": 80
     }
   ]
 }
