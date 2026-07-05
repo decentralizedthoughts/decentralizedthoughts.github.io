@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-07-04T19:35:13Z",
+  "fetched_at": "2026-07-05T09:21:58Z",
   "items": [
     {
       "path": "/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/",
@@ -8,11 +8,11 @@
     },
     {
       "path": "/2019-12-22-dolev-strong/",
-      "views": 163
+      "views": 161
     },
     {
       "path": "/start-here/",
-      "views": 153
+      "views": 148
     },
     {
       "path": "/2022-04-05-aa-part-five-ABBA/",
@@ -23,7 +23,7 @@
       "views": 108
     },
     {
-      "path": "/2026-06-28-chapter-lower-bounds/",
+      "path": "/2019-08-16-byzantine-agreement-needs-quadratic-messages/",
       "views": 82
     }
   ]
