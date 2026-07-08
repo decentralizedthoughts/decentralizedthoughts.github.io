@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-07-08T08:43:17Z",
+  "fetched_at": "2026-07-08T19:54:14Z",
   "items": [
     {
       "path": "/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/",
@@ -20,7 +20,7 @@
     },
     {
       "path": "/2026-06-28-chapter-lower-bounds/",
-      "views": 98
+      "views": 99
     },
     {
       "path": "/2019-08-16-byzantine-agreement-needs-quadratic-messages/",
