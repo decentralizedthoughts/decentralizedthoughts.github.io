@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-07-09T09:56:29Z",
+  "fetched_at": "2026-07-09T20:02:34Z",
   "items": [
     {
       "path": "/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/",
@@ -24,7 +24,7 @@
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 76
+      "views": 78
     },
     {
       "path": "/2020-02-26-selfish-mining/",
