@@ -1,17 +1,17 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-07-10T09:52:13Z",
+  "fetched_at": "2026-07-10T19:49:53Z",
   "items": [
     {
       "path": "/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/",
-      "views": 188
-    },
-    {
-      "path": "/2019-12-22-dolev-strong/",
-      "views": 137
+      "views": 189
     },
     {
       "path": "/2022-04-05-aa-part-five-ABBA/",
+      "views": 139
+    },
+    {
+      "path": "/2019-12-22-dolev-strong/",
       "views": 137
     },
     {
@@ -19,16 +19,16 @@
       "views": 104
     },
     {
+      "path": "/2020-12-22-what-is-a-merkle-tree/",
+      "views": 80
+    },
+    {
       "path": "/start-here/",
       "views": 79
     },
     {
-      "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 78
-    },
-    {
       "path": "/2020-02-26-selfish-mining/",
-      "views": 71
+      "views": 72
     }
   ]
 }
