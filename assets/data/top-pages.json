@@ -1,26 +1,26 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-07-09T20:02:34Z",
+  "fetched_at": "2026-07-10T09:52:13Z",
   "items": [
     {
       "path": "/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/",
-      "views": 187
+      "views": 188
     },
     {
       "path": "/2019-12-22-dolev-strong/",
-      "views": 146
+      "views": 137
     },
     {
       "path": "/2022-04-05-aa-part-five-ABBA/",
-      "views": 135
+      "views": 137
     },
     {
       "path": "/2026-06-28-chapter-lower-bounds/",
-      "views": 101
+      "views": 104
     },
     {
       "path": "/start-here/",
-      "views": 94
+      "views": 79
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
@@ -28,7 +28,7 @@
     },
     {
       "path": "/2020-02-26-selfish-mining/",
-      "views": 72
+      "views": 71
     }
   ]
 }
