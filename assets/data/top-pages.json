@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-07-10T19:49:53Z",
+  "fetched_at": "2026-07-11T08:14:08Z",
   "items": [
     {
       "path": "/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/",
@@ -8,27 +8,27 @@
     },
     {
       "path": "/2022-04-05-aa-part-five-ABBA/",
-      "views": 139
+      "views": 140
     },
     {
       "path": "/2019-12-22-dolev-strong/",
-      "views": 137
+      "views": 134
     },
     {
       "path": "/2026-06-28-chapter-lower-bounds/",
-      "views": 104
+      "views": 106
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 80
+      "views": 77
     },
     {
       "path": "/start-here/",
-      "views": 79
+      "views": 76
     },
     {
-      "path": "/2020-02-26-selfish-mining/",
-      "views": 72
+      "path": "/2019-06-07-modeling-the-adversary/",
+      "views": 69
     }
   ]
 }
