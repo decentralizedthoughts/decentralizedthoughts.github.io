@@ -449,14 +449,14 @@ If no honest party enters view $v$ before receiving the proposal and R2, no
 timer can expire before the party votes. Otherwise, let
 $\tau\geq\mathrm{GST}$ be the first honest entrance. For every $1\leq y<v$,
 the first entrant changed from view $y$ to view $y+1$ using an
-$\mathrm{X2}_y$ quorum. Let $w'$ be the highest such view in which it has a
-chain quorum $\mathrm{X2}_{w'}(C)$, or let $w'=0$ if there is none. It has
-$\mathrm{X2}_y(\bot)$ for every $w'<y<v$. Each of these quorums contains at
-least $Q-f=n-2f\ge A$ honest grade-2 messages. By $\tau+\delta$, the honest
-leader therefore has L2 for a valid extension of $C$ when $w'>0$, or a valid
-extension of $G$ when $w'=0$. Rule 1 sends its only proposal as soon as it has
-L2 for any such extension, so $t_L\leq\tau+\delta$. The first entrant receives
-the proposal and R2 by
+$\mathrm{X2}\_y$ quorum. Let $w^\prime$ be the highest such view in which it
+has a chain quorum $\mathrm{X2}\_{w^\prime}(C)$, or let $w^\prime=0$ if there is
+none. It has $\mathrm{X2}_y(\bot)$ for every $w^\prime<y<v$. Each of these
+quorums contains at least $Q-f=n-2f\ge A$ honest grade-2 messages. By
+$\tau+\delta$, the honest leader therefore has L2 for a valid extension of $C$
+when $w^\prime>0$, or a valid extension of $G$ when $w^\prime=0$. Rule 1 sends
+its only proposal as soon as it has L2 for any such extension, so
+$t_L\leq\tau+\delta$. The first entrant receives the proposal and R2 by
 
 $$
 t_L+\delta\leq\tau+2\delta\leq\tau+2\Delta.
