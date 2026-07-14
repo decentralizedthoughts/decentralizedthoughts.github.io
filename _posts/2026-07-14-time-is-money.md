@@ -1,6 +1,6 @@
 ---
 title: "Time Is Money: Incentivized Causal Transaction Ordering" 
-date: 2026-07-14 17:00:00 -05:00 
+date: 2026-07-14 12:31:00 -04:00
 tags:
 - blockchain 
 author: Hongyin Chen, Xu Zheng, Jichen Li, Ittay Eyal 
