@@ -1,9 +1,10 @@
 ---
-title: "Time Is Money: Incentivized Causal Transaction Ordering"
-date: 2026-07-14 17:00:00 -05:00
+title: "Time Is Money: Incentivized Causal Transaction Ordering" 
+date: 2026-07-14 17:00:00 -05:00 
 tags:
-- blockchain
-author: Hongyin Chen, Xu Zheng, Jichen Li, Ittay Eyal
+- blockchain 
+author: Hongyin Chen, Xu Zheng, Jichen Li, Ittay Eyal 
+layout: post 
 ---
 
 Front-running is a pervasive and costly problem on blockchains. Users earn rewards by publishing functional transactions that keeps markets efficient, such as arbitrage. But an attacker can [observe such a transaction before it is ordered and publish her own ahead of it](https://a16zcrypto.com/posts/article/mev-explained/), seizing the reward and eroding users' incentive to issue these transactions at all. The problem is well known and has drawn sustained effort from both industry and academia, yet it remains open. 
