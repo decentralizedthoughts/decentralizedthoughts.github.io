@@ -1,30 +1,30 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-07-15T19:34:48Z",
+  "fetched_at": "2026-07-16T08:33:27Z",
   "items": [
     {
       "path": "/2026-07-12-fast-IT-BFT/",
-      "views": 78
+      "views": 92
     },
     {
       "path": "/start-here/",
-      "views": 76
+      "views": 83
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 63
+      "views": 62
     },
     {
       "path": "/2020-02-26-selfish-mining/",
-      "views": 60
+      "views": 53
     },
     {
-      "path": "/2026-06-28-chapter-lower-bounds/",
-      "views": 41
+      "path": "/2026-07-14-time-is-money/",
+      "views": 51
     },
     {
-      "path": "/course/",
-      "views": 41
+      "path": "/2019-06-01-2019-5-31-models/",
+      "views": 45
     }
   ]
 }
