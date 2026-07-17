@@ -1,14 +1,14 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-07-16T19:33:25Z",
+  "fetched_at": "2026-07-17T08:27:17Z",
   "items": [
     {
       "path": "/2026-07-12-fast-IT-BFT/",
-      "views": 95
+      "views": 96
     },
     {
       "path": "/start-here/",
-      "views": 84
+      "views": 82
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
@@ -16,15 +16,15 @@
     },
     {
       "path": "/2026-07-14-time-is-money/",
-      "views": 54
+      "views": 57
     },
     {
       "path": "/2020-02-26-selfish-mining/",
-      "views": 53
+      "views": 49
     },
     {
       "path": "/2019-06-01-2019-5-31-models/",
-      "views": 46
+      "views": 48
     }
   ]
 }
