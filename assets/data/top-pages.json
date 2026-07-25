@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-07-25T08:23:04Z",
+  "fetched_at": "2026-07-25T19:33:19Z",
   "items": [
     {
       "path": "/2026-07-12-fast-IT-BFT/",
@@ -20,7 +20,7 @@
     },
     {
       "path": "/2019-10-15-consensus-for-state-machine-replication/",
-      "views": 46
+      "views": 48
     },
     {
       "path": "/2024-05-07-decentralization-ethereum/",
