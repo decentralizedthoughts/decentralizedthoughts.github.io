@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-07-27T10:08:27Z",
+  "fetched_at": "2026-07-27T19:52:53Z",
   "items": [
     {
       "path": "/2026-07-12-fast-IT-BFT/",
@@ -16,7 +16,7 @@
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 57
+      "views": 59
     },
     {
       "path": "/2019-10-15-consensus-for-state-machine-replication/",
