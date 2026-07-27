@@ -1,26 +1,26 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-07-26T19:32:54Z",
+  "fetched_at": "2026-07-27T10:08:27Z",
   "items": [
     {
       "path": "/2026-07-12-fast-IT-BFT/",
-      "views": 124
+      "views": 110
     },
     {
       "path": "/start-here/",
-      "views": 88
+      "views": 89
     },
     {
       "path": "/2026-07-14-time-is-money/",
       "views": 70
     },
     {
-      "path": "/2019-10-15-consensus-for-state-machine-replication/",
-      "views": 50
+      "path": "/2020-12-22-what-is-a-merkle-tree/",
+      "views": 57
     },
     {
-      "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 50
+      "path": "/2019-10-15-consensus-for-state-machine-replication/",
+      "views": 55
     },
     {
       "path": "/2024-05-07-decentralization-ethereum/",
