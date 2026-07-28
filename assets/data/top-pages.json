@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-07-28T08:50:35Z",
+  "fetched_at": "2026-07-28T19:51:38Z",
   "items": [
     {
       "path": "/start-here/",
@@ -12,11 +12,11 @@
     },
     {
       "path": "/2026-07-14-time-is-money/",
-      "views": 73
+      "views": 74
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 60
+      "views": 61
     },
     {
       "path": "/2019-10-15-consensus-for-state-machine-replication/",
