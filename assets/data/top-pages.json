@@ -1,10 +1,10 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-07-30T08:49:11Z",
+  "fetched_at": "2026-07-30T19:49:57Z",
   "items": [
     {
       "path": "/start-here/",
-      "views": 70
+      "views": 71
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
@@ -12,7 +12,7 @@
     },
     {
       "path": "/2019-10-15-consensus-for-state-machine-replication/",
-      "views": 49
+      "views": 50
     },
     {
       "path": "/2024-05-07-decentralization-ethereum/",
@@ -24,7 +24,7 @@
     },
     {
       "path": "/2019-12-22-dolev-strong/",
-      "views": 35
+      "views": 36
     }
   ]
 }
