@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-07-31T09:15:29Z",
+  "fetched_at": "2026-07-31T19:51:08Z",
   "items": [
     {
       "path": "/start-here/",
@@ -19,12 +19,12 @@
       "views": 44
     },
     {
-      "path": "/2020-02-26-selfish-mining/",
+      "path": "/2019-12-22-dolev-strong/",
       "views": 39
     },
     {
-      "path": "/2019-12-22-dolev-strong/",
-      "views": 38
+      "path": "/2020-02-26-selfish-mining/",
+      "views": 39
     }
   ]
 }
