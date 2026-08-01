@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-08-01T08:33:10Z",
+  "fetched_at": "2026-08-01T19:32:08Z",
   "items": [
     {
       "path": "/start-here/",
@@ -8,7 +8,7 @@
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 57
+      "views": 58
     },
     {
       "path": "/2019-10-15-consensus-for-state-machine-replication/",
