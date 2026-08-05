@@ -1,10 +1,10 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-08-05T09:04:10Z",
+  "fetched_at": "2026-08-05T19:52:39Z",
   "items": [
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 75
+      "views": 77
     },
     {
       "path": "/start-here/",
@@ -16,15 +16,15 @@
     },
     {
       "path": "/2020-02-26-selfish-mining/",
-      "views": 43
+      "views": 44
     },
     {
       "path": "/course/",
-      "views": 37
+      "views": 38
     },
     {
       "path": "/2019-11-29-Analysis-Nakamoto/",
-      "views": 33
+      "views": 34
     }
   ]
 }
