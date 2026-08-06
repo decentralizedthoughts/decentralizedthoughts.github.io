@@ -1,18 +1,18 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-08-05T19:52:39Z",
+  "fetched_at": "2026-08-06T09:04:28Z",
   "items": [
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 77
+      "views": 75
     },
     {
       "path": "/start-here/",
-      "views": 58
+      "views": 57
     },
     {
       "path": "/2019-10-15-consensus-for-state-machine-replication/",
-      "views": 45
+      "views": 46
     },
     {
       "path": "/2020-02-26-selfish-mining/",
@@ -20,7 +20,7 @@
     },
     {
       "path": "/course/",
-      "views": 38
+      "views": 36
     },
     {
       "path": "/2019-11-29-Analysis-Nakamoto/",
