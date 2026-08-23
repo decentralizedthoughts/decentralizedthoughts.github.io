@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-08-22T18:47:33Z",
+  "fetched_at": "2026-08-23T07:00:27Z",
   "items": [
     {
       "path": "/2025-02-14-verifiable-MSM/",
@@ -8,23 +8,23 @@
     },
     {
       "path": "/start-here/",
-      "views": 113
-    },
-    {
-      "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 62
+      "views": 115
     },
     {
       "path": "/2020-02-26-selfish-mining/",
       "views": 61
     },
     {
+      "path": "/2020-12-22-what-is-a-merkle-tree/",
+      "views": 61
+    },
+    {
       "path": "/course/",
-      "views": 56
+      "views": 57
     },
     {
       "path": "/2019-06-01-2019-5-31-models/",
-      "views": 46
+      "views": 47
     }
   ]
 }
