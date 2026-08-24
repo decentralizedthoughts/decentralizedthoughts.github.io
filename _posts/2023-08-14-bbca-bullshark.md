@@ -9,7 +9,7 @@ author: Dahlia Malkhi, Chrysa Stathakopoulou, Ted Yin
 
 In a recent post, we introduced [BBCA-Chain](https://blog.chain.link/bbca-chain-single-broadcast-consensus-on-a-dag/), a one-message consensus protocol on a DAG. This post explains the differences between BBCA-Chain and [Bullshark](https://arxiv.org/abs/2209.05633). The description below provides a piece-by-piece explanation by "migrating" Bullshark, step by step, into BBCA-Chain (familiarity with both is needed). 
 
-The first part focuses on reduce latency, the second on removing layering constraints. Aside from these tangible improvement, the transformation also simplifies the solution. 
+The first part focuses on reducing latency, the second on removing layering constraints. In addition to the tangible latency improvements, overall the transformation makes the consensus protocol somewhat more simple. 
 
 
 ## Background
