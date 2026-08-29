@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-08-29T12:40:38Z",
+  "fetched_at": "2026-08-29T20:53:59Z",
   "items": [
     {
       "path": "/start-here/",
@@ -24,7 +24,7 @@
     },
     {
       "path": "/2019-10-15-consensus-for-state-machine-replication/",
-      "views": 34
+      "views": 36
     }
   ]
 }
