@@ -1,14 +1,14 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-09-03T11:13:40Z",
+  "fetched_at": "2026-09-03T21:00:42Z",
   "items": [
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 98
+      "views": 92
     },
     {
       "path": "/start-here/",
-      "views": 89
+      "views": 90
     },
     {
       "path": "/2020-02-26-selfish-mining/",
@@ -20,11 +20,11 @@
     },
     {
       "path": "/2019-06-01-2019-5-31-models/",
-      "views": 44
+      "views": 45
     },
     {
       "path": "/2019-10-15-consensus-for-state-machine-replication/",
-      "views": 33
+      "views": 34
     }
   ]
 }
