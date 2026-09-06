@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-09-06T10:55:51Z",
+  "fetched_at": "2026-09-06T20:22:39Z",
   "items": [
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
@@ -8,7 +8,7 @@
     },
     {
       "path": "/2020-02-26-selfish-mining/",
-      "views": 84
+      "views": 85
     },
     {
       "path": "/start-here/",
@@ -24,7 +24,7 @@
     },
     {
       "path": "/2020-12-12-raft-liveness-full-omission/",
-      "views": 37
+      "views": 38
     }
   ]
 }
