@@ -1,14 +1,14 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-09-05T20:18:34Z",
+  "fetched_at": "2026-09-06T10:55:51Z",
   "items": [
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 105
+      "views": 107
     },
     {
       "path": "/2020-02-26-selfish-mining/",
-      "views": 80
+      "views": 84
     },
     {
       "path": "/start-here/",
@@ -16,14 +16,14 @@
     },
     {
       "path": "/2019-06-01-2019-5-31-models/",
-      "views": 47
+      "views": 50
     },
     {
       "path": "/2024-05-07-decentralization-ethereum/",
-      "views": 44
+      "views": 39
     },
     {
-      "path": "/2019-10-15-consensus-for-state-machine-replication/",
+      "path": "/2020-12-12-raft-liveness-full-omission/",
       "views": 37
     }
   ]
