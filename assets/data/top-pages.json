@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-09-07T12:32:00Z",
+  "fetched_at": "2026-09-07T21:29:52Z",
   "items": [
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
@@ -27,7 +27,7 @@
       "views": 37
     },
     {
-      "path": "/2024-05-07-decentralization-ethereum/",
+      "path": "/2023-04-01-hotstuff-2/",
       "views": 36
     }
   ]
