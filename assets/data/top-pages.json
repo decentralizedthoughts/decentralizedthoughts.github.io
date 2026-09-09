@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-09-09T11:22:53Z",
+  "fetched_at": "2026-09-09T20:54:43Z",
   "items": [
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
@@ -16,7 +16,7 @@
     },
     {
       "path": "/2020-12-12-raft-liveness-full-omission/",
-      "views": 57
+      "views": 58
     },
     {
       "path": "/2019-12-22-dolev-strong/",
@@ -28,7 +28,7 @@
     },
     {
       "path": "/2019-10-15-consensus-for-state-machine-replication/",
-      "views": 39
+      "views": 40
     }
   ]
 }
