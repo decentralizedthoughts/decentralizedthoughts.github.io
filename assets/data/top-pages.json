@@ -1,26 +1,26 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-09-10T20:50:25Z",
+  "fetched_at": "2026-09-11T11:20:28Z",
   "items": [
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 124
-    },
-    {
-      "path": "/start-here/",
-      "views": 83
+      "views": 127
     },
     {
       "path": "/2020-02-26-selfish-mining/",
-      "views": 80
+      "views": 77
+    },
+    {
+      "path": "/start-here/",
+      "views": 74
     },
     {
       "path": "/2020-12-12-raft-liveness-full-omission/",
-      "views": 58
+      "views": 59
     },
     {
       "path": "/2019-06-01-2019-5-31-models/",
-      "views": 54
+      "views": 57
     },
     {
       "path": "/2019-12-22-dolev-strong/",
@@ -28,7 +28,7 @@
     },
     {
       "path": "/2019-10-15-consensus-for-state-machine-replication/",
-      "views": 41
+      "views": 43
     }
   ]
 }
