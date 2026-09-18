@@ -1,14 +1,14 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-09-18T11:14:02Z",
+  "fetched_at": "2026-09-18T20:53:03Z",
   "items": [
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 102
+      "views": 103
     },
     {
       "path": "/start-here/",
-      "views": 85
+      "views": 88
     },
     {
       "path": "/2019-06-01-2019-5-31-models/",
@@ -20,15 +20,15 @@
     },
     {
       "path": "/2020-12-12-raft-liveness-full-omission/",
-      "views": 65
+      "views": 66
     },
     {
       "path": "/2019-12-22-dolev-strong/",
-      "views": 61
+      "views": 62
     },
     {
       "path": "/2026-07-14-time-is-money/",
-      "views": 40
+      "views": 41
     }
   ]
 }
