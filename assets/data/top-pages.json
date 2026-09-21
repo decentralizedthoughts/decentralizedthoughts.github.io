@@ -1,21 +1,21 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-09-21T12:47:30Z",
+  "fetched_at": "2026-09-21T21:57:32Z",
   "items": [
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 120
+      "views": 121
     },
     {
       "path": "/start-here/",
-      "views": 95
-    },
-    {
-      "path": "/2019-06-01-2019-5-31-models/",
-      "views": 70
+      "views": 96
     },
     {
       "path": "/2020-02-26-selfish-mining/",
+      "views": 71
+    },
+    {
+      "path": "/2019-06-01-2019-5-31-models/",
       "views": 70
     },
     {
@@ -24,7 +24,7 @@
     },
     {
       "path": "/2019-12-22-dolev-strong/",
-      "views": 52
+      "views": 53
     }
   ]
 }
