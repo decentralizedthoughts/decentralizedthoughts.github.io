@@ -1,10 +1,10 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-09-23T21:28:48Z",
+  "fetched_at": "2026-09-24T11:45:16Z",
   "items": [
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 134
+      "views": 159
     },
     {
       "path": "/start-here/",
@@ -12,7 +12,7 @@
     },
     {
       "path": "/2020-02-26-selfish-mining/",
-      "views": 74
+      "views": 78
     },
     {
       "path": "/2020-12-12-raft-liveness-full-omission/",
@@ -20,11 +20,11 @@
     },
     {
       "path": "/2019-06-01-2019-5-31-models/",
-      "views": 64
+      "views": 57
     },
     {
-      "path": "/2019-12-22-dolev-strong/",
-      "views": 39
+      "path": "/2019-06-27-defining-consensus/",
+      "views": 37
     }
   ]
 }
