@@ -404,6 +404,7 @@ For good case latency, read:
 * [Good-case Latency of Byzantine Broadcast: the Synchronous Case](https://decentralizedthoughts.github.io/2021-03-09-good-case-latency-of-byzantine-broadcast-the-synchronous-case/)
 * [Good-case Latency of Rotating Leader Synchronous BFT](https://decentralizedthoughts.github.io/2021-12-07-good-case-latency-of-rotating-leader-synchronous-bft/)
 * [Why BFT Needs Three Rounds](https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/)
+* [Why BFT with Byzantine and Crash Faults Needs Three Rounds](https://decentralizedthoughts.github.io/2026-09-26-three-round-BFT-with-crashes/)
 * [On the Optimality of Optimistic Responsiveness](https://decentralizedthoughts.github.io/2020-06-12-optimal-optimistic-responsiveness/)
 
 For validity and censorship resistance, read:
