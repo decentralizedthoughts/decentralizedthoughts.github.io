@@ -13,7 +13,7 @@
  
  <meta name="author" content="Ittai Abraham, Aniket Kate, Kartik Nayak, Nibesh Shrestha, Alberto Sonnino">
  
- <meta name="description" content="How many parties do we need to decide after one proposal and one round of voting, when some faults are Byzantine and others are crashes? The answer depends on both the faults we must tolerate for eventual progress and the faults we want to tolerate on the fast path. This post is based on the elegant 2005 lower bound in the unpublished technical report of Dutta, Guerraoui, and Vukolić. A...">
+ <meta name="description" content="How many parties do we need to decide after one proposal and one round of voting, when some faults are Byzantine and others are crashes? The answer depends on both the faults we must tolerate for eventual progress and the faults we want to tolerate on the fast path. This post is based on the elegant lower bound in the unpublished technical report of Dutta, Guerraoui, and Vukolić, 2005. A...">
  
  
  
@@ -72,7 +72,7 @@
  
  <meta property="og:site_name" content="Decentralized Thoughts">
  <meta property="og:title" content="Why BFT with Byzantine and Crash Faults Needs Three Rounds">
- <meta property="og:description" content="How many parties do we need to decide after one proposal and one round of voting, when some faults are Byzantine and others are crashes? The answer depends on both the faults we must tolerate for eventual progress and the faults we want to tolerate on the fast path. This post is based on the elegant 2005 lower bound in the unpublished technical report of Dutta, Guerraoui, and Vukolić. A...">
+ <meta property="og:description" content="How many parties do we need to decide after one proposal and one round of voting, when some faults are Byzantine and others are crashes? The answer depends on both the faults we must tolerate for eventual progress and the faults we want to tolerate on the fast path. This post is based on the elegant lower bound in the unpublished technical report of Dutta, Guerraoui, and Vukolić, 2005. A...">
  
  <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
  
@@ -91,7 +91,7 @@
  <meta name="twitter:site" content="@ittaia">
  <meta name="twitter:creator" content="@ittaia">
  <meta property="twitter:title" content="Why BFT with Byzantine and Crash Faults Needs Three Rounds">
- <meta property="twitter:description" content="How many parties do we need to decide after one proposal and one round of voting, when some faults are Byzantine and others are crashes? The answer depends on both the faults we must tolerate for eventual progress and the faults we want to tolerate on the fast path. This post is based on the elegant 2005 lower bound in the unpublished technical report of Dutta, Guerraoui, and Vukolić. A...">
+ <meta property="twitter:description" content="How many parties do we need to decide after one proposal and one round of voting, when some faults are Byzantine and others are crashes? The answer depends on both the faults we must tolerate for eventual progress and the faults we want to tolerate on the fast path. This post is based on the elegant lower bound in the unpublished technical report of Dutta, Guerraoui, and Vukolić, 2005. A...">
  
  <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
  
@@ -217,8 +217,8 @@
 voting, when some faults are Byzantine and others are crashes? The answer
 depends on both the faults we must tolerate for eventual progress and the
 faults we want to tolerate on the fast path.</p>
-<p>This post is based on the elegant 2005 lower bound in the unpublished technical
-report of <a href="https://lpdwww.epfl.ch/upload/documents/publications/567931850DGV-feb-05.pdf">Dutta, Guerraoui, and Vukolić</a>. A similar bound was proven in
+<p>This post is based on the elegant lower bound in the unpublished technical
+report of <a href="https://lpdwww.epfl.ch/upload/documents/publications/567931850DGV-feb-05.pdf">Dutta, Guerraoui, and Vukolić, 2005</a>. A similar bound was proven 20 years later in
 <a href="https://eprint.iacr.org/2025/1112.pdf">Hydrangea</a>. This bound extends
 <a href="https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/">Why BFT Needs Three Rounds</a> in two ways:</p>
 <ul>
@@ -372,8 +372,11 @@ is possible with $n=2c+1$. More generally, if there is a way to prevent even
 a Byzantine leader from equivocating, then a two round good case is possible
 already with $n=3f+2c-1$. <a href="https://www.anza.xyz/blog/alpenglow-a-new-consensus-for-solana">Alpenglow</a> obtains the closely related
 bound $n=3f+2c+1$ under its <a href="https://drive.google.com/file/d/1RPJ9OyohFMuFfLmTB5ydPYlrKTIlUxq9/view?usp=sharing">Assumption 3</a>, which
-prevents the leader from equivocating. It tolerates $f+c$ faults and its fast
-path finalizes when $n-p$ parties participate. Thus, the Byzantine and crash
+prevents the leader from equivocating. It tolerates $f$ Byzantine and $c$
+additional crash faults under that assumption; its fast path requires
+$n-c$ matching votes, corresponding to $p=c$ in our notation. Taking
+$f=c$ gives $n=5f+1$, corresponding to their “20+20” configuration:
+roughly 20% Byzantine faults and an additional 20% crash faults. Thus, the Byzantine and crash
 only cases do not meet continuously at $f=0$ because the lower bound relies
 specifically on a Byzantine leader equivocating.</p>
  </li>

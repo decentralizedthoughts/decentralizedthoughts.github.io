@@ -17,7 +17,7 @@
  
  <description>
  
- How many parties do we need to decide after one proposal and one round of voting, when some faults are Byzantine and others are crashes? The answer depends on both the faults we must tolerate for eventual progress and the faults we want to tolerate on the fast path. This post is based on the elegant 2005 lower bound in the unpublished technical report of Dutta, Guerraoui, and Vukolić. A...
+ How many parties do we need to decide after one proposal and one round of voting, when some faults are Byzantine and others are crashes? The answer depends on both the faults we must tolerate for eventual progress and the faults we want to tolerate on the fast path. This post is based on the elegant lower bound in the unpublished technical report of Dutta, Guerraoui, and Vukolić, 2005. A...
  </description>
  <pubDate>Sat, 26 Sep 2026 04:00:00 -0400</pubDate>
  <link>https://decentralizedthoughts.github.io/2026-09-26-three-round-BFT-with-crashes/</link>

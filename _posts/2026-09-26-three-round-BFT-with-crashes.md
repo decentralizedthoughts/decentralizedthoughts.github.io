@@ -11,8 +11,8 @@ voting, when some faults are Byzantine and others are crashes? The answer
 depends on both the faults we must tolerate for eventual progress and the
 faults we want to tolerate on the fast path.
 
-This post is based on the elegant 2005 lower bound in the unpublished technical
-report of [Dutta, Guerraoui, and Vukolić][dgv]. A similar bound was proven in
+This post is based on the elegant lower bound in the unpublished technical
+report of [Dutta, Guerraoui, and Vukolić, 2005][dgv]. A similar bound was proven 20 years later in
 [Hydrangea](https://eprint.iacr.org/2025/1112.pdf). This bound extends
 [Why BFT Needs Three Rounds][three-round-bft] in two ways:
 
@@ -208,8 +208,11 @@ two rounds.
   a Byzantine leader from equivocating, then a two round good case is possible
   already with $n=3f+2c-1$. [Alpenglow][alpenglow] obtains the closely related
   bound $n=3f+2c+1$ under its [Assumption 3][alpenglow-assumption-3], which
-  prevents the leader from equivocating. It tolerates $f+c$ faults and its fast
-  path finalizes when $n-p$ parties participate. Thus, the Byzantine and crash
+  prevents the leader from equivocating. It tolerates $f$ Byzantine and $c$
+  additional crash faults under that assumption; its fast path requires
+  $n-c$ matching votes, corresponding to $p=c$ in our notation. Taking
+  $f=c$ gives $n=5f+1$, corresponding to their "20+20" configuration:
+  roughly 20% Byzantine faults and an additional 20% crash faults. Thus, the Byzantine and crash
   only cases do not meet continuously at $f=0$ because the lower bound relies
   specifically on a Byzantine leader equivocating.
 
