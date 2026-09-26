@@ -192,6 +192,119 @@
  
  
  <article class="post-preview">
+ <a href="/2026-09-26-three-round-BFT-with-crashes/">
+ <h2 class="post-title">Why BFT with Byzantine and Crash Faults Needs Three Rounds</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on September 26, 2026, by <b>Ittai Abraham, Aniket Kate, Kartik Nayak, Nibesh Shrestha, Alberto Sonnino</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ How many parties do we need to decide after one proposal and one round of
+voting, when some faults are Byzantine and others are crashes? The answer
+depends on both the faults we must tolerate for eventual progress and the
+faults we want to tolerate on the fast path.
+ 
+ 
+ <a href="/2026-09-26-three-round-BFT-with-crashes/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#lowerbound">lowerbound</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ 
+ 
+ <article class="post-preview">
+ <a href="/2026-07-14-time-is-money/">
+ <h2 class="post-title">Time Is Money: Incentivized Causal Transaction Ordering</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on July 14, 2026, by <b>Hongyin Chen, Xu Zheng, Jichen Li, Ittay Eyal</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Front-running is a pervasive and costly problem on blockchains. Users earn rewards by publishing functional transactions that keeps markets efficient, such as arbitrage. But an attacker can observe such a transaction before it is ordered and publish her own ahead of it, seizing the reward and eroding users’ incentive to issue these transactions at all. The problem is well known and has drawn sustained effort from both industry and academia,...
+ 
+ 
+ <a href="/2026-07-14-time-is-money/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ 
+ 
+ <article class="post-preview">
+ <a href="/2026-07-12-fast-IT-BFT/">
+ <h2 class="post-title">Two Round Information-Theoretic Chained BFT at n=5f-1</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on July 12, 2026, by <b>Ittai Abraham, Sourav Das, Yuval Efron, Jovan Komatovic, Alejandro Ranchal-Pedrosa, Gilad Stern</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Information-Theoretic Kuplex
+gives a signature-free Simplex protocol in which quorums cannot be transferred
+between parties. This post makes the earlier
+two round BFT protocol for $n=5f-1$
+signature-free in the same way. We use the
+Chained Simplex
+outer protocol: a leader extends a certified chain by one valid block. For a
+map of the surrounding Simplex line, see the
+Simplex chapter.
+ 
+ 
+ <a href="/2026-07-12-fast-IT-BFT/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ <a href="/tags#partial-synchrony">partial-synchrony</a>
+ 
+ <a href="/tags#information-theoretic">information-theoretic</a>
+ 
+ <a href="/tags#fast-simplex">fast-simplex</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ 
+ 
+ <article class="post-preview">
  <a href="/2026-06-28-chapter-lower-bounds/">
  <h2 class="post-title">Chapter: Lower Bounds</h2>
  
@@ -743,88 +856,6 @@ For a map of the surrounding Simplex line, see the Simplex chapter.
  </div>
  </div>
  
- 
- </article>
- 
- 
- 
- <article class="post-preview">
- <a href="/2026-01-21-simple-payment/">
- <h2 class="post-title">Simple Payment Systems with Unlinkability</h2>
- 
- </a>
- <p class="post-meta">
- Posted on January 21, 2026, by <b>Ittai Abraham, Gilad Stern, and Alin Tomescu</b>
- </p>
- 
- <div class="post-entry-container">
- 
- <div class="post-entry">
- In this post, we discuss payment systems. There is a set of users who wish to pay each other.
- 
- 
- <a href="/2026-01-21-simple-payment/" class="post-read-more">[Read&nbsp;More]</a>
- 
- </div>
- </div>
- 
- 
- </article>
- 
- 
- 
- <article class="post-preview">
- <a href="/2026-01-21-blind-and-threshold/">
- <h2 class="post-title">Blind and Threshold Blind Signatures</h2>
- 
- </a>
- <p class="post-meta">
- Posted on January 21, 2026, by <b>Ittai Abraham, Gilad Stern, and Alin Tomescu</b>
- </p>
- 
- <div class="post-entry-container">
- 
- <div class="post-entry">
- A blind signature scheme allows a user to obtain a valid signature on a message while ensuring that the signer learns nothing about the message. The user blinds the message, the signer signs the blinded value, and the user unblinds the response to obtain a valid signature on the original message. Importantly, the signer still retains full control over whether to participate in the protocol, it only gives up visibility...
- 
- 
- <a href="/2026-01-21-blind-and-threshold/" class="post-read-more">[Read&nbsp;More]</a>
- 
- </div>
- </div>
- 
- 
- </article>
- 
- 
- 
- <article class="post-preview">
- <a href="/2025-12-19-cc-under-harsh-ps/">
- <h2 class="post-title">Partial Synchrony variants</h2>
- 
- </a>
- <p class="post-meta">
- Posted on December 19, 2025, by <b>Ittai Abraham, Yuval Efron, Kartik Nayak, and Ling Ren</b>
- </p>
- 
- <div class="post-entry-container">
- 
- <div class="post-entry">
- In this post we observe three variants of Partial Synchrony (PS) and how they affect (or not) popular BFT protocols like PBFT, Tendermint, and especially the recent Simplex protocol.
- 
- 
- <a href="/2025-12-19-cc-under-harsh-ps/" class="post-read-more">[Read&nbsp;More]</a>
- 
- </div>
- </div>
- 
- 
- <div class="blog-tags">
- Tags:
- 
- <a href="/tags#models">models</a>
- 
- </div>
  
  </article>
  

@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Why BFT with Byzantine and Crash Faults Needs Three Rounds</title>
+ 
+ 
+ 
+ 
+ <meta name="author" content="Ittai Abraham, Aniket Kate, Kartik Nayak, Nibesh Shrestha, Alberto Sonnino">
+ 
+ <meta name="description" content="How many parties do we need to decide after one proposal and one round of voting, when some faults are Byzantine and others are crashes? The answer depends on both the faults we must tolerate for eventual progress and the faults we want to tolerate on the fast path. This post is based on the elegant 2005 lower bound in the unpublished technical report of Dutta, Guerraoui, and Vukolić. A...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Why BFT with Byzantine and Crash Faults Needs Three Rounds">
+ <meta property="og:description" content="How many parties do we need to decide after one proposal and one round of voting, when some faults are Byzantine and others are crashes? The answer depends on both the faults we must tolerate for eventual progress and the faults we want to tolerate on the fast path. This post is based on the elegant 2005 lower bound in the unpublished technical report of Dutta, Guerraoui, and Vukolić. A...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham, Aniket Kate, Kartik Nayak, Nibesh Shrestha, Alberto Sonnino">
+ 
+ <meta property="og:article:published_time" content="2026-09-26T04:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2026-09-26-three-round-BFT-with-crashes/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2026-09-26-three-round-BFT-with-crashes/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Why BFT with Byzantine and Crash Faults Needs Three Rounds">
+ <meta property="twitter:description" content="How many parties do we need to decide after one proposal and one round of voting, when some faults are Byzantine and others are crashes? The answer depends on both the faults we must tolerate for eventual progress and the faults we want to tolerate on the fast path. This post is based on the elegant 2005 lower bound in the unpublished technical report of Dutta, Guerraoui, and Vukolić. A...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li><li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarChaptersDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Chapters</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarChaptersDropdown"><a class="dropdown-item" href="/2026-05-25-chapter-simplex/">Simplex</a><a class="dropdown-item" href="/2026-06-28-chapter-lower-bounds/">Lower Bounds</a></div>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" id="nav-search-link" href="#" title="Search the blog">
+ <span id="nav-search-icon" class="fa fa-search"></span>
+ <span id="nav-search-text">Search</span>
+ </a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+<div id="beautifuljekyll-search-overlay" data-search-json="/assets/data/searchcorpus.json" data-top-pages-json="/assets/data/top-pages.json" aria-hidden="true">
+ <div class="search-overlay-backdrop" data-search-close></div>
+ <div class="search-dialog" role="dialog" aria-modal="true" aria-labelledby="nav-search-heading">
+ <div class="search-dialog-header">
+ <p class="search-dialog-kicker">Search the archive</p>
+ <button id="nav-search-exit" type="button" title="Close search" aria-label="Close search">Close</button>
+ </div>
+ <label class="sr-only" id="nav-search-heading" for="nav-search-input">Search posts, authors, topics, and phrases</label>
+ <div class="search-input-shell">
+ <span class="fa fa-search" aria-hidden="true"></span>
+ <input type="text" id="nav-search-input" placeholder="Search posts, authors, topics, and phrases" autocomplete="off">
+ <span class="search-shortcut">/</span>
+ </div>
+ <p id="nav-search-status">Search by title, author, tag, or a phrase from the post.</p>
+ <div id="search-discovery">
+ <section class="search-discovery-group" aria-labelledby="search-popular-heading">
+ <p class="search-discovery-heading" id="search-popular-heading">Popular topics</p>
+ <div id="search-suggestions" aria-label="Popular topics"></div>
+ </section>
+ <section class="search-discovery-group" aria-labelledby="search-recent-heading">
+ <p class="search-discovery-heading" id="search-recent-heading">Top pages</p>
+ <div id="search-recent-posts"></div>
+ </section>
+ </div>
+ <ul id="search-results-container"></ul>
+ </div>
+</div>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Why BFT with Byzantine and Crash Faults Needs Three Rounds</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham, Aniket Kate, Kartik Nayak, Nibesh Shrestha, Alberto Sonnino</strong><br>
+ 
+ <span class="post-meta">Posted on September 26, 2026</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>How many parties do we need to decide after one proposal and one round of
+voting, when some faults are Byzantine and others are crashes? The answer
+depends on both the faults we must tolerate for eventual progress and the
+faults we want to tolerate on the fast path.</p>
+<p>This post is based on the elegant 2005 lower bound in the unpublished technical
+report of <a href="https://lpdwww.epfl.ch/upload/documents/publications/567931850DGV-feb-05.pdf">Dutta, Guerraoui, and Vukolić</a>. A similar bound was proven in
+<a href="https://eprint.iacr.org/2025/1112.pdf">Hydrangea</a>. This bound extends
+<a href="https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/">Why BFT Needs Three Rounds</a> in two ways:</p>
+<ul>
+ <li>It requires the protocol to be safe and live against $f$ Byzantine faults
+and $c$ crash faults. For $c=0$ and $p=f$, the $n=5f-2$ lower bound already
+appears in <a href="https://arxiv.org/abs/2102.07240">Abraham et al.</a> and
+<a href="https://arxiv.org/abs/2102.12825">Kuznetsov, Tonkikh, and Zhang</a>.</li>
+ <li>It requires the protocol to have a two round good case when there are at
+most $p$ faulty parties. For $c=0$, the $n=3f+2p-2$ lower bound already
+appears in <a href="https://arxiv.org/abs/2102.12825">Kuznetsov, Tonkikh, and Zhang</a>.</li>
+</ul>
+<h2 id="the-generalized-result">The generalized result</h2>
+<p>There are $n$ parties, including the leader. The adversary may control at most
+$f$ Byzantine parties and at most $c$ additional crash faulty parties. The two
+fault sets are disjoint. A Byzantine party may behave arbitrarily. A crash
+faulty party follows the protocol until it crashes and then sends no more
+messages.</p>
+<p>We assume authenticated point-to-point channels. The lower-bound attack does
+not require forging messages from correct parties; it also applies when
+digital signatures are available. We consider binary inputs, $0$ and $1$.</p>
+<p>The protocol must always satisfy agreement, must satisfy validity when the
+leader is honest and GST is $0$, and must terminate after GST against the full
+bounds of $f$ Byzantine faults and $c$ crash faults. We say that its two round
+good case tolerates $p$ faulty parties if all correct parties decide within
+two message delays ($2\delta$) whenever GST is $0$, the leader is honest, and at most $p$ parties
+are faulty, with the Byzantine and crash faults respecting their respective
+bounds.</p>
+<p>Here GST is the global stabilization time. Before GST, message delay is unbounded. After GST, every message from one
+correct party to another is delivered within $\delta\leq\Delta$ of the later
+of GST and its send time. The good case latency is the time from the leader’s
+initial proposal until every correct party decides. Thus, two rounds means
+one proposal followed by one round of voting, rather than two voting rounds.</p>
+<p>The main result is:</p>
+<p><strong>Theorem.</strong> Let $f\geq1$, $c\geq0$, and $p$ be integers satisfying</p>
+\[1\leq p\leq f+c.\]
+<p>There is no protocol with $n=3f+c+2p-2$ parties that solves Byzantine
+Broadcast in partial synchrony against at most $f$ Byzantine faults and $c$
+additional crash faults and has a two round good case tolerating $p$ faulty
+parties.</p>
+<p>When $(c+2)/2\leq p\leq f+c$, this is tight: with $n=3f+c+2p-1$, a
+two round good case tolerating the same $p$ faulty parties is possible, as we
+will show in a future post. The condition on $p$ is equivalent to
+$3f+c+2p-1\geq3f+2c+1$, the usual resilience threshold for this
+mixed-fault model. The lower bound itself does not need this condition.</p>
+<p>The good news is that proving this generalized result requires only minor
+changes to the parameters in the <a href="https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/">base proof</a>.</p>
+<h2 id="proof">Proof</h2>
+<p>As in the <a href="https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/">base proof</a>, we present the argument with the
+leader proposing first and other parties then voting. Input-independent
+messages sent before the proposal can be handled by the standard extension
+in <a href="https://arxiv.org/abs/2102.07240">Abraham et al.</a>.</p>
+<p>The proof is by contradiction. Assume that a protocol with
+$n=3f+c+2p-2$ has a two round good case tolerating $p$ faulty parties and show
+that it must violate agreement.</p>
+<p>The case $f=1,c=0$ forces $p=1$ and $n=3$, where Byzantine Broadcast is
+already impossible against one Byzantine fault. Hence, assume $f+c\geq2$, so
+the set $C$ defined below is nonempty.</p>
+<p>Partition the parties into the leader and five sets $A,B,C,D,E$ with sizes</p>
+\[|A|=|E|=p,
+\qquad
+|B|=|D|=f-1,
+\qquad
+|C|=f+c-1.\]
+<p>The sets $B$ and $D$ may be empty. In particular, when $f=1$,
+$B=D=\varnothing$. The prescribed Byzantine behavior of $B$ and $D$ is then
+vacuous.</p>
+<p>Indeed,</p>
+\[1+|A|+|B|+|C|+|D|+|E|
+=1+2p+2(f-1)+(f+c-1)
+=3f+c+2p-2.\]
+<p>The condition $p\leq f+c$ implies that either $A$ or $E$ can be made entirely
+faulty using at most $f$ Byzantine faults and $c$ crash faults.</p>
+<p>We consider three executions: a mixed world $M$, a corrupt world $\hat D$,
+and a validity world $V$.</p>
+<h3 id="world-m-mixed">World $M$ (mixed)</h3>
+<p><img src="/uploads/mixed-world-plus-crashes.svg" alt="Mixed world: the leader equivocates and C is silent." /></p>
+<p>In the mixed world, the leader is Byzantine. Of the parties in $C$, $f-1$
+are Byzantine and the remaining $c$ are crash faulty. Thus, all parties in
+$C$ are silent and the execution has exactly $f$ Byzantine faults and $c$
+crash faults. Also, GST is $0$.</p>
+<p>The leader sends $0$ to $A,B$ and $1$ to $D,E$. Since the protocol must
+eventually terminate even when the leader is Byzantine, all correct parties
+eventually decide the same value. Assume without loss of generality that they
+decide $1$. If they decide $0$ instead, swap $A$ with $E$, $B$ with $D$, and the
+roles of $0$ and $1$. We discuss randomized protocols below.</p>
+<h3 id="world-v-validity">World $V$ (validity)</h3>
+<p><img src="/uploads/validity-world-plus-crashes.svg" alt="Validity world: the leader proposes 0 and E is silent." /></p>
+<p>In the validity world, GST is $0$ and the leader is honest with input $0$.
+All parties in $E$ are faulty and remain silent. This is an allowed execution:
+$|E|=p\leq f+c$, so these faults can be divided into at most $f$ Byzantine
+faults and at most $c$ crash faults. It is also an execution to which the
+assumed two round good case applies because $|E|=p$.</p>
+<p>The parties in $C$ hear the leader’s value $0$ and receive the same first-round voting
+messages for $0$ from $A,B,D$. Since the leader is honest, validity requires
+every correct party to decide $0$. The assumed good case latency requires the
+parties in $C$ to decide $0$ within two rounds.</p>
+<h3 id="world-hat-d-corrupt">World $\hat D$ (corrupt)</h3>
+<p><img src="/uploads/corrupt-world-plus-crashes.svg" alt="Corrupt world: D equivocates and messages from C are delayed." /></p>
+<p>In this world, the leader and all parties in $D$ are Byzantine. Since
+$|D|=f-1$, there are exactly $f$ Byzantine parties. This execution does not
+need to use any of the allowed crash faults. Keep the network asynchronous
+until after the decisions described below, and then let GST occur.</p>
+<p>The leader sends $0$ to $A,B,C$ and $1$ to $E$. The Byzantine parties in $D$
+behave toward $A,B,E$ as if they had received $1$, exactly as the honest
+parties in $D$ do in world $M$. Toward $C$, they send the first-round voting messages
+they would have sent after receiving $0$, exactly as the honest parties in
+$D$ do in world $V$.</p>
+<p>Choose the synchronous schedules in $M$ and $V$ so that proposals arrive at
+time $\delta$ and the resulting votes arrive at time $2\delta$. A message
+reacting to those votes cannot arrive before $3\delta$. In particular,
+$C$ must decide in $V$ before it can hear a report of what $E$ received.</p>
+<p>Before GST, delay every message sent by a party in $C$ to a party outside $C$,
+and delay every message from $E$ to $C$. Through time $2\delta$, deliver to $C$ the proposal and votes from $V$.
+Afterward, continue delaying messages to $C$ as needed. Outside $C$, replay
+the schedule of $M$. These choices are compatible: $A$ and $B$ receive $0$
+in both worlds, and $D$ can simulate its $M$ behavior toward every party
+outside $C$. Thus:</p>
+<ul>
+ <li>the parties in $B,E$ see the same messages as in world $M$ until they
+decide; and</li>
+ <li>the parties in $C$ see the same messages as in world $V$ through their two
+round decision point.</li>
+</ul>
+<p>The parties in $B,E$ cannot distinguish worlds $M$ and $\hat D$ through their
+decision points. Therefore, they decide $1$ in world $\hat D$. In particular,
+$E$ is nonempty because $p\geq1$, so at least one correct party decides $1$.
+The parties in $C$ cannot distinguish worlds $\hat D$ and $V$ through the good
+case decision point. Therefore, they decide $0$ in world $\hat D$.</p>
+<h3 id="the-contradiction">The contradiction</h3>
+<p>World $\hat D$ has only $f$ Byzantine parties and no crash faults, yet correct
+parties decide different values. This violates agreement.</p>
+<p>To group the indistinguishability claims: first, $B,E$ cannot distinguish
+worlds $M$ and $\hat D$, which moves the decision $1$ from $M$ to $\hat D$.
+Second, $C$ cannot distinguish worlds $\hat D$ and $V$ through its decision
+point, which moves the decision $0$ from $V$ to $\hat D$. The two links force
+conflicting decisions in the same execution.</p>
+<p>This contradicts the assumption that the protocol has good case latency of
+two rounds.</p>
+<h3 id="notes">Notes</h3>
+<ul>
+ <li>
+ <p>For randomized protocols with always-correct agreement and validity and
+almost-sure termination, choose a value decided in $M$ with positive
+probability (at least one half for binary decisions). There is then a
+finite time $T$ by which that value is decided with positive probability.
+Couple the random choices in the indistinguishable views and set GST in
+the corrupt world later than both $T$ and $2\delta$. The same construction
+violates agreement with positive probability. This avoids choosing GST
+based on an unbounded wait for a randomized decision.</p>
+ </li>
+ <li>
+ <p>The parameter $p$ removes the even or odd case distinction that appears in
+the original proof of
+<a href="https://eprint.iacr.org/2025/1112.pdf">Hydrangea</a>. The sets $A$ and $E$ both
+contain $p$ parties, while $C$ contains $f-1$ Byzantine parties and all $c$
+crash faulty parties in the mixed world. The sets $B$ and $D$ stay at size
+$f-1$.</p>
+ </li>
+ <li>
+ <p>The proof requires a Byzantine leader, so the theorem assumes $f\geq1$.
+When $f=0$, the equivocation used in the mixed world is impossible. The
+theorem therefore does not give a crash-only lower bound. Similarly, a
+model that prevents leader equivocation needs a separate analysis: the
+mixed world in this proof is no longer an allowed execution.</p>
+ </li>
+ <li>
+ <p>In their unpublished technical report
+<a href="https://lpdwww.epfl.ch/upload/documents/publications/567931850DGV-feb-05.pdf"><em>Best-Case Complexity of Asynchronous Byzantine Consensus</em></a>,
+Partha Dutta, Rachid Guerraoui, and Marko Vukolić give the bound
+$N_a&gt;2Q+F+2M-2$ in Proposition L.4 (Section 4.2, page 19).
+In their notation, $N_a$ is the number of acceptors, $M$ bounds malicious
+acceptors, $F$ bounds total acceptor failures tolerated for liveness, and
+$Q$ bounds failures tolerated in the two round good case. Taking
+$M=f$, $F=f+c$, and $Q=p$ gives $n&gt;3f+c+2p-2$.
+Their formulation distinguishes proposers, acceptors, and learners, with
+the privileged proposer also counted as an acceptor. Their proof uses a
+learner that decides and then crashes. Here, the parties in $C$ decide
+and remain correct in the corrupt world, while their outgoing messages
+are delayed. The report is EPFL I&amp;C Technical Report 200499, revised
+February 2005.</p>
+ </li>
+ <li>
+ <p><a href="https://sonnino.com/papers/hydrozoan.pdf">Hydrozoan</a>, by Qianyu Yu, Lefteris Kokoris-Kogias, and
+Alberto Sonnino, studies the same tradeoff in DAG-based consensus. Its
+basic construction uses $n=3f+c+2p+1$ validators and combines a two round
+fast path tolerating $p$ faults with a three round path under the full
+fault bounds. Section VI presents <strong>Optimal-Hydrozoan</strong>, a variant with
+$n\geq3f+c+2p-1$, subject also to $n\geq3f+2c+1$.</p>
+ </li>
+</ul>
+<p>Your thoughts/comments on <a href="TBD">X</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#lowerbound">lowerbound</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Why+BFT+with+Byzantine+and+Crash+Faults+Needs+Three+Rounds&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2026-09-26-three-round-BFT-with-crashes%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2026-07-14-time-is-money/" data-toggle="tooltip" data-placement="top" title="Time Is Money: Incentivized Causal Transaction Ordering">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ 
+ Decentralized Thinkers
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

@@ -11,6 +11,48 @@
  
  
  <item>
+ <title>Why BFT with Byzantine and Crash Faults Needs Three Rounds</title>
+ 
+ <dc:creator><![CDATA[ Ittai Abraham, Aniket Kate, Kartik Nayak, Nibesh Shrestha, Alberto Sonnino ]]></dc:creator>
+ 
+ <description>
+ 
+ How many parties do we need to decide after one proposal and one round of voting, when some faults are Byzantine and others are crashes? The answer depends on both the faults we must tolerate for eventual progress and the faults we want to tolerate on the fast path. This post is based on the elegant 2005 lower bound in the unpublished technical report of Dutta, Guerraoui, and Vukolić. A...
+ </description>
+ <pubDate>Sat, 26 Sep 2026 04:00:00 -0400</pubDate>
+ <link>https://decentralizedthoughts.github.io/2026-09-26-three-round-BFT-with-crashes/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-09-26-three-round-BFT-with-crashes/</guid>
+ </item>
+ 
+ <item>
+ <title>Time Is Money: Incentivized Causal Transaction Ordering</title>
+ 
+ <dc:creator><![CDATA[ Hongyin Chen, Xu Zheng, Jichen Li, Ittay Eyal ]]></dc:creator>
+ 
+ <description>
+ 
+ Front-running is a pervasive and costly problem on blockchains. Users earn rewards by publishing functional transactions that keeps markets efficient, such as arbitrage. But an attacker can observe such a transaction before it is ordered and publish her own ahead of it, seizing the reward and eroding users’ incentive to issue these transactions at all. The problem is well known and has drawn sustained effort from both industry and academia,...
+ </description>
+ <pubDate>Tue, 14 Jul 2026 12:31:00 -0400</pubDate>
+ <link>https://decentralizedthoughts.github.io/2026-07-14-time-is-money/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-07-14-time-is-money/</guid>
+ </item>
+ 
+ <item>
+ <title>Two Round Information-Theoretic Chained BFT at n=5f-1</title>
+ 
+ <dc:creator><![CDATA[ Ittai Abraham, Sourav Das, Yuval Efron, Jovan Komatovic, Alejandro Ranchal-Pedrosa, Gilad Stern ]]></dc:creator>
+ 
+ <description>
+ 
+ Information-Theoretic Kuplex gives a signature-free Simplex protocol in which quorums cannot be transferred between parties. This post makes the earlier two round BFT protocol for $n=5f-1$ signature-free in the same way. We use the Chained Simplex outer protocol: a leader extends a certified chain by one valid block. For a map of the surrounding Simplex line, see the Simplex chapter. We view this as a simple extension of IT-Kuplex. We...
+ </description>
+ <pubDate>Sun, 12 Jul 2026 05:00:00 -0400</pubDate>
+ <link>https://decentralizedthoughts.github.io/2026-07-12-fast-IT-BFT/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-07-12-fast-IT-BFT/</guid>
+ </item>
+ 
+ <item>
  <title>Chapter: Lower Bounds</title>
  
  <dc:creator><![CDATA[ Ittai Abraham ]]></dc:creator>
@@ -246,48 +288,6 @@
  <pubDate>Sat, 24 Jan 2026 01:00:00 -0500</pubDate>
  <link>https://decentralizedthoughts.github.io/2026-01-24-two-round-ps/</link>
  <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-01-24-two-round-ps/</guid>
- </item>
- 
- <item>
- <title>Simple Payment Systems with Unlinkability</title>
- 
- <dc:creator><![CDATA[ Ittai Abraham, Gilad Stern, and Alin Tomescu ]]></dc:creator>
- 
- <description>
- 
- In this post, we discuss payment systems. There is a set of users who wish to pay each other. We start with perhaps the simplest form, which is based just on digital signatures and a single bank. We then show how the bank can be implemented as a fault tolerant distributed system with $n$ servers. Finally, we show a modern version of ecash, where blind signatures are used to obtain...
- </description>
- <pubDate>Wed, 21 Jan 2026 02:00:00 -0500</pubDate>
- <link>https://decentralizedthoughts.github.io/2026-01-21-simple-payment/</link>
- <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-01-21-simple-payment/</guid>
- </item>
- 
- <item>
- <title>Blind and Threshold Blind Signatures</title>
- 
- <dc:creator><![CDATA[ Ittai Abraham, Gilad Stern, and Alin Tomescu ]]></dc:creator>
- 
- <description>
- 
- A blind signature scheme allows a user to obtain a valid signature on a message while ensuring that the signer learns nothing about the message. The user blinds the message, the signer signs the blinded value, and the user unblinds the response to obtain a valid signature on the original message. Importantly, the signer still retains full control over whether to participate in the protocol, it only gives up visibility...
- </description>
- <pubDate>Wed, 21 Jan 2026 01:00:00 -0500</pubDate>
- <link>https://decentralizedthoughts.github.io/2026-01-21-blind-and-threshold/</link>
- <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-01-21-blind-and-threshold/</guid>
- </item>
- 
- <item>
- <title>Partial Synchrony variants</title>
- 
- <dc:creator><![CDATA[ Ittai Abraham, Yuval Efron, Kartik Nayak, and Ling Ren ]]></dc:creator>
- 
- <description>
- 
- In this post we observe three variants of Partial Synchrony (PS) and how they affect (or not) popular BFT protocols like PBFT, Tendermint, and especially the recent Simplex protocol. For a map of the surrounding Simplex line, see the Simplex chapter. Many modern systems use the following definition of Partial Synchrony: Bounded Partial Synchrony (BPS): A message sent at time $t$ arrives by time at most $\max{t, GST}+\Delta$ This definition...
- </description>
- <pubDate>Fri, 19 Dec 2025 23:00:00 -0500</pubDate>
- <link>https://decentralizedthoughts.github.io/2025-12-19-cc-under-harsh-ps/</link>
- <guid isPermaLink="true">https://decentralizedthoughts.github.io/2025-12-19-cc-under-harsh-ps/</guid>
  </item>
  
  </channel>

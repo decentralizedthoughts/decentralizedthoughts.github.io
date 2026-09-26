@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="470" viewBox="0 0 1100 470" role="img" aria-labelledby="title desc">
+  <title id="title">Mixed world M</title>
+  <desc id="desc">A Byzantine leader sends zero to groups A and B and one to groups D and E. Group C is silent and consists of f minus one Byzantine parties and c crash faulty parties.</desc>
+  <defs>
+    <marker id="arrow0" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#2563eb"/></marker>
+    <marker id="arrow1" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#dc2626"/></marker>
+    <marker id="arrowS" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#6b7280"/></marker>
+    <style>
+      text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #111827; }
+      .heading { font-size: 25px; font-weight: 700; }
+      .label { font-size: 20px; font-weight: 700; }
+      .size { font-size: 17px; }
+      .small { font-size: 15px; }
+      .box { stroke: #374151; stroke-width: 2; rx: 12; }
+      .honest { fill: #ecfdf5; }
+      .byz { fill: #fef2f2; }
+      .mixed { fill: #f3f4f6; }
+    </style>
+  </defs>
+  <text x="550" y="34" text-anchor="middle" class="heading">World M (mixed), GST = 0</text>
+  <rect x="455" y="62" width="190" height="72" class="box byz"/>
+  <text x="550" y="91" text-anchor="middle" class="label">Leader</text>
+  <text x="550" y="117" text-anchor="middle" class="size">Byzantine</text>
+
+  <path d="M500 134 Q270 205 115 280" fill="none" stroke="#2563eb" stroke-width="3" marker-end="url(#arrow0)"/>
+  <path d="M520 134 Q410 205 320 280" fill="none" stroke="#2563eb" stroke-width="3" marker-end="url(#arrow0)"/>
+  <path d="M550 134 L550 280" fill="none" stroke="#6b7280" stroke-width="3" stroke-dasharray="8 8" marker-end="url(#arrowS)"/>
+  <path d="M580 134 Q690 205 780 280" fill="none" stroke="#dc2626" stroke-width="3" marker-end="url(#arrow1)"/>
+  <path d="M600 134 Q830 205 985 280" fill="none" stroke="#dc2626" stroke-width="3" marker-end="url(#arrow1)"/>
+  <text x="285" y="190" class="label" fill="#2563eb">0</text>
+  <text x="395" y="213" class="label" fill="#2563eb">0</text>
+  <text x="566" y="216" class="small">silent</text>
+  <text x="690" y="213" class="label" fill="#dc2626">1</text>
+  <text x="800" y="190" class="label" fill="#dc2626">1</text>
+
+  <rect x="20" y="290" width="190" height="100" class="box honest"/>
+  <rect x="225" y="290" width="190" height="100" class="box honest"/>
+  <rect x="430" y="290" width="240" height="100" class="box mixed"/>
+  <rect x="685" y="290" width="190" height="100" class="box honest"/>
+  <rect x="890" y="290" width="190" height="100" class="box honest"/>
+  <text x="115" y="326" text-anchor="middle" class="label">A</text><text x="115" y="355" text-anchor="middle" class="small">p correct</text>
+  <text x="320" y="326" text-anchor="middle" class="label">B</text><text x="320" y="355" text-anchor="middle" class="size">f - 1 correct</text>
+  <text x="550" y="322" text-anchor="middle" class="label">C</text><text x="550" y="350" text-anchor="middle" class="size">f - 1 Byzantine</text><text x="550" y="374" text-anchor="middle" class="size">+ c crash</text>
+  <text x="780" y="326" text-anchor="middle" class="label">D</text><text x="780" y="355" text-anchor="middle" class="size">f - 1 correct</text>
+  <text x="985" y="326" text-anchor="middle" class="label">E</text><text x="985" y="355" text-anchor="middle" class="small">p correct</text>
+  <text x="550" y="438" text-anchor="middle" class="small">The leader and C use f Byzantine faults and c crash faults.</text>
+</svg>

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Time Is Money: Incentivized Causal Transaction Ordering</title>
+ 
+ 
+ 
+ 
+ <meta name="author" content="Hongyin Chen, Xu Zheng, Jichen Li, Ittay Eyal">
+ 
+ <meta name="description" content="Front-running is a pervasive and costly problem on blockchains. Users earn rewards by publishing functional transactions that keeps markets efficient, such as arbitrage. But an attacker can observe such a transaction before it is ordered and publish her own ahead of it, seizing the reward and eroding users’ incentive to issue these transactions at all. The problem is well known and has drawn sustained effort from both industry and academia,...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Time Is Money: Incentivized Causal Transaction Ordering">
+ <meta property="og:description" content="Front-running is a pervasive and costly problem on blockchains. Users earn rewards by publishing functional transactions that keeps markets efficient, such as arbitrage. But an attacker can observe such a transaction before it is ordered and publish her own ahead of it, seizing the reward and eroding users’ incentive to issue these transactions at all. The problem is well known and has drawn sustained effort from both industry and academia,...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Hongyin Chen, Xu Zheng, Jichen Li, Ittay Eyal">
+ 
+ <meta property="og:article:published_time" content="2026-07-14T12:31:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2026-07-14-time-is-money/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2026-07-14-time-is-money/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Time Is Money: Incentivized Causal Transaction Ordering">
+ <meta property="twitter:description" content="Front-running is a pervasive and costly problem on blockchains. Users earn rewards by publishing functional transactions that keeps markets efficient, such as arbitrage. But an attacker can observe such a transaction before it is ordered and publish her own ahead of it, seizing the reward and eroding users’ incentive to issue these transactions at all. The problem is well known and has drawn sustained effort from both industry and academia,...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li><li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarChaptersDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Chapters</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarChaptersDropdown"><a class="dropdown-item" href="/2026-05-25-chapter-simplex/">Simplex</a><a class="dropdown-item" href="/2026-06-28-chapter-lower-bounds/">Lower Bounds</a></div>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" id="nav-search-link" href="#" title="Search the blog">
+ <span id="nav-search-icon" class="fa fa-search"></span>
+ <span id="nav-search-text">Search</span>
+ </a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+<div id="beautifuljekyll-search-overlay" data-search-json="/assets/data/searchcorpus.json" data-top-pages-json="/assets/data/top-pages.json" aria-hidden="true">
+ <div class="search-overlay-backdrop" data-search-close></div>
+ <div class="search-dialog" role="dialog" aria-modal="true" aria-labelledby="nav-search-heading">
+ <div class="search-dialog-header">
+ <p class="search-dialog-kicker">Search the archive</p>
+ <button id="nav-search-exit" type="button" title="Close search" aria-label="Close search">Close</button>
+ </div>
+ <label class="sr-only" id="nav-search-heading" for="nav-search-input">Search posts, authors, topics, and phrases</label>
+ <div class="search-input-shell">
+ <span class="fa fa-search" aria-hidden="true"></span>
+ <input type="text" id="nav-search-input" placeholder="Search posts, authors, topics, and phrases" autocomplete="off">
+ <span class="search-shortcut">/</span>
+ </div>
+ <p id="nav-search-status">Search by title, author, tag, or a phrase from the post.</p>
+ <div id="search-discovery">
+ <section class="search-discovery-group" aria-labelledby="search-popular-heading">
+ <p class="search-discovery-heading" id="search-popular-heading">Popular topics</p>
+ <div id="search-suggestions" aria-label="Popular topics"></div>
+ </section>
+ <section class="search-discovery-group" aria-labelledby="search-recent-heading">
+ <p class="search-discovery-heading" id="search-recent-heading">Top pages</p>
+ <div id="search-recent-posts"></div>
+ </section>
+ </div>
+ <ul id="search-results-container"></ul>
+ </div>
+</div>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Time Is Money: Incentivized Causal Transaction Ordering</h1>
+ 
+ 
+ 
+ 
+ By <strong>Hongyin Chen, Xu Zheng, Jichen Li, Ittay Eyal</strong><br>
+ 
+ <span class="post-meta">Posted on July 14, 2026</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>Front-running is a pervasive and costly problem on blockchains. Users earn rewards by publishing functional transactions that keeps markets efficient, such as arbitrage. But an attacker can <a href="https://a16zcrypto.com/posts/article/mev-explained/">observe such a transaction before it is ordered and publish her own ahead of it</a>, seizing the reward and eroding users’ incentive to issue these transactions at all. The problem is well known and has drawn sustained effort from both industry and academia, yet it remains open.</p>
+<p>The fundamental challenge is that preventing front-running means enforcing causality: A transaction published in reaction to another must be ordered later, but this causal relationship is visible only to the attacker who reacts, and the protocol cannot observe it. We present PRECEDE, which takes a distinct angle: Instead of constraining how transactions are ordered, as every prior approach does, it removes the economic incentive to front-run, so the attacker never even tries. To our knowledge, PRECEDE is the first mechanism to address front-running this way. We call this principle <strong>entry deterrence</strong>.</p>
+<h2 id="a-running-example-an-arbitrage">A running example: an arbitrage</h2>
+<p>We start with a typical example of front-running. On a blockchain, people trade on a market by publishing transactions, and validators decide the order in which these transactions execute. Suppose the market’s current state lets anyone buy an asset below its price on other markets. A single transaction captures this gap, a profit worth $R$. Such an opportunity is called arbitrage. Because the first such trade closes this gap, the profit goes to whoever gets ordered first. A user spots the gap and publishes a transaction to capture it.</p>
+<p align="center">
+<img src="/uploads/opportunity.png" alt="An arbitrage opportunity" width="488" />
+</p>
+<p align="center" style="font-size: 0.75em"><em>An arbitrage opportunity worth $R = 20$. The user publishes $\mathrm{TX\_U}$ with bid $9$; the validator orders by bid, so her arbitrage trade captures the reward.</em></p>
+<p>But before validators order it in the blockchain, the transaction is visible to everyone, including an attacker, who submits the same trade and pays the validator to place her own transaction ahead of the user’s. The attacker’s transaction executes first and earns $R$, while the user, who found the opportunity, earns nothing.</p>
+<p>In practical systems like <a href="https://ethereum.org/en/whitepaper/">Ethereum</a> and <a href="https://solana.com/solana-whitepaper.pdf">Solana</a>, validators order transactions by how much each one pays them, so the higher payer goes first. Front-running then turns into a bidding war: The user pays the validator more to stay ahead, the attacker pays more again, and the two keep raising until most of $R$ has gone to the validator. The reward that should have gone to whoever found the opportunity is competed away in fees, a race to the bottom. This is not hypothetical: On Flashbots, the winner of an arbitrage pays the validator a median of more than 90% of $R$. Whether the user loses the reward to the attacker or spends it outbidding her, her incentive to search for such opportunities erodes, and so does the market efficiency that depends on it.</p>
+<p align="center">
+<img src="/uploads/front-running.png" alt="An attacker front-runs the user" width="488" />
+</p>
+<p align="center" style="font-size: 0.75em"><em>Front-running. The attacker copies the trade as $\mathrm{TX\_A}$ with a higher bid of $10$. Ordering by bid places it ahead of $\mathrm{TX\_U}$, so the attacker seizes the reward and the user earns nothing.</em></p>
+<h2 id="the-limits-of-existing-defenses">The limits of existing defenses</h2>
+<p>A large body of work constrains how validators may order transactions. Three families dominate, but front-running attackers slip past all of them.</p>
+<ul>
+ <li>
+ <p><strong>Order by arrival time.</strong> A committee of nodes orders transactions by when each node receives them, so the user’s transaction, sent first, should come ahead of the attacker’s later reaction. But this has been <a href="https://cryptobern.github.io/quickfairorder/">proven impossible</a>. Network delays make the nodes receive the transactions in different orders, so they cannot agree on which came first, and the protocol is left to settle the disagreement arbitrarily. The attacker can bend this in her favor: As one of the committee nodes, she misreports when she received the user’s transaction, so her later transaction still ends up first.</p>
+ <p align="center">
+<img src="/uploads/observation.png" alt="Three validators receive the transactions in different orders" width="600" />
+</p>
+ <p align="center" style="font-size: 0.75em"><em>Network delays leave each validator with a different local order.</em></p>
+ <p align="center">
+<img src="/uploads/timestamp-based-ordering.png" alt="Majority voting on each pair yields a cycle" width="600" />
+</p>
+ <p align="center" style="font-size: 0.75em"><em>The ordering protocol must aggregate the validators' reports into a single global order. Majority voting on each pair of transactions, for example, yields a cycle rather than an order.</em></p>
+ </li>
+ <li>
+ <p><strong>Randomize the order.</strong> The protocol orders the transactions in a block uniformly at random, removing the deterministic priority an attacker could exploit. But uniform randomization invites spam: A participant’s chance of being ordered first grows with the number of transactions she publishes, so the attacker publishes many copies of her transaction. Such spam burdens the system while still allowing front-running.</p>
+ <p align="center">
+<img src="/uploads/randonmized.png" alt="Uniform randomization gives each transaction an equal chance" width="450" />
+</p>
+ <p align="center" style="font-size: 0.75em"><em>Randomized ordering. The protocol picks the first transaction uniformly at random, so the user and attacker are each first with probability $1/2$.</em></p>
+ <p align="center">
+<img src="/uploads/spam.png" alt="Spam skews the random draw toward the attacker" width="450" />
+</p>
+ <p align="center" style="font-size: 0.75em"><em>But randomization invites spam. The attacker publishes extra copies, so with two transactions against the user's one she is first with probability $2/3$.</em></p>
+ </li>
+ <li>
+ <p><strong>Encrypt the content.</strong> This approach hides transaction content until the order is fixed, so an attacker cannot see what a transaction does and copy it. But such schemes still leave room for front-running. Even encrypted, a transaction reveals its timing, propagation, and creator metadata, <a href="https://a16zcrypto.com/posts/article/limits-encrypted-mempools/">enough to speculatively race ahead</a>, and whoever holds the key to open it can be paid to peek early or leak the content.</p>
+ </li>
+</ul>
+<h2 id="the-underlying-challenge-causality">The Underlying Challenge: Causality</h2>
+<p>Preventing front-running is fundamentally hard. It is a matter of <strong>causality</strong>: If a participant publishes her transaction after observing another’s, it should appear later on chain. But this causal relationship is private to the attacker who issues the later transaction. In a decentralized system we cannot compel participants to follow the protocol, neither to refrain from front-running nor to report honestly when they acted; classical solutions like Lamport timestamps do not apply, because a participant can misreport her timestamp and the chain cannot verify it. Instead, each participant takes whichever action maximizes her own revenue.</p>
+<p>The protocol can therefore make no trust assumption, which participants may violate for gain. It must rely only on signals the blockchain can observe. It does not even know the reward $R$, which varies across orders of magnitude, so any defense must hold across the full range. Together, these constraints force the protocol to defend blindly: against any rational adversary, at any revenue scale, using only signals the chain can verify.</p>
+<h2 id="deterrence-order-before-ordering">Deterrence: order before ordering</h2>
+<p>Our goal is that the attacker never tries to front-run, so the ordering itself never needs to learn the causal order. We call this <em>entry deterrence</em>: The user publishes a bid high enough that no attacker can profit by entering to compete, so the attackers abstain.</p>
+<p>We realize this with <strong>PRECEDE</strong>, <strong>P</strong>ower-weighted <strong>R</strong>andomization for <strong>E</strong>nforcing <strong>C</strong>ausal-ordering through <strong>E</strong>ntry <strong>DE</strong>terrence. PRECEDE orders transactions solely by the bid each carries, which is on-chain and verifiable, rather than by timestamps or arrival times. A transaction with bid $b$ has weight $w(b) = b^k$ for a parameter $k &gt; 1$, and is placed first with probability proportional to its weight. We assume the chain is <a href="https://decentralizedthoughts.github.io/2026-04-27-beyond-CR/">censorship-resistant</a>: Every published transaction enters the same ordering, so an attacker cannot drop the user’s transaction or place it in a separate one, and must outbid it instead.</p>
+<p>As $k$ grows toward infinity, the highest bid wins with probability approaching one, and the design degenerates into the deterministic descending-bid ordering of deployed blockchains. Under that rule the user can deter entry only by bidding the entire reward $R$: With any smaller bid, the attacker bids slightly higher, wins with certainty, and profits. Such deterrence leaves the user nothing. A carefully chosen $k$ softens this rule, letting her deter more cheaply. Overbidding no longer guarantees a win, and a counter-bid is paid for whether or not it wins. The attacker then faces a dilemma: A small counter-bid is cheap but, against the user’s large weight, wins too rarely to profit, while a large one wins often but, since $k &gt; 1$, must be so large that its cost exceeds $R$. Neither option yields positive expected revenue, so a bid strictly below $R$ suffices to deter her.</p>
+<p>At the other extreme, $k = 0$ makes every bid weigh the same, degenerating the order into a uniform random pick. A participant’s chance of being first then grows with the number of transactions she publishes, inviting spam. An exponent $k &gt; 1$ removes this incentive: Because $b^k$ is superadditive, a single bid outweighs the same amount split across many, so merging into one transaction beats spamming. Each participant therefore publishes a single bid.</p>
+<p>Return to the arbitrage with $k = 2$. Assuming that the user publishes a single bid of $R/2$, of weight $(R/2)^2 = R^2/4$. An attacker who enters with bid $b$ has weight $b^2$ and is placed first with probability $b^2/(b^2 + R^2/4)$. Paying her full bid whether she wins or loses, her expected revenue is</p>
+\[\frac{b^2}{b^2 + R^2/4}\,R \;-\; b \;=\; -\,\frac{b\,(b - R/2)^2}{b^2 + R^2/4} \;\le\; 0 .\]
+<p>The result is never positive, so no bid earns the attacker anything: She stays out, and the user’s single transaction wins. The user keeps half of $R$, instead of losing nearly all of it to a bidding war. This is deterrence: The attacker never competes, because competing never pays.</p>
+<p align="center">
+<img src="/uploads/precede.png" alt="Entry deterrence with PRECEDE" width="560" />
+</p>
+<p align="center" style="font-size: 0.75em"><em>Entry deterrence. The user publishes a single $\mathrm{TX\_U}$ with bid $R/2 = 10$. Any attacker who competes earns revenue $\le 0$, so she abstains, and $\mathrm{TX\_U}$ captures the reward.</em></p>
+<h2 id="generalization-and-results">Generalization and Results</h2>
+<p>The example fixed two things the mechanism leaves free: the exponent $k = 2$, and the assumption that a losing bid is paid in full. In general the exponent is any $k &gt; 1$, and a losing transaction does not pay its bid in full: It reverts and pays a fraction $\gamma$ of its bid, the <strong>losing-fee rate</strong>. The example took $\gamma = 1$.</p>
+<p>The user deters by publishing the <strong>deterring bid</strong> $b_{\mathrm{det}}$, the smallest bid that holds every attacker’s expected revenue at or below zero. It has a closed form,</p>
+\[b_{\mathrm{det}} \;=\; R\left(\frac{(k-1)^{k-1}}{\gamma\,k^{k}}\right)^{1/k} .\]
+<p>The simple case above is $k = 2$ and $\gamma = 1$, where this is $R/2$.</p>
+<p>Knowing the deterring bid is not yet enough for the mechanism to work. Three further properties are needed, and each holds only for a suitable range of the exponent $k$. The system designer picks a single $k$ that satisfies all three, and this $k$ is common knowledge in the system.</p>
+<p><strong>Anti-spam.</strong> As discussed above, the superadditivity of the weight $b^k$ already makes merging win more often than spamming. But that gain is not free when $\gamma &lt; 1$: A losing transaction pays only $\gamma b$ while the winner pays its full bid, so concentrating the whole bid on one transaction raises the expected payment. Single bids dominate only when $k$ is large enough that the merging gain outweighs this extra cost, namely $k \ge \ln 2 / \ln(1+\gamma)$.</p>
+<p><strong>Profitability.</strong> Deterring entry costs the user a bid, and she profits only if that bid leaves her something, $b_{\mathrm{det}} &lt; R$. This is not automatic, since as $k \to \infty$ the deterring bid climbs toward the whole reward. It stays below $R$ exactly when $\gamma &gt; (k-1)^{k-1}/k^k$. 
+But this condition already holds due to the anti-spam bound above.</p>
+<p><strong>Game and Equilibrium.</strong> Existence of the deterrence bid is not enough: Rational players might prefer to deviate. We model the competition as a sequential game in which the user and the attacker act in alternating turns, each observing all earlier moves. The attacker moves last, reflecting her advantage in observing and reacting to others’ transactions, whether from lower network latency or from controlling the set of placed transactions as the validator.</p>
+<p>The deterrence strategy, with the attacker abstaining in response, is a subgame-perfect equilibrium whenever $k \ge \max{2,\ \exp(1/\gamma)/\gamma}$, regardless of the game’s length. This bound is only sufficient and far from tight: We have no closed form for the exact threshold, but our numerical analysis shows it is either already covered by the anti-spam bound or above it by at most $0.2$, hence very close to the anti-spam bound in every case.</p>
+<h2 id="takeaways">Takeaways</h2>
+<ul>
+ <li>Front-running is hard because the blockchain cannot see causality.</li>
+ <li>Entry deterrence is PRECEDE’s answer: It removes the incentive to front-run instead of enforcing causality through the order, so the attacker never enters and the validator does not have to divine who reacted to whom.</li>
+ <li>Since chains often already order by bid, they can easily use PRECEDE: Use the power-weighted random ordering in which a transaction with bid $b$ is placed first with probability proportional to $b^k$, tuned by a single exponent $k$ between highest-bid-wins and a uniform draw, using only the on-chain bid.</li>
+ <li>A closed-form deterring bid makes front-running unprofitable, so the attacker stays out.</li>
+ <li>Choosing the exponent $k$ within a suitable range makes the mechanism anti-spam and profitable, and makes the user’s deterrence, with the attacker abstaining, an equilibrium.</li>
+</ul>
+<p>For the full model and the proofs, see our paper, <a href="https://arxiv.org/abs/2607.11496">PRECEDE</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Time+Is+Money%3A+Incentivized+Causal+Transaction+Ordering&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2026-07-14-time-is-money%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2026-07-12-fast-IT-BFT/" data-toggle="tooltip" data-placement="top" title="Two Round Information-Theoretic Chained BFT at n=5f-1">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2026-09-26-three-round-BFT-with-crashes/" data-toggle="tooltip" data-placement="top" title="Why BFT with Byzantine and Crash Faults Needs Three Rounds">
+ <span class="d-none d-sm-inline-block">Next Post</span>
+ <i class="fas fa-arrow-right" alt="Next Post"></i>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ 
+ Decentralized Thinkers
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

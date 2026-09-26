@@ -192,6 +192,104 @@
  
  
  <article class="post-preview">
+ <a href="/2025-06-18-simplex/">
+ <h2 class="post-title">From Tendermint to Simplex</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on June 18, 2025, by <b>Ling Ren</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Simplex is a partially synchronous Byzantine Fault Tolerant (BFT) protocol designed by Ben Chan and Rafael Pass in 2023. It is being incorporated by Commonware library and (with modifications) by Solana. It is a simple and clean protocol, especially for beginners, and Ben did a great job explaining it from scratch. But if you are already familiar with other BFT protocols such as PBFT or Tendermint, you may be wondering...
+ 
+ 
+ <a href="/2025-06-18-simplex/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ 
+ 
+ <article class="post-preview">
+ <a href="/2025-05-23-smart-casual-verification/">
+ <h2 class="post-title">Reasoning about Distributed Protocols with Smart Casual Verification</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on May 23, 2025, by <b>Heidi Howard</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Here at decentralized thoughts, we spend a lot of time reasoning about distributed protocols. Often, we focus on solving distributed consensus, personally it’s my favorite CS problem, but it’s also famously one of the most difficult and subtle problems in distributed computing. Reasoning about distributed algorithms is hard at the best of times, with state split across remote nodes, asynchrony, concurrency, and non-determinism in the order that events, such as...
+ 
+ 
+ <a href="/2025-05-23-smart-casual-verification/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ <a href="/tags#research">research</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ 
+ 
+ <article class="post-preview">
+ <a href="/2025-02-14-verifiable-MSM/">
+ <h2 class="post-title">Verifiable Multi-Exponentiation and Multi-Scalar Multiplication (MSM)</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on February 14, 2025, by <b>Benny Pinkas</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Multi-exponentiations and multi-scalar multiplications (MSMs) are computations that are widely used in cryptographic proof systems, mostly in proof generation and proof verification. This note outlines an efficient method for verifying the results of these computations, which opens the door to outsourcing them. In particular, by employing this technique it is possible to have the prover in a cryptographic proof system perform a significant portion of the computation that is usually...
+ 
+ 
+ <a href="/2025-02-14-verifiable-MSM/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#cryptography">cryptography</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ 
+ 
+ <article class="post-preview">
  <a href="/2025-02-14-PBFT/">
  <h2 class="post-title">Practical Byzantine Fault Tolerant Consensus (PBFT)</h2>
  
@@ -746,104 +844,6 @@
  <a href="/tags#blockchain101">blockchain101</a>
  
  <a href="/tags#blockchain">blockchain</a>
- 
- </div>
- 
- </article>
- 
- 
- 
- <article class="post-preview">
- <a href="/2023-09-30-scaling/">
- <h2 class="post-title">Scaling Blockchains: the Power of Batching</h2>
- 
- </a>
- <p class="post-meta">
- Posted on September 30, 2023, by <b>Ittai Abraham</b>
- </p>
- 
- <div class="post-entry-container">
- 
- <div class="post-entry">
- A few years ago if you asked “Can blockchains scale?” most people would give three reasons why, fundamentally, the answer is “No!”
- 
- 
- <a href="/2023-09-30-scaling/" class="post-read-more">[Read&nbsp;More]</a>
- 
- </div>
- </div>
- 
- 
- <div class="blog-tags">
- Tags:
- 
- <a href="/tags#blockchain">blockchain</a>
- 
- </div>
- 
- </article>
- 
- 
- 
- <article class="post-preview">
- <a href="/2023-09-01-FFT/">
- <h2 class="post-title">The Fast Fourier Transform over finite fields</h2>
- 
- </a>
- <p class="post-meta">
- Posted on September 1, 2023, by <b>Ittai Abraham</b>
- </p>
- 
- <div class="post-entry-container">
- 
- <div class="post-entry">
- The Fast Fourier Transform (FFT) developed by Cooley and Tukey in 1965 has its origins in the work of Gauss. The FFT, its variants and extensions to finite fields, are a fundamental algorithmic tool and a beautiful example of interplay between algebra and combinatorics. There are many great resources on FFT, see ingopedia’s curated list.
- 
- 
- <a href="/2023-09-01-FFT/" class="post-read-more">[Read&nbsp;More]</a>
- 
- </div>
- </div>
- 
- 
- <div class="blog-tags">
- Tags:
- 
- <a href="/tags#math">math</a>
- 
- </div>
- 
- </article>
- 
- 
- 
- <article class="post-preview">
- <a href="/2023-07-22-agreeemnt-on-a-core-set/">
- <h2 class="post-title">Asynchronous Agreement on a Core Set</h2>
- 
- </a>
- <p class="post-meta">
- Posted on July 22, 2023, by <b>Gilad Stern, Ittai Abraham</b>
- </p>
- 
- <div class="post-entry-container">
- 
- <div class="post-entry">
- A challenging step in many asynchronous protocols is agreeing on a set of parties that completed some task. For example, an asynchronous protocol might start off with parties reliably broadcasting a value. Due to asynchrony and having $\leq f$ corruptions, honest parties can only wait for $n-f$ parties to complete the task. Parties may need to agree on a core set of $n-f$ such broadcasts and use them in the...
- 
- 
- <a href="/2023-07-22-agreeemnt-on-a-core-set/" class="post-read-more">[Read&nbsp;More]</a>
- 
- </div>
- </div>
- 
- 
- <div class="blog-tags">
- Tags:
- 
- <a href="/tags#consensus">consensus</a>
- 
- <a href="/tags#asynchrony">asynchrony</a>
  
  </div>
  

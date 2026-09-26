@@ -117,7 +117,7 @@ and a validity world $V$.
 
 ### World $M$ (mixed)
 
-![Mixed world: the leader equivocates and C is silent.](/uploads/bft-crash-mixed.svg)
+![Mixed world: the leader equivocates and C is silent.](/uploads/mixed-world-plus-crashes.svg)
 
 In the mixed world, the leader is Byzantine. Of the parties in $C$, $f-1$
 are Byzantine and the remaining $c$ are crash faulty. Thus, all parties in
@@ -132,7 +132,7 @@ roles of $0$ and $1$. We discuss randomized protocols below.
 
 ### World $V$ (validity)
 
-![Validity world: the leader proposes 0 and E is silent.](/uploads/bft-crash-validity.svg)
+![Validity world: the leader proposes 0 and E is silent.](/uploads/validity-world-plus-crashes.svg)
 
 In the validity world, GST is $0$ and the leader is honest with input $0$.
 All parties in $E$ are faulty and remain silent. This is an allowed execution:
@@ -147,7 +147,7 @@ parties in $C$ to decide $0$ within two rounds.
 
 ### World $\hat D$ (corrupt)
 
-![Corrupt world: D equivocates and messages from C are delayed.](/uploads/bft-crash-corrupt.svg)
+![Corrupt world: D equivocates and messages from C are delayed.](/uploads/corrupt-world-plus-crashes.svg)
 
 In this world, the leader and all parties in $D$ are Byzantine. Since
 $|D|=f-1$, there are exactly $f$ Byzantine parties. This execution does not
