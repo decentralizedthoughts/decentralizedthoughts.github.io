@@ -32,9 +32,7 @@ fault sets are disjoint. A Byzantine party may behave arbitrarily. A crash
 faulty party follows the protocol until it crashes and then sends no more
 messages.
 
-We assume authenticated point-to-point channels. The lower-bound attack does
-not require forging messages from correct parties; it also applies when
-digital signatures are available. We consider binary inputs, $0$ and $1$.
+We place no computational bound on the adversary.
 
 The protocol must always satisfy agreement, must satisfy validity when the
 leader is honest and GST is $0$, and must terminate after GST against the full
@@ -65,9 +63,7 @@ parties.
 
 When $(c+2)/2\leq p\leq f+c$, this is tight: with $n=3f+c+2p-1$, a
 two round good case tolerating the same $p$ faulty parties is possible, as we
-will show in a future post. The condition on $p$ is equivalent to
-$3f+c+2p-1\geq3f+2c+1$, the usual resilience threshold for this
-mixed-fault model. The lower bound itself does not need this condition.
+will show in a future post.
 
 The good news is that proving this generalized result requires only minor
 changes to the parameters in the [base proof][three-round-bft].
@@ -160,17 +156,8 @@ parties in $D$ do in world $M$. Toward $C$, they send the first-round voting mes
 they would have sent after receiving $0$, exactly as the honest parties in
 $D$ do in world $V$.
 
-Choose the synchronous schedules in $M$ and $V$ so that proposals arrive at
-time $\delta$ and the resulting votes arrive at time $2\delta$. A message
-reacting to those votes cannot arrive before $3\delta$. In particular,
-$C$ must decide in $V$ before it can hear a report of what $E$ received.
-
 Before GST, delay every message sent by a party in $C$ to a party outside $C$,
-and delay every message from $E$ to $C$. Through time $2\delta$, deliver to $C$ the proposal and votes from $V$.
-Afterward, continue delaying messages to $C$ as needed. Outside $C$, replay
-the schedule of $M$. These choices are compatible: $A$ and $B$ receive $0$
-in both worlds, and $D$ can simulate its $M$ behavior toward every party
-outside $C$. Thus:
+and delay every message from $E$ to $C$. Deliver all other messages so that:
 
 * the parties in $B,E$ see the same messages as in world $M$ until they
   decide; and
@@ -216,10 +203,15 @@ two rounds.
   $f-1$.
 
 * The proof requires a Byzantine leader, so the theorem assumes $f\geq1$.
-  When $f=0$, the equivocation used in the mixed world is impossible. The
-  theorem therefore does not give a crash-only lower bound. Similarly, a
-  model that prevents leader equivocation needs a separate analysis: the
-  mixed world in this proof is no longer an allowed execution.
+  When $f=0$, no leader can equivocate and two round crash tolerant consensus
+  is possible with $n=2c+1$. More generally, if there is a way to prevent even
+  a Byzantine leader from equivocating, then a two round good case is possible
+  already with $n=3f+2c-1$. [Alpenglow][alpenglow] obtains the closely related
+  bound $n=3f+2c+1$ under its [Assumption 3][alpenglow-assumption-3], which
+  prevents the leader from equivocating. It tolerates $f+c$ faults and its fast
+  path finalizes when $n-p$ parties participate. Thus, the Byzantine and crash
+  only cases do not meet continuously at $f=0$ because the lower bound relies
+  specifically on a Byzantine leader equivocating.
 
 * In their unpublished technical report
   [*Best-Case Complexity of Asynchronous Byzantine Consensus*][dgv],
@@ -250,3 +242,5 @@ Your thoughts/comments on [X](TBD).
 [anrz21]: https://arxiv.org/abs/2102.07240
 [ktz21]: https://arxiv.org/abs/2102.12825
 [hydrozoan]: https://sonnino.com/papers/hydrozoan.pdf
+[alpenglow]: https://www.anza.xyz/blog/alpenglow-a-new-consensus-for-solana
+[alpenglow-assumption-3]: https://drive.google.com/file/d/1RPJ9OyohFMuFfLmTB5ydPYlrKTIlUxq9/view?usp=sharing
