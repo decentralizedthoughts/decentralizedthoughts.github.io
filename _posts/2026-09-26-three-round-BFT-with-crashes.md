@@ -236,7 +236,7 @@ two rounds.
   basic construction uses $n=3f+c+2p+1$ validators and combines a two round
   fast path tolerating $p$ faults with a three round path under the full
   fault bounds. Section VI presents **Optimal-Hydrozoan**, a variant with
-  $n\geq3f+c+2p-1$, subject also to $n\geq3f+2c+1$. 
+  $n\geq3f+c+2p-1$. 
 
 Your thoughts/comments on [X](TBD).
 
