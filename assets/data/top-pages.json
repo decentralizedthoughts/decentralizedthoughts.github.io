@@ -1,10 +1,10 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-09-30T12:33:54Z",
+  "fetched_at": "2026-09-30T22:13:40Z",
   "items": [
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 229
+      "views": 230
     },
     {
       "path": "/start-here/",
@@ -20,11 +20,11 @@
     },
     {
       "path": "/2020-02-26-selfish-mining/",
-      "views": 63
+      "views": 64
     },
     {
       "path": "/2019-06-01-2019-5-31-models/",
-      "views": 56
+      "views": 57
     }
   ]
 }
