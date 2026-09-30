@@ -238,7 +238,7 @@ two rounds.
   fault bounds. Section VI presents **Optimal-Hydrozoan**, a variant with
   $n\geq3f+c+2p-1$. 
 
-Your thoughts/comments on [X](TBD).
+Your thoughts/comments on [X](https://x.com/ittaia/status/2103929616142405695?s=20).
 
 [dgv]: https://lpdwww.epfl.ch/upload/documents/publications/567931850DGV-feb-05.pdf
 [three-round-bft]: https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/
