@@ -11,6 +11,20 @@
  
  
  <item>
+ <title>Information Checking Protocols</title>
+ 
+ <dc:creator><![CDATA[ Ittai Abraham, Gilad Asharov, Gilad Stern ]]></dc:creator>
+ 
+ <description>
+ 
+ The siege is over. The colony’s archivist brings its captain a recorded message from their founder, Hari. He predicted the attack, she says, and the choices that would let them survive. Hari is long dead. Did he foresee the siege, or did the archivist fake the recording last week? This story is inspired by Hari Seldon’s recorded messages in Isaac Asimov’s Foundation. Before the expedition leaves Earth, Hari records his...
+ </description>
+ <pubDate>Wed, 30 Sep 2026 05:00:00 -0400</pubDate>
+ <link>https://decentralizedthoughts.github.io/2026-09-30-information-checking-protocols/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-09-30-information-checking-protocols/</guid>
+ </item>
+ 
+ <item>
  <title>Why BFT with Byzantine and Crash Faults Needs Three Rounds</title>
  
  <dc:creator><![CDATA[ Ittai Abraham, Aniket Kate, Kartik Nayak, Nibesh Shrestha, Alberto Sonnino ]]></dc:creator>
@@ -274,20 +288,6 @@
  <pubDate>Mon, 02 Feb 2026 09:06:00 -0500</pubDate>
  <link>https://decentralizedthoughts.github.io/2026-02-02-ps-cheat-sheet/</link>
  <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-02-02-ps-cheat-sheet/</guid>
- </item>
- 
- <item>
- <title>Concurrent 2-round and 3-round BFT protocols under granular synchrony</title>
- 
- <dc:creator><![CDATA[ Ittai Abraham, Kartik Nayak, and Alejandro Ranchal-pedrosa ]]></dc:creator>
- 
- <description>
- 
- Consensus protocols for $n=3f+1$ can tolerate $f$ Byzantine faults under partial synchrony. However, they also require a latency of 3 rounds in the good-case when the leader is non-faulty, and the system is synchronous. Can we get a protocol with better latency, or tolerate more faults, if we assume $n=3f+2p+1$? For a map of the surrounding Simplex line, see the Simplex chapter. Better latency: If the actual number of Byzantine...
- </description>
- <pubDate>Sat, 24 Jan 2026 01:00:00 -0500</pubDate>
- <link>https://decentralizedthoughts.github.io/2026-01-24-two-round-ps/</link>
- <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-01-24-two-round-ps/</guid>
  </item>
  
  </channel>

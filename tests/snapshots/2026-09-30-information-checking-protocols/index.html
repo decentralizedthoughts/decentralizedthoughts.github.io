@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Information Checking Protocols</title>
+ 
+ 
+ 
+ 
+ <meta name="author" content="Ittai Abraham, Gilad Asharov, Gilad Stern">
+ 
+ <meta name="description" content="The siege is over. The colony’s archivist brings its captain a recorded message from their founder, Hari. He predicted the attack, she says, and the choices that would let them survive. Hari is long dead. Did he foresee the siege, or did the archivist fake the recording last week? This story is inspired by Hari Seldon’s recorded messages in Isaac Asimov’s Foundation. Before the expedition leaves Earth, Hari records his...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Information Checking Protocols">
+ <meta property="og:description" content="The siege is over. The colony’s archivist brings its captain a recorded message from their founder, Hari. He predicted the attack, she says, and the choices that would let them survive. Hari is long dead. Did he foresee the siege, or did the archivist fake the recording last week? This story is inspired by Hari Seldon’s recorded messages in Isaac Asimov’s Foundation. Before the expedition leaves Earth, Hari records his...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham, Gilad Asharov, Gilad Stern">
+ 
+ <meta property="og:article:published_time" content="2026-09-30T05:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2026-09-30-information-checking-protocols/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2026-09-30-information-checking-protocols/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Information Checking Protocols">
+ <meta property="twitter:description" content="The siege is over. The colony’s archivist brings its captain a recorded message from their founder, Hari. He predicted the attack, she says, and the choices that would let them survive. Hari is long dead. Did he foresee the siege, or did the archivist fake the recording last week? This story is inspired by Hari Seldon’s recorded messages in Isaac Asimov’s Foundation. Before the expedition leaves Earth, Hari records his...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li><li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarChaptersDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Chapters</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarChaptersDropdown"><a class="dropdown-item" href="/2026-05-25-chapter-simplex/">Simplex</a><a class="dropdown-item" href="/2026-06-28-chapter-lower-bounds/">Lower Bounds</a></div>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" id="nav-search-link" href="#" title="Search the blog">
+ <span id="nav-search-icon" class="fa fa-search"></span>
+ <span id="nav-search-text">Search</span>
+ </a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+<div id="beautifuljekyll-search-overlay" data-search-json="/assets/data/searchcorpus.json" data-top-pages-json="/assets/data/top-pages.json" aria-hidden="true">
+ <div class="search-overlay-backdrop" data-search-close></div>
+ <div class="search-dialog" role="dialog" aria-modal="true" aria-labelledby="nav-search-heading">
+ <div class="search-dialog-header">
+ <p class="search-dialog-kicker">Search the archive</p>
+ <button id="nav-search-exit" type="button" title="Close search" aria-label="Close search">Close</button>
+ </div>
+ <label class="sr-only" id="nav-search-heading" for="nav-search-input">Search posts, authors, topics, and phrases</label>
+ <div class="search-input-shell">
+ <span class="fa fa-search" aria-hidden="true"></span>
+ <input type="text" id="nav-search-input" placeholder="Search posts, authors, topics, and phrases" autocomplete="off">
+ <span class="search-shortcut">/</span>
+ </div>
+ <p id="nav-search-status">Search by title, author, tag, or a phrase from the post.</p>
+ <div id="search-discovery">
+ <section class="search-discovery-group" aria-labelledby="search-popular-heading">
+ <p class="search-discovery-heading" id="search-popular-heading">Popular topics</p>
+ <div id="search-suggestions" aria-label="Popular topics"></div>
+ </section>
+ <section class="search-discovery-group" aria-labelledby="search-recent-heading">
+ <p class="search-discovery-heading" id="search-recent-heading">Top pages</p>
+ <div id="search-recent-posts"></div>
+ </section>
+ </div>
+ <ul id="search-results-container"></ul>
+ </div>
+</div>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Information Checking Protocols</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham, Gilad Asharov, Gilad Stern</strong><br>
+ 
+ <span class="post-meta">Posted on September 30, 2026</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>The siege is over. The colony’s <strong>archivist</strong> brings its <strong>captain</strong> a recorded message from their <strong>founder</strong>, Hari. He predicted the attack, she says, and the choices that would let them survive.</p>
+<p>Hari is long dead. Did he foresee the siege, or did the archivist fake the recording last week?</p>
+<p>This story is inspired by Hari Seldon’s recorded messages in <a href="https://en.wikipedia.org/wiki/Foundation_%28Asimov_novel%29">Isaac Asimov’s <em>Foundation</em></a>. Before the expedition leaves Earth, Hari records his prediction and entrusts the message to the archivist. The captain is to hear it only after the colony’s first crisis. Knowing it beforehand could change her decisions.</p>
+<p>The captain agrees to wait, but wants a way to check that the archivist has preserved Hari’s words. The archivist refuses to spend thirty years guarding a message only to be accused of forging it. What if Hari has arranged for the genuine message to fail the captain’s check? He will be long dead when she is left to take the blame. She wants to discover that betrayal before she leaves Earth.</p>
+<p>A <a href="https://en.wikipedia.org/wiki/Digital_signature">digital signature based on public key cryptography</a> seems an obvious answer. Hari signs the message, and his public key lets the archivist verify it before departure and the captain verify it when it is revealed. But the ship will travel so close to the speed of light that thirty years will pass aboard while three thousand pass on Earth and at their destination. The civilizations they encounter may have vastly more powerful computers, or know mathematics that nobody on Earth has yet imagined. A signature trusted at departure might be easy to forge on arrival.</p>
+<p>All three can still meet before launch. Can they prepare now so that the captain can authenticate the message decades later, without learning its contents today and without relying on computational problems remaining hard?</p>
+<p>This is the problem of <strong>information checking</strong>. Information checking protocols, or ICPs, provide <strong>statistical security against a computationally unbounded adversary</strong>. Their guarantees allow a small error probability, but do not depend on the adversary’s computing power. Even three thousand years of faster computers and new mathematics would not weaken that guarantee.</p>
+<h2 id="information-checking">Information Checking</h2>
+<p>In the Information Checking Protocol (ICP) there are three parties: a <strong>dealer</strong> $D$, an <strong>intermediary</strong> $I$, and a <strong>receiver</strong> $R$. In the story, these are the founder, archivist, and captain.</p>
+<p><a href="https://www.cs.umd.edu/~gasarch/TOPICS/secretsharing/rabinVSS.pdf">Rabin and Ben-Or (1989)</a> introduced information checking as a building block for verifiable secret sharing and secure multi party computation. In this post we present a variation of the ICP of <a href="https://crypto.ethz.ch/publications/files/CDDHR99.pdf">Cramer, Damgård, Dziembowski, Hirt, and Rabin (1999)</a>.</p>
+<h3 id="definition-and-guarantees">Definition and Guarantees</h3>
+<p>The protocol has two phases: commitment and revelation.
+The first phase is a <em>commitment</em> phase, in which all three parties set the interaction up, making sure that the intermediary will be able to provide the correct message in the future.
+Think of this stage as the dealer sending a signed message to the intermediary.</p>
+<p>We will work with messages over a finite field $\mathbb{F}$ of order $q$.
+The size of the field acts as a security parameter: the larger the field, the more secure the protocol (but messages grow accordingly).
+The error probability in each security bound below is at most $1/q$ and we choose $q$ large enough to make this negligible.</p>
+<p>We formally describe the protocols with the dealer and intermediary already holding the message as input, and the protocol just authenticating it (we can think of the dealer as sending the message in advance).
+In the commitment phase, the dealer calls $\mathsf{Commit}(m)$ and the intermediary calls $\mathsf{Verify}(m’)$ with $m,m’\in\mathbb{F}$.
+The intermediary finds out if the commitment succeeds and outputs $OK$ if it does.</p>
+<p>Following the commitment phase, we can proceed to the reveal phase. In that phase, the intermediary can call $\mathsf{Reveal}()$, after which the receiver outputs the message $m’$.</p>
+<p>Thinking about our story above, we want the following properties to hold:</p>
+<ol>
+ <li><strong>Correctness.</strong> If all parties are honest and $m=m’$, verification succeeds. In addition, if the intermediary calls $\mathsf{Reveal}$ later, then the receiver outputs $m$.</li>
+ <li><strong>Unforgeability</strong> (against a dishonest intermediary). If the dealer and receiver are honest, the probability that the receiver outputs a message $m’\ne m$ in the reveal phase is negligible.</li>
+ <li><strong>Nonrepudiation</strong> (against a dishonest dealer). If the intermediary and receiver are honest, the probability that the intermediary outputs $OK$ in the commitment phase, but the receiver does not output $m’$ in the reveal phase is negligible.</li>
+ <li><strong>Perfect privacy</strong> (against a dishonest receiver). If the dealer and intermediary are honest and $m=m’$, the receiver learns nothing about that message before revelation.</li>
+</ol>
+<p>Digital signatures separate key setup from signing. Once the signing key is established, $D$ can sign messages without $R$ participating. $R$ then verifies the messages and signatures using $D$’s public key. In the ICP protocol, the commitment phase also establishes $R$’s private verification data for the message, and all three parties must participate in the commitment phase.</p>
+<p>In addition, a digital signature can be checked by anyone with $D$’s public key. However, in the ICP protocol, verification uses private data held by the designated receiver. $R$ can forward the message, but the ICP does not give it publicly verifiable proof that the message came from $D$.</p>
+<h3 id="the-protocol">The Protocol</h3>
+<p>The high level idea is simple: the dealer samples a line of the form $ax+b$, and sends the description of the line (i.e., the coefficients $a,b$) to the receiver, while sending the evaluation at $m$ (i.e., $t=am+b$) to the intermediary.</p>
+<p>The description of the line is entirely independent of $m$, so it reveals no information. Then, during the reveal phase, the intermediary can send both $m$ and $t$ to the receiver, who can then check that the evaluation is correct.</p>
+<p>The intermediary doesn’t know anything about $a,b$ other than the fact that $am+b=t$.
+This is one equation in two unknowns, so there is still one degree of freedom given its information.
+If $I$ were to try to send an incorrect message $m’$, it would have to guess the unique $t’=am’+b$, which is highly unlikely.</p>
+<p>Now comes a slight complication: the dealer might be dishonest. It could give $I$ and $R$ inconsistent information, leaving $I$ holding a message that $R$ will refuse to accept.
+To check that the dealer is not lying, the dealer samples two lines $a_0x+b_0$ and $a_1x+b_1$, and sends both descriptions to $R$ and both evaluations to $I$.
+$R$ then sends a random combination of the lines to $I$.
+This combination keeps the second line hidden, while allowing $I$ to combine the evaluations in the same way and check that its evaluations are correct.</p>
+<p><strong>Commitment Phase</strong></p>
+<p>In the protocols below, it is important that each party proceeds to a given round after completing everything in the previous lines. For example, in line $4$, $R$ sends $c$ to $D$ after receiving $\mathsf{Ack}$ from $I$, <em>and</em> completing line $2$.</p>
+<p><strong>$\mathsf{Commit}(m)$</strong>:</p>
+<ol>
+ <li>
+ <p>The dealer acts as follows:</p>
+ <p>Sample independent uniform $a_0,a_1,b_0,b_1\in\mathbb F$. Set</p>
+ <p>\(t_0=a_0 m+ b_0,
+\qquad
+ t_1=a_1 m+ b_1.\)
+Send $( m, t_0, t_1)$ to $I$.
+Send $(a_0, b_0,a_1, b_1)$ to $R$.</p>
+ </li>
+ <li>
+ <p><strong>Upon</strong> receiving $(a_0, b_0,a_1, b_1)$ from $D$, $R$ does the following:</p>
+ <p>Uniformly sample $c\in\mathbb F$. Set</p>
+ <p>\(A=a_0+ca_1,
+\qquad
+ B= b_0+c b_1.\)
+Send $C_R=(c,A, B)$ to $I$.</p>
+ </li>
+</ol>
+<p><strong>$\mathsf{Verify}(m’)$</strong>:</p>
+<ol>
+ <li>The intermediary waits to receive $(m, t_0, t_1)$ from $D$ and $C_R$ from $R$, and then does the following: If $m= m’$, send $\mathsf{Ack}$ to $R$.</li>
+ <li><strong>Upon</strong> receiving $\mathsf{Ack}$ from $I$, $R$ sends $c$ to $D$.</li>
+ <li><strong>Upon</strong> receiving $c$ from $R$, $D$ sends $C_D=(c,a_0+ca_1, b_0+c b_1)$ to $I$.</li>
+ <li><strong>Upon</strong> receiving $C_D$ from $D$, $I$ does the following: If $C_D=C_R$ and $t_0+c t_1=A m’+ B$, output <em>OK</em>.</li>
+</ol>
+<p>The extra steps ensure that $I$ receives its message and tags before $D$ learns the challenge $c$, and that $D$ confirms the combined coefficients before $I$ checks its tags.
+This confirmation also protects privacy when the protocol is used as part of a larger protocol: a dishonest $R$ cannot supply incorrect combined coefficients and learn about $m$ by observing whether $I$ outputs $OK$.</p>
+<p><strong>Reveal</strong></p>
+<ol>
+ <li>The intermediary sends $(m’, t_1)$ to $R$.</li>
+ <li><strong>Upon</strong> receiving the first pair $(m’, t_1)$ from $I$, $R$ checks if $t_1=a_1m’+b_1$. If this is the case, output $m’$.</li>
+</ol>
+<iframe src="https://decentralizedthoughts.github.io/uploads/icp-player.html" width="100%" height="900" title="Information Checking Protocol: step through Rules 1 to 8" style="border:0;" loading="lazy"></iframe>
+<p><a href="https://decentralizedthoughts.github.io/uploads/icp-player.html">Open the interactive protocol at full size</a></p>
+<!--
+[![Animated message flow between the dealer, intermediary, and receiver in Rules 1 through 8.](https://decentralizedthoughts.github.io/uploads/icp-protocol.gif)](https://decentralizedthoughts.github.io/uploads/icp-protocol.gif)
+*One successful execution of the protocol. Tap or click to view at full size.*
+-->
+<h3 id="why-it-works">Why It Works</h3>
+<p><strong>Correctness.</strong> Suppose all parties are honest and $D$ and $I$ input the same message $m$. The dealer sends evaluations and coefficients to $I$ and $R$, respectively, after which $R$ sends a random combination $(c,A,B)$ to $I$.
+$I$ sends an $\mathsf{Ack}$, after which $R$ sends $c$ to $D$.
+The dealer then performs the same computation as $R$, and sends the same tuple $(c,A,B)$ to $I$.
+Finally, $I$ sees that it receives the same tuples, sees that its evaluations are correct, and outputs $OK$.</p>
+<p>If $I$ calls $\mathsf{Reveal}$, it sends the correct message $m$ and evaluation $t_1$. $R$ sees that the evaluation is correct and outputs $m$.</p>
+<p><strong>Nonrepudiation.</strong> Suppose $I$ and $R$ are honest.
+$D$ only finds $c$ out after both $I$ and $R$ receive messages from it, as $R$ waits to receive an $\mathsf{Ack}$ message before sending $c$.
+The dealer’s initial messages are fixed independently of $c$.
+We would like to bound the probability that $I$ outputs $OK$, but $R$ does not output $m’$ during the reveal phase.</p>
+<p>The only way that $I$ would not be able to reveal the message $m’$, is if $t_1\neq a_1 m’ + b_1$, where $t_0,t_1$ are the values it received from $D$, and $a_0,a_1,b_0,b_1$ are the values $R$ received from $D$.
+However, if $D$ sent an incompatible $t_1$ value, then there is a tiny probability of $I$’s verification succeeding.
+In particular, for $I$ to output $OK$, it must be the case that:
+\(t_0+ct_1 = Am'+B = (a_0+ca_1)m' + (b_0+cb_1) = (a_0 m' + b_0) + c (a_1m'+b_1).\)</p>
+<p>Using the fact that $t_1\ne a_1m’+b_1$, we can isolate $c$ and see that it must equal:
+\(c = -\frac{t_0-a_0m'-b_0}{t_1-a_1m'-b_1}.\)
+Since $c$ is uniform and independent of those fixed messages, this equality holds with probability $1/q$.</p>
+<p><strong>Unforgeability.</strong> Suppose $D$ and $R$ are honest. Consider $I$’s view before its forgery attempt. It holds the message, the two evaluations, and the random combination chosen by $R$. In other words, it has the values $m, t_0, t_1, c, A, B$.
+For these values, it knows that there are values $a_0,b_0,a_1,b_1\in\mathbb{F}$ such that:</p>
+\[t_0 = a_0m+b_0,\quad t_1=a_1m+b_1, \quad A = a_0 + c a_1,\quad B=b_0+cb_1.\]
+<p>This looks bad, these are four equations in four variables, when considering the intermediary’s view as constant.
+Luckily, these equations are linearly related!
+In particular:
+\(Am+B=t_0+ct_1.\)</p>
+<p>This means that there is still a single degree of freedom in the system.</p>
+<p>For our purposes, we want to show that $a_1$ is independent of $I$’s view.
+For any choice of $a_1$ there is a single possible assignment of all other variables: $t_1$ and $A$ define $b_1$ and $a_0$, then using these values, $B$ (or $t_0$) defines $b_0$.
+This means that each $a_1$ is at least possible.</p>
+<p>Each choice of $a_1$ determines exactly one compatible key tuple. All key tuples were sampled with equal probability, so $a_1$ remains uniform given $I$’s view.</p>
+<p>However, $I$ successfully revealing a message $m’\ne m$ is equivalent to it guessing $a_1$.
+To forge such a message, $I$ will have to send $m’,t’$ such that $t’=a_1m’+b_1$, because $R$ only accepts messages for which this holds.
+In addition, $I$ knows that $t_1=a_1m+b_1$.
+Combining these two equations, we get:</p>
+\[t'-t_1=(a_1m' + b_1) - (a_1 m + b_1) = a_1(m'-m).\]
+<p>Since $m’-m\ne0$, $I$ could perform the same calculation, divide by $m’-m$ and get:</p>
+\[a_1=\frac{t'-t_1}{m'-m}.\]
+<p>In other words, forging a message is equivalent to guessing $a_1$, which $I$ can only do with probability $1/q$.</p>
+<p><strong>Perfect privacy.</strong> Suppose $D$ and $I$ are honest and input the same message $m$.
+The coefficients $a_0,b_0,a_1,b_1$ are sampled independently of $m$. Since $D$ and $I$ are honest and have matching inputs, $I$ sends $\mathsf{Ack}$ regardless of the values in $C_R$. Thus, neither the coefficients nor the acknowledgment reveal information about $m$ to $R$.</p>
+<p>In addition, for any choice of $c$, $I$ only checks the received messages if it receives the same (correct) random combinations $(c,a_0+ca_1,b_0+cb_1)$ from $D$ and $R$, and thus it only outputs $OK$ if $R$ sent the correct values, which $R$ already knows.</p>
+<p><strong>Communication.</strong> For a message $m\in\mathbb F$, parties send a constant number of field elements throughout both phases. The total communication is therefore $O(\log q)$ bits, or $O(1)$ field elements.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#cryptography">cryptography</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Information+Checking+Protocols&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2026-09-30-information-checking-protocols%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2026-09-26-three-round-BFT-with-crashes/" data-toggle="tooltip" data-placement="top" title="Why BFT with Byzantine and Crash Faults Needs Three Rounds">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ 
+ Decentralized Thinkers
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>
