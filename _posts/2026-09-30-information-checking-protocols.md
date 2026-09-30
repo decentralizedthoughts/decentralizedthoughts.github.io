@@ -207,4 +207,4 @@ In addition, for any choice of $c$, $I$ only checks the received messages if it 
 **Communication.** For a message $m\in\mathbb F$, parties send a constant number of field elements throughout both phases. The total communication is therefore $O(\log q)$ bits, or $O(1)$ field elements.
 
 
-Your thoughts/comments on [X](TBD).
+<!-- Your thoughts/comments on [X](TBD). -->
