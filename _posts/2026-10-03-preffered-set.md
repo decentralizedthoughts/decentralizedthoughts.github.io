@@ -1,5 +1,7 @@
 ---
 title: Preferred Sets in Concurrent Simplex and Alpenglow
+date: 2026-10-03 00:00:00 +03:00
+permalink: /2026-10-03-preffered-set/
 published: true
 unlisted: true
 sitemap: false
