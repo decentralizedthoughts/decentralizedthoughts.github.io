@@ -1,10 +1,10 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-10-03T11:39:43Z",
+  "fetched_at": "2026-10-03T21:12:36Z",
   "items": [
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 242
+      "views": 243
     },
     {
       "path": "/2026-09-26-three-round-BFT-with-crashes/",
