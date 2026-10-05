@@ -1,34 +1,34 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-10-04T21:22:07Z",
+  "fetched_at": "2026-10-05T14:37:13Z",
   "items": [
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 245
+      "views": 241
     },
     {
       "path": "/2026-09-26-three-round-BFT-with-crashes/",
-      "views": 87
+      "views": 88
     },
     {
       "path": "/start-here/",
-      "views": 86
-    },
-    {
-      "path": "/2020-02-26-selfish-mining/",
-      "views": 63
-    },
-    {
-      "path": "/2019-06-01-2019-5-31-models/",
-      "views": 59
+      "views": 84
     },
     {
       "path": "/2019-10-15-consensus-for-state-machine-replication/",
-      "views": 59
+      "views": 64
     },
     {
-      "path": "/2026-09-30-information-checking-protocols/",
-      "views": 59
+      "path": "/2019-06-27-defining-consensus/",
+      "views": 61
+    },
+    {
+      "path": "/2020-02-26-selfish-mining/",
+      "views": 61
+    },
+    {
+      "path": "/2019-06-01-2019-5-31-models/",
+      "views": 60
     }
   ]
 }
