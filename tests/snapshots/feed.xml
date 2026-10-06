@@ -11,6 +11,20 @@
  
  
  <item>
+ <title>Designated Sets in Concurrent Simplex and Alpenglow</title>
+ 
+ <dc:creator><![CDATA[ Ittai Abraham, Clément Burgelin, Antoine Murat, Joachim Neu ]]></dc:creator>
+ 
+ <description>
+ 
+ Recent consensus protocols like Alpenglow or Concurrent Simplex run two confirmation paths concurrently: a “slow” path with two voting rounds, each using a small quorum, and a “fast” path with a single voting round using a large quorum. The “slow” path can actually finish first because distances are not uniform in a geographically distributed system. Some parties are nearby, often on the same continent, while others are across an ocean....
+ </description>
+ <pubDate>Tue, 06 Oct 2026 09:44:54 -0400</pubDate>
+ <link>https://decentralizedthoughts.github.io/2026-10-06-designated-sets/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-10-06-designated-sets/</guid>
+ </item>
+ 
+ <item>
  <title>Information Checking Protocols</title>
  
  <dc:creator><![CDATA[ Ittai Abraham, Gilad Asharov, Gilad Stern ]]></dc:creator>
@@ -274,20 +288,6 @@
  <pubDate>Fri, 13 Feb 2026 00:00:00 -0500</pubDate>
  <link>https://decentralizedthoughts.github.io/2026-02-13-pipes/</link>
  <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-02-13-pipes/</guid>
- </item>
- 
- <item>
- <title>Partial Synchrony Progress Cheat Sheet</title>
- 
- <dc:creator><![CDATA[ Kartik Nayak ]]></dc:creator>
- 
- <description>
- 
- A walkthrough of this progress is available on the TheCoordinate podcast. A downloadable PDF is available here. The PBFT line of work A: Comparing PBFT, SBFT, Tendermint, HotStuff, and HotStuff-2: post1, post2 B: Explaining the core ideas behind PBFT: principles, PBFT C: Comparing the protocols Tendermint and Simplex, a lecture video explaining Tendermint D: Comparing the communication complexity of PBFT/Tendermint and Simplex under harsh conditions The Simplex line of work...
- </description>
- <pubDate>Mon, 02 Feb 2026 09:06:00 -0500</pubDate>
- <link>https://decentralizedthoughts.github.io/2026-02-02-ps-cheat-sheet/</link>
- <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-02-02-ps-cheat-sheet/</guid>
  </item>
  
  </channel>
