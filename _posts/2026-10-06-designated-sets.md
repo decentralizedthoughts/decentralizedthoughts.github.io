@@ -87,6 +87,8 @@ For example, a designated set holding 60% of total stake could contain 19% Byzan
 
 Agreeing on designated sets lets each proposer favor nearby voters and use smaller quorums in the two-round voting path. Only small changes are required for both protocols, though Alpenglow's extra crash tolerance is lost (this guarantee already relied on Assumption 3, a Rotor non-equivocation assumption that seems to require [stronger synchrony](https://decentralizedthoughts.github.io/2026-01-24-two-round-ps/)).
 
+Your thoughts/comments on [X](https://x.com/ittaia/status/2107469780647354545?s=20).
+
 ---
 
 <details markdown="1">
