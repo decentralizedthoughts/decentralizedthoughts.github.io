@@ -1,34 +1,34 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-10-09T22:36:34Z",
+  "fetched_at": "2026-10-10T12:31:14Z",
   "items": [
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 201
+      "views": 194
     },
     {
       "path": "/2026-09-26-three-round-BFT-with-crashes/",
-      "views": 99
+      "views": 100
     },
     {
       "path": "/2026-09-30-information-checking-protocols/",
-      "views": 70
-    },
-    {
-      "path": "/start-here/",
-      "views": 68
+      "views": 72
     },
     {
       "path": "/2019-06-27-defining-consensus/",
-      "views": 65
-    },
-    {
-      "path": "/2019-06-01-2019-5-31-models/",
-      "views": 63
+      "views": 66
     },
     {
       "path": "/2020-09-14-broadcast-from-agreement-and-agreement-from-broadcast/",
-      "views": 63
+      "views": 66
+    },
+    {
+      "path": "/2026-10-06-designated-sets/",
+      "views": 66
+    },
+    {
+      "path": "/start-here/",
+      "views": 66
     }
   ]
 }
