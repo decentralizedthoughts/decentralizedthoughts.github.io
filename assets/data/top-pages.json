@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-10-10T12:31:14Z",
+  "fetched_at": "2026-10-10T21:41:43Z",
   "items": [
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
@@ -16,11 +16,11 @@
     },
     {
       "path": "/2019-06-27-defining-consensus/",
-      "views": 66
+      "views": 67
     },
     {
       "path": "/2020-09-14-broadcast-from-agreement-and-agreement-from-broadcast/",
-      "views": 66
+      "views": 67
     },
     {
       "path": "/2026-10-06-designated-sets/",
