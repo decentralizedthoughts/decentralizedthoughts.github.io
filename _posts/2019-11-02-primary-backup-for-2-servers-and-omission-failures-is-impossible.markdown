@@ -54,4 +54,6 @@ So in World C, the two clients will see conflicting states and this is a violati
 5. Nancy Lynch's book has a variant of this lower bound for atomic objects in asynchrony. See Theorem 17.6 in her [book](https://dl.acm.org/doi/book/10.5555/2821576). 
 6. This was later [extended](https://users.ece.cmu.edu/~adrian/731-sp04/readings/GL-cap.pdf) by Gilbert and Lynch to partial synchrony and connected to Browers conjecture. We cover this in our post on the [CAP theorem](https://decentralizedthoughts.github.io/2023-07-09-CAP-two-servers-in-psynch/).
 
+7. This post is part of our collection of lower bounds. See the [Lower Bounds chapter](https://decentralizedthoughts.github.io/2026-06-28-chapter-lower-bounds/) for more results and proof techniques.
+
 Please leave comments on [Twitter](https://twitter.com/ittaia/status/1191305159638503426?s=20)

@@ -70,4 +70,6 @@ Lower bounds in distributed computing are protocols for the adversary. The FLM l
 
 What if we weaken the Validity property instead of the Agreement property: **(Weak Validity)**: if all parties are non-faulty and have the same input then this is the output value. Can you solve this problem for $n=3$? What about solving this problem with probability $0.99$?
 
+This post is part of our collection of lower bounds. See the [Lower Bounds chapter](https://decentralizedthoughts.github.io/2026-06-28-chapter-lower-bounds/) for more results and proof techniques.
+
 Your decentralized thoughts on [twitter](https://twitter.com/kartik1507/status/1445048662430683138?s=20)

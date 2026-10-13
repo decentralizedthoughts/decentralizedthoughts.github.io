@@ -147,6 +147,8 @@ Gafni and Losa prove an even stronger result, showing that synchronous single mo
 * Compared to the *Almost Same but Failure Free different* notion of our post on [early stopping](https://decentralizedthoughts.github.io/2024-01-28-early-stopping-lower-bounds/), here we maintain just one configuration instead of two. However, the proofs are very similar. It currently seems that early stopping needs to maintain two configurations because it needs to reason about a configuration that is one round in the future.
 * The constructive round by round nature of this proof approach shows that all the adversary needs to do is guess the pivot and its action (which can be done with probability $1/2n$ each round). This immediately implies that any protocol—even a randomized one, or one that uses cryptographic techniques—that runs for at most $c$ rounds must have an error probability of at least $(2n)^{-c} (1/2)$.
 
+* This post is part of our collection of lower bounds. See the [Lower Bounds chapter](https://decentralizedthoughts.github.io/2026-06-28-chapter-lower-bounds/) for more results and proof techniques.
+
 ## Acknowledgments
 
 We would like to thank Tim Roughgarden for insightful comments and for finding and fixing a major error in a previous version of the proof of Lemma 2.

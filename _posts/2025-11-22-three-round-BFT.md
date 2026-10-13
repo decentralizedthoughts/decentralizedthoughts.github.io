@@ -87,6 +87,8 @@ In PBFT, in world $M$ the first leader would not reach $2/3$ of preprepares, so 
 
 * For how this lower bound motivates the two-round Simplex variants, see the [Simplex chapter](https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/).
 
+* This post is part of our collection of lower bounds. See the [Lower Bounds chapter](https://decentralizedthoughts.github.io/2026-06-28-chapter-lower-bounds/) for more results and proof techniques.
+
 ### Acknowledgments
 
 Many thanks to our co-authors Ling Ren and Zhuolun Xiang. Thank you, Samuel Laferriere for inspiring us to write this post.  Thank you, Adan Irshead for the drawings.

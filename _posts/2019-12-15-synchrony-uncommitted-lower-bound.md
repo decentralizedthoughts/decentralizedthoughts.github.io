@@ -77,6 +77,8 @@ In a [follow-up post we discuss lower bounds for early stopping](), lower bounds
 
 In the [next post](https://decentralizedthoughts.github.io/2019-12-15-asynchrony-uncommitted-lower-bound/), we use the same proof approach to prove that in the *asynchronous* model, there must exist an *infinite* execution even for protocols that are resilient to just one crash failure.
 
+This post is part of our collection of lower bounds. See the [Lower Bounds chapter](https://decentralizedthoughts.github.io/2026-06-28-chapter-lower-bounds/) for more results and proof techniques.
+
 ### Acknowledgment
 
 Many thanks to Kartik Nayak for valuable feedback on this post.
