@@ -368,6 +368,11 @@ equivocation as a separate case. If the leader does not equivocate, a special
 certificate combines votes for $x$ and votes for $\bot$. If the leader does
 equivocate, parties ignore the leader’s own vote and use only non-leader votes.
 The same idea extends the concurrent protocol to $n=3f+2p-1$.</p>
+<p><a href="https://decentralizedthoughts.github.io/2026-07-12-fast-IT-BFT/">Two Round Information-Theoretic Chained BFT at n=5f-1</a>
+combines this threshold with the signature-free approach of IT-Kuplex and the
+Chained Simplex outer protocol. Parties use quorums received directly rather
+than transferable certificates, obtaining two-round good-case block latency
+and worst-case view latency $2\Delta+2\delta$.</p>
 <p>Other protocols in this neighborhood include
 <a href="https://arxiv.org/abs/2312.05869">Banyan</a>,
 <a href="https://arxiv.org/abs/2505.08771">Kudzu</a>,
@@ -377,6 +382,18 @@ and
 about fast paths, fallback paths, leader equivocation, data dissemination, and
 mixed Byzantine and crash faults. The Simplex style posts are useful because
 they isolate the quorum arithmetic in a very small protocol.</p>
+<h3 id="locality-and-designated-sets">Locality and Designated Sets</h3>
+<p><a href="https://decentralizedthoughts.github.io/2026-10-06-designated-sets/">Designated Sets in Concurrent Simplex and Alpenglow</a>
+asks whether the path with two voting rounds can benefit more from nearby
+voters. Each proposer has an agreed designated set of $3f+1$ parties, and each
+voting round on this path needs $2f+1$ votes from that set. For Concurrent
+Simplex with $n=3f+2p+1$, this replaces the global threshold of $2f+p+1$
+while preserving the Byzantine fault bound and the one-round voting path’s
+global threshold. Two rounds among nearby parties can finish before one round
+among geographically dispersed parties.</p>
+<p>The post also adapts Alpenglow, adding a skip fallback condition to preserve
+progress. That adaptation preserves the Byzantine fault bound but loses
+Alpenglow’s additional crash tolerance under its 20+20 guarantee.</p>
 <h3 id="granular-synchrony">Granular Synchrony</h3>
 <p>The post
 <a href="https://decentralizedthoughts.github.io/2026-01-24-two-round-ps/">Concurrent 2-round and 3-round BFT protocols under granular synchrony</a>
@@ -454,8 +471,13 @@ long Simplex list of intervening skips into a constant size check.</p>
  <li><a href="https://decentralizedthoughts.github.io/2025-07-18-two-round-Simplex/">2-round BFT in Simplex style</a></li>
  <li><a href="https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/">Concurrent 2-round and 3-round Simplex-style BFT</a></li>
  <li><a href="https://decentralizedthoughts.github.io/2025-08-06-5fminus1-simplex/">2-round BFT in Simplex style for $n=5f-1$</a></li>
+ <li><a href="https://decentralizedthoughts.github.io/2026-07-12-fast-IT-BFT/">Two Round Information-Theoretic Chained BFT at n=5f-1</a></li>
  <li><a href="https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/">Why BFT Needs Three Rounds</a></li>
  <li><a href="https://decentralizedthoughts.github.io/2026-01-24-two-round-ps/">Concurrent 2-round and 3-round BFT protocols under granular synchrony</a></li>
+</ul>
+<p>For locality and designated sets, read:</p>
+<ul>
+ <li><a href="https://decentralizedthoughts.github.io/2026-10-06-designated-sets/">Designated Sets in Concurrent Simplex and Alpenglow</a></li>
 </ul>
 <p>For fixed view schedules, read:</p>
 <ul>

@@ -101,7 +101,7 @@
  
  <description>
  
- This post is a map of the lower-bound posts on Decentralized Thoughts. The Start Here page already lists many of these results by topic, and the lowerbound tag lists the posts themselves. Here we turn that list into a chapter: first the main fault-threshold barriers, then communication, round complexity, latency, validity, privacy, and liveness. In distributed computing, an upper bound is often a condition and a protocol for the honest...
+ This post is a map of the lower-bound posts on Decentralized Thoughts. The Start Here page already lists many of these results by topic, and the lowerbound tag lists the posts themselves. Here we turn that list into a chapter: first the main fault-threshold barriers, then communication, round complexity, latency, clock synchronization, validity, privacy, and liveness. In distributed computing, an upper bound is often a condition and a protocol for...
  </description>
  <pubDate>Sun, 28 Jun 2026 05:00:00 -0400</pubDate>
  <link>https://decentralizedthoughts.github.io/2026-06-28-chapter-lower-bounds/</link>

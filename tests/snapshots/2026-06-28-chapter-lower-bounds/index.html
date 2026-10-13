@@ -13,7 +13,7 @@
  
  <meta name="author" content="Ittai Abraham">
  
- <meta name="description" content="This post is a map of the lower-bound posts on Decentralized Thoughts. The Start Here page already lists many of these results by topic, and the lowerbound tag lists the posts themselves. Here we turn that list into a chapter: first the main fault-threshold barriers, then communication, round complexity, latency, validity, privacy, and liveness. In distributed computing, an upper bound is often a condition and a protocol for the honest...">
+ <meta name="description" content="This post is a map of the lower-bound posts on Decentralized Thoughts. The Start Here page already lists many of these results by topic, and the lowerbound tag lists the posts themselves. Here we turn that list into a chapter: first the main fault-threshold barriers, then communication, round complexity, latency, clock synchronization, validity, privacy, and liveness. In distributed computing, an upper bound is often a condition and a protocol for...">
  
  
  
@@ -72,7 +72,7 @@
  
  <meta property="og:site_name" content="Decentralized Thoughts">
  <meta property="og:title" content="Chapter: Lower Bounds">
- <meta property="og:description" content="This post is a map of the lower-bound posts on Decentralized Thoughts. The Start Here page already lists many of these results by topic, and the lowerbound tag lists the posts themselves. Here we turn that list into a chapter: first the main fault-threshold barriers, then communication, round complexity, latency, validity, privacy, and liveness. In distributed computing, an upper bound is often a condition and a protocol for the honest...">
+ <meta property="og:description" content="This post is a map of the lower-bound posts on Decentralized Thoughts. The Start Here page already lists many of these results by topic, and the lowerbound tag lists the posts themselves. Here we turn that list into a chapter: first the main fault-threshold barriers, then communication, round complexity, latency, clock synchronization, validity, privacy, and liveness. In distributed computing, an upper bound is often a condition and a protocol for...">
  
  <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
  
@@ -91,7 +91,7 @@
  <meta name="twitter:site" content="@ittaia">
  <meta name="twitter:creator" content="@ittaia">
  <meta property="twitter:title" content="Chapter: Lower Bounds">
- <meta property="twitter:description" content="This post is a map of the lower-bound posts on Decentralized Thoughts. The Start Here page already lists many of these results by topic, and the lowerbound tag lists the posts themselves. Here we turn that list into a chapter: first the main fault-threshold barriers, then communication, round complexity, latency, validity, privacy, and liveness. In distributed computing, an upper bound is often a condition and a protocol for the honest...">
+ <meta property="twitter:description" content="This post is a map of the lower-bound posts on Decentralized Thoughts. The Start Here page already lists many of these results by topic, and the lowerbound tag lists the posts themselves. Here we turn that list into a chapter: first the main fault-threshold barriers, then communication, round complexity, latency, clock synchronization, validity, privacy, and liveness. In distributed computing, an upper bound is often a condition and a protocol for...">
  
  <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
  
@@ -219,7 +219,7 @@ page already lists many of these results by topic, and the
 <a href="https://decentralizedthoughts.github.io/tags/#lowerbound">lowerbound tag</a>
 lists the posts themselves. Here we turn that list into a chapter: first the
 main fault-threshold barriers, then communication, round complexity, latency,
-validity, privacy, and liveness.</p>
+clock synchronization, validity, privacy, and liveness.</p>
 <p>In distributed computing, an upper bound is often a condition and a <em>protocol
 for the honest parties</em>. Under that condition, the protocol lets the honest
 parties satisfy the target property against any adversary. A useful way to
@@ -475,6 +475,13 @@ least three rounds in the good case. This is why PBFT, Tendermint, HotStuff,
 Casper FFG, and Simplex all have the proposal plus two voting round pattern at
 optimal resilience. Two-round good-case protocols need more validators, a
 different timing assumption, or a weaker target.</p>
+<p>The mixed-fault extension is
+<a href="https://decentralizedthoughts.github.io/2026-09-26-three-round-BFT-with-crashes/">Why BFT with Byzantine and Crash Faults Needs Three Rounds</a>.
+If a protocol must tolerate $f$ Byzantine faults and $c$ additional crash
+faults, a two-round good case tolerating $p$ faults is impossible at
+$n=3f+c+2p-2$, for $f\geq1$ and $1\leq p\leq f+c$.
+The proof adapts the same indistinguishable executions to separate the full
+fault tolerance requirement from the faults allowed on the fast path.</p>
 <p>The related responsiveness lower bound is
 <a href="https://decentralizedthoughts.github.io/2020-06-12-optimal-optimistic-responsiveness/">On the Optimality of Optimistic Responsiveness</a>.
 Optimistic responsiveness is powerful, but it does not make the adversary’s
@@ -546,6 +553,20 @@ view gap disappear for free.</p>
  </tr>
  </tbody>
 </table>
+<h2 id="clock-synchronization">Clock Synchronization</h2>
+<p>Clock synchronization asks how closely parties can align their clock values
+despite uncertainty in message delays.</p>
+<p><a href="https://decentralizedthoughts.github.io/2026-10-13-clock-synchronization-no-drift/">Optimal Clock Synchronization When There Are No Failures or Drift</a>
+starts with $n$ parties whose clocks all run at the correct rate, with arbitrary
+initial offsets and message delays in $[d-u,d]$. Even without failures or
+clock drift, no protocol can guarantee skew smaller than
+$u(1-1/n)$, regardless of how many messages it exchanges. A single exchange
+of timestamps followed by averaging midpoint estimates achieves this bound.</p>
+<p>The lower-bound proof shifts selected parties’ events earlier and increases
+their hardware clock offsets by the same amount. Every party sees the same
+local clock values and messages, so it must choose the same correction in all
+these worlds. Comparing clock differences across the worlds forces one world
+to have skew at least $u(1-1/n)$.</p>
 <h2 id="validity-and-censorship-resistance">Validity and Censorship Resistance</h2>
 <p>Many lower bounds become sharper once validity is made more explicit.</p>
 <p>The starting point is
@@ -682,6 +703,9 @@ round lower bound, early stopping, and simultaneous agreement.</p>
 <p><strong>Validity worlds.</strong> Build one execution where validity forces value $0$ and
 another where validity forces value $1$, then connect them through a mixed
 execution. This is the proof style behind many good-case latency lower bounds.</p>
+<p><strong>Time shifts.</strong> Move events in real time while compensating with hardware
+clock offsets, preserving every party’s local observations. This is the clock
+synchronization lower-bound technique.</p>
 <p><strong>Privacy hybrids.</strong> Change one party’s secret or one share at a time while
 preserving what the adversary can see. This is the natural language of privacy
 and secret state lower bounds.</p>
@@ -764,6 +788,10 @@ and secret state lower bounds.</p>
  <li><a href="https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/">Why BFT Needs Three Rounds</a></li>
  <li><a href="https://decentralizedthoughts.github.io/2026-09-26-three-round-BFT-with-crashes/">Why BFT with Byzantine and Crash Faults Needs Three Rounds</a></li>
  <li><a href="https://decentralizedthoughts.github.io/2020-06-12-optimal-optimistic-responsiveness/">On the Optimality of Optimistic Responsiveness</a></li>
+</ul>
+<p>For clock synchronization, read:</p>
+<ul>
+ <li><a href="https://decentralizedthoughts.github.io/2026-10-13-clock-synchronization-no-drift/">Optimal Clock Synchronization When There Are No Failures or Drift</a></li>
 </ul>
 <p>For validity and censorship resistance, read:</p>
 <ul>
