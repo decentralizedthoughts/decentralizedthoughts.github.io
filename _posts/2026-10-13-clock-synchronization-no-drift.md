@@ -231,4 +231,4 @@ These are $n$ clock differences whose sum is $(n-1)u$. Therefore, one difference
 
 * **Tolerating failures**:  The [next post](TBD) adds Byzantine failures, still with no clock drift.
 
-Your thoughts on [X](TBD)
+Your thoughts on [X](https://x.com/ittaia/status/2109945430582718494?s=20)

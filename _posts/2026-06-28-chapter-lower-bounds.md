@@ -464,3 +464,5 @@ For classic external papers, read:
 * [Dolev and Reischuk: Bounds on Information Exchange for Byzantine Agreement](https://www.cs.huji.ac.il/~dolev/pubs/p132-dolev.pdf)
 * [Ben-Or, Kelmer, Rabin: Asynchronous Secure Computations with Optimal Resilience](https://arxiv.org/abs/2006.16686)
 * [Good-case Latency of Byzantine Broadcast: A Complete Categorization](https://arxiv.org/abs/2102.07240)
+
+Your thoughts/comments on [X](https://x.com/ittaia/status/2071271889738076486?s=20).

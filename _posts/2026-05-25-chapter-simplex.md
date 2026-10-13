@@ -355,4 +355,4 @@ Neil Giridharan, Andrew Lewis-Pye, Joachim Neu, Ertem Nusret Tas, and Alejandro
 Ranchal-Pedrosa for insightful discussions and feedback across the Simplex
 series and beyond.
 
-Your thoughts on X.
+Your thoughts/comments on [X](https://x.com/ittaia/status/2060876926680486068?s=20).
