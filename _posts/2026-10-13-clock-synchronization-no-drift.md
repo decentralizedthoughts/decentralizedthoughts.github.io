@@ -28,7 +28,7 @@ $$
 H_i(t)=t+h_i,
 $$
 
-where $h_i$ is its arbitrary, unknown hardware offset. Thus clocks may disagree about the time, but all advance at the same rate. Party $i$ can read $H_i$ but cannot change it or observe real time $t$. 
+Here $h_i$ is party $i$’s arbitrary, unknown hardware offset. For example, one clock might read five seconds ahead of another because they were initialized differently. The offsets model these initial clock differences. Party $i$ can read $H_i$, but cannot change it or observe real time $t$. We assume no clock drift: intuitively, every clock advances by exactly one second per second of real time, so the differences between hardware clocks stay constant. We will formally define drift in later posts.
 
 **Communication.** The parties know two parameters, $0\leq u\leq d$. Every message takes between $d-u$ and $d$ units of real time from sending to receipt. 
 
@@ -53,6 +53,8 @@ Formally, the **skew** at real time $t$ is
 $$
 \operatorname{skew}(t)=\max_i C_i(t)-\min_i C_i(t).
 $$
+
+Skew measures how well the clocks agree with one another, rather than how accurately they track real time. We could also measure $\max_i \lvert C_i(t)-t\rvert$, but the model in this post provides no external source of true time. Since the initial offsets are arbitrary, all clocks could agree perfectly while being hours ahead of real time. Our goal is therefore internal synchronization: bringing the clocks close together, without requiring them to match an external time reference.
 
 Note that once adjustments $a_1,\ldots,a_n$ are fixed, $\operatorname{skew}(t)=\max_i (h_i+a_i) -\min_i (h_i+a_i)$ without a dependence on $t$.
 
@@ -230,5 +232,9 @@ These are $n$ clock differences whose sum is $(n-1)u$. Therefore, one difference
 * **Lower bounds**: Our [lower bounds chapter](https://decentralizedthoughts.github.io/2026-06-28-chapter-lower-bounds/) collects more results and proof techniques. For more on indistinguishability, see our [post on Byzantine agreement under partial synchrony](https://decentralizedthoughts.github.io/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/).
 
 * **Tolerating failures**:  The [next post](TBD) adds Byzantine failures, still with no clock drift.
+
+### Acknowledgments
+
+Many thanks to Kartik Nayak for insightful comments and feedback on this post.
 
 Your thoughts on [X](https://x.com/ittaia/status/2109945430582718494?s=20)

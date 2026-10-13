@@ -222,7 +222,7 @@
 <p>There are $n$ parties with no failures. Every party has a direct, reliable channel to every other party.</p>
 <p><strong>Hardware clocks.</strong> At real time $t$, party $i$ can read</p>
 \[H_i(t)=t+h_i,\]
-<p>where $h_i$ is its arbitrary, unknown hardware offset. Thus clocks may disagree about the time, but all advance at the same rate. Party $i$ can read $H_i$ but cannot change it or observe real time $t$.</p>
+<p>Here $h_i$ is party $i$’s arbitrary, unknown hardware offset. For example, one clock might read five seconds ahead of another because they were initialized differently. The offsets model these initial clock differences. Party $i$ can read $H_i$, but cannot change it or observe real time $t$. We assume no clock drift: intuitively, every clock advances by exactly one second per second of real time, so the differences between hardware clocks stay constant. We will formally define drift in later posts.</p>
 <p><strong>Communication.</strong> The parties know two parameters, $0\leq u\leq d$. Every message takes between $d-u$ and $d$ units of real time from sending to receipt.</p>
 <p><strong>Startup.</strong> Every party eventually starts, the first local wakeup or message arrival starts the protocol.</p>
 <h2 id="what-does-synchronization-require">What does synchronization require?</h2>
@@ -232,6 +232,7 @@
 <p>Each party must eventually output its correction and keep it fixed. $C_i$ continues at the same rate as $H_i$.</p>
 <p>Formally, the <strong>skew</strong> at real time $t$ is</p>
 \[\operatorname{skew}(t)=\max_i C_i(t)-\min_i C_i(t).\]
+<p>Skew measures how well the clocks agree with one another, rather than how accurately they track real time. We could also measure $\max_i \lvert C_i(t)-t\rvert$, but the model in this post provides no external source of true time. Since the initial offsets are arbitrary, all clocks could agree perfectly while being hours ahead of real time. Our goal is therefore internal synchronization: bringing the clocks close together, without requiring them to match an external time reference.</p>
 <p>Note that once adjustments $a_1,\ldots,a_n$ are fixed, $\operatorname{skew}(t)=\max_i (h_i+a_i) -\min_i (h_i+a_i)$ without a dependence on $t$.</p>
 <p><strong>Theorem (Lundelius and Lynch, 1984).</strong> For $n$ parties, with no failures, no clock drifts, and delays in $[d-u,d]$, there is a protocol that terminates after one message exchange and guarantees adjustments $a_1,\ldots,a_n$ such that</p>
 \[\boxed{\operatorname{skew}\leq u\left(1-\frac1n\right).}\]
@@ -322,6 +323,8 @@
  <p><strong>Tolerating failures</strong>: The <a href="TBD">next post</a> adds Byzantine failures, still with no clock drift.</p>
  </li>
 </ul>
+<h3 id="acknowledgments">Acknowledgments</h3>
+<p>Many thanks to Kartik Nayak for insightful comments and feedback on this post.</p>
 <p>Your thoughts on <a href="https://x.com/ittaia/status/2109945430582718494?s=20">X</a></p>
  </div>
  
