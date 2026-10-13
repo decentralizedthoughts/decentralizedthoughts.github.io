@@ -518,3 +518,5 @@ adds a block, so decided chain height grows without bound.
   quorum implication does not require synchrony. Synchrony is needed only for
   timing: after GST, these honest messages reach every honest party within one
   message delay.
+
+Your thoughts/comments on [X](https://x.com/ittaia/status/2076789161869087080?s=20).
