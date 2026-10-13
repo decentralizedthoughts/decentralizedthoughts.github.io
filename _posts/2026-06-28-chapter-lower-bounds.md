@@ -13,7 +13,7 @@ page already lists many of these results by topic, and the
 [lowerbound tag](https://decentralizedthoughts.github.io/tags/#lowerbound)
 lists the posts themselves. Here we turn that list into a chapter: first the
 main fault-threshold barriers, then communication, round complexity, latency,
-validity, privacy, and liveness.
+clock synchronization, validity, privacy, and liveness.
 
 In distributed computing, an upper bound is often a condition and a *protocol
 for the honest parties*. Under that condition, the protocol lets the honest
@@ -225,6 +225,14 @@ Casper FFG, and Simplex all have the proposal plus two voting round pattern at
 optimal resilience. Two-round good-case protocols need more validators, a
 different timing assumption, or a weaker target.
 
+The mixed-fault extension is
+[Why BFT with Byzantine and Crash Faults Needs Three Rounds](https://decentralizedthoughts.github.io/2026-09-26-three-round-BFT-with-crashes/).
+If a protocol must tolerate $f$ Byzantine faults and $c$ additional crash
+faults, a two-round good case tolerating $p$ faults is impossible at
+$n=3f+c+2p-2$, for $f\geq1$ and $1\leq p\leq f+c$.
+The proof adapts the same indistinguishable executions to separate the full
+fault tolerance requirement from the faults allowed on the fast path.
+
 The related responsiveness lower bound is
 [On the Optimality of Optimistic Responsiveness](https://decentralizedthoughts.github.io/2020-06-12-optimal-optimistic-responsiveness/).
 Optimistic responsiveness is powerful, but it does not make the adversary's
@@ -245,6 +253,24 @@ At a glance:
 | [Rotating leaders](https://decentralizedthoughts.github.io/2021-12-07-good-case-latency-of-rotating-leader-synchronous-bft/) | single-slot responsive rotation needs $2\Delta-O(\delta)$ and is matched by $2\Delta+O(\delta)$ | stable leaders or pipelining change the latency target |
 | [Fault-tolerant responsive fast path](https://decentralizedthoughts.github.io/2020-06-12-optimal-optimistic-responsiveness/) | responsive $O(\delta)$ commit forces synchronous fallback at least $2\Delta-O(\delta)$ | a zero-fault optimistic path avoids this tradeoff |
 | [Zero-fault responsive fast path](https://decentralizedthoughts.github.io/2020-06-12-optimal-optimistic-responsiveness/) | $\Delta$ synchronous latency is possible | the optimistic condition no longer tolerates even one fault |
+
+## Clock Synchronization
+
+Clock synchronization asks how closely parties can align their clock values
+despite uncertainty in message delays.
+
+[Optimal Clock Synchronization When There Are No Failures or Drift](https://decentralizedthoughts.github.io/2026-10-13-clock-synchronization-no-drift/)
+starts with $n$ parties whose clocks all run at the correct rate, with arbitrary
+initial offsets and message delays in $[d-u,d]$. Even without failures or
+clock drift, no protocol can guarantee skew smaller than
+$u(1-1/n)$, regardless of how many messages it exchanges. A single exchange
+of timestamps followed by averaging midpoint estimates achieves this bound.
+
+The lower-bound proof shifts selected parties' events earlier and increases
+their hardware clock offsets by the same amount. Every party sees the same
+local clock values and messages, so it must choose the same correction in all
+these worlds. Comparing clock differences across the worlds forces one world
+to have skew at least $u(1-1/n)$.
 
 ## Validity and Censorship Resistance
 
@@ -353,6 +379,10 @@ round lower bound, early stopping, and simultaneous agreement.
 another where validity forces value $1$, then connect them through a mixed
 execution. This is the proof style behind many good-case latency lower bounds.
 
+**Time shifts.** Move events in real time while compensating with hardware
+clock offsets, preserving every party's local observations. This is the clock
+synchronization lower-bound technique.
+
 **Privacy hybrids.** Change one party's secret or one share at a time while
 preserving what the adversary can see. This is the natural language of privacy
 and secret state lower bounds.
@@ -406,6 +436,10 @@ For good case latency, read:
 * [Why BFT Needs Three Rounds](https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/)
 * [Why BFT with Byzantine and Crash Faults Needs Three Rounds](https://decentralizedthoughts.github.io/2026-09-26-three-round-BFT-with-crashes/)
 * [On the Optimality of Optimistic Responsiveness](https://decentralizedthoughts.github.io/2020-06-12-optimal-optimistic-responsiveness/)
+
+For clock synchronization, read:
+
+* [Optimal Clock Synchronization When There Are No Failures or Drift](https://decentralizedthoughts.github.io/2026-10-13-clock-synchronization-no-drift/)
 
 For validity and censorship resistance, read:
 

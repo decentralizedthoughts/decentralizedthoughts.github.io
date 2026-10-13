@@ -249,15 +249,7 @@
 \[|m-(H_j(t)-H_i(t))|\leq u/2.\]
 <p><strong>Proof.</strong> Since $r-s=\ell+h_i-h_j$ and $H_j(t)-H_i(t)=h_j-h_i$,</p>
 \[m-(H_j(t)-H_i(t))=(d-u/2)-\ell\in[-u/2,u/2].\]
-<table>
- <tbody>
- <tr>
- <td>Setting $a_i=m$ therefore gives $</td>
- <td>C_i(t+\ell)-H_j(t+\ell)</td>
- <td>\leq u/2$ at receipt.</td>
- </tr>
- </tbody>
-</table>
+<p>Setting $a_i=m$ therefore gives $\lvert C_i(t+\ell)-H_j(t+\ell)\rvert\leq u/2$ at receipt.</p>
 <p><img src="/img/clock-sync-no-drift-midpoint.png" alt="Suppose the sender sends s=1000 and the receiver observes r=1098, with message delay between 95 and 100 milliseconds. The observed difference is r-s=98. The clock difference lies in [95-98,100-98]=[-3,2], so the midpoint correction is m=97.5-98=-0.5. The corrected clock is 1097.5, within 2.5 milliseconds of the sender’s hardware clock at receipt." /></p>
 <p><em>Suppose $s=1000$, $r=1098$, and the delay is between $95$ and $100$ milliseconds. Then $r-s=98$, so the correction is $m=97.5-98=-0.5$.</em></p>
 <h2 id="the-protocol">The protocol</h2>

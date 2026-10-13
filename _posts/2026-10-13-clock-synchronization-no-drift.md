@@ -107,7 +107,7 @@ $$
 m-(H_j(t)-H_i(t))=(d-u/2)-\ell\in[-u/2,u/2].
 $$
 
-Setting $a_i=m$ therefore gives $|C_i(t+\ell)-H_j(t+\ell)|\leq u/2$ at receipt.
+Setting $a_i=m$ therefore gives $\lvert C_i(t+\ell)-H_j(t+\ell)\rvert\leq u/2$ at receipt.
 
 
 ![Suppose the sender sends s=1000 and the receiver observes r=1098, with message delay between 95 and 100 milliseconds. The observed difference is r-s=98. The clock difference lies in [95-98,100-98]=[-3,2], so the midpoint correction is m=97.5-98=-0.5. The corrected clock is 1097.5, within 2.5 milliseconds of the sender’s hardware clock at receipt.](/img/clock-sync-no-drift-midpoint.png)
