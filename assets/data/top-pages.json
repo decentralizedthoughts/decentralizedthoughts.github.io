@@ -1,14 +1,14 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-10-13T14:10:51Z",
+  "fetched_at": "2026-10-13T22:42:27Z",
   "items": [
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 168
+      "views": 170
     },
     {
       "path": "/2026-10-06-designated-sets/",
-      "views": 79
+      "views": 81
     },
     {
       "path": "/2026-09-30-information-checking-protocols/",
@@ -23,11 +23,11 @@
       "views": 68
     },
     {
-      "path": "/2019-06-27-defining-consensus/",
-      "views": 59
+      "path": "/2020-02-26-selfish-mining/",
+      "views": 60
     },
     {
-      "path": "/2020-02-26-selfish-mining/",
+      "path": "/2019-06-27-defining-consensus/",
       "views": 59
     }
   ]
