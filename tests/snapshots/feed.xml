@@ -11,6 +11,20 @@
  
  
  <item>
+ <title>Optimal Clock Synchronization When There Are No Failures or Drift</title>
+ 
+ <dc:creator><![CDATA[ Ittai Abraham, Jennifer Welch ]]></dc:creator>
+ 
+ <description>
+ 
+ Synchronized clocks help servers coordinate. For example, servers with synchronized clocks following the same schedule can switch leaders at nearly the same time. A natural approach is for servers to exchange their current clock values and take the average. But messages take time to arrive. By the time a server receives another server’s clock value, that clock has already advanced. If the delay were known, the receiver could account for...
+ </description>
+ <pubDate>Tue, 13 Oct 2026 05:17:27 -0400</pubDate>
+ <link>https://decentralizedthoughts.github.io/2026-10-13-clock-synchronization-no-drift/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-10-13-clock-synchronization-no-drift/</guid>
+ </item>
+ 
+ <item>
  <title>Designated Sets in Concurrent Simplex and Alpenglow</title>
  
  <dc:creator><![CDATA[ Ittai Abraham, Clément Burgelin, Antoine Murat, Joachim Neu ]]></dc:creator>
@@ -274,20 +288,6 @@
  <pubDate>Fri, 06 Mar 2026 00:00:00 -0500</pubDate>
  <link>https://decentralizedthoughts.github.io/2026-03-06-mysticeti-revolutionizing-consensus-on-sui/</link>
  <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-03-06-mysticeti-revolutionizing-consensus-on-sui/</guid>
- </item>
- 
- <item>
- <title>Beyond Latency and Communication Complexity - A Tutorial on the Pipes Model</title>
- 
- <dc:creator><![CDATA[ Andrew Lewis-Pye, Kartik Nayak, Nibesh Shrestha ]]></dc:creator>
- 
- <description>
- 
- Traditionally, protocol performance is summarized using two metrics: latency (measured in rounds), and communication complexity (measured asymptotically, e.g., $O(n^2)$). If both are small, we might expect the protocol to perform well in practice. But this intuition is incomplete. When Low Latency and Low Communication Aren’t Enough Consider two protocols: Protocol A: 3-round good-case latency and $O(n^4)$ communication. Protocol B: 5-round good-case latency and $O(n^3)$ communication. These are the asymptotics for...
- </description>
- <pubDate>Fri, 13 Feb 2026 00:00:00 -0500</pubDate>
- <link>https://decentralizedthoughts.github.io/2026-02-13-pipes/</link>
- <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-02-13-pipes/</guid>
  </item>
  
  </channel>

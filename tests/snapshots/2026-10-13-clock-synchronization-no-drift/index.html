@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Optimal Clock Synchronization When There Are No Failures or Drift</title>
+ 
+ 
+ 
+ 
+ <meta name="author" content="Ittai Abraham, Jennifer Welch">
+ 
+ <meta name="description" content="Synchronized clocks help servers coordinate. For example, servers with synchronized clocks following the same schedule can switch leaders at nearly the same time. A natural approach is for servers to exchange their current clock values and take the average. But messages take time to arrive. By the time a server receives another server’s clock value, that clock has already advanced. If the delay were known, the receiver could account for...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Optimal Clock Synchronization When There Are No Failures or Drift">
+ <meta property="og:description" content="Synchronized clocks help servers coordinate. For example, servers with synchronized clocks following the same schedule can switch leaders at nearly the same time. A natural approach is for servers to exchange their current clock values and take the average. But messages take time to arrive. By the time a server receives another server’s clock value, that clock has already advanced. If the delay were known, the receiver could account for...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham, Jennifer Welch">
+ 
+ <meta property="og:article:published_time" content="2026-10-13T05:17:27-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2026-10-13-clock-synchronization-no-drift/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2026-10-13-clock-synchronization-no-drift/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Optimal Clock Synchronization When There Are No Failures or Drift">
+ <meta property="twitter:description" content="Synchronized clocks help servers coordinate. For example, servers with synchronized clocks following the same schedule can switch leaders at nearly the same time. A natural approach is for servers to exchange their current clock values and take the average. But messages take time to arrive. By the time a server receives another server’s clock value, that clock has already advanced. If the delay were known, the receiver could account for...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li><li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarChaptersDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Chapters</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarChaptersDropdown"><a class="dropdown-item" href="/2026-05-25-chapter-simplex/">Simplex</a><a class="dropdown-item" href="/2026-06-28-chapter-lower-bounds/">Lower Bounds</a></div>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/course">Course</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" id="nav-search-link" href="#" title="Search the blog">
+ <span id="nav-search-icon" class="fa fa-search"></span>
+ <span id="nav-search-text">Search</span>
+ </a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+<div id="beautifuljekyll-search-overlay" data-search-json="/assets/data/searchcorpus.json" data-top-pages-json="/assets/data/top-pages.json" aria-hidden="true">
+ <div class="search-overlay-backdrop" data-search-close></div>
+ <div class="search-dialog" role="dialog" aria-modal="true" aria-labelledby="nav-search-heading">
+ <div class="search-dialog-header">
+ <p class="search-dialog-kicker">Search the archive</p>
+ <button id="nav-search-exit" type="button" title="Close search" aria-label="Close search">Close</button>
+ </div>
+ <label class="sr-only" id="nav-search-heading" for="nav-search-input">Search posts, authors, topics, and phrases</label>
+ <div class="search-input-shell">
+ <span class="fa fa-search" aria-hidden="true"></span>
+ <input type="text" id="nav-search-input" placeholder="Search posts, authors, topics, and phrases" autocomplete="off">
+ <span class="search-shortcut">/</span>
+ </div>
+ <p id="nav-search-status">Search by title, author, tag, or a phrase from the post.</p>
+ <div id="search-discovery">
+ <section class="search-discovery-group" aria-labelledby="search-popular-heading">
+ <p class="search-discovery-heading" id="search-popular-heading">Popular topics</p>
+ <div id="search-suggestions" aria-label="Popular topics"></div>
+ </section>
+ <section class="search-discovery-group" aria-labelledby="search-recent-heading">
+ <p class="search-discovery-heading" id="search-recent-heading">Top pages</p>
+ <div id="search-recent-posts"></div>
+ </section>
+ </div>
+ <ul id="search-results-container"></ul>
+ </div>
+</div>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Optimal Clock Synchronization When There Are No Failures or Drift</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham, Jennifer Welch</strong><br>
+ 
+ <span class="post-meta">Posted on October 13, 2026</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>Synchronized clocks help servers coordinate. For example, servers with synchronized clocks following the same schedule can switch leaders at nearly the same time.</p>
+<p>A natural approach is for servers to exchange their current clock values and take the average. But messages take time to arrive. By the time a server receives another server’s clock value, that clock has already advanced. If the delay were known, the receiver could account for it. The difficulty is that the delay is usually uncertain. We assume every message takes between $d-u$ and $d$ units of time, where $d$ is the maximum delay and $u$ is the width of the uncertainty interval. Synchronizing clocks despite this uncertainty is the central challenge of this post.</p>
+<p>The lower bound of $d-u$ can be thought of as modeling the limits of the speed of light, while the upper bound of $d$ captures our modeling of the maximal additional latency due to switching and routing costs. For illustration, take $d=100$ milliseconds and $u=5$ milliseconds, so messages take between $95$ and $100$ milliseconds.</p>
+<p>How closely can we synchronize clocks despite this uncertainty? This series starts with the simplest case: everyone follows the protocol, and every clock runs at exactly the correct rate. Later posts add Byzantine failures, clock drift, and periods when messages take longer than $d$.</p>
+<p>This post is based on the protocol and matching lower bound of <a href="https://groups.csail.mit.edu/tds/papers/Lynch/ic84.pdf">Lundelius and Lynch 1984</a>.</p>
+<h2 id="the-model">The model</h2>
+<p>There are $n$ parties with no failures. Every party has a direct, reliable channel to every other party.</p>
+<p><strong>Hardware clocks.</strong> At real time $t$, party $i$ can read</p>
+\[H_i(t)=t+h_i,\]
+<p>where $h_i$ is its arbitrary, unknown hardware offset. Thus clocks may disagree about the time, but all advance at the same rate. Party $i$ can read $H_i$ but cannot change it or observe real time $t$.</p>
+<p><strong>Communication.</strong> The parties know two parameters, $0\leq u\leq d$. Every message takes between $d-u$ and $d$ units of real time from sending to receipt.</p>
+<p><strong>Startup.</strong> Every party eventually starts, the first local wakeup or message arrival starts the protocol.</p>
+<h2 id="what-does-synchronization-require">What does synchronization require?</h2>
+<p>We want the parties’ clocks to show nearly the same time. The <strong>skew</strong> is the largest difference between two parties’ clocks at the same real time.</p>
+<p>Party $i$ cannot change $H_i$, but it can add a correction $a_i$. The resulting <em>logical</em> clock is</p>
+\[C_i(t)=H_i(t)+a_i.\]
+<p>Each party must eventually output its correction and keep it fixed. $C_i$ continues at the same rate as $H_i$.</p>
+<p>Formally, the <strong>skew</strong> at real time $t$ is</p>
+\[\operatorname{skew}(t)=\max_i C_i(t)-\min_i C_i(t).\]
+<p>Note that once adjustments $a_1,\ldots,a_n$ are fixed, $\operatorname{skew}(t)=\max_i (h_i+a_i) -\min_i (h_i+a_i)$ without a dependence on $t$.</p>
+<p><strong>Theorem (Lundelius and Lynch, 1984).</strong> For $n$ parties, with no failures, no clock drifts, and delays in $[d-u,d]$, there is a protocol that terminates after one message exchange and guarantees adjustments $a_1,\ldots,a_n$ such that</p>
+\[\boxed{\operatorname{skew}\leq u\left(1-\frac1n\right).}\]
+<p>Moreover, no protocol can guarantee a smaller bound, regardless of how many messages it exchanges.</p>
+<h2 id="what-one-message-tells-us">What one message tells us</h2>
+<p>Consider party $i$ receiving a message from party $j$. Let $\ell \in [d-u,d]$ be the actual message delay. In order for party $i$ to choose its correction $a_i$, it needs to estimate the gap $H_j(t)-H_i(t) = h_j-h_i$.</p>
+<p>Suppose $j$ sends at real time $t$, so it sends $s=H_j(t)$. When the message arrives at time $t+\ell$, $i$’s hardware clock is at $r=H_i(t+\ell)$. Therefore</p>
+\[r-s = H_i(t+\ell)-H_j(t)= \ell+h_i-h_j.\]
+<p>The receiver cannot tell how much of $r-s$ comes from the message delay ($\ell$) and how much comes from the clocks disagreeing ($h_i-h_j$).</p>
+<p>Since $d-u\leq\ell\leq d$, the message places the clock difference in the interval</p>
+\[h_j-h_i \in [d-u-(r-s),\; d-(r-s)].\]
+<p>Let $m$ be the midpoint of this interval:</p>
+\[m=(d-u/2)-(r-s).\]
+<p><strong>Claim 1.</strong> For every real time $t$,</p>
+\[|m-(H_j(t)-H_i(t))|\leq u/2.\]
+<p><strong>Proof.</strong> Since $r-s=\ell+h_i-h_j$ and $H_j(t)-H_i(t)=h_j-h_i$,</p>
+\[m-(H_j(t)-H_i(t))=(d-u/2)-\ell\in[-u/2,u/2].\]
+<table>
+ <tbody>
+ <tr>
+ <td>Setting $a_i=m$ therefore gives $</td>
+ <td>C_i(t+\ell)-H_j(t+\ell)</td>
+ <td>\leq u/2$ at receipt.</td>
+ </tr>
+ </tbody>
+</table>
+<p><img src="/img/clock-sync-no-drift-midpoint.png" alt="Suppose the sender sends s=1000 and the receiver observes r=1098, with message delay between 95 and 100 milliseconds. The observed difference is r-s=98. The clock difference lies in [95-98,100-98]=[-3,2], so the midpoint correction is m=97.5-98=-0.5. The corrected clock is 1097.5, within 2.5 milliseconds of the sender’s hardware clock at receipt." /></p>
+<p><em>Suppose $s=1000$, $r=1098$, and the delay is between $95$ and $100$ milliseconds. Then $r-s=98$, so the correction is $m=97.5-98=-0.5$.</em></p>
+<h2 id="the-protocol">The protocol</h2>
+<p>The above discussion shows that the best we can do from one message is to estimate it based on its midpoint delay $d-u/2$. So the natural thing to do is simply to take an average of all these estimates.</p>
+<p>Each party maintains a local list <code class="language-plaintext highlighter-rouge">estimate</code> that starts with <code class="language-plaintext highlighter-rouge">{0}</code>, since its own clock difference is exactly zero.</p>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. On startup:
+ Send H_i(t) to every other party.
+2. Upon receiving s_j from j != i:
+ Add (d - u/2) - (H_i(t) - s_j) to estimate.
+ If |estimate| = n:
+ Set a_i = sum(estimate)/n.
+</code></pre></div></div>
+<p>All parties eventually send, and every message is delivered, so all parties finish.</p>
+<p><strong>Claim 2.</strong> After every party has set its correction,</p>
+\[\operatorname{skew}(t)\leq u\left(1-\frac1n\right).\]
+<p><strong>Proof.</strong> Fix any such time $t$. By Claim 1, the entry for each $j\ne i$ in party $i$’s list <code class="language-plaintext highlighter-rouge">estimate</code> differs from $H_j(t)-H_i(t)$ by at most $u/2$. The entry for $j=i$ is exact. Since $a_i$ is the average of these $n$ entries,</p>
+\[\begin{aligned}
+\left|C_i(t)-\frac1n\sum_{j=1}^n H_j(t)\right|
+&amp;=\left|a_i-\frac1n\sum_{j=1}^n\bigl(H_j(t)-H_i(t)\bigr)\right|\\
+&amp;=\frac1n\left|\operatorname{sum}(\texttt{estimate})-\sum_{j=1}^n\bigl(H_j(t)-H_i(t)\bigr)\right|\\
+&amp;\leq\frac1n\cdot0+\frac1n(n-1)\frac u2\\
+&amp;=\frac{(n-1)u}{2n}.
+\end{aligned}\]
+<p>Every corrected clock is within $(n-1)u/(2n)$ of the same average $\frac1n\sum_{j=1}^n H_j(t)$. Any two are therefore at most $(n-1)u/n$ apart.</p>
+<h2 id="why-no-protocol-can-do-better">Why no protocol can do better</h2>
+<p>Fix any protocol that eventually sets its corrections.</p>
+<h3 id="the-base-world">The base world</h3>
+<p>In world $W_0$, every party has $h_i=0$, so $H_i(t)=t$. All parties start at real time $u$. A message from party $i$ to party $j$ takes $d-u$ time if $i&lt;j$, and $d$ time if $i&gt;j$.</p>
+<p>Run the protocol in this world, and let $a_i$ be party $i$’s final correction. After it finishes, $C_i(t)=t+a_i$.</p>
+<h3 id="the-shifted-worlds">The shifted worlds</h3>
+<p>For each $k=1,\ldots,n-1$, construct world $W_k$ by moving every event of parties $1,\ldots,k$ earlier by $u$ and increasing their hardware offsets to $u$. Leave the other parties unchanged.</p>
+<p>We will now show that every party sees exactly the same messages, in the same order, and the same values of $H_i$ at every event in each of the worlds. This means that worlds are <em>indistinguishable</em>. Thus each party $i$ must choose the same correction $a_i$ in every world.</p>
+<p><strong>Claim 3.</strong> Each shifted world obeys the model and is indistinguishable from $W_0$ to every party.</p>
+<p><strong>Proof.</strong> Shifted parties start at time $0$; the others start at time $u$. A message from a shifted party to an unchanged party now takes $(d-u)+u=d$ time. In the reverse direction, it takes $d-u$ time. All other message delays are unchanged.</p>
+<p>For a shifted party, an event at real time $t$ now occurs at $t-u$, but its hardware clock still equals</p>
+\[H_i(t-u)=(t-u)+u=t.\]
+<p>Each party therefore sees the same messages, in the same order, and the same values of $H_i$ at every event in each of the worlds. Hence party $i$ must choose the same correction $a_i$ in every world.</p>
+<p><img src="/img/clock-sync-no-drift-shift.png" alt="Two sample messages between parties i and j, where i is in the shifted prefix and j is outside it. In Wk, i sends and receives u earlier and has hardware offset u. The channel delays exchange d-u and d, while every corresponding event has the same hardware clock value as in W0." /></p>
+<p><em>The shift preserves each party’s hardware clock value at every event.</em></p>
+<p><strong>Claim 4.</strong> At least one of $W_0,\ldots,W_{n-1}$ has final skew at least $u(1-1/n)$.</p>
+<p><strong>Proof.</strong> Compare clocks at a real time $t$ after all parties have finished in all these worlds. In $W_0$,</p>
+\[C_n(t)-C_1(t)=a_n-a_1.\]
+<p>In each $W_k$, party $k$ has hardware offset $u$, while party $k+1$ has hardware offset $0$. By Claim 3, their corrections remain $a_k$ and $a_{k+1}$, so</p>
+\[C_k(t)-C_{k+1}(t)=a_k+u-a_{k+1}.\]
+<p>Take one clock difference from each world:</p>
+\[\begin{aligned}
+&amp;\underbrace{C_n(t)-C_1(t)}_{W_0}
++\underbrace{C_1(t)-C_2(t)}_{W_1}
++\cdots+
+\underbrace{C_{n-1}(t)-C_n(t)}_{W_{n-1}}\\
+&amp;\quad=(a_n-a_1)+(a_1+u-a_2)+\cdots+(a_{n-1}+u-a_n)\\
+&amp;\quad=(n-1)u.
+\end{aligned}\]
+<p>These are $n$ clock differences whose sum is $(n-1)u$. Therefore, one difference is at least $(n-1)u/n$, and the skew in its world is at least that large.</p>
+<h2 id="notes">Notes</h2>
+<ul>
+ <li>
+ <p><strong>Different channel delays</strong>: The same tight bound holds if the channel from $j$ to $i$ has known delay bounds $[d_{ij}-u,d_{ij}]$ with $d_{ij}\geq u$. Use $d_{ij}$ instead of $d$ when computing its estimate. Claim 1 still gives error at most $u/2$, so Claim 2 gives the same skew bound. For the lower bound, assign each channel its lower or upper delay using the same index order. The shifts exchange the two endpoints on channels between shifted and unchanged parties.</p>
+ </li>
+ <li>
+ <p><strong>Another proof of Claim 2.</strong> After all corrections are set, compare $C_i(t)$ and $C_j(t)$ for $i\ne j$. Expanding their corrections cancels the true clock differences. By Claim 1, $i$’s estimate of $H_j(t)-H_i(t)$ and $j$’s estimate of $H_i(t)-H_j(t)$ each contribute error at most $u/2$. For each other party $k$, both $i$ and $j$ estimate their clock difference from $k$. By Claim 1, each estimate has error at most $u/2$, so the difference between these errors is at most $u$ in magnitude. The $n-2$ other parties therefore contribute at most $(n-2)u$. Thus</p>
+\[|C_i(t)-C_j(t)|
+ \leq\frac1n\left(\frac u2+\frac u2+(n-2)u\right)
+ =u\left(1-\frac1n\right).\]
+ </li>
+ <li>
+ <p><strong>Lower bounds</strong>: Our <a href="https://decentralizedthoughts.github.io/2026-06-28-chapter-lower-bounds/">lower bounds chapter</a> collects more results and proof techniques. For more on indistinguishability, see our <a href="https://decentralizedthoughts.github.io/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/">post on Byzantine agreement under partial synchrony</a>.</p>
+ </li>
+ <li>
+ <p><strong>Tolerating failures</strong>: The <a href="TBD">next post</a> adds Byzantine failures, still with no clock drift.</p>
+ </li>
+</ul>
+<p>Your thoughts on <a href="TBD">X</a></p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#clock-synchronization">clock-synchronization</a>
+ 
+ <a href="/tags#lowerbound">lowerbound</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Optimal+Clock+Synchronization+When+There+Are+No+Failures+or+Drift&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2026-10-13-clock-synchronization-no-drift%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2026-10-06-designated-sets/" data-toggle="tooltip" data-placement="top" title="Designated Sets in Concurrent Simplex and Alpenglow">
+ <i class="fas fa-arrow-left" alt="Previous Post"></i>
+ <span class="d-none d-sm-inline-block">Previous Post</span>
+ </a>
+ </li>
+ 
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ 
+ Decentralized Thinkers
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

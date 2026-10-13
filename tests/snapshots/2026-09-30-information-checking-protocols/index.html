@@ -336,6 +336,7 @@ Combining these two equations, we get:</p>
 The coefficients $a_0,b_0,a_1,b_1$ are sampled independently of $m$. Since $D$ and $I$ are honest and have matching inputs, $I$ sends $\mathsf{Ack}$ regardless of the values in $C_R$. Thus, neither the coefficients nor the acknowledgment reveal information about $m$ to $R$.</p>
 <p>In addition, for any choice of $c$, $I$ only checks the received messages if it receives the same (correct) random combinations $(c,a_0+ca_1,b_0+cb_1)$ from $D$ and $R$, and thus it only outputs $OK$ if $R$ sent the correct values, which $R$ already knows.</p>
 <p><strong>Communication.</strong> For a message $m\in\mathbb F$, parties send a constant number of field elements throughout both phases. The total communication is therefore $O(\log q)$ bits, or $O(1)$ field elements.</p>
+<p>Your thoughts/comments on <a href="https://x.com/ittaia/status/2105411532750565750?s=20">X</a>.</p>
  </div>
  
  <div class="blog-tags">
