@@ -45,7 +45,7 @@ ALLOWLIST = load_allowlist()
 
 def looks_like_placeholder(raw: str) -> bool:
     value = raw.strip()
-    if value in ("...",):
+    if value in ("...", "TBD"):
         return True
     if value.startswith("..."):
         return True
