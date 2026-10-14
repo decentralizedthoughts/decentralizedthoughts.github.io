@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-10-14T11:50:59Z",
+  "fetched_at": "2026-10-14T21:39:05Z",
   "items": [
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
@@ -16,11 +16,11 @@
     },
     {
       "path": "/2020-09-14-broadcast-from-agreement-and-agreement-from-broadcast/",
-      "views": 72
+      "views": 73
     },
     {
       "path": "/start-here/",
-      "views": 67
+      "views": 68
     },
     {
       "path": "/2020-12-12-raft-liveness-full-omission/",
