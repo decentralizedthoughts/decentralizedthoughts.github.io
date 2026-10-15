@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-10-15T11:27:57Z",
+  "fetched_at": "2026-10-15T21:20:56Z",
   "items": [
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
@@ -12,15 +12,15 @@
     },
     {
       "path": "/2020-12-12-raft-liveness-full-omission/",
-      "views": 72
+      "views": 73
     },
     {
       "path": "/2026-10-13-clock-synchronization-no-drift/",
-      "views": 72
+      "views": 73
     },
     {
       "path": "/start-here/",
-      "views": 63
+      "views": 64
     },
     {
       "path": "/2019-06-01-2019-5-31-models/",
@@ -28,7 +28,7 @@
     },
     {
       "path": "/2020-09-14-broadcast-from-agreement-and-agreement-from-broadcast/",
-      "views": 58
+      "views": 59
     }
   ]
 }
