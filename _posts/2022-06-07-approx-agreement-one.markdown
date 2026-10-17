@@ -150,9 +150,9 @@ Every time we do this calculation we are re-surprised how everything cleans up s
 
 So what did we achieve? The Robust Midpoint protocol allows parties to output values in the convex hull of their inputs, while cutting their span in half!
 
-In the next posts we will see how repeating this one round protocol can eventually cut the span to any desired $<\epsilon$ and how to terminate with approximate agreement.
+The [complete-protocol post](/2026-10-17-approximate-agreement-complete-protocol/) adds a known interval containing all honest inputs and a stopping rule, showing how repeating this round achieves $\epsilon$-approximate agreement.
 
-Can't wait for the follow up post? Let us know if this protocol can also work in asynchrony?
+Can this protocol also work in asynchrony?
 
 Your thoughts/comments on [Twitter](https://twitter.com/ittaia/status/1534074996083109888?s=20&t=ytroU493gGzJind9MeGJKQ).
 
