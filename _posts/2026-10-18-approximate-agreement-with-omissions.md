@@ -20,7 +20,7 @@ Every party starts with a rational input in $[0,1]$. Everyone knows the same par
 * **Approximate agreement.** Any two outputs differ by less than $\epsilon$, including outputs of parties with omissions.
 * **Termination.** Every nonfaulty party decides and never aborts.
 
-Unlike the Byzantine posts, validity uses all initial inputs, including those of parties with omissions.
+In this omission model, convex validity refers to the inputs of all parties. In the Byzantine model, it refers only to honest parties' inputs.
 
 For each protocol, let $B_r$ be the set of parties that have aborted by the end of iteration $r$, and let $G_r=\{1,\ldots,n\}\setminus B_r$ be the set of parties that have not aborted. Initially, $B_0=\varnothing$ and $G_0=\{1,\ldots,n\}$. A party with omissions remains in $G_r$ until it aborts. These sets are used only in the proof; parties do not maintain them.
 
@@ -90,7 +90,7 @@ $$
 \leq\max(V_i)\leq\max(X_{r-1}).
 $$
 
-Taking the midpoint places every new value in
+Adding the bounds on $\min(V_i)$ and $\max(V_i)$ and dividing by two places every new value in
 
 $$
 \left[
@@ -104,6 +104,10 @@ This interval lies in the preceding range and has half its width. This is the sa
 ## The Average or Abort protocol: faster convergence
 
 At party $i$, `input`, `v`, `received`, and `bot` have the same meanings as in Midpoint. Each iteration takes two rounds. Parties first send their current values, then report the vectors they received.
+
+At the end of the second round, party $i$ counts the reports it received that contain its current value in the entry for sender $i$, including its own report. If fewer than $n-f$ reports contain this entry, $i$ must **abort**: it stops participating and produces no output. Otherwise, it averages the values appearing in the reports, counting each original sender once. Thus receiving enough reports is not sufficient; enough of them must acknowledge $i$'s value.
+
+The **abort** rule is critical to the faster convergence bound. It ensures that a party that continues has its current value included in every continuing party's average. Only values from parties that abort in this iteration can appear in some averages and not others. Each party can abort only once, and at most $f$ parties abort in total. As we prove below, this limits the differences between averages by the number of new aborts in each iteration, giving the product bound that leads to $O(\log n/\log\log n)$ rounds for $\epsilon=1/n$.
 
 The vector `report` has $n$ entries indexed by reporter: `report[k]` is the vector reported by party $k$, or `bot` if its report is missing. In the pseudocode, `q` denotes a report vector, `j` an original sender, and `k` a reporter. The variable `acks` counts reports containing $i$'s value. The set `U` contains pairs `(j, x)` of an original sender and its reported value; `V` is the multiset of their values.
 
