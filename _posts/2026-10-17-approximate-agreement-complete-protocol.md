@@ -122,7 +122,7 @@ Finally, each round ends without waiting for Byzantine parties, and all honest p
 
 ## Notes
 
-For $\epsilon=1/n$, this protocol uses $\lfloor\log_2 n\rfloor+1$ rounds. The next post will cover the work of [Ben-Or, Dolev, and Hoch][gradecast] that obtains $O(\log n/\log\log n)$ rounds.
+For $\epsilon=1/n$, this protocol uses $\lfloor\log_2 n\rfloor+1$ rounds. The [Grade, Detect, Average post][gda] covers the work of [Ben-Or, Dolev, and Hoch][gradecast] that obtains $O(\log n/\log\log n)$ rounds.
 
 For a simpler example of faster convergence, the [post on approximate agreement with omissions][omissions] replaces Byzantine failures with omissions and moves from midpoints to averages.
 
@@ -133,3 +133,5 @@ A later post will cover the lower bounds of [Dolev, Lynch, Pinter, Stark, and We
 [gradecast]: https://arxiv.org/abs/1007.1049
 [dolev]: https://groups.csail.mit.edu/tds/papers/Lynch/jacm86.pdf
 [fekete]: https://groups.csail.mit.edu/tds/papers/Fekete/DistComp90.pdf
+
+[gda]: /2026-10-18-byzantine-approximate-agreement-grade-detect-average/

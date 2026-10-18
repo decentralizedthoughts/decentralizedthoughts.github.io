@@ -6,7 +6,7 @@ tags:
 author: Ittai Abraham
 ---
 
-The [Byzantine approximate agreement posts][midpoint] start with a protocol that halves the span of honest values and [repeat it to obtain a complete protocol][complete]. A later post will improve its convergence by identifying parties that cause disagreement (TBD). With omission failures, both arguments become simpler, and $n>2f$ parties suffice.
+The [Byzantine approximate agreement posts][midpoint] start with a protocol that halves the span of honest values and [repeat it to obtain a complete protocol][complete]. The [Grade, Detect, Average post][gda] improves its convergence by identifying parties that cause disagreement. With omission failures, both arguments become simpler, and $n>2f$ parties suffice.
 
 We first give a **Midpoint** protocol that halves the span in each round. We then add receipt reports: a party averages the reported values only if at least $n-f$ reports acknowledge its own value; otherwise it aborts. In this **Average or Abort** protocol, the averages of continuing parties can differ only in values from parties that abort in that iteration. Each party can abort only once. Following [Fekete's convergence argument][fekete], this gives a span below $k^{-k}$ after $k$ iterations, each taking two rounds. Reaching span less than $1/n$ therefore takes $O(\log n/\log\log n)$ rounds instead of $O(\log n)$.
 
@@ -287,7 +287,7 @@ For $\epsilon=1/n$, the condition is $R\log R\geq\log n$. The smallest such $R$ 
 ## Notes
 
 * [Fekete][fekete] gave asymptotically optimal approximate agreement protocols for omissions, using detection to bound convergence by a product of new failures. The receipt report protocol here has a direct proof of this convergence rate. A later post (TBD) will give the matching $\Omega(\log n/\log\log n)$ worst-case round lower bound for deterministic protocols when $\epsilon=1/n$ and $f=\Theta(n)$, even with send omissions alone.
-* This is another example of detection helping agreement. Here a party detects that too few reports acknowledge its value and aborts. In the faster Byzantine protocol (TBD), parties use gradecast to identify senders that cause different receivers to accept different entries.
+* This is another example of detection helping agreement. Here a party detects that too few reports acknowledge its value and aborts. In the [faster Byzantine protocol][gda], parties use gradecast to identify senders that cause different receivers to accept different entries.
 * **Communication cost.** Assuming each rational value fits in one word, Midpoint sends $O(n^2)$ words per iteration, while Average or Abort sends $O(n^3)$ words. Both send $O(n^2)$ messages per iteration, but each second-round message in Average or Abort contains a vector of $n$ values. Its faster convergence therefore comes at the cost of a factor of $n$ more communication per iteration.
 * Future omission clock synchronization posts will apply these two ideas to clock measurements: interval midpoints (TBD) and acknowledged averages (TBD). Their additional arguments will account for delay uncertainty and clocks updating at different times.
 
@@ -295,3 +295,5 @@ For $\epsilon=1/n$, the condition is $R\log R\geq\log n$. The smallest such $R$ 
 [complete]: https://decentralizedthoughts.github.io/2026-10-17-approximate-agreement-complete-protocol/
 [fekete]: https://groups.csail.mit.edu/tds/papers/Fekete/DistComp90.pdf
 [am-gm]: https://en.wikipedia.org/wiki/AM%E2%80%93GM_inequality
+
+[gda]: /2026-10-18-byzantine-approximate-agreement-grade-detect-average/
