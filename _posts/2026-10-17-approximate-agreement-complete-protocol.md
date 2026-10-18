@@ -2,7 +2,7 @@
 title: "Byzantine Approximate Agreement: From One Round to a Complete Protocol"
 date: 2026-10-17 09:00:00 +03:00
 tags:
-  - consensus
+  - approximate-agreement
 author: Ittai Abraham, Gilad Stern
 ---
 
@@ -124,9 +124,12 @@ Finally, each round ends without waiting for Byzantine parties, and all honest p
 
 For $\epsilon=1/n$, this protocol uses $\lfloor\log_2 n\rfloor+1$ rounds. The next post will cover the work of [Ben-Or, Dolev, and Hoch][gradecast] that obtains $O(\log n/\log\log n)$ rounds.
 
+For a simpler example of faster convergence, the [post on approximate agreement with omissions][omissions] replaces Byzantine failures with omissions and moves from midpoints to averages.
+
 A later post will cover the lower bounds of [Dolev, Lynch, Pinter, Stark, and Weihl][dolev] and [Fekete][fekete]. For $\epsilon=1/n$ and $n=3f+1$, this implies an $\Omega(\log n/\log\log n)$ worst-case round lower bound for deterministic protocols.
 
 [previous]: https://decentralizedthoughts.github.io/2022-06-07-approx-agreement-one/
+[omissions]: /2026-10-18-approximate-agreement-with-omissions/
 [gradecast]: https://arxiv.org/abs/1007.1049
 [dolev]: https://groups.csail.mit.edu/tds/papers/Lynch/jacm86.pdf
 [fekete]: https://groups.csail.mit.edu/tds/papers/Fekete/DistComp90.pdf
