@@ -128,6 +128,8 @@ For a simpler example of faster convergence, the [post on approximate agreement 
 
 The [send-omission lower-bound post](/2026-10-19-approximate-agreement-send-omissions-lower-bound/) presents a modern proof of [Fekete’s lower bound][fekete] for approximate agreement. The Byzantine asymptotic lower bound was stated earlier by [Dolev, Lynch, Pinter, Stark, and Weihl][dolev]. For $\epsilon=1/n$ and $n=3f+1$, this implies an $\Omega(\log n/\log\log n)$ worst-case round lower bound for deterministic protocols.
 
+Your thoughts/comments on [X](https://x.com/ittaia/status/2112206479008706998).
+
 [previous]: https://decentralizedthoughts.github.io/2022-06-07-approx-agreement-one/
 [omissions]: /2026-10-18-approximate-agreement-with-omissions/
 [gradecast]: https://arxiv.org/abs/1007.1049

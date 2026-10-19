@@ -291,6 +291,8 @@ For $\epsilon=1/n$, the condition is $R\log R\geq\log n$. The smallest such $R$ 
 * **Communication cost.** Assuming each rational value fits in one word, Midpoint sends $O(n^2)$ words per iteration, while Average or Abort sends $O(n^3)$ words. Both send $O(n^2)$ messages per iteration, but each second-round message in Average or Abort contains a vector of $n$ values. Its faster convergence therefore comes at the cost of a factor of $n$ more communication per iteration.
 * Future omission clock synchronization posts will apply these two ideas to clock measurements: interval midpoints (TBD) and acknowledged averages (TBD). Their additional arguments will account for delay uncertainty and clocks updating at different times.
 
+Your thoughts/comments on [X](https://x.com/ittaia/status/2112206479008706998).
+
 [midpoint]: https://decentralizedthoughts.github.io/2022-06-07-approx-agreement-one/
 [complete]: https://decentralizedthoughts.github.io/2026-10-17-approximate-agreement-complete-protocol/
 [fekete]: https://groups.csail.mit.edu/tds/papers/Fekete/DistComp90.pdf

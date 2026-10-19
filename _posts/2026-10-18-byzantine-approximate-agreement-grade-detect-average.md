@@ -250,6 +250,8 @@ For $\epsilon=1/n$, the stopping condition is simply $R^R\ge n$, or $R\log R\ge\
 * The [omission approximate agreement protocol][omission-aa] uses the same counting argument: only parties that abort in an iteration can cause different accepted entries, and each party can abort only once.
 * **Question.** Robust Midpoint sends $O(n^2)$ values per round, while this protocol sends $O(n^3)$. Can a deterministic approximate agreement protocol, with $n>3f$ and no signatures, reach honest output span less than $1/n$ in $O(\log n/\log\log n)$ rounds using $O(n^2)$ messages of $O(\log n)$ bits per round, for $O(\log n)$-bit inputs in $[0,1]$?
 
+Your thoughts/comments on [X](https://x.com/ittaia/status/2112206481227387357).
+
 [bdh]: https://arxiv.org/pdf/1007.1049#page=7
 [fm]: https://doi.org/10.1145/62212.62225
 [dt-gc]: https://decentralizedthoughts.github.io/2022-06-09-phase-king-via-gradecast/
