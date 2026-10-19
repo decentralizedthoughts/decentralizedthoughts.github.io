@@ -7,16 +7,14 @@ tags:
 author: Ittai Abraham, Gilad Stern
 ---
 
-In **approximate agreement**, parties start with numerical inputs. Every nonfaulty party must terminate with an output in the input range, and their outputs must differ by less than a given $\epsilon>0$.
+In **approximate agreement**, parties start with numerical inputs in $[0,1]$. Every nonfaulty party must terminate with an output in the input range, and their outputs must differ by less than a given $\epsilon>0$.
 
 Define the **output span** of an execution as the difference between the largest and smallest nonfaulty outputs. Approximate agreement requires this span to be less than $\epsilon$.
-
-This post follows the [Robust Midpoint introduction](/2022-06-07-approx-agreement-one/), the [complete Byzantine approximate agreement protocol](/2026-10-17-approximate-agreement-complete-protocol/), the [Grade, Detect, Average protocol][faster], and [approximate agreement with omissions](/2026-10-18-approximate-agreement-with-omissions/). Here we turn to the lower bound.
 
 We present a modern version of [Fekete's lower bound][fekete] for approximate agreement with send omissions where faulty parties may omit outgoing messages but otherwise follow the protocol. The lower bound holds in a synchronous network even if each message is delayed by exactly $d$ (and $d$ is known), all parties start at exactly the same time and all clocks are perfectly synchronized. The lower bound deals with the time required for the protocol to reach a certain output span.
 
 
-**Theorem.** Suppose $n>f+1$ and $f\geq\alpha n$, for a fixed constant $\alpha>0$. For every $1\leq k\leq f$, any approximate agreement protocol that tolerates $f$ send-omission faulty parties and guarantees completion by time $kd$ has an execution with nonfaulty output span at least
+**Theorem.** Suppose $n>f+1$ and $f\geq\alpha n$, for a fixed constant $\alpha>0$. For every $1\leq k\leq f$, any approximate agreement protocol for inputs in $[0,1]$ that tolerates $f$ send-omission faulty parties and guarantees completion by time $kd$ has an execution with nonfaulty output span at least
 
 $$
 \frac1{(ck)^k},
@@ -33,6 +31,7 @@ $$
 
 Indeed this is asymptotically tight. For example, starting with inputs in $[0,1]$, the [GDA Byzantine approximate agreement protocol][faster] reaches output span below $1/n$ in $O(\log n/\log\log n)$ rounds for $n>3f$. When $n>f+1$ and $f=\Theta(n)$, even send omissions require $\Omega(d\log n/\log\log n)$ time to reach span below $1/n$.
 
+Additional background can be found in the [Robust Midpoint](/2022-06-07-approx-agreement-one/) post. Additional upper bound posts: [for omission](/2026-10-18-approximate-agreement-with-omissions/) and [for Byzantine](/2026-10-17-approximate-agreement-complete-protocol/).
 
 
 ## The model
