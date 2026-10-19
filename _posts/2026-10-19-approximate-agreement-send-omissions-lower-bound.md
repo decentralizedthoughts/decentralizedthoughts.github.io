@@ -238,7 +238,7 @@ $$
 
 ## Acknowledgments
 
-We thank Jenifer, Kartik, and Julian for insightful comments.
+We thank Jennifer Welch, Kartik Nayak, and Julian Loss for insightful comments.
 
 [faster]: https://decentralizedthoughts.github.io/2026-10-18-byzantine-approximate-agreement-grade-detect-average/
 [fekete]: https://groups.csail.mit.edu/tds/papers/Fekete/DistComp90.pdf#page=16
