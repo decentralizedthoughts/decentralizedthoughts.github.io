@@ -240,6 +240,8 @@ $$
 
 We thank Jennifer Welch, Kartik Nayak, and Julian Loss for insightful comments.
 
+Your thoughts/comments on [X](https://x.com/ittaia/status/2112206476819452060).
+
 [faster]: https://decentralizedthoughts.github.io/2026-10-18-byzantine-approximate-agreement-grade-detect-average/
 [fekete]: https://groups.csail.mit.edu/tds/papers/Fekete/DistComp90.pdf#page=16
 [dlpsw]: https://groups.csail.mit.edu/tds/papers/Lynch/jacm86.pdf#page=18
