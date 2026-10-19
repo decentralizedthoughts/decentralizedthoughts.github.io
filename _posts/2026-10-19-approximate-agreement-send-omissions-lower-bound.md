@@ -236,6 +236,10 @@ $$
 * **Randomization.** As with [FLP][flp], the lower bound also holds for randomized protocols as a worst-case execution bound. It does not imply the same bound on expected running time.
 * **Related proofs.** The [synchronous consensus][round-lb] and [early-stopping][early-stopping] lower bounds also change which recipients hear from a faulty sender. The [mobile-failure post][mobile-lb] studies how one additional failure changes the outcome. The clock-synchronization sequel (TBD) uses the path of worlds with endpoints shifted in real time instead of the all-zero and all-one inputs.
 
+## Acknowledgments
+
+We thank Jenifer, Kartik, and Julian for insightful comments.
+
 [faster]: https://decentralizedthoughts.github.io/2026-10-18-byzantine-approximate-agreement-grade-detect-average/
 [fekete]: https://groups.csail.mit.edu/tds/papers/Fekete/DistComp90.pdf#page=16
 [dlpsw]: https://groups.csail.mit.edu/tds/papers/Lynch/jacm86.pdf#page=18
