@@ -1,18 +1,18 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-10-19T13:13:45Z",
+  "fetched_at": "2026-10-19T22:19:34Z",
   "items": [
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 138
+      "views": 142
     },
     {
       "path": "/2026-10-13-clock-synchronization-no-drift/",
-      "views": 111
+      "views": 112
     },
     {
       "path": "/2026-10-06-designated-sets/",
-      "views": 95
+      "views": 96
     },
     {
       "path": "/2020-12-12-raft-liveness-full-omission/",
@@ -20,11 +20,11 @@
     },
     {
       "path": "/2019-06-01-2019-5-31-models/",
-      "views": 69
+      "views": 71
     },
     {
       "path": "/2020-02-26-selfish-mining/",
-      "views": 56
+      "views": 57
     },
     {
       "path": "/start-here/",
