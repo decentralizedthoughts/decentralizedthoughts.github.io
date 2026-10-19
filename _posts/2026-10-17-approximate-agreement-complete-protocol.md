@@ -126,7 +126,7 @@ For $\epsilon=1/n$, this protocol uses $\lfloor\log_2 n\rfloor+1$ rounds. The [G
 
 For a simpler example of faster convergence, the [post on approximate agreement with omissions][omissions] replaces Byzantine failures with omissions and moves from midpoints to averages.
 
-A later post will cover the lower bounds of [Dolev, Lynch, Pinter, Stark, and Weihl][dolev] and [Fekete][fekete]. For $\epsilon=1/n$ and $n=3f+1$, this implies an $\Omega(\log n/\log\log n)$ worst-case round lower bound for deterministic protocols.
+The [send-omission lower-bound post](/2026-10-19-approximate-agreement-send-omissions-lower-bound/) presents a modern proof of [Fekete’s lower bound][fekete] for approximate agreement. The Byzantine asymptotic lower bound was stated earlier by [Dolev, Lynch, Pinter, Stark, and Weihl][dolev]. For $\epsilon=1/n$ and $n=3f+1$, this implies an $\Omega(\log n/\log\log n)$ worst-case round lower bound for deterministic protocols.
 
 [previous]: https://decentralizedthoughts.github.io/2022-06-07-approx-agreement-one/
 [omissions]: /2026-10-18-approximate-agreement-with-omissions/

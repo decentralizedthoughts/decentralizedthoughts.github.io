@@ -10,7 +10,7 @@ The [previous post](https://decentralizedthoughts.github.io/2026-10-17-approxima
 
 [Ben-Or, Dolev, and Hoch][bdh] improve this bound to $O(\log n / \log\log n)$. The core idea is to prevent the same Byzantine party from causing disagreement repeatedly. They use **[gradecast][dt-gc]**: parties relay what they heard and assign each sender a grade. If one honest party accepts a sender's value and another rejects it, every honest party **detects** that the sender is Byzantine and *ignores* its messages in later iterations.
 
-We call this protocol **Grade, Detect, Average (GDA)**. It also replaces the trimmed midpoint with a trimmed **average**. The difference between two averages depends on how many senders caused disagreement in that iteration. Across all iterations, there are at most $f$ such senders. This reduces the round count to $O(\log n/\log\log n)$ for precision $1/n$, matching the deterministic round lower bound when $f=\Theta(n)$, even with send omissions (TBD).
+We call this protocol **Grade, Detect, Average (GDA)**. It also replaces the trimmed midpoint with a trimmed **average**. The difference between two averages depends on how many senders caused disagreement in that iteration. Across all iterations, there are at most $f$ such senders. This reduces the round count to $O(\log n/\log\log n)$ for precision $1/n$, matching the deterministic round lower bound when $f=\Theta(n)$, even with [send omissions](/2026-10-19-approximate-agreement-send-omissions-lower-bound/).
 
 ## The result
 

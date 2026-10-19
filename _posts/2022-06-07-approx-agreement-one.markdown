@@ -150,9 +150,11 @@ Every time we do this calculation we are re-surprised how everything cleans up s
 
 So what did we achieve? The Robust Midpoint protocol allows parties to output values in the convex hull of their inputs, while cutting their span in half!
 
-The [complete-protocol post](/2026-10-17-approximate-agreement-complete-protocol/) adds a known interval containing all honest inputs and a stopping rule, showing how repeating this round achieves $\epsilon$-approximate agreement.
-
 Can this protocol also work in asynchrony?
 
-Your thoughts/comments on [Twitter](https://twitter.com/ittaia/status/1534074996083109888?s=20&t=ytroU493gGzJind9MeGJKQ).
+## Notes
 
+* The [complete-protocol post](/2026-10-17-approximate-agreement-complete-protocol/) adds a known interval containing all honest inputs and a stopping rule, showing how repeating this round achieves $\epsilon$-approximate agreement.
+* The [send-omission lower-bound post](/2026-10-19-approximate-agreement-send-omissions-lower-bound/) shows why achieving span below $1/n$ requires $\Omega(\log n/\log\log n)$ rounds when $f=\Theta(n)$, even with send omissions alone.
+
+Your thoughts/comments on [Twitter](https://twitter.com/ittaia/status/1534074996083109888?s=20&t=ytroU493gGzJind9MeGJKQ).

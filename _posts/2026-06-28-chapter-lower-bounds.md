@@ -136,6 +136,13 @@ Even with crash faults, an adversary can spend one crash per round and keep
 the execution uncommitted. Note that this $t+1$ round lower bound holds even
 for randomized protocols.
 
+There is a lower bound on the round complexity of approximate agreement. The post
+[A Lower Bound for Approximate Agreement with Send Omissions](https://decentralizedthoughts.github.io/2026-10-19-approximate-agreement-send-omissions-lower-bound/)
+connects the all-zero and all-one executions by a path of indistinguishable
+worlds. Even with perfectly synchronized clocks and every message delayed by
+exactly $d$, reaching output span below $1/n$ requires
+$\Omega(d\log n/\log\log n)$ time when $n>f+1$ and $f=\Theta(n)$.
+
 In asynchrony, the same idea gives FLP:
 [The FLP Impossibility](https://decentralizedthoughts.github.io/2019-12-15-asynchrony-uncommitted-lower-bound/).
 The original paper is
@@ -180,6 +187,7 @@ At a glance:
 | Setting | What the adversary preserves | Resulting barrier |
 |---|---|---|
 | [Synchronous consensus](https://decentralizedthoughts.github.io/2019-12-15-synchrony-uncommitted-lower-bound/) | an uncommitted configuration | $t+1$ rounds |
+| [Approximate agreement with send omissions](https://decentralizedthoughts.github.io/2026-10-19-approximate-agreement-send-omissions-lower-bound/) | a path of indistinguishable worlds from all-zero to all-one inputs | $\Omega(d\log n/\log\log n)$ time for span below $1/n$ when $f=\Theta(n)$ and $n>f+1$ |
 | [Asynchronous consensus](https://decentralizedthoughts.github.io/2019-12-15-asynchrony-uncommitted-lower-bound/) | an uncommitted configuration | an infinite execution |
 | [Mobile crash in synchrony](https://decentralizedthoughts.github.io/2024-03-07-mobile-is-FLP/) | a pivotal configuration | infinite executions again |
 | [Early stopping](https://decentralizedthoughts.github.io/2024-01-28-early-stopping-lower-bounds/) | a pair of AS-FFD configurations | even good executions may need two more rounds |
@@ -426,6 +434,8 @@ For rounds and infinite executions, read:
 * [Consensus with One Mobile Crash in Synchrony or One Crash in Asynchrony Has Infinite Executions](https://decentralizedthoughts.github.io/2024-03-07-mobile-is-FLP/)
 * [Early Stopping, Same but Different](https://decentralizedthoughts.github.io/2024-01-28-early-stopping-lower-bounds/)
 * [Synchronized Clocks, Fixed View Schedules, and Simultaneous Agreement](https://decentralizedthoughts.github.io/2026-03-07-simultaneous-agreement/)
+
+* [A Lower Bound for Approximate Agreement with Send Omissions](https://decentralizedthoughts.github.io/2026-10-19-approximate-agreement-send-omissions-lower-bound/)
 
 For good case latency, read:
 
