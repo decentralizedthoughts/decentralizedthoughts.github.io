@@ -40,6 +40,14 @@ not both. This is the message of the
 The same majority barrier appears even in lock step synchrony with omission
 faults:
 [State Machine Replication for Two Servers and One Omission Failure is Impossible](https://decentralizedthoughts.github.io/2019-11-02-primary-backup-for-2-servers-and-omission-failures-is-impossible/).
+
+[Agreement under omission failures: non-uniformity and weak validity](https://decentralizedthoughts.github.io/2025-08-12-non-uniform-weak-validity/)
+explains why uniformity matters. With send and receive omissions, agreement
+among all parties that decide requires $n>2f$. If agreement concerns only
+nonfaulty parties and an output may equal any party's input, $n>f$ suffices.
+The same partition argument rules out uniform approximate agreement at
+$n\leq2f$: two isolated groups can decide $0$ and $1$.
+
 The post
 [In between Crash and Omission failures](https://decentralizedthoughts.github.io/2024-01-30-between-crash-and-omission/)
 sharpens this picture by looking at weaker omission models.
