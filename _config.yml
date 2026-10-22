@@ -31,13 +31,13 @@ repository: decentralizedthoughts/decentralizedthoughts.github.io
 description: Decentralized thoughts about decentralization
 navbar-links:
   Authors:
-  - Ittai Abraham: about-ittai
-  - Ittay Eyal: about-ittay
-  - Heidi Howard: about-heidi
-  - Kartik Nayak: about-kartik
-  - Ling Ren: about-ling
-  - Alin Tomescu: about-alin
-  - Avishay Yanai: about-avishay
+  - Ittai Abraham: /_authors/about-ittai
+  - Ittay Eyal: /_authors/about-ittay
+  - Heidi Howard: /_authors/about-heidi
+  - Kartik Nayak: /_authors/about-kartik
+  - Ling Ren: /_authors/about-ling
+  - Alin Tomescu: /_authors/about-alin
+  - Avishay Yanai: /_authors/about-avishay
   Videos: videos
   Start Here: start-here
   Course: course
