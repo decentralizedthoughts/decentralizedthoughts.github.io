@@ -3,9 +3,7 @@ title: Two Round Information-Theoretic Chained BFT at n=5f-1
 date: 2026-07-12 04:00:00 -05:00
 tags:
 - consensus
-- partial-synchrony
-- information-theoretic
-- fast-simplex
+- research
 author: Ittai Abraham, Sourav Das, Yuval Efron, Jovan Komatovic, Alejandro Ranchal-Pedrosa, Gilad Stern
 ---
 
