@@ -2,7 +2,7 @@
 title: From Benign Simplex to Byzantine Simplex
 date: 2025-11-15 04:30:00 -05:00
 tags:
-- dist101
+- consensus
 author: Ittai Abraham
 ---
 

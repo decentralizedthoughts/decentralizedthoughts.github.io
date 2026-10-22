@@ -2,7 +2,7 @@
 title: Optimal Clock Synchronization When There Are No Failures or Drift
 date: 2026-10-13 04:17:27 -05:00
 tags:
-  - clock-synchronization
+  - dist101
   - lowerbound
 author: Ittai Abraham, Jennifer Welch
 ---
