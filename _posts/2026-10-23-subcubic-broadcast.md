@@ -1,6 +1,7 @@
 ---
 title: Authenticated Broadcast in $O(n^{2.5}\log n)$ Communication
-date: 2026-10-19 00:00:00 -04:00
+date: 2026-10-23 00:00:00 -04:00
+published: false
 tags:
 - research
 author: Yuval Efron, Jovan Komatovic, Ling Ren
