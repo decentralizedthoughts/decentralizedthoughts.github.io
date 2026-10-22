@@ -5,7 +5,6 @@ date: 2026-05-20 14:29:56 +0300
 description: "Hybrid protocol composing Byzantine consistent broadcast with BFT consensus (Mysticeti) for low-latency single-writer paths."
 tags:
 - consensus
-- broadcast
 - blockchain
 ---
 
