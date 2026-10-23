@@ -3,7 +3,7 @@ title: Ittay Eyal
 layout: page
 ---
 
-<img align="left" width="200" height="200" src="../img/ittayEyal.jpg" hspace="20">
+<img align="left" width="200" height="200" src="../../img/ittayEyal.jpg" hspace="20">
 
 Ittay Eyal is an associate professor in the faculty of Electrical and Computer Engineering at the Technion.
 

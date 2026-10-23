@@ -3,7 +3,7 @@ title: Ittai Abraham
 layout: page
 ---
 
-<img align="left" width="200" height="200" src="../img/ittai.jpg" hspace="20"> 
+<img align="left" width="200" height="200" src="../../img/ittai.jpg" hspace="20"> 
 
 Ittai is a researcher at a16z crypto.
 

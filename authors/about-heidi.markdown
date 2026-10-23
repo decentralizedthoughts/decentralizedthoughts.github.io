@@ -3,7 +3,7 @@ title: Heidi Howard
 layout: page
 ---
 
-<img align="left" width="200" height="200" src="../img/heidi.jpg" hspace="20"> 
+<img align="left" width="200" height="200" src="../../img/heidi.jpg" hspace="20"> 
 
 Heidi is a Senior Researcher in the [Azure Research: Security & Privacy Group](https://www.microsoft.com/en-us/research/group/azure-security-privacy/) at Microsoft in Cambridge, UK.
 
