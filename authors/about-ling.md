@@ -3,7 +3,7 @@ title: Ling Ren
 layout: page
 ---
 
-<img align="left" width="170" height="200" src="LingRen_cropped.jpg" hspace="20"> 
+<img align="left" width="170" height="200" src="../../img/LingRen_cropped.jpg" hspace="20"> 
 
 Ling Ren is an associate professor at the University of Illinois Urbana Champaign. 
 
