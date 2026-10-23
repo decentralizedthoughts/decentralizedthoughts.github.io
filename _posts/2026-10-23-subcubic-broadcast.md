@@ -1,5 +1,5 @@
 ---
-title: Authenticated Broadcast in $O(n^{2.5}\log n)$ Communication
+title: Authenticated Broadcast in $\widetilde O(n^{2.5})$ Communication
 date: 2026-10-23 00:00:00 -04:00
 published: false
 tags:
@@ -7,7 +7,7 @@ tags:
 author: Yuval Efron, Jovan Komatovic, Ling Ren
 ---
 
-The [Dolev–Strong](https://decentralizedthoughts.github.io/2019-12-22-dolev-strong/) protocol is the best-known protocol for Byzantine broadcast. It is a deterministic protocol and tolerates any number $t<n$ of corruptions (assuming digital signatures). It runs in $t+1$ rounds, which is optimal for deterministic protocols. Its communication complexity is $O(n^2t\lambda)$ bits, which is $O(n^3\lambda)$ for $t=\Theta(n)$. The [Dolev–Reischuk](https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/) lower bound, by contrast, is only quadratic. Despite four decades of research, no deterministic protocol tolerating a dishonest majority has improved on the communication complexity of Dolev–Strong.
+The [Dolev–Strong](https://decentralizedthoughts.github.io/2019-12-22-dolev-strong/) protocol is a well-known protocol for Byzantine broadcast. It is a deterministic protocol and tolerates any number $t<n$ of corruptions (assuming digital signatures). It runs in $t+1$ rounds, which is optimal for deterministic protocols. Its communication complexity is $O(n^2t\lambda)$ bits, which is $O(n^3\lambda)$ for $t=\Theta(n)$. The [Dolev–Reischuk](https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/) lower bound, by contrast, is only quadratic. Despite four decades of research, no deterministic protocol tolerating a dishonest majority has improved on the communication complexity of Dolev–Strong.
 
 In a [new paper](https://eprint.iacr.org/2026/2504), we give a deterministic Byzantine broadcast protocol with $\widetilde O(n^2)$ communication for any $t<n$, assuming digital signatures and a collision-resistant hash function. ChatGPT substantially assisted with protocol design and proof development.
 
@@ -32,9 +32,9 @@ The protocol uses a fixed sparse graph on the parties, known to everyone.
 
 **Lemma**: There is a graph $G$ with $n$ vertices with maximum degree $O(\sqrt n\log n)$, such that any two disjoint sets of $\sqrt n$ vertices are joined by an edge of $G$.
 
-*Proof*. Let $G$ be the union of $m=3\sqrt n\ln n$ independent uniformly random permutations $\pi_1,\ldots,\pi_m$ of the vertices: add an edge $(\{v,\pi_j(v)\})$ for every $v$ and $j$, ignoring self-loops. The degree of $G$ is at most $2m$. Fix disjoint $X,Y$ of size $\sqrt n$ (larger sets only help). A single permutation maps no element of $X$ into $Y$ with probability at most $(1-1/\sqrt n)^{\sqrt n}\le e^{-1}$, so no edge joins $X$ and $Y$ with probability at most $e^{-m}=n^{-3\sqrt n}$. A union bound over the at most $n^{2\sqrt n}$ choices of $X$ and $Y$ shows that $G$ has the property with positive probability.
+*Proof*. Let $G$ be the union of $m=3\sqrt n\ln n$ independent uniformly random permutations $\pi_1,\ldots,\pi_m$ of the vertices: add an edge $\{v,\pi_j(v)\}$ for every $v$ and $j$, ignoring self-loops. The degree of $G$ is at most $2m$. Fix disjoint $X,Y$ of size $\sqrt n$ (larger sets only help). A single permutation maps no element of $X$ into $Y$ with probability at most $(1-1/\sqrt n)^{\sqrt n}\le e^{-1}$, so no edge joins $X$ and $Y$ with probability at most $e^{-m}=n^{-3\sqrt n}$. A union bound over the at most $n^{2\sqrt n}$ choices of $X$ and $Y$ shows that $G$ has the property with positive probability.
 
-Let each vertex be a party. We write $N(p)$ for the neighbors of party $p$ in $G$. Note that the graph does not restrict who talks to whom: messages still go over the complete network. It only decides *which signatures* a party forwards.
+Let each vertex be a party. We write $N(p)$ for the neighbors of party $p$ in $G$.
 
 #### Dolev–Strong, recalled
 
@@ -44,20 +44,18 @@ In round $0$, the leader signs its input and multicasts it. From then on, a part
 
 **Where the $n^3$ comes from.** An honest party may accept late, holding $\Theta(n)$ signatures, and multicast all of them. If $\Theta(n)$ honest parties do so in the same round, this costs $\Theta(n)\cdot\Theta(n)\cdot\Theta(n)$ signatures.
 
-Note, however, that when many honest parties accept together, they also create many *fresh* signatures: their own. This is a central observation behind the new protocol.
+Note, however, that when many honest parties accept together, they also create many *fresh* signatures: their own. This observation is central to the new protocol.
 
-#### Dolev–Strong in steps of three rounds
+#### An elementary protocol
 
 We split each round of Dolev–Strong into a *step* of three rounds:
 1. In the first round of step $r$, a party that holds $r$ signatures (including the leader's) accepts $b$. If a party newly accepts $b$, it multicasts only *its own* signature on $b$ in a signed $\langle\mathsf{accept},b\rangle_p$ message.
-2. In the second round, if fewer than $\sqrt n$ parties sent $\langle\mathsf{accept},b\rangle_*$ messages in the last round, then a party that newly accepts $b$ falls back to Dolev–Strong: multicasts all the signatures it holds to everyone.  This is cheap since few honest parties will do the same. Otherwise, the party holds signatures from at least $n + \sqrt n$ distinct parties; in this case, the party sends each party $q$ only the signatures of $q$'s neighbors. 
+2. In the second round, if a party that newly accepted $b$ holds fewer than $r+\sqrt n$ signatures, which happens only if fewer than $\sqrt n$ honest parties accepted $b$ in this step, it falls back to Dolev–Strong: it multicasts all the signatures it holds to everyone. This is cheap since few honest parties will do the same. Otherwise, it sends each party $q$ only the signatures of $q$'s neighbors.
 3. In the third round, each party forwards to everyone the signatures of its own neighbors (at most once for each neighbor in the entire protocol).
 
 The graph guarantees that, at the end of the step, each honest party misses fewer than $\sqrt n$ signatures. So it holds at least $r+1$ of them, and accepts $b$ in the next step.
 
-#### The protocol
-
-Each party $p$ maintains $A(b)$, the set of valid $\mathsf{accept}$ messages for $b$ it has received, one per signer. This includes its own, and those carried inside other messages. A non-leader's $\mathsf{accept}$ message is valid only together with $\langle\mathsf{accept},b\rangle_\ell$ ($\ell$ is the leader), so every message below also carries the leader's. For a set $S$ of $\mathsf{accept}$ messages and a set $X$ of parties, $S\cap X$ denotes the messages in $S$ signed by parties in $X$.
+More precisely, each party $p$ maintains $A(b)$, the set of valid $\mathsf{accept}$ messages for $b$ it has received, one per signer. This includes its own, and those carried inside other messages. A non-leader's $\mathsf{accept}$ message is valid only together with $\langle\mathsf{accept},b\rangle_\ell$ ($\ell$ is the leader), so every message below also carries the leader's. For a set $S$ of $\mathsf{accept}$ messages and a set $X$ of parties, $S\cap X$ denotes the messages in $S$ signed by parties in $X$. In pseudocode:
 
 ```
 // Party p, with neighbors N(p) in G
@@ -79,7 +77,7 @@ For each step r = 1, ..., t:
         Z = the messages in A(b) ∩ N(p) that p has not forwarded before;
         if Z is nonempty: multicast ⟨forward, b, Z⟩.
 
-At the end of step t+1:
+After step t:
     Also accept each b with |A(b)| ≥ t+1 and ⟨accept, b⟩_ℓ ∈ A(b).
     Output the accepted bit if there is exactly one, and 0 otherwise.
 ```
@@ -96,18 +94,18 @@ Otherwise, $p$ holds at least $r+\sqrt n$ signatures. Fix an honest party $q$, a
 $$(r+\sqrt n)-(\sqrt n-1)=r+1$$
 signers, including the leader, and accepts $b$ by step $r+1$.
 
-The rest of the agreement proof is identical to that of Dolev-Strong.
+**Agreement.** By propagation, a bit that an honest party accepts in some step $r\le t$ is accepted by every honest party by step $t+1$. A bit that an honest party accepts only after step $t$ has $t+1$ signers, one of which is honest and has accepted the bit earlier and sent its $\mathsf{accept}$ message then; so this bit, too, is accepted by every honest party. Hence all honest parties accept the same bits, and output the same bit.
 
 **Communication.** Fix a bit $b$. 
 - *Accept.* Each honest party sends its $\mathsf{accept}$ message once, for $O(n^2\lambda)$ bits in total.
-- *Certificates.* By propagation, honest parties accept $b$ in at most two consecutive steps. An honest party sends a $\mathsf{certificate}$ message in a round only if fewer than $\sqrt n$ honest parties do so in the same round, so fewer than $2\sqrt n$ honest parties ever send $\mathsf{certificate}$. Each has at most $n$ signatures and goes to $n$ parties, for $O(n^{2.5}\lambda)$ bits.
+- *Certificates.* By propagation, honest parties accept $b$ in at most two consecutive steps. An honest party sends a $\mathsf{certificate}$ message in a round only if fewer than $\sqrt n$ honest parties do so in the same round, so fewer than $2\sqrt n$ honest parties ever send $\mathsf{certificate}$ messages. Each has at most $n$ signatures and goes to $n$ parties, for $O(n^{2.5}\lambda)$ bits.
 - *Data.* Each honest party sends $\mathsf{data}$ messages, which contain $|N(q)|=O(\sqrt n\log n)$ signatures, to each $q$ once, for $O(n^{2.5}\log(n)\lambda)$ bits in total.
 - *Forwarding.* Each party forwards each neighbor's $\mathsf{accept}$ message at most once, to $n$ parties, for $O(n^{2.5}\log(n)\lambda)$ bits in total.
   
 Summing over the two bits gives $O(n^{2.5}\log(n)\lambda)$ bits. 
 
-#### From $n^{2.5}$ to $n^2$
+#### From $\widetilde O(n^{2.5})$ to $\widetilde O(n^2)$
 
-How do we remove the remaining $\sqrt n$ term? In the protocol above, the convinced parties still *push* their signatures to everyone, through the graph. In the [paper](https://eprint.iacr.org/2026/2504), we shift the responsibility to the parties that are not yet convinced. These parties *pull* the signatures they lack from the parties that announced acceptance. Pulling efficiently against both corrupt senders and corrupt receivers takes a few more ideas: a binary-search procedure that splits the work among the senders, requests that grow gently, and vector commitments to the sender list. Together they bring the communication down to $\widetilde O(n^2)$, for every $t<n$, in $O(t)$ rounds.
+How do we remove the remaining $\sqrt n$ term? In the protocol above, the convinced parties still *push* their signatures to everyone through the graph. In the [paper](https://eprint.iacr.org/2026/2504), we shift the responsibility to the parties that are not yet convinced. These parties *pull* the signatures they lack from the parties that announced acceptance. Pulling efficiently against both corrupt senders and corrupt receivers takes a few more ideas: a binary-search procedure that splits the work among the senders, requests that grow gently, and vector commitments to the sender list. Together they bring the communication down to $\widetilde O(n^2)$, for every $t<n$, in $O(t)$ rounds.
 
 Please leave comments on [X](TODO).
