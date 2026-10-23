@@ -628,7 +628,7 @@ No matter what, there will always be a collision!
 
 ## Acknowledgments
 
-Special thanks to [Ittai Abraham](https://decentralizedthoughts.github.io/about-ittai/) for reviewing a draft of this post and sending insightful comments.
+Special thanks to Ittai Abraham for reviewing a draft of this post and sending insightful comments.
 
 {% include_relative bib.md %}
 

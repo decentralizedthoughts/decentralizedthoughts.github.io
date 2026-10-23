@@ -9,8 +9,7 @@ author: Ittay Eyal
 
 Proof of Work (PoW) Blockchains implement a form of State Machine Replication (SMR). Unlike classical SMR protocols, they are **open**, i.e., anyone can join the system, and the system incentivizes participants, called **miners**, to follow the protocol. Therefore, unlike classical SMR protocols, reasoning about blockchain security relies not only on bounding the number of malicious participants. One should crucially ask whether miners are indeed *incentivized* to follow the prescribed protocol. This is the topic of this post.
 
-To make things concrete, we’ll consider Nakamoto’s Bitcoin protocol.
-[Ling](https://decentralizedthoughts.github.io/about-ling/) already provided [background](https://decentralizedthoughts.github.io/2019-11-29-Analysis-Nakamoto/) and an analysis of security against malicious adversaries. For our analysis, we’ll describe the system as a *game* played among miners.
+To make things concrete, we’ll consider Nakamoto’s Bitcoin protocol. Ling already provided [background](https://decentralizedthoughts.github.io/2019-11-29-Analysis-Nakamoto/) and an analysis of security against malicious adversaries. For our analysis, we’ll describe the system as a *game* played among miners.
 
 ## The Game
 
