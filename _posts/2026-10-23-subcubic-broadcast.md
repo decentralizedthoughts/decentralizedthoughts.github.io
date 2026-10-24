@@ -1,7 +1,7 @@
----
+ ---
 title: Authenticated Broadcast in $\widetilde O(n^{2.5})$ Communication
 date: 2026-10-23 00:00:00 -04:00
-published: false
+published: true
 tags:
 - research
 author: Yuval Efron, Jovan Komatovic, Ling Ren
@@ -95,6 +95,8 @@ $$(r+\sqrt n)-(\sqrt n-1)=r+1$$
 signers, including the leader, and accepts $b$ by step $r+1$.
 
 **Agreement.** By propagation, a bit that an honest party accepts in some step $r\le t$ is accepted by every honest party by step $t+1$. A bit that an honest party accepts only after step $t$ has $t+1$ signers, one of which is honest and has accepted the bit earlier and sent its $\mathsf{accept}$ message then; so this bit, too, is accepted by every honest party. Hence all honest parties accept the same bits, and output the same bit.
+
+**Validity.** If the leader is honest, every honest party accepts its input in step $1$. No honest party accepts the other bit, since that would require the leader's signature on it. So every honest party outputs the leader's input.
 
 **Communication.** Fix a bit $b$. 
 - *Accept.* Each honest party sends its $\mathsf{accept}$ message once, for $O(n^2\lambda)$ bits in total.
