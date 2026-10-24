@@ -830,6 +830,112 @@ nav.top-nav-short-permanent ~ header > .intro-header.big-img {
   background-color: var(--hover-col);
 }
 
+.post-links {
+  margin: 1.5rem 0;
+}
+.post-links h2 {
+  font-size: 1rem;
+  margin: 0 0 0.75rem;
+}
+.post-links-list {
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  list-style: none;
+  padding: 0;
+}
+.post-links-list .page-item {
+  max-width: 100%;
+}
+.pagination.post-links-list .page-link {
+  text-transform: none;
+  letter-spacing: normal;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  height: 100%;
+}
+.post-links-chapters h2 {
+  display: inline;
+  margin-right: 0.5rem;
+}
+.post-links-chapters .post-links-list {
+  display: inline-flex;
+  margin: 0;
+}
+.pagination.post-links-list .page-item .page-link {
+  border-radius: 0;
+}
+.post-links-chapters .page-item .page-link {
+  padding: 0.35rem 0.65rem;
+}
+.pagination.blog-pager .page-item .page-link {
+  border-color: transparent;
+  background: transparent;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: normal;
+  text-transform: none;
+  padding: 0.75rem 0.5rem;
+  min-height: 44px;
+}
+.pagination.blog-pager .page-item .page-link:hover,
+.pagination.blog-pager .page-item .page-link:focus {
+  color: var(--hover-col);
+  text-decoration: underline;
+}
+.post-links .page-link:focus-visible,
+.blog-pager .page-link:focus-visible {
+  outline: 2px solid var(--hover-col);
+  outline-offset: 3px;
+}
+.blog-pager .page-item {
+  flex: 0 1 48%;
+  min-width: 0;
+}
+.blog-pager .next {
+  text-align: right;
+}
+.post-date-direction,
+.post-date-title {
+  display: block;
+}
+.post-date-title {
+  margin-top: 0.3rem;
+  font-weight: 400;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 575.98px) {
+  .blog-pager {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .blog-pager .page-item {
+    flex-basis: auto;
+    width: 100%;
+  }
+  .blog-pager .next {
+    text-align: left;
+  }
+  .post-reading-links .post-links-list {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .post-reading-links .page-item {
+    width: 100%;
+    min-width: 0;
+  }
+  .post-reading-links .page-link {
+    display: block;
+    line-height: 1.5;
+    min-height: 44px;
+  }
+  .post-links-chapters .post-links-list {
+    max-width: 100%;
+    vertical-align: middle;
+  }
+}
+
 /* --- Tables --- */
 
 table {

@@ -4,6 +4,14 @@ date: 2025-11-15 04:30:00 -05:00
 tags:
 - consensus
 author: Ittai Abraham
+chapters:
+  - /2026-05-25-chapter-simplex/
+background:
+  - /2025-06-18-simplex/
+  - /2025-11-08-benign-simplex/
+continue_reading:
+  - /2026-04-23-deconstructing-simplex/
+  - /2026-05-14-simplex-FVS/
 ---
 
 In this post we present a [Simplex](https://simplex.blog)  protocol that solves single shot [consensus](https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/) and is resilient to $f < n/3$ [Byzantine failures](https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/), under [partial synchrony](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/). In a previous post we showed how to move [from Tendermint to Simplex](https://decentralizedthoughts.github.io/2025-06-18-simplex/). For a map of the surrounding Simplex line, see the [Simplex chapter](https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/).

@@ -4,6 +4,13 @@ date: 2026-05-14 04:00:00 -05:00
 tags:
 - consensus
 author: Ittai Abraham
+chapters:
+  - /2026-05-25-chapter-simplex/
+background:
+  - /2025-11-15-simplex-from-benign/
+  - /2026-03-07-simultaneous-agreement/
+continue_reading:
+  - /2026-05-17-fast-simplex-fvs/
 ---
 
 This post gives a **fixed view schedule** version of

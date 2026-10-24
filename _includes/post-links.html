@@ -1,0 +1,16 @@
+{%- assign linked_urls = page[include.field] -%}
+{%- if linked_urls.size > 0 -%}
+<nav class="post-links post-links-{{ include.field }}" aria-label="{{ include.label }}">
+  <h2>{% if include.field == 'background' %}<span aria-hidden="true">&larr; </span>{% endif %}{{ include.label }}{% if include.field == 'continue_reading' %}<span aria-hidden="true"> &rarr;</span>{% endif %}</h2>
+  <ul class="pagination post-links-list">
+    {%- for linked_url in linked_urls -%}
+      {%- assign linked_post = site.posts | where: 'url', linked_url | first -%}
+      {%- if linked_post -%}
+    <li class="page-item">
+      <a class="page-link" href="{{ linked_post.url | relative_url }}">{{ linked_post.title | remove_first: 'Chapter: ' | escape }}</a>
+    </li>
+      {%- endif -%}
+    {%- endfor %}
+  </ul>
+</nav>
+{%- endif -%}

@@ -39,7 +39,8 @@ layout: base
         </div>
       {% endif %}
 
-      <div class="blog-post">
+      {% if page.chapters.size > 0 %}{% include post-links.html field="chapters" label="In chapters" %}
+      {% endif %}<div class="blog-post">
         {{ content }}
       </div>
 
@@ -64,20 +65,24 @@ layout: base
         {% include social-share.html %}
       {% endif %}
 
-      <ul class="pagination blog-pager">
+      {% if page.background.size > 0 or page.continue_reading.size > 0 %}<div class="post-reading-links">
+          {% include post-links.html field="background" label="Background" %}
+          {% include post-links.html field="continue_reading" label="Continue reading" %}
+        </div>
+      {% endif %}<ul class="pagination blog-pager">
         {% if page.previous.url %}
         <li class="page-item previous">
           <a class="page-link" href="{{ page.previous.url | relative_url }}" data-toggle="tooltip" data-placement="top" title="{{page.previous.title | strip_html | xml_escape}}">
-            <i class="fas fa-arrow-left" alt="Previous Post"></i>
-            <span class="d-none d-sm-inline-block">Previous Post</span>
+            <span class="post-date-direction"><i class="fas fa-arrow-left" aria-hidden="true"></i> Older post</span>
+            <span class="post-date-title">{{ page.previous.title | strip_html | escape }}</span>
           </a>
         </li>
         {% endif %}
         {% if page.next.url %}
         <li class="page-item next">
           <a class="page-link" href="{{ page.next.url | relative_url }}" data-toggle="tooltip" data-placement="top" title="{{page.next.title | strip_html | xml_escape}}">
-            <span class="d-none d-sm-inline-block">Next Post</span>
-            <i class="fas fa-arrow-right" alt="Next Post"></i>
+            <span class="post-date-direction">Newer post <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+            <span class="post-date-title">{{ page.next.title | strip_html | escape }}</span>
           </a>
         </li>
         {% endif %}

@@ -28,6 +28,8 @@ jobs:
           bundle exec jekyll build --future --config _config_ci.yml,_config.yml --trace
       - name: Check internal links and assets
         run: python3 tools/check_site.py
+      - name: Check chapter and reading metadata
+        run: ruby tools/check_post_links.rb
       - name: Check HTML snapshots
         run: |
           python3 tools/list_urls.py | python3 tools/snapshot_html.py

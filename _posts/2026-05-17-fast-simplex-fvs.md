@@ -4,6 +4,13 @@ date: 2026-05-17 00:00:00 -05:00
 tags:
 - consensus
 author: Ittai Abraham
+chapters:
+  - /2026-05-25-chapter-simplex/
+background:
+  - /2026-05-14-simplex-FVS/
+  - /2025-07-18-two-round-Simplex/
+continue_reading:
+  - /2026-05-20-from-single-shot-to-chained/
 ---
 
 [Simplex FVS](https://decentralizedthoughts.github.io/2026-05-14-simplex-FVS/)
