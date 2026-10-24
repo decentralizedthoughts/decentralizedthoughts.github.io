@@ -90,7 +90,7 @@ If $p$ is the honest leader, every honest party accepts its input in step $1$. W
 
 After Round 1, $p$'s set $A(b)$ contains at least $r+1$ signers. If $p$ sends a $\mathsf{certificate}$, every honest party receives these $r+1$ signatures, and accepts $b$ by step $r+1$.
 
-Otherwise, $p$ holds at least $r+\sqrt n$ signatures. Fix an honest party $q$, and suppose that, at the end of step $r$, $q$ still misses the $\mathsf{accept}$ messages of a set $Y$ of $\sqrt n$ of signers in $p$'s $A(b)$. Each honest party has multicast its own $\mathsf{accept}$ message, so $Y$ contains only corrupt parties. The set $H$ of honest parties is disjoint from $Y$, and $|H|\ge n-t\ge\sqrt n$. So by the lemma, some $h\in H$ and $y\in Y$ are neighbors. In Round 2, $h$ received $y$'s $\mathsf{accept}$ message from $p$, and in Round 3, $h$ forwarded the message to everyone (unless it had done so before). Thus, $q$ has $y$'s message, contradicting $y\in Y$. So $q$ misses fewer than $\sqrt n$ signers and it holds signatures from at least
+Otherwise, $p$ holds at least $r+\sqrt n$ signatures. Fix an honest party $q$, and suppose that, at the end of step $r$, $q$ still misses the $\mathsf{accept}$ messages of a set $Y$ of $\sqrt n$ of signers in $p$'s $A(b)$. Each honest party has multicast its own $\mathsf{accept}$ message, so $Y$ contains only corrupt parties. The set $H$ of honest parties is disjoint from $Y$ and has size at least $n-t\ge\sqrt n$. So by the lemma, some $h\in H$ and $y\in Y$ are neighbors. In Round 2, $h$ received $y$'s $\mathsf{accept}$ message from $p$, and in Round 3, $h$ forwarded the message to everyone (unless it had done so before). Thus, $q$ has $y$'s message, contradicting $y\in Y$. So $q$ misses fewer than $\sqrt n$ signers and it holds signatures from at least
 $$(r+\sqrt n)-(\sqrt n-1)=r+1$$
 signers, including the leader, and accepts $b$ by step $r+1$.
 
@@ -101,7 +101,7 @@ signers, including the leader, and accepts $b$ by step $r+1$.
 **Communication.** Fix a bit $b$. 
 - *Accept.* Each honest party sends its $\mathsf{accept}$ message once, for $O(n^2\lambda)$ bits in total.
 - *Certificates.* By propagation, honest parties accept $b$ in at most two consecutive steps. An honest party sends a $\mathsf{certificate}$ message in a round only if fewer than $\sqrt n$ honest parties do so in the same round, so fewer than $2\sqrt n$ honest parties ever send $\mathsf{certificate}$ messages. Each has at most $n$ signatures and goes to $n$ parties, for $O(n^{2.5}\lambda)$ bits.
-- *Data.* Each honest party sends $\mathsf{data}$ messages, which contain $|N(q)|=O(\sqrt n\log n)$ signatures, to each $q$ once, for $O(n^{2.5}\log(n)\lambda)$ bits in total.
+- *Data.* Each honest party sends a $\mathsf{data}$ message containing $\lvert N(q)\rvert=O(\sqrt n\log n)$ signatures to each $q$ once, for $O(n^{2.5}\log(n)\lambda)$ bits in total.
 - *Forwarding.* Each party forwards each neighbor's $\mathsf{accept}$ message at most once, to $n$ parties, for $O(n^{2.5}\log(n)\lambda)$ bits in total.
   
 Summing over the two bits gives $O(n^{2.5}\log(n)\lambda)$ bits. 
