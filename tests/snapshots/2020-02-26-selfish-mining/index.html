@@ -113,13 +113,13 @@
  <li class="nav-item dropdown">
  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
- <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
- <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
- <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
- <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
- <a class="dropdown-item" href="/about-ling">Ling Ren</a>
- <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
- <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ <a class="dropdown-item" href="/authors/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/authors/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/authors/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/authors/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/authors/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/authors/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/authors/about-avishay">Avishay Yanai</a>
  </div>
  </li>
  
@@ -214,8 +214,7 @@
  
  <div class="blog-post">
  <p>Proof of Work (PoW) Blockchains implement a form of State Machine Replication (SMR). Unlike classical SMR protocols, they are <strong>open</strong>, i.e., anyone can join the system, and the system incentivizes participants, called <strong>miners</strong>, to follow the protocol. Therefore, unlike classical SMR protocols, reasoning about blockchain security relies not only on bounding the number of malicious participants. One should crucially ask whether miners are indeed <em>incentivized</em> to follow the prescribed protocol. This is the topic of this post.</p>
-<p>To make things concrete, we’ll consider Nakamoto’s Bitcoin protocol.
-<a href="https://decentralizedthoughts.github.io/about-ling/">Ling</a> already provided <a href="https://decentralizedthoughts.github.io/2019-11-29-Analysis-Nakamoto/">background</a> and an analysis of security against malicious adversaries. For our analysis, we’ll describe the system as a <em>game</em> played among miners.</p>
+<p>To make things concrete, we’ll consider Nakamoto’s Bitcoin protocol. Ling already provided <a href="https://decentralizedthoughts.github.io/2019-11-29-Analysis-Nakamoto/">background</a> and an analysis of security against malicious adversaries. For our analysis, we’ll describe the system as a <em>game</em> played among miners.</p>
 <h2 id="the-game">The Game</h2>
 <p>The players are the miners who generate blocks. The game proceeds in rounds, where in each round one miner generates a block and any miner can publish blocks it has generated. Publication is done with synchronous broadcast, so all miners receive messages published in the previous round.</p>
 <p>This is of course a simplification, e.g., it ignores the slow variation in the total mining power in the system and forks that happen accidentally, which are rare but still occur. Nevertheless, this model is sufficient as a first order approximation of the system.</p>

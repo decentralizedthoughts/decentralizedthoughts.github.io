@@ -109,13 +109,13 @@
  <li class="nav-item dropdown">
  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
- <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
- <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
- <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
- <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
- <a class="dropdown-item" href="/about-ling">Ling Ren</a>
- <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
- <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ <a class="dropdown-item" href="/authors/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/authors/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/authors/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/authors/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/authors/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/authors/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/authors/about-avishay">Avishay Yanai</a>
  </div>
  </li>
  
@@ -189,6 +189,136 @@
  
  
 <div class="posts-list">
+ 
+ 
+ <article class="post-preview">
+ <a href="/2022-06-21-sandglass/">
+ <h2 class="post-title">Safe Permissionless Consensus</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on June 21, 2022, by <b>Youer Pu, Lorenzo Alvisi, and Ittay Eyal</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Nakamoto’s consensus protocol works in a permissionless model, where nodes can join and leave without notice. However, it guarantees agreement only probabilistically. Is this weaker guarantee a necessary concession to the severe demands of supporting a permissionless model?
+ 
+ 
+ <a href="/2022-06-21-sandglass/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#research">research</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ 
+ 
+ <article class="post-preview">
+ <a href="/2022-06-19-crusader-braodcast/">
+ <h2 class="post-title">Crusader Broadcast</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on June 19, 2022, by <b>Gilad Stern and Ittai Abraham</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In previous posts we showed that the classic Dolev-Strong broadcast protocol takes $O(n^3)$ words and $t+1$ rounds and that Dolev Reischuk show that $\Omega(n^2)$ is needed and it is also known that $t+1$ rounds are needed. So while the number of rounds is optimal, to this day it remains an open question of obtaining $O(n^2)$ broadcast against a strongly adaptive adversary (see post for recent progress).
+ 
+ 
+ <a href="/2022-06-19-crusader-braodcast/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ 
+ 
+ <article class="post-preview">
+ <a href="/2022-06-09-phase-king-via-gradecast/">
+ <h2 class="post-title">Phase-King through the lens of Gradecast: A simple unauthenticated synchronous Byzantine Agreement protocol</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on June 9, 2022, by <b>Ittai Abraham and Andrew Lewis-Pye</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In this post we present a simple unauthenticated synchronous Byzantine Agreement protocol that is based on the Phase-King protocol of Berman, Garay, and Perry 1989-92. We refer also to Jonathan Katz’s excellent write-up on this same protocol from 2013. We offer a modern approach that decomposes the Phase-King protocol into a Graded Consensus building block.
+ 
+ 
+ <a href="/2022-06-09-phase-king-via-gradecast/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#consensus101">consensus101</a>
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ 
+ 
+ <article class="post-preview">
+ <a href="/2022-06-07-approx-agreement-one/">
+ <h2 class="post-title">Approximate Agreement: definitions and the Robust Midpoint protocol</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on June 7, 2022, by <b>Ittai Abraham and Gilad Stern</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ This post covers the basics of Approximate Agreement. We define the problem, explain in what way it’s an interesting variation of classic Agreement, and describe the idea behind the Robust Midpoint protocol.
+ 
+ 
+ <a href="/2022-06-07-approx-agreement-one/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#consensus">consensus</a>
+ 
+ </div>
+ 
+ </article>
+ 
  
  
  <article class="post-preview">
@@ -736,136 +866,6 @@
  <a href="/tags#consensus">consensus</a>
  
  <a href="/tags#consensus101">consensus101</a>
- 
- </div>
- 
- </article>
- 
- 
- 
- <article class="post-preview">
- <a href="/2021-09-29-the-round-complexity-of-reliable-broadcast/">
- <h2 class="post-title">The round complexity of Reliable Broadcast</h2>
- 
- </a>
- <p class="post-meta">
- Posted on September 29, 2021, by <b>Ittai Abraham, Zhuolun Xiang, Ling Ren</b>
- </p>
- 
- <div class="post-entry-container">
- 
- <div class="post-entry">
- Reliable Broadcast is an important building block of many Asynchronous protocols. There is a broadcaster that has some input value, $v$, and a non-faulty party that terminates needs to output a value. Reliable Broadcast is defined via two properties:
- 
- 
- <a href="/2021-09-29-the-round-complexity-of-reliable-broadcast/" class="post-read-more">[Read&nbsp;More]</a>
- 
- </div>
- </div>
- 
- 
- <div class="blog-tags">
- Tags:
- 
- <a href="/tags#research">research</a>
- 
- <a href="/tags#lowerbound">lowerbound</a>
- 
- </div>
- 
- </article>
- 
- 
- 
- <article class="post-preview">
- <a href="/2021-09-20-optimal-communication-complexity-of-authenticated-byzantine-agreement/">
- <h2 class="post-title">Optimal Communication Complexity of Authenticated Byzantine Agreement</h2>
- 
- </a>
- <p class="post-meta">
- Posted on September 20, 2021, by <b>Atsuki Momose, Ling Ren</b>
- </p>
- 
- <div class="post-entry-container">
- 
- <div class="post-entry">
- Communication complexity of Byzantine Agreement (BA) has been studied for decades. Dolev and Reischuk showed that quadratic communication is necessary for BA with perfect security, i.e., without error. Berman, Garay, and Perry showed that this lower bound is tight for the unauthenticated setting (without signatures) with $f < n/3$. However, for $f \ge n/3$, the best solution so far is still the Dolev-Strong protocol with cubic communication, so a linear...
- 
- 
- <a href="/2021-09-20-optimal-communication-complexity-of-authenticated-byzantine-agreement/" class="post-read-more">[Read&nbsp;More]</a>
- 
- </div>
- </div>
- 
- 
- <div class="blog-tags">
- Tags:
- 
- <a href="/tags#research">research</a>
- 
- </div>
- 
- </article>
- 
- 
- 
- <article class="post-preview">
- <a href="/2021-09-20-information-theoretic-hotstuff-it-hs-part-one/">
- <h2 class="post-title">Information Theoretic HotStuff (IT-HS): Part One</h2>
- 
- </a>
- <p class="post-meta">
- Posted on September 20, 2021, by <b>Gilad Stern, Ittai Abraham</b>
- </p>
- 
- <div class="post-entry-container">
- 
- <div class="post-entry">
- This post is the first of two on Information Theoretic HotStuff (IT-HS). Information Theoretic HotStuff is a Byzantine Consensus protocol in the partially synchronous model. It replaces all of HotStuff’s cryptographic signatures with simple information theoretic message passing techniques over authenticated channels. Information theoretic protocols are often easy to reason about, form a great introduction for learning the basics of consensus, have less of an attack surface, and highlight useful...
- 
- 
- <a href="/2021-09-20-information-theoretic-hotstuff-it-hs-part-one/" class="post-read-more">[Read&nbsp;More]</a>
- 
- </div>
- </div>
- 
- 
- <div class="blog-tags">
- Tags:
- 
- <a href="/tags#research">research</a>
- 
- </div>
- 
- </article>
- 
- 
- 
- <article class="post-preview">
- <a href="/2021-08-29-the-private-set-intersection-psi-protocol-of-the-apple-csam-detection-system/">
- <h2 class="post-title">The Private Set Intersection (PSI) Protocol of the Apple CSAM Detection System</h2>
- 
- </a>
- <p class="post-meta">
- Posted on August 29, 2021, by <b>Benny Pinkas</b>
- </p>
- 
- <div class="post-entry-container">
- 
- <div class="post-entry">
- In this post, we will discuss the cryptographic construction used in Apple’s new system for detecting CSAM - Child Sexual Abuse Material. This cryptographic construction implements a new variant of PSI - Private Set Intersection. While a lot of attention has been paid to the broad implications of this system, the technical details of the PSI construction have not been highlighted, even though Apple published a detailed technical description of...
- 
- 
- <a href="/2021-08-29-the-private-set-intersection-psi-protocol-of-the-apple-csam-detection-system/" class="post-read-more">[Read&nbsp;More]</a>
- 
- </div>
- </div>
- 
- 
- <div class="blog-tags">
- Tags:
- 
- <a href="/tags#cryptography">cryptography</a>
  
  </div>
  

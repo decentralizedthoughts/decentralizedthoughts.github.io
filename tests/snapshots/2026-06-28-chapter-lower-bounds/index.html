@@ -113,13 +113,13 @@
  <li class="nav-item dropdown">
  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
- <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
- <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
- <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
- <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
- <a class="dropdown-item" href="/about-ling">Ling Ren</a>
- <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
- <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ <a class="dropdown-item" href="/authors/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/authors/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/authors/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/authors/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/authors/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/authors/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/authors/about-avishay">Avishay Yanai</a>
  </div>
  </li>
  
@@ -241,8 +241,14 @@ not both. This is the message of the
 <a href="https://decentralizedthoughts.github.io/2023-07-09-CAP-two-servers-in-psynch/">CAP theorem for partial synchrony</a>.
 The same majority barrier appears even in lock step synchrony with omission
 faults:
-<a href="https://decentralizedthoughts.github.io/2019-11-02-primary-backup-for-2-servers-and-omission-failures-is-impossible/">State Machine Replication for Two Servers and One Omission Failure is Impossible</a>.
-The post
+<a href="https://decentralizedthoughts.github.io/2019-11-02-primary-backup-for-2-servers-and-omission-failures-is-impossible/">State Machine Replication for Two Servers and One Omission Failure is Impossible</a>.</p>
+<p><a href="https://decentralizedthoughts.github.io/2025-08-12-non-uniform-weak-validity/">Agreement under omission failures: non-uniformity and weak validity</a>
+explains why uniformity matters. With send and receive omissions, agreement
+among all parties that decide requires $n&gt;2f$. If agreement concerns only
+nonfaulty parties and an output may equal any party’s input, $n&gt;f$ suffices.
+The same partition argument rules out uniform approximate agreement at
+$n\leq2f$: two isolated groups can decide $0$ and $1$.</p>
+<p>The post
 <a href="https://decentralizedthoughts.github.io/2024-01-30-between-crash-and-omission/">In between Crash and Omission failures</a>
 sharpens this picture by looking at weaker omission models.</p>
 <p>There is also a permissionless version of the same obstruction:
@@ -369,6 +375,12 @@ least two futures with different decision values.</p>
 Even with crash faults, an adversary can spend one crash per round and keep
 the execution uncommitted. Note that this $t+1$ round lower bound holds even
 for randomized protocols.</p>
+<p>There is a lower bound on the round complexity of approximate agreement. The post
+<a href="https://decentralizedthoughts.github.io/2026-10-19-approximate-agreement-send-omissions-lower-bound/">A Lower Bound for Approximate Agreement with Send Omissions</a>
+connects the all-zero and all-one executions by a path of indistinguishable
+worlds. Even with perfectly synchronized clocks and every message delayed by
+exactly $d$, reaching output span below $1/n$ requires
+$\Omega(d\log n/\log\log n)$ time when $n&gt;f+1$ and $f=\Theta(n)$.</p>
 <p>In asynchrony, the same idea gives FLP:
 <a href="https://decentralizedthoughts.github.io/2019-12-15-asynchrony-uncommitted-lower-bound/">The FLP Impossibility</a>.
 The original paper is
@@ -418,6 +430,11 @@ $t+1$ barrier.</p>
  <td><a href="https://decentralizedthoughts.github.io/2019-12-15-synchrony-uncommitted-lower-bound/">Synchronous consensus</a></td>
  <td>an uncommitted configuration</td>
  <td>$t+1$ rounds</td>
+ </tr>
+ <tr>
+ <td><a href="https://decentralizedthoughts.github.io/2026-10-19-approximate-agreement-send-omissions-lower-bound/">Approximate agreement with send omissions</a></td>
+ <td>a path of indistinguishable worlds from all-zero to all-one inputs</td>
+ <td>$\Omega(d\log n/\log\log n)$ time for span below $1/n$ when $f=\Theta(n)$ and $n&gt;f+1$</td>
  </tr>
  <tr>
  <td><a href="https://decentralizedthoughts.github.io/2019-12-15-asynchrony-uncommitted-lower-bound/">Asynchronous consensus</a></td>
@@ -777,7 +794,10 @@ and secret state lower bounds.</p>
  <li><a href="https://decentralizedthoughts.github.io/2019-12-15-asynchrony-uncommitted-lower-bound/">The FLP Impossibility</a></li>
  <li><a href="https://decentralizedthoughts.github.io/2024-03-07-mobile-is-FLP/">Consensus with One Mobile Crash in Synchrony or One Crash in Asynchrony Has Infinite Executions</a></li>
  <li><a href="https://decentralizedthoughts.github.io/2024-01-28-early-stopping-lower-bounds/">Early Stopping, Same but Different</a></li>
- <li><a href="https://decentralizedthoughts.github.io/2026-03-07-simultaneous-agreement/">Synchronized Clocks, Fixed View Schedules, and Simultaneous Agreement</a></li>
+ <li>
+ <p><a href="https://decentralizedthoughts.github.io/2026-03-07-simultaneous-agreement/">Synchronized Clocks, Fixed View Schedules, and Simultaneous Agreement</a></p>
+ </li>
+ <li><a href="https://decentralizedthoughts.github.io/2026-10-19-approximate-agreement-send-omissions-lower-bound/">A Lower Bound for Approximate Agreement with Send Omissions</a></li>
 </ul>
 <p>For good case latency, read:</p>
 <ul>

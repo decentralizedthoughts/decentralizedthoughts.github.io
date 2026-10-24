@@ -11,6 +11,62 @@
  
  
  <item>
+ <title>A Lower Bound for Approximate Agreement with Send Omissions</title>
+ 
+ <dc:creator><![CDATA[ Ittai Abraham, Gilad Stern ]]></dc:creator>
+ 
+ <description>
+ 
+ In approximate agreement, parties start with numerical inputs in $[0,1]$. Every nonfaulty party must terminate with an output in the input range, and their outputs must differ by less than a given $\epsilon&amp;gt;0$. Define the output span of an execution as the difference between the largest and smallest nonfaulty outputs. Approximate agreement requires this span to be less than $\epsilon$. We present a modern version of Fekete’s lower bound for...
+ </description>
+ <pubDate>Mon, 19 Oct 2026 02:00:00 -0400</pubDate>
+ <link>https://decentralizedthoughts.github.io/2026-10-19-approximate-agreement-send-omissions-lower-bound/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-10-19-approximate-agreement-send-omissions-lower-bound/</guid>
+ </item>
+ 
+ <item>
+ <title>Byzantine Approximate Agreement: Grade, Detect, Average</title>
+ 
+ <dc:creator><![CDATA[ Ittai Abraham, Gilad Stern ]]></dc:creator>
+ 
+ <description>
+ 
+ The previous post gave a complete approximate agreement protocol: send the current value, remove the $f$ largest and $f$ smallest values, and take the midpoint. Each round halves the span of the honest values. Starting in $[0,1]$, reaching span less than $1/n$ takes $O(\log n)$ rounds. Ben-Or, Dolev, and Hoch improve this bound to $O(\log n / \log\log n)$. The core idea is to prevent the same Byzantine party from...
+ </description>
+ <pubDate>Sun, 18 Oct 2026 05:00:00 -0400</pubDate>
+ <link>https://decentralizedthoughts.github.io/2026-10-18-byzantine-approximate-agreement-grade-detect-average/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-10-18-byzantine-approximate-agreement-grade-detect-average/</guid>
+ </item>
+ 
+ <item>
+ <title>Approximate Agreement with Omissions: From Midpoints to Averages</title>
+ 
+ <dc:creator><![CDATA[ Ittai Abraham ]]></dc:creator>
+ 
+ <description>
+ 
+ The Byzantine approximate agreement posts start with a protocol that halves the span of honest values and repeat it to obtain a complete protocol. The Grade, Detect, Average post improves its convergence by identifying parties that cause disagreement. With omission failures, both arguments become simpler, and $n&amp;gt;2f$ parties suffice. We first give a Midpoint protocol that halves the span in each round. We then add receipt reports: a party averages...
+ </description>
+ <pubDate>Sun, 18 Oct 2026 02:00:00 -0400</pubDate>
+ <link>https://decentralizedthoughts.github.io/2026-10-18-approximate-agreement-with-omissions/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-10-18-approximate-agreement-with-omissions/</guid>
+ </item>
+ 
+ <item>
+ <title>Byzantine Approximate Agreement: From One Round to a Complete Protocol</title>
+ 
+ <dc:creator><![CDATA[ Ittai Abraham, Gilad Stern ]]></dc:creator>
+ 
+ <description>
+ 
+ The previous post showed that one round of the Robust Midpoint protocol keeps every honest value inside the old honest range and cuts the span of those values in half. Repeating this round gives approximate agreement. We do this formally in this post by specifying how many rounds to run and when parties decide. The update is the same as in the previous post: send the current value, discard the...
+ </description>
+ <pubDate>Sat, 17 Oct 2026 02:00:00 -0400</pubDate>
+ <link>https://decentralizedthoughts.github.io/2026-10-17-approximate-agreement-complete-protocol/</link>
+ <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-10-17-approximate-agreement-complete-protocol/</guid>
+ </item>
+ 
+ <item>
  <title>Optimal Clock Synchronization When There Are No Failures or Drift</title>
  
  <dc:creator><![CDATA[ Ittai Abraham, Jennifer Welch ]]></dc:creator>
@@ -232,62 +288,6 @@
  <pubDate>Thu, 23 Apr 2026 02:00:00 -0400</pubDate>
  <link>https://decentralizedthoughts.github.io/2026-04-23-latency-of-censorship-resistance/</link>
  <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-04-23-latency-of-censorship-resistance/</guid>
- </item>
- 
- <item>
- <title>Deconstructing Simplex</title>
- 
- <dc:creator><![CDATA[ Ittai Abraham ]]></dc:creator>
- 
- <description>
- 
- In a previous post we decomposed PBFT into an outer shell and an inner shell consisting of two building blocks: Locked-Broadcast (LB) and Recover-Max-Lock. Here we similarly decompose Simplex into an outer shell and an inner shell consisting of a single building block: Certifying Graded Broadcast (CGB). For a map of the surrounding Simplex line, see the Simplex chapter. The model is partial synchrony with $f&amp;lt;n/3$ Byzantine failures, and the...
- </description>
- <pubDate>Thu, 23 Apr 2026 01:00:00 -0400</pubDate>
- <link>https://decentralizedthoughts.github.io/2026-04-23-deconstructing-simplex/</link>
- <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-04-23-deconstructing-simplex/</guid>
- </item>
- 
- <item>
- <title>Strong Chain Quality</title>
- 
- <dc:creator><![CDATA[ Ittai Abraham, Pranav Garimidi, Joachim Neu ]]></dc:creator>
- 
- <description>
- 
- Chain Quality (CQ) is a core blockchain property. Roughly speaking, it says: Owning $3\%$ of the stake gives you inclusion rights over valid inputs of your choice in roughly $3\%$ of the blockspace over time. For Nakamoto style chains, this is called Ideal CQ (see here). Chain quality was sufficient for early generations of blockchains that had low throughput, but modern blockchains have much higher bandwidth and can commit many...
- </description>
- <pubDate>Mon, 23 Mar 2026 01:00:00 -0400</pubDate>
- <link>https://decentralizedthoughts.github.io/2026-03-23-strong-chain-quality/</link>
- <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-03-23-strong-chain-quality/</guid>
- </item>
- 
- <item>
- <title>Synchronized Clocks, Fixed View Schedules, and Simultaneous Agreement</title>
- 
- <dc:creator><![CDATA[ Ittai Abraham ]]></dc:creator>
- 
- <description>
- 
- Most modern blockchain protocols use partial synchrony-based BFT protocols that proceed in views. Each view has a designated block proposer (leader). This naturally leads to the following design question: How should parties synchronize the transition from view $i$ to view $i+1$? Dwork, Lynch, Stockmeyer, Consensus in the Presence of Partial Synchrony considered two models: one with synchronized clocks, and one with unbounded clock drift pre-GST. We argue that the former...
- </description>
- <pubDate>Sat, 07 Mar 2026 17:59:27 -0500</pubDate>
- <link>https://decentralizedthoughts.github.io/2026-03-07-simultaneous-agreement/</link>
- <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-03-07-simultaneous-agreement/</guid>
- </item>
- 
- <item>
- <title>Mysticeti: Revolutionizing Consensus on Sui</title>
- 
- <dc:creator><![CDATA[ Lefteris Kokoris Kogias, Alberto Sonnino, George Danezis ]]></dc:creator>
- 
- <description>
- 
- TL;DR Mysticeti is a novel Byzantine consensus protocol deployed on the Sui blockchain that revolutionizes transaction processing. Eliminates explicit certification, reducing good-case latency to the theoretical minimum. Crash-fault masking, avoiding head-of-line blocking for pipelined rounds. 40% CPU usage reduction for consensus in production. 80% latency reduction compared to Bullshark on Sui Mainnet (from ~1.9s to ~400ms). Mysticeti is a novel Byzantine consensus protocol recently deployed on the Sui blockchain. It...
- </description>
- <pubDate>Fri, 06 Mar 2026 00:00:00 -0500</pubDate>
- <link>https://decentralizedthoughts.github.io/2026-03-06-mysticeti-revolutionizing-consensus-on-sui/</link>
- <guid isPermaLink="true">https://decentralizedthoughts.github.io/2026-03-06-mysticeti-revolutionizing-consensus-on-sui/</guid>
  </item>
  
  </channel>

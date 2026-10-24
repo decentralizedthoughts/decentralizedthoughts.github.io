@@ -109,13 +109,13 @@
  <li class="nav-item dropdown">
  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
- <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
- <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
- <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
- <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
- <a class="dropdown-item" href="/about-ling">Ling Ren</a>
- <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
- <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ <a class="dropdown-item" href="/authors/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/authors/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/authors/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/authors/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/authors/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/authors/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/authors/about-avishay">Avishay Yanai</a>
  </div>
  </li>
  
@@ -189,6 +189,142 @@
  
  
 <div class="posts-list">
+ 
+ 
+ <article class="post-preview">
+ <a href="/2019-11-29-Analysis-Nakamoto/">
+ <h2 class="post-title">Security proof for Nakamoto Consensus</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on November 29, 2019, by <b>Ling Ren</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Bitcoin’s underlying consensus protocol, now known as Nakamoto consensus, is an extremely simple and elegant solution to the Byzantine consensus problem. One may expect this simple protocol to come with a simple security proof. But that turns out not to be the case. The Bitcoin white paper did not provide a proof. Several academic papers (e.g. Garay, Kiayias, Leonardos, and Pass, Seeman, shelat and Kiffer, Rajaraman, shelat) later presented rigorous...
+ 
+ 
+ <a href="/2019-11-29-Analysis-Nakamoto/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#blockchain">blockchain</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ 
+ 
+ <article class="post-preview">
+ <a href="/2019-11-12-Sync-HotStuff/">
+ <h2 class="post-title">Sync HotStuff, A Simple and Practical State Machine Replication</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on November 12, 2019, by <b>Kartik Nayak, Ling Ren</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In the previous post, we discussed progress in authenticated synchronous consensus protocols. In this post, we will discuss one of the recent protocols Sync HotStuff, which is a simple and practical Byzantine Fault Tolerant SMR protocol to tolerate $f < n/2$ faults.
+ 
+ 
+ <a href="/2019-11-12-Sync-HotStuff/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#consensus101">consensus101</a>
+ 
+ <a href="/tags#SMR">SMR</a>
+ 
+ <a href="/tags#research">research</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ 
+ 
+ <article class="post-preview">
+ <a href="/2019-11-11-authenticated-synchronous-bft/">
+ <h2 class="post-title">Authenticated Synchronous BFT</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on November 11, 2019, by <b>Kartik Nayak, Ittai Abraham, Ling Ren</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ Post updated in March 2021
+ 
+ 
+ <a href="/2019-11-11-authenticated-synchronous-bft/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#research">research</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ 
+ 
+ <article class="post-preview">
+ <a href="/2019-11-02-primary-backup-for-2-servers-and-omission-failures-is-impossible/">
+ <h2 class="post-title">State Machine Replication for Two Servers and One Omission Failure is Impossible even in a lock-step model</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on November 2, 2019, by <b>Ittai Abraham</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In a previous post, we show that State Machine Replication for any $f<n$ failures is possible in the synchronous model when the adversary can only cause parties to crash. In this post, we show that omission failures are more challenging. Implementing SMR requires at most $f<n/2$ omission failures, even in synchrony.
+ 
+ 
+ <a href="/2019-11-02-primary-backup-for-2-servers-and-omission-failures-is-impossible/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#lowerbound">lowerbound</a>
+ 
+ <a href="/tags#SMR">SMR</a>
+ 
+ <a href="/tags#omission">omission</a>
+ 
+ </div>
+ 
+ </article>
+ 
  
  
  <article class="post-preview">
@@ -710,69 +846,6 @@
  </article>
  
  
- 
- <article class="post-preview">
- <a href="/2019-06-01-2019-5-31-models/">
- <h2 class="post-title">Synchrony, Asynchrony and Partial synchrony</h2>
- 
- </a>
- <p class="post-meta">
- Posted on June 1, 2019, by <b>Ittai Abraham</b>
- </p>
- 
- <div class="post-entry-container">
- 
- <div class="post-entry">
- In the standard distributed computing model, communication uncertainty is modeled by an adversary that controls message delays. The communication model defines the limits to the power of the adversary to delay messages.
- 
- 
- <a href="/2019-06-01-2019-5-31-models/" class="post-read-more">[Read&nbsp;More]</a>
- 
- </div>
- </div>
- 
- 
- <div class="blog-tags">
- Tags:
- 
- <a href="/tags#dist101">dist101</a>
- 
- <a href="/tags#models">models</a>
- 
- </div>
- 
- </article>
- 
- 
- 
- <article class="post-preview">
- <a href="/2019-05-31-start/">
- <h2 class="post-title">Where do I even start?</h2>
- 
- </a>
- <p class="post-meta">
- Posted on May 31, 2019, by <b>Ittai Abraham</b>
- </p>
- 
- <div class="post-entry-container">
- 
- <div class="post-image">
- <a href="/2019-05-31-start/">
- <img src="/img/hello_world.jpeg" alt="Post thumbnail">
- </a>
- </div>
- 
- <div class="post-entry">
- I have been wanting to start a blog for a long time. Here we go!
- 
- 
- </div>
- </div>
- 
- 
- </article>
- 
- 
 </div>
 <ul class="pager main-pager">
  
@@ -780,6 +853,10 @@
  <a href="/page8">&larr; Newer Posts</a>
  </li>
  
+ 
+ <li class="next">
+ <a href="/page10">Older Posts &rarr;</a>
+ </li>
  
 </ul>
  

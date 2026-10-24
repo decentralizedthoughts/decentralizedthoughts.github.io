@@ -109,13 +109,13 @@
  <li class="nav-item dropdown">
  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
- <a class="dropdown-item" href="/about-ittai">Ittai Abraham</a>
- <a class="dropdown-item" href="/about-ittay">Ittay Eyal</a>
- <a class="dropdown-item" href="/about-heidi">Heidi Howard</a>
- <a class="dropdown-item" href="/about-kartik">Kartik Nayak</a>
- <a class="dropdown-item" href="/about-ling">Ling Ren</a>
- <a class="dropdown-item" href="/about-alin">Alin Tomescu</a>
- <a class="dropdown-item" href="/about-avishay">Avishay Yanai</a>
+ <a class="dropdown-item" href="/authors/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/authors/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/authors/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/authors/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/authors/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/authors/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/authors/about-avishay">Avishay Yanai</a>
  </div>
  </li>
  
@@ -192,6 +192,136 @@
  
  
  <article class="post-preview">
+ <a href="/2026-10-19-approximate-agreement-send-omissions-lower-bound/">
+ <h2 class="post-title">A Lower Bound for Approximate Agreement with Send Omissions</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on October 19, 2026, by <b>Ittai Abraham, Gilad Stern</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ In approximate agreement, parties start with numerical inputs in $[0,1]$. Every nonfaulty party must terminate with an output in the input range, and their outputs must differ by less than a given $\epsilon>0$.
+ 
+ 
+ <a href="/2026-10-19-approximate-agreement-send-omissions-lower-bound/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#approximate-agreement">approximate-agreement</a>
+ 
+ <a href="/tags#lowerbound">lowerbound</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ 
+ 
+ <article class="post-preview">
+ <a href="/2026-10-18-byzantine-approximate-agreement-grade-detect-average/">
+ <h2 class="post-title">Byzantine Approximate Agreement: Grade, Detect, Average</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on October 18, 2026, by <b>Ittai Abraham, Gilad Stern</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ The previous post gave a complete approximate agreement protocol: send the current value, remove the $f$ largest and $f$ smallest values, and take the midpoint. Each round halves the span of the honest values. Starting in $[0,1]$, reaching span less than $1/n$ takes $O(\log n)$ rounds.
+ 
+ 
+ <a href="/2026-10-18-byzantine-approximate-agreement-grade-detect-average/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#approximate-agreement">approximate-agreement</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ 
+ 
+ <article class="post-preview">
+ <a href="/2026-10-18-approximate-agreement-with-omissions/">
+ <h2 class="post-title">Approximate Agreement with Omissions: From Midpoints to Averages</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on October 18, 2026, by <b>Ittai Abraham</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ The Byzantine approximate agreement posts start with a protocol that halves the span of honest values and repeat it to obtain a complete protocol. The Grade, Detect, Average post improves its convergence by identifying parties that cause disagreement. With omission failures, both arguments become simpler, and $n>2f$ parties suffice.
+ 
+ 
+ <a href="/2026-10-18-approximate-agreement-with-omissions/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#approximate-agreement">approximate-agreement</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ 
+ 
+ <article class="post-preview">
+ <a href="/2026-10-17-approximate-agreement-complete-protocol/">
+ <h2 class="post-title">Byzantine Approximate Agreement: From One Round to a Complete Protocol</h2>
+ 
+ </a>
+ <p class="post-meta">
+ Posted on October 17, 2026, by <b>Ittai Abraham, Gilad Stern</b>
+ </p>
+ 
+ <div class="post-entry-container">
+ 
+ <div class="post-entry">
+ The previous post showed that one round of the Robust Midpoint protocol keeps every honest value inside the old honest range and cuts the span of those values in half. Repeating this round gives approximate agreement. We do this formally in this post by specifying how many rounds to run and when parties decide.
+ 
+ 
+ <a href="/2026-10-17-approximate-agreement-complete-protocol/" class="post-read-more">[Read&nbsp;More]</a>
+ 
+ </div>
+ </div>
+ 
+ 
+ <div class="blog-tags">
+ Tags:
+ 
+ <a href="/tags#approximate-agreement">approximate-agreement</a>
+ 
+ </div>
+ 
+ </article>
+ 
+ 
+ 
+ <article class="post-preview">
  <a href="/2026-10-13-clock-synchronization-no-drift/">
  <h2 class="post-title">Optimal Clock Synchronization When There Are No Failures or Drift</h2>
  
@@ -215,7 +345,7 @@
  <div class="blog-tags">
  Tags:
  
- <a href="/tags#clock-synchronization">clock-synchronization</a>
+ <a href="/tags#dist101">dist101</a>
  
  <a href="/tags#lowerbound">lowerbound</a>
  
@@ -390,11 +520,7 @@ Simplex chapter.
  
  <a href="/tags#consensus">consensus</a>
  
- <a href="/tags#partial-synchrony">partial-synchrony</a>
- 
- <a href="/tags#information-theoretic">information-theoretic</a>
- 
- <a href="/tags#fast-simplex">fast-simplex</a>
+ <a href="/tags#research">research</a>
  
  </div>
  
@@ -538,8 +664,6 @@ first the core Simplex idea, then some of the main ways to vary it.
  Tags:
  
  <a href="/tags#consensus">consensus</a>
- 
- <a href="/tags#broadcast">broadcast</a>
  
  <a href="/tags#blockchain">blockchain</a>
  
@@ -746,137 +870,6 @@ For a map of the surrounding Simplex line, see the Simplex chapter.
  Tags:
  
  <a href="/tags#consensus">consensus</a>
- 
- </div>
- 
- </article>
- 
- 
- 
- <article class="post-preview">
- <a href="/2026-04-23-deconstructing-simplex/">
- <h2 class="post-title">Deconstructing Simplex</h2>
- 
- </a>
- <p class="post-meta">
- Posted on April 23, 2026, by <b>Ittai Abraham</b>
- </p>
- 
- <div class="post-entry-container">
- 
- <div class="post-entry">
- In a previous post we decomposed PBFT into an outer shell and an inner shell consisting of two building blocks: Locked-Broadcast (LB) and Recover-Max-Lock. Here we similarly decompose Simplex into an outer shell and an inner shell consisting of a single building block: Certifying Graded Broadcast (CGB). For a map of the surrounding Simplex line, see the Simplex chapter.
- 
- 
- <a href="/2026-04-23-deconstructing-simplex/" class="post-read-more">[Read&nbsp;More]</a>
- 
- </div>
- </div>
- 
- 
- <div class="blog-tags">
- Tags:
- 
- <a href="/tags#consensus">consensus</a>
- 
- </div>
- 
- </article>
- 
- 
- 
- <article class="post-preview">
- <a href="/2026-03-23-strong-chain-quality/">
- <h2 class="post-title">Strong Chain Quality</h2>
- 
- </a>
- <p class="post-meta">
- Posted on March 23, 2026, by <b>Ittai Abraham, Pranav Garimidi, Joachim Neu</b>
- </p>
- 
- <div class="post-entry-container">
- 
- <div class="post-entry">
- Chain Quality (CQ) is a core blockchain property. Roughly speaking, it says:
- Owning $3\%$ of the stake gives you inclusion rights over valid inputs of your choice in roughly $3\%$ of the blockspace over time.
- 
- 
- <a href="/2026-03-23-strong-chain-quality/" class="post-read-more">[Read&nbsp;More]</a>
- 
- </div>
- </div>
- 
- 
- <div class="blog-tags">
- Tags:
- 
- <a href="/tags#blockchain">blockchain</a>
- 
- </div>
- 
- </article>
- 
- 
- 
- <article class="post-preview">
- <a href="/2026-03-07-simultaneous-agreement/">
- <h2 class="post-title">Synchronized Clocks, Fixed View Schedules, and Simultaneous Agreement</h2>
- 
- </a>
- <p class="post-meta">
- Posted on March 7, 2026, by <b>Ittai Abraham</b>
- </p>
- 
- <div class="post-entry-container">
- 
- <div class="post-entry">
- Most modern blockchain protocols use partial synchrony-based BFT protocols that proceed in views. Each view has a designated block proposer (leader). This naturally leads to the following design question:
- 
- 
- <a href="/2026-03-07-simultaneous-agreement/" class="post-read-more">[Read&nbsp;More]</a>
- 
- </div>
- </div>
- 
- 
- <div class="blog-tags">
- Tags:
- 
- <a href="/tags#consensus">consensus</a>
- 
- <a href="/tags#lowerbound">lowerbound</a>
- 
- </div>
- 
- </article>
- 
- 
- 
- <article class="post-preview">
- <a href="/2026-03-06-mysticeti-revolutionizing-consensus-on-sui/">
- <h2 class="post-title">Mysticeti: Revolutionizing Consensus on Sui</h2>
- 
- </a>
- <p class="post-meta">
- Posted on March 6, 2026, by <b>Lefteris Kokoris Kogias, Alberto Sonnino, George Danezis</b>
- </p>
- 
- <div class="post-entry-container">
- 
- <div class="post-entry">
- 
- 
- 
- <a href="/2026-03-06-mysticeti-revolutionizing-consensus-on-sui/" class="post-read-more">[Read&nbsp;More]</a>
- 
- </div>
- </div>
- 
- 
- <div class="blog-tags">
- Tags:
- 
- <a href="/tags#blockchain">blockchain</a>
  
  </div>
  
