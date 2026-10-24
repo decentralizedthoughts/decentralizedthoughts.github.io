@@ -4,6 +4,9 @@ date: 2025-08-01 07:00:00 -04:00
 tags:
 - VID
 author: Ittai Abraham, Gilad Asharov, Anirudh Chandramouli
+background:
+  - /2024-08-08-vid/
+  - /2020-07-17-the-marvels-of-polynomials-over-a-field/
 ---
 
 In a [previous post](https://decentralizedthoughts.github.io/2024-08-08-vid) we covered the basics of *Asynchronous Verifiable Information Dispersal* (AVID) and the classic AVID of [Cachin and Tessaro, 2004](https://homes.cs.washington.edu/~tessaro/papers/dds.pdf). 

@@ -5,6 +5,8 @@ tags:
 - consensus
 - research
 author: Heidi Howard
+background:
+  - /2019-06-27-defining-consensus/
 ---
 
 Here at [decentralized thoughts](https://decentralizedthoughts.github.io/), we spend a lot of time reasoning about distributed protocols. Often, we focus on solving [distributed consensus](https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/), personally it’s my favorite CS problem, but it’s also famously one of the most difficult and subtle problems in distributed computing. Reasoning about distributed algorithms is hard at the best of times, with state split across remote nodes, asynchrony, concurrency, and non-determinism in the order that events, such as message delivery, occur as well as failures, like nodes crashing, message loss, or even Byzantine attacks. 

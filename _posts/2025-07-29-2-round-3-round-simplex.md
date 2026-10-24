@@ -5,6 +5,14 @@ tags:
 - consensus
 - research
 author: Ittai Abraham, Yuval Efron, Kartik Nayak, and Ling Ren
+chapters:
+  - /2026-05-25-chapter-simplex/
+background:
+  - /2025-06-18-simplex/
+  - /2025-07-18-two-round-Simplex/
+continue_reading:
+  - /2025-08-06-5fminus1-simplex/
+  - /2026-01-24-two-round-ps/
 ---
 
 In the last two posts, we presented two partially synchronous BFT protocols in the [Simplex-style](https://eprint.iacr.org/2023/463.pdf): a [3-round protocol](https://decentralizedthoughts.github.io/2025-06-18-simplex/) with $n\geq3f+1$ and a [2-round protocol](https://decentralizedthoughts.github.io/2025-07-18-two-round-Simplex/) with $n\geq 5f+1$. In this post, we describe a protocol that runs a 2-round commit rule and a 3-round commit rule concurrently. For a map of the surrounding Simplex line, see the [Simplex chapter](https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/).

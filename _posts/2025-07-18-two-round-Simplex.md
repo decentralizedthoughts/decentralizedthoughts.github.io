@@ -4,6 +4,13 @@ date: 2025-07-18 00:00:00 -04:00
 tags:
 - consensus
 author: Ittai Abraham, Yuval Efron, and Ling Ren
+chapters:
+  - /2026-05-25-chapter-simplex/
+background:
+  - /2025-06-18-simplex/
+continue_reading:
+  - /2025-07-29-2-round-3-round-simplex/
+  - /2025-08-06-5fminus1-simplex/
 ---
 
 [Simplex](https://simplex.blog/) is a recent partially synchronous Byzantine Fault Tolerant (BFT) protocol that is gaining popularity. We take this opportunity to rehash several classic results in the Simplex style. [The first post](https://decentralizedthoughts.github.io/2025-06-18-simplex/) explained the key difference between Simplex and Tendermint. This second post is on 2-round BFT. The next post will explore protocols that integrate concurrent 2-round and 3-round paths. For a map of the surrounding Simplex line, see the [Simplex chapter](https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/).

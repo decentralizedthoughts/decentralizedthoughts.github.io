@@ -5,6 +5,13 @@ tags:
 - consensus
 - BFT
 author: Ittai Abraham and Ling Ren
+chapters:
+  - /2026-05-25-chapter-simplex/
+background:
+  - /2025-07-18-two-round-Simplex/
+continue_reading:
+  - /2025-07-29-2-round-3-round-simplex/
+  - /2026-07-12-fast-IT-BFT/
 ---
 
 In our [previous post](https://decentralizedthoughts.github.io/2025-07-18-two-round-Simplex/), we described a 2-round [partially synchronous](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/) BFT protocol for $n = 5f+1$. In this follow-up post, we **push the bound to $n = 5f-1$**, achieving [optimal 2-round commit](https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/) in the [Simplex style](https://decentralizedthoughts.github.io/2025-06-18-simplex/). 

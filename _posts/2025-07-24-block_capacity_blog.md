@@ -5,6 +5,8 @@ tags:
 - blockchain
 - incentives
 author: Michele Fabi
+background:
+  - /2019-11-29-Analysis-Nakamoto/
 ---
 
 > Achieving high throughput is essential for blockchain ecosystems to become competitive alternatives to their centralized counterparts across a wide range of domains. For example, high-frequency trading on decentralized platforms cannot be competitive unless transaction processing times are reduced to well below one second. The predominant strategy to address this challenge has been the development of Layer 2 (L2) scaling solutions. However, this approach often introduces trade-offs, potentially compromising decentralization and, consequently, the core value proposition of blockchain technology. This reality underscores the importance of scaling the Layer 1 (L1) protocol directly. But to what extent is this possible?
