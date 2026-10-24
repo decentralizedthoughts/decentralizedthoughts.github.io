@@ -40,7 +40,9 @@ navbar-links:
   - Avishay Yanai: /authors/about-avishay
   Videos: videos
   Start Here: start-here
-  Course: course
+  Resources:
+  - Book: https://github.com/renling/ConsensusAlgorithms/
+  - Course: course
 avatar: "/img/DTblog.png"
 round-avatar: true
 navbar-col: "#F5F5F5"
