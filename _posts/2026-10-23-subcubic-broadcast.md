@@ -109,3 +109,5 @@ Summing over the two bits gives $O(n^{2.5}\log(n)\lambda)$ bits.
 #### From $\widetilde O(n^{2.5})$ to $\widetilde O(n^2)$
 
 How do we remove the remaining $\sqrt n$ term? In the protocol above, the convinced parties still *push* their signatures to everyone through the graph. In the [paper](https://eprint.iacr.org/2026/2504), we shift the responsibility to the parties that are not yet convinced. These parties *pull* the signatures they lack from the parties that announced acceptance. Pulling efficiently against both corrupt senders and corrupt receivers takes a few more ideas: a binary-search procedure that splits the work among the senders, requests that grow gently, and vector commitments to the sender list. Together they bring the communication down to $\widetilde O(n^2)$, for every $t<n$, in $O(t)$ rounds.
+
+Please leave comments on [X](https://x.com/ElodinStorm/status/2111481415225532615).
