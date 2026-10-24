@@ -217,6 +217,13 @@
  <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
  
  
+ <nav class="post-links post-links-chapters" aria-label="In chapters">
+ <h2>In chapters</h2>
+ <ul class="pagination post-links-list"><li class="page-item">
+ <a class="page-link" href="/2026-05-25-chapter-simplex/">Simplex</a>
+ </li>
+ </ul>
+</nav>
  <div class="blog-post">
  <p>Recent consensus protocols like <a href="https://www.anza.xyz/blog/alpenglow-a-new-consensus-for-solana">Alpenglow</a> or <a href="https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/">Concurrent Simplex</a> run two confirmation paths concurrently: a “slow” path with two voting rounds, each using a <em>small</em> quorum, and a “fast” path with a single voting round using a <em>large</em> quorum.</p>
 <p>The “slow” path can actually finish first because distances are not uniform in a geographically distributed system. Some parties are nearby, often on the same continent, while others are across an ocean. In <a href="https://arxiv.org/pdf/2312.05869#page=11">Banyan’s experiments</a>, the two smaller quorums can form without waiting for the furthest datacenter, while the larger one-round quorum requires votes from all datacenters. Two voting rounds among nearby parties can therefore take less time than a single voting round among globally dispersed parties.</p>
@@ -390,6 +397,16 @@
  
 </section>
  
+ <div class="post-reading-links">
+ <nav class="post-links post-links-background" aria-label="Background">
+ <h2><span aria-hidden="true">&larr; </span>Background</h2>
+ <ul class="pagination post-links-list"><li class="page-item">
+ <a class="page-link" href="/2025-07-29-2-round-3-round-simplex/">Concurrent 2-round and 3-round Simplex-style BFT</a>
+ </li>
+ </ul>
+</nav>
+ 
+ </div>
  <ul class="pagination blog-pager">
  
  <li class="page-item previous">

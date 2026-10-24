@@ -4,6 +4,12 @@ date: 2026-10-18 04:00:00 -05:00
 tags:
   - approximate-agreement
 author: Ittai Abraham, Gilad Stern
+background:
+  - /2026-10-17-approximate-agreement-complete-protocol/
+  - /2019-10-22-flavours-of-broadcast/
+continue_reading:
+  - /2026-10-18-approximate-agreement-with-omissions/
+  - /2026-10-19-approximate-agreement-send-omissions-lower-bound/
 ---
 
 The [previous post](https://decentralizedthoughts.github.io/2026-10-17-approximate-agreement-complete-protocol/) gave a complete approximate agreement protocol: send the current value, remove the $f$ largest and $f$ smallest values, and take the midpoint. Each round halves the span of the honest values. Starting in $[0,1]$, reaching span less than $1/n$ takes $O(\log n)$ rounds.

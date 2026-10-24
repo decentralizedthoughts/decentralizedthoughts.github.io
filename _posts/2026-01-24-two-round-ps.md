@@ -2,6 +2,10 @@
 title: Concurrent 2-round and 3-round BFT protocols under granular synchrony
 date: 2026-01-24 01:00:00 -05:00
 author: Ittai Abraham, Kartik Nayak, and Alejandro Ranchal-pedrosa
+chapters:
+  - /2026-05-25-chapter-simplex/
+background:
+  - /2025-07-29-2-round-3-round-simplex/
 ---
 
 Consensus protocols for $n=3f+1$ can tolerate $f$ Byzantine faults under partial synchrony. However, they also require a latency of [3 rounds in the good-case](https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/) when the leader is non-faulty, and the system is synchronous. *Can we get a protocol with better latency, or tolerate more faults, if we assume $n=3f+2p+1$?*

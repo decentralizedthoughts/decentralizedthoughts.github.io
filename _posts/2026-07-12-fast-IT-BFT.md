@@ -5,6 +5,12 @@ tags:
 - consensus
 - research
 author: Ittai Abraham, Sourav Das, Yuval Efron, Jovan Komatovic, Alejandro Ranchal-Pedrosa, Gilad Stern
+chapters:
+  - /2026-05-25-chapter-simplex/
+background:
+  - /2026-06-05-IT-Kuplex/
+  - /2025-08-06-5fminus1-simplex/
+  - /2026-05-20-from-single-shot-to-chained/
 ---
 
 [Information-Theoretic Kuplex](https://decentralizedthoughts.github.io/2026-06-05-IT-Kuplex/)

@@ -4,6 +4,14 @@ date: 2026-04-23 01:00:00 -05:00
 tags:
 - consensus
 author: Ittai Abraham, Yuval Efron, and Ling Ren
+chapters:
+  - /2026-06-28-chapter-lower-bounds/
+background:
+  - /2025-11-22-three-round-BFT/
+  - /2024-01-28-early-stopping-lower-bounds/
+  - /2026-03-23-strong-chain-quality/
+continue_reading:
+  - /2026-04-27-beyond-CR/
 ---
 
 

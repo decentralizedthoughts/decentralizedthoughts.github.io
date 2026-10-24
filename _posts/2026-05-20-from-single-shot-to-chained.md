@@ -4,6 +4,13 @@ date: 2026-05-20 09:00:00 +0300
 tags:
 - consensus
 author: Ittai Abraham, Joachim Neu
+chapters:
+  - /2026-05-25-chapter-simplex/
+background:
+  - /2026-04-23-deconstructing-simplex/
+  - /2022-11-19-from-single-shot-to-smr/
+continue_reading:
+  - /2026-07-12-fast-IT-BFT/
 ---
 
 In this post we construct **Chained Simplex** from

@@ -4,6 +4,14 @@ date: 2025-11-08 04:30:00 -05:00
 tags:
 - dist101
 author: Ittai Abraham
+chapters:
+  - /2026-05-25-chapter-simplex/
+background:
+  - /2019-06-27-defining-consensus/
+  - /2019-06-01-2019-5-31-models/
+  - /2019-06-07-modeling-the-adversary/
+continue_reading:
+  - /2025-11-15-simplex-from-benign/
 ---
 
 The goal of this post is to describe a *single-shot* [consensus](https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/) protocol that is resilient to *f < n/2* [omission failures](https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/), under [partial synchrony](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/).

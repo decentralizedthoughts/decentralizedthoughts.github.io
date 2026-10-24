@@ -4,6 +4,12 @@ date: 2026-10-17 09:00:00 +03:00
 tags:
   - approximate-agreement
 author: Ittai Abraham, Gilad Stern
+background:
+  - /2022-06-07-approx-agreement-one/
+continue_reading:
+  - /2026-10-18-byzantine-approximate-agreement-grade-detect-average/
+  - /2026-10-18-approximate-agreement-with-omissions/
+  - /2026-10-19-approximate-agreement-send-omissions-lower-bound/
 ---
 
 The [previous post][previous] showed that one round of the **Robust Midpoint** protocol keeps every honest value inside the old honest range and cuts the span of those values in half. Repeating this round gives approximate agreement. We do this formally in this post by specifying how many rounds to run and when parties decide.

@@ -4,6 +4,12 @@ date: 2025-12-19 23:00:00 -05:00
 tags:
 - models
 author: Ittai Abraham, Yuval Efron, Kartik Nayak, and Ling Ren
+chapters:
+  - /2026-05-25-chapter-simplex/
+background:
+  - /2019-06-01-2019-5-31-models/
+  - /2019-09-13-flavours-of-partial-synchrony/
+  - /2025-06-18-simplex/
 ---
 
 In this post we observe three variants of **Partial Synchrony (PS)** and how they affect (or not) popular BFT protocols like PBFT, Tendermint, and especially the recent [Simplex](https://decentralizedthoughts.github.io/2025-06-18-simplex/) protocol.

@@ -5,6 +5,13 @@ tags:
   - approximate-agreement
   - lowerbound
 author: Ittai Abraham, Gilad Stern
+chapters:
+  - /2026-06-28-chapter-lower-bounds/
+background:
+  - /2022-06-07-approx-agreement-one/
+continue_reading:
+  - /2026-10-18-byzantine-approximate-agreement-grade-detect-average/
+  - /2026-10-18-approximate-agreement-with-omissions/
 ---
 
 In **approximate agreement**, parties start with numerical inputs in $[0,1]$. Every nonfaulty party must terminate with an output in the input range, and their outputs must differ by less than a given $\epsilon>0$.

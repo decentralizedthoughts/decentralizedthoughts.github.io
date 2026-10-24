@@ -4,6 +4,10 @@ date: 2026-09-26 04:00:00 -04:00
 tags:
 - lowerbound
 author: Ittai Abraham, Aniket Kate, Kartik Nayak, Nibesh Shrestha, Alberto Sonnino
+chapters:
+  - /2026-06-28-chapter-lower-bounds/
+background:
+  - /2025-11-22-three-round-BFT/
 ---
 
 How many parties do we need to decide after one proposal and one round of

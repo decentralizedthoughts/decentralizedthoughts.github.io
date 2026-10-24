@@ -4,6 +4,12 @@ date: 2026-03-23 00:00:00 -05:00
 tags:
 - blockchain
 author: Ittai Abraham, Pranav Garimidi, Joachim Neu
+background:
+  - /2019-06-27-defining-consensus/
+  - /2020-02-26-selfish-mining/
+continue_reading:
+  - /2026-04-23-latency-of-censorship-resistance/
+  - /2026-04-27-beyond-CR/
 ---
 
 **Chain Quality (CQ)** is a core blockchain property. Roughly speaking, it says:

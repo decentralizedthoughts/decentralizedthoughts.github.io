@@ -4,6 +4,15 @@ date: 2025-11-22 09:00:00 -05:00
 tags:
 - lowerbound
 author: Ittai Abraham and Kartik Nayak
+chapters:
+  - /2026-06-28-chapter-lower-bounds/
+  - /2026-05-25-chapter-simplex/
+background:
+  - /2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/
+continue_reading:
+  - /2026-09-26-three-round-BFT-with-crashes/
+  - /2025-08-06-5fminus1-simplex/
+  - /2026-04-23-latency-of-censorship-resistance/
 ---
 
 Many modern BFT protocols share a common structural pattern. PBFT uses *preprepare* and *prepare*. Tendermint uses *prevote* and *precommit*. CasperFFG and Simplex use *notarization* and *finalization*. HotStuff uses a *QC* on top of another *QC*.

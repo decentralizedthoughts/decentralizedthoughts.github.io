@@ -217,6 +217,13 @@
  <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
  
  
+ <nav class="post-links post-links-chapters" aria-label="In chapters">
+ <h2>In chapters</h2>
+ <ul class="pagination post-links-list"><li class="page-item">
+ <a class="page-link" href="/2026-06-28-chapter-lower-bounds/">Lower Bounds</a>
+ </li>
+ </ul>
+</nav>
  <div class="blog-post">
  <p>Synchronized clocks help servers coordinate. For example, servers with synchronized clocks following the same schedule can switch leaders at nearly the same time.</p>
 <p>A natural approach is for servers to exchange their current clock values and take the average. But messages take time to arrive. By the time a server receives another server’s clock value, that clock has already advanced. If the delay were known, the receiver could account for it. The difficulty is that the delay is usually uncertain. We assume every message takes between $d-u$ and $d$ units of time, where $d$ is the maximum delay and $u$ is the width of the uncertainty interval. Synchronizing clocks despite this uncertainty is the central challenge of this post.</p>
@@ -360,6 +367,16 @@
  
 </section>
  
+ <div class="post-reading-links">
+ <nav class="post-links post-links-background" aria-label="Background">
+ <h2><span aria-hidden="true">&larr; </span>Background</h2>
+ <ul class="pagination post-links-list"><li class="page-item">
+ <a class="page-link" href="/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/">Byzantine Agreement is impossible for $n \leq 3 f$ under partial synchrony</a>
+ </li>
+ </ul>
+</nav>
+ 
+ </div>
  <ul class="pagination blog-pager">
  
  <li class="page-item previous">

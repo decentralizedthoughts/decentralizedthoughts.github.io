@@ -5,6 +5,10 @@ tags:
   - dist101
   - lowerbound
 author: Ittai Abraham, Jennifer Welch
+chapters:
+  - /2026-06-28-chapter-lower-bounds/
+background:
+  - /2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/
 ---
 
 Synchronized clocks help servers coordinate. For example, servers with synchronized clocks following the same schedule can switch leaders at nearly the same time.

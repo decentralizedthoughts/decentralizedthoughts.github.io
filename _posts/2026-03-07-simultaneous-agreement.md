@@ -5,6 +5,15 @@ tags:
 - consensus
 - lowerbound
 author: Ittai Abraham
+chapters:
+  - /2026-05-25-chapter-simplex/
+  - /2026-06-28-chapter-lower-bounds/
+background:
+  - /2019-12-15-synchrony-uncommitted-lower-bound/
+  - /2024-01-28-early-stopping-lower-bounds/
+continue_reading:
+  - /2026-05-14-simplex-FVS/
+  - /2026-05-17-fast-simplex-fvs/
 ---
 
 Most modern blockchain protocols use [partial synchrony](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/)-based BFT protocols that proceed in views. Each view has a designated block proposer (leader). This naturally leads to the following design question:

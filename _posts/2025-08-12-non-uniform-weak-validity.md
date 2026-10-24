@@ -4,6 +4,13 @@ date: 2025-08-12 00:05:00 -04:00
 tags:
 - omission
 author: Ittai Abraham and Gilad Stern
+chapters:
+  - /2026-06-28-chapter-lower-bounds/
+background:
+  - /2019-06-01-2019-5-31-models/
+  - /2019-12-22-dolev-strong/
+continue_reading:
+  - /2026-10-18-approximate-agreement-with-omissions/
 ---
 
 In this post, we study non-uniform agreement and weak validity under [synchronous networks](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/) with general omission failures, where faulty parties may lose some or all incoming and outgoing messages.

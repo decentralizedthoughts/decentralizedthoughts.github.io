@@ -6,6 +6,9 @@ description: "Hybrid protocol composing Byzantine consistent broadcast with BFT 
 tags:
 - consensus
 - blockchain
+background:
+  - /2026-03-06-mysticeti-revolutionizing-consensus-on-sui/
+  - /2022-12-27-set-replication/
 ---
 
 ---

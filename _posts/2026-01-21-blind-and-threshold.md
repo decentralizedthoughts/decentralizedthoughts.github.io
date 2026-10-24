@@ -2,6 +2,10 @@
 title: Blind and Threshold Blind Signatures
 date: 2026-01-21 01:00:00 -05:00
 author: Ittai Abraham, Gilad Stern, and Alin Tomescu
+background:
+  - /2020-07-17-polynomial-secret-sharing-and-the-lagrange-basis/
+continue_reading:
+  - /2026-01-21-simple-payment/
 ---
 
 A blind signature scheme allows a user to obtain a valid signature on a message while ensuring that the signer learns nothing about the message. The user blinds the message, the signer signs the blinded value, and the user unblinds the response to obtain a valid signature on the original message. Importantly, the signer still retains full control over whether to participate in the protocol, it only gives up visibility into the message being signed.

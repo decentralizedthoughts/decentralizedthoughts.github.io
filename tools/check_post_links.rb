@@ -7,7 +7,8 @@ posts = Dir['_posts/*.{md,markdown}'].map do |path|
   front_matter = File.read(path).split(/^---\s*$\n?/, 3)[1]
   next unless front_matter
   metadata = YAML.safe_load(front_matter, permitted_classes: [Date, Time], aliases: true) || {}
-  ["/#{File.basename(path).sub(/\.(md|markdown)$/, '')}/", [path, metadata]]
+  slug = File.basename(path).sub(/\.(md|markdown)$/, '').gsub(/\s+/, '-')
+  ["/#{slug}/", [path, metadata]]
 end.compact.to_h
 errors = []
 posts.each do |url, (path, metadata)|

@@ -4,6 +4,11 @@ date: 2026-03-06 00:00:00 -05:00
 tags:
 - blockchain
 author: Lefteris Kokoris Kogias, Alberto Sonnino, George Danezis
+background:
+  - /2022-06-28-DAG-meets-BFT/
+  - /2025-08-08-DAGs/
+continue_reading:
+  - /2026-05-20-sui-lutris/
 ---
 
 ---

@@ -5,6 +5,8 @@ tags:
 - blockchain 
 author: Hongyin Chen, Xu Zheng, Jichen Li, Ittay Eyal 
 layout: post 
+background:
+  - /2026-04-27-beyond-CR/
 ---
 
 Front-running is a pervasive and costly problem on blockchains. Users earn rewards by publishing functional transactions that keeps markets efficient, such as arbitrage. But an attacker can [observe such a transaction before it is ordered and publish her own ahead of it](https://a16zcrypto.com/posts/article/mev-explained/), seizing the reward and eroding users' incentive to issue these transactions at all. The problem is well known and has drawn sustained effort from both industry and academia, yet it remains open. 

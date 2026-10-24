@@ -4,6 +4,10 @@ date: 2026-10-06 08:44:54 -05:00
 tags:
   - consensus
 author: Ittai Abraham, Clément Burgelin, Antoine Murat, Joachim Neu
+chapters:
+  - /2026-05-25-chapter-simplex/
+background:
+  - /2025-07-29-2-round-3-round-simplex/
 ---
 
 Recent consensus protocols like [Alpenglow](https://www.anza.xyz/blog/alpenglow-a-new-consensus-for-solana) or [Concurrent Simplex](https://decentralizedthoughts.github.io/2025-07-29-2-round-3-round-simplex/) run two confirmation paths concurrently: a "slow" path with two voting rounds, each using a *small* quorum, and a "fast" path with a single voting round using a *large* quorum.

@@ -4,6 +4,11 @@ date: 2026-10-18 09:00:00 +03:00
 tags:
   - approximate-agreement
 author: Ittai Abraham
+background:
+  - /2026-10-17-approximate-agreement-complete-protocol/
+  - /2026-10-18-byzantine-approximate-agreement-grade-detect-average/
+continue_reading:
+  - /2026-10-19-approximate-agreement-send-omissions-lower-bound/
 ---
 
 The [Byzantine approximate agreement posts][midpoint] start with a protocol that halves the span of honest values and [repeat it to obtain a complete protocol][complete]. The [Grade, Detect, Average post][gda] improves its convergence by identifying parties that cause disagreement. With omission failures, both arguments become simpler, and $n>2f$ parties suffice.

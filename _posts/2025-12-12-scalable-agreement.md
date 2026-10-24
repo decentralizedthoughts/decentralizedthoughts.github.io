@@ -4,6 +4,9 @@ date: 2025-12-12 06:00:00 -05:00
 tags:
 - randomness
 author: Ittai Abraham
+background:
+  - /2023-02-18-rand-and-consensus-1/
+  - /2023-02-19-rand-and-consensus-2/
 ---
 
 Agreement needs quadratic communication and linear time in the worst case. **Scalable Agreement** aims for *near linear communication* and *constant time* in expectation. In this post, we show scalable agreement against a [weak adaptive adversary](https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/) that can cause **omission failures**. This will be the basis for the Byzantine case that we will explore in future posts.

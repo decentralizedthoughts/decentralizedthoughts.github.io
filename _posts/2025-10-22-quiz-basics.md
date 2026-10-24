@@ -5,6 +5,11 @@ tags:
 - dist101
 - models
 author: Ittai Abraham
+background:
+  - /2019-06-01-2019-5-31-models/
+  - /2019-06-17-the-threshold-adversary/
+  - /2019-06-07-modeling-the-adversary/
+  - /2019-10-15-consensus-for-state-machine-replication/
 ---
 
 The goal of this post is to motivate you to learn the basics of distributed computing by providing a set of simple questions that test your understanding of the basic definitions. In 2025, LLM-based chatbots score 100 on this test, so that's what you should aim for. The questions cover the standard models and fault assumptions you encounter in the first lectures of any distributed computing course.

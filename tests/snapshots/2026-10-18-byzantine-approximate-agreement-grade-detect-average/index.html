@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Byzantine Approximate Agreement: Grade, Detect, Average</title>
+ 
+ 
+ 
+ 
+ <meta name="author" content="Ittai Abraham, Gilad Stern">
+ 
+ <meta name="description" content="The previous post gave a complete approximate agreement protocol: send the current value, remove the $f$ largest and $f$ smallest values, and take the midpoint. Each round halves the span of the honest values. Starting in $[0,1]$, reaching span less than $1/n$ takes $O(\log n)$ rounds. Ben-Or, Dolev, and Hoch improve this bound to $O(\log n / \log\log n)$. The core idea is to prevent the same Byzantine party from...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Byzantine Approximate Agreement: Grade, Detect, Average">
+ <meta property="og:description" content="The previous post gave a complete approximate agreement protocol: send the current value, remove the $f$ largest and $f$ smallest values, and take the midpoint. Each round halves the span of the honest values. Starting in $[0,1]$, reaching span less than $1/n$ takes $O(\log n)$ rounds. Ben-Or, Dolev, and Hoch improve this bound to $O(\log n / \log\log n)$. The core idea is to prevent the same Byzantine party from...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham, Gilad Stern">
+ 
+ <meta property="og:article:published_time" content="2026-10-18T05:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2026-10-18-byzantine-approximate-agreement-grade-detect-average/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2026-10-18-byzantine-approximate-agreement-grade-detect-average/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Byzantine Approximate Agreement: Grade, Detect, Average">
+ <meta property="twitter:description" content="The previous post gave a complete approximate agreement protocol: send the current value, remove the $f$ largest and $f$ smallest values, and take the midpoint. Each round halves the span of the honest values. Starting in $[0,1]$, reaching span less than $1/n$ takes $O(\log n)$ rounds. Ben-Or, Dolev, and Hoch improve this bound to $O(\log n / \log\log n)$. The core idea is to prevent the same Byzantine party from...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/authors/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/authors/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/authors/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/authors/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/authors/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/authors/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/authors/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li><li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarChaptersDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Chapters</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarChaptersDropdown"><a class="dropdown-item" href="/2026-05-25-chapter-simplex/">Simplex</a><a class="dropdown-item" href="/2026-06-28-chapter-lower-bounds/">Lower Bounds</a></div>
+ </li>
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Resources</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="https://github.com/renling/ConsensusAlgorithms/">Book</a>
+ <a class="dropdown-item" href="/course">Course</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" id="nav-search-link" href="#" title="Search the blog">
+ <span id="nav-search-icon" class="fa fa-search"></span>
+ <span id="nav-search-text">Search</span>
+ </a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+<div id="beautifuljekyll-search-overlay" data-search-json="/assets/data/searchcorpus.json" data-top-pages-json="/assets/data/top-pages.json" aria-hidden="true">
+ <div class="search-overlay-backdrop" data-search-close></div>
+ <div class="search-dialog" role="dialog" aria-modal="true" aria-labelledby="nav-search-heading">
+ <div class="search-dialog-header">
+ <p class="search-dialog-kicker">Search the archive</p>
+ <button id="nav-search-exit" type="button" title="Close search" aria-label="Close search">Close</button>
+ </div>
+ <label class="sr-only" id="nav-search-heading" for="nav-search-input">Search posts, authors, topics, and phrases</label>
+ <div class="search-input-shell">
+ <span class="fa fa-search" aria-hidden="true"></span>
+ <input type="text" id="nav-search-input" placeholder="Search posts, authors, topics, and phrases" autocomplete="off">
+ <span class="search-shortcut">/</span>
+ </div>
+ <p id="nav-search-status">Search by title, author, tag, or a phrase from the post.</p>
+ <div id="search-discovery">
+ <section class="search-discovery-group" aria-labelledby="search-popular-heading">
+ <p class="search-discovery-heading" id="search-popular-heading">Popular topics</p>
+ <div id="search-suggestions" aria-label="Popular topics"></div>
+ </section>
+ <section class="search-discovery-group" aria-labelledby="search-recent-heading">
+ <p class="search-discovery-heading" id="search-recent-heading">Top pages</p>
+ <div id="search-recent-posts"></div>
+ </section>
+ </div>
+ <ul id="search-results-container"></ul>
+ </div>
+</div>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Byzantine Approximate Agreement: Grade, Detect, Average</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham, Gilad Stern</strong><br>
+ 
+ <span class="post-meta">Posted on October 18, 2026</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>The <a href="https://decentralizedthoughts.github.io/2026-10-17-approximate-agreement-complete-protocol/">previous post</a> gave a complete approximate agreement protocol: send the current value, remove the $f$ largest and $f$ smallest values, and take the midpoint. Each round halves the span of the honest values. Starting in $[0,1]$, reaching span less than $1/n$ takes $O(\log n)$ rounds.</p>
+<p><a href="https://arxiv.org/pdf/1007.1049#page=7">Ben-Or, Dolev, and Hoch</a> improve this bound to $O(\log n / \log\log n)$. The core idea is to prevent the same Byzantine party from causing disagreement repeatedly. They use <strong><a href="https://decentralizedthoughts.github.io/2022-06-09-phase-king-via-gradecast/">gradecast</a></strong>: parties relay what they heard and assign each sender a grade. If one honest party accepts a sender’s value and another rejects it, every honest party <strong>detects</strong> that the sender is Byzantine and <em>ignores</em> its messages in later iterations.</p>
+<p>We call this protocol <strong>Grade, Detect, Average (GDA)</strong>. It also replaces the trimmed midpoint with a trimmed <strong>average</strong>. The difference between two averages depends on how many senders caused disagreement in that iteration. Across all iterations, there are at most $f$ such senders. This reduces the round count to $O(\log n/\log\log n)$ for precision $1/n$, matching the deterministic round lower bound when $f=\Theta(n)$, even with <a href="/2026-10-19-approximate-agreement-send-omissions-lower-bound/">send omissions</a>.</p>
+<h2 id="the-result">The result</h2>
+<p>There are $n&gt;3f$ parties, of which at most $f$ are Byzantine. Channels identify senders; no digital signatures are needed. Communication takes place in lock-step synchronous rounds: every honest message sent in a round arrives before that round ends.</p>
+<p>Each honest party starts with a rational input in $[0,1]$ and must output a rational value. Everyone knows the same parameter $0&lt;\epsilon\le1$. As before, $G_r$ is the multiset of honest current values after iteration $r$, and</p>
+\[\operatorname{span}(G_r)=\max(G_r)-\min(G_r).\]
+<p>Here $r$ counts iterations, each containing three rounds. $G_0$ contains the honest inputs.</p>
+<p><strong>Theorem.</strong> In the synchronous model with $n&gt;3f$ and at most $f$ Byzantine parties, GDA keeps every honest current value in the honest input range. After each completed iteration $r$,</p>
+\[\operatorname{span}(G_r)
+\le \operatorname{span}(G_0)
+\left(\frac{f}{(n-2f)r}\right)^r.\]
+<p>Let $R$ be the smallest positive integer with $R^R\ge1/\epsilon$. Every honest party decides after $3R$ rounds with honest output span strictly less than $\epsilon$.</p>
+<h2 id="gradecast-in-three-rounds">Gradecast in three rounds</h2>
+<p>In each gradecast instance, a designated sender $q$ sends a value. Every honest receiver outputs $(\mathit{value},\mathit{grade})$, where $\mathit{grade}\in{0,1,2}$ and $\mathit{value}=\bot$ when the grade is zero. The three-round protocol below first sends the designated sender’s value, then applies the two rounds of our <a href="https://decentralizedthoughts.github.io/2022-06-09-phase-king-via-gradecast/">graded consensus protocol</a>.</p>
+<p>For repeated gradecasts, party $i$ maintains a set $\mathrm{bad}_i$ of parties it has identified as Byzantine, initially empty. During an iteration, it ignores messages <strong>from</strong> parties in this set. The set remains fixed throughout all gradecast instances in that iteration. Parties may have different sets.</p>
+<p>Even if $q\in\mathrm{bad}_i$, party $i$ still processes messages from parties outside $\mathrm{bad}_i$ in $q$’s gradecast instance.</p>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gradecast(r, q, v, bad), executed by party i:
+ r: iteration number
+ q: designated sender
+ v: party i's current rational value
+ bad: fixed set of ignored senders
+ n: number of parties; f: fault bound, with n &gt; 3f
+ bot: no value
+initialize a local table received[k][j] = bot
+ for k = 1,2,3 and j = 1,...,n.
+upon receiving &lt;r, q, x&gt; from party j in round k of this instance:
+ if j not in bad and x is rational and received[k][j] = bot:
+ received[k][j] := x
+at the start of round 1:
+ if i = q:
+ received[1][i] := v
+ send &lt;r, q, v&gt; to every other party
+at the start of round 2:
+ if received[1][q] != bot:
+ x := received[1][q]
+ received[2][i] := x
+ send &lt;r, q, x&gt; to every other party
+at the start of round 3:
+ if received[2] contains the same rational value x
+ from at least n-f distinct parties:
+ received[3][i] := x
+ send &lt;r, q, x&gt; to every other party
+at the end of round 3:
+ if received[3] contains the same rational value x
+ from at least n-f distinct parties:
+ output (x, 2)
+ otherwise, if received[3] contains the same rational value x
+ from at least f+1 distinct parties:
+ output (x, 1)
+ otherwise, output (bot, 0)
+</code></pre></div></div>
+<p><strong>Claim 1.</strong> If every honest party’s $\mathrm{bad}$ set contains only Byzantine parties, gradecast guarantees:</p>
+<ol>
+ <li>If sender $q$ is honest, every honest party outputs $q$’s value with grade two.</li>
+ <li>All honest outputs with positive grades have the same value.</li>
+ <li>If one honest party outputs grade two, every honest party outputs a positive grade.</li>
+ <li>If every honest party ignores $q$, every honest party outputs $(\bot,0)$.</li>
+</ol>
+<p><strong>Proof.</strong> If $q$ is honest, every honest party receives its value in round 1 and relays it in round 2. Every honest party therefore sees at least $n-f$ copies, sends that value in round 3, and outputs it with grade two.</p>
+<p>No two honest parties can send different values in round 3. Otherwise, they must have received different values from two sets of at least $n-f$ senders in round 2. Those sets intersect in at least $n-2f&gt;f$ parties, including an honest party. But each honest party sends at most one value in round 2. This is the Weak Agreement argument from the <a href="https://decentralizedthoughts.github.io/2022-06-09-phase-king-via-gradecast/">earlier proof</a>.</p>
+<p>A positive grade requires $f+1$ senders in round 3, including an honest one. Since all honest round 3 messages contain the same value, all honest outputs with positive grades agree. If one honest party outputs grade two, at least $n-2f&gt;f$ honest parties sent that value in round 3. Every honest receiver counts those messages and therefore outputs a positive grade.</p>
+<p>These arguments still hold when parties ignore messages from Byzantine senders, because every honest message is still counted.</p>
+<p>Finally, if every honest party ignores $q$, no honest party sends in round 2 of its instance. At most $f$ round 2 messages remain, so no honest party sends in round 3. The at most $f$ Byzantine messages in round 3 cannot give a positive grade.</p>
+<h2 id="the-protocol">The protocol</h2>
+<p>Three changes to the previous protocol produce the faster convergence:</p>
+<ul>
+ <li><strong>Gradecast</strong> each current value, so honest outputs with positive grades for the same sender agree exactly.</li>
+ <li><strong>Detect</strong> senders with grade at most one and ignore their messages in later iterations.</li>
+ <li><strong>Average</strong> the retained values after trimming, so each differing entry has a bounded contribution.</li>
+</ul>
+<p>If a sender gets grade zero at one honest party and a positive grade at another, Claim 1 rules out grade two at every honest party. Every honest party therefore adds the sender to $\mathrm{bad}$ and outputs $(\bot,0)$ for it in all later iterations.</p>
+<p>A Byzantine sender can still make every honest party accept the same arbitrary value. This creates no differing entry. Trimming keeps the average within the honest range even when accepted Byzantine values lie outside it.</p>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>grade_detect_average, executed by party i:
+ input: rational value input in [0,1].
+ parameters: n parties, fault bound f with n &gt; 3f,
+ common precision 0 &lt; epsilon &lt;= 1.
+v := input
+bad := {}
+iterations := the smallest positive integer t with t^t &gt;= 1/epsilon
+for r = 1,...,iterations:
+ in parallel for q = 1,...,n:
+ run gradecast(r, q, v, bad) in rounds 3r-2, 3r-1, 3r
+ store its output as (value[q], grade[q])
+ at the end of round 3r:
+ values := the multiset {value[1],...,value[n]}
+ order bot below every rational value
+ remove the f smallest and f largest entries from values
+ v := sum(values)/(n-2f)
+ bad := bad union {q : grade[q] &lt;= 1}
+decide v
+</code></pre></div></div>
+<p>All gradecast instances finish before $\mathrm{bad}_i$ changes. The next iteration uses the updated set.</p>
+<p><strong>Claim 2.</strong> No honest party is ever added to an honest party’s $\mathrm{bad}$ set, and every honest current value after an iteration lies in the preceding honest range.</p>
+<p><strong>Proof.</strong> Initially the sets are empty. If they contain only Byzantine parties, Claim 1 gives every honest sender’s value grade two at every honest receiver. Thus the update adds only Byzantine senders, proving the first statement by induction.</p>
+<p>By Claim 1, each honest receiver’s multiset contains every honest party’s current value. At most $f$ entries are Byzantine values or $\bot$. Consequently, removing the $f$ smallest and $f$ largest entries leaves only values between $\min(G_{r-1})$ and $\max(G_{r-1})$. Every $\bot$ is removed. The average is rational and remains in this interval, proving the second statement.</p>
+<p>In particular, repeated updates preserve the initial honest range.</p>
+<h2 id="a-byzantine-sender-can-cause-disagreement-only-once">A Byzantine sender can cause disagreement only once</h2>
+<p>Let $b_r$ count the senders whose gradecast has grade zero at one honest party and a positive grade at another in iteration $r$. This is a quantity for the proof; parties do not compute it.</p>
+<p><strong>Claim 3.</strong> Each sender is counted at most once, and</p>
+\[\sum_{r=1}^R b_r\le f.\]
+<p><strong>Proof.</strong> As observed above, every sender counted by $b_r$ is added to every honest party’s $\mathrm{bad}$ set at the end of iteration $r$. Every honest party outputs $(\bot,0)$ for it in later iterations, so it cannot be counted again. Claim 2 says every such sender is Byzantine.</p>
+<h2 id="how-much-can-b_r-different-entries-change-an-average">How much can $b_r$ different entries change an average?</h2>
+<p><strong>Claim 4.</strong> One iteration gives</p>
+\[\operatorname{span}(G_r)
+\le\frac{b_r}{n-2f}\operatorname{span}(G_{r-1}).\]
+<p><strong>Proof.</strong> Fix two honest receivers $i$ and $j$. Let $T_i$ and $T_j$ be the multisets they retain after trimming. Each contains $n-2f$ entries, and their updated values are</p>
+\[v_i=\frac{\sum_{x\in T_i}x}{n-2f},
+\qquad
+v_j=\frac{\sum_{x\in T_j}x}{n-2f}.\]
+<p>Before trimming, all honest receivers have the same entry for every sender not counted by $b_r$: either the same value with a positive grade, by Claim 1, or $\bot$ at every receiver. These give $n-b_r$ common entries.</p>
+<p>For the proof, order entries by value, breaking ties by sender identity; this does not change either average. Among the common entries, remove the $f$ smallest and $f$ largest. The remaining $n-b_r-2f$ entries survive trimming at both receivers. Each has at least $f$ common entries before it, so it cannot be among either receiver’s $f$ smallest entries. It also has at least $f$ common entries after it, so it cannot be among either receiver’s $f$ largest entries.</p>
+<p>Thus both $T_i$ and $T_j$ contain these $n-2f-b_r$ common entries. Cancel them when subtracting the two sums. Each sum now has</p>
+\[(n-2f)-(n-2f-b_r)=b_r\]
+<p>entries left.</p>
+<p>Let $L=\min(G_{r-1})$ and $H=\max(G_{r-1})$. By Claim 2, every retained entry lies in $[L,H]$. Pair the remaining entries arbitrarily. Each pair differs by at most $H-L$, so</p>
+\[\lvert v_i-v_j\rvert
+\le\frac{b_r(H-L)}{n-2f}
+=\frac{b_r}{n-2f}\operatorname{span}(G_{r-1}).\]
+<p>This holds for every pair of honest receivers and proves the claim. If $b_r=0$, all entries cancel and the updated values coincide.</p>
+<h2 id="putting-it-together">Putting it together</h2>
+<p><strong>Claim 5.</strong> GDA satisfies convex validity, approximate agreement, and termination after $3R$ rounds.</p>
+<p><strong>Proof.</strong> Claim 2 keeps every honest current value in the preceding honest range. Repeating this argument proves convex validity. Applying Claim 4 repeatedly gives</p>
+\[\operatorname{span}(G_r)
+\le\operatorname{span}(G_0)
+\prod_{s=1}^r\frac{b_s}{n-2f}.\]
+<p>The <a href="https://en.wikipedia.org/wiki/AM%E2%80%93GM_inequality">arithmetic-geometric mean inequality</a> states that, for nonnegative numbers $a_1,\ldots,a_r$,</p>
+\[\sqrt[r]{a_1\cdots a_r}
+\le\frac{a_1+\cdots+a_r}{r}.\]
+<p>Apply it to $b_1,\ldots,b_r$ and raise both sides to the $r$th power. Since these counts sum to at most $f$, by Claim 3,</p>
+\[\begin{aligned}
+\prod_{s=1}^r b_s
+&amp;\le\left(\frac{b_1+\cdots+b_r}{r}\right)^r\\
+&amp;\le\left(\frac fr\right)^r.
+\end{aligned}\]
+<p>Substituting proves the theorem’s span bound, including when some $b_s$ is zero.</p>
+<p>Since $\operatorname{span}(G_0)\le1$ and $f/(n-2f)&lt;1$, our choice $R^R\ge1/\epsilon$ gives</p>
+\[\operatorname{span}(G_R)
+\le\frac1{R^R}\left(\frac{f}{n-2f}\right)^R
+&lt;\frac1{R^R}
+\le\epsilon.\]
+<p>Every honest party decides its current value at the end of iteration $R$, so this proves approximate agreement. Each iteration ends after three synchronous rounds, so every honest party decides after exactly $3R$ rounds.</p>
+<p>For $\epsilon=1/n$, the stopping condition is simply $R^R\ge n$, or $R\log R\ge\log n$. The smallest such $R$ is $\Theta(\log n/\log\log n)$: writing $L=\log n$, a value of order $L/\log L$ has logarithm of order $\log L$, and their product is of order $L$. Hence the protocol uses $O(\log n/\log\log n)$ rounds.</p>
+<h2 id="notes">Notes</h2>
+<ul>
+ <li>Gradecast was introduced by <a href="https://doi.org/10.1145/62212.62225">Feldman and Micali</a>. This <a href="https://decentralizedthoughts.github.io/2019-10-22-flavours-of-broadcast/#crusader-broadcast-and-gradecast">DT post</a> presents several flavours of broadcast, including gradecast.</li>
+ <li>The <a href="https://decentralizedthoughts.github.io/2026-10-18-approximate-agreement-with-omissions/">omission approximate agreement protocol</a> uses the same counting argument: only parties that abort in an iteration can cause different accepted entries, and each party can abort only once.</li>
+ <li><strong>Question.</strong> Robust Midpoint sends $O(n^2)$ values per round, while this protocol sends $O(n^3)$. Can a deterministic approximate agreement protocol, with $n&gt;3f$ and no signatures, reach honest output span less than $1/n$ in $O(\log n/\log\log n)$ rounds using $O(n^2)$ messages of $O(\log n)$ bits per round, for $O(\log n)$-bit inputs in $[0,1]$?</li>
+</ul>
+<p>Your thoughts/comments on <a href="https://x.com/ittaia/status/2112206481227387357">X</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#approximate-agreement">approximate-agreement</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Byzantine+Approximate+Agreement%3A+Grade%2C+Detect%2C+Average&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2026-10-18-byzantine-approximate-agreement-grade-detect-average%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <div class="post-reading-links">
+ <nav class="post-links post-links-background" aria-label="Background">
+ <h2><span aria-hidden="true">&larr; </span>Background</h2>
+ <ul class="pagination post-links-list"><li class="page-item">
+ <a class="page-link" href="/2026-10-17-approximate-agreement-complete-protocol/">Byzantine Approximate Agreement: From One Round to a Complete Protocol</a>
+ </li><li class="page-item">
+ <a class="page-link" href="/2019-10-22-flavours-of-broadcast/">Flavours of Broadcast</a>
+ </li>
+ </ul>
+</nav>
+ <nav class="post-links post-links-continue_reading" aria-label="Continue reading">
+ <h2>Continue reading<span aria-hidden="true"> &rarr;</span></h2>
+ <ul class="pagination post-links-list"><li class="page-item">
+ <a class="page-link" href="/2026-10-18-approximate-agreement-with-omissions/">Approximate Agreement with Omissions: From Midpoints to Averages</a>
+ </li><li class="page-item">
+ <a class="page-link" href="/2026-10-19-approximate-agreement-send-omissions-lower-bound/">A Lower Bound for Approximate Agreement with Send Omissions</a>
+ </li>
+ </ul>
+</nav>
+ </div>
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2026-10-18-approximate-agreement-with-omissions/" data-toggle="tooltip" data-placement="top" title="Approximate Agreement with Omissions: From Midpoints to Averages">
+ <span class="post-date-direction"><i class="fas fa-arrow-left" aria-hidden="true"></i> Older post</span>
+ <span class="post-date-title">Approximate Agreement with Omissions: From Midpoints to Averages</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2026-10-19-approximate-agreement-send-omissions-lower-bound/" data-toggle="tooltip" data-placement="top" title="A Lower Bound for Approximate Agreement with Send Omissions">
+ <span class="post-date-direction">Newer post <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+ <span class="post-date-title">A Lower Bound for Approximate Agreement with Send Omissions</span>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ 
+ Decentralized Thinkers
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

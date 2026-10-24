@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+ 
+ 
+ <title>Approximate Agreement with Omissions: From Midpoints to Averages</title>
+ 
+ 
+ 
+ 
+ <meta name="author" content="Ittai Abraham">
+ 
+ <meta name="description" content="The Byzantine approximate agreement posts start with a protocol that halves the span of honest values and repeat it to obtain a complete protocol. The Grade, Detect, Average post improves its convergence by identifying parties that cause disagreement. With omission failures, both arguments become simpler, and $n&amp;gt;2f$ parties suffice. We first give a Midpoint protocol that halves the span in each round. We then add receipt reports: a party averages...">
+ 
+ 
+ 
+ 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XM1QBM4KRX"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-XM1QBM4KRX');
+</script>
+ 
+ 
+ 
+ 
+<script>
+ window.MathJax = {
+ tex: {
+ inlineMath: [['$', '$'], ['\\(', '\\)']],
+ displayMath: [['$$', '$$'], ['\\[', '\\]']],
+ processEscapes: true
+ },
+ options: {
+ skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+ }
+ };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+ 
+ 
+ 
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+ 
+ 
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+ 
+ 
+ 
+ 
+ <link rel="stylesheet" href="/assets/css/bootstrap-social.css">
+ 
+ <link rel="stylesheet" href="/assets/css/beautifuljekyll.css">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <meta property="og:site_name" content="Decentralized Thoughts">
+ <meta property="og:title" content="Approximate Agreement with Omissions: From Midpoints to Averages">
+ <meta property="og:description" content="The Byzantine approximate agreement posts start with a protocol that halves the span of honest values and repeat it to obtain a complete protocol. The Grade, Detect, Average post improves its convergence by identifying parties that cause disagreement. With omission failures, both arguments become simpler, and $n&amp;gt;2f$ parties suffice. We first give a Midpoint protocol that halves the span in each round. We then add receipt reports: a party averages...">
+ 
+ <meta property="og:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ <meta property="og:type" content="article">
+ 
+ <meta property="og:article:author" content="Ittai Abraham">
+ 
+ <meta property="og:article:published_time" content="2026-10-18T02:00:00-04:00">
+ <meta property="og:url" content="https://decentralizedthoughts.github.io/2026-10-18-approximate-agreement-with-omissions/">
+ <link rel="canonical" href="https://decentralizedthoughts.github.io/2026-10-18-approximate-agreement-with-omissions/">
+ 
+ 
+ <meta name="twitter:card" content="summary">
+ 
+ <meta name="twitter:site" content="@ittaia">
+ <meta name="twitter:creator" content="@ittaia">
+ <meta property="twitter:title" content="Approximate Agreement with Omissions: From Midpoints to Averages">
+ <meta property="twitter:description" content="The Byzantine approximate agreement posts start with a protocol that halves the span of honest values and repeat it to obtain a complete protocol. The Grade, Detect, Average post improves its convergence by identifying parties that cause disagreement. With omission failures, both arguments become simpler, and $n&amp;gt;2f$ parties suffice. We first give a Midpoint protocol that halves the span in each round. We then add receipt reports: a party averages...">
+ 
+ <meta name="twitter:image" content="https://decentralizedthoughts.github.io/img/DTblog.png">
+ 
+ 
+ 
+ 
+ 
+ <link rel="icon" href="/favicon.ico" />
+ 
+ 
+</head>
+<body>
+ 
+ <nav class="navbar navbar-expand-xl navbar-light fixed-top navbar-custom top-nav-regular"><a class="navbar-brand" href="https://decentralizedthoughts.github.io/">Decentralized Thoughts</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+ <span class="navbar-toggler-icon"></span>
+ </button>
+ <div class="collapse navbar-collapse" id="main-navbar">
+ <ul class="navbar-nav ml-auto">
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Authors</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="/authors/about-ittai">Ittai Abraham</a>
+ <a class="dropdown-item" href="/authors/about-ittay">Ittay Eyal</a>
+ <a class="dropdown-item" href="/authors/about-heidi">Heidi Howard</a>
+ <a class="dropdown-item" href="/authors/about-kartik">Kartik Nayak</a>
+ <a class="dropdown-item" href="/authors/about-ling">Ling Ren</a>
+ <a class="dropdown-item" href="/authors/about-alin">Alin Tomescu</a>
+ <a class="dropdown-item" href="/authors/about-avishay">Avishay Yanai</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" href="/videos">Videos</a>
+ </li>
+ <li class="nav-item">
+ <a class="nav-link" href="/start-here">Start Here</a>
+ </li><li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarChaptersDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Chapters</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarChaptersDropdown"><a class="dropdown-item" href="/2026-05-25-chapter-simplex/">Simplex</a><a class="dropdown-item" href="/2026-06-28-chapter-lower-bounds/">Lower Bounds</a></div>
+ </li>
+ <li class="nav-item dropdown">
+ <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Resources</a>
+ <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+ <a class="dropdown-item" href="https://github.com/renling/ConsensusAlgorithms/">Book</a>
+ <a class="dropdown-item" href="/course">Course</a>
+ </div>
+ </li>
+ 
+ <li class="nav-item">
+ <a class="nav-link" id="nav-search-link" href="#" title="Search the blog">
+ <span id="nav-search-icon" class="fa fa-search"></span>
+ <span id="nav-search-text">Search</span>
+ </a>
+ </li></ul>
+ </div>
+ 
+ 
+ <div class="avatar-container">
+ <div class="avatar-img-border">
+ <a href="https://decentralizedthoughts.github.io/">
+ <img alt="Navigation bar avatar" class="avatar-img" src="/img/DTblog.png" />
+ </a>
+ </div>
+ </div>
+ 
+</nav>
+<div id="beautifuljekyll-search-overlay" data-search-json="/assets/data/searchcorpus.json" data-top-pages-json="/assets/data/top-pages.json" aria-hidden="true">
+ <div class="search-overlay-backdrop" data-search-close></div>
+ <div class="search-dialog" role="dialog" aria-modal="true" aria-labelledby="nav-search-heading">
+ <div class="search-dialog-header">
+ <p class="search-dialog-kicker">Search the archive</p>
+ <button id="nav-search-exit" type="button" title="Close search" aria-label="Close search">Close</button>
+ </div>
+ <label class="sr-only" id="nav-search-heading" for="nav-search-input">Search posts, authors, topics, and phrases</label>
+ <div class="search-input-shell">
+ <span class="fa fa-search" aria-hidden="true"></span>
+ <input type="text" id="nav-search-input" placeholder="Search posts, authors, topics, and phrases" autocomplete="off">
+ <span class="search-shortcut">/</span>
+ </div>
+ <p id="nav-search-status">Search by title, author, tag, or a phrase from the post.</p>
+ <div id="search-discovery">
+ <section class="search-discovery-group" aria-labelledby="search-popular-heading">
+ <p class="search-discovery-heading" id="search-popular-heading">Popular topics</p>
+ <div id="search-suggestions" aria-label="Popular topics"></div>
+ </section>
+ <section class="search-discovery-group" aria-labelledby="search-recent-heading">
+ <p class="search-discovery-heading" id="search-recent-heading">Top pages</p>
+ <div id="search-recent-posts"></div>
+ </section>
+ </div>
+ <ul id="search-results-container"></ul>
+ </div>
+</div>
+ 
+<header class="header-section ">
+<div class="intro-header ">
+ 
+ <div class="container-md">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ <div class="post-heading">
+ <h1>Approximate Agreement with Omissions: From Midpoints to Averages</h1>
+ 
+ 
+ 
+ 
+ By <strong>Ittai Abraham</strong><br>
+ 
+ <span class="post-meta">Posted on October 18, 2026</span>
+ 
+ 
+ 
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ 
+</div>
+</header>
+<main class=" container-md ">
+ <div class="row">
+ <div class=" col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 ">
+ 
+ 
+ <div class="blog-post">
+ <p>The <a href="https://decentralizedthoughts.github.io/2022-06-07-approx-agreement-one/">Byzantine approximate agreement posts</a> start with a protocol that halves the span of honest values and <a href="https://decentralizedthoughts.github.io/2026-10-17-approximate-agreement-complete-protocol/">repeat it to obtain a complete protocol</a>. The <a href="/2026-10-18-byzantine-approximate-agreement-grade-detect-average/">Grade, Detect, Average post</a> improves its convergence by identifying parties that cause disagreement. With omission failures, both arguments become simpler, and $n&gt;2f$ parties suffice.</p>
+<p>We first give a <strong>Midpoint</strong> protocol that halves the span in each round. We then add receipt reports: a party averages the reported values only if at least $n-f$ reports acknowledge its own value; otherwise it aborts. In this <strong>Average or Abort</strong> protocol, the averages of continuing parties can differ only in values from parties that abort in that iteration. Each party can abort only once. Following <a href="https://groups.csail.mit.edu/tds/papers/Fekete/DistComp90.pdf">Fekete’s convergence argument</a>, this gives a span below $k^{-k}$ after $k$ iterations, each taking two rounds. Reaching span less than $1/n$ therefore takes $O(\log n/\log\log n)$ rounds instead of $O(\log n)$.</p>
+<h2 id="the-problem">The problem</h2>
+<p>There are $n&gt;2f$ parties. At most $f$ parties may suffer send omissions, receive omissions, or both; every party otherwise follows the protocol. Communication takes place in synchronous rounds. Each message either arrives in full in its round or is omitted. Channels identify senders. There are no digital signatures.</p>
+<p>Every party starts with a rational input in $[0,1]$. Everyone knows the same parameter $0&lt;\epsilon\leq1$. A party may <strong>abort</strong>, after which it stops participating and produces no output. We require:</p>
+<ul>
+ <li><strong>Convex validity.</strong> Every output lies between the smallest and largest initial inputs.</li>
+ <li><strong>Approximate agreement.</strong> Any two outputs differ by less than $\epsilon$, including outputs of parties with omissions.</li>
+ <li><strong>Termination.</strong> Every nonfaulty party decides and never aborts.</li>
+</ul>
+<p>In this omission model, convex validity refers to the inputs of all parties. In the Byzantine model, it refers only to honest parties’ inputs.</p>
+<p>For each protocol, let $B_r$ be the set of parties that have aborted by the end of iteration $r$, and let $G_r={1,\ldots,n}\setminus B_r$ be the set of parties that have not aborted. Initially, $B_0=\varnothing$ and $G_0={1,\ldots,n}$. A party with omissions remains in $G_r$ until it aborts. These sets are used only in the proof; parties do not maintain them.</p>
+<p>Let $X_r$ be the multiset of current values of parties in $G_r$, with $X_0$ containing all initial inputs. As before,</p>
+\[\operatorname{span}(X_r)=\max(X_r)-\min(X_r).\]
+<p>An iteration takes one round in Midpoint and two rounds in Average or Abort.</p>
+<p><strong>Theorem.</strong> With $n&gt;2f$ and at most $f$ parties with send or receive omissions, both protocols preserve the initial input range, and no nonfaulty party aborts. After $k\geq1$ iterations, their spans satisfy</p>
+\[\begin{aligned}
+\text{Midpoint:}\qquad
+\operatorname{span}(X_k)
+&amp;\leq 2^{-k}\operatorname{span}(X_0),\\
+\text{Average or Abort:}\qquad
+\operatorname{span}(X_k)
+&amp;\leq\left(\frac{f}{k(n-f)}\right)^k\operatorname{span}(X_0).
+\end{aligned}\]
+<p>Midpoint solves approximate agreement after $\lfloor\log_2(1/\epsilon)\rfloor+1$ rounds. Average or Abort does so after $2R$ rounds, where $R$ is the smallest positive integer with $R^R\geq1/\epsilon$.</p>
+<h2 id="the-midpoint-protocol-halving-the-span">The Midpoint protocol: halving the span</h2>
+<p>At party $i$, <code class="language-plaintext highlighter-rouge">input</code> is its initial input, <code class="language-plaintext highlighter-rouge">v</code> is its current value, and <code class="language-plaintext highlighter-rouge">received</code> is a vector of $n$ entries indexed by sender. The symbol <code class="language-plaintext highlighter-rouge">bot</code> denotes a missing value. The multiset <code class="language-plaintext highlighter-rouge">V</code> contains the received values. Square brackets in a comprehension denote a multiset, so equal values from different senders remain separate entries.</p>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Set v = input.
+Set R = floor(log2(1/epsilon)) + 1.
+For r = 1,...,R:
+ 1. At the start of round r:
+ Set received = [bot,...,bot].
+ Set received[i] = v.
+ Send &lt;r, v&gt; to every other party.
+ 2. Upon receiving &lt;r, x&gt; from j during round r:
+ Set received[j] = x.
+ 3. At the end of round r:
+ Set V = [received[j] : j in {1,...,n}, received[j] != bot].
+ If |V| &lt; n-f:
+ Abort.
+ Else:
+ Set v = (min(V) + max(V)) / 2.
+ If r = R:
+ Decide v.
+</code></pre></div></div>
+<p><strong>Claim 1.</strong> No nonfaulty party aborts. Every update stays in the preceding range, and</p>
+\[\operatorname{span}(X_r)\leq\frac{\operatorname{span}(X_{r-1})}{2}.\]
+<p><strong>Proof.</strong> Inductively, all nonfaulty parties enter the round and receive each other’s values. There are at least $n-f$ of them, so each passes the check.</p>
+<p>Let $V_i$ be the multiset used by a party that continues. Every entry belongs to $X_{r-1}$. Also, $\lvert V_i\rvert\geq n-f&gt;n/2$, so $V_i$ contains more than half of the entries of $X_{r-1}$. Its interval therefore contains the median of $X_{r-1}$:</p>
+\[\min(X_{r-1})\leq\min(V_i)
+\leq\operatorname{median}(X_{r-1})
+\leq\max(V_i)\leq\max(X_{r-1}).\]
+<p>Adding the bounds on $\min(V_i)$ and $\max(V_i)$ and dividing by two places every new value in</p>
+\[\left[
+\frac{\min(X_{r-1})+\operatorname{median}(X_{r-1})}{2},
+\frac{\operatorname{median}(X_{r-1})+\max(X_{r-1})}{2}
+\right].\]
+<p>This interval lies in the preceding range and has half its width. This is the same median argument as in the <a href="https://decentralizedthoughts.github.io/2022-06-07-approx-agreement-one/">Byzantine protocol</a>, with no trimming needed.</p>
+<h2 id="the-average-or-abort-protocol-faster-convergence">The Average or Abort protocol: faster convergence</h2>
+<p>At party $i$, <code class="language-plaintext highlighter-rouge">input</code>, <code class="language-plaintext highlighter-rouge">v</code>, <code class="language-plaintext highlighter-rouge">received</code>, and <code class="language-plaintext highlighter-rouge">bot</code> have the same meanings as in Midpoint. Each iteration takes two rounds. Parties first send their current values, then report the vectors they received.</p>
+<p>At the end of the second round, party $i$ counts the reports it received that contain its current value in the entry for sender $i$, including its own report. If fewer than $n-f$ reports contain this entry, $i$ must <strong>abort</strong>: it stops participating and produces no output. Otherwise, it averages the values appearing in the reports, counting each original sender once. Thus receiving enough reports is not sufficient; enough of them must acknowledge $i$’s value.</p>
+<p>The <strong>abort</strong> rule is critical to the faster convergence bound. It ensures that a party that continues has its current value included in every continuing party’s average. Only values from parties that abort in this iteration can appear in some averages and not others. Each party can abort only once, and at most $f$ parties abort in total. As we prove below, this limits the differences between averages by the number of new aborts in each iteration, giving the product bound that leads to $O(\log n/\log\log n)$ rounds for $\epsilon=1/n$.</p>
+<p>The vector <code class="language-plaintext highlighter-rouge">report</code> has $n$ entries indexed by reporter: <code class="language-plaintext highlighter-rouge">report[k]</code> is the vector reported by party $k$, or <code class="language-plaintext highlighter-rouge">bot</code> if its report is missing. In the pseudocode, <code class="language-plaintext highlighter-rouge">q</code> denotes a report vector, <code class="language-plaintext highlighter-rouge">j</code> an original sender, and <code class="language-plaintext highlighter-rouge">k</code> a reporter. The variable <code class="language-plaintext highlighter-rouge">acks</code> counts reports containing $i$’s value. The set <code class="language-plaintext highlighter-rouge">U</code> contains pairs <code class="language-plaintext highlighter-rouge">(j, x)</code> of an original sender and its reported value; <code class="language-plaintext highlighter-rouge">V</code> is the multiset of their values.</p>
+<p>The set <code class="language-plaintext highlighter-rouge">U</code> removes repeated reports of the same sender. Its entries for that sender agree because omissions cannot change message contents. The multiset <code class="language-plaintext highlighter-rouge">V</code> retains equal values from different senders.</p>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Set v = input.
+Set R = min {k in {1,2,...} : k^k &gt;= 1/epsilon}.
+For r = 1,...,R:
+ 1. At the start of round 2r-1:
+ Set received = [bot,...,bot].
+ Set received[i] = v.
+ Send &lt;r, v&gt; to every other party.
+ 2. Upon receiving &lt;r, x&gt; from j during round 2r-1:
+ Set received[j] = x.
+ 3. At the start of round 2r:
+ Set report = [bot,...,bot].
+ Set report[i] = received.
+ Send &lt;r, received&gt; to every other party.
+ 4. Upon receiving &lt;r, q&gt; from k during round 2r:
+ Set report[k] = q.
+ 5. At the end of round 2r:
+ Set acks = |{k in {1,...,n} :
+ report[k] != bot and report[k][i] != bot}|.
+ If acks &lt; n-f:
+ Abort.
+ Else:
+ Set U = {(j, report[k][j]) : k,j in {1,...,n},
+ report[k] != bot and report[k][j] != bot}.
+ Set V = [x : (j, x) in U].
+ Set v = average(V).
+ If r = R:
+ Decide v.
+</code></pre></div></div>
+<h2 id="only-new-aborts-can-cause-different-averages">Only new aborts can cause different averages</h2>
+<p>In Midpoint, the same party can omit messages in every round. In Average or Abort, the report check makes every continuing party’s value appear in every continuing party’s update. Only values from parties that abort now can appear in some averages and not others.</p>
+<p><strong>Claim 2.</strong> No nonfaulty party aborts. In iteration $r$, every party in $G_r$ includes in its average the previous value of every party in $G_r$, and no value from a party in $B_{r-1}$.</p>
+<p><strong>Proof.</strong> Inductively, every nonfaulty party receives every nonfaulty sender’s value and reports it. Each nonfaulty sender receives these at least $n-f$ reports and passes its check.</p>
+<p>Now fix parties $i$ and $j$ that both continue. Party $j$ received at least $n-f$ reports containing its value. Party $i$ received at least $n-f$ reports, since it passed its own check. These two sets of reporters intersect, because</p>
+\[(n-f)+(n-f)-n=n-2f&gt;0.\]
+<p>A reporter in the intersection sent the same vector to both parties. Its report to $i$ therefore contains $j$’s value, which $i$ includes in its average.</p>
+<p>A party that aborted earlier sends no value in this iteration, so no report can contain a value from it.</p>
+<p>Let $b_r=\lvert B_r\setminus B_{r-1}\rvert$ be the number of parties that abort in iteration $r$. There are $\lvert G_{r-1}\rvert$ parties entering the iteration and $\lvert G_r\rvert$ continuing afterward, so $b_r=\lvert G_{r-1}\rvert-\lvert G_r\rvert$. By Claim 2, the multisets being averaged can differ only on values from parties in $B_r\setminus B_{r-1}$. Aborts are permanent, so $B_{r-1}\subseteq B_r$. Only faulty parties abort, hence</p>
+\[\sum_{r=1}^k b_r=\lvert B_k\rvert\leq f.\]
+<p><strong>Claim 3.</strong> Every update stays in the preceding range, and</p>
+\[\operatorname{span}(X_r)
+\leq\frac{b_r}{\lvert G_{r-1}\rvert}\operatorname{span}(X_{r-1}).\]
+<p><strong>Proof.</strong> Let $L=\min(X_{r-1})$, $H=\max(X_{r-1})$, and $D=H-L$. Every reported value lies in $[L,H]$, so every average also lies in this interval. This proves range preservation.</p>
+<p>Now consider two continuing parties with accepted multisets $V_i,V_j$ and new values</p>
+\[\mu_i=\operatorname{average}(V_i),
+\qquad
+\mu_j=\operatorname{average}(V_j).\]
+<p>Assume $\lvert V_i\rvert\leq \lvert V_j\rvert$, and write $m=\lvert V_j\rvert$.</p>
+<p>The two averages may have different denominators. To compare them, pad $V_i$ with $m-\lvert V_i\rvert$ copies of $\mu_i$. This does not change its average:</p>
+\[\frac{\sum_{x\in V_i}x+(m-\lvert V_i\rvert)\mu_i}{m}
+=\frac{\lvert V_i\rvert\mu_i+(m-\lvert V_i\rvert)\mu_i}{m}
+=\mu_i.\]
+<p>The added values also lie in $[L,H]$.</p>
+<p>By Claim 2, both multisets contain the previous value of every party in $G_r$. Cancel these $\lvert G_r\rvert$ common entries when subtracting the two sums. Each multiset now has $m-\lvert G_r\rvert$ entries left. Pair them arbitrarily. Each pair differs by at most $D$, so</p>
+\[\lvert \mu_i-\mu_j\rvert
+\leq \frac{m-\lvert G_r\rvert}{m}\,D.\]
+<p>Each accepted multiset contains at most one value per party entering the iteration, so $m\leq \lvert G_{r-1}\rvert$. Therefore,</p>
+\[\frac{m-\lvert G_r\rvert}{m}
+=1-\frac{\lvert G_r\rvert}{m}
+\leq 1-\frac{\lvert G_r\rvert}{\lvert G_{r-1}\rvert}
+=\frac{b_r}{\lvert G_{r-1}\rvert}.\]
+<p>Applying this bound to every pair of continuing parties gives</p>
+\[\operatorname{span}(X_r)
+\leq \frac{b_r}{\lvert G_{r-1}\rvert}\operatorname{span}(X_{r-1}).\]
+<p>In particular, if no party aborts in this iteration, then $b_r=0$: every continuing party averages exactly the same values, and their new values coincide.</p>
+<h2 id="putting-it-together">Putting it together</h2>
+<p><strong>Claim 4.</strong> Both protocols satisfy convex validity, approximate agreement, and termination with the stated stopping rules.</p>
+<p><strong>Proof.</strong> Claims 1 and 3 keep every update in the preceding range, and hence in the initial input range. All values remain rational. Claims 1 and 2 show that nonfaulty parties never abort. Every continuing party decides after the prescribed number of synchronous rounds.</p>
+<p>For Midpoint, Claim 1 gives</p>
+\[\operatorname{span}(X_R)\leq2^{-R}\operatorname{span}(X_0)
+\leq2^{-R}&lt;\epsilon.\]
+<p>For Average or Abort, at least $n-f$ parties continue in every iteration. Iterating Claim 3 gives</p>
+\[\begin{aligned}
+\operatorname{span}(X_k)
+&amp;\leq\operatorname{span}(X_0)
+\prod_{r=1}^k\frac{b_r}{\lvert G_{r-1}\rvert}\\
+&amp;\leq\frac{\operatorname{span}(X_0)}{(n-f)^k}
+\prod_{r=1}^k b_r.
+\end{aligned}\]
+<p>Recall the <a href="https://en.wikipedia.org/wiki/AM%E2%80%93GM_inequality">arithmetic-geometric mean inequality</a> (AM–GM): for nonnegative numbers $a_1,\ldots,a_k$,</p>
+\[\sqrt[k]{a_1\cdots a_k}
+\leq\frac{a_1+\cdots+a_k}{k}.\]
+<p>Apply it to the abort counts $b_1,\ldots,b_k$ and raise both sides to the $k$th power. Since $b_1+\cdots+b_k=\lvert B_k\rvert\leq f$,</p>
+\[\prod_{r=1}^k b_r
+\leq\left(\frac{b_1+\cdots+b_k}{k}\right)^k
+\leq\left(\frac{f}{k}\right)^k.\]
+<p>Combining these bounds gives</p>
+\[\operatorname{span}(X_k)
+\leq\operatorname{span}(X_0)
+\left(\frac{f}{k(n-f)}\right)^k.\]
+<p>Since $\operatorname{span}(X_0)\leq1$ and $f&lt;n-f$, choosing $R^R\geq1/\epsilon$ gives</p>
+\[\operatorname{span}(X_R)
+\leq\left(\frac{f}{n-f}\right)^R\frac1{R^R}
+&lt;\frac1{R^R}\leq\epsilon.\]
+<p>For $\epsilon=1/n$, the condition is $R\log R\geq\log n$. The smallest such $R$ is $\Theta(\log n/\log\log n)$, so $2R$ rounds give the claimed improvement.</p>
+<h2 id="notes">Notes</h2>
+<ul>
+ <li>The requirement $n&gt;2f$ is necessary because agreement includes outputs of parties with omissions. For $f&lt;n\leq2f$, split the parties into two nonempty groups of at most $f$ each, with inputs $0$ in one and $1$ in the other. One group can omit all sends and receives across the partition. To the first group, this is indistinguishable from a world where it is nonfaulty and all inputs are $0$, so it must decide $0$. The second group similarly must decide $1$. Their outputs differ by $1$, violating approximate agreement for $0&lt;\epsilon\leq1$. This is the <a href="https://decentralizedthoughts.github.io/2025-08-12-non-uniform-weak-validity/">uniform-agreement lower bound from the omission post</a>.</li>
+ <li><a href="https://groups.csail.mit.edu/tds/papers/Fekete/DistComp90.pdf">Fekete</a> gave asymptotically optimal approximate agreement protocols for omissions, using detection to bound convergence by a product of new failures. The receipt report protocol here has a direct proof of this convergence rate. The <a href="/2026-10-19-approximate-agreement-send-omissions-lower-bound/">send-omission lower-bound post</a> gives the matching $\Omega(\log n/\log\log n)$ worst-case round lower bound for deterministic protocols when $\epsilon=1/n$ and $f=\Theta(n)$, even with send omissions alone.</li>
+ <li>This is another example of detection helping agreement. Here a party detects that too few reports acknowledge its value and aborts. In the <a href="/2026-10-18-byzantine-approximate-agreement-grade-detect-average/">faster Byzantine protocol</a>, parties use gradecast to identify senders that cause different receivers to accept different entries.</li>
+ <li><strong>Communication cost.</strong> Assuming each rational value fits in one word, Midpoint sends $O(n^2)$ words per iteration, while Average or Abort sends $O(n^3)$ words. Both send $O(n^2)$ messages per iteration, but each second-round message in Average or Abort contains a vector of $n$ values. Its faster convergence therefore comes at the cost of a factor of $n$ more communication per iteration.</li>
+ <li>Future omission clock synchronization posts will apply these two ideas to clock measurements: interval midpoints (TBD) and acknowledged averages (TBD). Their additional arguments will account for delay uncertainty and clocks updating at different times.</li>
+</ul>
+<p>Your thoughts/comments on <a href="https://x.com/ittaia/status/2112206479008706998">X</a>.</p>
+ </div>
+ 
+ <div class="blog-tags">
+ <span>Tags:</span>
+ 
+ <a href="/tags#approximate-agreement">approximate-agreement</a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+<section id = "social-share-section">
+ <span class="sr-only">Share: </span>
+ 
+ <a href="https://twitter.com/intent/tweet?text=Approximate+Agreement+with+Omissions%3A+From+Midpoints+to+Averages&url=https%3A%2F%2Fdecentralizedthoughts.github.io%2F2026-10-18-approximate-agreement-with-omissions%2F"
+ class="btn btn-social-icon btn-twitter" title="Share on X (Twitter)">
+ <span class="fab fa-fw fa-x-twitter" aria-hidden="true"></span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ 
+ 
+ 
+ 
+ 
+</section>
+ 
+ <div class="post-reading-links">
+ <nav class="post-links post-links-background" aria-label="Background">
+ <h2><span aria-hidden="true">&larr; </span>Background</h2>
+ <ul class="pagination post-links-list"><li class="page-item">
+ <a class="page-link" href="/2026-10-17-approximate-agreement-complete-protocol/">Byzantine Approximate Agreement: From One Round to a Complete Protocol</a>
+ </li><li class="page-item">
+ <a class="page-link" href="/2026-10-18-byzantine-approximate-agreement-grade-detect-average/">Byzantine Approximate Agreement: Grade, Detect, Average</a>
+ </li>
+ </ul>
+</nav>
+ <nav class="post-links post-links-continue_reading" aria-label="Continue reading">
+ <h2>Continue reading<span aria-hidden="true"> &rarr;</span></h2>
+ <ul class="pagination post-links-list"><li class="page-item">
+ <a class="page-link" href="/2026-10-19-approximate-agreement-send-omissions-lower-bound/">A Lower Bound for Approximate Agreement with Send Omissions</a>
+ </li>
+ </ul>
+</nav>
+ </div>
+ <ul class="pagination blog-pager">
+ 
+ <li class="page-item previous">
+ <a class="page-link" href="/2026-10-17-approximate-agreement-complete-protocol/" data-toggle="tooltip" data-placement="top" title="Byzantine Approximate Agreement: From One Round to a Complete Protocol">
+ <span class="post-date-direction"><i class="fas fa-arrow-left" aria-hidden="true"></i> Older post</span>
+ <span class="post-date-title">Byzantine Approximate Agreement: From One Round to a Complete Protocol</span>
+ </a>
+ </li>
+ 
+ 
+ <li class="page-item next">
+ <a class="page-link" href="/2026-10-18-byzantine-approximate-agreement-grade-detect-average/" data-toggle="tooltip" data-placement="top" title="Byzantine Approximate Agreement: Grade, Detect, Average">
+ <span class="post-date-direction">Newer post <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+ <span class="post-date-title">Byzantine Approximate Agreement: Grade, Detect, Average</span>
+ </a>
+ </li>
+ 
+ </ul>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ </div>
+</main>
+ <footer>
+ <div class="container-md beautiful-jekyll-footer">
+ <div class="row">
+ <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1">
+ 
+<ul class="list-inline text-center footer-links"><li class="list-inline-item">
+ <a href="https://twitter.com/ittaia" title="X (Twitter)">
+ <span class="fa-stack fa-lg" aria-hidden="true">
+ <i class="fas fa-circle fa-stack-2x"></i>
+ <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+ </span>
+ <span class="sr-only">X (Twitter)</span>
+ </a>
+ </li></ul>
+ 
+ <p class="copyright text-muted">
+ 
+ 
+ Decentralized Thinkers
+ &nbsp;&bull;&nbsp;
+ 
+ 2026
+ 
+ 
+ 
+ </p>
+ <p class="theme-by text-muted">
+ Powered by
+ <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
+ </p>
+ </div>
+ </div>
+ </div>
+</footer>
+ 
+ 
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ 
+ 
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+ 
+ 
+ 
+ 
+ <script src="/assets/js/beautifuljekyll.js"></script>
+ 
+ 
+</body>
+</html>

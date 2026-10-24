@@ -2,6 +2,9 @@
 title: Simple Payment Systems with Unlinkability
 date: 2026-01-21 02:00:00 -05:00
 author: Ittai Abraham, Gilad Stern, and Alin Tomescu
+background:
+  - /2026-01-21-blind-and-threshold/
+  - /2022-09-10-provable-broadcast/
 ---
 
 In this post, we discuss payment systems. There is a set of *users* who wish to pay each other.

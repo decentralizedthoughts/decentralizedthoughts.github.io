@@ -4,6 +4,14 @@ date: 2026-04-23 00:00:00 -05:00
 tags:
 - consensus
 author: Ittai Abraham
+chapters:
+  - /2026-05-25-chapter-simplex/
+background:
+  - /2025-11-15-simplex-from-benign/
+  - /2022-11-20-pbft-via-locked-braodcast/
+continue_reading:
+  - /2026-04-26-complex/
+  - /2026-05-20-from-single-shot-to-chained/
 ---
 
 
