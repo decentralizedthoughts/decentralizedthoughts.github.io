@@ -30,9 +30,7 @@ jobs:
         run: python3 tools/check_site.py
       - name: Check chapter and reading metadata
         run: ruby tools/check_post_links.rb
-      - name: Check HTML snapshots
-        run: |
-          python3 tools/list_urls.py | python3 tools/snapshot_html.py
-          git diff --exit-code -- tests/snapshots
+      - name: Check layout fixture snapshots
+        run: bundle exec python3 tools/check_snapshots.py
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

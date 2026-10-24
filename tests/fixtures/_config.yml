@@ -1,0 +1,25 @@
+title: Layout test site
+author: Fixture Author
+url: https://example.test
+baseurl: ''
+timezone: UTC
+markdown: kramdown
+highlighter: rouge
+permalink: /:year-:month-:day-:title/
+kramdown:
+  input: GFM
+plugins: []
+whitelist: []
+exclude: []
+navbar-links:
+  Resources:
+    - Book: https://github.com/renling/ConsensusAlgorithms/
+    - Course: /plain-page/
+defaults:
+  - scope:
+      path: ''
+      type: posts
+    values:
+      layout: post
+      social-share: true
+      mathjax: true

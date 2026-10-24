@@ -1,3 +1,8 @@
+## Editing Decentralized Thoughts posts
+
+Post edits and new posts do **not** require HTML snapshot updates. See the
+[editing and layout test guide](tests/README.md) for CI checks and template tests.
+
 # Beautiful Jekyll
 
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/daattali/20)

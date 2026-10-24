@@ -16,6 +16,9 @@ Each list can contain several links; omit a list when it is not needed.
 Links are curated in each direction, rather than automatically made reciprocal.
 Chapter pages keep their existing hand-written content during the pilot.
 
-Run `ruby tools/check_post_links.rb` to validate the metadata. After building,
-refresh HTML snapshots with
-`python3 tools/list_urls.py | python3 tools/snapshot_html.py`.
+Run `ruby tools/check_post_links.rb` to validate the metadata. Editing post
+content or these metadata lists does not require updating HTML snapshots.
+CI builds the site and checks links and metadata automatically.
+
+Layout snapshots use fixed fixtures, independent of published posts. See
+[the snapshot guide](../tests/README.md) when changing templates.
