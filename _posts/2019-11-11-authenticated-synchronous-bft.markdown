@@ -4,6 +4,13 @@ date: 2019-11-11 03:01:00 -05:00
 tags:
 - research
 author: Kartik Nayak, Ittai Abraham, Ling Ren
+background:
+  - /2019-06-01-2019-5-31-models/
+  - /2019-07-19-setup-assumptions/
+continue_reading:
+  - /2019-11-12-Sync-HotStuff/
+  - /2020-06-12-optimal-optimistic-responsiveness/
+  - /2019-11-29-Analysis-Nakamoto/
 ---
 
 <span style="color:grey"> ![](https://github.githubassets.com/images/icons/emoji/unicode/23f0.png?v8) Post updated in March 2021</span>

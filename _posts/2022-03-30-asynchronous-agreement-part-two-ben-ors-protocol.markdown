@@ -6,6 +6,10 @@ tags:
 - consensus101
 - consensus
 author: Ittai Abraham, Namma Ben-David, Sravya Yandamuri
+background:
+  - /2022-03-30-asynchronous-agreement-part-one-defining-the-problem/
+continue_reading:
+  - /2022-03-30-asynchronous-agreement-part-three-a-modern-version-of-ben-ors-protocol/
 ---
 
 We continue to explore the marvelous world of consensus in the [Asynchronous model](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/). In this post, we present Ben-Or's classic [protocol](https://homepage.cs.uiowa.edu/~ghosh/BenOr.pdf) from 1983. In the next post, we will present a [more modern version](https://decentralizedthoughts.github.io/2022-03-30-asynchronous-agreement-part-three-a-modern-version-of-ben-ors-protocol/) that is a simplified version from our [paper](https://eprint.iacr.org/2022/711.pdf).

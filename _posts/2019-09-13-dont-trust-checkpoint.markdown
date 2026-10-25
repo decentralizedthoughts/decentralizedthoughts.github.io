@@ -4,6 +4,10 @@ date: 2019-09-13 16:32:00 -04:00
 tags:
 - blockchain
 author: Ittai Abraham
+background:
+  - /2019-07-18-do-bitcoin-and-ethereum-have-any-trusted-setup-assumptions/
+continue_reading:
+  - /2020-11-01-ebb-and-flow-protocols-a-resolution-of-the-availability-finality-dilemma/
 ---
 
 Imagine that that Aliens land on earth with a new superfast SHA256 machine. Imagine this machine always gives them more than 51% of the current world Bitcoin hash power (but not enough hash power to completely break SHA256). Suppose they decide to build a chain from the [Bitcoin Genesis block](https://ittaiab.github.io/2019-07-18-do-bitcoin-and-ethereum-have-any-trusted-setup-assumptions/) that is longer than any other chain on earth and put only empty blocks on it. *Could they erase all bitcoin transactions?*

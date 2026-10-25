@@ -7,6 +7,10 @@ tags:
 - consensus
 - research
 author: 'Ittai Abraham, Naama Ben-David, Sravya Yandamuri '
+background:
+  - /2022-04-05-aa-part-four-CA-and-BCA/
+continue_reading:
+  - /2023-07-22-agreeemnt-on-a-core-set/
 ---
 
 In this post we show how to use Binding Crusader Agreement from the [previous post](https://decentralizedthoughts.github.io/2022-04-05-aa-part-four-CA-and-BCA/), along with a strong common coin to get a simple and efficient  Binary Byzantine Agreement with only an expected $O(n^2)$ message complexity. This is a simplified version from our [paper](https://eprint.iacr.org/2022/711.pdf).

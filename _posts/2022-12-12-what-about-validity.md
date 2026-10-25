@@ -5,6 +5,13 @@ tags:
 - consensus
 - lowerbound
 author: Ittai Abraham and Christian Cachin
+chapters:
+  - /2026-06-28-chapter-lower-bounds/
+background:
+  - /2019-06-27-defining-consensus/
+  - /2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/
+continue_reading:
+  - /2022-09-10-provable-broadcast/
 ---
 
 Perhaps the archetypical [trilemma](https://twitter.com/el33th4xor/status/1191820205456023552?s=20&t=RcutJw0wQUsTmrO0OXzpXw) is **consensus** - it requires three properties: **agreement**, **liveness**, and **validity**. Getting any two is easy, but all three together is what makes consensus such a facinating problem that continues to create new challenges even after 40 years of research.

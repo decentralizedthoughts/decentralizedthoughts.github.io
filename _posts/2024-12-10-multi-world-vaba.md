@@ -5,6 +5,10 @@ tags:
 - research
 - asynchrony
 author: Ittai Abraham, Alexander Spiegelman
+background:
+  - /2024-12-10-bind-and-rand/
+  - /2022-09-10-provable-broadcast/
+  - /2022-11-20-pbft-via-locked-braodcast/
 ---
 
 In this post, we show how to solve Validated Asynchronous Byzantine Agreement using the multi-world VABA approach from [Abraham, Malkhi, and Spiegelman 2018](https://arxiv.org/pdf/1811.01332). 

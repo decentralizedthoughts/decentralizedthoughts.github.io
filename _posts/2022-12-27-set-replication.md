@@ -4,6 +4,11 @@ date: 2022-12-27 04:00:00 -05:00
 tags:
 - research
 author: Ittai Abraham
+background:
+  - /2019-10-15-consensus-for-state-machine-replication/
+  - /2022-09-10-provable-broadcast/
+continue_reading:
+  - /2026-05-20-sui-lutris/
 ---
 
 State machine replication is the gold standard for implementing any (public) ideal functionality. It totally orders all transactions and as a consequence solves Byzantine agreement. But solving agreement, in non-optimistic cases, is quadratic in cost and is not constant time. In some cases this overhead is unnecessary because there is no need to totally order all transactions.

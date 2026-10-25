@@ -5,6 +5,12 @@ tags:
 - lowerbound
 - research
 author: Zhuolun Xiang
+chapters:
+  - /2026-06-28-chapter-lower-bounds/
+background:
+  - /2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/
+continue_reading:
+  - /2021-12-07-good-case-latency-of-rotating-leader-synchronous-bft/
 ---
 
 In our [first post](https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/), we presented a summary of our [good-case latency](https://arxiv.org/abs/2102.07240) results for Byzantine broadcast (BB) and state machine replication (SMR), where the good case measures the latency to commit given that the broadcaster or leader is honest. In our [second post](https://decentralizedthoughts.github.io/2021-03-03-2-round-bft-smr-with-n-equals-4-f-equals-1/), we discussed our results for partial synchrony, and described a new BFT SMR protocol named [(5f-1)-SMR](https://arxiv.org/abs/2102.07932) that can commit a decision within $2$ rounds in the good case and only requires $n\geq 5f-1$ replicas. In this third post, we highlight some of our results for synchrony, and provide intuition on how they improve the current best solutions.

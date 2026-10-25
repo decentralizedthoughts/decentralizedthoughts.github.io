@@ -5,6 +5,11 @@ tags:
 - blockchain
 - research
 author: Jannis Stoeter, Kartik Nayak
+background:
+  - /2019-11-11-authenticated-synchronous-bft/
+  - /2019-10-15-consensus-for-state-machine-replication/
+continue_reading:
+  - /2022-03-12-dfinity-partial-synchrony/
 ---
 
 This is part one of a two-part post on consensus protocols published by the [Dfinity Foundation](https://dfinity.org/).

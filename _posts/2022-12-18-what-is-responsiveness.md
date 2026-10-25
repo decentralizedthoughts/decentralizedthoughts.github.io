@@ -5,6 +5,11 @@ tags:
 - models
 - research
 author: Ittai Abraham and Kartik Nayak
+background:
+  - /2019-12-15-synchrony-uncommitted-lower-bound/
+  - /2022-11-19-from-single-shot-to-smr/
+continue_reading:
+  - /2022-12-27-responsiveness-omission/
 ---
 
 In asynchronous protocols, latency to commit is a function of the actual maximum network delay $\delta$. In synchronous protocols, message delay is bounded by $\Delta$, and for $n/3 \leq f < n/2$, the $\Delta$ bound is used to obtain both safety and liveness. In partial synchrony, message delay is bounded by $\Delta$ after GST, and the $\Delta$ bound is used to obtain liveness.

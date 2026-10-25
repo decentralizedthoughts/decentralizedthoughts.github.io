@@ -4,6 +4,12 @@ date: 2020-07-17 14:23:00 -04:00
 tags:
 - cryptography101
 author: Ittai Abraham, Alin Tomescu
+background:
+  - /2020-07-17-the-marvels-of-polynomials-over-a-field/
+continue_reading:
+  - /2022-08-17-secret-sharing-with-crash/
+  - /2022-08-24-BGW-secret-sharing/
+  - /2022-08-25-dining-cryptographers-additive/
 ---
 
 In this post, we highlight an amazing result: Shamir's [secret sharing scheme](https://cs.jhu.edu/~sdoshi/crypto/papers/shamirturing.pdf). This is one of the most powerful uses of [polynomials over a finite field](/2020-07-17-the-marvels-of-polynomials-over-a-field) in distributed computing.

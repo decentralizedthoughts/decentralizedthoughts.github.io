@@ -4,6 +4,9 @@ date: 2020-08-28 13:05:00 -04:00
 tags:
 - cryptography101
 author: Alin Tomescu
+continue_reading:
+  - /2020-12-22-what-is-a-merkle-tree/
+  - /2019-11-29-Analysis-Nakamoto/
 ---
 
 If you ever tried to understand Bitcoin, you've probably banged your head against the wall trying to understand what is a **cryptographic hash function**?

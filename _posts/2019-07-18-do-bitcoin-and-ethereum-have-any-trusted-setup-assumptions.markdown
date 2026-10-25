@@ -5,6 +5,10 @@ tags:
 - blockchain101
 layout: post
 author: Ittai Abraham, Alin Tomescu, Avishay Yanai
+background:
+  - /2019-07-19-setup-assumptions/
+continue_reading:
+  - /2019-09-13-dont-trust-checkpoint/
 ---
 
 <!--

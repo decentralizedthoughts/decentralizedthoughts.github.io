@@ -4,6 +4,10 @@ date: 2022-08-17 08:00:00 -04:00
 tags:
 - cryptography
 author: Ittai Abraham
+background:
+  - /2020-07-17-polynomial-secret-sharing-and-the-lagrange-basis/
+continue_reading:
+  - /2022-08-24-BGW-secret-sharing/
 ---
 
 We continue our series on polynomial secret sharing. In the [previous post](https://decentralizedthoughts.github.io/2020-07-17-polynomial-secret-sharing-and-the-lagrange-basis/) of this series we discussed secret sharing against a [passive adversary](https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/). In this post we assume **crash failures** and in later posts we extend to [malicious failures](https://decentralizedthoughts.github.io/2022-08-24-BGW-secret-sharing/). As before, we assume parties have **private channels**: the adversary cannot observe messages exchanged between non-faulty parties.

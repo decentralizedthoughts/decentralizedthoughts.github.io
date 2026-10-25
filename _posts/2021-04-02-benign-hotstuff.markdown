@@ -6,6 +6,15 @@ tags:
 - SMR
 - crash
 author: Ittai Abraham, Heidi Howard, and Kartik Nayak
+chapters:
+  - /2026-05-25-chapter-simplex/
+background:
+  - /2020-11-30-the-lock-commit-paradigm-multi-shot-and-mixed-faults/
+  - /2019-06-01-2019-5-31-models/
+continue_reading:
+  - /2021-07-17-simplifying-raft-with-chaining/
+  - /2021-09-30-distributed-consensus-made-simple-for-real-this-time/
+  - /2025-11-08-benign-simplex/
 ---
 
 In this post we describe a variant of [Paxos](https://lamport.azurewebsites.net/pubs/lamport-paxos.pdf) (or [Raft](https://raft.github.io/raft.pdf) or [Lock-Commit](https://decentralizedthoughts.github.io/2020-11-30-the-lock-commit-paradigm-multi-shot-and-mixed-faults/)) that is [inspired by looking through the lens](https://dahliamalkhi.github.io/posts/2018/03/bft-lens-casper/) of [HotStuff](https://research.vmware.com/files/attachments/0/0/0/0/0/7/7/podc.pdf) and Blockchain protocols. The most noticeable difference is that while Paxos and Raft aim to maintain a stable Primary/Leader (and change views infrequently), in Benign Hotstuff (as in HotStuff), the Primary is rotated every round! A more subtle difference is that in Paxos and Raft each block of commands is associated with both a view and a *position* in the log, in Benign Hotstuff (as in HotStuff), each block of commands is associated with a view and a *pointer to a previous block*.

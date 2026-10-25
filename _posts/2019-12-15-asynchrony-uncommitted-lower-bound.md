@@ -5,6 +5,14 @@ tags:
 - asynchrony
 - lowerbound
 author: Ittai Abraham
+chapters:
+  - /2026-06-28-chapter-lower-bounds/
+background:
+  - /2019-12-15-consensus-model-for-FLP/
+  - /2019-06-01-2019-5-31-models/
+continue_reading:
+  - /2024-03-07-mobile-is-FLP/
+  - /2022-03-30-asynchronous-agreement-part-one-defining-the-problem/
 ---
 
 In this third post, we conclude with the celebrated Fischer, Lynch, and Paterson impossibility result from 1985. It is the fundamental lower bound for consensus in the [asynchronous model](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/).

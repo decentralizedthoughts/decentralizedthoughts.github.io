@@ -4,6 +4,11 @@ date: 2022-06-19 03:11:00 -04:00
 tags:
 - consensus
 author: Gilad Stern and Ittai Abraham
+background:
+  - /2019-12-22-dolev-strong/
+  - /2019-10-22-flavours-of-broadcast/
+continue_reading:
+  - /2022-08-14-new-DR-LB/
 ---
 
 In  previous posts we showed that the classic [Dolev-Strong](https://decentralizedthoughts.github.io/2019-12-22-dolev-strong/) broadcast protocol takes $O(n^3)$ words and $t+1$ rounds and that [Dolev Reischuk](https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/) show that $\Omega(n^2)$ is needed and [it is also known that](https://decentralizedthoughts.github.io/2019-12-15-synchrony-uncommitted-lower-bound/) $t+1$ rounds are needed. So while the number of rounds is optimal, to this day it remains an open question of obtaining $O(n^2)$ broadcast against a strongly adaptive adversary (see [post](https://decentralizedthoughts.github.io/2021-09-20-optimal-communication-complexity-of-authenticated-byzantine-agreement/) for recent progress).

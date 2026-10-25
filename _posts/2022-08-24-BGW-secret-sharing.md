@@ -4,6 +4,9 @@ date: 2022-08-24 08:00:00 -04:00
 tags:
 - cryptography
 author: Ittai Abraham and Gilad Asharov
+background:
+  - /2020-07-17-polynomial-secret-sharing-and-the-lagrange-basis/
+  - /2022-08-17-secret-sharing-with-crash/
 ---
 
 In this post, we present the classic [Ben-or, Goldwasser, and Wigderson, 1988](https://inst.eecs.berkeley.edu/~cs276/fa20/notes/BGW88.pdf) (**BGW**) Verifiable Secret Sharing protocol (**VSS**) with the simplifications of [Feldman, 1988](https://dspace.mit.edu/handle/1721.1/14368). The analysis and notation in this post are based on the full proof of the BGW MPC protocol of [Asharov and Lindell](https://eprint.iacr.org/2011/136.pdf). This post is a continuation of our previous posts on secret sharing for [passive](https://decentralizedthoughts.github.io/2020-07-17-polynomial-secret-sharing-and-the-lagrange-basis/) and [crash](https://decentralizedthoughts.github.io/2022-08-17-secret-sharing-with-crash/) failures.

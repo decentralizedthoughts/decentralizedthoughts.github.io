@@ -6,6 +6,13 @@ tags:
 - lowerbound
 - research
 author: Sravya Yandamuri, Naama Ben David
+chapters:
+  - /2026-06-28-chapter-lower-bounds/
+background:
+  - /2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/
+  - /2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/
+continue_reading:
+  - /2023-06-26-dls-meets-rollback/
 ---
 
 In this post, we explore a theorem of [Clement, Junqueira, Kate, and Rodrigues](https://www.cs.purdue.edu/homes/akate/publications/Non-equivocation.pdf) from PODC 2012 regarding the limits of non-equivocation. Informally, this theorem says that neither *Non-equivocation* nor *Transferability* alone is enough for tolerating minority corruptions in asynchrony.

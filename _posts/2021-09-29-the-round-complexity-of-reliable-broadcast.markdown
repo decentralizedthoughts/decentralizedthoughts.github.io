@@ -5,6 +5,11 @@ tags:
 - research
 - lowerbound
 author: Ittai Abraham, Zhuolun Xiang, Ling Ren
+chapters:
+  - /2026-06-28-chapter-lower-bounds/
+background:
+  - /2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/
+  - /2019-06-01-2019-5-31-models/
 ---
 
 [Reliable Broadcast](https://decentralizedthoughts.github.io/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/) is an important building block of many [Asynchronous](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/) protocols. There is a broadcaster that has some *input value*, $v$, and a non-faulty party that *terminates* needs to *output* a value. Reliable Broadcast is defined via two properties: 

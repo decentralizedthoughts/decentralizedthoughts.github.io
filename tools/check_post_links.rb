@@ -2,13 +2,14 @@
 require 'date'
 require 'yaml'
 
-# Post URLs follow the repository's date-and-slug permalink convention.
+# Match the date-and-slug permalink, including front matter date overrides.
 posts = Dir['_posts/*.{md,markdown}'].map do |path|
   front_matter = File.read(path).split(/^---\s*$\n?/, 3)[1]
   next unless front_matter
   metadata = YAML.safe_load(front_matter, permitted_classes: [Date, Time], aliases: true) || {}
-  slug = File.basename(path).sub(/\.(md|markdown)$/, '').gsub(/\s+/, '-')
-  ["/#{slug}/", [path, metadata]]
+  slug = File.basename(path).sub(/\.(md|markdown)$/, '').sub(/^\d{4}-\d{2}-\d{2}-/, '').gsub(/\s+/, '-')
+  date = DateTime.parse(metadata.fetch('date').to_s).strftime('%Y-%m-%d')
+  ["/#{date}-#{slug}/", [path, metadata]]
 end.compact.to_h
 errors = []
 posts.each do |url, (path, metadata)|

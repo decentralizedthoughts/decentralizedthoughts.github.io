@@ -5,6 +5,13 @@ date: 2024-03-07 12:05:00 -05:00
 tags:
 - lowerbound
 author: Ittai Abraham and Gilad Stern
+chapters:
+  - /2026-06-28-chapter-lower-bounds/
+background:
+  - /2019-12-15-asynchrony-uncommitted-lower-bound/
+  - /2024-01-28-early-stopping-lower-bounds/
+continue_reading:
+  - /2024-12-10-bind-and-rand/
 ---
 
 **TL;DR:** We give a simple, unified proof that consensus with one mobile crash in synchrony, or one crash in asynchrony, inevitably admits infinite executions. The proof uses a single reduction to a *mobile delay adversary*, a weaker but expressive fault model and then shows that every consensus protocol resilient to it must fail to terminate. This approach streamlines the classic FLP83 and SW89 results and highlights the close connection between asynchrony and mobile faults.

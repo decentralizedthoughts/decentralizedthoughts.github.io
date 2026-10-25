@@ -4,6 +4,8 @@ date: 2019-07-19 02:29:00 -04:00
 tags:
 - models
 layout: post
+continue_reading:
+  - /2019-07-18-do-bitcoin-and-ethereum-have-any-trusted-setup-assumptions/
 ---
 
 <p align="center">

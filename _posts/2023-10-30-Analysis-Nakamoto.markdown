@@ -5,6 +5,9 @@ tags:
 - blockchain101
 - blockchain
 author: Ling Ren
+background:
+  - /2019-11-29-Analysis-Nakamoto/
+  - /2020-02-26-selfish-mining/
 ---
 
 Four years ago (time flies!), I made a post on a [simple security proof for Nakamoto consensus](https://decentralizedthoughts.github.io/2019-11-29-Analysis-Nakamoto/). While the proof intuition, as outlined in that post, is still reasonably simple, the [actual proof](https://eprint.iacr.org/2019/943) has become quite delicate and crafty over the years. What happened was that some colleagues -- Chen Feng at UBC and Dongning Guo at Northwestern -- identified very subtle flaws in the proof, and clever mathematical maneuvers had to be put in to fix them.  

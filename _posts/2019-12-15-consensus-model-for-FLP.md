@@ -5,6 +5,15 @@ tags:
 - asynchrony
 - lowerbound
 author: Ittai Abraham
+chapters:
+  - /2026-06-28-chapter-lower-bounds/
+background:
+  - /2019-06-27-defining-consensus/
+  - /2019-06-01-2019-5-31-models/
+continue_reading:
+  - /2019-12-15-synchrony-uncommitted-lower-bound/
+  - /2019-12-15-asynchrony-uncommitted-lower-bound/
+  - /2024-01-28-early-stopping-lower-bounds/
 ---
 
 In this series of three posts, we discuss two of the most important consensus lower bounds:

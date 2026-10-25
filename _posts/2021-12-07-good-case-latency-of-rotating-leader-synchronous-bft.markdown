@@ -4,6 +4,12 @@ date: 2021-12-07 04:39:00 -05:00
 tags:
 - research
 author: Nibesh Shrestha, Ittai Abraha, Kartik Nayak
+chapters:
+  - /2026-06-28-chapter-lower-bounds/
+background:
+  - /2019-11-11-authenticated-synchronous-bft/
+  - /2019-11-12-Sync-HotStuff/
+  - /2021-03-09-good-case-latency-of-byzantine-broadcast-the-synchronous-case/
 ---
 
 [Synchronous consensus protocols](https://decentralizedthoughts.github.io/2019-11-11-authenticated-synchronous-bft/) can tolerate $f < n/2$ Byzantine failures but for $n/3 <f <n/2$ must depend on the *maximum network delay* $\Delta$ for their safety and progress. So these protocols must *set* $\Delta$ to be much larger than the *actual network delay* $\delta \ll \Delta$. The good news is in the multi-shot (blockchain) scenarios, modern synchronous protocols such as [Sync HotStuff](https://decentralizedthoughts.github.io/2019-11-12-Sync-HotStuff/) can essentially ***pipeline*** the $\Delta$-dependent delay:

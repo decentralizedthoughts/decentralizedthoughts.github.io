@@ -4,6 +4,11 @@ date: 2022-06-07 03:11:00 -04:00
 tags:
 - consensus
 author: Ittai Abraham and Gilad Stern
+background:
+  - /2019-06-27-defining-consensus/
+continue_reading:
+  - /2026-10-17-approximate-agreement-complete-protocol/
+  - /2026-10-19-approximate-agreement-send-omissions-lower-bound/
 ---
 
 This post covers the basics of **Approximate Agreement**. We define the problem, explain in what way it's an interesting variation of classic [Agreement](https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/), and describe the idea behind the Robust Midpoint protocol.

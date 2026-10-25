@@ -4,6 +4,8 @@ date: 2020-03-03 03:00:00 -05:00
 tags:
 - cryptography
 author: Alin Tomescu
+background:
+  - /2020-07-17-the-marvels-of-polynomials-over-a-field/
 ---
 
 This is a re-exposition of [a post here](https://hackmd.io/@dabo/B1U4kx8XI) by _Dan Boneh, Ben Fisch, Ariel Gabizon, and Zac Williamson_, with a few more details on why the polynomial relations hold.

@@ -5,6 +5,13 @@ tags:
 - consensus
 - research
 author: Ittai Abraham, Alexander Spiegelman
+background:
+  - /2019-06-01-2019-5-31-models/
+  - /2019-06-17-the-threshold-adversary/
+continue_reading:
+  - /2022-11-20-pbft-via-locked-braodcast/
+  - /2022-11-24-two-round-HS/
+  - /2024-12-10-multi-world-vaba/
 ---
 
 We explore a family of broadcast protocols in the authenticated setting in which a designated *sender* wants to create a *delivery-certificate* of its input value. After describing the base protocol we call **Provable Broadcast** ($PB$),  we explore the surprising power of simply running $PB$ two times in a row, then three times, and finally four times in a row. 

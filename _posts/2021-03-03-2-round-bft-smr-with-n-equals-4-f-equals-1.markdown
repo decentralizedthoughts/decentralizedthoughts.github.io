@@ -5,6 +5,11 @@ tags:
 - research
 - SMR
 author: Zhuolun Xiang
+background:
+  - /2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/
+  - /2019-06-01-2019-5-31-models/
+continue_reading:
+  - /2025-12-12-dpaas/
 ---
 
 <span style="color:grey"> Guest post by [Zhuolun Xiang](https://sites.google.com/site/danielxiangzl/)  </span>

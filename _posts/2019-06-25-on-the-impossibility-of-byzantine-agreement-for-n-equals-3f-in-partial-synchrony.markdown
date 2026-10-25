@@ -5,6 +5,14 @@ tags:
 - consensus101
 - lowerbound
 author: Kartik Nayak, Ittai Abraham
+chapters:
+  - /2026-06-28-chapter-lower-bounds/
+background:
+  - /2019-06-27-defining-consensus/
+  - /2019-06-01-2019-5-31-models/
+continue_reading:
+  - /2021-06-14-neither-non-equivocation-nor-transferability-alone-is-enough-for-tolerating-minority-corruptions-in-asynchrony/
+  - /2023-06-26-dls-meets-rollback/
 ---
 
 Lower bounds in distributed computing are very helpful. They prevent us from wasting time on impossible tasks :-). More importantly, they help us focus on what is optimally possible or how to circumvent them by altering assumptions or problem formulation.

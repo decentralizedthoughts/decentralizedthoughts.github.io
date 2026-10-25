@@ -5,6 +5,11 @@ tags:
 - dist101
 - models
 author: Ittai Abraham
+background:
+  - /2019-06-01-2019-5-31-models/
+continue_reading:
+  - /2025-02-14-partial-synchrony-protocols/
+  - /2025-12-19-cc-under-harsh-ps/
 ---
 
 This is a follow-up post to the post on [Synchrony, Asynchrony and Partial synchrony](https://ittaiab.github.io/2019-06-01-2019-5-31-models/). The partial synchrony model of [DLS88](https://groups.csail.mit.edu/tds/papers/Lynch/jacm88.pdf) comes in two flavors: **GST** and **Unknown Latency**. In this post we discuss:

@@ -7,6 +7,12 @@ tags:
 - consensus
 - randomness
 author: Ittai Abraham
+background:
+  - /2023-02-18-rand-and-consensus-1/
+  - /2019-12-15-synchrony-uncommitted-lower-bound/
+continue_reading:
+  - /2025-12-12-scalable-agreement/
+  - /2022-03-30-asynchronous-agreement-part-three-a-modern-version-of-ben-ors-protocol/
 ---
 
 Continuing the series on [simple ways](https://decentralizedthoughts.github.io/2023-02-18-rand-and-consensus-1/) where randomization can help solve consensus. The model is **lock-step** (synchrony) with $f<n/2$ **omission** failures. We know that in the [worst case](https://decentralizedthoughts.github.io/2019-12-15-synchrony-uncommitted-lower-bound/) reaching agreement takes at least $f+1$ rounds. Can randomization help reduce the expected number of rounds? In the post, we show a simple randomized consensus algorithm including a simple weak coin protocol that works against a weak adaptive adversary.

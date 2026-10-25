@@ -4,6 +4,12 @@ date: 2021-09-20 15:28:00 -04:00
 tags:
 - research
 author: Atsuki Momose, Ling Ren
+background:
+  - /2020-09-14-broadcast-from-agreement-and-agreement-from-broadcast/
+  - /2019-08-16-byzantine-agreement-needs-quadratic-messages/
+  - /2019-12-22-dolev-strong/
+continue_reading:
+  - /2024-09-15-divide-and-conquer/
 ---
 
 Communication complexity of [Byzantine Agreement (BA)](https://decentralizedthoughts.github.io/2020-09-14-broadcast-from-agreement-and-agreement-from-broadcast/) has been studied for decades. [Dolev and Reischuk](https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/) showed that quadratic communication is necessary for BA with perfect security, i.e., without error. [Berman, Garay, and Perry](https://dl.acm.org/doi/10.5555/166961.167018) showed that this lower bound is tight for the [unauthenticated setting](https://decentralizedthoughts.github.io/2019-08-02-byzantine-agreement-is-impossible-for-$n-slash-leq-3-f$-is-the-adversary-can-easily-simulate/) (without signatures) with $f < n/3$. However, for $f \ge n/3$, the best solution so far is still the [Dolev-Strong protocol](https://decentralizedthoughts.github.io/2019-12-22-dolev-strong/) with cubic communication, so a linear gap remains. 

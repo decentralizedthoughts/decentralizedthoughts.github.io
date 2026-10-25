@@ -4,6 +4,15 @@ date: 2020-11-29 08:02:00 -05:00
 tags:
 - consensus101
 author: Ittai Abraham, Kartik Nayak
+chapters:
+  - /2026-05-25-chapter-simplex/
+background:
+  - /2019-06-01-2019-5-31-models/
+  - /2019-06-27-defining-consensus/
+continue_reading:
+  - /2020-11-30-the-lock-commit-paradigm-multi-shot-and-mixed-faults/
+  - /2021-04-02-benign-hotstuff/
+  - /2021-09-20-information-theoretic-hotstuff-it-hs-part-one/
 ---
 
 In this post, we explore one of the most celebrated and widely used techniques for reaching consensus: the **Lock-Commit paradigm**. This approach is a key technique of [DLS88](https://groups.csail.mit.edu/tds/papers/Lynch/jacm88.pdf), Lamport's [Paxos](https://lamport.azurewebsites.net/pubs/lamport-paxos.pdf), and many subsequent protocols. Protocols like [Raft](https://raft.github.io/), [PBFT](http://pmg.csail.mit.edu/papers/osdi99.pdf), [Tendermint](https://arxiv.org/pdf/1807.04938.pdf), [SBFT](https://arxiv.org/pdf/1804.01626.pdf), [Casper FFG](https://arxiv.org/pdf/1710.09437.pdf), [HotStuff](https://arxiv.org/pdf/1803.05069.pdf), etc., are all based on this paradigm.

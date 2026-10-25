@@ -4,6 +4,10 @@ date: 2020-12-22 09:05:00 -05:00
 tags:
 - cryptography101
 author: Alin Tomescu
+background:
+  - /2020-08-28-what-is-a-cryptographic-hash-function/
+continue_reading:
+  - /2024-08-08-vid/
 ---
 
 In this post, we will demystify _Merkle trees_ using three examples of problems they solve:

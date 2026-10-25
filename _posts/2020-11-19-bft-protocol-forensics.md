@@ -4,6 +4,11 @@ date: 2020-11-19 20:00:00 -05:00
 tags:
 - research
 author: Peiyao Sheng, Gerui Wang, Kartik Nayak, Sreeram Kannan, Pramod Viswanath
+background:
+  - /2019-06-27-defining-consensus/
+  - /2019-06-17-the-threshold-adversary/
+continue_reading:
+  - /2023-01-30-player-replaceability-forensic-support/
 ---
 
 An important property satisfied by any [Byzantine fault tolerant consensus protocol](https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/) is agreement, which requires non-faulty replicas to not decide on conflicting values. Depending on the [network model](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/), typical consensus protocols tolerate only a [fraction of Byzantine replicas](https://decentralizedthoughts.github.io/2019-06-17-the-threshold-adversary/). In particular, under partial synchrony or asynchrony, no consensus protocol with $n$ replicas [can tolerate more than $n/3$ Byzantine faults](https://decentralizedthoughts.github.io/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/). If the number of Byzantine replicas exceed this number, the protocols do not provide safety (or liveness).

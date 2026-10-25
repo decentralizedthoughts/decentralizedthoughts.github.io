@@ -2,6 +2,12 @@
 title: Flavours of Broadcast
 date: 2019-10-22 10:44:00 -04:00
 author: Ittai Abraham
+background:
+  - /2019-06-27-defining-consensus/
+  - /2019-06-01-2019-5-31-models/
+continue_reading:
+  - /2022-06-19-crusader-braodcast/
+  - /2022-06-09-phase-king-via-gradecast/
 ---
 
 What is the difference between broadcast, crusader broadcast, gradecast, weak broadcast, detectable broadcast, and broadcast with abort? This post is a follow up to our basic post on: [What is Broadcast?](https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/)

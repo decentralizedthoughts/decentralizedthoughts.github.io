@@ -4,6 +4,8 @@ date: 2020-07-10 16:10:00 -04:00
 tags:
 - research
 author: Daniel Adkins, Archita Agarwal, Seny Kamara, Tarik Moataz
+continue_reading:
+  - /2020-07-10-encrypted-blockchain-databases-part-ii/
 ---
 
 [^1]: We reserve the term key to refer to cryptographic keys.

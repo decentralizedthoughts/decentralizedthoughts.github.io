@@ -4,6 +4,12 @@ date: 2021-10-15 00:00:00 -04:00
 tags:
 - blockchain101
 author: Kartik Nayak
+background:
+  - /2019-10-15-consensus-for-state-machine-replication/
+  - /2020-08-28-what-is-a-cryptographic-hash-function/
+  - /2019-11-29-Analysis-Nakamoto/
+continue_reading:
+  - /2022-03-10-eip1559/
 ---
 
 In this post, we will cover Nakamoto's Consensus protocol presented in the [Bitcoin whitepaper](https://bitcoin.org/bitcoin.pdf). There are a lot of posts and videos that explain this seminal and simple protocol. Our goal in this post will be to *intuitively* piece out the need for different aspects of the protocol, such as proof-of-work and how network synchrony plays a role in the protocol.

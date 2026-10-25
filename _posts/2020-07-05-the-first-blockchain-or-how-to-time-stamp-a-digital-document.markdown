@@ -4,6 +4,8 @@ date: 2020-07-05 19:58:00 -07:00
 tags:
 - blockchain101
 author: Ittai Abraham
+continue_reading:
+  - /2019-11-29-Analysis-Nakamoto/
 ---
 
 This post is about the work of Stuart Haber and W. Scott Stornetta from 1991 on [How to Time-Stamp a Digital Document](https://www.anf.es/pdf/Haber_Stornetta.pdf) and their followup paper [Improving the Efficiency and Reliability of Digital Time-Stamping](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.71.4891&rep=rep1&type=pdf). In many ways, this work introduced the idea of a chain of hashes to create a total order of commitments to a dynamically growing set of documents. It's no wonder these two papers are cited by the [Bitcoin whitepaper](https://bitcoin.org/bitcoin.pdf). 

@@ -4,6 +4,14 @@ date: 2019-12-15 12:05:00 -05:00
 tags:
 - lowerbound
 author: Ittai Abraham
+chapters:
+  - /2026-06-28-chapter-lower-bounds/
+background:
+  - /2019-12-15-consensus-model-for-FLP/
+continue_reading:
+  - /2019-12-15-asynchrony-uncommitted-lower-bound/
+  - /2024-01-28-early-stopping-lower-bounds/
+  - /2023-02-18-rand-and-consensus-1/
 ---
 
 In this second post, we show the fundamental lower bound on the number of rounds for consensus protocols in the synchronous model.

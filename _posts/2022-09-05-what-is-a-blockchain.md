@@ -4,6 +4,8 @@ date: 2022-09-05 00:00:00 -04:00
 tags:
 - blockchain101
 author: Ittai Abraham
+continue_reading:
+  - /2023-01-12-what-are-blockchains-useful-for-really/
 ---
 
 ## TL;DR: A blockchain is a trusted coordination mechanism.

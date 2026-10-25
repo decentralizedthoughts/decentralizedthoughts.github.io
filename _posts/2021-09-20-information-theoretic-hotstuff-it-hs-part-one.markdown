@@ -4,6 +4,11 @@ date: 2021-09-20 08:07:00 -04:00
 tags:
 - research
 author: Gilad Stern, Ittai Abraham
+background:
+  - /2020-11-29-the-lock-commit-paradigm/
+  - /2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/
+continue_reading:
+  - /2026-06-05-IT-Kuplex/
 ---
 
 This post is the first of two on [Information Theoretic HotStuff (IT-HS)](https://arxiv.org/abs/2009.12828). Information Theoretic HotStuff is a [Byzantine Consensus](https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/) protocol in the [partially synchronous](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/) model. It replaces all of [HotStuff's](https://arxiv.org/abs/1803.05069) cryptographic signatures with simple information theoretic message passing techniques over [authenticated channels](https://decentralizedthoughts.github.io/2019-07-19-setup-assumptions/). Information theoretic protocols are often easy to reason about, form a great introduction for learning the basics of consensus, have less of an attack surface, and highlight useful core distributed computing techniques.

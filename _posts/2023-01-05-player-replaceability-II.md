@@ -6,6 +6,9 @@ tags:
 - blockchain
 - research
 author: Kartik Nayak
+background:
+  - /2023-01-05-player-replaceability-I/
+  - /2019-06-07-modeling-the-adversary/
 ---
 
 This is part II of a two-part post on player-replaceability. Part I can be found [here](https://decentralizedthoughts.github.io/2023-01-05-player-replaceability-I/).

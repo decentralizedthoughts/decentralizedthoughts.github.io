@@ -5,6 +5,11 @@ tags:
 - research
 author: Nibesh Shrestha, Kartik Nayak
 redirect_from: "/2020-06-12-optimal-optimistic-responsiveness/"
+chapters:
+  - /2026-06-28-chapter-lower-bounds/
+background:
+  - /2019-11-11-authenticated-synchronous-bft/
+  - /2019-11-12-Sync-HotStuff/
 ---
 
 [Synchronous consensus protocols](https://decentralizedthoughts.github.io/2019-11-11-authenticated-synchronous-bft/) tolerating Byzantine failures 

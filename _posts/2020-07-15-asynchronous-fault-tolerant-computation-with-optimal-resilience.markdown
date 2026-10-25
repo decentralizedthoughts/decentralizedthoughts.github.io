@@ -5,6 +5,11 @@ tags:
 - lowerbound
 - asynchrony
 author: Ittai Abraham, Danny Dolev, Gilad Stern
+chapters:
+  - /2026-06-28-chapter-lower-bounds/
+background:
+  - /2019-12-15-asynchrony-uncommitted-lower-bound/
+  - /2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/
 ---
 
 A basic question of distributed computing:

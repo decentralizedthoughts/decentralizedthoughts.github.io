@@ -5,6 +5,8 @@ tags:
 - SMR
 - blockchain101
 author: Ittai Abraham
+background:
+  - /2019-10-25-flavours-of-state-machine-replication/
 ---
 
 This posts views payment channels as essentially a [two person BFS-SMR](https://decentralizedthoughts.github.io/2019-10-25-flavours-of-state-machine-replication/) system along with a carefully implemented mechanism for safe termination (channel closing) under assumptions of synchrony. 

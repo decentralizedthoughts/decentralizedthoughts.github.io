@@ -5,6 +5,13 @@ tags:
 - SMR
 - crash
 author: Ittai Abraham, Kartik Nayak
+background:
+  - /2019-10-15-consensus-for-state-machine-replication/
+  - /2019-06-01-2019-5-31-models/
+continue_reading:
+  - /2019-11-02-primary-backup-for-2-servers-and-omission-failures-is-impossible/
+  - /2020-09-13-synchronous-consensus-omission-faults/
+  - /2021-10-16-the-ideal-state-machine-model-multiple-clients-and-linearizability/
 ---
 
 We continue our series of posts on [State Machine Replication](https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/) (SMR). In this post we discuss the most simple form of SMR: Primary-Backup for crash failures. We will assume [synchronous](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/) communication. For simplicity, we will consider the case with two replicas, out of which one can crash. Recall that when a party *crashes*, it irrevocably terminates.  

@@ -4,6 +4,8 @@ date: 2021-08-29 17:55:00 -04:00
 tags:
 - cryptography
 author: Benny Pinkas
+background:
+  - /2020-03-29-private-set-intersection-a-soft-introduction/
 ---
 
 In this post, we will discuss the cryptographic construction used in Apple's new system for detecting CSAM - Child Sexual Abuse Material. This cryptographic construction implements a new variant of PSI - Private Set Intersection.  While a lot of attention has been paid to the broad implications of this system, the technical details of the PSI construction have not been highlighted, even though Apple published a detailed [technical description of the system](https://www.apple.com/child-safety/pdf/Apple_PSI_System_Security_Protocol_and_Analysis.pdf), and Eric Rescorla published a [technical overview](https://educatedguesswork.org/posts/apple-csam-intro/) of the system.

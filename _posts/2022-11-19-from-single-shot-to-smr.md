@@ -5,6 +5,11 @@ tags:
 - SMR
 - omission
 author: Ittai Abraham and Kartik Nayak
+background:
+  - /2022-11-04-paxos-via-recoverable-broadcast/
+  - /2019-10-15-consensus-for-state-machine-replication/
+continue_reading:
+  - /2026-05-20-from-single-shot-to-chained/
 ---
 
 In this post we explore the path from *Single-Shot Agreement*, via *Write-Once Registers*, to *Log Replication*, and finally to *State Machine Replication*. We begin by defining all four problems assuming *minority omission failures* and *partial synchrony*. This post continues our previous posts on [Paxos from Recoverable Broadcast](https://decentralizedthoughts.github.io/2022-11-04-paxos-via-recoverable-broadcast/) and on [State Machine Replication](https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/). 

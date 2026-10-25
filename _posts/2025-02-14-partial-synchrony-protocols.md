@@ -4,6 +4,12 @@ date: 2025-02-14 09:30:00 -05:00
 tags:
 - consensus
 author: Kartik Nayak, Ittai Abraham
+chapters:
+  - /2026-05-25-chapter-simplex/
+background:
+  - /2019-09-13-flavours-of-partial-synchrony/
+continue_reading:
+  - /2025-02-14-PBFT/
 ---
 
 Many blockchain protocols work under [partial synchrony](https://decentralizedthoughts.github.io/2019-09-13-flavours-of-partial-synchrony/). Examples include [PBFT](https://pmg.csail.mit.edu/papers/osdi99.pdf), [SBFT](https://arxiv.org/abs/1804.01626), Cosmos ([Tendermint](https://arxiv.org/abs/1807.04938)), Diem ([DiemBFT](https://developers.diem.com/papers/diem-consensus-state-machine-replication-in-the-diem-blockchain/2021-08-17.pdf)), [Jolteon](https://arxiv.org/abs/2106.10362),  Espresso Systems ([HotStuff](https://eprint.iacr.org/2023/397.pdf)), Dfinity ([Internet Computer Consensus](https://eprint.iacr.org/2021/632.pdf)) and Ethereum ([Casper](https://arxiv.org/pdf/1710.09437)).

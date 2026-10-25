@@ -5,6 +5,11 @@ tags:
 - dist101
 - models
 author: Ittai Abraham
+background:
+  - /2019-06-01-2019-5-31-models/
+continue_reading:
+  - /2019-06-27-defining-consensus/
+  - /2019-06-07-modeling-the-adversary/
 ---
 
 In addition to limiting the adversary via a communication model [synchrony, asynchrony, or partial synchrony](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/), we need a way to limit the adversary’s power to corrupt parties. 

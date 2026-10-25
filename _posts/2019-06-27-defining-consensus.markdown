@@ -4,6 +4,14 @@ date: 2019-06-27 15:00:00 -04:00
 tags:
 - consensus101
 author: Kartik Nayak, Ittai Abraham
+background:
+  - /2019-06-01-2019-5-31-models/
+  - /2019-06-17-the-threshold-adversary/
+  - /2019-06-07-modeling-the-adversary/
+continue_reading:
+  - /2020-09-14-broadcast-from-agreement-and-agreement-from-broadcast/
+  - /2019-10-15-consensus-for-state-machine-replication/
+  - /2022-12-12-what-about-validity/
 ---
 
 Consensus broadly means different parties reaching agreement. In distributed computing, consensus is a core functionality. In this post, we define the consensus problem and its variants.

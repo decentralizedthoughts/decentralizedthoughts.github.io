@@ -4,6 +4,14 @@ date: 2022-11-20 04:00:00 -05:00
 tags:
 - consensus
 author: Ittai Abraham
+chapters:
+  - /2026-05-25-chapter-simplex/
+background:
+  - /2022-11-04-paxos-via-recoverable-broadcast/
+  - /2022-09-10-provable-broadcast/
+continue_reading:
+  - /2022-11-24-two-round-HS/
+  - /2022-11-19-from-single-shot-to-smr/
 ---
 
 [PBFT](https://pmg.csail.mit.edu/bft/) is a foundational multi-year project led by [Barbara Liskov](https://pmg.csail.mit.edu/~liskov/) and her students, obtaining major advances in both the theory and practice of Byzantine Fault Tolerance. The PBFT [conference version](https://pmg.csail.mit.edu/papers/osdi99.pdf), [journal version](https://pmg.csail.mit.edu/papers/bft-tocs.pdf), Castro's [thesis](https://pmg.csail.mit.edu/~castro/thesis.pdf), Liskov's [talk](https://www.youtube.com/watch?v=Uj638eFIWg8), and follow-up work on [BASE](http://www.sosp.org/2001/papers/rodrigues.pdf) are all required reading for anyone who wants to deeply understand BFT systems.

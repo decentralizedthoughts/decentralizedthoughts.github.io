@@ -5,6 +5,10 @@ date: 2021-10-04 10:46:00 -04:00
 tags:
 - lowerbound
 author: Ittai Abraham and Kartik Nayak
+chapters:
+  - /2026-06-28-chapter-lower-bounds/
+background:
+  - /2019-08-02-byzantine-agreement-is-impossible-for-$n-slash-leq-3-f$-is-the-adversary-can-easily-simulate/
 ---
 
 The classic [FLM lower bound](https://groups.csail.mit.edu/tds/papers/Lynch/FischerLynchMerritt-dc.pdf) says that in Synchrony, Byzantine Agreement is impossible when $n \leq 3f$. We discussed this important bound in a [previous post](https://decentralizedthoughts.github.io/2019-08-02-byzantine-agreement-is-impossible-for-$n-slash-leq-3-f$-is-the-adversary-can-easily-simulate/). In this post we strengthen the FLM lower bound in two important ways:

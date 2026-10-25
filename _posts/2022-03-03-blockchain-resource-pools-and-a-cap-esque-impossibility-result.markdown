@@ -6,6 +6,8 @@ tags:
 - lowerbound
 - blockchain
 author: Andrew Lewis-Pye, Tim Roughgarden
+chapters:
+  - /2026-06-28-chapter-lower-bounds/
 ---
 
 The consensus layers of different blockchain protocols can look very

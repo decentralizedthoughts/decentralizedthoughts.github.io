@@ -6,6 +6,11 @@ tags:
 - randomness
 - asynchrony
 author: Ittai Abraham, Gilad Stern
+background:
+  - /2019-12-15-consensus-model-for-FLP/
+  - /2024-03-07-mobile-is-FLP/
+continue_reading:
+  - /2024-12-10-multi-world-vaba/
 ---
 
 The prevailing view on fault-tolerant agreement is that it is impossible in asynchrony for deterministic protocols, but adding randomization solves the problem. This statement is confusing in two aspects:

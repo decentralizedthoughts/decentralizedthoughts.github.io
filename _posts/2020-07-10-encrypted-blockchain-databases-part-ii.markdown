@@ -4,6 +4,8 @@ date: 2020-07-10 16:25:00 -04:00
 tags:
 - research
 author: Daniel Adkins, Archita Agarwal, Seny Kamara, Tarik Moataz
+background:
+  - /2020-07-10-encrypted-blockchain-databases-part-i/
 ---
 
 In this second part of the series on [Encrypted Blockchain Databases](https://decentralizedthoughts.github.io/2020-07-10-encrypted-blockchain-databases-part-i/), we are going to describe three schemes to store dynamic encrypted multi-maps (EMMs) on blockchains, each of which achieves different tradeoffs between query, add and delete efficiency. 

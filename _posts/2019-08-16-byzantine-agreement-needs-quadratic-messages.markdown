@@ -4,6 +4,13 @@ date: 2019-08-16 18:30:00 -04:00
 tags:
 - lowerbound
 author: Kartik Nayak, Ittai Abraham
+chapters:
+  - /2026-06-28-chapter-lower-bounds/
+background:
+  - /2020-09-14-broadcast-from-agreement-and-agreement-from-broadcast/
+continue_reading:
+  - /2024-12-16-strong-adaptive-lower-bound/
+  - /2022-08-14-new-DR-LB/
 ---
 
 How scalable is Byzantine agreement? Does solving agreement require non-faulty parties to send a quadratic number of messages in the number of potential faults? In this post, we highlight the [Dolev and Reischuk](http://cs.huji.ac.il/~dolev/pubs/p132-dolev.pdf) lower bound from 1982 that addresses this fundamental question.

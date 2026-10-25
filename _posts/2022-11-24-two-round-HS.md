@@ -4,6 +4,12 @@ date: 2022-11-24 04:00:00 -05:00
 tags:
 - consensus
 author: Ittai Abraham
+background:
+  - /2022-09-10-provable-broadcast/
+  - /2022-11-04-paxos-via-recoverable-broadcast/
+  - /2022-11-20-pbft-via-locked-braodcast/
+continue_reading:
+  - /2023-04-01-hotstuff-2/
 ---
 
 In the first part of this post, we describe a single-shot variation of Two Round HotStuff (see [HotStuff v1 paper, March 2018](https://arxiv.org/pdf/1803.05069v1.pdf) and [this March 2018 post](https://malkhi.com/posts/2018/03/bft-lens-casper/)) using [Locked-Broadcast](https://decentralizedthoughts.github.io/2022-09-10-provable-broadcast/) that follows a similar path as our previous posts on [Paxos](https://decentralizedthoughts.github.io/2022-11-04-paxos-via-recoverable-broadcast/) and [Linear PBFT](https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/). 

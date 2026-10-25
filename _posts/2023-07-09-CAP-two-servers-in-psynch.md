@@ -7,6 +7,14 @@ tags:
 - SMR
 - crash
 author: Ittai Abraham
+chapters:
+  - /2026-06-28-chapter-lower-bounds/
+background:
+  - /2019-10-15-consensus-for-state-machine-replication/
+  - /2019-11-02-primary-backup-for-2-servers-and-omission-failures-is-impossible/
+continue_reading:
+  - /2024-08-09-sap/
+  - /2022-03-03-blockchain-resource-pools-and-a-cap-esque-impossibility-result/
 ---
 
 In 1999, Fox and Brewer published a paper on the [*CAP principle*](https://s3.amazonaws.com/systemsandpapers/papers/FOX_Brewer_99-Harvest_Yield_and_Scalable_Tolerant_Systems.pdf), where they wrote:

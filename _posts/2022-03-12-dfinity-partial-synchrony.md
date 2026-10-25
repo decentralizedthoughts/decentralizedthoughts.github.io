@@ -5,6 +5,9 @@ tags:
 - blockchain
 - research
 author: Kartik Nayak
+background:
+  - /2022-03-12-dfinity-synchrony/
+  - /2019-06-01-2019-5-31-models/
 ---
 
 This post is part two of a two-part post on consensus protocols published by the [Dfinity Foundation](https://dfinity.org/); you can find part one [here](https://decentralizedthoughts.github.io/2022-03-12-dfinity-synchrony/). This post will intuitively explain the [Internet Computer Consensus](https://eprint.iacr.org/2021/632.pdf).

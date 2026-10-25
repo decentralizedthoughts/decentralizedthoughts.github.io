@@ -5,6 +5,14 @@ tags:
 - consensus
 - consensus101
 author: Chris Jensen, Heidi Howard
+chapters:
+  - /2026-05-25-chapter-simplex/
+background:
+  - /2021-04-02-benign-hotstuff/
+  - /2021-07-17-simplifying-raft-with-chaining/
+  - /2020-11-30-the-lock-commit-paradigm-multi-shot-and-mixed-faults/
+continue_reading:
+  - /2025-11-08-benign-simplex/
 ---
 
 [Multi-Paxos](https://lamport.azurewebsites.net/pubs/paxos-simple.pdf) is the *de facto* solution for deciding a log of commands to execute on a [replicated state machine](https://www.cs.cornell.edu/fbs/publications/ibmFault.sm.pdf), yet it's famously difficult to understand, motivating the switch to 'simpler' consensus protocols such as [Raft](https://raft.github.io/raft.pdf). The conventional wisdom is that the best way to use [Paxos](https://www.microsoft.com/en-us/research/uploads/prod/2016/12/The-Part-Time-Parliament.pdf) (aka Synod, or single-shot Paxos), to decide a log of commands is to run many instances of it, where the $i^{th}$ instance decides the $i^{th}$ command in the log. This approach, known as Multi-Paxos, can decide a command in one round trip since the first of Paxos's two phases can be shared between instances, effectively electing a *leader*.

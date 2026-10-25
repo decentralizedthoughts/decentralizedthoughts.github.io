@@ -5,6 +5,14 @@ tags:
 - research
 - lowerbound
 author: Zhuolun Xiang
+chapters:
+  - /2026-06-28-chapter-lower-bounds/
+background:
+  - /2019-06-27-defining-consensus/
+  - /2019-06-01-2019-5-31-models/
+continue_reading:
+  - /2021-03-03-2-round-bft-smr-with-n-equals-4-f-equals-1/
+  - /2021-03-09-good-case-latency-of-byzantine-broadcast-the-synchronous-case/
 ---
 
 <span style="color:grey"> Guest post by [Zhuolun Xiang](https://sites.google.com/site/danielxiangzl/)  </span>

@@ -4,6 +4,12 @@ date: 2019-11-29 16:05:00 -05:00
 tags:
 - blockchain
 author: Ling Ren
+background:
+  - /2019-06-01-2019-5-31-models/
+  - /2019-10-15-consensus-for-state-machine-replication/
+continue_reading:
+  - /2023-10-30-Analysis-Nakamoto/
+  - /2020-02-26-selfish-mining/
 ---
 
 Bitcoin's underlying consensus protocol, now known as *Nakamoto consensus*, is an extremely simple and elegant solution to the Byzantine consensus problem. One may expect this simple protocol to come with a simple security proof. But that turns out not to be the case. The Bitcoin white paper did not provide a proof. Several academic papers (e.g. [Garay, Kiayias, Leonardos](https://eprint.iacr.org/2014/765), and [Pass, Seeman, shelat](https://eprint.iacr.org/2016/454) and [Kiffer, Rajaraman, shelat](https://dl.acm.org/citation.cfm?id=3243814)) later presented rigorous proofs. These proofs are fairly complicated even for experts and quite hard for practitioners, beginners, and students to follow.

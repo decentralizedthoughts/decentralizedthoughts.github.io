@@ -4,6 +4,11 @@ date: 2024-01-09 18:00:00 -05:00
 tags:
 - research
 author: Gilad Stern and Ittai Abraham
+background:
+  - /2021-03-26-living-with-asynchrony-the-gather-protocol/
+  - /2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/
+continue_reading:
+  - /2024-12-10-bind-and-rand/
 ---
 
 We extend the [Gather protocol](https://decentralizedthoughts.github.io/2021-03-26-living-with-asynchrony-the-gather-protocol/) with two important properties: *Binding* and *Verifiability*. This post is based on and somewhat simplifies the *information theoretic* gather protocol in our recent [ACS work](https://eprint.iacr.org/2023/1130) with Gilad Asharov and Arpita Patra.

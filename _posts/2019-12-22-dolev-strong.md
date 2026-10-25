@@ -4,6 +4,10 @@ date: 2019-12-22 12:05:00 -05:00
 tags:
 - consensus
 author: Ittai Abraham, Kartik Nayak
+background:
+  - /2019-06-27-defining-consensus/
+continue_reading:
+  - /2022-06-19-crusader-braodcast/
 ---
 
 This post is about the classic result from 1983 on authenticated broadcast against a Byzantine adversary:

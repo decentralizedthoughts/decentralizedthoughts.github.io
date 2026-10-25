@@ -6,6 +6,8 @@ tags:
 - incentives
 - research
 author: Ittay Eyal, Ittai Abraham
+background:
+  - /2020-02-26-selfish-mining/
 ---
 
 The Selfish mining attack against blockchain protocols was discovered and formalized in 2013 by [Eyal and Sirer](https://webee.technion.ac.il/people/ittay/publications/btcProcFC.pdf) (also see our [blog post](https://decentralizedthoughts.github.io/2020-02-26-selfish-mining/)). The Bitcoin community has mentioned similar types of [attacks in 2010](https://bitcointalk.org/index.php?topic=2227.msg30083#msg30083). This attack remains a vulnerability of all operational blockchains we are aware of. For Bitcoin’s blockchain algorithm (under reasonable network assumptions), a coalition controlling over 1/4 of the mining power can improve its revenue using this attack. The situation is even worse if we consider more powerful attacks (see [Sapirshtein, Sompolinsky, Zohar](https://arxiv.org/pdf/1507.06183.pdf), [Heilman et al.](https://www.usenix.org/system/files/conference/usenixsecurity15/sec15-paper-heilman.pdf), and [Nakak et al.](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.712.5613&rep=rep1&type=pdf)).

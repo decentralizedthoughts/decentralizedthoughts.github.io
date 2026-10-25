@@ -4,6 +4,9 @@ date: 2023-01-30 20:00:00 -05:00
 tags:
 - research
 author: Peiyao Sheng, Gerui Wang, Kartik Nayak, Sreeram Kannan, Pramod Viswanath
+background:
+  - /2020-11-19-bft-protocol-forensics/
+  - /2023-01-05-player-replaceability-I/
 ---
 
 **Forensic support** is an important property of BFT protocols that addresses the other side of security: what happens when the number of malicious parties exceeds the allowable threshold? In a [previous post](https://decentralizedthoughts.github.io/2020-11-19-bft-protocol-forensics/), we systematically studied different BFT protocols to assess their ability to detect and prove malicious behavior when safety is violated. We learned that protocols such as PBFT and HotStuff with ${\sf poly}(n)$ communication have strong forensic support, meaning that the $t+1$ Byzantine actors can be identified irrefutably. 

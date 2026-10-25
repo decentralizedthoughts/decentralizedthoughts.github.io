@@ -4,6 +4,10 @@ date: 2020-09-14 10:07:00 -04:00
 tags:
 - consensus101
 author: Ittai Abraham, Kartik Nayak
+background:
+  - /2019-06-27-defining-consensus/
+continue_reading:
+  - /2021-09-20-optimal-communication-complexity-of-authenticated-byzantine-agreement/
 ---
 
 In this post, we highlight the connection between Broadcast and Agreement in the synchronous model. 

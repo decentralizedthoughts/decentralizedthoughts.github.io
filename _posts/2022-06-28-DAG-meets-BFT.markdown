@@ -5,6 +5,10 @@ tags:
 - consensus
 - research
 author: Alexander Spiegelman
+continue_reading:
+  - /2025-08-08-DAGs/
+  - /2024-05-23-sailfish/
+  - /2024-06-12-shoalpp/
 ---
 
 This post explains in simple words a recent development in the theory and practice of directed acyclic graph-based (DAG-based) Byzantine Fault Tolerance (BFT) consensus, published in three prestigious peer-reviewed conferences, and currently being implemented by several Blockchain companies, e.g., Aptos, Celo, Mysten Labs, and Somelier.

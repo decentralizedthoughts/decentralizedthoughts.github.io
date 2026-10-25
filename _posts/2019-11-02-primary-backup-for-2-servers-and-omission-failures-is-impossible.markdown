@@ -7,6 +7,13 @@ tags:
 - SMR
 - omission
 author: Ittai Abraham
+chapters:
+  - /2026-06-28-chapter-lower-bounds/
+background:
+  - /2019-11-01-primary-backup/
+continue_reading:
+  - /2023-07-09-CAP-two-servers-in-psynch/
+  - /2024-01-30-between-crash-and-omission/
 ---
 
 In a [previous post](https://decentralizedthoughts.github.io/2019-11-01-primary-backup/), we show that State Machine Replication for any $f<n$ failures is possible in the *synchronous* model when the adversary can only cause parties to *crash*. In this post, we show that *omission* failures are more challenging. Implementing SMR requires at most $f<n/2$ omission failures, even in synchrony.

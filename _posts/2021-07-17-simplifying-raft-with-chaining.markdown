@@ -6,6 +6,14 @@ tags:
 - crash
 - omission
 author: Heidi Howard, Natacha Crooks, Ittai Abraham
+chapters:
+  - /2026-05-25-chapter-simplex/
+background:
+  - /2019-10-15-consensus-for-state-machine-replication/
+  - /2021-04-02-benign-hotstuff/
+continue_reading:
+  - /2021-09-30-distributed-consensus-made-simple-for-real-this-time/
+  - /2025-11-08-benign-simplex/
 ---
 
 [Raft](https://raft.github.io/raft.pdf) is a consensus algorithm for deciding a sequence of commands to execute on a [replicated state machine](https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/). Raft is famed for its understandability (relative to other consensus algorithms such as [Paxos](https://www.microsoft.com/en-us/research/uploads/prod/2016/12/The-Part-Time-Parliament.pdf)) yet some aspects of the protocol still require careful treatment. For instance, determining when it is safe for a leader to commit commands from previous leaders or when it is safe for servers to delete or overwrite commands in their logs.

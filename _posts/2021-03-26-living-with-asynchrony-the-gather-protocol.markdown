@@ -4,6 +4,11 @@ date: 2021-03-26 06:54:00 -04:00
 tags:
 - asynchrony
 author: Gilad Stern and Ittai Abraham
+background:
+  - /2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/
+continue_reading:
+  - /2024-01-09-gather-with-binding-and-verifiability/
+  - /2023-07-22-agreeemnt-on-a-core-set/
 ---
 
 A very useful tool in [Asynchronus](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/) distributed computing is [Reliable Broadcast](https://decentralizedthoughts.github.io/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/), or simply called *Broadcast*. It allows a leader to send a message, knowing that all parties will eventually receive the same message, even if a malicious adversary control $f$ parties and $f<n/3$. Broadcast is deterministic and takes just a constant number of rounds. 

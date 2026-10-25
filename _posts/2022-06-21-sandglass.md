@@ -4,6 +4,8 @@ date: 2022-06-21 08:00:00 -04:00
 tags:
 - research
 author: Youer Pu, Lorenzo Alvisi, and Ittay Eyal
+background:
+  - /2022-03-30-asynchronous-agreement-part-two-ben-ors-protocol/
 ---
 
 Nakamoto's consensus protocol works in a permissionless model, where nodes can join and leave without notice. However,  it guarantees agreement only probabilistically. Is this weaker guarantee a necessary concession to the severe demands of supporting a permissionless model? 

@@ -5,6 +5,9 @@ tags:
 - SMR
 - models
 author: Ittai Abraham
+background:
+  - /2019-10-15-consensus-for-state-machine-replication/
+  - /2019-11-01-primary-backup/
 ---
 
 We introduced state machines and [state machine replication](https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/) in an earlier post. In this post, we elaborate on the exact notion of safety and liveness that can be obtained by an ideal state machine when there are multiple clients.

@@ -5,6 +5,11 @@ tags:
 - lowerbound
 - consensus
 author: Ittai Abraham
+chapters:
+  - /2026-06-28-chapter-lower-bounds/
+background:
+  - /2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/
+  - /2021-06-14-neither-non-equivocation-nor-transferability-alone-is-enough-for-tolerating-minority-corruptions-in-asynchrony/
 ---
 
 In this post we show that trusted execution environments (TEEs) don't help against the classic $3f$ lower bound for partial synchrony, when these TEEs have no persistent storage, against a rollback adversary.

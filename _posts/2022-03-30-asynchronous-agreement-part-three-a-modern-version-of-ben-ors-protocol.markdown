@@ -6,6 +6,10 @@ tags:
 - consensus
 - research
 author: Ittai Abraham, Naama Ben-David, Sravya Yandamuri
+background:
+  - /2022-03-30-asynchronous-agreement-part-two-ben-ors-protocol/
+continue_reading:
+  - /2022-04-05-aa-part-four-CA-and-BCA/
 ---
 
 In this series of posts, we explore the marvelous world of consensus in the [Asynchronous model](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/). In this third post, we present a modern version of Ben-Or's classic [protocol](https://homepage.cs.uiowa.edu/~ghosh/BenOr.pdf) that is part of our new work on Asynchronous Agreement. In the [first post](https://decentralizedthoughts.github.io/2022-03-30-asynchronous-agreement-part-one-defining-the-problem/) we defined the problem and in the [second post](https://decentralizedthoughts.github.io/2022-03-30-asynchronous-agreement-part-two-ben-ors-protocol/) we presented Ben-Or's protocol. This is a simplified version extracted from our [paper](https://eprint.iacr.org/2022/711.pdf).

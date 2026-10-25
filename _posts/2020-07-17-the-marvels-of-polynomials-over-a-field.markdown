@@ -5,6 +5,9 @@ tags:
 - math
 - cryptography
 author: Ittai Abraham
+continue_reading:
+  - /2020-07-17-polynomial-secret-sharing-and-the-lagrange-basis/
+  - /2020-12-08-a-simple-and-succinct-zero-knowledge-proof/
 ---
 
 In this series of posts, we explore the mathematical foundations of polynomials over a field. These objects are at the heart of several results in computer science: [secret sharing](/2020-07-17-polynomial-secret-sharing-and-the-lagrange-basis), [Multi Party Computation](https://eprint.iacr.org/2011/136.pdf), [Complexity](https://lance.fortnow.com/papers/files/ip.pdf), and [Zero](https://www.iacr.org/archive/asiacrypt2010/6477178/6477178.pdf) [Knowledge](https://cyber.biu.ac.il/event/the-9th-biu-winter-school-on-cryptography/) [protocols](https://eprint.iacr.org/2019/953.pdf) (and see [this post](https://decentralizedthoughts.github.io/2020-12-08-a-simple-and-succinct-zero-knowledge-proof/)).

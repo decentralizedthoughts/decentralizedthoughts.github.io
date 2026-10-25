@@ -8,6 +8,11 @@ tags:
 - randomness
 - crash
 author: Ittai Abraham
+background:
+  - /2019-12-15-synchrony-uncommitted-lower-bound/
+continue_reading:
+  - /2023-02-19-rand-and-consensus-2/
+  - /2022-03-30-asynchronous-agreement-part-one-defining-the-problem/
 ---
 
 What is the simplest setting where **randomization** can help solve **consensus**? Assume *lock-step* (**synchrony**) with $f<n$ **crash** failures. We know that in the [worst case](https://decentralizedthoughts.github.io/2019-12-15-synchrony-uncommitted-lower-bound/) reaching agreement takes at least $f+1$ rounds. This lower bound holds even if the protocol is randomized so the natural question is:

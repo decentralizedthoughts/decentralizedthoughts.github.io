@@ -4,6 +4,9 @@ date: 2020-12-08 13:37:00 -05:00
 tags:
 - cryptography
 author: Ittai Abraham, Alin Tomescu
+background:
+  - /2020-07-17-the-marvels-of-polynomials-over-a-field/
+  - /2020-07-17-polynomial-secret-sharing-and-the-lagrange-basis/
 ---
 
 There is a popular belief that **succinct proofs** and **zero-knowledge proofs** are a type of [moon math](https://medium.com/@VitalikButerin/quadratic-arithmetic-programs-from-zero-to-hero-f6d558cea649). In this post, our goal is to present a simple proof system that can provide an introduction and intuition to this space. Perhaps surprisingly, the only tool we will use is the [Theorem](/2020-07-17-the-marvels-of-polynomials-over-a-field) that non-trivial degree-at-most-$d$ polynomials over a field have at most $d$ roots.

@@ -6,6 +6,11 @@ tags:
 - blockchain
 - research
 author: Kartik Nayak
+background:
+  - /2019-08-16-byzantine-agreement-needs-quadratic-messages/
+  - /2019-07-19-setup-assumptions/
+continue_reading:
+  - /2023-01-05-player-replaceability-II/
 ---
 
 This is part I of a two-part post on the concept of player-replaceability.

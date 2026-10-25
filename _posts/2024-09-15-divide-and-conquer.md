@@ -5,6 +5,11 @@ date: 2024-09-15 07:00:00 -04:00
 tags:
 - consensus
 author: Ittai Abraham, Renas Bacho, and Gilad Stern
+background:
+  - /2022-06-09-phase-king-via-gradecast/
+  - /2019-08-16-byzantine-agreement-needs-quadratic-messages/
+continue_reading:
+  - /2021-09-20-optimal-communication-complexity-of-authenticated-byzantine-agreement/
 ---
 
 The idea of decomposing a hard problem into easier problems is a fundamental algorithm design pattern in Computer Science. [Divide and Conquer](https://en.wikipedia.org/wiki/Divide-and-conquer_algorithm) is used in so many domains: sorting, [multiplication](https://www.youtube.com/watch?v=JCbZayFr9RE), and [FFT](https://decentralizedthoughts.github.io/2023-09-01-FFT/), to mention a few. But what about distributed computing?

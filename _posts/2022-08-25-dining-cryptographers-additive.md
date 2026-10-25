@@ -4,6 +4,9 @@ date: 2022-08-25 08:00:00 -04:00
 tags:
 - cryptography
 author: Ittai Abraham
+background:
+  - /2020-07-17-polynomial-secret-sharing-and-the-lagrange-basis/
+  - /2019-06-07-modeling-the-adversary/
 ---
 
 David Chaum’s [dining cryptographer problem](https://en.wikipedia.org/wiki/Dining_cryptographers_problem) is a pioneering work on the foundations of privacy. It shows the amazing power of information-theoretic Secure Multi Party Computation. The [original paper](https://users.ece.cmu.edu/~adrian/731-sp04/readings/dcnets.html) from 1988 is super accessible and fun to read. Many systems in the last 20 years for anonymity and privacy-preserving communication are based on the Dining Cryptographers problem. [Herbivore](https://www.cs.cornell.edu/people/egs/herbivore/documentation.html), [Dissent](https://dedis.cs.yale.edu/dissent/), [Riposte](https://arxiv.org/pdf/1503.06115.pdf), [Blinder](https://eprint.iacr.org/2020/248.pdf), and many others.

@@ -3,6 +3,9 @@ title: 'Streamlet: A Simple Textbook Blockchain Protocol'
 date: 2020-05-14 13:48:00 -04:00
 tags:
 - blockchain
+background:
+  - /2019-10-25-flavours-of-state-machine-replication/
+  - /2019-06-01-2019-5-31-models/
 ---
 
 <p align="center">

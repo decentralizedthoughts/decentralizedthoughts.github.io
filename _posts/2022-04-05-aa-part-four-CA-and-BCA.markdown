@@ -6,6 +6,11 @@ tags:
 - consensus
 - research
 author: 'Ittai Abraham, Naama Ben-David, Sravya Yandamuri '
+background:
+  - /2022-03-30-asynchronous-agreement-part-three-a-modern-version-of-ben-ors-protocol/
+  - /2022-03-30-asynchronous-agreement-part-one-defining-the-problem/
+continue_reading:
+  - /2022-04-05-aa-part-five-ABBA/
 ---
 
 In this post we introduce a key building block in the *Byzantine* Model called **Binding Crusader Agreement**. We show how to use it in the [next post](https://decentralizedthoughts.github.io/2022-04-05-aa-part-five-ABBA/). This is a simplified version extracted from our [paper](https://eprint.iacr.org/2022/711.pdf).

@@ -5,6 +5,11 @@ tags:
 - lowerbound
 - research
 author: Ittai Abraham, Kartik Nayak, Ling Ren
+chapters:
+  - /2026-06-28-chapter-lower-bounds/
+background:
+  - /2019-08-16-byzantine-agreement-needs-quadratic-messages/
+  - /2019-06-07-modeling-the-adversary/
 ---
 
 In this post, we prove a result of [Abraham, Hubert Chan, Dolev, Nayak, Pass, Ren, Shi, 2019](https://users.cs.duke.edu/~kartik/papers/podc2019.pdf) showing that:

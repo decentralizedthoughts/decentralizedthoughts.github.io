@@ -5,6 +5,11 @@ tags:
 - lowerbound
 - models
 author: Ittai Abraham
+chapters:
+  - /2026-06-28-chapter-lower-bounds/
+background:
+  - /2019-11-01-primary-backup/
+  - /2019-11-02-primary-backup-for-2-servers-and-omission-failures-is-impossible/
 ---
 
 In this post we explore adversary failure models that lie between crash and omission failures:

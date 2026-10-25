@@ -4,6 +4,11 @@ date: 2020-11-30 09:01:00 -05:00
 tags:
 - consensus
 author: Ittai Abraham, Kartik Nayak
+background:
+  - /2020-11-29-the-lock-commit-paradigm/
+  - /2019-10-15-consensus-for-state-machine-replication/
+continue_reading:
+  - /2021-04-02-benign-hotstuff/
 ---
 
 In this follow to our [Lock-Commit post](https://decentralizedthoughts.github.io/2020-11-29-the-lock-commit-paradigm/), we show two important extensions. The first is how to extend from single-shot to **multi-shot**. Multi-shot is the bases of [State Machine Replication](https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/). The second is how to tolerate **mix faluts**: both $f$ omission failures and $k$ [crash](https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/) failures given *k+2f < n*.

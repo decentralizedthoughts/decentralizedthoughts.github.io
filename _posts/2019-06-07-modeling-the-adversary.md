@@ -6,6 +6,12 @@ tags:
 - models
 author: Ittai Abraham
 layout: post
+background:
+  - /2019-06-01-2019-5-31-models/
+  - /2019-06-17-the-threshold-adversary/
+continue_reading:
+  - /2024-01-30-between-crash-and-omission/
+  - /2024-01-28-early-stopping-lower-bounds/
 ---
 
 After we fix the communication model, [synchrony, asynchrony, or partial synchrony](/2019-06-01-2019-5-31-models/), and a [threshold adversary](/2019-06-17-the-threshold-adversary/) there are still five important modeling decisions regarding the adversary's power:

@@ -5,6 +5,10 @@ date: 2019-12-06 12:05:00 -05:00
 tags:
 - blockchain
 author: Ittai Abraham
+background:
+  - /2019-10-15-consensus-for-state-machine-replication/
+continue_reading:
+  - /2023-09-30-scaling/
 ---
 
 If anyone asks you: *how can I **scale**  my State Machine Replication (Blockchain) system?*

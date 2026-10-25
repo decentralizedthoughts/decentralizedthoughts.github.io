@@ -5,6 +5,10 @@ tags:
 - consensus
 - asynchrony
 author: Gilad Stern, Ittai Abraham
+background:
+  - /2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/
+  - /2021-03-26-living-with-asynchrony-the-gather-protocol/
+  - /2022-04-05-aa-part-five-ABBA/
 ---
 
 A challenging step in many *asynchronous* protocols is agreeing on a set of parties that completed some task. For example, an asynchronous protocol might start off with parties [reliably broadcasting](https://decentralizedthoughts.github.io/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/) a value. Due to asynchrony and having $\leq f$ corruptions, honest parties can only wait for $n-f$ parties to complete the task.

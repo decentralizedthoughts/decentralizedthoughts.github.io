@@ -6,6 +6,12 @@ tags:
 - SMR
 - research
 author: Kartik Nayak, Ling Ren
+background:
+  - /2019-11-11-authenticated-synchronous-bft/
+  - /2019-10-15-consensus-for-state-machine-replication/
+continue_reading:
+  - /2020-06-12-optimal-optimistic-responsiveness/
+  - /2021-12-07-good-case-latency-of-rotating-leader-synchronous-bft/
 ---
 
 In the [previous post](https://decentralizedthoughts.github.io/2019-11-11-authenticated-synchronous-bft/), we discussed progress in authenticated synchronous consensus protocols. In this post, we will discuss one of the recent protocols [Sync HotStuff](https://eprint.iacr.org/2019/270), which is a simple and practical Byzantine Fault Tolerant SMR protocol to tolerate $f < n/2$ faults.

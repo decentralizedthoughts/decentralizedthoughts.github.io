@@ -5,6 +5,14 @@ date: 2024-01-28 12:05:00 -05:00
 tags:
 - lowerbound
 author: Ittai Abraham and Gilad Stern
+chapters:
+  - /2026-06-28-chapter-lower-bounds/
+background:
+  - /2019-12-15-consensus-model-for-FLP/
+  - /2019-12-15-synchrony-uncommitted-lower-bound/
+continue_reading:
+  - /2024-03-07-mobile-is-FLP/
+  - /2026-04-23-latency-of-censorship-resistance/
 ---
 
 **TL;DR:** Even in *failure-free* executions, consensus protocols resilient to crash failures often require at least two rounds. This follows from the early stopping lower bound: executions with $f$ actual crashes require at least $\min \{f+2, t+1\}$ rounds when tolerating $t$ possible failures. Thus, the possibility of a failure forces extra rounds, even when no failures occur.

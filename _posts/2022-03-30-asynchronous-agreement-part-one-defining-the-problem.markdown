@@ -6,6 +6,11 @@ tags:
 - consensus
 - consensus101
 author: 'Ittai Abraham, Naama Ben-David, Sravya Yandamuri '
+background:
+  - /2019-06-01-2019-5-31-models/
+  - /2019-12-15-asynchrony-uncommitted-lower-bound/
+continue_reading:
+  - /2022-03-30-asynchronous-agreement-part-two-ben-ors-protocol/
 ---
 
 In this series of posts, we explore the marvelous world of consensus in the [Asynchronous model](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/). In this post, we start by simply defining the problem. Recall the  [FLP theorem](https://decentralizedthoughts.github.io/2019-12-15-asynchrony-uncommitted-lower-bound/):

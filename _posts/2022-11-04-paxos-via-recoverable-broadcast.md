@@ -5,6 +5,14 @@ tags:
 - crash
 - omission
 author: Ittai Abraham
+background:
+  - /2019-06-27-defining-consensus/
+  - /2019-06-01-2019-5-31-models/
+  - /2019-06-07-modeling-the-adversary/
+continue_reading:
+  - /2022-11-19-from-single-shot-to-smr/
+  - /2022-11-20-pbft-via-locked-braodcast/
+  - /2022-11-24-two-round-HS/
 ---
 
 There are many ways to learn about the [Paxos](https://lamport.azurewebsites.net/pubs/lamport-paxos.pdf) protocol (see [Lampson](https://www.microsoft.com/en-us/research/publication/the-abcds-of-paxos/), [Cachin](https://cachin.com/cc/papers/pax.pdf), [Howard](https://www.youtube.com/watch?v=0K6kt39wyH0), [Howard 2](https://www.youtube.com/watch?v=s8JqcZtvnsM), [Guerraoui](https://www.youtube.com/watch?v=WX4gjowx45E), [Kladov](https://matklad.github.io/2020/11/01/notes-on-paxos.html), [Krzyzanowski](https://people.cs.rutgers.edu/~pxk/417/notes/paxos.html), [Lamport](https://www.youtube.com/watch?v=tw3gsBms-f8), [Wikipedia](https://en.wikipedia.org/wiki/Paxos_(computer_science)) and many more). The emphasis of this post is on a **decomposition** of Paxos for *omission failures* that will later help when we do a similar decomposition for *Byzantine failures* (for [PBFT](https://decentralizedthoughts.github.io/2022-11-20-pbft-via-locked-braodcast/) and [HotStuff](https://decentralizedthoughts.github.io/2022-11-24-two-round-HS/)).

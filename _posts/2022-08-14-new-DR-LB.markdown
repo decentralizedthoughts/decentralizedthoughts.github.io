@@ -6,6 +6,11 @@ tags:
 - lowerbound
 - research
 author: Gilad Stein, Ittai Abraham
+chapters:
+  - /2026-06-28-chapter-lower-bounds/
+background:
+  - /2022-06-19-crusader-braodcast/
+  - /2019-08-16-byzantine-agreement-needs-quadratic-messages/
 ---
 
 In a [previous post](https://decentralizedthoughts.github.io/2022-06-19-crusader-braodcast/) we discussed **Crusader Broadcast** and showed a $O(n^2)$ words, $O(1)$ time solution for $f<n$ and assuming a PKI. In this post, we overview a new [Dolev-Reischuk](https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/) style bower bound ([see our full paper](https://eprint.iacr.org/2022/730.pdf)):

@@ -6,6 +6,12 @@ tags:
 - consensus101
 - consensus
 author: Ittai Abraham and Andrew Lewis-Pye
+background:
+  - /2019-12-15-synchrony-uncommitted-lower-bound/
+  - /2019-08-16-byzantine-agreement-needs-quadratic-messages/
+continue_reading:
+  - /2024-09-15-divide-and-conquer/
+  - /2026-10-18-byzantine-approximate-agreement-grade-detect-average/
 ---
 
 In this post we present a **simple** unauthenticated synchronous Byzantine Agreement protocol that is based on the Phase-King protocol of [Berman, Garay, and Perry 1989-92](http://plan9.bell-labs.co/who/garay/bit.ps). We refer also to [Jonathan Katz's excellent write-up](https://www.cs.umd.edu/~jkatz/gradcrypto2/f13/BA.pdf) on this same protocol from 2013. We offer a modern approach that decomposes the Phase-King protocol into a Graded Consensus building block.

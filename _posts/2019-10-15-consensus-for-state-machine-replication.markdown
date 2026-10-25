@@ -5,6 +5,12 @@ tags:
 - consensus
 - SMR
 author: Kartik Nayak, Ittai Abraham, Ling Ren
+background:
+  - /2019-06-27-defining-consensus/
+continue_reading:
+  - /2019-11-01-primary-backup/
+  - /2019-10-25-flavours-of-state-machine-replication/
+  - /2022-11-19-from-single-shot-to-smr/
 ---
 
 We introduced definitions for consensus, Byzantine Broadcast (BB) and Byzantine Agreement (BA), in an [earlier post](https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/). In this post, we discuss how consensus protocols are used in **State Machine Replication** ([SMR](https://en.wikipedia.org/wiki/State_machine_replication)), a fundamental approach in distributed computing for building fault-tolerant systems. We compare and contrast this setting to that of traditional BB and BA. A [follow-up post](https://decentralizedthoughts.github.io/2022-11-19-from-single-shot-to-smr/) discusses the reductions from one abstraction to the other in the omission failure model.

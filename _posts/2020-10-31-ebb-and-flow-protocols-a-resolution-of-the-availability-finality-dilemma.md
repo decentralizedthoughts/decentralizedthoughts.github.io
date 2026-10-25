@@ -4,6 +4,10 @@ date: 2020-11-01 01:16:00 -04:00
 tags:
 - SMR
 - research
+background:
+  - /2019-06-01-2019-5-31-models/
+  - /2019-11-29-Analysis-Nakamoto/
+  - /2019-06-23-what-is-the-difference-between/
 ---
 
 <p align="center">

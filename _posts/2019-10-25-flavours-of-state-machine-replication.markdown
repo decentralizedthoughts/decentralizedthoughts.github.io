@@ -4,6 +4,11 @@ date: 2019-10-25 15:54:00 -04:00
 tags:
 - SMR
 author: Ittai Abraham
+background:
+  - /2019-10-15-consensus-for-state-machine-replication/
+continue_reading:
+  - /2019-10-25-payment-channels-are-just-a-two-person-bfs-smr-systems/
+  - /2020-05-14-streamlet/
 ---
 
 [State Machine Replication](https://www.cs.cornell.edu/fbs/publications/ibmFault.sm.pdf) is a fundamental approach in distributed computing for building fault tolerant systems. This post is a followup to our basic post on [Fault Tolerant State Machine Replication](https://decentralizedthoughts.github.io/2019-10-15-consensus-for-state-machine-replication/).
