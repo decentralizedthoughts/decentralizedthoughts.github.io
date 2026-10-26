@@ -845,14 +845,24 @@ nav.top-nav-short-permanent ~ header > .intro-header.big-img {
   padding: 0;
 }
 .post-links-list .page-item {
+  display: flex;
+  min-width: 0;
   max-width: 100%;
 }
 .pagination.post-links-list .page-link {
+  flex: 1;
   text-transform: none;
   letter-spacing: normal;
   white-space: normal;
   overflow-wrap: anywhere;
-  height: 100%;
+  height: auto;
+}
+.pagination.post-links-list .page-item:hover > .page-link,
+.pagination.post-links-list .page-item .page-link:focus,
+.pagination.post-links-list .page-item .page-link:active {
+  color: var(--page-col);
+  border-color: var(--hover-col);
+  background-color: var(--hover-col);
 }
 .post-links-chapters h2 {
   display: inline;
