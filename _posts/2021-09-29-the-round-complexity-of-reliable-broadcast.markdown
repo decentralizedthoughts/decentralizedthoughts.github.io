@@ -77,7 +77,7 @@ This protocol appears in section 3 of our [good-case latency categorization](htt
 
        on receiving <echo, v>_* signed by n-f distinct parties:
           send the <echo, v>_* signed by n-f distinct parties to all parties
-          deliver v and termiante
+          deliver v and terminate
 
 The main insight: a party that delivers a value has a cryptographic proof that it can transfer to other parties.
 

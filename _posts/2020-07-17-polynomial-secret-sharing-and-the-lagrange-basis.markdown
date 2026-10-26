@@ -89,7 +89,7 @@ $$p(X)=\sum_{z \in Z} L_z(X) p(z)$$
 Why does this equality hold?
 It's because both $p(X)$ and $\sum_{z \in Z} L_z(X) p(z)$ are degree-at-most-$f$ polynomials so their difference is also of degree-at-most-$f$ and has $f+1$ zeros, since $|Z|=f+1$.
 From the [main theorem in our previous post on polynomials](/2020-07-17-the-marvels-of-polynomials-over-a-field), this means that $p(X)-\sum_{z\in Z} L_z(X) p(z)$ must be the zero polynomial.
-Thus, $p(X)=\sum_{z \in Z} L_z(X) p(z)$ follows from the fact that non-trivial degree-at-most-$f$ polynomials have at most $d$ roots!
+Thus, $p(X)=\sum_{z \in Z} L_z(X) p(z)$ follows from the fact that non-trivial degree-at-most-$f$ polynomials have at most $f$ roots!
 
 This argument shows that there is a *unique representation* of $p=(p_0,\dots,p_f)$ for the Lagrange basis induced by $Z=\\{z_1,\dots,z_{f+1}\\}$.
 Specifically, this representation is $\left(p(z_1),\dots,p(z_{f+1})\right)$.
@@ -192,8 +192,8 @@ In other words, anything the adversary could learn by observing the distribution
 ### Notes
 
 
-* The adversary in this post is *passive*, so the main challenge is in the hiding property. The binding propoerty will be less trivial in future posts about stronger adversaries. See our [follow-up post on the Byzantine case](https://decentralizedthoughts.github.io/2022-08-24-BGW-secret-sharing/).
-* In the share protocol we rather arbitrarily used the integers from 1 to $n$ as the shares sent to parties 1 to $n$. In fact one can use any fixed set $w_1,\dots,w_n$ of field elements. Since in many cases we want to use [FFT](https://decentralizedthoughts.github.io/2023-09-01-FFT/) it is often beneficial to **use roots of unity** and set $w_i \omega^i$, so party $i$ gets the share $P(\omega^i)$.
+* The adversary in this post is *passive*, so the main challenge is in the hiding property. The binding property will be less trivial in future posts about stronger adversaries. See our [follow-up post on the Byzantine case](https://decentralizedthoughts.github.io/2022-08-24-BGW-secret-sharing/).
+* In the share protocol we rather arbitrarily used the integers from 1 to $n$ as the shares sent to parties 1 to $n$. In fact one can use any fixed set $w_1,\dots,w_n$ of distinct field elements. Since in many cases we want to use [FFT](https://decentralizedthoughts.github.io/2023-09-01-FFT/) it is often beneficial to **use roots of unity** and set $w_i = \omega^i$, so party $i$ gets the share $P(\omega^i)$.
 
 
 Please leave comments on [Twitter](https://twitter.com/ittaia/status/1284267077587677184?s=20).

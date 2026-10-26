@@ -53,7 +53,7 @@ $$
 P' = P - p_d X^{d-1} (X-a),
 $$
 
-note that $p_d$ is the largest coefficient of $P$. Lets make a few observations about $P'$:
+note that $p_d$ is the leading coefficient of $P$. Lets make a few observations about $P'$:
 
 1. The degree of $P'$ is smaller than $d$. This is because the $d$th coefficient of $p_d X^{d-1} (X-a)$ equals $p_d$, so it will cancel out.
 2. $a$ is a root of $P'$. This is because $P(a)=0$ and because $p_d X^{d-1} (X-a)$ also has a root at $a$.
@@ -86,7 +86,7 @@ The proof is by induction on $d=deg(P)$.
 
 For $d=0$, since $P$ is non-trivial, we have $p_0 \neq 0$ and hence $P$ has no roots (as it should be).
 
-For $d=1$, we use the fact that $K$ is a field. The unique root of $P=p_0+p_1 X$ (for $p_1 \neq 0$) is the *unique* element $-p_0/p_1 = -(p_0) (p_1)^{-1}$. This follows from the uniqueness of the inverse for both addition and multiplication in a field (if $K$ were just a ring and not a field (e.g., $K=\mathbb{Z}_{12}$), then the inverse of $p_1$ may not exist or, more worrisome, may not be unique!).
+For $d=1$, we use the fact that $K$ is a field. The unique root of $P=p_0+p_1 X$ (for $p_1 \neq 0$) is the *unique* element $-p_0/p_1 = -(p_0) (p_1)^{-1}$. This follows because every nonzero element of a field has a multiplicative inverse. In a ring that is not a field (e.g., $K=\mathbb{Z}_{12}$), a nonzero $p_1$ may have no multiplicative inverse, and the equation $p_0+p_1X=0$ can have multiple solutions. Whenever a multiplicative inverse exists, it is unique.
 
 For $d\geq 2$, we use an induction step. There are two cases:
 

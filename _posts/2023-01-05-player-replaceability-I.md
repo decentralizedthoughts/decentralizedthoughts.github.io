@@ -25,7 +25,7 @@ Essentially, these properties make the miners ephemeral where they are in a posi
 
 **Can we achieve these properties without PoW, for instance, in a setting where there are a fixed set of parties or a protocol that relies on proof-of-stake?**
 
-To answer this question, we must first ask when is the property of player-replaceability useful? As an example, consider a setting with a fixed set of parties running a protocol such as HotStuff or PBFT. In these protocols, committing a value typically requires *all* parties to send messages. Even if a threshold adversary decides to adaptively corrupt some of these parties, so far as the protocol assumptions hold, the adversary would only delay committing a value. For example, corrupting a non-leader party in HotStuff would not help since there are sufficiently many honest parties to ensure safety and livenes. The adversary can corrupt the protocol leader who is only responsible for liveness; however, eventually, after some view changes, we would have an honest leader and we would commit values. On the other hand, if a protocol involves only a few (sublinear) parties sending messages to all parties, in the absence of the properties discussed earlier, an adverarsary can corrupt all these senders. They can then send equivocating messages, eventually leading to safety (and liveness) violation.
+To answer this question, we must first ask when is the property of player-replaceability useful? As an example, consider a setting with a fixed set of parties running a protocol such as HotStuff or PBFT. In these protocols, committing a value typically requires *all* parties to send messages. Even if a threshold adversary decides to adaptively corrupt some of these parties, so far as the protocol assumptions hold, the adversary would only delay committing a value. For example, corrupting a non-leader party in HotStuff would not help since there are sufficiently many honest parties to ensure safety and liveness. The adversary can corrupt the protocol leader who is only responsible for liveness; however, eventually, after some view changes, we would have an honest leader and we would commit values. On the other hand, if a protocol involves only a few (sublinear) parties sending messages to all parties, in the absence of the properties discussed earlier, an adversary can corrupt all these senders. They can then send equivocating messages, eventually leading to safety (and liveness) violation.
 
 Thus, player-replaceability is a relevant property for a protocol that has only a sub-linear number of parties sending messages (thus obtaining sub-quadratic communication) and needs to be simultaneously secure under an adaptive adversary. Chen and Micali, in [Algorand](https://arxiv.org/pdf/1607.01341.pdf), originally described it as *a protocol that correctly and efficiently reaches consensus even if each of its step is executed by a totally new, and randomly and independently selected, subset of parties with little intersection between the subset*s.
 
@@ -46,7 +46,7 @@ C = Randomly select k parties among n parties // C is  known to everyone
 
 if party i is in C:
     newCommand := getNextVal()
-    ouptut o := run BFT-C(newCommand)
+    output o := run BFT-C(newCommand)
     send output o to all parties
     Output o
 else:

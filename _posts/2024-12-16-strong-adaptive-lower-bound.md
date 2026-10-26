@@ -34,7 +34,7 @@ As in Dolev and Reischuk's proof from 1982, we show that some designated party g
 
 Seeking a contradiction, we look at world 1 and use Markov inequity to argue that with a large probability the protocol sends not too many messages to parties in $V$. Conditioned on this event, there is a large probability that the party $p$ gets no more than $f/2$ messages. Conditioned on this event, there is a probability that all parties output the leader value (there is no error).
 
-We then show indistingushability between world 1 and world 2. Then in world 2, conditioned on these three events, party $p$, which is non-faulty, sees no message, so there is a constant probability that party $p$ has either a safety error or a liveness error.
+We then show indistinguishability between world 1 and world 2. Then in world 2, conditioned on these three events, party $p$, which is non-faulty, sees no message, so there is a constant probability that party $p$ has either a safety error or a liveness error.
 
 
 ### Proof

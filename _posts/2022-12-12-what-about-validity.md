@@ -14,7 +14,7 @@ continue_reading:
   - /2022-09-10-provable-broadcast/
 ---
 
-Perhaps the archetypical [trilemma](https://twitter.com/el33th4xor/status/1191820205456023552?s=20&t=RcutJw0wQUsTmrO0OXzpXw) is **consensus** - it requires three properties: **agreement**, **liveness**, and **validity**. Getting any two is easy, but all three together is what makes consensus such a facinating problem that continues to create new challenges even after 40 years of research.
+Perhaps the archetypical [trilemma](https://twitter.com/el33th4xor/status/1191820205456023552?s=20&t=RcutJw0wQUsTmrO0OXzpXw) is **consensus** - it requires three properties: **agreement**, **liveness**, and **validity**. Getting any two is easy, but all three together is what makes consensus such a fascinating problem that continues to create new challenges even after 40 years of research.
 
 A lot of research focuses on *agreement* and *liveness* properties. In this series of posts, we highlight some classic and some more recent research on **validity** in the context of consensus and blockchain protocols. 
 
@@ -60,7 +60,7 @@ Note that Neiger called this problem *Strong Consensus* but we choose to use a m
 
 Neiger's original proof was for deterministic protocols, here we present a modern version that covers even randomized protocols.
 
-Seeking a contradiction, assume $n=mf$ and $n > 3f$. So there must be $m>3$ possible input values. Assume with loss of generality that the possible input values are $1,\dots,m$. Partition the parties into sets of size $f$: $S_1,\dots,S_m$ and have parties in set $S_i$ start with input $i$. 
+Seeking a contradiction, assume $n=mf$ and $n > 3f$. So there must be $m>3$ possible input values. Assume without loss of generality that the possible input values are $1,\dots,m$. Partition the parties into sets of size $f$: $S_1,\dots,S_m$ and have parties in set $S_i$ start with input $i$.
 
 
 
@@ -133,7 +133,7 @@ One way to slightly relax validity with honest input validity is to allow a defa
 Note that [Cachin,  Guerraoui, Rodrigues, 2011](https://www.distributedprogramming.net) called this problem *Strong Validity* but we choose to use a more explicit name here to avoid overloading the term *strong*.
 
 
-Note that this variation does not suffer from stronger lower bounds than regular consensus. See exercise 5.11 in [CGR11](https://www.distributedprogramming.net) for how to solve consensus with honest-input-or-default validity. In a nutshll, this is done again via a reduction to consensus with external validity (where the validity condition is that at least $f+1$ parties sent this input).
+Note that this variation does not suffer from stronger lower bounds than regular consensus. See exercise 5.11 in [CGR11](https://www.distributedprogramming.net) for how to solve consensus with honest-input-or-default validity. In a nutshell, this is done again via a reduction to consensus with external validity (where the validity condition is that at least $f+1$ parties sent this input).
 
 ### Majority validity and advantaged validity
 

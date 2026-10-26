@@ -49,7 +49,7 @@ In a round-based DAG (first introduced in [Aleph](https://arxiv.org/abs/1908.051
 
 >Hence, recursively, the vertex's causal history in both local views is exactly the same. 
 
-The non-equivocation property eliminates the ability of Byzantine validators to lie, which drastically simplifies the consensus logic. As we explain shortly, [Narwhal](https://arxiv.org/abs/2105.11827) and [Bullshark](https://arxiv.org/abs/2201.05677) provide an efficient reliabile broadcast implementation.
+The non-equivocation property eliminates the ability of Byzantine validators to lie, which drastically simplifies the consensus logic. As we explain shortly, [Narwhal](https://arxiv.org/abs/2105.11827) and [Bullshark](https://arxiv.org/abs/2201.05677) provide an efficient reliable broadcast implementation.
 
 
 #### Network speed throughput and chain quality
@@ -89,7 +89,7 @@ The Narwhal system implements a highly scalable and efficient DAG construction, 
 
 Moreover, since data dissemination is completely symmetric among validators, the system is resilient to faults (a weak spot in many previous systems) -  tps is only affected because faulty validators do not disseminate data. 
 
-Each validator consists of a number of workers and a primary. Workers continuously stream batches of data to each other and forward the digests of the batches to their primaries. The primaries form a round-based DAG on metadata (vertices contain digests). Importantly, the data is disseminated by the workers at network speed regarding the metadata DAG construction by the primaries. To form the DAG, validators use the follwoing [broadcast protocol](https://link.springer.com/book/10.1007/978-3-642-15260-3) that satisfies reliable broadcast properties with a linear number of messages on the critical path.
+Each validator consists of a number of workers and a primary. Workers continuously stream batches of data to each other and forward the digests of the batches to their primaries. The primaries form a round-based DAG on metadata (vertices contain digests). Importantly, the data is disseminated by the workers at network speed regarding the metadata DAG construction by the primaries. To form the DAG, validators use the following [broadcast protocol](https://link.springer.com/book/10.1007/978-3-642-15260-3) that satisfies reliable broadcast properties with a linear number of messages on the critical path.
 
 In each round (see Figure 2 in [Narwhal&Tusk](https://arxiv.org/abs/2105.11827) for illustration):
 1. Each validator prepares and sends to all other validators a message with the metadata corresponding to the DAG vertex: i.e. batch digests and n-f references to vertices from the previous round.

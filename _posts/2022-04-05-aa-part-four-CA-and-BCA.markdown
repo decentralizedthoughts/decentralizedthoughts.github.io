@@ -65,7 +65,7 @@ Proving *Liveness* is done in 3 steps:
 
 
 **Claim 3**: If all non-faulty parties send `<echo2, u>` for the same value $u$, then all non-faulty parties output a value.
-*Proof*: Clearly, in this case eventaully all of them will see at least $n-f$ `<echo2, u>` and hence output $u$ if they did not output $\bot$ earlier.
+*Proof*: Clearly, in this case eventually all of them will see at least $n-f$ `<echo2, u>` and hence output $u$ if they did not output $\bot$ earlier.
 
 ### Adding a Termination Gadget 
 
@@ -80,7 +80,7 @@ Hence even after outputting value $x \neq \bot$, a party is required to keep mai
 Without the Termination property, sequentially running $k$ instances requires maintaining $O(k \times n)$ local memory. With Termination, only the latest instance needs to be maintained, so local memory is bounded by just $O(n)$. 
 
 
-Here is the psedocode for termination:
+Here is the pseudocode for termination:
 
 ```
 if output(bot)

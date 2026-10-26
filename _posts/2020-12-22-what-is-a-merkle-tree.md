@@ -514,7 +514,7 @@ At the end of the day, I think what I'm trying to say is _"why don't you go read
 
 ## Bonus: A Merkle tree is a collision-resistant hash function
 
-A very simple way to think of a Merkle hash tree with $n$ _leaves_ is as a collision-resistant hash function $\mht$ that takes $n$ inputs[^contrast] and ouputs a $2\lambda$-bit hash, a.k.a. the _Merkle root hash_.
+A very simple way to think of a Merkle hash tree with $n$ _leaves_ is as a collision-resistant hash function $\mht$ that takes $n$ inputs[^contrast] and outputs a $2\lambda$-bit hash, a.k.a. the _Merkle root hash_.
 More formally, the _Merkle hash function_ is defined as:
 
 $$\mht : \left(\{0,1\}^*\right)^n \rightarrow \{0,1\}^{2\lambda}$$

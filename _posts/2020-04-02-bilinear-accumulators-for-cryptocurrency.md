@@ -378,7 +378,7 @@ Many interesting problems remain open for bilinear accumulators:
 [^BGG18]: **A Multi-party Protocol for Constructing the Public Parameters of the Pinocchio zk-SNARK**, by Bowe, Sean and Gabizon, Ariel and Green, Matthew D., *in Financial Cryptography and Data Security*, 2019
 [^BGM17]: **Scalable Multi-party Computation for zk-SNARK Parameters in the Random Beacon Model**, by Sean Bowe and Ariel Gabizon and Ian Miers, *in Cryptology ePrint Archive, Report 2017/1050*, 2017
 [^CLRS09]: **Introduction to Algorithms, Third Edition**, by Cormen, Thomas H. and Leiserson, Charles E. and Rivest, Ronald L. and Stein, Clifford, 2009
-[^Erickson15]: **Static-to-dynamic tranformations**, by Jeff Erickson, 2015, [[URL]](http://jeffe.cs.illinois.edu/teaching/datastructures/notes/01-statictodynamic.pdf)
+[^Erickson15]: **Static-to-dynamic transformations**, by Jeff Erickson, 2015, [[URL]](http://jeffe.cs.illinois.edu/teaching/datastructures/notes/01-statictodynamic.pdf)
 [^Fiore20]: **Zero-Knowledge Proofs for Set Membership**, by Dario Fiore, in [ZKProof Blog](https://zkproof.org/2020/02/27/zkp-set-membership/), 2020
 [^Henry10]: **Pippenger's Multiproduct and Multiexponentiation Algorithms (Extended Version)**, by Ryan Henry, 2010
 [^Joux00]: **A One Round Protocol for Tripartite Diffie--Hellman**, by Joux, Antoine, *in Algorithmic Number Theory*, 2000

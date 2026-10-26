@@ -28,7 +28,7 @@ In a [technical report](https://eprint.iacr.org/2022/796) we publish today, we s
 
 ## Sandglass 
 
-We show that if instead we can send _all work_, achieving a full (rather than statistical) PoW, it is possible to achieve _deterministic safety in a permssionless model_. 
+We show that if instead we can send _all work_, achieving a full (rather than statistical) PoW, it is possible to achieve _deterministic safety in a permissionless model_.
 
 We present _Sandglass_, a permissionless consensus algorithm that guarantees deterministic agreement and terminates with probability 1. It operates in a model based on Nakamoto's. Our model allows an arbitrary number of participants to join and leave the system at any time and stipulates that at no time the number of participants exceeds an upper bound N (though the actual number _n_ of participants at any given time is unknown). Further, like Nakamoto's, it is hybrid synchronous, in that, at all times, a majority of participants are correct and able to communicate synchronously with one another. We call these participants good; our protocol's safety and liveness guarantees apply to them. Participants that are not good (whether because they crash, perform omission failures, and/or experience asynchronous network connections) we call _defective_. 
 
@@ -45,7 +45,7 @@ This approach is clearly no longer feasible in a permissionless setting, where _
  
 ## Conclusion
 
-The discovery that deterministic safety is possible in a permissionless setting leads to the question of whether there exists a protocol that also achieves deterministic termination in a hybrid synchronous model. Another natural question is whether there exists a deterministically-safe solution to consensus in a hybrid-synchronous model with Byzantine failures ([Lewis-Pye and Roughgarden](https://arxiv.org/pdf/2101.07095.pdf) have shown that a deterministic-consesus protocol does not exist). Answering these questions might pave the way to a qualitative improvement of permissionless systems that would provide deterministic guarantees; or, at the very least, give us more insight about the nature of consensus. 
+The discovery that deterministic safety is possible in a permissionless setting leads to the question of whether there exists a protocol that also achieves deterministic termination in a hybrid synchronous model. Another natural question is whether there exists a deterministically-safe solution to consensus in a hybrid-synchronous model with Byzantine failures ([Lewis-Pye and Roughgarden](https://arxiv.org/pdf/2101.07095.pdf) have shown that a deterministic-consensus protocol does not exist). Answering these questions might pave the way to a qualitative improvement of permissionless systems that would provide deterministic guarantees; or, at the very least, give us more insight about the nature of consensus.
 
 Read more in our [technical report](https://eprint.iacr.org/2022/796). 
 

@@ -35,7 +35,7 @@ We have 5 servers and servers 1, 2, and 3 are connected to each other. Server 4 
 
 
 
-In order to guarantee liveness, Raft must ensure that if a leader is up and connected to a majority of responding servers then it will not be forced to step down. Fortunately, section 9.6 of [Diego Ongaro’s thesis](https://web.stanford.edu/~ouster/cgi-bin/papers/OngaroPhD.pdf) suggests how this can be achieved using **PreVote**. PreVote requires potential candidates to run a trial election to test if they can win an election before incrementing their term and running a normal election using RequestVote. A server only pre-votes for a potential candidate during the PreVote phase if it would vote for it during a normal election, and importantly, if it has not received an AppendEntries RPC from the leader with in the election timeout. PreVote fixes the problem have we described as servers 4 and 5 will not update their terms as they will not receive pre-votes from the majority of servers.
+In order to guarantee liveness, Raft must ensure that if a leader is up and connected to a majority of responding servers then it will not be forced to step down. Fortunately, section 9.6 of [Diego Ongaro’s thesis](https://web.stanford.edu/~ouster/cgi-bin/papers/OngaroPhD.pdf) suggests how this can be achieved using **PreVote**. PreVote requires potential candidates to run a trial election to test if they can win an election before incrementing their term and running a normal election using RequestVote. A server only pre-votes for a potential candidate during the PreVote phase if it would vote for it during a normal election, and importantly, if it has not received an AppendEntries RPC from the leader within the election timeout. PreVote fixes the problem we have described as servers 4 and 5 will not update their terms as they will not receive pre-votes from the majority of servers.
 
 An alternative fix is to require servers to ignore RequestVote RPCs if they have received an AppendEntries RPC from the leader within the election timeout. This was suggested in section 6 in the [Raft paper](https://raft.github.io/raft.pdf) as mitigation for liveness issues during reconfiguration. However, we will focus on PreVote instead.
 
@@ -49,7 +49,7 @@ Initially, server 4 is the leader. It was elected before its links to the other 
 
 <figure class="image">
   <img src="/uploads/RAFT 2.jpg" width="80%">
-  <figcaption><center>The leader, Server 4, suffers partial network faults but does not step down. Server 2 does not timeout, severs 1 and 3 will fail PreVote because of server 2.</center></figcaption>
+  <figcaption><center>The leader, Server 4, suffers partial network faults but does not step down. Server 2 does not timeout, servers 1 and 3 will fail PreVote because of server 2.</center></figcaption>
 </figure>
 
 

@@ -21,7 +21,7 @@ In the rest of this note, we will interleave the usage of the terms *multi-expon
 
 Computing a multi-exponentiation or an MSM is resource-intensive in terms of computation. There are three common approaches for improving the run time of these operations. 
 
-* The first approach is using Pippinger's algorithm [[P80](https://scholarship.claremont.edu/cgi/viewcontent.cgi?article=1141&context=hmc_fac_pub), [B02](https://cr.yp.to/papers/pippenger-20020118-retypeset20220327.pdf)], which improves the overhead on an $n$-wide multi-exponentiation to be roughly the same as computing $O(n/ \log n)$ independent exponentiations. This is an improvement by a factor of about $\log n$ compared to the baseline of computing each exponentiation independently.
+* The first approach is using Pippenger's algorithm [[P80](https://scholarship.claremont.edu/cgi/viewcontent.cgi?article=1141&context=hmc_fac_pub), [B02](https://cr.yp.to/papers/pippenger-20020118-retypeset20220327.pdf)], which improves the overhead on an $n$-wide multi-exponentiation to be roughly the same as computing $O(n/ \log n)$ independent exponentiations. This is an improvement by a factor of about $\log n$ compared to the baseline of computing each exponentiation independently.
 * The second approach uses some precomputation, which is beneficial if the same bases $v_i$ are used in multiple multi-exponentiations.
 * The third approach speeds MSM computation using hardware accelerators such are GPUs or FPGAs. (See, for example, the following [review](https://medium.com/@ingonyama/deep-dive-into-the-latest-msm-hardware-implementation-a9739b2cd107).)
 
@@ -155,13 +155,13 @@ $$
 This can be done using $m$ multiplications and $m$ squarings, which is much faster than computing an $n$-wise multi-exponentiation directly.
 * The verifier needs to verify that each $w_j$ value is correct. As we described, this property can be batch-verified for $w_j$ values using a single $n$-wide multi-exponentiation, where the exponents are $\lambda+\log(m)$ bits long. 
 
-Since the overhead of the multi-exponentiation is linear in the length of the exponents, performance is roughtly improved by a factor of $m/(\lambda+\log m)$.
+Since the overhead of the multi-exponentiation is linear in the length of the exponents, performance is roughly improved by a factor of $m/(\lambda+\log m)$.
 
 #### Methods for improving the runtime of multi-exponentiations / MSMs
 
-Computing a multi-exponentiation can be optimized using *Pippinger's algorithm* [[P80](https://scholarship.claremont.edu/cgi/viewcontent.cgi?article=1141&context=hmc_fac_pub), [B02](https://cr.yp.to/papers/pippenger-20020118-retypeset20220327.pdf)]. The overhead is roughly the same as computing $O(n/ \log n)$ independent exponentiations with exponents of the same length as the original exponents. The overhead of both the straightforward computation of a multi-exponentiation and  that of Pippinger's algorithm, depends linearly on the length of the exponents. Our optimization reduces the length of the exponents and can therefore be applied with an equal effect to Pippinger's optimization. (This is demonstrated by the experiments described below, which measure the runtime of a multi-exponentiation library that uses Pippinger's optimization.)
+Computing a multi-exponentiation can be optimized using *Pippenger's algorithm* [[P80](https://scholarship.claremont.edu/cgi/viewcontent.cgi?article=1141&context=hmc_fac_pub), [B02](https://cr.yp.to/papers/pippenger-20020118-retypeset20220327.pdf)]. The overhead is roughly the same as computing $O(n/ \log n)$ independent exponentiations with exponents of the same length as the original exponents. The overhead of both the straightforward computation of a multi-exponentiation and  that of Pippenger's algorithm, depends linearly on the length of the exponents. Our optimization reduces the length of the exponents and can therefore be applied with an equal effect to Pippenger's optimization. (This is demonstrated by the experiments described below, which measure the runtime of a multi-exponentiation library that uses Pippenger's optimization.)
 
-There are well-known methods for improving the runtime of multi-exponenitations, and in particular MSMs, using *precomputation*. These methods require knowing in advance the values of the base points $v_i$. If that is the case then these precomputation methods can be applied to our optimized computation as well
+There are well-known methods for improving the runtime of multi-exponentiations, and in particular MSMs, using *precomputation*. These methods require knowing in advance the values of the base points $v_i$. If that is the case then these precomputation methods can be applied to our optimized computation as well
 
 ### Further efficiency improvements
 
@@ -194,7 +194,7 @@ In the general case, considering the computation of $s$ random subset multiplica
 
 ## Experiments
 
-We ran experiments using a multi-exponentiation library written by Zhoujun Ma, which implements Pippinger's multi-exponentiation algorithm. The library is written in Rust and can be found [here](https://github.com/zjma/pippenger).
+We ran experiments using a multi-exponentiation library written by Zhoujun Ma, which implements Pippenger's multi-exponentiation algorithm. The library is written in Rust and can be found [here](https://github.com/zjma/pippenger).
 
 The first experiment was run to verify that the runtime of computing multi-exponentiations in this library is linear in the length of the exponent. The following table shows the results of benchmarks for computing multi-exponentiations over BLS12-381, with different exponent lengths of 16, 32, 64, 128 and 256 bits. The order of the group is about $2^{255}$, corresponding to $m
 \approx 255$. The results were computed for multi-exponentiation widths ($n$) of 1000, 2000, 4000 and 8000. The run time is measured in milliseconds and is the median of 100 runs. All measurements were conducted on a MacBook Pro M1.  

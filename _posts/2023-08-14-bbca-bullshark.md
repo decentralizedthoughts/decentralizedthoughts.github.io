@@ -51,11 +51,11 @@ All commits (both leader and non-leader blocks) depend on the latency for leader
 
 ### Step 2. Getting Rid of Specialized Layers
 
-Next, we apply further latency reduction on commiting **non-leader blocks**, by removing the dedicated layers for "voting"/"proposing" altogether. This requires a bit of explaining: 
+Next, we apply further latency reduction on committing **non-leader blocks**, by removing the dedicated layers for "voting"/"proposing" altogether. This requires a bit of explaining:
 
-In Bullshark, voting occurs on the layer that follows a leader-block, because voting blocks must causally follow the proposal they vote for. The first modification (above) already gets rid of voting blocks, but if a node times-out waiting for a leader-block, it needs to broadcast `adopt/no-adopt` in complaint-blocks. The trick is that compaint-blocks can occur on the same layer as the leader-block, because there is no causality reference.
+In Bullshark, voting occurs on the layer that follows a leader-block, because voting blocks must causally follow the proposal they vote for. The first modification (above) already gets rid of voting blocks, but if a node times-out waiting for a leader-block, it needs to broadcast `adopt/no-adopt` in complaint-blocks. The trick is that complaint-blocks can occur on the same layer as the leader-block, because there is no causality reference.
 
-The protocol is depicted below after this modification: On the left, a scenario without complaints, and on the right, one layer incurs compaints.
+The protocol is depicted below after this modification: On the left, a scenario without complaints, and on the right, one layer incurs complaints.
 
 ![](https://hackmd.io/_uploads/Bk64g0732.png)
 
@@ -113,12 +113,12 @@ We remark that a similar implementation of BBCA can be constructed over an all-a
 
 ## Relaxing the Structured-DAG Layering
 
-In addition to the commit latency reductions, we comment briefly on relaxing the sturcture-DAG layering constraints. 
+In addition to the commit latency reductions, we comment briefly on relaxing the structure-DAG layering constraints.
 
 Bullshark requires each block to reference $2f+1$ predecessors in the previous layer. This requirement is not needed for BBCA-Chain correctness and can be relaxed and fine-tuned by system designers to their needs. However, in order to preserve correctness of the consensus logic, relaxing the predecessor requirement must done with care.
 
 In particular, leader-blocks at each layer must reference either the a leader-block in the previous layer or $2f+1$ complaint-blocks. In the original layered-DAG of Bullshark, this requirement is enforced at the DAG level. BBCA-Chain enforces this rule inside the BBCA broadcast primitive: nodes will not acknowledge a leader BBCA-broadcast if it does not fulfill it. 
 
-We remark that system designers may choose to structure the DAG to address various other considerations. For example, a system may require $f+1$ predecessors for censorship resistence. Another system may require a constant number of predecessors to achieve certain parallelism. Additionally, systems may advaptively adjust the required number of predecessors at runtime based on their workload. Finally, structuring may also help with garbage collection and keeping node progress in sync at the network substrate level. Removing structured-layering from consensus logic shifts the fine-tuning of structuring outside the consensus logic. 
+We remark that system designers may choose to structure the DAG to address various other considerations. For example, a system may require $f+1$ predecessors for censorship resistance. Another system may require a constant number of predecessors to achieve certain parallelism. Additionally, systems may adaptively adjust the required number of predecessors at runtime based on their workload. Finally, structuring may also help with garbage collection and keeping node progress in sync at the network substrate level. Removing structured-layering from consensus logic shifts the fine-tuning of structuring outside the consensus logic.
 
 *Acknowledgements: We are grateful to George Danezis, Eleftherios Kokoris Kogias, and Alberto Sonnino for useful comments about this post.*

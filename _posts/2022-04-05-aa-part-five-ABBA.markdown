@@ -24,7 +24,7 @@ Over the years, many solutions have been proposed for Asynchronous Binary Byzant
 
 ## Common Coins
 
-First we need to define *random common coins* with two parameters, controlling their fairness and their unpredicability, as follows.
+First we need to define *random common coins* with two parameters, controlling their fairness and their unpredictability, as follows.
 
 > An **$\epsilon$-good $d$-unpredictable common coin** provides an *access* primitive that takes no arguments and outputs either $0$ or $1$ with the following properties:
 >* The output value for all parties is completely unpredictable until at least $d+1$ parties have accessed the coin.
@@ -104,7 +104,7 @@ Note that a non-faulty party $X$ only decides a value in a round $r$ if the coin
 If all non-faulty parties have the same input, then they all start round $r=1$ with the same value. Therefore, by Lemma 1, they will all decide on that input in a constant expected number of rounds.
 
 **Constant Expected  Termination:**
-Note that if in any round, either all non-faulty parties decide $\bot$ in their BCA, or the coin is the same as the non-$\bot$ decision value of BCA, then Lemma 1 applies in the next round. Furthermore, by the binding property of BCA, the adversary is bound to some non-$\bot$ decision value of the BCA in any round $r$ (if there is one) by the time the first non-faulty party finishes its BCA in round $r$. In particular, this must happen before the coin value is revealed in any coin that is $f$ unpredictable. Therefore, in each round, with probability at least $1/2$ the BCA **binded** value $b$ will be the same as the Strong Common Coin.
+Note that if in any round, either all non-faulty parties decide $\bot$ in their BCA, or the coin is the same as the non-$\bot$ decision value of BCA, then Lemma 1 applies in the next round. Furthermore, by the binding property of BCA, the adversary is bound to some non-$\bot$ decision value of the BCA in any round $r$ (if there is one) by the time the first non-faulty party finishes its BCA in round $r$. In particular, this must happen before the coin value is revealed in any coin that is $f$ unpredictable. Therefore, in each round, with probability at least $1/2$ the BCA **bound** value $b$ will be the same as the Strong Common Coin.
 
 **Message Complexity:**
 Since each round takes $O(n^2)$ messages of constant size, the expected message complexity is $O(n^2)$ which is asymptotically optimal.  
