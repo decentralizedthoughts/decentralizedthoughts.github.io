@@ -1,30 +1,30 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-11-04T23:38:41Z",
+  "fetched_at": "2026-11-05T14:38:28Z",
   "items": [
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 156
+      "views": 148
     },
     {
       "path": "/start-here/",
-      "views": 129
+      "views": 139
     },
     {
       "path": "/2019-06-01-2019-5-31-models/",
-      "views": 95
+      "views": 106
     },
     {
       "path": "/2026-10-23-subcubic-broadcast/",
-      "views": 80
+      "views": 85
     },
     {
       "path": "/2019-12-22-dolev-strong/",
-      "views": 79
+      "views": 78
     },
     {
       "path": "/2020-12-12-raft-liveness-full-omission/",
-      "views": 70
+      "views": 73
     }
   ]
 }
