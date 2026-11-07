@@ -37,9 +37,9 @@ There are many examples of protocols that work in the above threshold models. He
 
 There are other less common thresholds. For example, [perfect asynchronous verifiable secret sharing](https://decentralizedthoughts.github.io/2020-07-15-asynchronous-fault-tolerant-computation-with-optimal-resilience/) requires $f<n/4$. And there are even bounds that are not integer divisions of $n$. For example, [2 round unauthenticated reliable broadcast](https://decentralizedthoughts.github.io/2021-09-29-the-round-complexity-of-reliable-broadcast/) requires $f < (n+1)/4$.
 
-## What does the $1/2$ and $1/3$ threshold provide? Quorum intersection
+## What do the $1/2$ and $1/3$ thresholds provide? Quorum intersection
 
-Since the adversary can corrupt $f$ parties, which may include crash failures, then protocols often collect $n-f$ message to guarantee they don't get stuck. These sets of $n-f$ parties have very useful properties based on quorum intersection (essentially the [Pigeonhole principle](https://en.wikipedia.org/wiki/Pigeonhole_principle)):
+Since the adversary can corrupt $f$ parties, which may include crash failures, then protocols often collect $n-f$ messages to guarantee they don't get stuck. These sets of $n-f$ parties have very useful properties based on quorum intersection (essentially the [Pigeonhole principle](https://en.wikipedia.org/wiki/Pigeonhole_principle)):
 
 For example, for $f<n/2$:
 
@@ -55,7 +55,7 @@ More generally, observe that any two sets of size $n-f$ intersect with at least 
 
 ## Proof of work and proof of stake
 
-The blockchain disruption brought significant interest to settings where the set of participants are not static and not fixed in advance. Two main models are **proof of work (PoW)** and **proof of stake (PoS)**. Both use the idea of some *bounded resource*:
+The blockchain disruption brought significant interest to settings where the set of participants is not static and not fixed in advance. Two main models are **proof of work (PoW)** and **proof of stake (PoS)**. Both use the idea of some *bounded resource*:
 
 1. **Proof of work**: In [Nakamoto Consensus](https://decentralizedthoughts.github.io/2021-10-15-Nakamoto-Consensus/) (the consensus mechanism used by Bitcoin), one can consider the bounded resource to be the total CPU power of the participants. The assumption is then that the adversary controls less CPU power than the honest nodes (a minority adversary). The Nakamoto authors explicitly mention the assumption of a resource bounded *minority* adversary:
 > The system is secure as long as honest nodes collectively control more CPU power than any cooperating group of attacker nodes.

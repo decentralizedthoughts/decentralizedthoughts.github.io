@@ -61,7 +61,7 @@ Due to this impossibility, Fox and Brewer categorized all solutions into three b
 
 3. **CP**: Consistent even during Partitions - but not always available. The system is always consistent, but a partition may cause a loss of availability. The trivial solution is a centralized system. A more interesting solution is [Two Phase Commit](https://cs.brown.edu/courses/csci1380/s19/lectures/Day13_2019.pdf) which allows replication and obtains consistency at the cost of losing availability for partitions. Many distributed systems and databases use this approach, but even one failed/partitioned server can block the system. Can we get slightly better availability?
 
-Yes, its a [trilemma](https://en.wikipedia.org/wiki/Trilemma). Yes, in [hindsight](https://twitter.com/el33th4xor/status/1191820205456023552?s=20&t=RcutJw0wQUsTmrO0OXzpXw), Brewer writes that "2 of 3" is [misleading](https://www.infoq.com/articles/cap-twelve-years-later-how-the-rules-have-changed/) because there are more nuanced properties that CAP does not capture. We highlight one such nuance and its deep connections to the impossibility proof. 
+Yes, it's a [trilemma](https://en.wikipedia.org/wiki/Trilemma). Yes, in [hindsight](https://twitter.com/el33th4xor/status/1191820205456023552?s=20&t=RcutJw0wQUsTmrO0OXzpXw), Brewer writes that "2 of 3" is [misleading](https://www.infoq.com/articles/cap-twelve-years-later-how-the-rules-have-changed/) because there are more nuanced properties that CAP does not capture. We highlight one such nuance and its deep connections to the impossibility proof.
 ### CP-MAJ-A
 
 A powerful approach to address the CAP theorem is to obtain consistency even during partitions and in addition a *majority partition availability (MAJ-A)* property:

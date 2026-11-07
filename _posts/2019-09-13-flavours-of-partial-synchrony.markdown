@@ -58,7 +58,7 @@ We then discuss the challenges of a reduction in the other direction.
 
 Assume a protocol $Q$ that obtains safety and liveness in the Unknown Latency flavor. Does $Q$ also obtain safety and liveness in the GST flavor?
 
-Yes! Consider an execution in the GST flavor and let $\Gamma$ be the maximum of $\Delta$ and the time until $GST$ starts. Observe that by definition, $Q$ has safety and liveness assuming that the unknown latency is $\Gamma$, because its true for any finite latency.
+Yes! Consider an execution in the GST flavor and let $\Gamma$ be the maximum of $\Delta$ and the time until $GST$ starts. Observe that by definition, $Q$ has safety and liveness assuming that the unknown latency is $\Gamma$, because it's true for any finite latency.
 
 Note that this reduction is extremely wasteful: the value of $\Gamma$ may be huge. Many systems may strive to adjust their estimate of $\Delta$ both up and down.
 

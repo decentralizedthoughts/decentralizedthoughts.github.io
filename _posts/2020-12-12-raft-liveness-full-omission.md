@@ -55,7 +55,7 @@ Initially, server 4 is the leader. It was elected before its links to the other 
 
 
 
-This can be addressed by requiring leaders to actively step down if they do not receive AppendEntries responses from a majority of servers. This optimisation is sometimes referred to as CheckQuourm and related matters are mentioned in section 6.2 of [Ongaro’s thesis](https://web.stanford.edu/~ouster/cgi-bin/papers/OngaroPhD.pdf) and in [raft discussions](https://github.com/etcd-io/etcd/issues/3866).
+This can be addressed by requiring leaders to actively step down if they do not receive AppendEntries responses from a majority of servers. This optimisation is sometimes referred to as CheckQuorum and related matters are mentioned in section 6.2 of [Ongaro’s thesis](https://web.stanford.edu/~ouster/cgi-bin/papers/OngaroPhD.pdf) and in [raft discussions](https://github.com/etcd-io/etcd/issues/3866).
 
 ## Does Raft with PreVote and CheckQuorum guarantee liveness?
 

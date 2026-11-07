@@ -116,7 +116,7 @@ From the weak common coin properties, with probability of at least $1/4$ all par
 This shows expected decision in constant number of rounds. *Exercise*: add a termination gadget that stops after one more round of helping.
 
 
-**Message complexity**: each round has each party send an $O(1)$ size messages to all other parties, except for the rank which needs $O(\log n)$ bit size messages. One way to get to $O(n^2)$ expected bits is to only send a rank if its in the top $\log n / n$ percentile. This may increase the round complexity by a constant. 
+**Message complexity**: each round has each party send an $O(1)$-size message to all other parties, except for the rank which needs $O(\log n)$ bit size messages. One way to get to $O(n^2)$ expected bits is to only send a rank if it's in the top $\log n / n$ percentile. This may increase the round complexity by a constant.
 
 ### Zooming out
 

@@ -22,7 +22,7 @@ continue_reading:
 
 ## State Machine Replication and Broadcast
 
-Many existing permission blockchains are built using *Byzantine fault-tolerant state machine replication (BFT SMR)*, which ensures all honest replicas agree on the same sequence of client inputs. Most of the practical solutions for BFT SMR are based on the **Primary-Backup paradigm**. In this approach, in each view, there is a leader in charge to drive decisions efficiently, until replaced by the next leader. The Primary-Backup approach for SMR exposes deep connections to *broadcast*. Each view in BFT SMR is similar to an instance of broadcast where the leader taking on a similar role as the broadcaster, and hence **an efficient broadcast protocol can be converted to an SMR protocol with similar efficiency guarantees**.
+Many existing permissioned blockchains are built using *Byzantine fault-tolerant state machine replication (BFT SMR)*, which ensures all honest replicas agree on the same sequence of client inputs. Most of the practical solutions for BFT SMR are based on the **Primary-Backup paradigm**. In this approach, in each view, there is a leader responsible for driving decisions efficiently, until replaced by the next leader. The Primary-Backup approach for SMR exposes deep connections to *broadcast*. Each view in BFT SMR is similar to an instance of broadcast where the leader takes on a similar role as the broadcaster, and hence **an efficient broadcast protocol can be converted to an SMR protocol with similar efficiency guarantees**.
 
 
 

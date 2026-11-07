@@ -40,7 +40,7 @@ For example, a protocol that solves Crusader Agreement with $1/10$-error only ne
 
 Before going into the proof, let us unpack this statement. It says that even if you allow considerable error (at most $1/3$) for both Validity and Agreement and **also** weaken the Agreement property to Weak Agreement it is still impossible when $n \leq 3f$.
 
-Side note: one may wonder if *Crusader Ageement* is substantially weaker than Agreement? Indeed there is a significant round complexity separation:  We can solve Crusader agreement using a worst case constant number of rounds (for any $f<n/3$). But for Agreement there is $f+1$ round [lower bound](https://decentralizedthoughts.github.io/2019-12-15-synchrony-uncommitted-lower-bound/) on the worst case number of rounds (for any $f<n/3$).
+Side note: one may wonder if *Crusader Agreement* is substantially weaker than Agreement? Indeed there is a significant round complexity separation:  We can solve Crusader agreement using a worst case constant number of rounds (for any $f<n/3$). But for Agreement there is an $f+1$-round [lower bound](https://decentralizedthoughts.github.io/2019-12-15-synchrony-uncommitted-lower-bound/) on the worst case number of rounds (for any $f<n/3$).
 
 ### The Proof
 

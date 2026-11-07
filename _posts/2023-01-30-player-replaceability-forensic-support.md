@@ -17,7 +17,7 @@ In another recent [post](https://decentralizedthoughts.github.io/2023-01-05-play
 
 To identify the malicious parties, our forensic analysis for protocols such as HotStuff required us to identify conflicting actions by these parties, possibly in two different rounds of execution. On the other hand, player replaceability rotates players in each round, due to which a party may not be elected more than once. As is stands, existing BFT protocols like HotStuff have strong forensic support but are not player replaceable, while [Algorand](https://arxiv.org/abs/1607.01341) is player-replaceable but lacks forensic support. Does this imply that only one of these two properties can be obtained? The aim of this post is to explore the fundamental relationship between player-replaceability and forensic support in BFT protocols.
 
-## HotStuff Made Player-Replacable
+## HotStuff Made Player-Replaceable
 
 A possible way to achieve both player-replaceability and strong forensic support in BFT protocols is to start with a protocol that has strong forensic support and make it player-replaceable. An example of this approach is described in [this post](https://decentralizedthoughts.github.io/2023-01-05-player-replaceability-I/), which combines the main protocol from HotStuff and the committee election technique from Algorand. In each round of the protocol, parties use cryptographic sortition computed by verifiable random functions (VRFs) to determine eligible voters. This publicly verifiable process randomly and independently selects a voting committee in each round, leading to player-replaceability.
 
@@ -32,7 +32,7 @@ Briefly, the security of HotStuff is guaranteed by a rule of locking. Every part
 However, this argument does not apply to player replaceable protocols. In player replaceable world, only a small fraction of parties are selected ($\lambda$ out of $n$) for each round to send messages, making it highly likely that a party only participates in the committee once. This results in mutually exclusive quorums between rounds and makes it impossible to distinguish between adversarial parties locked on $v$ outside of the committee and honest parties who do not have the same lock (as shown in Figure 1 on the right). 
 
 
-## A Player Replacable Protocol with Forensic Support
+## A Player Replaceable Protocol with Forensic Support
 
 Essentially, to obtain forensic support, the transcripts must keep a record of each party's lock changes. The original HotStuff protocol includes this information implicitly in its vote messages for each round, but the player replaceable version sacrifices this detail for efficiency. To remedy this, we propose a protocol that requires all parties to wait for $\lceil 2/3\lambda\rceil$ committee members to provide lock information to form a **transition certificate (TC)** before proceeding to the next round. Since only committee members have the potential to compromise safety, there is no need to collect the lock information of all parties in each round. This waiting period ensures that a party's lock is up-to-date before the start of the next round, eliminating the possibility of honest parties being wrongly blamed due to message delays. With this mechanism, we can distinguish between honest parties who experience long message delays and adversarial parties, and thus provide strong forensic support. 
 

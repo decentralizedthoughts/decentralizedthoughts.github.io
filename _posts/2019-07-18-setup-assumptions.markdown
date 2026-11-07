@@ -41,7 +41,7 @@ Here we assume there is some set of initial parties $P_1,...,P_n$ and each two p
 3. *Broadcast setup*: 
 We assume a setup whose implementation requires no secrets. The canonical example is a [PKI setup](https://en.wikipedia.org/wiki/Public_key_infrastructure) that requires [broadcast](https://ittaiab.github.io/2019-06-27-defining-consensus/) only to relay the public keys. 
 4. *Partially public setup*: often called the *Common Reference String* ([CRS](https://en.wikipedia.org/wiki/Common_reference_string_model)) model. Many cryptographic protocols leverage this setup for improved efficiency. A special case of this setup is a [randomness beacon](http://www.copenhagen-interpretation.com/home/cryptography/cryptographic-beacons).
-5. *Fully private setup*: often called the *offline phase* in the context of secure multiparty computation (MPC) protocols. Here, the setup phase computes a rather complex output that is party-dependant. For example, a phase that creates [OT and multiplication triplets](https://github.com/bristolcrypto/SPDZ-2) in SPDZ-2.
+5. *Fully private setup*: often called the *offline phase* in the context of secure multiparty computation (MPC) protocols. Here, the setup phase computes a rather complex output that is party-dependent. For example, a phase that creates [OT and multiplication triplets](https://github.com/bristolcrypto/SPDZ-2) in SPDZ-2.
 
 Let's detail these five setup variants, give some examples and discuss their advantages and disadvantages. In the end, we will also discuss some potential alternatives for having a setup phase. We use $n$ to denote the number of parties engaged in a system and $f$ the number of 'faulty' (or Byzantine) parties (who may behave arbitrarily).
 
@@ -67,7 +67,7 @@ Here, we assume that the communication channel between every pair of parties is 
 This is a classic assumption in distributed cryptography and distributed computing.
 The [Fisher, Lynch and Merritt 1985](https://groups.csail.mit.edu/tds/papers/Lynch/FischerLynchMerritt-dc.pdf) lower bounds show that even weak forms of Byzantine Agreement are impossible when $n \leq 3f$ even given this setup, and even against a traditional polynomially-bounded adversary.
 
-For $n>3f$, on the other hand, this setup allows perfect implementation of any functionality. This is the celebrated result of [Ben-Or, Goldwasser and Widgerson 1988](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.116.2968&rep=rep1&type=pdf) (see [Asharov and Lindell](https://eprint.iacr.org/2011/136.pdf) for a full proof).
+For $n>3f$, on the other hand, this setup allows perfect implementation of any functionality. This is the celebrated result of [Ben-Or, Goldwasser and Wigderson 1988](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.116.2968&rep=rep1&type=pdf) (see [Asharov and Lindell](https://eprint.iacr.org/2011/136.pdf) for a full proof).
 
 
 ## 3. Broadcast setup

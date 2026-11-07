@@ -9,7 +9,7 @@ background:
   - /2026-04-27-beyond-CR/
 ---
 
-Front-running is a pervasive and costly problem on blockchains. Users earn rewards by publishing functional transactions that keeps markets efficient, such as arbitrage. But an attacker can [observe such a transaction before it is ordered and publish her own ahead of it](https://a16zcrypto.com/posts/article/mev-explained/), seizing the reward and eroding users' incentive to issue these transactions at all. The problem is well known and has drawn sustained effort from both industry and academia, yet it remains open. 
+Front-running is a pervasive and costly problem on blockchains. Users earn rewards by publishing functional transactions that keep markets efficient, such as arbitrage. But an attacker can [observe such a transaction before it is ordered and publish her own ahead of it](https://a16zcrypto.com/posts/article/mev-explained/), seizing the reward and eroding users' incentive to issue these transactions at all. The problem is well known and has drawn sustained effort from both industry and academia, yet it remains open.
 
 The fundamental challenge is that preventing front-running means enforcing causality: A transaction published in reaction to another must be ordered later, but this causal relationship is visible only to the attacker who reacts, and the protocol cannot observe it. We present PRECEDE, which takes a distinct angle: Instead of constraining how transactions are ordered, as every prior approach does, it removes the economic incentive to front-run, so the attacker never even tries. To our knowledge, PRECEDE is the first mechanism to address front-running this way. We call this principle **entry deterrence**.
 

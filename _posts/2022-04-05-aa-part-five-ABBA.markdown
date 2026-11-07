@@ -50,7 +50,7 @@ Many ABA algorithms in the literature can be viewed as operating in rounds of cr
 In this pseudocode, we call CrusaderAgreement with a round number. We assume that each new round number gets a new CrusaderAgreement instance in which all variables are reinitialized, and that messages with different round numbers are ignored. The StrongCommonCoin() function returns $0$ for all parties with probability $1/2$ and $1$ for all parties with the remaining probability $1/2$.
 
 ```
-Atempting Asynchronous Binary Byzantine Agreement via Crusader Agreement
+Attempting Asynchronous Binary Byzantine Agreement via Crusader Agreement
 
 input: v (0 or 1)
 r:= 1
@@ -114,7 +114,7 @@ Since each round takes $O(n^2)$ messages of constant size, the expected message 
 Much like in the [crash-model](https://decentralizedthoughts.github.io/2022-03-30-asynchronous-agreement-part-two-ben-ors-protocol/), we can add a folklore Byzantine Termination Gadget to ensure termination:
 
 ```
-Termination Gadegt for Byzantine failures
+Termination Gadget for Byzantine failures
 
 If receive f+1 <decide u>, then
     decide(u) 

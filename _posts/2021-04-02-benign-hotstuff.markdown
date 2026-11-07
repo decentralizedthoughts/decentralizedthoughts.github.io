@@ -125,10 +125,10 @@ If some replicas crash, then consider the first two consecutive nonfaulty replic
 
 
 ## Complexity analysis 
-Benign Hotsuff maintains a linear message complexity per view. In each round either all replicas send to the Primary or the Primary sends to all replicas. In the failure free case, the amortized cost of committing a block is just $2n$ messages. In the worst case, the total number of messages to commit to one block after GST is $O(fn)$ which is [asymptotically optimal](https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/). 
+Benign HotStuff maintains a linear message complexity per view. In each round either all replicas send to the Primary or the Primary sends to all replicas. In the failure free case, the amortized cost of committing a block is just $2n$ messages. In the worst case, the total number of messages to commit to one block after GST is $O(fn)$ which is [asymptotically optimal](https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/).
 
 ## Adding a relaxed one chain rule
-The commit rule requires the view $v$ Primary to gather $n{-}f$ votes on a block from view $v-1$. Can we relax this and allow to commit even if the votes are on a previous block?  This is a relaxed  "one chain" safety rule that allows to "skip" replicas that crashed. 
+The commit rule requires the view $v$ Primary to gather $n{-}f$ votes on a block from view $v-1$. Can we relax this and allow replicas to commit even if the votes are on a previous block?  This is a relaxed  "one chain" safety rule that allows the protocol to "skip" replicas that crashed.
 
 The core observation is that at view $v$ in order to commit a block of view $v'<v$ we need to say that we did not vote for any other block (other than $v'$) in all views $v'<u<v$. Note, this statement is trivial when $v'=v-1$.
 
@@ -145,7 +145,7 @@ The second change is for the commit rule to only use strong votes:
 For safety observe that in all the views $v'<u<v$ there could not be any party that commits any block that does not extend $B$. Moreover, any proposal of $v'<u<v$ will be lower than the proposals from the member of $Q$ of view at least $v$.
 
 
-In the following posts, we will see how the Byzantine variants of Hotsuff can be extended to these relaxed "two chain" (and "three chain") safety rules in order to add non-equivocation (and responsiveness).
+In the following posts, we will see how the Byzantine variants of HotStuff can be extended to these relaxed "two chain" (and "three chain") safety rules in order to add non-equivocation (and responsiveness).
 
 
 

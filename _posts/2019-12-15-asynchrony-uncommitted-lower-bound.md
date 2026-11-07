@@ -80,7 +80,7 @@ Since $\pi_0,\pi_1$ start from the same configuration $C$, let $G$ be the least 
 ![](https://i.imgur.com/sZWp2VU.jpg)
 
 
-Now examine the sub-sequence $G=Y_1,\dots,Y_k=C_0$ of $\pi_0$ from $G$ to $C_0$. Let $G'=Z_1,\dots,Z_k=C'_0$ be such that $Y_i \xrightarrow{e} Z_i$. Since $Z_1=G'$ is 1-committed and $Z_k=C'_0$ is 0-committed then clearly there must exist two **adjacent configurations** $Y \xrightarrow{T', e'} Y'$ (in the path $Y_1,\dots,Y_k$) such that that $Z$ is 1-committed and $Z'$ is 0-committed where $Y \xrightarrow{e} Z$ and $Y' \xrightarrow{e} Z'$. Note that this follows from the [discrete version of the intermediate value theorem](https://en.wikipedia.org/wiki/Sperner%27s_lemma#One-dimensional_case).
+Now examine the sub-sequence $G=Y_1,\dots,Y_k=C_0$ of $\pi_0$ from $G$ to $C_0$. Let $G'=Z_1,\dots,Z_k=C'_0$ be such that $Y_i \xrightarrow{e} Z_i$. Since $Z_1=G'$ is 1-committed and $Z_k=C'_0$ is 0-committed then clearly there must exist two **adjacent configurations** $Y \xrightarrow{T', e'} Y'$ (in the path $Y_1,\dots,Y_k$) such that $Z$ is 1-committed and $Z'$ is 0-committed where $Y \xrightarrow{e} Z$ and $Y' \xrightarrow{e} Z'$. Note that this follows from the [discrete version of the intermediate value theorem](https://en.wikipedia.org/wiki/Sperner%27s_lemma#One-dimensional_case).
 
 
 ![](https://i.imgur.com/TLWm47j.jpg)

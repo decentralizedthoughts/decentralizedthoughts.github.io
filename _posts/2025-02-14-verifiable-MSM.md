@@ -36,7 +36,7 @@ Naively, the overhead of the verifier can be reduced by asking the *prover* to c
 
 #### Checking instead of computing
 
-Our goal is to *verify* the computation of a multi-exponentiation in a multiplicative group $G$. As we wrote earlier, we focus on the scenario where a multi-exponentiation or a multi-scalar multiplication (MSM) is employed during the verification of a cryptographic proof, and represents a significant computational bottleneck for the verifier. (It it important to emphasize that "verification" is performed twice: First, in a cryptographic proof system there is a verifier that needs to verify a proof. The work of this verifier is dominated by computing an MSM. The verifier therefore outsources the computation of the MSM and needs to verify the result it receives. It is natural to outsource the computation of the MSM to the prover of the cryptographic proof. The proof then contains the orignal proof, the result of the MSM, and a proof that the MSM was computed correctly. The verifier verifies the result of the MSM, and then uses it to verify the original proof.)
+Our goal is to *verify* the computation of a multi-exponentiation in a multiplicative group $G$. As we wrote earlier, we focus on the scenario where a multi-exponentiation or a multi-scalar multiplication (MSM) is employed during the verification of a cryptographic proof, and represents a significant computational bottleneck for the verifier. (It is important to emphasize that "verification" is performed twice: First, in a cryptographic proof system there is a verifier that needs to verify a proof. The work of this verifier is dominated by computing an MSM. The verifier therefore outsources the computation of the MSM and needs to verify the result it receives. It is natural to outsource the computation of the MSM to the prover of the cryptographic proof. The proof then contains the original proof, the result of the MSM, and a proof that the MSM was computed correctly. The verifier verifies the result of the MSM, and then uses it to verify the original proof.)
 
 Observe that the cost of computing an MSM by a verifier might be significantly higher than the cost of the prover computing this MSM. This can be caused by several factors:
 
@@ -46,7 +46,7 @@ Suppose that the verification of the message received from the dealer requires c
 
 #### A birds-eye view
 
-The basic setting of an *interactive proof system* includes a prover, a verifier, an input $x$ and a language $L$. The verifier receives from the prover a statement for the claim that $x\in L$. (We ingore here any zero-knowledge requirements from the proof.)
+The basic setting of an *interactive proof system* includes a prover, a verifier, an input $x$ and a language $L$. The verifier receives from the prover a statement for the claim that $x\in L$. (We ignore here any zero-knowledge requirements from the proof.)
 The verifier runs a verification procedure for checking the correctness of the proof. In most interesting cases, the cost of verifying the proof that $x\in L$ is much smaller than the verifier computing by itself whether $x\in L$.
 Suppose that the verification procedure includes computing a multi-exponentiation or an MSM. This is depicted in the next image, where the verification process is shorter than the proof and is dominated by computing the MSM.
 ![Presentation1](/uploads/Benny-P1.png)

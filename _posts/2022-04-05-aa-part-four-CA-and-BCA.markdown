@@ -56,7 +56,7 @@ Proof of properties.
 
 Proving *Liveness* is done in 3 steps:
 
-**Claim 1**: All non-faulty parties will eventualy send an echo2 message.
+**Claim 1**: All non-faulty parties will eventually send an echo2 message.
 *Proof*: Let $x$ be an input value that at least $f+1$ non-faulty parties have. Since there are only two possible input values and at least $2f+1$ non-faulty parties, such a value exists. So all non-faulty parties will send `<echo1, x>` after at most one communication round, hence a round later they will all send `<echo2, x>` if they have not sent `<echo2, 1-x>` earlier.
 
 **Claim 2**: If non-faulty parties send both `<echo2, 0>` and `<echo2, 1>` then all non-faulty parties output a value.

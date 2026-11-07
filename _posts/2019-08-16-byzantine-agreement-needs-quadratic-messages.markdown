@@ -24,9 +24,9 @@ In fact, we will observe that the result is stronger and holds even for omission
 In a [follow-up post](https://decentralizedthoughts.github.io/2024-12-16-strong-adaptive-lower-bound/) we address randomization.
 
 
-In 1980, [PSL](https://lamport.azurewebsites.net/pubs/reaching.pdf) showed the *first* feasibility result for consensus in the presence of Byzantine adversaries. However, their solution had an *exponential* (in $n$, the number of parties) communication complexity. The obvious next question is to determine the lowest possible communication complexity. Dolev and Resichuk showed that the barrier to quadratic communication complexity cannot be broken by deterministic protocols. 
+In 1980, [PSL](https://lamport.azurewebsites.net/pubs/reaching.pdf) showed the *first* feasibility result for consensus in the presence of Byzantine adversaries. However, their solution had an *exponential* (in $n$, the number of parties) communication complexity. The obvious next question is to determine the lowest possible communication complexity. Dolev and Reischuk showed that the barrier to quadratic communication complexity cannot be broken by deterministic protocols.
 
-At a high level, the Dolev and Resichuk lower bound says that if the non-faulty send few messages (specifically $< (f/2)^2$), then the adversary can cause some non-faulty party to receive no message! The party that receives no message has no way of reaching agreement with the rest. 
+At a high level, the Dolev and Reischuk lower bound says that if the non-faulty send few messages (specifically $< (f/2)^2$), then the adversary can cause some non-faulty party to receive no message! The party that receives no message has no way of reaching agreement with the rest.
 
 
 ### Proof Intuition

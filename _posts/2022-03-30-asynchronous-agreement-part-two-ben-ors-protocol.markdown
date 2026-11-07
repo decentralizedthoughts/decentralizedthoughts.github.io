@@ -5,7 +5,7 @@ tags:
 - asynchrony
 - consensus101
 - consensus
-author: Ittai Abraham, Namma Ben-David, Sravya Yandamuri
+author: Ittai Abraham, Naama Ben-David, Sravya Yandamuri
 background:
   - /2022-03-30-asynchronous-agreement-part-one-defining-the-problem/
 continue_reading:
@@ -60,7 +60,7 @@ Now for the hard part. Why does this protocol have **Finite Expected Termination
 
 It turns out that this is a non-trivial theorem for an adaptive adversary. It took over 15 years to realize via a rather complicated argument:
 
-**[Theorem: [Aguilera, Toueg 1998]](https://ecommons.cornell.edu/bitstream/handle/1813/7336/98-1682.pdf?sequence=1&isAllowed=y)**: Ben-Or's protocol with $n=2f+1$ parties has an Finite Expected Termination of $O(2^{2n})$.
+**[Theorem: [Aguilera, Toueg 1998]](https://ecommons.cornell.edu/bitstream/handle/1813/7336/98-1682.pdf?sequence=1&isAllowed=y)**: Ben-Or's protocol with $n=2f+1$ parties has a finite expected termination time of $O(2^{2n})$.
 
 This leaves us in an unsatisfying state. While Ben-Or's protocol is elegant, the proof for Finite Expected Termination is non-trivial and not easily taught in a standard class (or a short blog post). Is there a simpler proof? Maybe there is a reason for the complexity? Another concrete question is about efficiency: can we improve the $O(2^{2n})$  bound to a more natural $O(2^n)$ bound? 
 

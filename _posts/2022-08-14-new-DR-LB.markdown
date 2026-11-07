@@ -13,7 +13,7 @@ background:
   - /2019-08-16-byzantine-agreement-needs-quadratic-messages/
 ---
 
-In a [previous post](https://decentralizedthoughts.github.io/2022-06-19-crusader-braodcast/) we discussed **Crusader Broadcast** and showed a $O(n^2)$ words, $O(1)$ time solution for $f<n$ and assuming a PKI. In this post, we overview a new [Dolev-Reischuk](https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/) style bower bound ([see our full paper](https://eprint.iacr.org/2022/730.pdf)):
+In a [previous post](https://decentralizedthoughts.github.io/2022-06-19-crusader-braodcast/) we discussed **Crusader Broadcast** and showed a $O(n^2)$ words, $O(1)$ time solution for $f<n$ and assuming a PKI. In this post, we overview a new [Dolev-Reischuk](https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/) style lower bound ([see our full paper](https://eprint.iacr.org/2022/730.pdf)):
 
 
 ***Theorem [AS22](https://eprint.iacr.org/2022/730.pdf)***: In any deterministic protocol solving **Crusader Broadcast** with $f<n$ *Byzantine* failures there exists at least one run in which the nonfaulty parties send at least $\Omega(nf)$ messages, *if the adversary can simulate nonfaulty parties*.

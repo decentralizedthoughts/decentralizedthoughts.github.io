@@ -163,7 +163,7 @@ while true
 
 The backup waits to receive a block message. If it does not arrive on time then it deduces that the Primary crashed and assumes the role of the leader.
 
-When the Backup is not the leader it does not send responses to the clients. When the Backup becomes the leader is will send the ```responses``` of the previous block (in case the Primary crashed before sending the responses). In this case, the client may receive a response twice (having unique request ids allows to ignore the second response).
+When the Backup is not the leader it does not send responses to the clients. When the Backup becomes the leader it will send the ```responses``` of the previous block (in case the Primary crashed before sending the responses). In this case, the client may receive a response twice (unique request IDs allow the client to ignore the second response).
 
 Finally, the client may need to resend its command. The Backup may receive the same command: once from the Primary and once from the client resend. So the Backup checks the command from the client is not already part of a previous block.
 

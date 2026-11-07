@@ -34,7 +34,7 @@ Note the first iteration uses ```Recover-Max``` and appends the new command to i
 
 This protocol obtains multi-shot responsiveness. When the stable leader is non-faulty, there are no timeouts between proposals.
 
-There is no safety concern: each consensus instance has its independent safety properties maintained. The primary must wait for $n-f$ echeos before moving forward. Moreover, just as before, echoes are only sent by parties that are in view $v$. 
+There is no safety concern: each consensus instance has its independent safety properties maintained. The primary must wait for $n-f$ echoes before moving forward. Moreover, just as before, echoes are only sent by parties that are in view $v$.
 
 But what about liveness? There is a new challenge: we cannot use a fixed timer to change views because we want the leader to continue driving decisions. A mechanism to decide when to move to a new view is needed. New problems emerge: how do we decide when to change views, and how do we make sure this move is synchronized between all parties? Here is a common state machine approach:
 

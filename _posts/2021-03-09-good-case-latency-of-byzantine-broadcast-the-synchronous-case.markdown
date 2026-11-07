@@ -64,7 +64,7 @@ In our [good-case latency paper](https://arxiv.org/abs/2102.07240), we finally p
 </p>
 
 ![](https://github.githubassets.com/images/icons/emoji/unicode/1f4a5.png?v8) **Intuition.**  The novelty of our $(\Delta+1.5\delta)$-BB is to break the indistinguishability mentioned at the end of the previous section, by (1) allowing parties to *early vote* with a parameter $d$ that *guesses* all possible values of $\delta$, and (2) ranking the certificates by the value of $d$ (a smaller $d$ ranks higher). So in our protocol, **though honest parties may vote for different values, only the one with the highest rank will win**, and we will guarantee that the certificate for any committed value always has the highest rank. More specifically, we have the following claim.
-> If any honest party commits $v$ with paramter $d$, the our protocol guarantees that no honest party can vote for any other value $v'\neq v$ with a parameter $d'\leq d$. 
+> If any honest party commits $v$ with parameter $d$, our protocol guarantees that no honest party can vote for any other value $v'\neq v$ with a parameter $d'\leq d$.
 
 The intuition is that, as shown in the figure, if the second honest party receives the proposal $v'$ no later than some time threshold, its forwarded proposal will stop the first honest party from committing $v$. But if the second honest party receives $v'$ later than the time threshold, the forwarded proposal of $v$ from the first honest party will stop it from sending any votes with parameter $d'\leq d$ due to detecting equivocation.
 

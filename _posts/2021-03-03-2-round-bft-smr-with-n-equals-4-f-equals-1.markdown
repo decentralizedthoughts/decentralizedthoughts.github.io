@@ -21,7 +21,7 @@ In the [previous post](https://decentralizedthoughts.github.io/2021-02-28-good-c
 Our **[(5f-1)-SMR protocol](https://arxiv.org/abs/2102.07932)** can commit a decision within $2$ rounds after GST with an honest leader, and only requires $n\geq 5f-1$ replicas. 
 
 
-Our protocol refutes the claim made in [Fast Byzantine Consensus (FaB)](https://ieeexplore.ieee.org/document/1467815) saying that $n=5f+1$ is the best possible resilience for $2$-round BFT SMR protocols. Interstingly, for the canonical example with $n=4$ and $f=1$, we can have a 2-round [PBFT]((http://pmg.csail.mit.edu/papers/osdi99.pdf)) protocol with the optimal resilience!
+Our protocol refutes the claim made in [Fast Byzantine Consensus (FaB)](https://ieeexplore.ieee.org/document/1467815) saying that $n=5f+1$ is the best possible resilience for $2$-round BFT SMR protocols. Interestingly, for the canonical example with $n=4$ and $f=1$, we can have a 2-round [PBFT](http://pmg.csail.mit.edu/papers/osdi99.pdf) protocol with the optimal resilience!
 
 ## [PBFT](http://pmg.csail.mit.edu/papers/osdi99.pdf): 3 rounds with $n=3f+1$
 
@@ -85,7 +85,7 @@ In this way, we are able to construct a BFT SMR protocol that commits in 2 round
 
 > Wait.. what about the *lower bound* in FaB we just mentioned? Does it mean our result contradicts the lower bound? 
 
-The answer turns out to be NO. As pointed out in a [concurrent work](https://arxiv.org/abs/2102.12825), the lower bound proof in FaB assumes a family of consensus protocols that with seperate sets of proposers and acceptors, i.e., the set of parties that propose values and the set of parties that run the consensus are disjoint. For this family of protocols, our technique of detecting leader equivocation with signatures won't work, since the proposal is from a different set of parties. We also note that, even for general protocols, authentication (using signatures) is crucial for our protocol construction and the lower bound proof. We believe that the right resilience bound is back to $n=5f+1$ for unauthenticated protocols.
+The answer turns out to be NO. As pointed out in a [concurrent work](https://arxiv.org/abs/2102.12825), the lower bound proof in FaB assumes a family of consensus protocols with separate sets of proposers and acceptors, i.e., the set of parties that propose values and the set of parties that run the consensus are disjoint. For this family of protocols, our technique of detecting leader equivocation with signatures won't work, since the proposal is from a different set of parties. We also note that, even for general protocols, authentication (using signatures) is crucial for our protocol construction and the lower bound proof. We believe that the right resilience bound is back to $n=5f+1$ for unauthenticated protocols.
 
 > So, how do we know if it is optimal?
 

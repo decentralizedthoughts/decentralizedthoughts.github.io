@@ -297,9 +297,9 @@ We prove this theorem via the following accountable safety lemma which is a stro
 
 *Proof of the accountable safety lemma:*
 
-Let $v^-$ be the *first* view after view $v^\star$ for which there is a block-cert for a block $B'$ such that $B_1$ is not a prefix of $B'$. Let $L$ be the set of $n-f$ parties that singed the block-cert for $B'$.
+Let $v^-$ be the *first* view after view $v^\star$ for which there is a block-cert for a block $B'$ such that $B_1$ is not a prefix of $B'$. Let $L$ be the set of $n-f$ parties that signed the block-cert for $B'$.
 
-Let $S_1$ be the set of $n-f$ parties that singed the block-cert for $B_1$ and $S_2$ be the set of $n-f$ parties that singed the block-cert for $B_2$.
+Let $S_1$ be the set of $n-f$ parties that signed the block-cert for $B_1$ and $S_2$ be the set of $n-f$ parties that signed the block-cert for $B_2$.
 
 The first case is if $v^- = v^\star$. In this case due to quorum intersection, there are at least $n-2f \geq f+1$ parties in the intersection of $S_1 \cap L$ that must have violated the protocol by signing two different blocks in the same view $v^\star$. The two block-certs from $S_1$ and $L$ contain irrefutable cryptographic evidence of at least $f+1$ parties that misbehaved.
 

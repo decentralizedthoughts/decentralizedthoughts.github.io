@@ -15,7 +15,7 @@ In the [first post on Private Set Intersection](https://decentralizedthoughts.gi
 The main challenge in that protocol was to make sure that the 3rd party, Steve, does not cheat.
 In this post, I will present another, more recent protocol, proposed by Phi Hung Le, Samuel Ranellucci, and Dov Gordon [[LRG19]](https://eprint.iacr.org/2019/1338.pdf). They tackle the challenge from a different angle, which is somewhat more elegant, but could be quite expensive in some cases.
 
-I will now re-iterate the problem statement and then present a simple protocol that works when the parties are assumed to be [semi-honest]((https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/)). Then I'll move to the description of detecting a cheating Steve according to [[LRG19]](https://eprint.iacr.org/2019/1338.pdf). For more introduction to Private Set Intersection please read the [first post](https://decentralizedthoughts.github.io/2020-03-29-private-set-intersection-a-soft-introduction/).
+I will now re-iterate the problem statement and then present a simple protocol that works when the parties are assumed to be [semi-honest](https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/). Then I'll move to the description of detecting a cheating Steve according to [[LRG19]](https://eprint.iacr.org/2019/1338.pdf). For more introduction to Private Set Intersection please read the [first post](https://decentralizedthoughts.github.io/2020-03-29-private-set-intersection-a-soft-introduction/).
 
 ## The problem
 Recall the problem of Private Set Intersection:

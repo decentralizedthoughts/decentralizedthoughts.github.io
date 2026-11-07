@@ -64,7 +64,7 @@ MAD-HTLC uses the lack of trust between Bob and miners to disincentivize bribery
 The deposit and collateral contracts look like the following.
 ![](https://i.imgur.com/DSAjMkY.png)
 
-Compared to the earlier deposit contract, refunding Bob now requires presenting an additional pre-image $pre_b$ in path $dep\text{-}B$. As is, this does not change the honest paths for Alice or Bob. However, if Bob attempts to cheat (e.g., bribe miners and attempt to refund when $pre_a$ is available in the mempool), then the miners can instead redeem $v^{dep}$ using path $dep\text{-}M$ by presenting $(pre_a, pre_b)$. Thus, this additional path acts as a deterrant for Bob to bribe.
+Compared to the earlier deposit contract, refunding Bob now requires presenting an additional pre-image $pre_b$ in path $dep\text{-}B$. As is, this does not change the honest paths for Alice or Bob. However, if Bob attempts to cheat (e.g., bribe miners and attempt to refund when $pre_a$ is available in the mempool), then the miners can instead redeem $v^{dep}$ using path $dep\text{-}M$ by presenting $(pre_a, pre_b)$. Thus, this additional path acts as a deterrent against Bob offering a bribe.
 
 The collateral contract requires Bob to deposit an additional amount $v^{col}$. Bob can retrieve the collateral back at any time after $T$. Contrary to the deposit contract, Bob does not need to present pre-image $pre_b$ to do this. This makes sense since the collateral needs to be refunded even if Alice has redeemed the deposit contract through path $dep\text{-}A$. However, if the pre-image $pre_a$ is available and Bob attempts to bribe, miners can confiscate the collateral too.
 

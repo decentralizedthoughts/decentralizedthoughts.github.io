@@ -271,7 +271,7 @@ The model does not include a hard-coded maximum block size ($k^{max}$), which is
 
 This is a deliberate modeling choice, meant to isolate the balance between fee revenue and latency. In fact, based on the above model, the maximum size would never be binding, as due to the incentive structure of the coinbase reward, miners are already motivated to produce blocks that are **inefficiently small**. 
 
-A bit more formally, if a maxium block size (e.g., $k^{max}$) were present in the model, the strategic capacity chosen by miners would simply be $\min(k^{NE}, k^{max})$, but since the model shows $k^{NE}$ is already smaller than what is socially optimal, $k^{max}$ would not alter the analysis. 
+A bit more formally, if a maximum block size (e.g., $k^{max}$) were present in the model, the strategic capacity chosen by miners would simply be $\min(k^{NE}, k^{max})$, but since the model shows $k^{NE}$ is already smaller than what is socially optimal, $k^{max}$ would not alter the analysis.
 
 While latency is relevant for the choice of block size limits, for Bitcoin, the historical debate was driven by other concerns. In particular, it was driven by the need for spam prevention or the desire to create blockspace scarcity to foster a fee market through a priority auction.
 

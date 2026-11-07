@@ -486,7 +486,7 @@ You could start by going to the bonus section below and reading our formal secur
 Then, you could read my three favorite Merkle tree papers, which I think are highly approachable even for beginners.
 
 First, you should read the paper on **history trees** by Crosby and Wallach[^CW09].
-History trees are Merkle trees that "grow" from left to right, in the sense that one is only allowed to append new leafs to the right of the tree.
+History trees are Merkle trees that "grow" from left to right, in the sense that one is only allowed to append new leaves to the right of the tree.
 
 Despite their simplicity, history trees are incredibly powerful since they support _append-only proofs_: given an older tree of $t$ leaves and a new tree of $t'=t+\Delta$ leaves, one can prove (using a succinct $O(\log{t'})$-sized proof) that the new tree includes all the leaves from the old tree.
 This makes history trees very useful for building append-only logs such as [Certificate Transparency (CT)][ct], which is at the core of securing HTTPS.

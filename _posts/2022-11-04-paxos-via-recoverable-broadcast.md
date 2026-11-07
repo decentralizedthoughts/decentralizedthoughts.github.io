@@ -188,7 +188,7 @@ Upon primary receiving n-f <"recover", u, *>,
 
 3. *Quorum intersection*: The primary of view $u$ waits for $n-f$ `recover` messages. Let's denote the set of these sending parties as $R$ (for the read-quorum). Given $ f < n/2 $ and the fact that both $ W $ and $ R $ have at least $ n-f $ parties, the intersection of $ W $ and $ R $ is non-empty. This is because $W \cap R$ contains at least $ 2(n-f) - n = n - 2f \geq 1 $ parties.
 
-4. *Primary chooses the highest*: Because of the non-empty intersection between $ W $ and $ R $ the primary receives recover messages that indicate echoes from a view of at least $ v $. Note that the view may be higher since (1) the party in the intersection may have a higher view echo, or the set $W$ contains some higher higher view echo. The primary then chooses the value associated with the highest view number.
+4. *Primary chooses the highest*: Because of the non-empty intersection between $ W $ and $ R $ the primary receives recover messages that indicate echoes from a view of at least $ v $. Note that the view may be higher since (1) the party in the intersection may have a higher view echo, or the set $W$ contains some higher-view echo. The primary then chooses the value associated with the highest view number.
 
 
 

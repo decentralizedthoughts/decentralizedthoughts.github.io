@@ -43,7 +43,7 @@ In this approach we maintain the safety property but weaken the liveness to be o
 
 **(Optimistic Liveness)** If all replicas are honest and the system is synchronous then all honest replicas will execute a command proposed by a client in a timely manner.
 
-**(Safe Termination)** If an honest replicas does not make progress it can terminate and guarantee that no honest replica will make further progress.
+**(Safe Termination)** If an honest replica does not make progress it can terminate and guarantee that no honest replica will make further progress.
 
 ### Omission Fault Safe State Machine Replication (OFS-SMR)
 

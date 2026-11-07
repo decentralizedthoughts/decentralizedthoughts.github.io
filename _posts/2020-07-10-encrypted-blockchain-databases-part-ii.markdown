@@ -57,7 +57,7 @@ There are two issues with this:
 
 2. The number of patches is equal to the number of deleted values, which means searching for a patch is as expensive as employing lazy deletion.
 
-To address this, we need to make sure that we clean up (or remove) old patches. Precisely, we should remove both $(v_5 \rightarrow v_3)$ and $(v_3 \rightarrow v_1)$ when $v_3$ is deleted. Deletion of $(v_5 \rightarrow v_3)$ guarantees correctness while deletion of $(v_3 \rightarrow v_1)$ guarantees efficiency since the number of patches left are at most the number of un-deleted values. 
+To address this, we need to make sure that we clean up (or remove) old patches. Precisely, we should remove both $(v_5 \rightarrow v_3)$ and $(v_3 \rightarrow v_1)$ when $v_3$ is deleted. Deletion of $(v_5 \rightarrow v_3)$ guarantees correctness while deletion of $(v_3 \rightarrow v_1)$ guarantees efficiency since the number of patches left is at most the number of un-deleted values.
 
 
 **Patch data structure.** Since the number of patches can be significant, they cannot be stored locally and have to be stored on the blockchain as well. We can organise patches in either a linked-list or a tree. Whatever we decide, let’s call the structure the patch structure.  Notice that, irrespective of how we organise the patch structure on the blockchain, the requirement to delete patches from it introduces a chicken and egg problem: deletion of multi-map values from the linked-list requires deletion of patches from the patch structure. So should we patch the patch structure? 

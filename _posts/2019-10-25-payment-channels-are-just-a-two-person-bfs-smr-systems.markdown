@@ -9,9 +9,9 @@ background:
   - /2019-10-25-flavours-of-state-machine-replication/
 ---
 
-This posts views payment channels as essentially a [two person BFS-SMR](https://decentralizedthoughts.github.io/2019-10-25-flavours-of-state-machine-replication/) system along with a carefully implemented mechanism for safe termination (channel closing) under assumptions of synchrony. 
+This post views payment channels as essentially a [two person BFS-SMR](https://decentralizedthoughts.github.io/2019-10-25-flavours-of-state-machine-replication/) system along with a carefully implemented mechanism for safe termination (channel closing) under assumptions of synchrony.
 
-Suppose Alice wants to Pay Bob 10,000 times. The obvious solution is to do 10,000 transactions on a main State Machine Replication System. Let's call this system the *Layer 1 system* and assume Layer 1 is a large Byzantine Fault Tolerant State Machine Replication system. This type of solution may cause the Layer 1 system to have considerable traffic. Payment channels (and more generally Layer 2 solutions) offer a way to relive this traffic and scale the system. 
+Suppose Alice wants to Pay Bob 10,000 times. The obvious solution is to do 10,000 transactions on a main State Machine Replication System. Let's call this system the *Layer 1 system* and assume Layer 1 is a large Byzantine Fault Tolerant State Machine Replication system. This type of solution may cause the Layer 1 system to have considerable traffic. Payment channels (and more generally Layer 2 solutions) offer a way to relieve this traffic and scale the system.
 
 The basic idea of a payment channel:
 1. Alice *opens* the channel by locking value on Layer 1 and dedicating it to the channel.
@@ -20,7 +20,7 @@ The basic idea of a payment channel:
 
 Important details of implementing a basic payment channel:
 1. When Alice locks value on Layer 1 for this payment channel she should not be able to double-spend and use the locked funds for other uses. This can be guaranteed for example by having Alice essentially *pay* the channel.
-2. When Alice or Bob try to close the channel they cannot report a channel state (balance) that never occured. This can be guaranteed by having both Alice and Bob sign each transaction *execution* and its resulting state. So the Layer 1 system will only accept a state from the layer 2 channel that is singed by both Alice and Bob.
+2. When Alice or Bob try to close the channel they cannot report a channel state (balance) that never occurred. This can be guaranteed by having both Alice and Bob sign each transaction *execution* and its resulting state. So the Layer 1 system will only accept a state from the layer 2 channel that is signed by both Alice and Bob.
 3. When Alice or Bob try to close the channel they cannot report a state that is not the most *recent state*. This requires two things: 
 
    3.1. Alice and Bob sign each transactions in a log of operations. by doing this, ALice and Bob are essentially implementing a [two person Byzantine Fault Safe State Machine Replication](https://decentralizedthoughts.github.io/2019-10-25-flavours-of-state-machine-replication/) system run by Alice and Bob. So formally this BFS-SMR has $n=2, f=1$ and maintains its safety, optimistic liveness and safe termination as long as either Alice or Bob are honest.

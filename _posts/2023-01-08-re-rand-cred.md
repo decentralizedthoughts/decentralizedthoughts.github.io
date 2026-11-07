@@ -35,7 +35,7 @@ As in a standard credential system, *issuers*, given a vector of values can crea
 
 When a user holds a credential and wants to prove a *statements* about its underlying values:
 
-It first creates a new credential on the same data. This new credential looks completely random. That's why the operation of taking the credential and creating a new one out of it is called **re-randomizing the credential**. This requires a special type of credential, one that allows to create new credentials on the same data without the issuers help!
+It first creates a new credential on the same data. This new credential looks completely random. That's why the operation of taking the credential and creating a new one out of it is called **re-randomizing the credential**. This requires a special type of credential, one that allows users to create new credentials on the same data without the issuer's help!
 
 
 The user then send this new (re-randomized) credential to the Verifier, along with a statement about the content of the new credential. In particular, this statement can be a [NIZK](https://www.cs.umd.edu/~jkatz/gradcrypto2/NOTES/lecture13.pdf).
@@ -78,7 +78,7 @@ Pedersen commitments have amazing properties:
 * **Perfectly Hiding**: the commitment leaks no information about $\vec{\mathbf{m}}$, in fact it is uniformly distributed in $\mathbb{G}$.
 * **Computationally Binding**: under the hardness of the [discrete log](https://en.wikipedia.org/wiki/Discrete_logarithm) assumption you cannot find $\vec{\mathbf{m}} \neq  \vec{\mathbf{m}}'$ and $r,r'$ such that $\mathsf{Commit}(\vec{\mathbf{m}}; r) = \mathsf{Commit}(\vec{\mathbf{m}}'; r')$
 * **Re-randomizable**: given a commitment $cm$, anyone can generate a new commitment $cm'$ such that:
-    * the new commitment is also binded to $\vec{\mathbf{m}}$
+    * the new commitment is also bound to $\vec{\mathbf{m}}$
     * the new commitment is uniformly, independently distributed in $\mathbb{G}$ (in particular, independent of $cm$)
 
 Re-randomization of a Pedersen commitment is easy:

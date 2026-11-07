@@ -23,9 +23,9 @@ Related posts:
 
 1. It is [impossible to solve consensus](/2019-11-02-primary-backup-for-2-servers-and-omission-failures-is-impossible/) with  $2f \geq n$ omission failures. As an exercise: extend this lower bound to show it is impossible to tolerate $k\+2f \\geq n$ for $k$ crash failures and $f$ omission failures.
 
-2. Using the [Commit-Notify paradigm](/2020-09-13-synchronous-consensus-omission-faults/) in synchrony, *non-uniform* consensus is possible for $t<n/2$ *omission* failures (recall that for omision failures, non-uniform consensus means that faulty replicas may commit on incorrect values). 
+2. Using the [Commit-Notify paradigm](/2020-09-13-synchronous-consensus-omission-faults/) in synchrony, *non-uniform* consensus is possible for $t<n/2$ *omission* failures (recall that for omission failures, non-uniform consensus means that faulty replicas may commit on incorrect values).
 
-3. In synchrony, consensus is possible for $k$ [crash failures](/2019-10-31-primary-backup/), for any $k<n$.
+3. In synchrony, consensus is possible for $k$ [crash failures](/2019-11-01-primary-backup/), for any $k<n$.
 
 
 4. In a [follow-up post](/2020-11-30-the-lock-commit-paradigm-multi-shot-and-mixed-faults/), we extend the lock-commit paradigm to a multi-shot protocol that can tolerate both $f$ omission failures and $k$ [crash](/2019-06-07-modeling-the-adversary/) failures given $k\+2f<n$.
@@ -34,7 +34,7 @@ Related posts:
 
 ## Lock-Commit Paradigm
 
-Consider the task of solving consensus in a system with *clients* and $n$ *replicas*. Clients send commands to the replicas and the goal of the replicacs (in the single shot case) is to decide on one command. In the **Primary-Backup approach**, the protocol progresses in *views*. In each view $v$, one designated replica is the *primary replica* and the other replicas are the *backup replicas* of this view. The primary of a view needs to *propose* a command and replica need to eventually *commit* (or decide) on a command.  There is a *view change trigger* protocol that decides when to globally execute a *view change* protocol that increments the view. 
+Consider the task of solving consensus in a system with *clients* and $n$ *replicas*. Clients send commands to the replicas and the goal of the replicas (in the single shot case) is to decide on one command. In the **Primary-Backup approach**, the protocol progresses in *views*. In each view $v$, one designated replica is the *primary replica* and the other replicas are the *backup replicas* of this view. The primary of a view needs to *propose* a command and replicas need to eventually *commit* (or decide) on a command.  There is a *view change trigger* protocol that decides when to globally execute a *view change* protocol that increments the view.
 
 The main safety risk in Primary-Backup based consensus protocols is that a replica *commits* to a value and later a different replica commits to a different value. The only way this can happen is if a new primary in a new view proposes a different value. To guarantee this will not happen the **Lock-Commit paradigm** does two crucial things:
 
@@ -42,7 +42,7 @@ The main safety risk in Primary-Backup based consensus protocols is that a repli
 
 2. *Read a quorum before you Propose*. When a new primary starts a new view, it runs a *view change* protocol. In this protocol, the new primary of view $v$ needs to decide which value to propose (and eventually commit) in view $v$. The new Primary must read the locks of previous views from a **quorum** of replicas and must adopt the *lock-value* with the **highest** *lock-view* it sees.
 
-Intuitively, this approach is safe is because *any two quorum sets must have a non-empty intersection, hence if the primary proposes the lock-value with the highest lock-view then this value must be the the committed value* (see the proof below). In this post, we assume $n=2f+1$ and use majority quorums that consist of $n-f=f\+1$ replicas.
+Intuitively, this approach is safe because *any two quorum sets must have a non-empty intersection, hence if the primary proposes the lock-value with the highest lock-view then this value must be the committed value* (see the proof below). In this post, we assume $n=2f+1$ and use majority quorums that consist of $n-f=f\+1$ replicas.
 
 This Lock-Commit paradigm is the core of Paxos. It is extended to many settings:
 
@@ -50,7 +50,7 @@ This Lock-Commit paradigm is the core of Paxos. It is extended to many settings:
 
 2. The Lock-Commit paradigm guarantees [uniform consensus](/2019-06-27-defining-consensus/) (so even omission-faulty replicas commit on the same value). In essence, it guarantees that a replica does not decide before the *system* is in a [committed](/2019-12-15-consensus-model-for-FLP/) state.
 
-3. The Lock-Commit paradigm can be extended to tolerate malicious adversaries. For $n>2f$, by using [signatures and synchrony](/2019-11-10-authenticated-synchronous-bft/); and for $n>3f$, by using a quorum system where every two sets intersect by at least $f\+1$ replicas.
+3. The Lock-Commit paradigm can be extended to tolerate malicious adversaries. For $n>2f$, by using [signatures and synchrony](/2019-11-11-authenticated-synchronous-bft/); and for $n>3f$, by using a quorum system where every two sets intersect by at least $f\+1$ replicas.
 
 
 
@@ -166,13 +166,13 @@ Again observe the use of synchrony.
 ### Remarks
 1. We did not fully specify how the clients send commands to the replicas. For simplicity, we can assume that clients broadcast their requests to all replicas. In practice, one can add a mechanism to track the primary and resend commands only to the new primary when there is a view change.
 
-2. In this post, we do not talk about executing the commands (as discussed in a [state machine replication protocol](/2019-10-15-consensus-for-state-machine-replication/)) or running multiple consensus instantces. 
+2. In this post, we do not talk about executing the commands (as discussed in a [state machine replication protocol](/2019-10-15-consensus-for-state-machine-replication/)) or running multiple consensus instances.
 
 3. The only requirement for Safety is that $\|W \cap R\| \geq 1$ (honest) replica. Thus, while we consider using quorums of size $n-f = f+1$, the sizes are flexible and do not have to be symmetric. This is the idea behind [Flexible Paxos](https://arxiv.org/pdf/1608.06696v1.pdf).
 
 4. This post is background for the [Simplex chapter](https://decentralizedthoughts.github.io/2026-05-25-chapter-simplex/), especially the contrast between lock-commit style protocols and Simplex's skip-certificate style.
 
-### Acknowlegment
+### Acknowledgment
 Many thanks to [Alin Tomescu](https://alinush.github.io/) for valuable comments and insights!
 
 Please answer/discuss/comment/ask on [Twitter](https://twitter.com/ittaia/status/1339895006610542594?s=20).

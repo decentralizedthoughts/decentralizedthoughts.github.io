@@ -159,14 +159,14 @@ These protocols decide in two rounds when the broadcaster is honest.
        send <v> to all parties
 
        on receiving <v> from broadcaster:
-          if first mesage form broadcaster:
+          if first message from broadcaster:
              send <echo, v> to all parties
 
        on receiving <echo, v>  by n-f-1 distinct non-broadcaster parties:
           deliver v and terminate
 
        on receiving <echo, v>  from j ( and j is not you and not the broadcaster):
-          if first mesage form j:
+          if first message from j:
              send <vote, j, v> to all parties
           
        on receiving <vote,j,v> by n-f-1 distinct non-broadcaster and non-j parties:
@@ -211,7 +211,7 @@ A similar protocol was shown by  [Imbs and Raynal](https://www.worldscientific.c
 
 Validity in two rounds follows since all $n-f$ non-faulty parties will echo the non-faulty broadcaster's value in the end of the second round.
 
-For Agreement, when the broadcaster is faulty, if a non-faulty party decides $v$, there there are at least $n-2f$ non-faulty non-broadcasters that echo $v$. So from quorum intersection, no value $v' \neq v$ can receive $n-2f$ echoes. Hence all non-faulty will hear $n-2f$ echo $v$ and after at most one more round will send echo $v$. By the end of this round, all non-faulty parties will hear $n-f$ echoes and terminate.
+For Agreement, when the broadcaster is faulty, if a non-faulty party decides $v$, there are at least $n-2f$ non-faulty non-broadcasters that echo $v$. So from quorum intersection, no value $v' \neq v$ can receive $n-2f$ echoes. Hence all non-faulty will hear $n-2f$ echo $v$ and after at most one more round will send echo $v$. By the end of this round, all non-faulty parties will hear $n-f$ echoes and terminate.
 
 
 For more results, check out our [good-case and bad-case latency paper](https://arxiv.org/pdf/2109.12454.pdf).

@@ -37,7 +37,7 @@ We will describe this as a two-step process starting with a protocol with a fixe
 
 ### Towards a Committee-based Sub-quadratic Communication Protocol
 
-To achieve a sub-quadratic communication protocol, the key idea is to randomly sample an appropriate number parties in a *committee*, run consensus among the committee members, and disseminate the result to all other parties. Thus, so far as other parties know who the committee members are, they can learn the result by receiving messages from each of the committee members. 
+To achieve a sub-quadratic communication protocol, the key idea is to randomly sample an appropriate number of parties in a *committee*, run consensus among the committee members, and disseminate the result to all other parties. Thus, so far as other parties know who the committee members are, they can learn the result by receiving messages from each of the committee members.
 
 ```
 // Protocol for party i
@@ -64,10 +64,10 @@ Note that, so far as the Byzantine parties within the committee $C$ are bounded 
 
 Wait, it appears that we are now running the protocol among a smaller committee, which appears substantially better. Is this free lunch? How does this relate to the [Dolev-Reischuk lower bound](https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/) on communication complexity?
 
-No, its not free lunch. There are trade-offs:
+No, it's not a free lunch. There are trade-offs:
 - First, for the protocol to achieve the desired properties, we need the number of Byzantine parties within the committee to be bounded, e.g., $< \kappa/3$ Byzantine faults for HotStuff. Since we elect the $\kappa$ parties uniformly at random, a simple Chernoff bound requires that the total number of faults we can tolerate is $t < (1-\epsilon)n/3$ instead of $t < n/3$ for some $\epsilon > 0$. Moreover, the $\kappa/3$ corruption bound can be exceeded with probability $\exp(-\Omega(\kappa))$. Thus, we think of $\kappa$ as the security parameter.
 
-    The following graph from [Algorand](https://dspace.mit.edu/bitstream/handle/1721.1/137789/p51-gilad.pdf?sequence=2&isAllowed=y) presents a trade-off between $\epsilon$ (or the percentage of honest users in the population) and the committee size $\kappa$ for achieving a failure probability of $5\cdot 10^{-9}$. Thus, this strategy works only when the total number of parties are large enough and we are okay with the reduction in fault tolerance due to the slack parameter $\epsilon$ for a given committee size.
+    The following graph from [Algorand](https://dspace.mit.edu/bitstream/handle/1721.1/137789/p51-gilad.pdf?sequence=2&isAllowed=y) presents a trade-off between $\epsilon$ (or the percentage of honest users in the population) and the committee size $\kappa$ for achieving a failure probability of $5\cdot 10^{-9}$. Thus, this strategy works only when the total number of parties is large enough and we are okay with the reduction in fault tolerance due to the slack parameter $\epsilon$ for a given committee size.
 
 <figure>
 <p align="center">

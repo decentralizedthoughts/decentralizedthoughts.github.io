@@ -11,7 +11,7 @@ continue_reading:
   - /2023-07-22-agreeemnt-on-a-core-set/
 ---
 
-A very useful tool in [Asynchronus](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/) distributed computing is [Reliable Broadcast](https://decentralizedthoughts.github.io/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/), or simply called *Broadcast*. It allows a leader to send a message, knowing that all parties will eventually receive the same message, even if a malicious adversary control $f$ parties and $f<n/3$. Broadcast is deterministic and takes just a constant number of rounds. 
+A very useful tool in [Asynchronous](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/) distributed computing is [Reliable Broadcast](https://decentralizedthoughts.github.io/2020-09-19-living-with-asynchrony-brachas-reliable-broadcast/), or simply called *Broadcast*. It allows a leader to send a message, knowing that all parties will eventually receive the same message, even if a malicious adversary controls $f$ parties and $f<n/3$. Broadcast is deterministic and takes just a constant number of rounds.
 
 
 A natural extension of broadcast is a *Multi-Broadcast*, where each party has an input. Ideally, you may want all parties to *agree on the same set* of outputs.
@@ -65,7 +65,7 @@ More formally: there exists a set $W \subset G$ of size $\|W\|=f+1$, such that f
 
 Lets count how many sets are received by $G$ that are sent from nonfaulty parties in round 2. Since each party in $G$ gathers $n-f$ sets in round 3, then at least $n-2f$ of those set were sent from nonfaulty parties. By assumption $f<\frac{n}{3}$, so $n-2f\geq f+1$. Hence, each nonfaulty party in $G$ receives round 2 sets from at least $f+1$ nonfaulty parties. In total, parties in $G$ receive *at least* $(f+1)(n-f)$ round 2 sets.
 
-Assume the property above is false, so every round 2 set from a nonfaulty party is received by at most $f$ nonfaulty parties in $G$. This means that the total number of rounds 2 sets from nonfaulty parties that are received by nonfaulty parties is *at most* *$f(n-f)$*. This is a contradiction (clearly $f(n-f)<(f+1)(n-f)$).
+Assume the property above is false, so every round 2 set from a nonfaulty party is received by at most $f$ nonfaulty parties in $G$. This means that the total number of round 2 sets from nonfaulty parties that are received by nonfaulty parties is *at most* *$f(n-f)$*. This is a contradiction (clearly $f(n-f)<(f+1)(n-f)$).
 
 
 

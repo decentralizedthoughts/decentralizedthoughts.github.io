@@ -58,7 +58,7 @@ A protocol solves the **crusader broadcast** problem:
 2. **Validity**: If the sender is honest, then all honest parties output the sender's value.
 
 
-See [this post](https://decentralizedthoughts.github.io/2022-06-19-crusader-braodcast/) for Crusader Boardcast with $O(n^2)$ words and $O(1)$ rounds, for any $f<n$ given a PKI.
+See [this post](https://decentralizedthoughts.github.io/2022-06-19-crusader-braodcast/) for Crusader Broadcast with $O(n^2)$ words and $O(1)$ rounds, for any $f<n$ given a PKI.
 
 [Feldman and Micali 1988, 1997](https://people.csail.mit.edu/silvio/Selected%20Scientific%20Papers/Distributed%20Computation/An%20Optimal%20Probabilistic%20Algorithm%20for%20Byzantine%20Agreement.pdf) strengthened the definition of crusader agreement so the output of the protocol is *both* a decision value and a $grade \in \{0,1,2\}$.
 

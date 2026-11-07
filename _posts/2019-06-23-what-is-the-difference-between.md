@@ -98,7 +98,7 @@ The basic HotStuff protocol works sequentially to commit each block. So throughp
 From a theoretical perspective, the concurrent approach can also obtain the optimal amortized 1 block per round that the pipelined approach obtains. However, the pipelining approach also reduces the number of bits sent (by aggregating several messages into one), this is something that the concurrent approach does not currently do.
 
 
-Note that Pipelining and Concurrency are BFT SMR throughput boosting techniques. They are not strongly tied to any particular BFT protocol. For example, one could come up with a _Chained PBFT_ (or SBFT) variant that uses pipelining, or a _Windowed HotStuff_ variant that can switch to a stable leader mode that allows to concurrently make progress on a window of outstanding slots.
+Note that Pipelining and Concurrency are BFT SMR throughput boosting techniques. They are not strongly tied to any particular BFT protocol. For example, one could come up with a _Chained PBFT_ (or SBFT) variant that uses pipelining, or a _Windowed HotStuff_ variant that can switch to a stable leader mode that allows replicas to make progress concurrently on a window of outstanding slots.
 
 In the standard BFT SMR architecture, [committing a block can be separated from executing it](https://www.cs.rochester.edu/meetings/sosp2003/papers/p195-yin.pdf). Typically the execution must be sequential, and often after optimizing the commit throughput (via pipeline or concurrency) the sequential execution becomes the performance bottleneck for throughput. If the execution is indeed the bottleneck, then this is what needs to be optimized. More on this in later posts.  
  

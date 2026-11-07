@@ -11,7 +11,7 @@ background:
 
 Agreement needs quadratic communication and linear time in the worst case. **Scalable Agreement** aims for *near linear communication* and *constant time* in expectation. In this post, we show scalable agreement against a [weak adaptive adversary](https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/) that can cause **omission failures**. This will be the basis for the Byzantine case that we will explore in future posts.
 
-This post can be seen as followup to the posts that solve binary consensus for [crash failures](https://decentralizedthoughts.github.io/2023-02-18-rand-and-consensus-1/) and for [omission failures](https://decentralizedthoughts.github.io/2023-02-19-rand-and-consensus-2/) in **constant expected time**. Rhose protocols had **quadratic message complexity**. 
+This post can be seen as a follow-up to the posts that solve binary consensus for [crash failures](https://decentralizedthoughts.github.io/2023-02-18-rand-and-consensus-1/) and for [omission failures](https://decentralizedthoughts.github.io/2023-02-19-rand-and-consensus-2/) in **constant expected time**. Those protocols had **quadratic message complexity**.
 
 
 ### What is the best we can hope for?
@@ -244,7 +244,7 @@ Therefore, conditioned on $\|C\|\in[\ell,h]$, with probability at least $1-\delt
 
 * The protocol can be adapted to multi-valued agreement using a weak leader election instead of a weak common coin.
 * We will explore how to extend this protocol to Byzantine agreement in a future post.
-* Its a good exercise to verify that the protocol can obtain uniform agreement.
+* It's a good exercise to verify that the protocol can obtain uniform agreement.
 * Its also a good exercise to add an explicit termination detection mechanism so that parties can know when to stop sending messages.
 
 Your thoughts on [X](https://x.com/ittaia/status/1999552330966995097?s=20).

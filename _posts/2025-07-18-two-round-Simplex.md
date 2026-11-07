@@ -17,7 +17,7 @@ continue_reading:
 
 Mainstream partially synchronous BFT protocols tolerate $f<n/3$ Byzantine faults and have [3-round good case commit latency](https://decentralizedthoughts.github.io/2021-02-28-good-case-latency-of-byzantine-broadcast-a-complete-categorization/) under an honest leader. This latency can be reduced to 2 round good case, if we decrease the fault tolerance from <33% to <20% (see [this post](https://decentralizedthoughts.github.io/2025-11-22-three-round-BFT/) for the proof that 20% is required).
 
-Recently, there has been renewed interest in 2-round partially synchronous BFT. In this post, we present a natural 2-round BFT protocol in the Simplex style. A very similar protocol is independently proposed by Commonware and called [Minimmit](https://commonware.xyz/blogs/minimmit.html), also see [Chou, Lewis-Pye, O'Grady 2025](https://arxiv.org/pdf/2508.10862). Also see ZKSync's [ChonkyBFT](https://arxiv.org/abs/2503.15380?utm_source=chatgpt.com) and Tempo's [research post](https://dankradfeist.de/tempo/2025/12/31/minimmit-simple-fast-consensus.html) on Minimint.
+Recently, there has been renewed interest in 2-round partially synchronous BFT. In this post, we present a natural 2-round BFT protocol in the Simplex style. A very similar protocol is independently proposed by Commonware and called [Minimmit](https://commonware.xyz/blogs/minimmit.html), also see [Chou, Lewis-Pye, O'Grady 2025](https://arxiv.org/pdf/2508.10862). Also see ZKSync's [ChonkyBFT](https://arxiv.org/abs/2503.15380?utm_source=chatgpt.com) and Tempo's [research post](https://dankradfeist.de/tempo/2025/12/31/minimmit-simple-fast-consensus.html) on Minimmit.
 
 ## Two-round commit intuition
 
@@ -75,7 +75,7 @@ The first four Upon blocks correspond to leader proposal, vote, timeout, and com
 
 The sixth Upon block is Simplex's mechanism of advancing views using certificates (for either a value or no-commit) and a mechanism to ensure voting before leaving the view.
 
-The fifth Upon block warrants additional explanation because without it, there is a subtle liveness challenge. A Byzantine leader can propose different values to different parties. Then, it could happen that none of the value (including $\bot$) gets enough votes to form a certificate. Since Simplex advances views using certificates, the protocol gets stuck and loses liveness. 
+The fifth Upon block warrants additional explanation because without it, there is a subtle liveness challenge. A Byzantine leader can propose different values to different parties. Then, it could happen that none of the values (including $\bot$) gets enough votes to form a certificate. Since Simplex advances views using certificates, the protocol gets stuck and loses liveness.
 
 But recall that we argued earlier that if a value $x$ has been committed, then there must be a Cert(k, x) among the $n-f$ (Vote, k, \*) messages. Therefore, if no certificate exists among the $n-f$ (Vote, k, \*) messages, the party can be confident that no commit has occurred in this view, and hence can send (Vote, k, $\bot$) **even if** it has already voted for some proposal of the leader. With this additional $\bot$ vote step, a certificate (possibly for $\bot$) is guaranteed to form. 
 

@@ -32,7 +32,7 @@ Note that the lower bound on broadcast in synchrony implies a lower bound on agr
 
 As in Dolev and Reischuk's proof from 1982, we show that some designated party gets no message and hence must violate agreement or termination with a (large) constant probability. This is done by defining two worlds. In world 1 there are $f/2$ parties, $V$, with omission failures. In world 2, we choose a uniformly random party $p \in V$ and un-corrupt it. In addition, we cause omission failures to the $f/2$ first messages sent to $p$. This is where claw back may be required.
 
-Seeking a contradiction, we look at world 1 and use Markov inequity to argue that with a large probability the protocol sends not too many messages to parties in $V$. Conditioned on this event, there is a large probability that the party $p$ gets no more than $f/2$ messages. Conditioned on this event, there is a probability that all parties output the leader value (there is no error).
+Seeking a contradiction, we look at world 1 and use Markov's inequality to argue that with a large probability the protocol sends not too many messages to parties in $V$. Conditioned on this event, there is a large probability that the party $p$ gets no more than $f/2$ messages. Conditioned on this event, there is a probability that all parties output the leader value (there is no error).
 
 We then show indistinguishability between world 1 and world 2. Then in world 2, conditioned on these three events, party $p$, which is non-faulty, sees no message, so there is a constant probability that party $p$ has either a safety error or a liveness error.
 

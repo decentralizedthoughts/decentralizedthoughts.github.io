@@ -18,7 +18,7 @@ continue_reading:
 
 In this series of three posts, we discuss two of the most important consensus lower bounds:
 1. [Lamport, Fischer \[1982\]](https://lamport.azurewebsites.net/pubs/trans.pdf): any protocol solving consensus in the *synchronous* model that is resilient to $t$ crash failures must have an execution with at least $t+1$ rounds.
-2. [Fischer, Lynch, and Patterson \[1983, 1985\]](https://groups.csail.mit.edu/tds/papers/Lynch/jacm85.pdf): any protocol solving consensus in the *asynchronous* model that is resilient to even one crash failure must have an infinite execution.
+2. [Fischer, Lynch, and Paterson \[1983, 1985\]](https://groups.csail.mit.edu/tds/papers/Lynch/jacm85.pdf): any protocol solving consensus in the *asynchronous* model that is resilient to even one crash failure must have an infinite execution.
 
 The modern interpretation of these lower bounds highlights the importance of *randomness*:
 * **Bad news**: Without randomness, asynchronous consensus is *impossible*, and synchronous consensus is *slow*.
@@ -31,7 +31,7 @@ The modern interpretation of these lower bounds highlights the importance of *ra
 
 2. In the [second post](https://decentralizedthoughts.github.io/2019-12-15-synchrony-uncommitted-lower-bound/), we use the approach of [Aguilera and Toueg \[1999\]](https://ecommons.cornell.edu/bitstream/handle/1813/7355/98-1701.pdf?sequence=1&isAllowed=y) to prove that any protocol solving consensus in the *synchronous* model that is resilient to $t$ crash failures must have an execution with at least $t+1$ rounds. The proof uses the definitions and the lemma in this post.
 
-3. In the [third post](https://decentralizedthoughts.github.io/2019-12-15-asynchrony-uncommitted-lower-bound/), we prove the celebrated [Fischer, Lynch, and Patterson \[1985\]](https://groups.csail.mit.edu/tds/papers/Lynch/jacm85.pdf) result that any protocol solving consensus in the *asynchronous* model that is resilient to even one crash failure must have an infinite execution. The proof uses the same definitions and the lemma in this post.
+3. In the [third post](https://decentralizedthoughts.github.io/2019-12-15-asynchrony-uncommitted-lower-bound/), we prove the celebrated [Fischer, Lynch, and Paterson \[1985\]](https://groups.csail.mit.edu/tds/papers/Lynch/jacm85.pdf) result that any protocol solving consensus in the *asynchronous* model that is resilient to even one crash failure must have an infinite execution. The proof uses the same definitions and the lemma in this post.
 
 
 
@@ -50,7 +50,7 @@ We say that a protocol $\mathcal{P}$ solves *agreement against $t$ crash failure
 #### Parties as State Machines
 
 We model each party as a deterministic state machine, and model randomness by giving the state machine read-only access to a tape of random bits.
-Each state machine has access to an immutable *input* register, a read-only *incoming-messages* queue, and a write-only *outgoing-messages* queue. At any given moment, the *local state* of a party is fully defined by the state of its state machine and the content of it input register and local message queues. A **protocol**, $\mathcal{P}$, for $n$ parties is a set of $n$ state machines.
+Each state machine has access to an immutable *input* register, a read-only *incoming-messages* queue, and a write-only *outgoing-messages* queue. At any given moment, the *local state* of a party is fully defined by the state of its state machine and the contents of its input register and local message queues. A **protocol**, $\mathcal{P}$, for $n$ parties is a set of $n$ state machines.
 
 #### Message passing
 

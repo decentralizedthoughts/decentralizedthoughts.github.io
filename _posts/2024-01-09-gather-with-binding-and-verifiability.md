@@ -59,9 +59,9 @@ To achieve **binding**, we employ the most important trick in distributed comput
 
 The proofs of the validity and termination properties of this protocol remain straightforward. Let's prove that the protocol has a binding common core: 
 
-Consider the *first nonfaulty party* that completed the protocol. Denote its output as $V$. The set $V$ contains $n{-}f~$ $U$ sets, so least $n{-}2f$ of these $U$ sets must be from nonfaulty parties.
+Consider the *first nonfaulty party* that completed the protocol. Denote its output as $V$. The set $V$ contains $n{-}f~$ $U$ sets, so at least $n{-}2f$ of these $U$ sets must be from nonfaulty parties.
 
-Let $U^1,\dots,U^{f+1}$ be some $f+1$ sets from nonfaulty that form the set $V$ (for concreteness, choose the $f+1$ lexicographically first). Define:
+Let $U^1,\dots,U^{f+1}$ be some $f+1$ sets from nonfaulty parties that form the set $V$ (for concreteness, choose the $f+1$ lexicographically first). Define:
 
 $$
 S^\star= \bigcap_1^{f+1} U^i

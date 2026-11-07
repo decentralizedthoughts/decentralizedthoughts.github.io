@@ -121,7 +121,7 @@ Reads can also be made linearizable by adding an additional round. We will discu
 
 * Read correctness: For a read request with response $S$, any response from a request that started after this response, returns a set of values that includes $S$.
 
-Its a good exercise to see why the above protocol does not obtain read correctness and how to fix that (and stay linear communication). Another good exercise is to see how correctness and read correctness implies [linearizability](https://decentralizedthoughts.github.io/2021-10-16-the-ideal-state-machine-model-multiple-clients-and-linearizability/).
+It's a good exercise to see why the above protocol does not obtain read correctness and how to fix that (and retain linear communication complexity). Another good exercise is to see how correctness and read correctness imply [linearizability](https://decentralizedthoughts.github.io/2021-10-16-the-ideal-state-machine-model-multiple-clients-and-linearizability/).
 
 It is also possible to carefully *combine* log replication with set replication to get the best of both worlds (fulfilling Lamport’s vision for the Byzantine setting). See [Kuznetsov, Pignolet, Ponomarev, Tonkikh, 2022](https://arxiv.org/pdf/2212.04895.pdf). We plan to cover this in future posts.
 
