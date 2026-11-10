@@ -1,14 +1,14 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-11-10T01:29:37Z",
+  "fetched_at": "2026-11-10T14:52:17Z",
   "items": [
     {
       "path": "/start-here/",
-      "views": 147
+      "views": 139
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 138
+      "views": 135
     },
     {
       "path": "/2019-06-01-2019-5-31-models/",
@@ -16,15 +16,15 @@
     },
     {
       "path": "/course/",
-      "views": 98
+      "views": 95
+    },
+    {
+      "path": "/2019-11-02-primary-backup-for-2-servers-and-omission-failures-is-impossible/",
+      "views": 77
     },
     {
       "path": "/2019-12-22-dolev-strong/",
-      "views": 85
-    },
-    {
-      "path": "/2020-12-12-raft-liveness-full-omission/",
-      "views": 75
+      "views": 76
     },
     {
       "path": "/2019-06-07-modeling-the-adversary/",
