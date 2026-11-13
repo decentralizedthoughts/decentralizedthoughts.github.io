@@ -6,6 +6,7 @@ _site/
 .jekyll-metadata
 vendor/
 .bundle/
+__pycache__/
 
 # general
 .DS_Store

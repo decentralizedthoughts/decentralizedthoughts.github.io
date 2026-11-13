@@ -4,7 +4,7 @@ date: 2020-06-12 04:10:00 -04:00
 tags:
 - research
 author: Nibesh Shrestha, Kartik Nayak
-redirect_from: "/2020-06-12-optimal-optimistic-responsiveness/"
+redirect_from: "/2020-06-11-optimal-optimistic-responsiveness/"
 chapters:
   - /2026-06-28-chapter-lower-bounds/
 background:

@@ -1,9 +1,12 @@
 ---
 title: Avishay Yanai
 layout: page
+redirect_from:
+  - /about-avishay/
+  - /_authors/about-avishay/
 ---
 
-<img align="left" height="200" src="../../img/avishay.jpg" hspace="20"> 
+<img align="left" height="200" src="{{ '/img/avishay.jpg' | relative_url }}" hspace="20">
 
 Avishay is a [Researcher](https://research.vmware.com/researchers/avishay-yanai) at VMware Research.
 

@@ -9,6 +9,8 @@ background:
   - /2019-11-29-Analysis-Nakamoto/
 continue_reading:
   - /2022-03-07-colordag-from-always-almost-to-almost-always-50-percent-selfish-mining-resilience/
+redirect_from:
+  - /2020-02-26-blockchain-selfish-mining/
 ---
 
 Proof of Work (PoW) Blockchains implement a form of State Machine Replication (SMR). Unlike classical SMR protocols, they are **open**, i.e., anyone can join the system, and the system incentivizes participants, called **miners**, to follow the protocol. Therefore, unlike classical SMR protocols, reasoning about blockchain security relies not only on bounding the number of malicious participants. One should crucially ask whether miners are indeed *incentivized* to follow the prescribed protocol. This is the topic of this post.

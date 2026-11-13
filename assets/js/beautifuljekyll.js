@@ -578,6 +578,9 @@ let BeautifulJekyllJS = {
       e.preventDefault();
       openSearch();
     });
+    document.querySelectorAll("[data-open-search]").forEach(function(button) {
+      button.addEventListener("click", function() { openSearch(); });
+    });
     $("#nav-search-exit").click(function(e) {
       e.preventDefault();
       closeSearch();

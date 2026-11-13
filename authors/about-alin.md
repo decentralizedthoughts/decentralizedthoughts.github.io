@@ -1,9 +1,12 @@
 ---
 title: Alin Tomescu
 layout: page
+redirect_from:
+  - /about-alin/
+  - /_authors/about-alin/
 ---
 
-<img align="right" height="200" src="../../img/alin.png" hspace="20"> 
+<img align="right" height="200" src="{{ '/img/alin.png' | relative_url }}" hspace="20">
 
 Alin is a Research Scientist at Aptos Labs. His broad research interests are in cryptography and its practical applications. 
 

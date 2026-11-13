@@ -49,11 +49,9 @@ def looks_like_placeholder(raw: str) -> bool:
         return True
     if value.startswith("..."):
         return True
-    if " " in value and not value.startswith("http"):
-        return True
     if value.lower().startswith("post-on") or value.lower().startswith("post%20on"):
         return True
-    if value.lower().startswith("post"):
+    if value.lower().startswith("post on "):
         return True
     if value.startswith("(") and value.endswith(")") and ("http://" in value or "https://" in value):
         return True
@@ -86,7 +84,7 @@ def resolve_internal_target(referrer: str, raw: str):
     if "{{" in raw or "}}" in raw:
         return None
     if looks_like_placeholder(raw):
-        return None
+        return "__PLACEHOLDER__"
 
     parsed = urlparse(raw)
     if parsed.scheme or parsed.netloc:
@@ -173,6 +171,9 @@ def check_target(referrer, raw):
     target = resolve_internal_target(referrer, raw)
     if target is None:
         return 0
+    if target == "__PLACEHOLDER__":
+        print(f"ERROR: placeholder link referenced from {referrer}: {raw}")
+        return 1
     if target == "__OUTSIDE_ROOT__":
         print(f"ERROR: path escapes site root from {referrer}: {raw}")
         return 1
@@ -196,6 +197,14 @@ def check_redirects():
 
     errors = 0
     for source, dest in sorted(data.items()):
+        destination = urlparse(dest)
+        same_site = not destination.netloc or destination.netloc in INTERNAL_HOSTS
+        source_path = normalize_site_path(urlparse(source).path).rstrip("/")
+        destination_path = normalize_site_path(destination.path).rstrip("/")
+        if same_site and source_path == destination_path:
+            print(f"ERROR: redirect points to itself: {source} -> {dest}")
+            errors += 1
+            continue
         target = resolve_internal_target("redirects.json", dest)
         if target == "__OUTSIDE_ROOT__":
             print(f"ERROR: redirect target escapes site root: {source} -> {dest}")

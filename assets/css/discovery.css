@@ -1,0 +1,23 @@
+.archive-guide {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #ddd;
+}
+.archive-guide h1 { font-size: 2rem; }
+.archive-paths {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0;
+}
+.archive-paths li {
+  border-left: 3px solid #0085a1;
+  padding-left: .8rem;
+}
+.archive-paths a { font-weight: bold; }
+.archive-paths span { display: block; font-size: .9rem; margin-top: .4rem; }
+@media (max-width: 575px) {
+  .archive-paths { grid-template-columns: 1fr; }
+}

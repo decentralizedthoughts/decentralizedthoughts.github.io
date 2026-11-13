@@ -146,4 +146,4 @@ Further reading/listening:
 * paper: <http://timroughgarden.org/papers/RPCAP_public_arxiv.pdf>
 * talk: <https://www.youtube.com/watch?v=EfsSV7ni2ZM>
 
-Your thoughts/comments on [twitter](...)
+Your thoughts/comments on twitter

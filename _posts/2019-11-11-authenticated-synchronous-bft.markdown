@@ -11,6 +11,8 @@ continue_reading:
   - /2019-11-12-Sync-HotStuff/
   - /2020-06-12-optimal-optimistic-responsiveness/
   - /2019-11-29-Analysis-Nakamoto/
+redirect_from:
+  - /2019-11-10-authenticated-synchronous-bft/
 ---
 
 <span style="color:grey"> ![](https://github.githubassets.com/images/icons/emoji/unicode/23f0.png?v8) Post updated in March 2021</span>

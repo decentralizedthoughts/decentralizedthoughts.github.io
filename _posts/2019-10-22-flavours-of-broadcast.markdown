@@ -43,9 +43,9 @@ Note on lower bounds: [Fischer, Lynch, and Merritt](https://groups.csail.mit.edu
 For randomized protocols [Karlin and Yao 1984, unpublished](http://www.math.ucsd.edu/~ronspubs/89_08_byzantine.pdf) show that Broadcast must have a constant (more than $1/3$) error probability for $n\leq 3f$.  
 
 This lower bound for randomized protocols does not hold for weak Broadcast. Using randomization and private channels, [Fitzi, Gisin, Maurer, and von Rotz 2002](https://iacr.org/archive/eurocrypt2002/23320478/qbc.pdf
-) strengthen Weak Broadcast to a notion of *Detectable Broadcast* that also provides a stronger notion of fairness that is important for SMPC. They show that it is possible to solve weak broadcast for $n>2f$ with just a [negligible error probability](post on security definitions).
+) strengthen Weak Broadcast to a notion of *Detectable Broadcast* that also provides a stronger notion of fairness that is important for SMPC. They show that it is possible to solve weak broadcast for $n>2f$ with just a negligible error probability.
 
-[Fitzi, Gottesman, Hirt, Holenstein, and Smith 2002](https://groups.csail.mit.edu/tds/papers/Smith-Adam/fghhs-PODC2002-new-final.pdf) improve this bound to $n>f$ again with just a [negligible error probability](post on security definitions).
+[Fitzi, Gottesman, Hirt, Holenstein, and Smith 2002](https://groups.csail.mit.edu/tds/papers/Smith-Adam/fghhs-PODC2002-new-final.pdf) improve this bound to $n>f$ again with just a negligible error probability.
 
 
 
@@ -83,7 +83,7 @@ A protocol solves the **Broadcast with abort** problem:
 2. **Weak Validity**: If the sender is honest, then all honest parties output either sender's value or ⊥.
 3. **Non-triviality**: If all parties are honest, then all parties output the sender's value.
 
-Goldwasser and Lindell show that this relaxation can be solved even if the adversary controls $n-1$ parties out of $n$. The solution is a natural two-round protocol and obtains [perfect security](post on security definitions). Here is the protocol for Broadcast with abort:
+Goldwasser and Lindell show that this relaxation can be solved even if the adversary controls $n-1$ parties out of $n$. The solution is a natural two-round protocol and obtains perfect security. Here is the protocol for Broadcast with abort:
 
 1. The sender sends $x$ to all parties.
 2. Denote by $x_i$ the value received by party $i$ from the sender in the previous round. If $i$ did not receive a value from the sender in the first round, then it sets $x_i = ⊥$. Then, every party $i$ (for $i > 1$) sends its value $x_i$ to all other parties.

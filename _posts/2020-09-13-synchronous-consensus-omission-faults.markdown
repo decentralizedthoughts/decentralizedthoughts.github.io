@@ -77,7 +77,7 @@ Note that Commit-Notify also comes with several disadvantages:
 1. Safety depends on synchrony.
 2. Safety is only guaranteed for non-faulty replicas ([non-uniform agreement](https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/)): A replica may commit and then crash before any notify message is sent.
 
-**Simplifying assumption: single shot.** To simplify the presentation we will focus on just *one* decision, not a sequence of decisions. [In the next post](...) we will show how to extend this to multi-shot agreement.
+**Simplifying assumption: single shot.** To simplify the presentation we will focus on just *one* decision, not a sequence of decisions. In the next post we will show how to extend this to multi-shot agreement.
 
 
 ### Commit-Notify: in the steady state

@@ -1,13 +1,17 @@
 ---
 title: 404 - Page not found
 permalink: "/404.html"
-layout: default
+layout: page
+css: /assets/css/discovery.css
 ---
 
-<div class="text-center">
-  <h1>Whoops, this page doesn't exist.</h1>
-  <h1>Move along. (404 error)</h1>
-  <br/>
-
-  <img src="{{ 'assets/img/404-southpark.jpg' | relative_url }}" alt="Not found" />
-</div>
+<section class="archive-guide" data-page-not-found aria-labelledby="recovery-heading">
+  <h2 id="recovery-heading">Find the post you were looking for</h2>
+  <p>This link may be outdated. Search the archive by title, author, or topic, or explore one of the paths below.</p>
+  {% if site.post_search %}<button type="button" class="btn btn-primary" data-open-search>Search the archive</button>{% endif %}
+  <ul class="archive-paths" data-discovery="recovery">
+    <li><a href="{{ '/start-here/' | relative_url }}">Start Here</a><span>A guide to distributed computing, consensus, and cryptography.</span></li>
+    <li><a href="{{ '/' | relative_url }}">Latest posts</a><span>Recent research and explanations from Decentralized Thoughts.</span></li>
+    <li><a href="{{ '/tags/' | relative_url }}">Browse by topic</a><span>Find posts across the archive.</span></li>
+  </ul>
+</section>

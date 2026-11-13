@@ -235,7 +235,7 @@ These are $n$ clock differences whose sum is $(n-1)u$. Therefore, one difference
 
 * **Lower bounds**: Our [lower bounds chapter](https://decentralizedthoughts.github.io/2026-06-28-chapter-lower-bounds/) collects more results and proof techniques. For more on indistinguishability, see our [post on Byzantine agreement under partial synchrony](https://decentralizedthoughts.github.io/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/).
 
-* **Tolerating failures**:  The [next post](TBD) adds Byzantine failures, still with no clock drift.
+* **Tolerating failures**:  The next post adds Byzantine failures, still with no clock drift.
 
 ### Acknowledgments
 

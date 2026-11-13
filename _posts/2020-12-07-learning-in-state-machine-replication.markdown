@@ -63,5 +63,5 @@ In a na\"ive form of learning, each faulty replica can ask each non-faulty repli
 2. To solve the denial of service attack, instead of sending the decision, we can use [error correcting codes](https://users.ece.cmu.edu/~jwylie/pubs/CMU-PDL-03-104.pdf) to split the decision value to $O(m/n)$ shares. Each non-faulty party will send its share to all parties. So the total word complexity is just $O(M/n)$ times $O(n^2)$ which is $O(n M)$ (where the leading constant is at least 3).
 
 
-Please answer/discuss/comment/ask on [Twitter](...).
+Please answer/discuss/comment/ask on Twitter.
 

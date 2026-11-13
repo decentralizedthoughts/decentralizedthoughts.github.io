@@ -1,9 +1,12 @@
 ---
 title: Ittai Abraham
 layout: page
+redirect_from:
+  - /about-ittai/
+  - /_authors/about-ittai/
 ---
 
-<img align="left" width="200" height="200" src="../../img/ittai.jpg" hspace="20"> 
+<img align="left" width="200" height="200" src="{{ '/img/ittai.jpg' | relative_url }}" hspace="20">
 
 Ittai is a researcher at a16z crypto.
 

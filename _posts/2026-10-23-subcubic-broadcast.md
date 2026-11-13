@@ -5,6 +5,8 @@ published: true
 tags:
 - research
 author: Yuval Efron, Jovan Komatovic, Ling Ren
+redirect_from:
+  - /2026-10-23-subcubic-broadcast.md/
 ---
 
 The [Dolev–Strong](https://decentralizedthoughts.github.io/2019-12-22-dolev-strong/) protocol is a well-known protocol for Byzantine broadcast. It is a deterministic protocol and tolerates any number $t<n$ of corruptions (assuming digital signatures). It runs in $t+1$ rounds, which is optimal for deterministic protocols. Its communication complexity is $O(n^2t\lambda)$ bits, which is $O(n^3\lambda)$ for $t=\Theta(n)$. The [Dolev–Reischuk](https://decentralizedthoughts.github.io/2019-08-16-byzantine-agreement-needs-quadratic-messages/) lower bound, by contrast, is only quadratic. Despite four decades of research, no deterministic protocol tolerating a dishonest majority has improved on the communication complexity of Dolev–Strong.

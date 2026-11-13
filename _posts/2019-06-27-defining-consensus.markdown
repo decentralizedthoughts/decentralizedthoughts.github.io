@@ -12,6 +12,9 @@ continue_reading:
   - /2020-09-14-broadcast-from-agreement-and-agreement-from-broadcast/
   - /2019-10-15-consensus-for-state-machine-replication/
   - /2022-12-12-what-about-validity/
+redirect_from:
+  - /2019-06-27-what-is-consensus/
+  - /2019/06/27/what-is-consensus/
 ---
 
 Consensus broadly means different parties reaching agreement. In distributed computing, consensus is a core functionality. In this post, we define the consensus problem and its variants.
