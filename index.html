@@ -1,21 +1,6 @@
 ---
 layout: home
-share-description: Explanations of consensus, blockchains, and cryptography, from first principles to current research.
+share-description: Decentralized thoughts about decentralization
 mathjax: true
-css: /assets/css/discovery.css
 ---
-
-{% unless paginator.page > 1 %}
-<section class="archive-guide" aria-labelledby="archive-guide-heading">
-  <h1 id="archive-guide-heading">Understand distributed systems</h1>
-  <p>Explanations of consensus, blockchains, and cryptography, from first principles to current research.</p>
-  <ul class="archive-paths" data-discovery="homepage">
-    <li><a href="{{ '/start-here/' | relative_url }}">Start with the fundamentals</a><span>Follow a guided path through models, consensus, and classic protocols.</span></li>
-    <li><a href="{{ '/2020-12-22-what-is-a-merkle-tree/' | relative_url }}">Explore cryptography</a><span>Learn how Merkle trees work through concrete examples.</span></li>
-    <li><a href="{{ '/2026-05-25-chapter-simplex/' | relative_url }}">Study modern consensus</a><span>Read the Simplex chapter, from the core protocol to its variants.</span></li>
-  </ul>
-  {% if site.post_search %}<button type="button" class="btn btn-outline-primary" data-open-search>Search the archive</button>{% endif %}
-</section>
-<h2>Latest posts</h2>
-{% endunless %}
 
