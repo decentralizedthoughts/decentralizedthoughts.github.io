@@ -1,30 +1,30 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-11-13T23:30:35Z",
+  "fetched_at": "2026-11-14T13:30:02Z",
   "items": [
     {
-      "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 128
+      "path": "/start-here/",
+      "views": 117
     },
     {
-      "path": "/start-here/",
-      "views": 122
+      "path": "/2020-12-22-what-is-a-merkle-tree/",
+      "views": 105
     },
     {
       "path": "/2019-06-01-2019-5-31-models/",
-      "views": 106
+      "views": 94
     },
     {
       "path": "/2026-11-08-beyond-leaderless-consensus/",
-      "views": 92
+      "views": 87
     },
     {
       "path": "/course/",
-      "views": 89
+      "views": 83
     },
     {
       "path": "/2019-06-07-modeling-the-adversary/",
-      "views": 71
+      "views": 66
     }
   ]
 }
