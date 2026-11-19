@@ -1,22 +1,22 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-11-19T00:20:39Z",
+  "fetched_at": "2026-11-19T15:43:47Z",
   "items": [
     {
       "path": "/2026-11-08-beyond-leaderless-consensus/",
-      "views": 113
-    },
-    {
-      "path": "/start-here/",
-      "views": 99
+      "views": 117
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
       "views": 94
     },
     {
+      "path": "/start-here/",
+      "views": 93
+    },
+    {
       "path": "/2019-06-01-2019-5-31-models/",
-      "views": 88
+      "views": 81
     },
     {
       "path": "/2019-10-15-consensus-for-state-machine-replication/",
@@ -24,11 +24,11 @@
     },
     {
       "path": "/2019-11-02-primary-backup-for-2-servers-and-omission-failures-is-impossible/",
-      "views": 73
+      "views": 71
     },
     {
       "path": "/2019-06-07-modeling-the-adversary/",
-      "views": 69
+      "views": 67
     }
   ]
 }
