@@ -1,6 +1,6 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-11-25T02:23:57Z",
+  "fetched_at": "2026-11-25T17:12:47Z",
   "items": [
     {
       "path": "/start-here/",
@@ -8,23 +8,23 @@
     },
     {
       "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 78
-    },
-    {
-      "path": "/2026-11-08-beyond-leaderless-consensus/",
-      "views": 78
+      "views": 79
     },
     {
       "path": "/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/",
-      "views": 70
+      "views": 68
     },
     {
       "path": "/2019-06-01-2019-5-31-models/",
-      "views": 67
+      "views": 66
     },
     {
       "path": "/2020-02-26-selfish-mining/",
       "views": 65
+    },
+    {
+      "path": "/2019-06-07-modeling-the-adversary/",
+      "views": 59
     }
   ]
 }
