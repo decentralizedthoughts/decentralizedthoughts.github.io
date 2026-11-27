@@ -1,30 +1,30 @@
 {
   "source": "ga4",
-  "fetched_at": "2026-11-27T01:42:58Z",
+  "fetched_at": "2026-11-27T16:39:13Z",
   "items": [
     {
       "path": "/start-here/",
-      "views": 87
-    },
-    {
-      "path": "/2020-12-22-what-is-a-merkle-tree/",
-      "views": 75
+      "views": 86
     },
     {
       "path": "/2019-06-25-on-the-impossibility-of-byzantine-agreement-for-n-equals-3f-in-partial-synchrony/",
-      "views": 69
+      "views": 71
+    },
+    {
+      "path": "/2020-12-22-what-is-a-merkle-tree/",
+      "views": 71
     },
     {
       "path": "/2019-06-01-2019-5-31-models/",
-      "views": 64
+      "views": 60
     },
     {
       "path": "/2019-06-07-modeling-the-adversary/",
-      "views": 62
+      "views": 60
     },
     {
       "path": "/2020-02-26-selfish-mining/",
-      "views": 62
+      "views": 60
     }
   ]
 }
