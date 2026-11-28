@@ -11,6 +11,8 @@ background:
   - /2026-03-07-simultaneous-agreement/
 continue_reading:
   - /2026-05-17-fast-simplex-fvs/
+  - /2026-11-08-multi-shot-benign-simplex-fixed-view-schedule/
+  - /2026-11-08-beyond-leaderless-consensus/
 ---
 
 This post gives a **fixed view schedule** version of

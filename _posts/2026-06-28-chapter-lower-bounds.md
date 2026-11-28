@@ -176,6 +176,11 @@ puts FLP and the Santoro-Widmayer mobile crash lower bound into one view. The
 proof tracks a pivot configuration and moves the pivot forward. The post also
 offers a simpler, more modern proof of the FLP theorem.
 
+For a construction that changes the assumptions behind the mobile-crash
+lower bound, see [Beyond Leaderless Consensus](https://decentralizedthoughts.github.io/2026-11-08-beyond-leaderless-consensus/).
+It combines multiple leaders with a randomness beacon under a model with
+delayed Byzantine corruptions and mobile crashes that preserve local state.
+
 Finally,
 [Early Stopping, Same but Different](https://decentralizedthoughts.github.io/2024-01-28-early-stopping-lower-bounds/)
 asks what happens when the actual number of failures is smaller than the

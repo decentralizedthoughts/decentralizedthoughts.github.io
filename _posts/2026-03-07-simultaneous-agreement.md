@@ -11,6 +11,7 @@ chapters:
 background:
   - /2019-12-15-synchrony-uncommitted-lower-bound/
   - /2024-01-28-early-stopping-lower-bounds/
+  - /2026-10-13-clock-synchronization-no-drift/
 continue_reading:
   - /2026-05-14-simplex-FVS/
   - /2026-05-17-fast-simplex-fvs/

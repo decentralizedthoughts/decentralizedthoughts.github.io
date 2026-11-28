@@ -8,8 +8,11 @@ author: Ittai Abraham, Kaya Alpturer, Pranav Garimidi, Joachim Neu, Tim Roughgar
 background:
   - /2026-05-14-simplex-FVS/
   - /2024-03-07-mobile-is-FLP/
+  - /2024-12-10-multi-world-vaba/
 continue_reading:
   - /2024-12-10-bind-and-rand/
+chapters:
+  - /2026-05-25-chapter-simplex/
 ---
 
 Most consensus protocols are leader based.

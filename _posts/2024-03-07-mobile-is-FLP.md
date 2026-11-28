@@ -12,6 +12,7 @@ background:
   - /2024-01-28-early-stopping-lower-bounds/
 continue_reading:
   - /2024-12-10-bind-and-rand/
+  - /2026-11-08-beyond-leaderless-consensus/
 ---
 
 **TL;DR:** We give a simple, unified proof that consensus with one mobile crash in synchrony, or one crash in asynchrony, inevitably admits infinite executions. The proof uses a single reduction to a *mobile delay adversary*, a weaker but expressive fault model and then shows that every consensus protocol resilient to it must fail to terminate. This approach streamlines the classic FLP83 and SW89 results and highlights the close connection between asynchrony and mobile faults.

@@ -8,11 +8,14 @@ background:
   - /2019-06-27-defining-consensus/
 continue_reading:
   - /2022-06-19-crusader-braodcast/
+  - /2026-10-23-subcubic-broadcast/
 ---
 
 This post is about the classic result from 1983 on authenticated broadcast against a Byzantine adversary:
 
 **Theorem ([Dolev-Strong \[1983\]](https://www.cse.huji.ac.il/~dolev/pubs/authenticated.pdf)):** *there exists an authenticated protocol for solving broadcast, against any adversary controlling $t<n$ out of $n$ parties, in $t+1$ rounds, using $O(n^2t)$ words*
+
+**2026 update:** For improvements in word complexity beyond Dolev–Strong, see [Authenticated Broadcast in $\widetilde O(n^{2.5})$ Communication](https://decentralizedthoughts.github.io/2026-10-23-subcubic-broadcast/), which also points to a $\widetilde O(n^2)$-communication protocol for any $t<n$.
 
 
 Recall the [Broadcast properties](https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/): (1) *Termination* -  all honest parties decide and terminate; (2) *Validity* - if the leader is honest, its value is the decision value; and (3) *Agreement* - all honest parties decide the same value.
@@ -133,7 +136,7 @@ The protocol satisfies agreement, validity, and termination:
 
 Every party sends at most two chains, each of length at most $t+1$ (that is, $O(t)$ signatures). The total communication is $O(n^2t)$ signatures.
 
-Here is an open question: for $t<n$, reduce communication to $o(n^3)$ against some type of adaptive adversary, or perhaps show that $O(n^3)$ is required under some conditions.
+When this post was written, reducing communication to $o(n^3)$ for $t<n$ against an adaptive adversary was an open question. **In 2026, Yuval Efron, Jovan Komatovic, and Ling Ren resolved it** with a deterministic authenticated broadcast protocol using $\widetilde O(n^2)$ communication for any $t<n$, assuming digital signatures and a collision-resistant hash function. See their [post on the 2026 communication improvements](https://decentralizedthoughts.github.io/2026-10-23-subcubic-broadcast/), which presents an elementary $\widetilde O(n^{2.5})$-communication protocol for $t\leq n-\sqrt n$ and links to the full near-quadratic result.
 
 Note that this protocol relies heavily on synchrony and [does not work for $t \geq n/2$](https://decentralizedthoughts.github.io/2019-11-02-primary-backup-for-2-servers-and-omission-failures-is-impossible/) in the client-server model where the clients are passive or maybe offline.
 In Dolev–Strong, a party must accept a length-$k$ chain only in round $k$, but offline clients cannot verify timing. Thus the protocol fails when $t \geq n/2$ or clients are not continuously online.

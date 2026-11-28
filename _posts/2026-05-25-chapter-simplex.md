@@ -253,6 +253,15 @@ value certificate or a skip certificate.
 pushes this fixed view schedule line through the two round Simplex certificate
 structure. It uses $n=5f+1$ and view length $2\Delta$. 
 
+[Multi-Shot Benign Simplex on a Fixed View Schedule](https://decentralizedthoughts.github.io/2026-11-08-multi-shot-benign-simplex-fixed-view-schedule/)
+puts the omission-fault version on a rotating-leader schedule with $2\Delta$
+views and $2\delta$ good-case commits.
+
+[Beyond Leaderless Consensus](https://decentralizedthoughts.github.io/2026-11-08-beyond-leaderless-consensus/)
+uses Multi-Leader Fixed-View Simplex to tolerate mobile crashes. Two leaders
+propose in each view, and a randomness beacon ranks them after voting, so the
+adversary must choose which broadcast to interrupt before learning the ranking.
+
 ## Harsh Partial Synchrony and Complex
 
 The post
@@ -322,6 +331,8 @@ For fixed view schedules, read:
 * [Synchronized Clocks, Fixed View Schedules, and Simultaneous Agreement](https://decentralizedthoughts.github.io/2026-03-07-simultaneous-agreement/)
 * [Simplex on a Fixed View Schedule](https://decentralizedthoughts.github.io/2026-05-14-simplex-FVS/)
 * [Fast Simplex on a Fixed View Schedule](https://decentralizedthoughts.github.io/2026-05-17-fast-simplex-fvs/)
+* [Multi-Shot Benign Simplex on a Fixed View Schedule](https://decentralizedthoughts.github.io/2026-11-08-multi-shot-benign-simplex-fixed-view-schedule/)
+* [Beyond Leaderless Consensus](https://decentralizedthoughts.github.io/2026-11-08-beyond-leaderless-consensus/)
 
 For harsh partial synchrony and certificate growth, read:
 

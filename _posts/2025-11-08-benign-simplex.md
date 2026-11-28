@@ -12,6 +12,7 @@ background:
   - /2019-06-07-modeling-the-adversary/
 continue_reading:
   - /2025-11-15-simplex-from-benign/
+  - /2026-11-08-multi-shot-benign-simplex-fixed-view-schedule/
 ---
 
 The goal of this post is to describe a *single-shot* [consensus](https://decentralizedthoughts.github.io/2019-06-27-defining-consensus/) protocol that is resilient to *f < n/2* [omission failures](https://decentralizedthoughts.github.io/2019-06-07-modeling-the-adversary/), under [partial synchrony](https://decentralizedthoughts.github.io/2019-06-01-2019-5-31-models/).
