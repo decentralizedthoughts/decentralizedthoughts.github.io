@@ -9,6 +9,10 @@ chapters:
   - /2026-06-28-chapter-lower-bounds/
 background:
   - /2019-08-02-byzantine-agreement-is-impossible-for-$n-slash-leq-3-f$-is-the-adversary-can-easily-simulate/
+continue_reading:
+  - /2022-04-05-aa-part-four-CA-and-BCA/
+  - /2022-04-05-aa-part-five-ABBA/
+  - /2022-12-12-what-about-validity/
 ---
 
 The classic [FLM lower bound](https://groups.csail.mit.edu/tds/papers/Lynch/FischerLynchMerritt-dc.pdf) says that in Synchrony, Byzantine Agreement is impossible when $n \leq 3f$. We discussed this important bound in a [previous post](https://decentralizedthoughts.github.io/2019-08-02-byzantine-agreement-is-impossible-for-$n-slash-leq-3-f$-is-the-adversary-can-easily-simulate/). In this post we strengthen the FLM lower bound in two important ways:
@@ -73,6 +77,8 @@ We have shown that the FLM lower bound holds for Agreement, and even for Crusade
 Lower bounds in distributed computing are protocols for the adversary. The FLM lower bound is a striking example of a non-trivial adversary strategy: The adversary uses the protocol against itself.   
 
 What if we weaken the Validity property instead of the Agreement property: **(Weak Validity)**: if all parties are non-faulty and have the same input then this is the output value. Can you solve this problem for $n=3$? What about solving this problem with probability $0.99$?
+
+For constructions on the achievable side of the $n>3f$ threshold, see [Crusader Agreement and Binding Crusader Agreement](https://decentralizedthoughts.github.io/2022-04-05-aa-part-four-CA-and-BCA/) in the asynchronous model, followed by [Asynchronous Binary Byzantine Agreement](https://decentralizedthoughts.github.io/2022-04-05-aa-part-five-ABBA/), which combines binding crusader agreement with a strong common coin. For more on how changing validity affects consensus, see [What about Validity?](https://decentralizedthoughts.github.io/2022-12-12-what-about-validity/).
 
 This post is part of our collection of lower bounds. See the [Lower Bounds chapter](https://decentralizedthoughts.github.io/2026-06-28-chapter-lower-bounds/) for more results and proof techniques.
 
